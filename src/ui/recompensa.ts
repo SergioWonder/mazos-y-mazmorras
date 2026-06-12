@@ -139,7 +139,7 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
         <div class="descanso-opciones">
           <button class="btn-tomar btn-descansar">😴 Descansar<small>Cura ${cura} PV</small></button>
           <button class="btn-tomar btn-afilar" ${mejorables.length === 0 ? 'disabled' : ''}>
-            ⚒️ Afilar<small>Mejora hasta 2 cartas del mazo</small></button>
+            ⚒️ Afilar<small>Mejora 1 carta del mazo</small></button>
         </div>
         <p class="titulo-ayuda">←→ y Enter, o haz clic</p>
       `;
@@ -174,16 +174,16 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
       });
     }
 
-    function vistaMejora(restantes = 2) {
+    function vistaMejora() {
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
       const mejorables = run.mazo.filter((c) => !c.mejorada && c.def.mejora);
       const panel = el('div', 'panel-recompensa panel-mejora');
       panel.innerHTML = `
         <h2>⚒️ Afilar</h2>
-        <p>Elige la carta que quieres mejorar (te quedan ${restantes})</p>
+        <p>Elige la carta que quieres mejorar</p>
         <div class="mejora-rejilla"></div>
-        <button class="btn-saltar">${restantes === 2 ? 'Volver' : 'Terminar'} <span class="atajo">[Esc]</span></button>
+        <button class="btn-saltar">Volver <span class="atajo">[Esc]</span></button>
       `;
       overlay.appendChild(panel);
 
@@ -212,10 +212,7 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
         const inst = mejorables[i];
         inst.mejorada = true;
         anuncio(`⚒️ ${inst.def.nombre} → ${inst.def.nombre}+`, 'anuncio-botin');
-        window.removeEventListener('keydown', teclado);
-        const quedanMejorables = run.mazo.some((c) => !c.mejorada && c.def.mejora);
-        if (restantes > 1 && quedanMejorables) vistaMejora(restantes - 1);
-        else cerrar(() => {});
+        cerrar(teclado);
       }
 
       const teclado = (ev: KeyboardEvent) => {
@@ -231,11 +228,9 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
           salir();
         }
       };
-      // si aún no se ha mejorado nada se puede volver atrás; si ya se mejoró 1, se termina
       const salir = () => {
         window.removeEventListener('keydown', teclado);
-        if (restantes === 2) vistaPrincipal();
-        else cerrar(() => {});
+        vistaPrincipal();
       };
       window.addEventListener('keydown', teclado);
       panel.querySelector('.btn-saltar')!.addEventListener('click', salir);
