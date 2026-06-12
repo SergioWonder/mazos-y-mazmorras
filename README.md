@@ -65,6 +65,10 @@ mecánicas de clase (Furia, transformaciones, raíces).
 - **Capítulo II — La Cripta**: no-muertos con drenajes y curas (espectros, zombis,
   momias) y jefe final Vol'guth (140 PV). Entre capítulos: reliquia + carta rara
   garantizada + cura del 35%.
+- **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros) y
+  música lo-fi de mazmorreo. La música prefiere una pista CC0 real en
+  `public/audio/lofi-mazmorra.mp3` y, si no existe, genera un loop lo-fi al vuelo
+  (ver `public/audio/LEEME.md`). Botón flotante 🔊/🔇 para silenciar (se recuerda).
 
 ## Estructura
 
@@ -72,7 +76,7 @@ mecánicas de clase (Furia, transformaciones, raíces).
 src/
   core/        Lógica pura (sin DOM): cartas, enemigos, combate, mapa, reliquias, rng
   ui/          Pantallas DOM: título, mapa, combate, recompensas, fin
-  fx/          Partículas en <canvas> (chispas, hojas, luna, furia…)
+  fx/          Partículas en <canvas> (chispas, hojas, luna, furia…) y audio
   estilos/     CSS: base, cartas, combate, pantallas
 scripts/       smoke-test del motor
 ```

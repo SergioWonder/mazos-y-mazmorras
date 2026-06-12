@@ -9,6 +9,7 @@ import { nuevaRun, avanzarCapitulo } from './core/run.ts';
 import { CAPITULOS } from './core/enemigos.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
+import { audio } from './fx/audio.ts';
 import { pantallaTitulo } from './ui/titulo.ts';
 import { pantallaMapa } from './ui/mapa.ts';
 import { pantallaCombate } from './ui/combate.ts';
@@ -16,6 +17,7 @@ import { pantallaCapitulo } from './ui/capitulo.ts';
 import { pantallaBendicion } from './ui/bendicion.ts';
 import { pantallaMision } from './ui/mision.ts';
 import { avisoInstalacion } from './ui/instalar.ts';
+import { iniciarActualizaciones } from './ui/actualizacion.ts';
 import { elegirCarta, obtenerReliquia, pantallaDescanso } from './ui/recompensa.ts';
 import { pantallaEvento } from './ui/evento.ts';
 import { pantallaFin } from './ui/fin.ts';
@@ -24,6 +26,16 @@ import { iniciarTooltips } from './ui/util.ts';
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
 avisoInstalacion();
+iniciarActualizaciones();
+
+// Audio: el botón de silencio y, al primer gesto, contexto + música lo-fi
+audio.crearBoton();
+const arrancarAudio = () => {
+  audio.desbloquear();
+  audio.iniciarMusica();
+};
+window.addEventListener('pointerdown', arrancarAudio, { once: true });
+window.addEventListener('keydown', arrancarAudio, { once: true });
 
 async function juego() {
   for (;;) {

@@ -6,7 +6,7 @@ export default defineConfig({
   base: '/mazos-y-mazmorras/',
   plugins: [
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       includeAssets: ['icono.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Mazo y Mazmorra',
@@ -25,7 +25,9 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg}'],
+        globPatterns: ['**/*.{js,css,html,png,svg,mp3,ogg}'],
+        // la pista lo-fi puede pesar varios MB: súbele el tope de precaché
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         // Las fuentes de Google se cachean al vuelo para jugar sin conexión
         runtimeCaching: [
           {

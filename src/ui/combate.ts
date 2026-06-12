@@ -3,6 +3,7 @@ import type {
   CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
 } from '../core/types.ts';
 import { fx } from '../fx/particulas.ts';
+import { audio } from '../fx/audio.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
 } from './util.ts';
@@ -79,6 +80,7 @@ export function pantallaCombate(
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
         fx.emitir(efecto, x, y);
+        audio.sfx(dano > 0 ? efecto : 'bloqueo');
         if (dano > 0) {
           numeroFlotante(elem, `${dano}`, 'dano');
           elem?.classList.add('golpeado');
@@ -94,6 +96,7 @@ export function pantallaCombate(
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
         fx.emitir('bloqueo', x, y);
+        audio.sfx('bloqueo');
         numeroFlotante(elem, `+${n} 🛡`, 'bloqueo');
         render();
         await espera(200);
@@ -101,6 +104,7 @@ export function pantallaCombate(
       async fxEstado(obj, estado, n) {
         const elem = elemDe(obj);
         const signo = n > 0 ? '+' : '';
+        audio.sfx('estado');
         numeroFlotante(elem, `${ICONO_ESTADO[estado]} ${signo}${n} ${NOMBRE_ESTADO[estado]}`, 'estado');
         render();
         await espera(260);
@@ -109,6 +113,7 @@ export function pantallaCombate(
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
         fx.emitir('cura', x, y);
+        audio.sfx('cura');
         numeroFlotante(elem, `+${n}`, 'cura');
         render();
         await espera(220);
@@ -117,6 +122,7 @@ export function pantallaCombate(
         const elem = elemDe(e);
         const { x, y } = centroDe(elem);
         fx.emitir('muerte', x, y);
+        audio.sfx('muerte');
         elem?.classList.add('muriendo');
         await espera(550);
         render();
@@ -132,6 +138,7 @@ export function pantallaCombate(
         await espera(300);
       },
       async fxFuriaPerdida() {
+        audio.sfx('furiaPerdida');
         anuncio('💨 ¡La Furia se desvanece!', 'anuncio-furia-perdida');
         sacudir(1);
         await espera(500);
@@ -347,6 +354,7 @@ export function pantallaCombate(
         grande.classList.add('carta-showcase', def.animRara);
         document.body.appendChild(grande);
         fx.estallido(def.fx ?? 'impacto');
+        audio.sfx(def.fx ?? 'impacto');
         anuncio(def.subclase ? `✦ ${def.subclase} ✦` : def.nombre, 'anuncio-rara');
         await espera(850);
         grande.remove();
@@ -359,6 +367,7 @@ export function pantallaCombate(
         document.body.appendChild(clon);
         requestAnimationFrame(() => clon.classList.add('carta-volando-fin'));
         setTimeout(() => clon.remove(), 420);
+        audio.sfx('carta');
         await espera(160);
       }
     }

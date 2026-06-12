@@ -396,19 +396,27 @@ export class Combate {
     delete j.estados.espejismo;
 
     // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
-    // (el daño absorbido por el bloqueo no cuenta)
+    // (el daño absorbido por el bloqueo no cuenta). El Frenesí la rompe siempre.
+    const frenesi = (j.estados.frenesi ?? 0) > 0;
     if (
       !this.terminado &&
-      this.danoRecibidoEsteTurno === 0 &&
-      j.furiaFuerza + j.furiaDestreza > 0 &&
-      !(j.estados.furiaEstable ?? 0)
+      (this.danoRecibidoEsteTurno === 0 || frenesi) &&
+      j.furiaFuerza + j.furiaDestreza > 0
     ) {
       j.estados.fuerza = (j.estados.fuerza ?? 0) - j.furiaFuerza;
       j.estados.destreza = (j.estados.destreza ?? 0) - j.furiaDestreza;
       j.furiaFuerza = 0;
       j.furiaDestreza = 0;
       await this.ui.fxFuriaPerdida();
+      // Corazón Salvaje: la Furia perdida deja un poso de Fuerza y Destreza
+      const cs = j.estados.corazonSalvaje ?? 0;
+      if (cs > 0) {
+        j.estados.fuerza = (j.estados.fuerza ?? 0) + cs;
+        j.estados.destreza = (j.estados.destreza ?? 0) + cs;
+        await this.ui.fxMensaje(`🐾 Corazón Salvaje: +${cs} Fuerza y +${cs} Destreza`);
+      }
     }
+    delete j.estados.frenesi; // el Frenesí solo dura este turno
 
     this.enResolucion = false;
     if (!this.terminado) await this.inicioTurnoJugador();

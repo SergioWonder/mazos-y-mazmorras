@@ -2,6 +2,7 @@ import type { ClaseId } from '../core/types.ts';
 import { PV_POR_CLASE } from '../core/run.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import { VERSION } from '../version.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
 
@@ -51,6 +52,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             : ''
         }
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
+        <p class="titulo-version">v${VERSION}</p>
       </div>
     `;
     app.appendChild(raiz);

@@ -542,15 +542,15 @@ export const BARBARO: CartaDef[] = [
     rareza: 'comun',
     coste: 2,
     objetivo: 'ninguno',
-    texto: 'Gana 11 de bloqueo.',
+    texto: 'Gana 7 de bloqueo, más tu Fuerza.',
     fx: 'bloqueo',
     jugar: async (c) => {
-      await c.ganarBloqueo(11);
+      await c.ganarBloqueo(7 + (c.jugador.estados.fuerza ?? 0));
     },
     mejora: {
-      texto: 'Gana 17 de bloqueo.',
+      texto: 'Gana 11 de bloqueo, más tu Fuerza.',
       jugar: async (c) => {
-        await c.ganarBloqueo(17);
+        await c.ganarBloqueo(11 + (c.jugador.estados.fuerza ?? 0));
       },
     },
   },
@@ -752,21 +752,25 @@ export const BARBARO: CartaDef[] = [
     clase: 'barbaro',
     tipo: 'ataque',
     rareza: 'rara',
-    coste: 2,
+    coste: 1,
     objetivo: 'enemigo',
     subclase: 'Senda del Berserker',
     fx: 'furia',
     animRara: 'anim-berserker',
-    texto: 'Inflige 6 de daño 3 veces.\nFuria: gana 1 de Fuerza.',
+    texto: 'Inflige 4 de daño 3 veces.\nDuplica tu Furia, pero se romperá al final del turno.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 6, 3, 'furia');
-      await c.ganarFuria(1);
+      await c.atacar(c.objetivo!, 4, 3, 'furia');
+      if (c.jugador.furiaFuerza + c.jugador.furiaDestreza > 0)
+        await c.ganarFuria(c.jugador.furiaFuerza, c.jugador.furiaDestreza);
+      await c.aplicarEstado(c.jugador, 'frenesi', 1);
     },
     mejora: {
-      texto: 'Inflige 8 de daño 3 veces.\nFuria: gana 1 de Fuerza.',
+      texto: 'Inflige 6 de daño 3 veces.\nDuplica tu Furia, pero se romperá al final del turno.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 8, 3, 'furia');
-        await c.ganarFuria(1);
+        await c.atacar(c.objetivo!, 6, 3, 'furia');
+        if (c.jugador.furiaFuerza + c.jugador.furiaDestreza > 0)
+          await c.ganarFuria(c.jugador.furiaFuerza, c.jugador.furiaDestreza);
+        await c.aplicarEstado(c.jugador, 'frenesi', 1);
       },
     },
   },
@@ -781,15 +785,14 @@ export const BARBARO: CartaDef[] = [
     subclase: 'Senda del Corazón Salvaje',
     fx: 'tierra',
     animRara: 'anim-corazon',
-    texto: 'Tu Furia ya no se rompe\naunque no recibas daño.',
+    texto: 'Cuando pierdas tu Furia,\nganas 1 de Fuerza y 1 de Destreza\npara este combate.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'furiaEstable', 1);
+      await c.aplicarEstado(c.jugador, 'corazonSalvaje', 1);
     },
     mejora: {
-      texto: 'Tu Furia ya no se rompe.\nAdemás: Furia: gana 2 de Fuerza.',
+      texto: 'Cuando pierdas tu Furia,\nganas 2 de Fuerza y 2 de Destreza\npara este combate.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'furiaEstable', 1);
-        await c.ganarFuria(2);
+        await c.aplicarEstado(c.jugador, 'corazonSalvaje', 1);
       },
     },
   },
@@ -828,16 +831,16 @@ export const BARBARO: CartaDef[] = [
     subclase: 'Senda del Fanático',
     fx: 'divino',
     animRara: 'anim-divino',
-    texto: 'Inflige 12 de daño.\nFuria: gana 2 de Fuerza.',
+    texto: 'Inflige 9 de daño; tu bonus de Furia\ncuenta doble. Gana 8 de bloqueo.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 12, 1, 'divino');
-      await c.ganarFuria(2);
+      await c.atacar(c.objetivo!, 9 + c.jugador.furiaFuerza, 1, 'divino');
+      await c.ganarBloqueo(8);
     },
     mejora: {
-      texto: 'Inflige 16 de daño.\nFuria: gana 2 de Fuerza.',
+      texto: 'Inflige 12 de daño; tu bonus de Furia\ncuenta doble. Gana 11 de bloqueo.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 16, 1, 'divino');
-        await c.ganarFuria(2);
+        await c.atacar(c.objetivo!, 12 + c.jugador.furiaFuerza, 1, 'divino');
+        await c.ganarBloqueo(11);
       },
     },
   },

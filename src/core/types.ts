@@ -15,7 +15,8 @@ export type EstadoId =
   | 'fragil'        // gana -25% bloqueo, N turnos
   | 'espinas'       // devuelve N daño al ser atacado
   | 'regeneracion'  // cura N al inicio del turno
-  | 'furiaEstable'  // la Furia ya no se pierde (Corazón Salvaje)
+  | 'corazonSalvaje' // al perder la Furia, ganas esta cantidad de Fuerza y Destreza para el combate
+  | 'frenesi'       // la Furia se romperá al final del turno aunque recibas daño (Frenesí)
   | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
   | 'invulnerable'; // no recibe daño (N turnos)
 
