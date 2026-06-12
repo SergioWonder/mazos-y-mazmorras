@@ -24,6 +24,7 @@ export function pantallaCombate(
   rng: () => number,
   esJefe: boolean,
   nombreCapitulo: string,
+  esElite = false,
 ): Promise<'victoria' | 'derrota'> {
   return new Promise((resolver) => {
     const app = document.getElementById('app')!;
@@ -137,7 +138,7 @@ export function pantallaCombate(
       },
     };
 
-    const combate = new Combate(run, defs, rng, ui);
+    const combate = new Combate(run, defs, rng, ui, esJefe || esElite);
 
     // ── Render ───────────────────────────────────────────────────────────────
     function render() {
@@ -208,7 +209,7 @@ export function pantallaCombate(
           ${barraVida(j)}
           ${fichasEstados(j)}
           <div class="temporales">${temporales}</div>
-          ${furiaActiva ? `<div class="furia-ficha" data-tip="<strong>🔥 Furia</strong><br>Fuerza/Destreza acumulada. Se pierde si terminas el turno sin hacer daño.">🔥 Furia +${j.furiaFuerza}F${j.furiaDestreza ? ` +${j.furiaDestreza}D` : ''}</div>` : ''}
+          ${furiaActiva ? `<div class="furia-ficha" data-tip="<strong>🔥 Furia</strong><br>Fuerza/Destreza acumulada. Se rompe si acabas la ronda sin recibir daño (lo bloqueado no cuenta).">🔥 Furia +${j.furiaFuerza}F${j.furiaDestreza ? ` +${j.furiaDestreza}D` : ''}</div>` : ''}
         </div>`;
     }
 
@@ -352,6 +353,17 @@ export function pantallaCombate(
       await combate.jugarCarta(inst, objetivo);
     }
 
+    /** Vista ampliada de una carta (toque en móvil: leer, no jugar). */
+    function ampliarCarta(inst: CartaInstancia) {
+      const zoom = el('div', 'zoom-carta');
+      const grande = renderCarta(defDe(inst));
+      if (inst.mejorada) grande.classList.add('carta-mejorada');
+      zoom.appendChild(grande);
+      zoom.appendChild(el('p', 'zoom-ayuda', 'Arrastra la carta para jugarla · toca para cerrar'));
+      zoom.addEventListener('pointerdown', () => zoom.remove());
+      document.body.appendChild(zoom);
+    }
+
     function jugarSobre(idxEnemigo: number) {
       const inst = cartaPendiente;
       if (!inst) return;
@@ -438,7 +450,12 @@ export function pantallaCombate(
           arrastrando = null;
 
           if (!movido) {
-            // clic simple: seleccionar / activar
+            if (e.pointerType === 'touch') {
+              // en táctil un toque AMPLÍA la carta (para leerla); se juega arrastrando
+              ampliarCarta(inst);
+              return;
+            }
+            // clic de ratón: seleccionar / activar
             seleccion = combate.jugador.mano.indexOf(inst);
             activarCarta(inst);
             return;
@@ -527,7 +544,10 @@ export function pantallaCombate(
     }
 
     // ¡Empieza el combate!
-    anuncio(esJefe ? '☠️ ¡EL JEFE OGRO! ☠️' : '⚔️ ¡Combate!', esJefe ? 'anuncio-jefe' : '');
+    anuncio(
+      esJefe ? `☠️ ¡${defs[0].nombre.toUpperCase()}! ☠️` : '⚔️ ¡Combate!',
+      esJefe ? 'anuncio-jefe' : '',
+    );
     void combate.iniciar();
   });
 }

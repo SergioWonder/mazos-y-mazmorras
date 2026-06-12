@@ -168,22 +168,22 @@ export const DRUIDA: CartaDef[] = [
   },
   {
     id: 'raices-estranguladoras', nombre: 'Raíces Estranguladoras', clase: 'druida',
-    tipo: 'habilidad', rareza: 'infrecuente', coste: 1, objetivo: 'enemigo', fx: 'raices',
-    texto: 'Raíces: −10 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 14 de daño.',
+    tipo: 'habilidad', rareza: 'infrecuente', coste: 2, objetivo: 'enemigo', fx: 'raices',
+    texto: 'Raíces: −12 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 16 de daño.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'raices', 10);
+      await c.aplicarEstado(c.objetivo!, 'raices', 12);
       if (c.ataqueAnulado(c.objetivo!)) {
         await c.mensaje('¡Las raíces trituran!');
-        await c.atacar(c.objetivo!, 14, 1, 'raices');
+        await c.atacar(c.objetivo!, 16, 1, 'raices');
       }
     },
     mejora: {
-      texto: 'Raíces: −14 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 18 de daño.',
+      texto: 'Raíces: −16 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 22 de daño.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'raices', 14);
+        await c.aplicarEstado(c.objetivo!, 'raices', 16);
         if (c.ataqueAnulado(c.objetivo!)) {
           await c.mensaje('¡Las raíces trituran!');
-          await c.atacar(c.objetivo!, 18, 1, 'raices');
+          await c.atacar(c.objetivo!, 22, 1, 'raices');
         }
       },
     },
@@ -308,27 +308,25 @@ export const BARBARO: CartaDef[] = [
   {
     id: 'furia-primaria', nombre: 'Furia Primaria', clase: 'barbaro', tipo: 'habilidad', rareza: 'inicial',
     coste: 1, objetivo: 'ninguno', fx: 'furia',
-    texto: 'Furia: gana 1 de Fuerza.\n(La Furia se pierde si terminas el turno\nsin hacer daño.)',
+    texto: 'Furia: gana 1 de Fuerza.\n(La Furia se rompe si acabas la ronda\nsin recibir daño; lo bloqueado no cuenta.)',
     jugar: async (c) => { await c.ganarFuria(1); },
     mejora: {
-      texto: 'Furia: gana 2 de Fuerza.\n(La Furia se pierde si terminas el turno\nsin hacer daño.)',
+      texto: 'Furia: gana 2 de Fuerza.\n(La Furia se rompe si acabas la ronda\nsin recibir daño; lo bloqueado no cuenta.)',
       jugar: async (c) => { await c.ganarFuria(2); },
     },
   },
   {
     id: 'golpe-imprudente', nombre: 'Golpe Imprudente', clase: 'barbaro', tipo: 'ataque', rareza: 'comun',
-    coste: 0, objetivo: 'enemigo', texto: 'Inflige 8 de daño.\nRecibes 2 de daño.', fx: 'tajo',
+    coste: 0, objetivo: 'enemigo', texto: 'Inflige 8 de daño.\nRecibes 2 de daño\n(alimenta tu Furia).', fx: 'tajo',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 8);
-      c.jugador.pv = Math.max(1, c.jugador.pv - 2);
-      await c.mensaje('-2 PV');
+      await c.perderPV(2);
     },
     mejora: {
-      texto: 'Inflige 11 de daño.\nRecibes 2 de daño.',
+      texto: 'Inflige 11 de daño.\nRecibes 2 de daño\n(alimenta tu Furia).',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 11);
-        c.jugador.pv = Math.max(1, c.jugador.pv - 2);
-        await c.mensaje('-2 PV');
+        await c.perderPV(2);
       },
     },
   },
@@ -491,10 +489,10 @@ export const BARBARO: CartaDef[] = [
     id: 'senda-corazon-salvaje', nombre: 'Corazón Salvaje', clase: 'barbaro', tipo: 'poder',
     rareza: 'rara', coste: 1, objetivo: 'ninguno', subclase: 'Senda del Corazón Salvaje',
     fx: 'tierra', animRara: 'anim-corazon',
-    texto: 'Tu Furia ya no se pierde\nal terminar el turno sin hacer daño.',
+    texto: 'Tu Furia ya no se rompe\naunque no recibas daño.',
     jugar: async (c) => { await c.aplicarEstado(c.jugador, 'furiaEstable', 1); },
     mejora: {
-      texto: 'Tu Furia ya no se pierde.\nAdemás: Furia: gana 2 de Fuerza.',
+      texto: 'Tu Furia ya no se rompe.\nAdemás: Furia: gana 2 de Fuerza.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'furiaEstable', 1);
         await c.ganarFuria(2);
@@ -704,15 +702,13 @@ export const MAGO: CartaDef[] = [
     rareza: 'infrecuente', coste: 0, objetivo: 'ninguno', fx: 'muerte', exhumar: true,
     texto: 'Pierde 4 PV.\nGana 1 espacio de conjuro\ndurante este combate.\nSe agota.',
     jugar: async (c) => {
-      c.jugador.pv = Math.max(1, c.jugador.pv - 4);
-      await c.mensaje('-4 PV');
+      await c.perderPV(4);
       await c.ganarConjuro(false);
     },
     mejora: {
       texto: 'Pierde 2 PV.\nGana 1 espacio de conjuro\ndurante este combate.\nSe agota.',
       jugar: async (c) => {
-        c.jugador.pv = Math.max(1, c.jugador.pv - 2);
-        await c.mensaje('-2 PV');
+        await c.perderPV(2);
         await c.ganarConjuro(false);
       },
     },
@@ -729,15 +725,29 @@ export const MAGO: CartaDef[] = [
   },
   {
     id: 'recuperacion-arcana', nombre: 'Recuperación Arcana', clase: 'mago', tipo: 'habilidad',
-    rareza: 'infrecuente', coste: 1, objetivo: 'ninguno', fx: 'estrellas', exhumar: true,
-    texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.\nSe agota.',
+    rareza: 'infrecuente', coste: 1, objetivo: 'ninguno', fx: 'estrellas',
+    texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.',
     jugar: async (c) => {
       const nivel = await c.recuperarConjuro();
       if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
       coste: 0,
-      texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.\nSe agota.',
+      texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.',
+    },
+  },
+  {
+    id: 'marea-arcana', nombre: 'Marea Arcana', clase: 'mago', tipo: 'habilidad',
+    rareza: 'infrecuente', coste: 2, objetivo: 'ninguno', fx: 'ola',
+    texto: 'Recupera los 2 espacios de conjuro\ngastados de mayor nivel.',
+    jugar: async (c) => {
+      const a = await c.recuperarConjuro();
+      const b = await c.recuperarConjuro();
+      if (a + b === 0) await c.mensaje('No había conjuros gastados…');
+    },
+    mejora: {
+      coste: 1,
+      texto: 'Recupera los 2 espacios de conjuro\ngastados de mayor nivel.',
     },
   },
   {

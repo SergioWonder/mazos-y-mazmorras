@@ -26,18 +26,26 @@ export class Combate {
   enemigos: EnemigoCombate[];
   turno = 0;
   danoHechoEsteTurno = 0;
+  danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
   terminado: 'victoria' | 'derrota' | null = null;
   enResolucion = false;
   run: EstadoRun;
   rng: () => number;
   ui: Presentador;
 
-  constructor(run: EstadoRun, defs: EnemigoDef[], rng: () => number, ui: Presentador) {
+  constructor(
+    run: EstadoRun,
+    defs: EnemigoDef[],
+    rng: () => number,
+    ui: Presentador,
+    eliteOJefe = false,
+  ) {
     this.run = run;
     this.rng = rng;
     this.ui = ui;
     const nombres = { druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago' };
-    const energiaMax = 3 + run.permanentes.energia;
+    const energiaMax =
+      3 + run.permanentes.energia + (eliteOJefe ? run.permanentes.energiaElite : 0);
     this.jugador = {
       nombre: nombres[run.clase],
       pvMax: run.pvMax, pv: run.pv, bloqueo: 0, estados: {}, vivo: true,
@@ -122,6 +130,13 @@ export class Combate {
         self.jugador.pv += real;
         await self.ui.fxCura(self.jugador, real);
       },
+      async perderPV(n) {
+        const real = Math.min(n, self.jugador.pv - 1); // nunca mata
+        if (real <= 0) return;
+        self.jugador.pv -= real;
+        self.danoRecibidoEsteTurno += real; // alimenta la Furia del bárbaro
+        await self.ui.fxGolpe(self.jugador, real, 'golpeEnemigo');
+      },
       async robar(n) {
         self.robarCartas(n);
         self.ui.render();
@@ -194,6 +209,7 @@ export class Combate {
     const real = dano - absorbido;
     obj.pv = Math.max(0, obj.pv - real);
     if (obj !== this.jugador) this.danoHechoEsteTurno += real;
+    else this.danoRecibidoEsteTurno += real; // solo el daño que atraviesa el bloqueo
     await this.ui.fxGolpe(obj, real, fx);
     if (obj.pv <= 0 && obj.vivo) {
       const e = obj as EnemigoCombate;
@@ -233,11 +249,16 @@ export class Combate {
   }
 
   async iniciar() {
-    // Efectos permanentes de cartas de 1 uso (Voto de Sangre, etc.)
+    // Efectos permanentes (cartas de 1 uso, bendiciones)
     if (this.run.permanentes.fuerza > 0) {
       this.jugador.estados.fuerza =
         (this.jugador.estados.fuerza ?? 0) + this.run.permanentes.fuerza;
       await this.ui.fxEstado(this.jugador, 'fuerza', this.run.permanentes.fuerza);
+    }
+    if (this.run.permanentes.destreza > 0) {
+      this.jugador.estados.destreza =
+        (this.jugador.estados.destreza ?? 0) + this.run.permanentes.destreza;
+      await this.ui.fxEstado(this.jugador, 'destreza', this.run.permanentes.destreza);
     }
     for (const r of this.run.reliquias) {
       if (r.inicioCombate) await r.inicioCombate(this.contexto());
@@ -255,6 +276,7 @@ export class Combate {
   async inicioTurnoJugador(primero = false) {
     this.turno++;
     this.danoHechoEsteTurno = 0;
+    this.danoRecibidoEsteTurno = 0;
     if (!primero) this.jugador.bloqueo = 0;
     this.jugador.energia = this.jugador.energiaMax;
     // regeneración y curas de efectos temporales
@@ -318,20 +340,7 @@ export class Combate {
   async terminarTurno() {
     if (this.enResolucion || this.terminado) return;
     this.enResolucion = true;
-
-    // Furia del bárbaro: se pierde si no se ha hecho daño este turno
     const j = this.jugador;
-    if (
-      this.danoHechoEsteTurno === 0 &&
-      j.furiaFuerza + j.furiaDestreza > 0 &&
-      !(j.estados.furiaEstable ?? 0)
-    ) {
-      j.estados.fuerza = (j.estados.fuerza ?? 0) - j.furiaFuerza;
-      j.estados.destreza = (j.estados.destreza ?? 0) - j.furiaDestreza;
-      j.furiaFuerza = 0;
-      j.furiaDestreza = 0;
-      await this.ui.fxFuriaPerdida();
-    }
 
     // Efectos temporales del druida: expiran
     for (const e of [...j.efectosTemporales]) {
@@ -372,6 +381,21 @@ export class Combate {
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
       this.ui.render();
       await this.ui.espera(250);
+    }
+
+    // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
+    // (el daño absorbido por el bloqueo no cuenta)
+    if (
+      !this.terminado &&
+      this.danoRecibidoEsteTurno === 0 &&
+      j.furiaFuerza + j.furiaDestreza > 0 &&
+      !(j.estados.furiaEstable ?? 0)
+    ) {
+      j.estados.fuerza = (j.estados.fuerza ?? 0) - j.furiaFuerza;
+      j.estados.destreza = (j.estados.destreza ?? 0) - j.furiaDestreza;
+      j.furiaFuerza = 0;
+      j.furiaDestreza = 0;
+      await this.ui.fxFuriaPerdida();
     }
 
     this.enResolucion = false;

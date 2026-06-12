@@ -80,7 +80,7 @@ function defNombre(c: CartaInstancia): string {
   return c.mejorada ? `${c.def.nombre}+` : c.def.nombre;
 }
 
-function reliquiaAleatoria(run: EstadoRun, rng: () => number): string {
+export function reliquiaAleatoria(run: EstadoRun, rng: () => number): string {
   const propias = new Set(run.reliquias.map((r) => r.id));
   const pool = POOL_RELIQUIAS.filter(
     (r) => !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase),

@@ -10,7 +10,7 @@ export const TOTEM_ROBLE: ReliquiaDef = {
 
 export const HACHA_ANCESTRO: ReliquiaDef = {
   id: 'hacha-ancestro', nombre: 'Hacha del Ancestro', icono: '🪓',
-  texto: 'Empiezas cada combate con Furia: +1 de Fuerza.',
+  texto: 'Empiezas cada combate con Furia: +1 de Fuerza. (La Furia se rompe si acabas la ronda sin recibir daño.)',
   inicioCombate: async (ctx) => { await ctx.ganarFuria(1); },
 };
 

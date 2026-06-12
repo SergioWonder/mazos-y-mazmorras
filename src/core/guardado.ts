@@ -16,7 +16,8 @@ export interface Guardado {
   capitulo: number;
   semilla: number;
   espaciosConjuro: number;
-  permanentes: EstadoRun['permanentes'];
+  /** Parcial: los guardados antiguos pueden no tener los campos más nuevos. */
+  permanentes: Partial<EstadoRun['permanentes']>;
   eventosVistos: string[];
   mazo: Array<{ id: string; mejorada: boolean }>;
   reliquias: string[];
@@ -71,7 +72,10 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
     capitulo: g.capitulo,
     semilla: g.semilla,
     espaciosConjuro: g.espaciosConjuro,
-    permanentes: { ...g.permanentes },
+    permanentes: {
+      fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, robo: 0,
+      ...g.permanentes,
+    },
     eventosVistos: [...g.eventosVistos],
   };
 }

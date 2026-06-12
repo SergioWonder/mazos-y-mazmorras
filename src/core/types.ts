@@ -151,6 +151,9 @@ export interface ContextoEfecto {
   ganarBloqueo(base: number): Promise<void>;
   aplicarEstado(obj: Luchador, estado: EstadoId, n: number): Promise<void>;
   curar(n: number): Promise<void>;
+  /** Pierde PV (sin pasar por el bloqueo). Cuenta como daño recibido
+   *  para la Furia del bárbaro. Nunca mata (mínimo 1 PV). */
+  perderPV(n: number): Promise<void>;
   robar(n: number): Promise<void>;
   ganarEnergia(n: number): void;
   /** Transformación u otro efecto temporal del druida. */
@@ -220,9 +223,11 @@ export interface EstadoRun {
   espaciosConjuro: number;
   /** Efectos permanentes (cartas de 1 uso, bendiciones entre actos). */
   permanentes: {
-    fuerza: number;   // Fuerza al inicio de cada combate
-    energia: number;  // energía máxima adicional
-    robo: number;     // cartas adicionales robadas por turno
+    fuerza: number;       // Fuerza al inicio de cada combate
+    destreza: number;     // Destreza al inicio de cada combate
+    energia: number;      // energía máxima adicional
+    energiaElite: number; // energía máxima adicional SOLO en élites y jefes
+    robo: number;         // cartas adicionales robadas por turno
   };
   /** Ids de eventos ya vividos (para no repetirlos). */
   eventosVistos: string[];

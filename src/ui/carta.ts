@@ -62,6 +62,7 @@ function arteDeCarta(def: CartaDef): string {
     'escudo-arcano': '🛡️', 'bola-fuego': '☄️', 'rayo-abrasador': '🔆',
     'toque-vampirico': '🦇', 'estudio-arcano': '📖', 'recuperacion-arcana': '🌀',
     'canalizar-mana': '🕯️', 'meditacion-arcana': '🧘', 'sacrificio-arcano': '🗡️',
+    'marea-arcana': '🌊',
     acelerar: '💨', 'escuela-evocacion': '☄️', 'escuela-abjuracion': '🔵',
     'escuela-ilusion': '🎭',
   };

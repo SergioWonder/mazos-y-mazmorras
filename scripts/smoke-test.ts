@@ -155,15 +155,44 @@ console.log('— Combates simulados (cap. I y II, 3 clases) —');
   }
 }
 
-console.log('— Mecánica de Furia —');
+console.log('— Mecánica de Furia (se rompe sin recibir daño) —');
 {
+  // Caso 1: el enemigo no ataca → no recibes daño → la Furia se rompe
   const run = nuevaRun('barbaro', 999);
-  const combate = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(999), uiSilenciosa);
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(999), uiSilenciosa);
   await combate.iniciar();
   check(combate.jugador.furiaFuerza === 1, 'Hacha del Ancestro otorga Furia inicial');
+  combate.enemigos[0].intencion = { nombre: 'Esconderse', intencion: 'defensa', bloqueo: 5 };
   await combate.terminarTurno();
-  check(combate.jugador.furiaFuerza === 0, 'la Furia se pierde al no hacer daño');
+  check(combate.jugador.furiaFuerza === 0, 'la Furia se rompe al acabar la ronda sin recibir daño');
   check((combate.jugador.estados.fuerza ?? 0) === 0, 'la Fuerza de Furia se retira');
+
+  // Caso 2: el enemigo te hiere → la Furia se mantiene
+  const run2 = nuevaRun('barbaro', 998);
+  const combate2 = new Combate(run2, [GOBLIN_CORTADOR], crearRng(998), uiSilenciosa);
+  await combate2.iniciar();
+  combate2.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  await combate2.terminarTurno();
+  check(combate2.jugador.furiaFuerza === 1, 'la Furia se mantiene si recibes daño real');
+
+  // Caso 3: bloquear todo el daño NO cuenta como recibirlo
+  const run3 = nuevaRun('barbaro', 997);
+  const combate3 = new Combate(run3, [GOBLIN_CORTADOR], crearRng(997), uiSilenciosa);
+  await combate3.iniciar();
+  combate3.jugador.bloqueo = 99;
+  combate3.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  await combate3.terminarTurno();
+  check(combate3.jugador.furiaFuerza === 0, 'el daño bloqueado no mantiene la Furia');
+
+  // Caso 4: el daño autoinfligido (Golpe Imprudente) sí alimenta la Furia
+  const run4 = nuevaRun('barbaro', 996);
+  const combate4 = new Combate(run4, [GOBLIN_CORTADOR], crearRng(996), uiSilenciosa);
+  await combate4.iniciar();
+  combate4.jugador.bloqueo = 99;
+  combate4.enemigos[0].intencion = { nombre: 'Esconderse', intencion: 'defensa', bloqueo: 5 };
+  await combate4.contexto().perderPV(2);
+  await combate4.terminarTurno();
+  check(combate4.jugador.furiaFuerza === 1, 'perder PV propios (Golpe Imprudente) mantiene la Furia');
 }
 
 console.log('— Espacios de conjuro del mago —');
@@ -410,18 +439,51 @@ console.log('— Guardado y carga —');
 
 console.log('— Bendiciones de la Vidente —');
 {
-  // +1 energía máxima
+  // +1 energía solo en élites/jefes (Don del Vigor con drawback)
   const run = nuevaRun('druida', 55);
-  run.permanentes.energia = 1;
-  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(55), uiSilenciosa);
-  await combate.iniciar();
-  check(combate.jugador.energiaMax === 4 && combate.jugador.energia === 4, 'Don del Vigor: 4 de energía');
+  run.permanentes.energiaElite = 1;
+  const normal = new Combate(run, [GOBLIN_CORTADOR], crearRng(55), uiSilenciosa);
+  await normal.iniciar();
+  check(normal.jugador.energiaMax === 3, 'Don del Vigor: energía normal en combates corrientes');
+  const elite = new Combate(run, [GOBLIN_CORTADOR], crearRng(55), uiSilenciosa, true);
+  await elite.iniciar();
+  check(elite.jugador.energiaMax === 4, 'Don del Vigor: +1 energía contra élites y jefes');
   // +1 robo por turno
   const run2 = nuevaRun('druida', 56);
   run2.permanentes.robo = 1;
   const combate2 = new Combate(run2, [GOBLIN_CORTADOR], crearRng(56), uiSilenciosa);
   await combate2.iniciar();
   check(combate2.jugador.mano.length === 6, 'Don de la Mente: roba 6 cartas');
+  // +1 destreza al inicio
+  const run3 = nuevaRun('druida', 57);
+  run3.permanentes.destreza = 1;
+  const combate3 = new Combate(run3, [GOBLIN_CORTADOR], crearRng(57), uiSilenciosa);
+  await combate3.iniciar();
+  check((combate3.jugador.estados.destreza ?? 0) === 1, 'Don de la Destreza: +1 al inicio del combate');
+}
+
+console.log('— Recuperación de conjuros sostenible —');
+{
+  const recu = MAGO.find((c) => c.id === 'recuperacion-arcana')!;
+  check(!recu.exhumar, 'Recuperación Arcana ya no se agota');
+  const marea = MAGO.find((c) => c.id === 'marea-arcana')!;
+  check(!!marea && !marea.exhumar, 'Marea Arcana existe y no se agota');
+  const run = nuevaRun('mago', 60);
+  run.espaciosConjuro = 3; // pirámide [2×N1, 1×N2]
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(60), uiSilenciosa);
+  await combate.iniciar();
+  const ctx = combate.contexto();
+  await ctx.gastarConjuro(1);
+  await ctx.gastarConjuro(1);
+  await ctx.gastarConjuro(1);
+  check(ctx.conjurosLibres() === 0, 'tres espacios gastados');
+  const inst = instanciar(marea);
+  combate.jugador.mano.push(inst);
+  await combate.jugarCarta(inst);
+  check(ctx.conjurosLibres() === 2, 'Marea Arcana recupera 2 espacios');
+  check(combate.jugador.descarte.includes(inst), 'Marea Arcana va al descarte (reutilizable)');
+  const estrang = DRUIDA.find((c) => c.id === 'raices-estranguladoras')!;
+  check(estrang.coste === 2, 'Raíces Estranguladoras cuesta 2 de maná');
 }
 
 console.log('— Avance de capítulo —');

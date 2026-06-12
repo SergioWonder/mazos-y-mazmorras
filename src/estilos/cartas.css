@@ -169,11 +169,14 @@
   transform: rotate(var(--ang, 0deg)) translateY(var(--alza, 0px));
   margin: 0 -14px;
 }
-.mano .carta:hover,
-.mano .carta.seleccionada {
-  transform: rotate(0deg) translateY(-46px) scale(1.22);
-  z-index: 20;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 209, 102, 0.35);
+/* el realce al pasar/seleccionar solo existe donde hay cursor (no en táctil) */
+@media (hover: hover) {
+  .mano .carta:hover,
+  .mano .carta.seleccionada {
+    transform: rotate(0deg) translateY(-46px) scale(1.22);
+    z-index: 20;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 209, 102, 0.35);
+  }
 }
 .mano .carta.pendiente {
   transform: rotate(0deg) translateY(-56px) scale(1.18);

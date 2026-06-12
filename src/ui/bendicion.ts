@@ -1,4 +1,6 @@
 import type { EstadoRun } from '../core/types.ts';
+import { reliquiaAleatoria } from '../core/eventos.ts';
+import { barajar } from '../core/rng.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 
@@ -6,33 +8,56 @@ interface Don {
   icono: string;
   nombre: string;
   detalle: string;
-  aplicar: (run: EstadoRun) => void;
+  aplicar: (run: EstadoRun, rng: () => number) => void;
 }
 
 const DONES: Don[] = [
   {
     icono: '💎', nombre: 'Don del Vigor',
-    detalle: '+1 de energía máxima en todos los combates',
-    aplicar: (run) => { run.permanentes.energia += 1; },
+    detalle: '+1 de energía máxima… pero solo contra élites y jefes',
+    aplicar: (run) => { run.permanentes.energiaElite += 1; },
   },
   {
     icono: '❤️', nombre: 'Don de la Vida',
-    detalle: '+15 PV máximos',
-    aplicar: (run) => { run.pvMax += 15; },
+    detalle: '+20 PV máximos',
+    aplicar: (run) => { run.pvMax += 20; },
   },
   {
     icono: '🧠', nombre: 'Don de la Mente',
-    detalle: 'Robas 1 carta adicional cada turno',
-    aplicar: (run) => { run.permanentes.robo += 1; },
+    detalle: 'Robas 1 carta adicional cada turno y +5 PV máximos',
+    aplicar: (run) => {
+      run.permanentes.robo += 1;
+      run.pvMax += 5;
+    },
+  },
+  {
+    icono: '💪', nombre: 'Don de la Fuerza',
+    detalle: '+1 de Fuerza al inicio de cada combate',
+    aplicar: (run) => { run.permanentes.fuerza += 1; },
+  },
+  {
+    icono: '🌀', nombre: 'Don de la Destreza',
+    detalle: '+1 de Destreza al inicio de cada combate',
+    aplicar: (run) => { run.permanentes.destreza += 1; },
+  },
+  {
+    icono: '👑', nombre: 'Don del Tesoro',
+    detalle: 'Obtienes 2 reliquias al azar',
+    aplicar: (run, rng) => {
+      reliquiaAleatoria(run, rng);
+      reliquiaAleatoria(run, rng);
+    },
   },
 ];
 
 /**
  * Encuentro especial entre actos: Síbila, la Vidente del Manantial.
- * Cura por completo y otorga un don permanente a elegir.
+ * Cura por completo y ofrece 3 dones (de un pool mayor) a elegir 1.
  */
-export function pantallaBendicion(run: EstadoRun): Promise<void> {
+export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<void> {
   return new Promise((resolver) => {
+    const ofrecidos = barajar(rng, DONES).slice(0, 3);
+
     const app = document.getElementById('app')!;
     app.innerHTML = '';
     app.className = 'pantalla-fin pantalla-bendicion';
@@ -53,7 +78,7 @@ export function pantallaBendicion(run: EstadoRun): Promise<void> {
     app.appendChild(raiz);
 
     const cont = raiz.querySelector('.bendicion-opciones') as HTMLElement;
-    const botones: HTMLButtonElement[] = DONES.map((don, i) => {
+    const botones: HTMLButtonElement[] = ofrecidos.map((don, i) => {
       const b = el('button', 'evento-opcion') as HTMLButtonElement;
       b.innerHTML = `<span class="op-etiqueta">${don.icono} ${don.nombre}</span>
         <span class="op-detalle">${don.detalle}</span>`;
@@ -68,7 +93,7 @@ export function pantallaBendicion(run: EstadoRun): Promise<void> {
     marcar();
 
     function elegirDon(don: Don) {
-      don.aplicar(run);
+      don.aplicar(run, rng);
       run.pv = run.pvMax; // curación completa
       fx.estallido('divino');
       anuncio(`${don.icono} ${don.nombre}`, 'anuncio-rara');
@@ -87,7 +112,7 @@ export function pantallaBendicion(run: EstadoRun): Promise<void> {
         marcar();
       } else if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
-        elegirDon(DONES[idx]);
+        elegirDon(ofrecidos[idx]);
       }
     };
     window.addEventListener('keydown', teclado);

@@ -108,7 +108,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   fragil: 'Gana un 25 % menos de bloqueo. Baja 1 por turno.',
   espinas: 'Devuelve esa cantidad de daño a quien le ataca cuerpo a cuerpo.',
   regeneracion: 'Cura esa cantidad de PV al inicio de cada turno.',
-  furiaEstable: 'La Furia ya no se pierde al terminar el turno sin hacer daño.',
+  furiaEstable: 'La Furia ya no se rompe aunque acabes la ronda sin recibir daño.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

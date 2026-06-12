@@ -14,6 +14,8 @@ import { pantallaMapa } from './ui/mapa.ts';
 import { pantallaCombate } from './ui/combate.ts';
 import { pantallaCapitulo } from './ui/capitulo.ts';
 import { pantallaBendicion } from './ui/bendicion.ts';
+import { pantallaMision } from './ui/mision.ts';
+import { avisoInstalacion } from './ui/instalar.ts';
 import { elegirCarta, obtenerReliquia, pantallaDescanso } from './ui/recompensa.ts';
 import { pantallaEvento } from './ui/evento.ts';
 import { pantallaFin } from './ui/fin.ts';
@@ -21,6 +23,7 @@ import { iniciarTooltips } from './ui/util.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
+avisoInstalacion();
 
 async function juego() {
   for (;;) {
@@ -34,12 +37,16 @@ async function juego() {
       if (!run) continue; // guardado corrupto o de otra versión: vuelve al título
     } else {
       run = nuevaRun(eleccion.clase);
-      await pantallaCapitulo(CAPITULOS[0]);
-      guardarRun(run);
     }
 
     // la semilla deriva del guardado: el rng continúa distinto pero determinista
     const rng = crearRng((run.semilla ^ 0x9e3779b9) + run.piso * 7919);
+
+    if (eleccion.tipo === 'nueva') {
+      await pantallaCapitulo(CAPITULOS[0]);
+      await pantallaMision(run, rng); // el Senescal encomienda la misión
+      guardarRun(run);
+    }
     let vivo = true;
     let campanaCompleta = false;
 
@@ -63,7 +70,7 @@ async function juego() {
         }
         case 'elite': {
           const grupo = elegir(rng, cap.elites);
-          const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre);
+          const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre, true);
           if (resultado === 'derrota') vivo = false;
           else {
             await obtenerReliquia(run, rng);
@@ -88,7 +95,7 @@ async function juego() {
             // botín de jefe, bendición de la Vidente y siguiente capítulo
             await obtenerReliquia(run, rng);
             await elegirCarta(run, rng, 100); // garantiza elección de rara
-            await pantallaBendicion(run);
+            await pantallaBendicion(run, rng);
             avanzarCapitulo(run, rng);
             await pantallaCapitulo(CAPITULOS[run.capitulo]);
           } else {
