@@ -45,7 +45,8 @@
   .sprite { font-size: 3.2rem; }
   .heroe, .enemigo { min-width: 92px; padding-top: 2rem; }
   .vida { width: 92px; height: 13px; }
-  .campo { padding: 0 3vw 1vh; }
+  /* centrados verticalmente: sin hueco muerto bajo la barra superior */
+  .campo { padding: 0 3vw 1vh; align-items: center; }
   .intencion { font-size: 1rem; }
   .bloqueo-ficha { width: 38px; height: 38px; font-size: 0.9rem; top: 1.8rem; left: -12px; }
   .aviso-jefe { top: 2.4rem; font-size: 0.95rem; }
@@ -108,4 +109,49 @@
   .fin-titulo { font-size: clamp(1.8rem, 7vw, 3rem); }
   .fin-texto { font-size: 0.92rem; }
   .pantalla-bendicion .bendicion-arte { font-size: 3.4rem; }
+}
+
+/* ── Combate en formato VERTICAL: luchadores arriba, HUD en medio, mano abajo ── */
+@media (orientation: portrait) and (max-width: 700px) {
+  /* el escenario deja de estirarse: ocupa solo lo que necesita arriba */
+  .escenario { flex: 0 0 auto; }
+  .campo {
+    align-items: flex-start;
+    padding: 0.5rem 3vw 1rem;
+    gap: 2vw;
+  }
+  .lado-enemigos {
+    gap: 2vw;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+  .lado-jugador { align-items: flex-start; }
+  .aviso-jefe { top: 2rem; }
+
+  /* la zona inferior ocupa el resto: HUD en la franja media, mano al fondo */
+  .zona-mano {
+    flex: 1;
+    height: auto;
+    min-height: 0;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 0.5rem 0.5rem 0.3rem;
+    background: linear-gradient(180deg, rgba(8, 11, 7, 0.45), rgba(8, 11, 7, 0.9) 55%);
+  }
+  .pila-robo { order: 1; }
+  .energia { order: 2; }
+  .btn-fin-turno { order: 3; }
+  .pila-descarte { order: 4; }
+  .mano {
+    order: 5;
+    flex-basis: 100%;
+    max-width: 100%;
+    align-self: flex-end;
+    height: 132px;
+  }
+  /* la línea de soltar cartas baja al borde de la mano */
+  .linea-lanzamiento { top: auto; bottom: 150px; }
 }
