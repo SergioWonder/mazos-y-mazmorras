@@ -191,6 +191,109 @@ export const SENOR_CRIPTA: EnemigoDef = {
   },
 };
 
+// ═══ Capítulo III: La Guarida del Dragón ═════════════════════════════════════
+
+export const KOBOLD_LANCERO: EnemigoDef = {
+  id: 'kobold-lancero', nombre: 'Kobold Lancero', arte: '🦎', pv: [30, 34],
+  ia: (turno, rng) => {
+    if (rng() < 0.3) return atk('Trampa de Abrojos', 7, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Lanzada', 7, 2) : atk('Lanza Dracónica', 11);
+  },
+};
+
+export const KOBOLD_HECHICERO: EnemigoDef = {
+  id: 'kobold-hechicero', nombre: 'Kobold Hechicero', arte: '🜂', pv: [28, 32],
+  ia: (turno, rng) => {
+    if (turno === 0) return { nombre: 'Bendición Dracónica', intencion: 'mejora', fuerzaAliados: 2 };
+    if (rng() < 0.3)
+      return { nombre: 'Humo Cegador', intencion: 'perjuicio', efectos: [['debil', 2, true]] };
+    return atk('Chispa Ígnea', 10);
+  },
+};
+
+export const CULTISTA_DRAGON: EnemigoDef = {
+  id: 'cultista-dragon', nombre: 'Cultista del Dragón', arte: '🥷', pv: [36, 40],
+  ia: (turno, rng, self) => {
+    if (turno % 3 === 1)
+      return { nombre: 'Ofrenda de Sangre', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
+    return rng() < 0.4 ? atk('Daga Ritual', 8, 2) : atk('Tajo Fanático', 12);
+  },
+};
+
+export const DRACO_JOVEN: EnemigoDef = {
+  id: 'draco-joven', nombre: 'Draco Joven', arte: '🐲', pv: [44, 48], escala: 1.25,
+  ia: (turno, rng) => {
+    if (rng() < 0.3) return atk('Aliento Chispeante', 6, 2);
+    if (rng() < 0.45) return atk('Coletazo', 9, 1, [['vulnerable', 1, true]]);
+    return atk('Mordisco', 13);
+  },
+};
+
+export const ELEMENTAL_MAGMA: EnemigoDef = {
+  id: 'elemental-magma', nombre: 'Elemental de Magma', arte: '🌋', pv: [38, 42], escala: 1.2,
+  ia: (turno, rng) => {
+    if (turno % 3 === 2)
+      return { nombre: 'Cuerpo Ardiente', intencion: 'defensa', bloqueo: 10, cura: 4 };
+    if (rng() < 0.35) return atk('Salpicadura de Lava', 8, 1, [['fragil', 1, true]]);
+    return atk('Erupción', 14);
+  },
+};
+
+export const DRACO_VETERANO: EnemigoDef = {
+  id: 'draco-veterano', nombre: 'Draco Veterano', arte: '🐉', pv: [88, 95], escala: 1.45,
+  ia: (turno, rng) => {
+    if (turno % 4 === 3) return { nombre: 'Rugido Escamoso', intencion: 'mejora', efectos: [['fuerza', 2, false]] };
+    if (rng() < 0.4) return atk('Aliento de Fuego', 9, 2);
+    return atk('Garra Desgarradora', 16);
+  },
+};
+
+export const SUMO_CULTISTA: EnemigoDef = {
+  id: 'sumo-cultista', nombre: 'Sumo Cultista de Ignifax', arte: '🧙‍♀️', pv: [80, 86], escala: 1.35,
+  ia: (turno, rng, self, aliados) => {
+    if (turno % 4 === 0 && aliados.length === 0)
+      return {
+        nombre: 'Llamada al Nido', intencion: 'mejora',
+        invocar: [{ def: KOBOLD_LANCERO, pv: 14 }],
+      };
+    if (turno % 4 === 2)
+      return {
+        nombre: 'Maldición Dracónica', intencion: 'perjuicio',
+        efectos: [['debil', 2, true], ['fragil', 2, true]],
+      };
+    if (rng() < 0.4) return { nombre: 'Drenar Esencia', intencion: 'ataque', dano: 12, cura: 6 };
+    return atk('Látigo de Fuego', 14);
+  },
+};
+
+export const IGNIFAX: EnemigoDef = {
+  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [200, 200], escala: 2.2,
+  rasgo: {
+    nombre: 'Corazón de Magma',
+    texto: 'La primera vez que baja de la mitad de sus PV se enfurece: se cura 25 y gana +3 de Fuerza. Cuando alza el vuelo, al turno siguiente desata su Aliento Ígneo (30): bloquea o anula su ataque.',
+  },
+  ia: (turno, rng, self) => {
+    // Enfurecimiento único al cruzar la mitad de la vida
+    if (!self.rasgoUsado && self.pv <= self.pvMax / 2) {
+      self.rasgoUsado = true;
+      return {
+        nombre: 'Corazón de Magma', intencion: 'mejora',
+        cura: 25, efectos: [['fuerza', 3, false]],
+      };
+    }
+    if (turno === 0)
+      return {
+        nombre: 'Rugido del Tesoro', intencion: 'mejora',
+        efectos: [['fuerza', 2, false], ['debil', 1, true]],
+      };
+    const ciclo = turno % 4;
+    if (ciclo === 1) return atk('Garra Incandescente', 18);
+    if (ciclo === 2) return atk('Coletazo Brutal', 12, 1, [['vulnerable', 2, true]]);
+    if (ciclo === 3) return def('Alza el Vuelo', 20);
+    return atk('ALIENTO ÍGNEO', 30);
+  },
+};
+
 // ═══ Capítulos ═══════════════════════════════════════════════════════════════
 
 export interface Capitulo {
@@ -241,6 +344,26 @@ export const CAPITULOS: Capitulo[] = [
     ],
     elites: [[CABALLERO_TUMBARIO], [MOMIA_REAL]],
     jefe: [SENOR_CRIPTA],
+  },
+  {
+    nombre: 'La Guarida del Dragón',
+    subtitulo: 'Capítulo III',
+    intro:
+      'Más allá de la cripta, los túneles descienden hacia un calor imposible. Los kobolds susurran un nombre entre reverencias: Ignifax. El señor oculto del valle, el origen de todo… y tu última batalla.',
+    ambiente: 'brasas',
+    normales: [
+      [KOBOLD_LANCERO, KOBOLD_LANCERO],
+      [KOBOLD_HECHICERO, KOBOLD_LANCERO],
+      [CULTISTA_DRAGON],
+      [DRACO_JOVEN],
+      [ELEMENTAL_MAGMA],
+      [CULTISTA_DRAGON, KOBOLD_HECHICERO],
+      [DRACO_JOVEN, KOBOLD_LANCERO],
+      [KOBOLD_LANCERO, KOBOLD_LANCERO, KOBOLD_HECHICERO],
+      [ELEMENTAL_MAGMA, CULTISTA_DRAGON],
+    ],
+    elites: [[DRACO_VETERANO], [SUMO_CULTISTA]],
+    jefe: [IGNIFAX],
   },
 ];
 

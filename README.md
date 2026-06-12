@@ -1,7 +1,10 @@
 # Mazo y Mazmorra
 
 Roguelike de construcción de mazos al estilo *Slay the Spire* con ambientación de
-fantasía medieval tipo D&D. Dos capítulos: **El Asentamiento Ogro** y **La Cripta**.
+fantasía medieval tipo D&D. Tres capítulos: **El Asentamiento Ogro**, **La Cripta**
+y **La Guarida del Dragón**.
+
+🎮 **Jugar**: https://sergiowonder.github.io/mazos-y-mazmorras/
 
 ## Ejecutar
 

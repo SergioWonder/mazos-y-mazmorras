@@ -12,9 +12,10 @@ export function pantallaFin(victoria: boolean, clase: string): Promise<void> {
     raiz.innerHTML = victoria
       ? `
         <h1 class="fin-titulo">🏆 ¡VICTORIA!</h1>
-        <p class="fin-texto">La filacteria de Vol'guth estalla en mil esquirlas de luz fría.
-        Los muertos vuelven a su descanso y, arriba, el asentamiento no es más que ceniza.
-        Las aldeas del condado vuelven a respirar.</p>
+        <p class="fin-texto">Ignifax se desploma y la montaña entera tiembla con su último
+        rugido. El oro de su tesoro ya no calienta a nadie. Arriba, el asentamiento es ceniza,
+        los muertos descansan… y el valle, por fin, vuelve a respirar. Los bardos tienen
+        canción para décadas.</p>
         <p class="fin-sub">Campaña completada con el ${nombreClase}</p>
         <button class="btn-tomar">Volver al título <span class="atajo">[Enter]</span></button>`
       : `

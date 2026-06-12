@@ -80,6 +80,8 @@ export interface EnemigoCombate extends Luchador {
   danoBaseMax: number;
   /** La filacteria ya se consumió (pasiva del liche). */
   filacteriaUsada?: boolean;
+  /** Rasgo único de un solo uso ya gastado (enfurecerse, etc.). */
+  rasgoUsado?: boolean;
 }
 
 /** Espacio de conjuro del mago (pirámide de niveles 1-3). */

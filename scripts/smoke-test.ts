@@ -5,7 +5,7 @@ import { Combate, type Presentador } from '../src/core/combate.ts';
 import { nuevaRun, avanzarCapitulo } from '../src/core/run.ts';
 import { crearRng } from '../src/core/rng.ts';
 import {
-  CAPITULOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, JEFE_OGRO, SENOR_CRIPTA,
+  CAPITULOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
@@ -395,6 +395,22 @@ console.log('— Jefes con efectos únicos —');
   );
   check(gorzug.pv === pvAntes + 12, 'se cura 12 al devorar');
   check((gorzug.estados.fuerza ?? 0) >= 2, 'gana 2 de Fuerza al devorar');
+
+  // Ignifax: se enfurece una sola vez al cruzar la mitad de sus PV
+  const runI = nuevaRun('druida', 7777);
+  const combateI = new Combate(runI, [IGNIFAX], crearRng(7777), uiSilenciosa);
+  await combateI.iniciar();
+  const dragon = combateI.enemigos[0];
+  dragon.pv = 80; // por debajo de la mitad de 200
+  combateI.jugador.bloqueo = 999; // sobrevivir a su turno
+  await combateI.terminarTurno();
+  check(dragon.intencion.nombre === 'Corazón de Magma', 'Ignifax telegrafia su enfurecimiento');
+  const pvDragon = dragon.pv;
+  combateI.jugador.bloqueo = 999;
+  await combateI.terminarTurno();
+  check(dragon.pv === pvDragon + 25, 'Corazón de Magma lo cura 25');
+  check((dragon.estados.fuerza ?? 0) >= 3, 'y gana +3 de Fuerza');
+  check(dragon.rasgoUsado === true, 'el enfurecimiento es de un solo uso');
 
   // Vol'guth: la filacteria lo revive una vez con 30 PV
   const run2 = nuevaRun('mago', 6666);

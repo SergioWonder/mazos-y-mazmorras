@@ -16,7 +16,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     raiz.innerHTML = `
       <div class="titulo-marco">
         <h1 class="titulo-juego"><span>Mazo</span> <em>&</em> <span>Mazmorra</span></h1>
-        <p class="titulo-sub">Del Asentamiento Ogro a la Cripta</p>
+        <p class="titulo-sub">Del Asentamiento Ogro a la Guarida del Dragón</p>
         <p class="titulo-intro">
           Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio
           del temible <strong>Gorzug</strong>, asola las aldeas del condado.
