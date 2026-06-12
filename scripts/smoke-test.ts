@@ -512,7 +512,11 @@ console.log('— Recuperación de conjuros sostenible —');
   const cartaE = instanciar(espejismo);
   combE.jugador.mano.push(cartaE);
   await combE.jugarCarta(cartaE, combE.enemigos[0]);
-  check(combE.jugador.bloqueo === 7, `bloquea solo el ataque del objetivo (7, no 13): ${combE.jugador.bloqueo}`);
+  // 7 del ataque del objetivo + 2 del Péndulo de Ámbar (no 13 de ambos enemigos)
+  check(
+    combE.jugador.bloqueo === 7 + 2,
+    `bloquea solo el ataque del objetivo (7+2 del Péndulo, no 13+2): ${combE.jugador.bloqueo}`,
+  );
 }
 
 console.log('— Avance de capítulo —');
