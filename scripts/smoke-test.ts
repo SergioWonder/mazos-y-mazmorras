@@ -500,6 +500,19 @@ console.log('— Recuperación de conjuros sostenible —');
   check(combate.jugador.descarte.includes(inst), 'Marea Arcana va al descarte (reutilizable)');
   const estrang = DRUIDA.find((c) => c.id === 'raices-estranguladoras')!;
   check(estrang.coste === 2, 'Raíces Estranguladoras cuesta 2 de maná');
+
+  // Doble Espejismo: ahora bloquea el ataque de UN enemigo elegido
+  const espejismo = MAGO.find((c) => c.id === 'escuela-ilusion')!;
+  check(espejismo.objetivo === 'enemigo', 'Doble Espejismo requiere elegir objetivo');
+  const runE = nuevaRun('mago', 61);
+  const combE = new Combate(runE, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(61), uiSilenciosa);
+  await combE.iniciar();
+  combE.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  combE.enemigos[1].intencion = { nombre: 'Flecha', intencion: 'ataque', dano: 6 };
+  const cartaE = instanciar(espejismo);
+  combE.jugador.mano.push(cartaE);
+  await combE.jugarCarta(cartaE, combE.enemigos[0]);
+  check(combE.jugador.bloqueo === 7, `bloquea solo el ataque del objetivo (7, no 13): ${combE.jugador.bloqueo}`);
 }
 
 console.log('— Avance de capítulo —');

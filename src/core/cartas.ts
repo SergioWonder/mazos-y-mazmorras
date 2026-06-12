@@ -810,25 +810,27 @@ export const MAGO: CartaDef[] = [
   },
   {
     id: 'escuela-ilusion', nombre: 'Doble Espejismo', clase: 'mago', tipo: 'habilidad',
-    rareza: 'rara', coste: 0, objetivo: 'ninguno', subclase: 'Ilusión',
+    rareza: 'rara', coste: 0, objetivo: 'enemigo', subclase: 'Ilusión',
     requiereConjuro: 1, fx: 'luna', animRara: 'anim-ilusion',
-    texto: 'Gasta un conjuro: gana bloqueo igual\nal daño total que pretenden infligirte\nlos enemigos. Roba 1 carta (+1 por nivel).',
+    texto: 'Gasta un conjuro: gana bloqueo igual\nal daño que pretende infligirte\nel enemigo elegido. Roba 1 carta (+1 por nivel).',
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
-      const entrante = c.enemigos
-        .filter((e) => e.vivo && e.intencion.dano !== undefined)
-        .reduce((s, e) => s + c.danoIntencion(e) * (e.intencion.veces ?? 1), 0);
+      const e = c.objetivo!;
+      const entrante =
+        e.intencion.dano !== undefined ? c.danoIntencion(e) * (e.intencion.veces ?? 1) : 0;
       if (entrante > 0) await c.ganarBloqueo(entrante);
+      else await c.mensaje('Ese enemigo no pretende atacarte…');
       await c.robar(nivel);
     },
     mejora: {
-      texto: 'Gasta un conjuro: gana bloqueo igual\nal daño total que pretenden infligirte\nlos enemigos. Roba 2 cartas (+1 por nivel).',
+      texto: 'Gasta un conjuro: gana bloqueo igual\nal daño que pretende infligirte\nel enemigo elegido. Roba 2 cartas (+1 por nivel).',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(1);
-        const entrante = c.enemigos
-          .filter((e) => e.vivo && e.intencion.dano !== undefined)
-          .reduce((s, e) => s + c.danoIntencion(e) * (e.intencion.veces ?? 1), 0);
+        const e = c.objetivo!;
+        const entrante =
+          e.intencion.dano !== undefined ? c.danoIntencion(e) * (e.intencion.veces ?? 1) : 0;
         if (entrante > 0) await c.ganarBloqueo(entrante);
+        else await c.mensaje('Ese enemigo no pretende atacarte…');
         await c.robar(1 + nivel);
       },
     },
