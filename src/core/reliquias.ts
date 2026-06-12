@@ -68,4 +68,38 @@ export const POOL_RELIQUIAS: ReliquiaDef[] = [
     soloClase: 'mago',
     inicioCombate: async (ctx) => { await ctx.ganarConjuro(false); },
   },
+  {
+    id: 'cuerno-valhalla', nombre: 'Cuerno de Valhalla', icono: '📯',
+    texto: 'Al inicio de cada combate, aplica 1 de Débil a todos los enemigos.',
+    inicioCombate: async (ctx) => {
+      for (const e of ctx.enemigos.filter((x) => x.vivo)) await ctx.aplicarEstado(e, 'debil', 1);
+    },
+  },
+  {
+    id: 'talisman-vorpal', nombre: 'Talismán Vorpal', icono: '🗡️',
+    texto: 'Al inicio de cada combate, aplica 1 de Vulnerable a todos los enemigos.',
+    inicioCombate: async (ctx) => {
+      for (const e of ctx.enemigos.filter((x) => x.vivo)) await ctx.aplicarEstado(e, 'vulnerable', 1);
+    },
+  },
+  {
+    id: 'brazales-defensa', nombre: 'Brazales de Defensa', icono: '🦾',
+    texto: 'Empiezas cada combate con 8 de bloqueo.',
+    inicioCombate: async (ctx) => { await ctx.ganarBloqueo(8); },
+  },
+  {
+    id: 'manual-ejercicio', nombre: 'Manual del Ejercicio Provechoso', icono: '📕',
+    texto: 'Al obtenerlo: +1 de Fuerza permanente al inicio de cada combate.',
+    alObtener: (run) => { run.permanentes.fuerza += 1; },
+  },
+  {
+    id: 'piedra-suerte', nombre: 'Piedra de la Buena Suerte', icono: '🍀',
+    texto: 'Cúrate 3 PV al inicio de cada combate.',
+    inicioCombate: async (ctx) => { await ctx.curar(3); },
+  },
+  {
+    id: 'manto-espectral', nombre: 'Manto Espectral', icono: '👘',
+    texto: 'Empiezas cada combate con Espejismo: 20 % de esquivar el primer ataque.',
+    inicioCombate: async (ctx) => { await ctx.aplicarEstado(ctx.jugador, 'espejismo', 1); },
+  },
 ];

@@ -100,6 +100,17 @@
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 18px rgba(125, 186, 78, 0.85));
 }
 
+/* Imagen Espejo: copias ilusorias solapadas alrededor del héroe */
+.heroe.con-espejismo .sprite {
+  filter:
+    drop-shadow(-26px 0 0 rgba(155, 180, 255, 0.45))
+    drop-shadow(26px 0 0 rgba(155, 180, 255, 0.45))
+    drop-shadow(-13px -4px 0 rgba(200, 154, 255, 0.35))
+    drop-shadow(13px -4px 0 rgba(200, 154, 255, 0.35))
+    drop-shadow(0 0 14px rgba(155, 180, 255, 0.9));
+  animation: respirar 1.1s ease-in-out infinite;
+}
+
 .enemigo.golpeado .sprite, .heroe.golpeado .sprite {
   animation: golpeado 0.34s ease-out;
 }
@@ -290,34 +301,44 @@
 /* espacios de conjuro del mago */
 .conjuros {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   flex-wrap: wrap;
   justify-content: center;
-  max-width: 110px;
+  max-width: 150px;
   cursor: help;
+  padding: 4px 8px;
+  border-radius: 10px;
+  background: rgba(46, 38, 96, 0.35);
+  border: 1px solid rgba(138, 122, 224, 0.4);
 }
 .espacio {
   position: relative;
-  font-size: 1.25rem;
+  font-size: 1.8rem;
   line-height: 1;
   color: #a89aff;
-  filter: drop-shadow(0 0 6px rgba(138, 122, 224, 0.8));
+  filter: drop-shadow(0 0 8px rgba(138, 122, 224, 0.95));
+  animation: pulso-conjuro 2.6s ease-in-out infinite;
+}
+@keyframes pulso-conjuro {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(138, 122, 224, 0.75)); }
+  50% { filter: drop-shadow(0 0 14px rgba(168, 154, 255, 1)); }
 }
 .espacio i {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  font-size: 0.5rem;
+  font-size: 0.72rem;
   font-style: normal;
   font-weight: 700;
   color: #100c28;
 }
-.espacio.nivel-2 { font-size: 1.5rem; color: #c0b4ff; }
-.espacio.nivel-3 { font-size: 1.75rem; color: #e4dcff; }
+.espacio.nivel-2 { font-size: 2.15rem; color: #c0b4ff; }
+.espacio.nivel-3 { font-size: 2.5rem; color: #e4dcff; }
 .espacio.gastado {
   color: #3a3650;
   filter: none;
+  animation: none;
   opacity: 0.55;
 }
 .espacio.gastado i { color: #8a86a0; }

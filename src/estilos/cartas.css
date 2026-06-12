@@ -155,6 +155,10 @@
   overflow: hidden;
 }
 
+/* valores modificados en vivo (Fuerza, Débil, Vulnerable del objetivo…) */
+.carta-texto .val-arriba { color: #1c7c1f; font-weight: 700; }
+.carta-texto .val-abajo { color: #b3261e; font-weight: 700; }
+
 /* textos largos: fuente progresivamente menor y arte más pequeño */
 .carta.texto-largo .carta-texto { font-size: 0.65rem; line-height: 1.16; }
 .carta.texto-largo .carta-arte { font-size: 2.3rem; }

@@ -84,8 +84,11 @@
   }
 
   .orbe { width: 54px; height: 54px; font-size: 1.45rem; border-width: 2px; }
-  .conjuros { max-width: 90px; }
-  .espacio { font-size: 1.05rem; }
+  .conjuros { max-width: 120px; gap: 4px; }
+  .espacio { font-size: 1.4rem; }
+  .espacio.nivel-2 { font-size: 1.65rem; }
+  .espacio.nivel-3 { font-size: 1.9rem; }
+  .espacio i { font-size: 0.58rem; }
   .btn-fin-turno { font-size: 0.88rem; padding: 0.5rem 0.8rem; }
   .pila { font-size: 1.4rem; }
   .pila span { font-size: 0.85rem; }

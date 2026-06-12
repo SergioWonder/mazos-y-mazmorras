@@ -106,6 +106,9 @@ export class Combate {
           if (!obj.vivo) break;
           const dano = self.danoRecibido(obj, self.danoDeAtaque(self.jugador, base));
           total += await self.infligir(obj, dano, fx);
+          // Espinas del enemigo (Escamas Ígneas, etc.): devuelven daño al atacante
+          const espinas = obj.estados.espinas ?? 0;
+          if (espinas > 0 && self.jugador.vivo) await self.infligir(self.jugador, espinas, 'raices');
           if (veces > 1) await self.ui.espera(220);
         }
         return total;
@@ -204,6 +207,11 @@ export class Combate {
 
   /** Aplica daño real a un luchador (atraviesa bloqueo primero). */
   async infligir(obj: Luchador, dano: number, fx?: string): Promise<number> {
+    // Invulnerable: no recibe daño alguno
+    if ((obj.estados.invulnerable ?? 0) > 0) {
+      await this.ui.fxGolpe(obj, 0, fx);
+      return 0;
+    }
     const absorbido = Math.min(obj.bloqueo, dano);
     obj.bloqueo -= absorbido;
     const real = dano - absorbido;
@@ -216,7 +224,8 @@ export class Combate {
       // Pasiva del liche: la primera muerte no cuenta
       if (obj !== this.jugador && e.def.pasiva === 'filacteria' && !e.filacteriaUsada) {
         e.filacteriaUsada = true;
-        e.pv = 30;
+        e.pv = 60;
+        e.estados.invulnerable = 1; // un turno intocable mientras se recompone
         await this.ui.fxMensaje('☠️ ¡Su filacteria lo devuelve a la no-vida!');
         this.ui.render();
       } else {
@@ -330,9 +339,9 @@ export class Combate {
     this.ui.render();
   }
 
-  /** Reduce contadores temporales (débil, vulnerable, frágil) de un luchador. */
+  /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador. */
   private decrementarEstados(l: Luchador) {
-    for (const k of ['vulnerable', 'debil', 'fragil'] as EstadoId[]) {
+    for (const k of ['vulnerable', 'debil', 'fragil', 'invulnerable'] as EstadoId[]) {
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
     }
   }
@@ -383,6 +392,9 @@ export class Combate {
       await this.ui.espera(250);
     }
 
+    // Imagen Espejo dura 1 turno: lo que quede se disipa
+    delete j.estados.espejismo;
+
     // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
     // (el daño absorbido por el bloqueo no cuenta)
     if (
@@ -410,6 +422,21 @@ export class Combate {
       const veces = m.veces ?? 1;
       for (let i = 0; i < veces; i++) {
         if (this.terminado) return;
+        // Imagen Espejo: 20% de esquiva por carga; esquivar gasta una carga,
+        // recibir un golpe disipa el conjuro entero
+        const cargas = this.jugador.estados.espejismo ?? 0;
+        if (cargas > 0) {
+          if (this.rng() < cargas * 0.2) {
+            this.jugador.estados.espejismo = cargas - 1;
+            if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
+            await this.ui.fxMensaje('🪞 ¡Esquivado!');
+            this.ui.render();
+            if (veces > 1) await this.ui.espera(220);
+            continue;
+          }
+          delete this.jugador.estados.espejismo; // el golpe rompe las imágenes
+          await this.ui.fxMensaje('🪞 Las imágenes se desvanecen…');
+        }
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
         await this.infligir(this.jugador, dano, 'golpeEnemigo');
         // Espinas: devuelve daño al atacante

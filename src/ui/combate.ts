@@ -6,7 +6,7 @@ import { fx } from '../fx/particulas.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
 } from './util.ts';
-import { renderCarta } from './carta.ts';
+import { renderCarta, actualizarTextoCarta, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
 const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️' };
@@ -203,7 +203,9 @@ export function pantallaCombate(
         )
         .join('');
       $('.lado-jugador').innerHTML = `
-        <div class="heroe ${furiaActiva ? 'con-furia' : ''} ${forma ? 'transformado' : ''}" data-luchador="jugador">
+        <div class="heroe ${furiaActiva ? 'con-furia' : ''} ${forma ? 'transformado' : ''} ${
+          (j.estados.espejismo ?? 0) > 0 ? 'con-espejismo' : ''
+        }" data-luchador="jugador">
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
           <div class="sprite sprite-jugador">${sprite}</div>
           ${barraVida(j)}
@@ -273,17 +275,21 @@ export function pantallaCombate(
     }
 
     function renderEnergia() {
+      const tipPiramide =
+        '<strong>◈ Espacios de conjuro</strong><br>' +
+        'Las cartas de conjuro gastan el espacio libre de MAYOR nivel y escalan con él. ' +
+        'No se recuperan hasta acabar el combate (salvo cartas de recuperación).<br>' +
+        '<em>Crecen en pirámide: cada nivel exige más espacios del nivel inferior ' +
+        '(1 → 2 → 2+1 de nivel 2… máx. nivel 3).</em>';
       const conjuros = combate.jugador.conjuros.length
         ? `<div class="conjuros">
             ${combate.jugador.conjuros
               .map(
                 (c) =>
                   `<span class="espacio nivel-${c.nivel} ${c.gastado ? 'gastado' : ''}"
-                    data-tip="<strong>◈ Espacio de conjuro · nivel ${c.nivel}</strong><br>${
-                      c.gastado
-                        ? 'Gastado: se recupera al acabar el combate.'
-                        : 'Libre: las cartas de conjuro lo consumen y escalan con su nivel.'
-                    }">◈<i>${c.nivel}</i></span>`,
+                    data-tip="${tipPiramide}<br><em>Este espacio: nivel ${c.nivel} · ${
+                      c.gastado ? 'gastado' : 'libre'
+                    }.</em>">◈<i>${c.nivel}</i></span>`,
               )
               .join('')}
           </div>`
@@ -295,13 +301,28 @@ export function pantallaCombate(
         </div>${conjuros}`;
     }
 
+    /** Modificadores en vivo para el texto de las cartas (Fuerza, Débil,
+     *  Destreza, Frágil… y Vulnerable del objetivo si se conoce). */
+    function modsEnCombate(objetivo?: EnemigoCombate | null): ModsCarta {
+      return {
+        dano: (base) => {
+          const d = combate.danoDeAtaque(combate.jugador, base);
+          return objetivo?.vivo ? combate.danoRecibido(objetivo, d) : d;
+        },
+        bloqueo: (base) => combate.bloqueoDeCarta(base),
+      };
+    }
+
     function renderMano() {
       const mano = $('.mano');
       mano.innerHTML = '';
       const cartas = combate.jugador.mano;
       if (seleccion >= cartas.length) seleccion = Math.max(0, cartas.length - 1);
       cartas.forEach((inst, i) => {
-        const c = renderCarta(defDe(inst));
+        // la carta pendiente de objetivo muestra el daño contra el enemigo marcado
+        const objetivo =
+          cartaPendiente === inst ? combate.enemigos[objetivoIdxValido()] : undefined;
+        const c = renderCarta(defDe(inst), modsEnCombate(objetivo));
         if (inst.mejorada) c.classList.add('carta-mejorada');
         c.dataset.mano = String(i);
         const n = cartas.length;
@@ -409,6 +430,7 @@ export function pantallaCombate(
         const inicioY = ev.clientY;
         let movido = false;
 
+        let idxSobre = -1; // enemigo bajo el cursor (para el texto dinámico)
         const alMover = (e: PointerEvent) => {
           const dx = e.clientX - inicioX;
           const dy = e.clientY - inicioY;
@@ -429,6 +451,16 @@ export function pantallaCombate(
               .elementFromPoint(e.clientX, e.clientY)
               ?.closest('.enemigo');
             sobre?.classList.add('objetivo-activo');
+            // el texto refleja el daño real contra el enemigo concreto (Vulnerable)
+            const idx = sobre ? Number((sobre as HTMLElement).dataset.idx) : -1;
+            if (idx !== idxSobre) {
+              idxSobre = idx;
+              actualizarTextoCarta(
+                elemCarta,
+                defDe(inst),
+                modsEnCombate(idx >= 0 ? combate.enemigos[idx] : null),
+              );
+            }
           }
         };
 

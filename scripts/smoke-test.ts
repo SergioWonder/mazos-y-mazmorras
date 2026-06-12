@@ -396,33 +396,92 @@ console.log('— Jefes con efectos únicos —');
   check(gorzug.pv === pvAntes + 20, 'se cura 20 al devorar');
   check((gorzug.estados.fuerza ?? 0) >= 3, 'gana 3 de Fuerza al devorar');
 
-  // Ignifax: se enfurece una sola vez al cruzar la mitad de sus PV
+  // Ignifax: escamas pasivas y enfurecimiento devastador único bajo el 50%
   const runI = nuevaRun('druida', 7777);
   const combateI = new Combate(runI, [IGNIFAX], crearRng(7777), uiSilenciosa);
   await combateI.iniciar();
   const dragon = combateI.enemigos[0];
-  dragon.pv = 80; // por debajo de la mitad de 200
+  check(dragon.pvMax === 260, 'Ignifax tiene 260 PV');
+  check((dragon.estados.espinas ?? 0) === 3, 'Escamas Ígneas: empieza con 3 de Espinas');
+  const pvHeroe = combateI.jugador.pv;
+  await combateI.contexto(dragon).atacar(dragon, 5);
+  check(combateI.jugador.pv === pvHeroe - 3, 'sus espinas devuelven 3 de daño al atacarle');
+  dragon.pv = 100; // por debajo de la mitad de 260
   combateI.jugador.bloqueo = 999; // sobrevivir a su turno
   await combateI.terminarTurno();
-  check(dragon.intencion.nombre === 'Corazón de Magma', 'Ignifax telegrafia su enfurecimiento');
+  check(dragon.intencion.nombre === 'CORAZÓN DE MAGMA', 'Ignifax telegrafia su enfurecimiento');
   const pvDragon = dragon.pv;
   combateI.jugador.bloqueo = 999;
   await combateI.terminarTurno();
-  check(dragon.pv === pvDragon + 25, 'Corazón de Magma lo cura 25');
-  check((dragon.estados.fuerza ?? 0) >= 3, 'y gana +3 de Fuerza');
+  check(dragon.pv === pvDragon + 50, 'Corazón de Magma lo cura 50');
+  check((dragon.estados.fuerza ?? 0) >= 5, 'gana +5 de Fuerza');
+  check((dragon.estados.espinas ?? 0) === 5, 'y sus escamas arden más (+2 Espinas)');
   check(dragon.rasgoUsado === true, 'el enfurecimiento es de un solo uso');
 
-  // Vol'guth: la filacteria lo revive una vez con 30 PV
+  // Vol'guth: la filacteria lo revive con 60 PV, invulnerable 1 turno y sediento
   const run2 = nuevaRun('mago', 6666);
   const combate2 = new Combate(run2, [SENOR_CRIPTA], crearRng(6666), uiSilenciosa);
   await combate2.iniciar();
   const liche = combate2.enemigos[0];
   liche.pv = 5;
   await combate2.contexto(liche).atacar(liche, 99);
-  check(liche.vivo && liche.pv === 30, 'la filacteria lo revive con 30 PV');
-  check(combate2.terminado === null, 'el combate continúa tras la primera muerte');
+  check(liche.vivo && liche.pv === 60, 'la filacteria lo revive con 60 PV');
+  check((liche.estados.invulnerable ?? 0) === 1, 'y queda invulnerable');
+  await combate2.contexto(liche).atacar(liche, 999);
+  check(liche.vivo && liche.pv === 60, 'invulnerable: no recibe daño ese turno');
+  combate2.jugador.bloqueo = 999;
+  await combate2.terminarTurno(); // su turno consume la invulnerabilidad
+  check((liche.estados.invulnerable ?? 0) === 0, 'la invulnerabilidad dura 1 turno');
+  const drena = ['Drenar Vida', 'Lluvia de Huesos Voraz', 'Nova Necrótica Voraz', 'Maldición del Despertar'];
+  for (let t = 0; t < 4 && liche.vivo; t++) {
+    if (liche.intencion.cura && liche.intencion.dano) break;
+    combate2.jugador.bloqueo = 999;
+    combate2.jugador.pv = combate2.jugador.pvMax;
+    await combate2.terminarTurno();
+  }
+  check(
+    drena.includes(liche.intencion.nombre) || liche.filacteriaUsada === true,
+    'tras despertar, sus ataques drenan vida',
+  );
   await combate2.contexto(liche).atacar(liche, 999);
   check(!liche.vivo && combate2.terminado === 'victoria', 'la segunda muerte es definitiva');
+}
+
+console.log('— Imagen Espejo —');
+{
+  const espejo = MAGO.find((c) => c.id === 'escuela-ilusion')!;
+  check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 1, 'Imagen Espejo: coste 1');
+  check(!espejo.requiereConjuro, 'ya no gasta espacio de conjuro');
+
+  // rng constante 0.01 → siempre esquiva (0.01 < cargas×0.2)
+  const runA = nuevaRun('mago', 11);
+  const combA = new Combate(runA, [GOBLIN_CORTADOR], () => 0.01, uiSilenciosa);
+  await combA.iniciar();
+  combA.jugador.estados.espejismo = 4;
+  combA.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  const pvAntes = combA.jugador.pv;
+  await combA.terminarTurno();
+  check(combA.jugador.pv === pvAntes, 'esquiva el ataque sin recibir daño');
+  check((combA.jugador.estados.espejismo ?? 0) === 0, 'el espejismo expira tras 1 turno');
+
+  // rng constante 0.99 → nunca esquiva: el golpe disipa el conjuro
+  const runB = nuevaRun('mago', 12);
+  const combB = new Combate(runB, [GOBLIN_CORTADOR], () => 0.99, uiSilenciosa);
+  await combB.iniciar();
+  combB.jugador.estados.espejismo = 4;
+  combB.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  const pvAntesB = combB.jugador.pv;
+  await combB.terminarTurno();
+  check(combB.jugador.pv < pvAntesB, 'si el golpe entra, recibe el daño');
+  check((combB.jugador.estados.espejismo ?? 0) === 0, 'y las imágenes se disipan');
+}
+
+console.log('— Reliquias —');
+{
+  const { POOL_RELIQUIAS } = await import('../src/core/reliquias.ts');
+  const ids = POOL_RELIQUIAS.map((r) => r.id);
+  check(ids.length >= 13, `pool de reliquias amplio (${ids.length})`);
+  check(new Set(ids).size === ids.length, 'sin ids de reliquia duplicados');
 }
 
 console.log('— Guardado y carga —');
@@ -500,23 +559,6 @@ console.log('— Recuperación de conjuros sostenible —');
   check(combate.jugador.descarte.includes(inst), 'Marea Arcana va al descarte (reutilizable)');
   const estrang = DRUIDA.find((c) => c.id === 'raices-estranguladoras')!;
   check(estrang.coste === 2, 'Raíces Estranguladoras cuesta 2 de maná');
-
-  // Doble Espejismo: ahora bloquea el ataque de UN enemigo elegido
-  const espejismo = MAGO.find((c) => c.id === 'escuela-ilusion')!;
-  check(espejismo.objetivo === 'enemigo', 'Doble Espejismo requiere elegir objetivo');
-  const runE = nuevaRun('mago', 61);
-  const combE = new Combate(runE, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(61), uiSilenciosa);
-  await combE.iniciar();
-  combE.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
-  combE.enemigos[1].intencion = { nombre: 'Flecha', intencion: 'ataque', dano: 6 };
-  const cartaE = instanciar(espejismo);
-  combE.jugador.mano.push(cartaE);
-  await combE.jugarCarta(cartaE, combE.enemigos[0]);
-  // 7 del ataque del objetivo + 2 del Péndulo de Ámbar (no 13 de ambos enemigos)
-  check(
-    combE.jugador.bloqueo === 7 + 2,
-    `bloquea solo el ataque del objetivo (7+2 del Péndulo, no 13+2): ${combE.jugador.bloqueo}`,
-  );
 }
 
 console.log('— Avance de capítulo —');

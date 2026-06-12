@@ -91,12 +91,14 @@ export function iniciarTooltips() {
 export const ICONO_ESTADO: Record<string, string> = {
   fuerza: '💪', raices: '🪾', destreza: '🌀', vulnerable: '🎯', debil: '💧',
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', furiaEstable: '🔒',
+  espejismo: '🪞', invulnerable: '🌟',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
   fuerza: 'Fuerza', raices: 'Raíces', destreza: 'Destreza',
   vulnerable: 'Vulnerable', debil: 'Débil', fragil: 'Frágil', espinas: 'Espinas',
   regeneracion: 'Regeneración', furiaEstable: 'Furia Estable',
+  espejismo: 'Espejismo', invulnerable: 'Invulnerable',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -109,6 +111,9 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   espinas: 'Devuelve esa cantidad de daño a quien le ataca cuerpo a cuerpo.',
   regeneracion: 'Cura esa cantidad de PV al inicio de cada turno.',
   furiaEstable: 'La Furia ya no se rompe aunque acabes la ronda sin recibir daño.',
+  espejismo:
+    'Copias ilusorias: 20 % de esquivar cada ataque por carga. Esquivar gasta 1 carga; recibir un golpe las disipa todas. Dura 1 turno.',
+  invulnerable: 'No recibe ningún daño mientras dure.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

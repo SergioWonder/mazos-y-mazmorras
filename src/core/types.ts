@@ -15,7 +15,9 @@ export type EstadoId =
   | 'fragil'        // gana -25% bloqueo, N turnos
   | 'espinas'       // devuelve N daño al ser atacado
   | 'regeneracion'  // cura N al inicio del turno
-  | 'furiaEstable'; // la Furia ya no se pierde (Corazón Salvaje)
+  | 'furiaEstable'  // la Furia ya no se pierde (Corazón Salvaje)
+  | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
+  | 'invulnerable'; // no recibe daño (N turnos)
 
 export interface EfectoTemporal {
   etiqueta: string;     // p.ej. "Forma de Lobo"
@@ -61,6 +63,8 @@ export interface EnemigoDef {
   escala?: number;       // tamaño relativo del sprite
   /** Rasgo único visible (jefes): nombre + descripción para el tooltip. */
   rasgo?: { nombre: string; texto: string };
+  /** Estados con los que entra en combate (pasivas: espinas, etc.). */
+  estadosIniciales?: Partial<Record<EstadoId, number>>;
   /** Pasiva especial: 'filacteria' = la primera vez que muere revive con 30 PV. */
   pasiva?: 'filacteria';
   /** Decide el próximo movimiento (recibe a sus aliados vivos). */

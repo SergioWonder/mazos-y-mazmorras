@@ -70,7 +70,7 @@ export const JEFE_OGRO: EnemigoDef = {
   id: 'jefe-ogro', nombre: 'Gorzug, Jefe Ogro', arte: '👹', pv: [115, 115], escala: 1.9,
   rasgo: {
     nombre: 'Devorador',
-    texto: 'Invoca goblins famélicos y puede devorar a uno vivo para curarse 20 PV y ganar 3 de Fuerza. Mata a los goblins antes de que se los coma.',
+    texto: 'Su despensa camina: invoca goblins famélicos, y devorarlos lo repara y lo enfurece.',
   },
   ia: (turno, rng, self, aliados) => {
     if (turno === 0)
@@ -176,18 +176,30 @@ export const SENOR_CRIPTA: EnemigoDef = {
   pasiva: 'filacteria',
   rasgo: {
     nombre: 'Filacteria',
-    texto: 'La primera vez que sus PV llegan a 0, su filacteria lo devuelve a la no-vida con 30 PV. Tendrás que matarlo dos veces.',
+    texto: 'Su alma está atada a una filacteria: para él, la muerte no es un final… sino un despertar.',
   },
-  ia: (turno) => {
+  ia: (turno, rng, self) => {
+    // Tras despertar de la filacteria, su hambre de vida se desata:
+    // todos sus ataques drenan la esencia del enemigo
+    const despierto = self.filacteriaUsada === true;
     const ciclo = turno % 4;
     if (ciclo === 0)
       return {
-        nombre: 'Maldición Eterna', intencion: 'perjuicio',
-        efectos: [['debil', 2, true], ['fragil', 2, true], ['fuerza', 2, false]],
+        nombre: despierto ? 'Maldición del Despertar' : 'Maldición Eterna',
+        intencion: 'perjuicio',
+        efectos: despierto
+          ? [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true], ['fuerza', 3, false]]
+          : [['debil', 2, true], ['fragil', 2, true], ['fuerza', 2, false]],
       };
-    if (ciclo === 1) return { nombre: 'Drenar Vida', intencion: 'ataque', dano: 13, cura: 8 };
-    if (ciclo === 2) return atk('Lluvia de Huesos', 7, 3);
-    return atk('Nova Necrótica', 20);
+    if (ciclo === 1)
+      return { nombre: 'Drenar Vida', intencion: 'ataque', dano: 13, cura: despierto ? 13 : 8 };
+    if (ciclo === 2)
+      return despierto
+        ? { nombre: 'Lluvia de Huesos Voraz', intencion: 'ataque', dano: 7, veces: 3, cura: 9 }
+        : atk('Lluvia de Huesos', 7, 3);
+    return despierto
+      ? { nombre: 'Nova Necrótica Voraz', intencion: 'ataque', dano: 22, cura: 11 }
+      : atk('Nova Necrótica', 20);
   },
 };
 
@@ -267,18 +279,20 @@ export const SUMO_CULTISTA: EnemigoDef = {
 };
 
 export const IGNIFAX: EnemigoDef = {
-  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [200, 200], escala: 2.2,
+  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [260, 260], escala: 2.2,
+  estadosIniciales: { espinas: 3 }, // Escamas Ígneas: pasiva todo el combate
   rasgo: {
-    nombre: 'Corazón de Magma',
-    texto: 'La primera vez que baja de la mitad de sus PV se enfurece: se cura 25 y gana +3 de Fuerza. Cuando alza el vuelo, al turno siguiente desata su Aliento Ígneo (30): bloquea o anula su ataque.',
+    nombre: 'Escamas Ígneas y Corazón de Magma',
+    texto: 'Sus escamas al rojo castigan a quien lo golpea. Y cuando la sangre del dragón hierve de verdad… la montaña entera lo sabe.',
   },
   ia: (turno, rng, self) => {
-    // Enfurecimiento único al cruzar la mitad de la vida
+    // Enfurecimiento único y devastador al cruzar la mitad de la vida
     if (!self.rasgoUsado && self.pv <= self.pvMax / 2) {
       self.rasgoUsado = true;
       return {
-        nombre: 'Corazón de Magma', intencion: 'mejora',
-        cura: 25, efectos: [['fuerza', 3, false]],
+        nombre: 'CORAZÓN DE MAGMA', intencion: 'ataque',
+        dano: 12, cura: 50,
+        efectos: [['fuerza', 5, false], ['espinas', 2, false], ['vulnerable', 2, true]],
       };
     }
     if (turno === 0)
@@ -371,7 +385,7 @@ export function crearEnemigo(def: EnemigoDef, rng: () => number): EnemigoCombate
   const pv = def.pv[0] + Math.floor(rng() * (def.pv[1] - def.pv[0] + 1));
   const enemigo: EnemigoCombate = {
     def, nombre: def.nombre, pvMax: pv, pv, bloqueo: 0,
-    estados: {}, vivo: true, turnosVisto: 0,
+    estados: { ...def.estadosIniciales }, vivo: true, turnosVisto: 0,
     intencion: { nombre: '...', intencion: 'desconocido' },
     danoBaseMax: 0,
   };
