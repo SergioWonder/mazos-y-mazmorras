@@ -3,7 +3,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   // Ruta base del repositorio en GitHub Pages
-  base: '/mazo-y-mazmorra/',
+  base: '/mazos-y-mazmorras/',
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
