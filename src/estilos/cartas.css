@@ -152,7 +152,15 @@
   display: grid;
   place-items: center;
   padding: 1px 2px;
+  overflow: hidden;
 }
+
+/* textos largos: fuente progresivamente menor y arte más pequeño */
+.carta.texto-largo .carta-texto { font-size: 0.65rem; line-height: 1.16; }
+.carta.texto-largo .carta-arte { font-size: 2.3rem; }
+.carta.texto-xl .carta-texto { font-size: 0.59rem; line-height: 1.12; }
+.carta.texto-xl .carta-arte { font-size: 1.9rem; padding: 2px 0 0; }
+.carta.texto-xl .carta-tipo { padding: 1px 0; font-size: 0.56rem; }
 
 /* ── Cartas en mano ─────────────────────────────────────────────────────── */
 .mano .carta {

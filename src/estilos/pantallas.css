@@ -122,11 +122,18 @@
   text-shadow: 0 0 22px rgba(255, 140, 59, 0.35);
 }
 
-.mapa-lienzo {
+.mapa-scroll {
   flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mapa-lienzo {
   position: relative;
   margin: 0 auto;
   width: min(680px, 92vw);
+  height: 960px;       /* el mapa respira y se recorre con scroll */
+  min-height: 100%;
 }
 
 .mapa-svg {
@@ -186,6 +193,10 @@
 
 .panel-recompensa {
   text-align: center;
+  max-height: 94vh;
+  max-width: 94vw;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 2.4rem 3rem;
   border-radius: 6px;
   border: 1px solid rgba(217, 169, 63, 0.4);

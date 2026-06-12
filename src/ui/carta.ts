@@ -14,6 +14,12 @@ export function renderCarta(def: CartaDef): HTMLElement {
   const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo}`);
   if (def.rareza === 'rara') carta.classList.add('carta-rara-brillo');
 
+  // Textos largos (frecuentes en el mago): reduce la fuente para que quepan
+  const caracteres = def.texto.replaceAll('\n', ' ').length;
+  const lineas = def.texto.split('\n').length;
+  if (caracteres > 120 || lineas > 4) carta.classList.add('texto-xl');
+  else if (caracteres > 88 || lineas > 3) carta.classList.add('texto-largo');
+
   const conjuro = def.requiereConjuro
     ? `<div class="carta-conjuro" data-tip="<strong>◈ Carta de conjuro</strong><br>Gasta un espacio de conjuro de nivel ${def.requiereConjuro}+ al jugarse.">◈${
         def.requiereConjuro > 1 ? def.requiereConjuro : ''

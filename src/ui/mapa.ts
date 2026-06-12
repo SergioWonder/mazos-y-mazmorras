@@ -32,9 +32,11 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
         <span class="bs-piso">🃏 ${run.mazo.length} cartas</span>
       </div>
       <h2 class="mapa-titulo">${nombreCapitulo}</h2>
-      <div class="mapa-lienzo">
-        <svg class="mapa-svg"></svg>
-        <div class="mapa-nodos"></div>
+      <div class="mapa-scroll">
+        <div class="mapa-lienzo">
+          <svg class="mapa-svg"></svg>
+          <div class="mapa-nodos"></div>
+        </div>
       </div>
       <p class="titulo-ayuda">Elige tu siguiente paso · ←→ y Enter, o haz clic</p>
     `;
@@ -89,8 +91,14 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
     }
 
     let idx = 0;
-    const marcar = () => botones.forEach((b, i) => b.classList.toggle('nodo-foco', i === idx));
+    const marcar = () =>
+      botones.forEach((b, i) => {
+        b.classList.toggle('nodo-foco', i === idx);
+        if (i === idx) b.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      });
     marcar();
+    // arranca con la zona del jugador visible (el mapa se recorre con scroll)
+    requestAnimationFrame(() => botones[0]?.scrollIntoView({ block: 'center' }));
 
     const teclado = (ev: KeyboardEvent) => {
       if (ev.code === 'ArrowLeft' || ev.code === 'ArrowRight') {

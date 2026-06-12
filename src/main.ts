@@ -2,6 +2,7 @@ import './estilos/base.css';
 import './estilos/cartas.css';
 import './estilos/combate.css';
 import './estilos/pantallas.css';
+import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
 import { nuevaRun, avanzarCapitulo } from './core/run.ts';
