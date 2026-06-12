@@ -1,0 +1,241 @@
+/* ── Cartas ─────────────────────────────────────────────────────────────── */
+
+.carta {
+  --marco: #8a7350;
+  width: 148px;
+  height: 208px;
+  border-radius: 10px;
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 9px 7px;
+  color: #2b2316;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(255, 248, 220, 0.65), transparent 55%),
+    linear-gradient(165deg, #efe2bd 0%, #e3d2a4 55%, #d4bf8b 100%);
+  border: 3px solid var(--marco);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 250, 230, 0.5),
+    0 6px 14px rgba(0, 0, 0, 0.55);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+/* marcos por clase */
+.carta-druida { --marco: #4e7a35; }
+.carta-barbaro { --marco: #9e4530; }
+.carta-mago { --marco: #5e50b0; }
+.carta-neutral { --marco: #6e6356; }
+
+/* marcos por rareza */
+.rareza-infrecuente { --marco: #5a7d9e; }
+.rareza-infrecuente .carta-nombre { color: #2c4a66; }
+.rareza-rara {
+  --marco: #c79a2e;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 250, 230, 0.5),
+    0 6px 14px rgba(0, 0, 0, 0.55),
+    0 0 14px rgba(217, 169, 63, 0.45);
+}
+
+/* brillo animado en cartas raras */
+.carta-rara-brillo::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 10px;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 235, 170, 0.55) 46%,
+    rgba(255, 255, 255, 0.75) 50%,
+    rgba(255, 235, 170, 0.55) 54%,
+    transparent 70%
+  );
+  background-size: 280% 100%;
+  mix-blend-mode: overlay;
+  animation: destello-raro 3.2s ease-in-out infinite;
+}
+@keyframes destello-raro {
+  0%, 55% { background-position: 120% 0; }
+  85%, 100% { background-position: -60% 0; }
+}
+
+.carta-coste {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-titulo);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff8e0;
+  background: radial-gradient(circle at 32% 28%, #ffd166, #c97b1e 60%, #8a4d0f);
+  border: 2px solid #5e3608;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+/* insignia de espacio de conjuro */
+.carta-conjuro {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 4px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-titulo);
+  font-size: 1rem;
+  color: #efe9ff;
+  background: radial-gradient(circle at 32% 28%, #a89aff, #5e50b0 60%, #2e2660);
+  border: 2px solid #241e4a;
+  box-shadow: 0 0 10px rgba(138, 122, 224, 0.7);
+  z-index: 2;
+}
+
+.carta-tipo strong { color: #8a4d0f; letter-spacing: 0.04em; }
+
+/* carta mejorada (+) */
+.carta-mejorada .carta-nombre { color: #2e7a2a; }
+.carta-mejorada {
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 250, 230, 0.5),
+    0 6px 14px rgba(0, 0, 0, 0.55),
+    0 0 10px rgba(125, 186, 78, 0.45);
+}
+
+.carta-cabecera { text-align: center; min-height: 2.1em; display: grid; place-items: center; }
+.carta-nombre {
+  font-family: var(--fuente-titulo);
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.05;
+  color: #3a2c12;
+}
+
+.carta-arte {
+  font-size: 2.7rem;
+  text-align: center;
+  padding: 4px 0 2px;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 50%, rgba(255, 252, 240, 0.5), rgba(120, 100, 60, 0.18)),
+    linear-gradient(180deg, rgba(110, 95, 60, 0.12), rgba(110, 95, 60, 0.22));
+  border: 1px solid rgba(110, 90, 50, 0.4);
+  border-radius: 5px;
+  margin: 2px 0;
+}
+
+.carta-tipo {
+  font-size: 0.62rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+  padding: 2px 0;
+}
+.carta-tipo em { text-transform: none; letter-spacing: 0; color: #7a5414; }
+
+.carta-texto {
+  font-size: 0.72rem;
+  line-height: 1.22;
+  text-align: center;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  padding: 1px 2px;
+}
+
+/* ── Cartas en mano ─────────────────────────────────────────────────────── */
+.mano .carta {
+  cursor: grab;
+  touch-action: none; /* el arrastre táctil no debe hacer scroll/zoom */
+  transform: rotate(var(--ang, 0deg)) translateY(var(--alza, 0px));
+  margin: 0 -14px;
+}
+.mano .carta:hover,
+.mano .carta.seleccionada {
+  transform: rotate(0deg) translateY(-46px) scale(1.22);
+  z-index: 20;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7), 0 0 18px rgba(255, 209, 102, 0.35);
+}
+.mano .carta.pendiente {
+  transform: rotate(0deg) translateY(-56px) scale(1.18);
+  z-index: 20;
+  outline: 2px solid var(--brasa-viva);
+  outline-offset: 3px;
+}
+.mano .carta.sin-energia { filter: grayscale(0.7) brightness(0.7); }
+.mano .carta.arrastrando {
+  transform: translate(var(--dx, 0), var(--dy, 0)) rotate(0deg) scale(1.08);
+  z-index: 30;
+  cursor: grabbing;
+  transition: none;
+  pointer-events: none;
+}
+
+/* carta volando al jugarse */
+.carta-volando {
+  position: fixed;
+  z-index: 70;
+  pointer-events: none;
+  transition: all 0.4s cubic-bezier(0.5, -0.3, 0.3, 1);
+}
+.carta-volando-fin {
+  transform: translate(0, -180px) scale(0.45) rotate(8deg);
+  opacity: 0;
+}
+
+/* ── Showcase de carta rara al jugarse ──────────────────────────────────── */
+.carta-showcase {
+  position: fixed;
+  left: 50%;
+  top: 42%;
+  z-index: 75;
+  transform: translate(-50%, -50%) scale(1.7);
+  pointer-events: none;
+  animation: showcase 0.85s ease-out forwards;
+}
+@keyframes showcase {
+  0% { transform: translate(-50%, -50%) scale(0.5) rotate(-6deg); opacity: 0; }
+  18% { transform: translate(-50%, -50%) scale(1.85) rotate(1deg); opacity: 1; }
+  75% { transform: translate(-50%, -50%) scale(1.7); opacity: 1; }
+  100% { transform: translate(-50%, -55%) scale(1.6); opacity: 0; }
+}
+
+/* halos específicos por subclase (animaciones de cartas raras) */
+.anim-luna { filter: drop-shadow(0 0 34px #9bb4ff) drop-shadow(0 0 80px #dfe8ff); }
+.anim-mar { filter: drop-shadow(0 0 34px #5aa7d6) drop-shadow(0 0 80px #bfe7ff); }
+.anim-estrellas { filter: drop-shadow(0 0 34px #ffd166) drop-shadow(0 0 80px #fff3b8); }
+.anim-tierra { filter: drop-shadow(0 0 34px #7dba4e) drop-shadow(0 0 80px #c9f29b); }
+.anim-berserker { filter: drop-shadow(0 0 34px #d62828) drop-shadow(0 0 80px #ff6b35); animation-duration: 0.7s; }
+.anim-corazon { filter: drop-shadow(0 0 34px #d65a8a) drop-shadow(0 0 80px #ffc2d6); }
+.anim-arbol { filter: drop-shadow(0 0 34px #4e8a33) drop-shadow(0 0 80px #b8e08a); }
+.anim-divino { filter: drop-shadow(0 0 34px #ffd166) drop-shadow(0 0 80px #ffffff); }
+.anim-evocacion { filter: drop-shadow(0 0 34px #ff8c3b) drop-shadow(0 0 80px #ffd166); animation-duration: 0.7s; }
+.anim-abjuracion { filter: drop-shadow(0 0 34px #5aa7d6) drop-shadow(0 0 80px #cfeaff); }
+.anim-ilusion { filter: drop-shadow(0 0 34px #c89aff) drop-shadow(0 0 80px #ffd9f2); }
+
+/* ── Cartas de recompensa ───────────────────────────────────────────────── */
+.carta-recompensa {
+  cursor: pointer;
+  animation: entrar-recompensa 0.5s ease-out backwards;
+  animation-delay: var(--retraso, 0s);
+}
+.carta-recompensa:hover,
+.carta-recompensa.seleccionada {
+  transform: translateY(-14px) scale(1.12);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.7), 0 0 22px rgba(255, 209, 102, 0.5);
+}
+@keyframes entrar-recompensa {
+  from { opacity: 0; transform: translateY(40px) rotate(4deg) scale(0.8); }
+  to { opacity: 1; }
+}

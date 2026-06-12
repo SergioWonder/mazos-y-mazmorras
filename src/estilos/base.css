@@ -1,0 +1,255 @@
+/* ── Mazo y Mazmorra · base ─────────────────────────────────────────────── */
+
+:root {
+  /* noche en el asentamiento en llamas */
+  --tinta: #0d120c;
+  --tinta-2: #161e14;
+  --tinta-3: #232e1f;
+  --pergamino: #e8d9b0;
+  --pergamino-oscuro: #cdb98a;
+  --brasa: #ff8c3b;
+  --brasa-viva: #ffd166;
+  --sangre: #b3261e;
+  --druida: #7dba4e;
+  --druida-oscuro: #3c5a2a;
+  --barbaro: #d65a3a;
+  --barbaro-oscuro: #6e2a1c;
+  --mago: #8a7ae0;
+  --mago-oscuro: #3a3270;
+  --acero: #9fb4c7;
+  --oro: #d9a93f;
+
+  --fuente-titulo: 'Almendra SC', serif;
+  --fuente-display: 'Almendra', serif;
+  --fuente-cuerpo: 'Alegreya', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: var(--fuente-cuerpo);
+  color: var(--pergamino);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 110%, rgba(255, 110, 40, 0.18), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% -10%, rgba(60, 90, 42, 0.25), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 85% -5%, rgba(40, 50, 80, 0.2), transparent 60%),
+    linear-gradient(180deg, #0a0e09 0%, var(--tinta) 45%, #141008 100%);
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* grano sutil sobre todo */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.05;
+  background-image: repeating-conic-gradient(#fff 0% 0.0001%, transparent 0.0002% 0.05%);
+  background-size: 7px 7px;
+  mix-blend-mode: overlay;
+}
+
+/* viñeta */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(ellipse 75% 70% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+#fx-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+}
+
+#app { width: 100vw; height: 100vh; position: relative; }
+
+#overlay:empty { display: none; }
+#overlay.overlay-activo {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  background: rgba(5, 8, 5, 0.78);
+  backdrop-filter: blur(3px);
+  animation: aparecer 0.25s ease-out;
+}
+
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
+
+button {
+  font-family: var(--fuente-display);
+  cursor: pointer;
+}
+
+.atajo {
+  opacity: 0.55;
+  font-size: 0.78em;
+  margin-left: 0.4em;
+  letter-spacing: 0.05em;
+}
+
+/* ── Barra superior ─────────────────────────────────────────────────────── */
+.barra-superior {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 0.55rem 1.4rem;
+  font-family: var(--fuente-display);
+  font-size: 1.05rem;
+  background: linear-gradient(180deg, rgba(10, 13, 9, 0.92), rgba(10, 13, 9, 0.55) 85%, transparent);
+  border-bottom: 1px solid rgba(217, 169, 63, 0.22);
+  position: relative;
+  z-index: 10;
+}
+.bs-pv { color: #ff9d8a; }
+.bs-piso { margin-left: auto; opacity: 0.75; font-style: italic; }
+.reliquia {
+  font-size: 1.25rem;
+  margin-right: 0.35rem;
+  cursor: help;
+  filter: drop-shadow(0 0 4px rgba(217, 169, 63, 0.5));
+}
+
+/* ── Números flotantes ──────────────────────────────────────────────────── */
+.num-flotante {
+  position: fixed;
+  z-index: 80;
+  transform: translate(-50%, 0);
+  font-family: var(--fuente-titulo);
+  font-size: 2rem;
+  font-weight: 700;
+  pointer-events: none;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  animation: flotar 1.05s ease-out forwards;
+}
+.nf-dano { color: #ff5d4d; font-size: 2.4rem; }
+.nf-cura { color: #7ee07a; }
+.nf-bloqueo { color: #9fd8ff; font-size: 1.5rem; }
+.nf-estado { color: var(--brasa-viva); font-size: 1.15rem; font-family: var(--fuente-cuerpo); }
+
+@keyframes flotar {
+  0% { opacity: 0; transform: translate(-50%, 8px) scale(0.6); }
+  15% { opacity: 1; transform: translate(-50%, -6px) scale(1.15); }
+  100% { opacity: 0; transform: translate(-50%, -64px) scale(0.95); }
+}
+
+/* ── Tooltip global ─────────────────────────────────────────────────────── */
+.tooltip-global {
+  position: fixed;
+  z-index: 95;
+  max-width: 280px;
+  padding: 0.55rem 0.8rem;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: var(--pergamino);
+  background: linear-gradient(180deg, rgba(28, 24, 14, 0.97), rgba(16, 13, 8, 0.97));
+  border: 1px solid rgba(217, 169, 63, 0.55);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+.tooltip-global.tooltip-visible { opacity: 1; transform: translateY(0); }
+.tooltip-global strong { color: var(--brasa-viva); font-family: var(--fuente-display); }
+.tooltip-global em { opacity: 0.75; }
+
+/* ── Anuncios centrales ─────────────────────────────────────────────────── */
+.anuncio {
+  position: fixed;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  z-index: 85;
+  font-family: var(--fuente-titulo);
+  font-size: 1.8rem;
+  color: var(--pergamino);
+  text-shadow: 0 0 18px rgba(255, 140, 59, 0.65), 0 2px 8px #000;
+  pointer-events: none;
+  animation: anunciar 1.4s ease-out forwards;
+  white-space: nowrap;
+}
+.anuncio-jefe { font-size: 3.2rem; color: #ff6b5e; letter-spacing: 0.12em; }
+.anuncio-rara { font-size: 2.4rem; color: var(--oro); }
+.anuncio-botin { color: var(--brasa-viva); }
+.anuncio-error { color: #ff8a8a; font-size: 1.3rem; top: 58%; }
+.anuncio-furia-perdida { color: #b9c4d0; }
+
+@keyframes anunciar {
+  0% { opacity: 0; transform: translateX(-50%) scale(0.7); }
+  12% { opacity: 1; transform: translateX(-50%) scale(1.06); }
+  80% { opacity: 1; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+}
+
+/* ── Sacudidas de pantalla ──────────────────────────────────────────────── */
+.sacudida-1 { animation: sacudida 0.3s; }
+.sacudida-2 { animation: sacudida 0.35s; animation-timing-function: ease-in-out; }
+.sacudida-3 { animation: sacudida-fuerte 0.45s; }
+
+@keyframes sacudida {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-5px, 2px); }
+  50% { transform: translate(5px, -2px); }
+  75% { transform: translate(-3px, -2px); }
+}
+@keyframes sacudida-fuerte {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-11px, 5px) rotate(-0.4deg); }
+  35% { transform: translate(10px, -6px) rotate(0.4deg); }
+  55% { transform: translate(-8px, 3px); }
+  75% { transform: translate(6px, -3px); }
+}
+
+.titulo-ayuda {
+  text-align: center;
+  opacity: 0.55;
+  font-style: italic;
+  font-size: 0.95rem;
+  padding: 0.6rem;
+}
+
+/* ── Tema del Capítulo II: La Cripta ────────────────────────────────────── */
+body[data-capitulo='1'] {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 110%, rgba(110, 160, 255, 0.14), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% -10%, rgba(70, 60, 120, 0.3), transparent 60%),
+    radial-gradient(ellipse 70% 45% at 85% -5%, rgba(40, 90, 70, 0.18), transparent 60%),
+    linear-gradient(180deg, #07080d 0%, #0c0e16 45%, #0a1210 100%);
+}
+body[data-capitulo='1'] .silueta-fondo {
+  background:
+    /* antorchas espectrales */
+    radial-gradient(ellipse 10% 7% at 15% 72%, rgba(155, 180, 255, 0.4), transparent 70%),
+    radial-gradient(ellipse 9% 6% at 82% 70%, rgba(184, 255, 217, 0.32), transparent 70%),
+    /* columnas y arcos de la cripta */
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 90px,
+      rgba(8, 10, 16, 0.9) 90px 116px,
+      transparent 116px 200px
+    ),
+    /* losas del suelo */
+    linear-gradient(180deg, transparent 60%, rgba(14, 16, 26, 0.9) 76%, rgba(8, 10, 16, 0.95));
+}
+body[data-capitulo='1'] .barra-superior {
+  border-bottom-color: rgba(138, 122, 224, 0.3);
+}
+body[data-capitulo='1'] .mapa-titulo,
+body[data-capitulo='1'] .titulo-juego {
+  text-shadow: 0 0 22px rgba(138, 122, 224, 0.5);
+}
