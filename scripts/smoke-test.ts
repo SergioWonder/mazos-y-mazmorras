@@ -386,15 +386,15 @@ console.log('— Jefes con efectos únicos —');
     'tras su turno hay 2 goblins famélicos invocados',
   );
   check(gorzug.intencion.devorar !== undefined, 'su siguiente intención es Devorar Goblin');
-  gorzug.pv -= 20; // le abrimos el apetito para ver la cura
+  gorzug.pv -= 30; // le abrimos el apetito para ver la cura
   const pvAntes = gorzug.pv;
   await combate.terminarTurno();
   check(
     combate.enemigos.filter((e) => e.vivo).length === 2,
     'devora a un goblin (queda 1)',
   );
-  check(gorzug.pv === pvAntes + 12, 'se cura 12 al devorar');
-  check((gorzug.estados.fuerza ?? 0) >= 2, 'gana 2 de Fuerza al devorar');
+  check(gorzug.pv === pvAntes + 20, 'se cura 20 al devorar');
+  check((gorzug.estados.fuerza ?? 0) >= 3, 'gana 3 de Fuerza al devorar');
 
   // Ignifax: se enfurece una sola vez al cruzar la mitad de sus PV
   const runI = nuevaRun('druida', 7777);

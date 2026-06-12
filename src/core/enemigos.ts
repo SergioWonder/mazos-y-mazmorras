@@ -67,10 +67,10 @@ export const GOBLIN_FAMELICO: EnemigoDef = {
 };
 
 export const JEFE_OGRO: EnemigoDef = {
-  id: 'jefe-ogro', nombre: 'Gorzug, Jefe Ogro', arte: '👹', pv: [95, 95], escala: 1.9,
+  id: 'jefe-ogro', nombre: 'Gorzug, Jefe Ogro', arte: '👹', pv: [115, 115], escala: 1.9,
   rasgo: {
     nombre: 'Devorador',
-    texto: 'Invoca goblins famélicos y puede devorar a uno vivo para curarse 12 PV y ganar 2 de Fuerza. Mata a los goblins antes de que se los coma.',
+    texto: 'Invoca goblins famélicos y puede devorar a uno vivo para curarse 20 PV y ganar 3 de Fuerza. Mata a los goblins antes de que se los coma.',
   },
   ia: (turno, rng, self, aliados) => {
     if (turno === 0)
@@ -84,7 +84,7 @@ export const JEFE_OGRO: EnemigoDef = {
     const ciclo = turno % 4;
     if (ciclo === 1) {
       if (aliados.length > 0)
-        return { nombre: 'Devorar Goblin', intencion: 'mejora', devorar: { cura: 12, fuerza: 2 } };
+        return { nombre: 'Devorar Goblin', intencion: 'mejora', devorar: { cura: 20, fuerza: 3 } };
       return {
         nombre: 'Rugido Atronador', intencion: 'mejora',
         efectos: [['fuerza', 2, false], ['debil', 1, true]],
