@@ -3,6 +3,7 @@ import { VERSION, CHANGELOG, type EntradaCambios } from '../version.ts';
 import { el } from './util.ts';
 
 const CLAVE_VERSION = 'mazmorra-version-vista';
+const INTERVALO_COMPROBACION = 60 * 1000; // busca versión nueva cada minuto
 
 /**
  * Gestión de actualizaciones de la PWA:
@@ -15,6 +16,18 @@ export function iniciarActualizaciones() {
   const actualizar = registerSW({
     onNeedRefresh() {
       mostrarAvisoActualizar(() => void actualizar(true));
+    },
+    onRegisteredSW(_url, registration) {
+      if (!registration) return;
+      // El SW solo busca versión nueva al navegar; forzamos comprobaciones
+      // periódicas y al recuperar el foco para que el aviso no dependa de
+      // la caché ni de cerrar y reabrir la app.
+      const comprobar = () => void registration.update().catch(() => {});
+      setInterval(comprobar, INTERVALO_COMPROBACION);
+      window.addEventListener('focus', comprobar);
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') comprobar();
+      });
     },
   });
   mostrarNovedadesSiNuevo();
