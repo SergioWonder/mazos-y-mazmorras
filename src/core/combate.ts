@@ -83,12 +83,12 @@ export class Combate {
     return this.danoRecibido(this.jugador, this.danoDeAtaque(e, e.intencion.dano));
   }
 
-  /** Ataque anulado: su mejor ataque conocido, con su Fuerza actual, queda en ≤ 0.
-   *  Funciona aunque este turno no esté atacando (defensa, mejoras…). */
+  /** Ataque anulado: SOLO si el enemigo pretende atacar este turno y ese ataque,
+   *  con su Fuerza actual (Raíces incluidas), queda en ≤ 0. Las raíces solo
+   *  "aprietan" cuando hay un ataque real que neutralizar. */
   ataqueAnulado(e: EnemigoCombate): boolean {
-    const base = Math.max(e.intencion.dano ?? 0, e.danoBaseMax);
-    if (base <= 0) return false; // aún no se le conoce ningún ataque
-    return this.danoDeAtaque(e, base) <= 0;
+    if (e.intencion.dano === undefined) return false; // no ataca este turno
+    return this.danoDeAtaque(e, e.intencion.dano) <= 0;
   }
 
   // ── Contexto que se pasa a las cartas y reliquias ─────────────────────────

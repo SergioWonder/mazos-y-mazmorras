@@ -272,22 +272,17 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'raices',
-    texto: 'Raíces: −12 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 16 de daño.',
+    texto: 'Raíces: −10 de Fuerza al enemigo\ndurante 2 turnos.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'raices', 12);
-      if (c.ataqueAnulado(c.objetivo!)) {
-        await c.mensaje('¡Las raíces trituran!');
-        await c.atacar(c.objetivo!, 16, 1, 'raices');
-      }
+      await c.aplicarEstado(c.objetivo!, 'raices', 10);
+      // dura 2 turnos de base (1 turno + 1 extra), respetando Raíces Profundas si da más
+      c.objetivo!.estados.raicesExtra = Math.max(c.objetivo!.estados.raicesExtra ?? 0, 1);
     },
     mejora: {
-      texto: 'Raíces: −16 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 22 de daño.',
+      texto: 'Raíces: −14 de Fuerza al enemigo\ndurante 2 turnos.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'raices', 16);
-        if (c.ataqueAnulado(c.objetivo!)) {
-          await c.mensaje('¡Las raíces trituran!');
-          await c.atacar(c.objetivo!, 22, 1, 'raices');
-        }
+        await c.aplicarEstado(c.objetivo!, 'raices', 14);
+        c.objetivo!.estados.raicesExtra = Math.max(c.objetivo!.estados.raicesExtra ?? 0, 1);
       },
     },
   },

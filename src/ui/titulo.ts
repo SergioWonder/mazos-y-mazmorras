@@ -3,6 +3,7 @@ import { PV_POR_CLASE } from '../core/run.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { VERSION } from '../version.ts';
+import { pantallaCompendio } from './compendio.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
 
@@ -51,6 +52,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             ? `<button class="btn-tomar btn-continuar">📜 Continuar partida guardada</button>`
             : ''
         }
+        <button class="btn-tomar btn-compendio">📖 Compendio de cartas</button>
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
         <p class="titulo-version">v${VERSION}</p>
       </div>
@@ -84,5 +86,12 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     }
 
     botones.forEach((b) => b.addEventListener('click', () => activar(b)));
+
+    // Compendio: pausa la navegación por teclado del título mientras está abierto
+    raiz.querySelector('.btn-compendio')!.addEventListener('click', async () => {
+      window.removeEventListener('keydown', teclado);
+      await pantallaCompendio();
+      window.addEventListener('keydown', teclado);
+    });
   });
 }

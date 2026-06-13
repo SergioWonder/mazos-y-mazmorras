@@ -273,20 +273,28 @@ console.log('— Raíces (ataque anulado, 1 turno) —');
   await ctx.aplicarEstado(enemigo, 'raices', 5);
   check(combate.ataqueAnulado(enemigo), 'sigue anulado con reducción muy superior (no solo 0 exacto)');
 
-  // CASO QUE FALLABA: el enemigo no ataca este turno (defiende), pero su ataque
-  // conocido está anulado → las raíces deben seguir disparando el daño extra
+  // Si NO pretende atacar este turno (defiende), las raíces no "aprietan":
+  // el daño extra solo aplica cuando hay un ataque real que anular.
   enemigo.intencion = { nombre: 'Esconderse', intencion: 'defensa', bloqueo: 6 };
-  check(combate.ataqueAnulado(enemigo), 'anulado también cuando este turno no ataca');
+  check(!combate.ataqueAnulado(enemigo), 'al defender (sin intención de atacar) NO cuenta como anulado');
 
-  // la carta dispara el daño extra contra ese enemigo que defiende
+  // la carta NO inflige daño extra a un enemigo que defiende
   const enredadera = instanciar(DRUIDA.find((c) => c.id === 'enredadera')!);
   combate.jugador.mano.push(enredadera);
   const pvAntes = enemigo.pv;
   await combate.jugarCarta(enredadera, enemigo);
   check(
-    enemigo.pv < pvAntes || !enemigo.vivo,
-    'Enredadera inflige daño extra a un enemigo anulado que defiende',
+    enemigo.pv === pvAntes,
+    'Enredadera no daña a un enemigo que defiende (sin ataque que anular)',
   );
+
+  // pero SÍ aprieta cuando el enemigo pretende atacar y su ataque queda anulado
+  enemigo.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 5 };
+  const enredadera2 = instanciar(DRUIDA.find((c) => c.id === 'enredadera')!);
+  combate.jugador.mano.push(enredadera2);
+  const pvAtaque = enemigo.pv;
+  await combate.jugarCarta(enredadera2, enemigo);
+  check(enemigo.pv < pvAtaque || !enemigo.vivo, 'con intención de atacar y ataque anulado, sí inflige daño extra');
 
   // las raíces expiran tras el turno del enemigo
   await combate.terminarTurno();

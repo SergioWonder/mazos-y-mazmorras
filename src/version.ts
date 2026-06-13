@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.6.0';
+export const VERSION = '0.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.7.0',
+    fecha: '2026-06-13',
+    cambios: [
+      '📖 Nuevo Compendio de cartas en el menú: todas por clase, opción de verlas mejoradas, comentarios por carta y exportación a JSON.',
+      '🌿 Las Raíces solo dañan si el enemigo pretende atacar ese turno (se acabó el daño errático, sobre todo con Raíces Profundas).',
+      '🪢 Raíces Estranguladoras rediseñada: −10 de Fuerza al enemigo durante 2 turnos (mejorada −14), coste 2; ya no inflige daño.',
+    ],
+  },
   {
     version: '0.6.0',
     fecha: '2026-06-13',

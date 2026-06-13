@@ -62,6 +62,8 @@ mecánicas de clase (Furia, transformaciones, raíces).
   elige entre descansar (cura 30 %) o afilar (mejorar 1 carta).
 - **Eventos narrativos** (nodos ❓): escenas con elecciones y contrapartidas,
   ~70 % positivos / ~30 % negativos, sin repetirse dentro de una run.
+- **Compendio de cartas** (desde el menú): todas las cartas por clase, con opción de
+  verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
 - Mapa de 10 filas por capítulo con ≥2 eventos, cofres, élites y descansos.
 - Reliquias inspiradas en objetos clásicos de D&D.
 - **Capítulo II — La Cripta**: no-muertos con drenajes y curas (espectros, zombis,
