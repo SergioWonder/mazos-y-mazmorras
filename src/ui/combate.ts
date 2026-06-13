@@ -32,7 +32,7 @@ export function pantallaCombate(
     app.innerHTML = '';
     app.className = `pantalla-combate ${esJefe ? 'combate-jefe' : ''}`;
     fx.ambiente(true);
-    audio.musica(run.capitulo, true); // música de combate del capítulo
+    audio.musica(run.capitulo, esJefe); // tema normal del acto, o épico si es jefe
 
     // ── Estructura ──────────────────────────────────────────────────────────
     const raiz = el('div', 'combate');
@@ -227,8 +227,12 @@ export function pantallaCombate(
       const m = e.intencion;
       if (m.dano !== undefined) {
         const d = combate.danoIntencion(e);
+        // daño "natural" del enemigo (su Fuerza propia) sin Débil/Raíces ni Vulnerable
+        const natural = Math.max(0, m.dano + (e.estados.fuerza ?? 0));
+        // verde si lo hemos reducido (Débil/Raíces); rojo si Vulnerable lo amplifica
+        const mod = d < natural ? 'int-mod-baja' : d > natural ? 'int-mod-alta' : '';
         const veces = m.veces && m.veces > 1 ? `×${m.veces}` : '';
-        return `<span class="int-ataque">⚔️ ${d}${veces}</span>`;
+        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}</span>`;
       }
       if (m.invocar) return `<span class="int-mejora">👥</span>`;
       if (m.devorar) return `<span class="int-mejora">🍖</span>`;

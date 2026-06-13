@@ -68,11 +68,12 @@ mecánicas de clase (Furia, transformaciones, raíces).
   momias) y jefe final Vol'guth (140 PV). Entre capítulos: reliquia + carta rara
   garantizada + cura del 35%.
 - **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
-  con floritura especial al jugar cartas raras, y música lo-fi de mazmorreo
-  generada al vuelo: un tema distinto por capítulo y una variante más intensa
-  (con bombo) en combate. Se pausa al pasar a segundo plano. Se pueden enchufar
+  con floritura especial al jugar cartas raras, y música chiptune (8-bit) de
+  mazmorreo generada al vuelo: tema de menú y, por acto, un tema normal y un tema
+  de jefe rápido y épico. Se pausa al pasar a segundo plano. Se pueden enchufar
   pistas CC0 reales por tema (ver `public/audio/LEEME.md`). Botón flotante 🔊/🔇
-  para silenciar (se recuerda).
+  para silenciar (se recuerda). La intención de ataque enemiga muestra el daño ya
+  modificado (verde si lo reduces con Débil/Raíces, rojo si te amplifican con Vulnerable).
 
 ## Estructura
 

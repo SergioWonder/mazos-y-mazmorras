@@ -32,7 +32,7 @@ iniciarActualizaciones();
 audio.crearBoton();
 const arrancarAudio = () => {
   audio.desbloquear();
-  audio.musica(0); // tema del título / Capítulo I
+  audio.menu(); // tema del menú principal
 };
 window.addEventListener('pointerdown', arrancarAudio, { once: true });
 window.addEventListener('keydown', arrancarAudio, { once: true });
@@ -41,6 +41,7 @@ async function juego() {
   for (;;) {
     document.body.dataset.capitulo = '0';
     fx.estiloAmbiente = 'brasas';
+    audio.menu(); // música del menú principal
     const eleccion = await pantallaTitulo(hayGuardado());
 
     let run;

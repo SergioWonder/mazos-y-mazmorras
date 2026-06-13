@@ -1,14 +1,16 @@
 # Música y sonido
 
 El juego usa **efectos de sonido sintetizados** (Web Audio API, sin ficheros) y
-**música lo-fi de mazmorreo generada al vuelo**, con un tema distinto por capítulo
-y una variante más intensa (con bombo) durante el combate:
+**música chiptune (8-bit) de mazmorreo generada al vuelo**: un tema de menú, y por
+cada acto un tema normal (exploración y combate corriente) y un tema de **jefe**
+rápido y épico:
 
-| Capítulo | Exploración        | Combate                   |
-|----------|--------------------|---------------------------|
-| I        | `cap1`             | `cap1-combate`            |
-| II       | `cap2`             | `cap2-combate`            |
-| III      | `cap3`             | `cap3-combate`            |
+| Tema             | Cuándo suena                          |
+|------------------|---------------------------------------|
+| `menu`           | menú principal                        |
+| `cap1` / `cap1-jefe` | Acto I — El Asentamiento Ogro / su jefe |
+| `cap2` / `cap2-jefe` | Acto II — La Cripta / su jefe         |
+| `cap3` / `cap3-jefe` | Acto III — La Guarida del Dragón / su jefe |
 
 La música se **pausa automáticamente** cuando la pestaña/app pasa a segundo plano
 y se reanuda al volver. El botón flotante 🔊/🔇 silencia todo (se recuerda).

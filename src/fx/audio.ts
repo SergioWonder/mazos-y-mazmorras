@@ -81,28 +81,57 @@ const RECETAS: Record<string, Capa[]> = {
   ui: [{ tipo: 'triangle', freq: 520, dur: 0.07, vol: 0.07 }],
 };
 
-/** Tema musical procedural (pad de acordes + opcional bombo/percusión). */
-interface TemaMusica {
-  acordes: number[][]; // progresión en notas MIDI
-  compas: number;      // segundos por acorde (más bajo = más movido)
-  onda: OscillatorType;
-  filtro: number;      // corte del paso-bajo del pad (Hz)
-  ganancia: number;    // volumen del pad
-  bombo?: number;      // golpes de bombo por compás (temas de combate)
-  archivo?: string;    // fichero CC0 opcional en public/audio/ que sustituye al loop
+/** Tema chiptune (8-bit): secuenciador de pasos con bajo, melodía y batería. */
+interface TemaChip {
+  bpm: number;        // velocidad; los pasos son corcheas (bpm/2)
+  bajo: number[];     // patrón de bajo en notas MIDI (0 = silencio)
+  melodia: number[];  // patrón de melodía/arpegio (0 = silencio)
+  bateria?: boolean;  // bombo + charles
+  epico?: boolean;    // duplica la melodía en quintas y sube el volumen (jefes)
+  archivo?: string;   // fichero CC0 opcional en public/audio/ que sustituye al loop
 }
 
-// Tres capítulos × (exploración / combate). El combate es más rápido y con bombo.
-const TEMAS: Record<string, TemaMusica> = {
-  // Cap. I — El Asentamiento Ogro: cálido, melancólico
-  'cap1':         { acordes: [[57,60,64,69],[53,57,60,65],[48,55,60,64],[55,59,62,67]], compas: 3.4, onda: 'triangle', filtro: 900, ganancia: 0.05 },
-  'cap1-combate': { acordes: [[57,60,64],[50,53,57],[52,56,59],[57,60,64]],            compas: 1.8, onda: 'triangle', filtro: 1400, ganancia: 0.05, bombo: 2 },
-  // Cap. II — La Cripta: oscuro, etéreo
-  'cap2':         { acordes: [[50,53,57,60],[46,50,53,58],[43,46,50,53],[45,48,52,57]], compas: 3.8, onda: 'sine', filtro: 680, ganancia: 0.05 },
-  'cap2-combate': { acordes: [[50,53,57],[45,48,52],[50,53,57],[43,46,50]],            compas: 1.9, onda: 'triangle', filtro: 1100, ganancia: 0.05, bombo: 2 },
-  // Cap. III — La Guarida del Dragón: tenso, amenazante
-  'cap3':         { acordes: [[52,55,59,62],[48,52,55,60],[45,48,52,57],[47,51,54,59]], compas: 3.1, onda: 'triangle', filtro: 1000, ganancia: 0.05 },
-  'cap3-combate': { acordes: [[52,55,59],[47,50,54],[52,55,59],[48,51,55]],            compas: 1.6, onda: 'sawtooth', filtro: 1600, ganancia: 0.045, bombo: 3 },
+// 0 = silencio. Menú + (normal / jefe) único por acto. Los jefes son rápidos y épicos.
+const TEMAS: Record<string, TemaChip> = {
+  // Menú principal: misterioso, tempo medio (La menor)
+  'menu': {
+    bpm: 104,
+    bajo:    [45, 0, 45, 0, 41, 0, 43, 0, 45, 0, 45, 0, 40, 0, 43, 0],
+    melodia: [69, 72, 76, 72, 65, 69, 72, 69, 67, 71, 74, 71, 64, 67, 71, 0],
+  },
+  // Cap. I — El Asentamiento Ogro (La menor): marcha decidida
+  'cap1': {
+    bpm: 128, bateria: true,
+    bajo:    [45, 45, 0, 45, 41, 41, 0, 43, 45, 45, 0, 45, 43, 0, 41, 0],
+    melodia: [69, 76, 72, 69, 65, 72, 69, 65, 67, 74, 71, 67, 64, 71, 67, 64],
+  },
+  'cap1-jefe': {
+    bpm: 152, bateria: true, epico: true,
+    bajo:    [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40],
+    melodia: [81, 76, 72, 76, 77, 72, 69, 72, 79, 74, 71, 74, 76, 72, 69, 67],
+  },
+  // Cap. II — La Cripta (Re menor): oscuro, reptante
+  'cap2': {
+    bpm: 116, bateria: true,
+    bajo:    [38, 0, 38, 41, 36, 0, 36, 38, 34, 0, 34, 38, 33, 0, 36, 0],
+    melodia: [62, 65, 69, 65, 60, 65, 62, 60, 58, 62, 65, 62, 57, 60, 62, 0],
+  },
+  'cap2-jefe': {
+    bpm: 146, bateria: true, epico: true,
+    bajo:    [38, 38, 45, 38, 36, 36, 43, 36, 34, 34, 41, 34, 33, 33, 40, 33],
+    melodia: [74, 69, 65, 69, 70, 65, 62, 65, 72, 67, 65, 67, 69, 65, 62, 60],
+  },
+  // Cap. III — La Guarida del Dragón (Mi menor): tenso, amenazante
+  'cap3': {
+    bpm: 132, bateria: true,
+    bajo:    [40, 40, 0, 40, 43, 0, 38, 0, 45, 0, 43, 0, 40, 0, 35, 0],
+    melodia: [64, 71, 67, 64, 67, 74, 71, 67, 69, 76, 72, 69, 71, 67, 64, 62],
+  },
+  'cap3-jefe': {
+    bpm: 164, bateria: true, epico: true,
+    bajo:    [40, 40, 47, 40, 35, 35, 42, 35, 43, 43, 50, 43, 38, 38, 45, 38],
+    melodia: [76, 71, 67, 71, 72, 67, 64, 67, 79, 74, 71, 74, 71, 67, 64, 71],
+  },
 };
 
 class MotorAudio {
@@ -114,7 +143,6 @@ class MotorAudio {
 
   private pista: HTMLAudioElement | null = null; // pista CC0 real, si existe
   private temporizadorMusica: number | null = null;
-  private crackleActual: AudioBufferSourceNode | null = null;
   private temaActual: string | null = null;
   private sonando = false;
   private pausada = false; // pausada por estar en segundo plano
@@ -202,21 +230,35 @@ class MotorAudio {
 
   // ── Música ────────────────────────────────────────────────────────────────
 
-  /** Pone la música del capítulo (0-based); `combate` usa la variante intensa. */
-  musica(capitulo: number, combate = false) {
-    this.reproducirTema(`cap${capitulo + 1}${combate ? '-combate' : ''}`);
+  /** Tema del menú principal. */
+  menu() {
+    this.reproducirTema('menu');
+  }
+
+  /** Pone la música del capítulo (0-based); `jefe` usa el tema épico del acto. */
+  musica(capitulo: number, jefe = false) {
+    this.reproducirTema(`cap${capitulo + 1}${jefe ? '-jefe' : ''}`);
   }
 
   /** Conmuta al tema indicado (idempotente: no reinicia si ya suena). */
   reproducirTema(id: string) {
     this.engancharVisibilidad();
-    this.desbloquear();
-    if (!this.ctx) return;
     if (this.temaActual === id && this.sonando) return;
     this.temaActual = id;
+    this.desbloquear();
+    if (!this.ctx) return;
+    // si el contexto aún no está activo (sin gesto), se arrancará al reanudarlo
+    if (this.ctx.state === 'running') this.refrescarMusica();
+    else void this.ctx.resume().then(() => this.refrescarMusica());
+  }
+
+  /** (Re)arranca el tema actual según el estado (silencio, pausa, contexto). */
+  private refrescarMusica() {
+    if (!this.ctx) return;
     this.detenerMusica();
-    if (this.silenciado || this.pausada) return; // se arrancará al reanudar
-    this.arrancarTema(TEMAS[id] ?? TEMAS.cap1);
+    if (this.silenciado || this.pausada || !this.temaActual) return;
+    if (this.ctx.state !== 'running') return;
+    this.arrancarTema(TEMAS[this.temaActual] ?? TEMAS.menu);
   }
 
   private detenerMusica() {
@@ -224,82 +266,89 @@ class MotorAudio {
       clearInterval(this.temporizadorMusica);
       this.temporizadorMusica = null;
     }
-    if (this.crackleActual) {
-      try { this.crackleActual.stop(); } catch { /* ya parado */ }
-      this.crackleActual = null;
-    }
     if (this.pista) { this.pista.pause(); this.pista = null; }
     this.sonando = false;
   }
 
-  private arrancarTema(tema: TemaMusica) {
+  private arrancarTema(tema: TemaChip) {
     const ctx = this.ctx;
     if (!ctx) return;
     this.sonando = true;
 
-    // Pista CC0 real opcional (public/audio/<archivo>); si falla, sigue el loop
+    // Pista CC0 real opcional (public/audio/<archivo>); si falla, sigue el chiptune
     if (tema.archivo) {
       const pista = new Audio(`${import.meta.env.BASE_URL}audio/${tema.archivo}`);
       pista.loop = true;
       pista.volume = 0.6;
-      pista.addEventListener('error', () => this.lofiProcedural(tema), { once: true });
+      pista.addEventListener('error', () => this.chiptune(tema), { once: true });
       this.pista = pista;
-      void pista.play().catch(() => this.lofiProcedural(tema));
+      void pista.play().catch(() => this.chiptune(tema));
       return;
     }
-    this.lofiProcedural(tema);
+    this.chiptune(tema);
   }
 
-  /** Loop lo-fi: pad de acordes + crepitar de vinilo (+ bombo en combate). */
-  private lofiProcedural(tema: TemaMusica) {
-    const ctx = this.ctx;
-    if (!ctx) return;
-
-    // Crepitar de vinilo continuo, muy bajo
-    const crackle = ctx.createBufferSource();
-    crackle.buffer = this.bufferRuido(2);
-    crackle.loop = true;
-    const filtroCrackle = ctx.createBiquadFilter();
-    filtroCrackle.type = 'highpass';
-    filtroCrackle.frequency.value = 6000;
-    const gCrackle = ctx.createGain();
-    gCrackle.gain.value = 0.015;
-    crackle.connect(filtroCrackle).connect(gCrackle).connect(this.busMusica);
-    crackle.start();
-    this.crackleActual = crackle;
-
-    let i = 0;
-    const tocarAcorde = () => {
+  /** Secuenciador 8-bit: bajo (triángulo) + melodía (cuadrada) + batería. */
+  private chiptune(tema: TemaChip) {
+    if (!this.ctx) return;
+    const pasoDur = 60 / tema.bpm / 2; // corchea
+    const volMel = tema.epico ? 0.09 : 0.07;
+    let paso = 0;
+    const tick = () => {
       if (!this.ctx) return;
-      const t = this.ctx.currentTime + 0.05;
-      const notas = tema.acordes[i % tema.acordes.length];
-      i++;
-      for (const nota of notas) {
-        const freq = 440 * Math.pow(2, (nota - 69) / 12);
-        const osc = this.ctx.createOscillator();
-        osc.type = tema.onda;
-        osc.frequency.value = freq;
-        const filtro = this.ctx.createBiquadFilter();
-        filtro.type = 'lowpass';
-        filtro.frequency.value = tema.filtro;
-        const g = this.ctx.createGain();
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(tema.ganancia, t + 0.6);   // ataque lento
-        g.gain.exponentialRampToValueAtTime(0.0001, t + tema.compas);  // caída suave
-        osc.connect(filtro).connect(g).connect(this.busMusica);
-        osc.start(t);
-        osc.stop(t + tema.compas + 0.1);
+      const t = this.ctx.currentTime + 0.06;
+      const i = paso++;
+      const nb = tema.bajo[i % tema.bajo.length];
+      if (nb) this.notaChip(nb, t, pasoDur * 0.95, 'triangle', 0.11, 1400);
+      const nm = tema.melodia[i % tema.melodia.length];
+      if (nm) {
+        this.notaChip(nm, t, pasoDur * 0.85, 'square', volMel, 5000);
+        if (tema.epico) this.notaChip(nm + 7, t, pasoDur * 0.85, 'square', volMel * 0.5, 5000);
       }
-      // Bombo: golpes graves repartidos por el compás (temas de combate)
-      for (let k = 0; k < (tema.bombo ?? 0); k++) {
-        this.bombo(t + (k * tema.compas) / (tema.bombo ?? 1));
+      if (tema.bateria) {
+        if (i % 4 === 0) this.bombo(t);
+        if (i % 4 === 2) this.charles(t);
       }
     };
-    tocarAcorde();
-    this.temporizadorMusica = window.setInterval(tocarAcorde, tema.compas * 1000);
+    tick();
+    this.temporizadorMusica = window.setInterval(tick, pasoDur * 1000);
   }
 
-  /** Golpe de bombo grave para la percusión de combate. */
+  /** Nota corta con envolvente de pluck (estilo chip). */
+  private notaChip(midi: number, t: number, dur: number, onda: OscillatorType, vol: number, filtro: number) {
+    const ctx = this.ctx!;
+    const osc = ctx.createOscillator();
+    osc.type = onda;
+    osc.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
+    const f = ctx.createBiquadFilter();
+    f.type = 'lowpass';
+    f.frequency.value = filtro;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    osc.connect(f).connect(g).connect(this.busMusica);
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
+  }
+
+  /** Charles (hi-hat): ráfaga breve de ruido agudo. */
+  private charles(t: number) {
+    const ctx = this.ctx!;
+    const s = ctx.createBufferSource();
+    s.buffer = this.bufferRuido(0.05);
+    const f = ctx.createBiquadFilter();
+    f.type = 'highpass';
+    f.frequency.value = 7000;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.05, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+    s.connect(f).connect(g).connect(this.busMusica);
+    s.start(t);
+    s.stop(t + 0.06);
+  }
+
+  /** Golpe de bombo grave para la percusión. */
   private bombo(t: number) {
     const ctx = this.ctx!;
     const osc = ctx.createOscillator();
@@ -336,8 +385,7 @@ class MotorAudio {
   private reanudarDeFondo() {
     this.pausada = false;
     if (!this.ctx || this.silenciado) return;
-    void this.ctx.resume();
-    if (this.temaActual) this.arrancarTema(TEMAS[this.temaActual] ?? TEMAS.cap1);
+    void this.ctx.resume().then(() => this.refrescarMusica());
   }
 
   // ── SFX elaborados para cartas raras ─────────────────────────────────────────
@@ -398,11 +446,8 @@ class MotorAudio {
     this.silenciado = !this.silenciado;
     localStorage.setItem(CLAVE_SILENCIO, this.silenciado ? '1' : '0');
     if (this.ctx) this.maestro.gain.value = this.silenciado ? 0 : 1;
-    if (this.silenciado) {
-      this.detenerMusica();
-    } else if (this.temaActual && !this.pausada) {
-      this.arrancarTema(TEMAS[this.temaActual] ?? TEMAS.cap1);
-    }
+    if (this.silenciado) this.detenerMusica();
+    else this.refrescarMusica();
     this.actualizarBoton();
     if (!this.silenciado) this.sfx('ui');
   }

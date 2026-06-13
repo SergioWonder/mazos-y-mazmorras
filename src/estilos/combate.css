@@ -184,6 +184,9 @@
   cursor: help;
 }
 .int-ataque { color: #ff8a7a; }
+/* daño de la intención modificado: verde si lo reducimos, rojo si nos amplifican */
+.int-mod-baja { color: #7be07f; font-weight: 700; text-shadow: 0 0 8px rgba(123, 224, 127, 0.7); }
+.int-mod-alta { color: #ff5d5d; font-weight: 800; text-shadow: 0 0 9px rgba(255, 93, 93, 0.85); }
 .int-defensa { color: #9fd8ff; }
 .int-mejora { color: #ffd166; }
 .int-perjuicio { color: #c89aff; }
