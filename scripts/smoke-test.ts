@@ -450,21 +450,21 @@ console.log('— Jefes con efectos únicos —');
   const combateI = new Combate(runI, [IGNIFAX], crearRng(7777), uiSilenciosa);
   await combateI.iniciar();
   const dragon = combateI.enemigos[0];
-  check(dragon.pvMax === 260, 'Ignifax tiene 260 PV');
-  check((dragon.estados.espinas ?? 0) === 3, 'Escamas Ígneas: empieza con 3 de Espinas');
+  check(dragon.pvMax === 320, 'Ignifax tiene 320 PV');
+  check((dragon.estados.espinas ?? 0) === 4, 'Escamas Ígneas: empieza con 4 de Espinas');
   const pvHeroe = combateI.jugador.pv;
   await combateI.contexto(dragon).atacar(dragon, 5);
-  check(combateI.jugador.pv === pvHeroe - 3, 'sus espinas devuelven 3 de daño al atacarle');
-  dragon.pv = 100; // por debajo de la mitad de 260
+  check(combateI.jugador.pv === pvHeroe - 4, 'sus espinas devuelven 4 de daño al atacarle');
+  dragon.pv = 100; // por debajo de la mitad de 320
   combateI.jugador.bloqueo = 999; // sobrevivir a su turno
   await combateI.terminarTurno();
   check(dragon.intencion.nombre === 'CORAZÓN DE MAGMA', 'Ignifax telegrafia su enfurecimiento');
   const pvDragon = dragon.pv;
   combateI.jugador.bloqueo = 999;
   await combateI.terminarTurno();
-  check(dragon.pv === pvDragon + 50, 'Corazón de Magma lo cura 50');
+  check(dragon.pv === pvDragon + 55, 'Corazón de Magma lo cura 55');
   check((dragon.estados.fuerza ?? 0) >= 5, 'gana +5 de Fuerza');
-  check((dragon.estados.espinas ?? 0) === 5, 'y sus escamas arden más (+2 Espinas)');
+  check((dragon.estados.espinas ?? 0) === 6, 'y sus escamas arden más (+2 Espinas)');
   check(dragon.rasgoUsado === true, 'el enfurecimiento es de un solo uso');
 
   // Vol'guth: la filacteria lo revive con 60 PV, invulnerable 1 turno y sediento
@@ -494,6 +494,31 @@ console.log('— Jefes con efectos únicos —');
   );
   await combate2.contexto(liche).atacar(liche, 999);
   check(!liche.vivo && combate2.terminado === 'victoria', 'la segunda muerte es definitiva');
+}
+
+console.log('— Quemadura (Aliento de Dragón) —');
+{
+  const run = nuevaRun('barbaro', 31415);
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(31415), uiSilenciosa);
+  await combate.iniciar();
+  combate.jugador.estados.quemadura = 2;
+  combate.jugador.pv = combate.jugador.pvMax;
+  const carta = combate.jugador.mano.find((c) => combate.puedeJugar(c))!;
+  const pvAntes = combate.jugador.pv;
+  await combate.jugarCarta(carta, combate.enemigos[0]);
+  check(combate.jugador.pv === pvAntes - 3, 'cada carta jugada con Quemadura cuesta 3 PV');
+  // se reduce 1 por turno y expira tras dos
+  combate.jugador.bloqueo = 999;
+  await combate.terminarTurno();
+  check((combate.jugador.estados.quemadura ?? 0) === 1, 'la Quemadura baja 1 por turno');
+  combate.jugador.bloqueo = 999;
+  await combate.terminarTurno();
+  check((combate.jugador.estados.quemadura ?? 0) === 0, 'y expira tras dos turnos');
+
+  // el dragón la inflige con su Aliento de Dragón
+  const aliento = IGNIFAX.ia(2, () => 0.5, { rasgoUsado: true, pv: 320, pvMax: 320 } as never, []);
+  check(aliento.nombre === 'ALIENTO DE DRAGÓN' && (aliento.efectos ?? []).some(([e]) => e === 'quemadura'),
+    'el Aliento de Dragón de Ignifax aplica Quemadura');
 }
 
 console.log('— Imagen Espejo —');

@@ -365,7 +365,7 @@ export const DRUIDA: CartaDef[] = [
     clase: 'druida',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 1,
+    coste: 2,
     objetivo: 'ninguno',
     subclase: 'Círculo de la Tierra',
     fx: 'tierra',
@@ -375,9 +375,10 @@ export const DRUIDA: CartaDef[] = [
       await c.aplicarEstado(c.jugador, 'raizProlongada', 1);
     },
     mejora: {
-      texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 2 turnos adicionales.',
+      coste: 1,
+      texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 1 turno adicional.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'raizProlongada', 2);
+        await c.aplicarEstado(c.jugador, 'raizProlongada', 1);
       },
     },
   },

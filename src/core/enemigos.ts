@@ -44,20 +44,20 @@ export const WORG: EnemigoDef = {
 };
 
 export const HOBGOBLIN: EnemigoDef = {
-  id: 'hobgoblin', nombre: 'Hobgoblin Capitán', arte: '⚔️', pv: [44, 48], escala: 1.25,
+  id: 'hobgoblin', nombre: 'Hobgoblin Capitán', arte: '⚔️', pv: [62, 68], escala: 1.25,
   ia: (turno, rng) => {
-    if (turno % 3 === 0) return def('Muro de Escudos', 9, [['fuerza', 1, false]]);
-    if (rng() < 0.4) return atk('Golpe de Escudo', 7, 1, [['debil', 1, true]]);
-    return atk('Espadazo', 12);
+    if (turno % 3 === 0) return def('Muro de Escudos', 12, [['fuerza', 2, false]]);
+    if (rng() < 0.45) return atk('Golpe de Escudo', 11, 1, [['debil', 2, true]]);
+    return atk('Espadazo', 17);
   },
 };
 
 export const OGRO_JOVEN: EnemigoDef = {
-  id: 'ogro-joven', nombre: 'Ogro Joven', arte: '👹', pv: [52, 58], escala: 1.4,
+  id: 'ogro-joven', nombre: 'Ogro Joven', arte: '👹', pv: [74, 82], escala: 1.4,
   ia: (turno, rng) => {
-    if (turno % 4 === 3) return { nombre: 'Rugido', intencion: 'mejora', efectos: [['fuerza', 2, false]] };
-    if (rng() < 0.35) return atk('Pisotón', 9, 1, [['vulnerable', 1, true]]);
-    return atk('Garrotazo', 15);
+    if (turno % 4 === 3) return { nombre: 'Rugido', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
+    if (rng() < 0.4) return atk('Pisotón', 12, 1, [['vulnerable', 2, true]]);
+    return atk('Garrotazo', 21);
   },
 };
 
@@ -150,29 +150,29 @@ export const NECROFAGO: EnemigoDef = {
 };
 
 export const CABALLERO_TUMBARIO: EnemigoDef = {
-  id: 'caballero-tumbario', nombre: 'Caballero Tumbario', arte: '🛡️', pv: [68, 74], escala: 1.3,
+  id: 'caballero-tumbario', nombre: 'Caballero Tumbario', arte: '🛡️', pv: [92, 100], escala: 1.3,
   ia: (turno, rng) => {
-    if (turno % 3 === 0) return def('Muro Sepulcral', 10, [['fuerza', 2, false]]);
-    return rng() < 0.4 ? atk('Carga Fantasmal', 9, 2) : atk('Mandoble Maldito', 15);
+    if (turno % 3 === 0) return def('Muro Sepulcral', 14, [['fuerza', 3, false]]);
+    return rng() < 0.45 ? atk('Carga Fantasmal', 12, 2, [['vulnerable', 1, true]]) : atk('Mandoble Maldito', 21);
   },
 };
 
 export const MOMIA_REAL: EnemigoDef = {
-  id: 'momia-real', nombre: 'Momia Real', arte: '🪦', pv: [60, 66], escala: 1.3,
+  id: 'momia-real', nombre: 'Momia Real', arte: '🪦', pv: [82, 90], escala: 1.3,
   ia: (turno, rng) => {
     if (turno % 4 === 0)
       return {
         nombre: 'Maldición Faraónica', intencion: 'perjuicio',
-        efectos: [['debil', 2, true], ['fragil', 2, true]],
+        efectos: [['debil', 3, true], ['fragil', 3, true], ['vulnerable', 1, true]],
       };
     if (rng() < 0.3)
-      return { nombre: 'Vendas Reparadoras', intencion: 'defensa', bloqueo: 8, cura: 6 };
-    return atk('Puño Vendado', 13);
+      return { nombre: 'Vendas Reparadoras', intencion: 'defensa', bloqueo: 12, cura: 10 };
+    return atk('Puño Vendado', 18);
   },
 };
 
 export const SENOR_CRIPTA: EnemigoDef = {
-  id: 'senor-cripta', nombre: "Vol'guth, Señor de la Cripta", arte: '🧙‍♂️', pv: [140, 140], escala: 1.8,
+  id: 'senor-cripta', nombre: "Vol'guth, Señor de la Cripta", arte: '🧙‍♂️', pv: [178, 178], escala: 1.8,
   pasiva: 'filacteria',
   rasgo: {
     nombre: 'Filacteria',
@@ -188,18 +188,21 @@ export const SENOR_CRIPTA: EnemigoDef = {
         nombre: despierto ? 'Maldición del Despertar' : 'Maldición Eterna',
         intencion: 'perjuicio',
         efectos: despierto
-          ? [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true], ['fuerza', 3, false]]
-          : [['debil', 2, true], ['fragil', 2, true], ['fuerza', 2, false]],
+          ? [['debil', 3, true], ['fragil', 3, true], ['vulnerable', 2, true], ['fuerza', 3, false]]
+          : [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true], ['fuerza', 2, false]],
       };
     if (ciclo === 1)
-      return { nombre: 'Drenar Vida', intencion: 'ataque', dano: 13, cura: despierto ? 13 : 8 };
+      return {
+        nombre: 'Drenar Vida', intencion: 'ataque', dano: despierto ? 18 : 15,
+        cura: despierto ? 15 : 9, efectos: [['vulnerable', 1, true]],
+      };
     if (ciclo === 2)
       return despierto
-        ? { nombre: 'Lluvia de Huesos Voraz', intencion: 'ataque', dano: 7, veces: 3, cura: 9 }
-        : atk('Lluvia de Huesos', 7, 3);
+        ? { nombre: 'Lluvia de Huesos Voraz', intencion: 'ataque', dano: 9, veces: 3, cura: 9, efectos: [['debil', 1, true]] }
+        : atk('Lluvia de Huesos', 8, 3, [['debil', 1, true]]);
     return despierto
-      ? { nombre: 'Nova Necrótica Voraz', intencion: 'ataque', dano: 22, cura: 11 }
-      : atk('Nova Necrótica', 20);
+      ? { nombre: 'Nova Necrótica Voraz', intencion: 'ataque', dano: 28, cura: 14 }
+      : atk('Nova Necrótica', 24);
   },
 };
 
@@ -252,35 +255,35 @@ export const ELEMENTAL_MAGMA: EnemigoDef = {
 };
 
 export const DRACO_VETERANO: EnemigoDef = {
-  id: 'draco-veterano', nombre: 'Draco Veterano', arte: '🐉', pv: [88, 95], escala: 1.45,
+  id: 'draco-veterano', nombre: 'Draco Veterano', arte: '🐉', pv: [120, 130], escala: 1.45,
   ia: (turno, rng) => {
-    if (turno % 4 === 3) return { nombre: 'Rugido Escamoso', intencion: 'mejora', efectos: [['fuerza', 2, false]] };
-    if (rng() < 0.4) return atk('Aliento de Fuego', 9, 2);
-    return atk('Garra Desgarradora', 16);
+    if (turno % 4 === 3) return { nombre: 'Rugido Escamoso', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
+    if (rng() < 0.4) return atk('Aliento de Fuego', 12, 2, [['vulnerable', 1, true]]);
+    return atk('Garra Desgarradora', 22);
   },
 };
 
 export const SUMO_CULTISTA: EnemigoDef = {
-  id: 'sumo-cultista', nombre: 'Sumo Cultista de Ignifax', arte: '🧙‍♀️', pv: [80, 86], escala: 1.35,
+  id: 'sumo-cultista', nombre: 'Sumo Cultista de Ignifax', arte: '🧙‍♀️', pv: [110, 118], escala: 1.35,
   ia: (turno, rng, self, aliados) => {
     if (turno % 4 === 0 && aliados.length === 0)
       return {
         nombre: 'Llamada al Nido', intencion: 'mejora',
-        invocar: [{ def: KOBOLD_LANCERO, pv: 14 }],
+        invocar: [{ def: KOBOLD_LANCERO, pv: 20 }],
       };
     if (turno % 4 === 2)
       return {
         nombre: 'Maldición Dracónica', intencion: 'perjuicio',
-        efectos: [['debil', 2, true], ['fragil', 2, true]],
+        efectos: [['debil', 3, true], ['fragil', 3, true], ['vulnerable', 1, true]],
       };
-    if (rng() < 0.4) return { nombre: 'Drenar Esencia', intencion: 'ataque', dano: 12, cura: 6 };
-    return atk('Látigo de Fuego', 14);
+    if (rng() < 0.4) return { nombre: 'Drenar Esencia', intencion: 'ataque', dano: 16, cura: 9 };
+    return atk('Látigo de Fuego', 19);
   },
 };
 
 export const IGNIFAX: EnemigoDef = {
-  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [260, 260], escala: 2.2,
-  estadosIniciales: { espinas: 3 }, // Escamas Ígneas: pasiva todo el combate
+  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [320, 320], escala: 2.2,
+  estadosIniciales: { espinas: 4 }, // Escamas Ígneas: pasiva todo el combate
   rasgo: {
     nombre: 'Escamas Ígneas y Corazón de Magma',
     texto: 'Sus escamas al rojo castigan a quien lo golpea. Y cuando la sangre del dragón hierve de verdad… la montaña entera lo sabe.',
@@ -290,21 +293,26 @@ export const IGNIFAX: EnemigoDef = {
     if (!self.rasgoUsado && self.pv <= self.pvMax / 2) {
       self.rasgoUsado = true;
       return {
-        nombre: 'CORAZÓN DE MAGMA', intencion: 'ataque',
-        dano: 12, cura: 50,
+        nombre: 'CORAZÓN DE MAGMA', intencion: 'ataque', fx: 'aliento',
+        dano: 14, cura: 55,
         efectos: [['fuerza', 5, false], ['espinas', 2, false], ['vulnerable', 2, true]],
       };
     }
     if (turno === 0)
       return {
         nombre: 'Rugido del Tesoro', intencion: 'mejora',
-        efectos: [['fuerza', 2, false], ['debil', 1, true]],
+        efectos: [['fuerza', 3, false], ['debil', 2, true]],
       };
     const ciclo = turno % 4;
-    if (ciclo === 1) return atk('Garra Incandescente', 18);
-    if (ciclo === 2) return atk('Coletazo Brutal', 12, 1, [['vulnerable', 2, true]]);
-    if (ciclo === 3) return def('Alza el Vuelo', 20);
-    return atk('ALIENTO ÍGNEO', 30);
+    if (ciclo === 1) return atk('Garra Incandescente', 20, 1, [['vulnerable', 1, true]]);
+    // Ataque especial alternado: Aliento de Dragón (fuego + Quemadura 2 turnos)
+    if (ciclo === 2)
+      return {
+        nombre: 'ALIENTO DE DRAGÓN', intencion: 'ataque', dano: 15, fx: 'aliento',
+        efectos: [['vulnerable', 2, true], ['quemadura', 2, true]],
+      };
+    if (ciclo === 3) return atk('Coletazo Brutal', 16, 1, [['debil', 2, true]]);
+    return { nombre: 'ALIENTO ÍGNEO', intencion: 'ataque', dano: 34, fx: 'aliento' };
   },
 };
 

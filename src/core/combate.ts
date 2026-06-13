@@ -332,6 +332,15 @@ export class Combate {
     this.jugador.energia -= def.coste;
     this.ui.render();
     await def.jugar(this.contexto(objetivo));
+    // Quemadura (Aliento de Dragón): cada carta jugada cuesta 3 PV mientras dure
+    if ((this.jugador.estados.quemadura ?? 0) > 0 && !this.terminado) {
+      const real = Math.min(3, this.jugador.pv - 1); // no mata
+      if (real > 0) {
+        this.jugador.pv -= real;
+        await this.ui.fxGolpe(this.jugador, real, 'aliento');
+        this.ui.render();
+      }
+    }
     if (carta.def.unUso) {
       // Se elimina del mazo para el resto de la partida
       const enRun = this.run.mazo.findIndex((c) => c.uid === carta.uid);
@@ -349,7 +358,7 @@ export class Combate {
 
   /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador. */
   private decrementarEstados(l: Luchador) {
-    for (const k of ['vulnerable', 'debil', 'fragil', 'invulnerable'] as EstadoId[]) {
+    for (const k of ['vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura'] as EstadoId[]) {
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
     }
   }
@@ -460,7 +469,7 @@ export class Combate {
           await this.ui.fxMensaje('🪞 Las imágenes se desvanecen…');
         }
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
-        await this.infligir(this.jugador, dano, 'golpeEnemigo');
+        await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo');
         // Espinas: devuelve daño al atacante
         const espinas = this.jugador.estados.espinas ?? 0;
         if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.5.0';
+export const VERSION = '0.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.6.0',
+    fecha: '2026-06-13',
+    cambios: [
+      '🔥 Ignifax (Acto III) ahora desata el Aliento de Dragón: muchas partículas de fuego, daño y Quemadura (2 turnos en los que cada carta jugada te cuesta 3 PV).',
+      '💀 Jefes de los Actos II y III más temibles: más vida y combos de Débil + Vulnerable.',
+      '⚔️ Élites bastante más duros en los tres actos (más vida y más daño).',
+      '🌳 Raíces Profundas (Círculo de la Tierra) cuesta 2 maná (mejorada baja a 1); el turno extra de Raíces ya no aumenta a 2 con la mejora.',
+    ],
+  },
   {
     version: '0.5.0',
     fecha: '2026-06-13',

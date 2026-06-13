@@ -17,6 +17,7 @@ export type EstadoId =
   | 'fragil'        // gana -25% bloqueo, N turnos
   | 'espinas'       // devuelve N daño al ser atacado
   | 'regeneracion'  // cura N al inicio del turno
+  | 'quemadura'     // (jugador) cada carta jugada cuesta 3 PV; dura N turnos
   | 'corazonSalvaje' // al perder la Furia, ganas esta cantidad de Fuerza y Destreza para el combate
   | 'frenesi'       // la Furia se romperá al final del turno aunque recibas daño (Frenesí)
   | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
@@ -47,6 +48,7 @@ export interface Movimiento {
   intencion: TipoIntencion;
   dano?: number;        // daño base por golpe
   veces?: number;       // nº de golpes (def. 1)
+  fx?: string;          // efecto de partículas al golpear (def. 'golpeEnemigo')
   bloqueo?: number;
   cura?: number;        // se cura a sí mismo al ejecutarlo (drenajes, regeneración)
   /** efectos extra al ejecutarse: [estado, cantidad, sobreJugador] */

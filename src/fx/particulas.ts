@@ -41,6 +41,7 @@ const EFECTOS: Record<string, ConfigEfecto> = {
   tierra:     { cantidad: 26, colores: ['#a8804f', '#7a5a36', '#c9f29b'], velocidad: [1, 4], vida: [0.5, 1], tam: [2, 5], forma: 'circulo', gravedad: 0.1 },
   divino:     { cantidad: 36, colores: ['#ffd166', '#fff3b8', '#ffffff'], velocidad: [1, 6], vida: [0.5, 1.1], tam: [2, 5], forma: 'estrella', gravedad: -0.08, brillo: true },
   muerte:     { cantidad: 40, colores: ['#8d8db5', '#3a3a52', '#cfcfe8'], velocidad: [1, 6], vida: [0.5, 1.2], tam: [2, 6], forma: 'circulo', gravedad: -0.02 },
+  aliento:    { cantidad: 72, colores: ['#ff3b00', '#ff7a18', '#ffb347', '#fff3b8'], velocidad: [3, 11], vida: [0.4, 1.0], tam: [3, 7], forma: 'chispa', gravedad: -0.05, brillo: true },
 };
 
 class MotorParticulas {

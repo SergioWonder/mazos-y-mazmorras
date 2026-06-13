@@ -65,8 +65,12 @@ mecánicas de clase (Furia, transformaciones, raíces).
 - Mapa de 10 filas por capítulo con ≥2 eventos, cofres, élites y descansos.
 - Reliquias inspiradas en objetos clásicos de D&D.
 - **Capítulo II — La Cripta**: no-muertos con drenajes y curas (espectros, zombis,
-  momias) y jefe final Vol'guth (140 PV). Entre capítulos: reliquia + carta rara
+  momias) y jefe final Vol'guth (178 PV). Entre capítulos: reliquia + carta rara
   garantizada + cura del 35%.
+- **Élites y jefes exigentes**: los élites pegan fuerte y los jefes de los Actos II
+  y III combinan Débil/Vulnerable con ataques especiales. El **Aliento de Dragón**
+  de Ignifax (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas
+  te cuesta 3 PV.
 - **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
   con floritura especial al jugar cartas raras, y música 8-bit con **pistas CC0
   reales** (OpenGameArt): tema de menú y, por acto, un tema normal y un tema de jefe
