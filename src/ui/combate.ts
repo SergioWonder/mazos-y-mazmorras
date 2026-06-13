@@ -10,6 +10,28 @@ import {
 import { renderCarta, actualizarTextoCarta, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
+// Icosaedro (d20) facetado en SVG: triángulo central (con el número) rodeado de facetas.
+const SVG_D20 = `
+<svg class="d20-svg" viewBox="0 0 120 120" aria-hidden="true">
+  <defs>
+    <linearGradient id="d20cara" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3cf"/><stop offset="1" stop-color="#e7d09a"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#5c4a2e" stroke-width="1.4" stroke-linejoin="round">
+    <polygon points="60,4 10,33 60,40" fill="#cdb583"/>
+    <polygon points="60,4 60,40 110,33" fill="#e7d4a6"/>
+    <polygon points="10,33 60,40 37,78" fill="#bfa570"/>
+    <polygon points="110,33 60,40 83,78" fill="#d2bd8c"/>
+    <polygon points="10,87 10,33 37,78" fill="#c7ad7a"/>
+    <polygon points="110,87 110,33 83,78" fill="#b89a64"/>
+    <polygon points="10,87 37,78 60,116" fill="#b89a64"/>
+    <polygon points="110,87 83,78 60,116" fill="#c7ad7a"/>
+    <polygon points="60,116 37,78 83,78" fill="#cbb079"/>
+    <polygon points="60,40 83,78 37,78" fill="url(#d20cara)"/>
+  </g>
+</svg>`;
+
 const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️' };
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago',
@@ -153,24 +175,23 @@ export function pantallaCombate(
       async fxDado(n, caras) {
         audio.sfx('carta');
         const overlay = el('div', 'dado-overlay');
-        overlay.innerHTML = `<div class="dado rodando"><span class="dado-num"></span></div>`;
+        overlay.innerHTML = `<div class="dado rodando">${SVG_D20}<span class="dado-num"></span></div>`;
         document.body.appendChild(overlay);
-        const cubo = overlay.querySelector('.dado') as HTMLElement;
+        const dado = overlay.querySelector('.dado') as HTMLElement;
         const num = overlay.querySelector('.dado-num') as HTMLElement;
-        // mientras "rueda", parpadea números aleatorios (puramente visual)
+        // mientras rebota y gira, parpadea números aleatorios (puramente visual)
         const flick = window.setInterval(() => {
           num.textContent = String(1 + Math.floor(Math.random() * caras));
-        }, 70);
-        await espera(900);
+        }, 90);
+        await espera(2600); // rueda despacio rebotando por la pantalla
         window.clearInterval(flick);
         num.textContent = String(n);
-        cubo.classList.remove('rodando');
-        cubo.classList.add('dado-final');
-        if (n === caras) { cubo.classList.add('dado-critico'); fx.estallido('estrellas'); }
-        else if (n === 1) cubo.classList.add('dado-pifia');
-        await espera(780);
+        dado.classList.add('dado-revelado');
+        if (n === caras) { dado.classList.add('dado-critico'); fx.estallido('estrellas'); }
+        else if (n === 1) dado.classList.add('dado-pifia');
+        await espera(2100); // el resultado se queda a la vista un buen rato
         overlay.classList.add('dado-fuera');
-        await espera(260);
+        await espera(320);
         overlay.remove();
       },
     };
@@ -253,6 +274,7 @@ export function pantallaCombate(
     }
 
     function textoIntencion(e: EnemigoCombate): string {
+      if (e.saltaAccion) return '<span class="int-dormido">💤</span>'; // saltará su acción
       const m = e.intencion;
       if (m.dano !== undefined) {
         const d = combate.danoIntencion(e);
