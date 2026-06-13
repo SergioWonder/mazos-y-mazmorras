@@ -91,14 +91,14 @@ export function iniciarTooltips() {
 export const ICONO_ESTADO: Record<string, string> = {
   fuerza: '💪', raices: '🪾', destreza: '🌀', vulnerable: '🎯', debil: '💧',
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', corazonSalvaje: '🐾', frenesi: '🔥',
-  espejismo: '🪞', invulnerable: '🌟',
+  espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
   fuerza: 'Fuerza', raices: 'Raíces', destreza: 'Destreza',
   vulnerable: 'Vulnerable', debil: 'Débil', fragil: 'Frágil', espinas: 'Espinas',
   regeneracion: 'Regeneración', corazonSalvaje: 'Corazón Salvaje', frenesi: 'Frenesí',
-  espejismo: 'Espejismo', invulnerable: 'Invulnerable',
+  espejismo: 'Espejismo', invulnerable: 'Invulnerable', raizProlongada: 'Raíces Profundas',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -115,6 +115,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   espejismo:
     'Copias ilusorias: 20 % de esquivar cada ataque por carga. Esquivar gasta 1 carga; recibir un golpe las disipa todas. Dura 1 turno.',
   invulnerable: 'No recibe ningún daño mientras dure.',
+  raizProlongada: 'Las Raíces que apliques reducen la Fuerza del enemigo esa cantidad de turnos adicionales.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

@@ -9,6 +9,8 @@ export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
 export type EstadoId =
   | 'fuerza'        // +daño por ataque (puede ser negativo)
   | 'raices'        // −Fuerza SOLO durante el próximo turno del enemigo (druida)
+  | 'raizProlongada' // (jugador) las Raíces que aplique duran N turnos extra
+  | 'raicesExtra'   // (enemigo) turnos extra que le quedan a sus Raíces antes de expirar
   | 'destreza'      // +bloqueo por carta
   | 'vulnerable'    // recibe +50% daño, N turnos
   | 'debil'         // inflige -25% daño, N turnos
@@ -173,8 +175,9 @@ export interface ContextoEfecto {
   /** Gana un espacio de conjuro (la pirámide se reconstruye).
    *  Si `permanente`, persiste para toda la partida; si no, solo este combate. */
   ganarConjuro(permanente?: boolean): Promise<void>;
-  /** Recupera el espacio gastado de mayor nivel. Devuelve su nivel (0 si nada). */
-  recuperarConjuro(): Promise<number>;
+  /** Recupera un espacio gastado y devuelve su nivel (0 si no había ninguno).
+   *  Por defecto el de MENOR nivel; con `masAlto`, el de MAYOR nivel. */
+  recuperarConjuro(masAlto?: boolean): Promise<number>;
   /** Nº de espacios de conjuro libres (opcionalmente de nivel ≥ nivelMin). */
   conjurosLibres(nivelMin?: number): number;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */

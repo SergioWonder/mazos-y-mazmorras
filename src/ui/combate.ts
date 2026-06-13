@@ -32,6 +32,7 @@ export function pantallaCombate(
     app.innerHTML = '';
     app.className = `pantalla-combate ${esJefe ? 'combate-jefe' : ''}`;
     fx.ambiente(true);
+    audio.musica(run.capitulo, true); // música de combate del capítulo
 
     // ── Estructura ──────────────────────────────────────────────────────────
     const raiz = el('div', 'combate');
@@ -182,7 +183,7 @@ export function pantallaCombate(
 
     function fichasEstados(l: Luchador): string {
       const fichas = Object.entries(l.estados)
-        .filter(([, v]) => v !== 0 && v !== undefined)
+        .filter(([k, v]) => v !== 0 && v !== undefined && k !== 'raicesExtra')
         .map(
           ([k, v]) =>
             `<span class="estado ${v! < 0 || k === 'raices' ? 'estado-neg' : ''}" data-tip="${tipEstado(k, v!)}">${ICONO_ESTADO[k]}${v}</span>`,
@@ -286,20 +287,26 @@ export function pantallaCombate(
         '<strong>◈ Espacios de conjuro</strong><br>' +
         'Las cartas de conjuro gastan el espacio libre de MAYOR nivel y escalan con él. ' +
         'No se recuperan hasta acabar el combate (salvo cartas de recuperación).<br>' +
-        '<em>Crecen en pirámide: cada nivel exige más espacios del nivel inferior ' +
-        '(1 → 2 → 2+1 de nivel 2… máx. nivel 3).</em>';
+        '<em>Se disponen en pirámide (nivel 1 abajo, nivel 3 arriba). La recuperación ' +
+        'devuelve el de MENOR nivel; Sacrificio Arcano, el de MAYOR.</em>';
+      // Pirámide: una fila por nivel, el más alto arriba y centrado.
+      const filas = [3, 2, 1]
+        .map((nivel) => {
+          const espacios = combate.jugador.conjuros.filter((c) => c.nivel === nivel);
+          if (espacios.length === 0) return '';
+          return `<div class="fila-conjuro">${espacios
+            .map(
+              (c) =>
+                `<span class="espacio nivel-${c.nivel} ${c.gastado ? 'gastado' : ''}"
+                  data-tip="${tipPiramide}<br><em>Este espacio: nivel ${c.nivel} · ${
+                    c.gastado ? 'gastado' : 'libre'
+                  }.</em>">◈<i>${c.nivel}</i></span>`,
+            )
+            .join('')}</div>`;
+        })
+        .join('');
       const conjuros = combate.jugador.conjuros.length
-        ? `<div class="conjuros">
-            ${combate.jugador.conjuros
-              .map(
-                (c) =>
-                  `<span class="espacio nivel-${c.nivel} ${c.gastado ? 'gastado' : ''}"
-                    data-tip="${tipPiramide}<br><em>Este espacio: nivel ${c.nivel} · ${
-                      c.gastado ? 'gastado' : 'libre'
-                    }.</em>">◈<i>${c.nivel}</i></span>`,
-              )
-              .join('')}
-          </div>`
+        ? `<div class="conjuros piramide">${filas}</div>`
         : '';
       $('.energia').innerHTML = `
         <div class="orbe ${combate.jugador.energia === 0 ? 'orbe-vacio' : ''}"
@@ -354,7 +361,7 @@ export function pantallaCombate(
         grande.classList.add('carta-showcase', def.animRara);
         document.body.appendChild(grande);
         fx.estallido(def.fx ?? 'impacto');
-        audio.sfx(def.fx ?? 'impacto');
+        audio.sfxRara(def.fx ?? 'divino');
         anuncio(def.subclase ? `✦ ${def.subclase} ✦` : def.nombre, 'anuncio-rara');
         await espera(850);
         grande.remove();

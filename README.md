@@ -46,8 +46,10 @@ mecánicas de clase (Furia, transformaciones, raíces).
   gastan un espacio (no se recupera hasta el fin del combate, salvo Recuperación
   Arcana) y escalan con el nivel gastado. Vías para ganar espacios: poderes
   «Canalizar Maná» y «Meditación Arcana» (solo ese combate; los poderes se
-  reinician entre combates), «Sacrificio Arcano» (PV por espacio, se agota),
-  «Estudio Arcano» (1 uso, permanente) y la reliquia «Diadema de Intelecto».
+  reinician entre combates), «Estudio Arcano» (1 uso, permanente) y la reliquia
+  «Diadema de Intelecto». Los espacios se muestran en pirámide (nivel 1 abajo,
+  3 arriba). La recuperación devuelve el espacio gastado de MENOR nivel; «Sacrificio
+  Arcano» recupera el de MAYOR (cuesta 1 maná y PV; mejorado, sin coste de vida).
   Cartas raras: una por escuela de magia (Evocación, Abjuración, Ilusión).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Enredadera · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
@@ -65,10 +67,12 @@ mecánicas de clase (Furia, transformaciones, raíces).
 - **Capítulo II — La Cripta**: no-muertos con drenajes y curas (espectros, zombis,
   momias) y jefe final Vol'guth (140 PV). Entre capítulos: reliquia + carta rara
   garantizada + cura del 35%.
-- **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros) y
-  música lo-fi de mazmorreo. La música prefiere una pista CC0 real en
-  `public/audio/lofi-mazmorra.mp3` y, si no existe, genera un loop lo-fi al vuelo
-  (ver `public/audio/LEEME.md`). Botón flotante 🔊/🔇 para silenciar (se recuerda).
+- **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
+  con floritura especial al jugar cartas raras, y música lo-fi de mazmorreo
+  generada al vuelo: un tema distinto por capítulo y una variante más intensa
+  (con bombo) en combate. Se pausa al pasar a segundo plano. Se pueden enchufar
+  pistas CC0 reales por tema (ver `public/audio/LEEME.md`). Botón flotante 🔊/🔇
+  para silenciar (se recuerda).
 
 ## Estructura
 

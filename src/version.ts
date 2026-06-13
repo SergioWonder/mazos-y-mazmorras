@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.2.2';
+export const VERSION = '0.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.3.0',
+    fecha: '2026-06-13',
+    cambios: [
+      '🎵 Música lo-fi distinta para cada capítulo y más intensa en combate; se pausa al salir de la app.',
+      '🔮 Floritura sonora especial al jugar cartas raras.',
+      '🍃 Nueva carta del Círculo de la Tierra, «Raíces Profundas»: tus Raíces reducen la Fuerza del enemigo un turno adicional.',
+      '🧙 Los espacios de conjuro se muestran en pirámide. La recuperación devuelve el de MENOR nivel; «Sacrificio Arcano» el de MAYOR (cuesta 1 maná y PV; mejorado, sin perder vida).',
+      '🎴 Las cartas raras salen menos en combates normales y algo más en élites.',
+    ],
+  },
   {
     version: '0.2.2',
     fecha: '2026-06-13',

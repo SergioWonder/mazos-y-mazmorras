@@ -32,7 +32,7 @@ iniciarActualizaciones();
 audio.crearBoton();
 const arrancarAudio = () => {
   audio.desbloquear();
-  audio.iniciarMusica();
+  audio.musica(0); // tema del título / Capítulo I
 };
 window.addEventListener('pointerdown', arrancarAudio, { once: true });
 window.addEventListener('keydown', arrancarAudio, { once: true });
@@ -66,6 +66,7 @@ async function juego() {
       const cap = CAPITULOS[run.capitulo];
       document.body.dataset.capitulo = String(run.capitulo);
       fx.estiloAmbiente = cap.ambiente;
+      audio.musica(run.capitulo); // música de exploración del capítulo
 
       const nodo = await pantallaMapa(run, `${cap.subtitulo} · ${cap.nombre}`);
       nodo.visitado = true;
@@ -86,7 +87,7 @@ async function juego() {
           if (resultado === 'derrota') vivo = false;
           else {
             await obtenerReliquia(run, rng);
-            await elegirCarta(run, rng, 20); // más probabilidad de rara
+            await elegirCarta(run, rng, 25); // élite: bastante más probable que salga rara
           }
           break;
         }

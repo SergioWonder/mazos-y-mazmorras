@@ -361,7 +361,7 @@ export const DRUIDA: CartaDef[] = [
   // — Cartas raras: una por subclase de druida (D&D 2024) —
   {
     id: 'circulo-tierra',
-    nombre: 'Bendición de la Tierra',
+    nombre: 'Raíces Profundas',
     clase: 'druida',
     tipo: 'poder',
     rareza: 'rara',
@@ -370,14 +370,14 @@ export const DRUIDA: CartaDef[] = [
     subclase: 'Círculo de la Tierra',
     fx: 'tierra',
     animRara: 'anim-tierra',
-    texto: 'Gana 3 de Regeneración.\n(Dura 3 turnos)',
+    texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 1 turno adicional.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Bendición de la Tierra', turnos: 3, fuerza: 0, destreza: 0, curaTurno: 3 });
+      await c.aplicarEstado(c.jugador, 'raizProlongada', 1);
     },
     mejora: {
-      texto: 'Gana 4 de Regeneración.\n(Dura 3 turnos)',
+      texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 2 turnos adicionales.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Bendición de la Tierra', turnos: 3, fuerza: 0, destreza: 0, curaTurno: 4 });
+        await c.aplicarEstado(c.jugador, 'raizProlongada', 2);
       },
     },
   },
@@ -1113,20 +1113,20 @@ export const MAGO: CartaDef[] = [
     clase: 'mago',
     tipo: 'habilidad',
     rareza: 'infrecuente',
-    coste: 0,
+    coste: 1,
     objetivo: 'ninguno',
     fx: 'muerte',
-    exhumar: true,
-    texto: 'Pierde 4 PV.\nGana 1 espacio de conjuro\ndurante este combate.\nSe agota.',
+    texto: 'Pierde 5 PV.\nRecupera el espacio de conjuro\ngastado de MAYOR nivel.',
     jugar: async (c) => {
-      await c.perderPV(4);
-      await c.ganarConjuro(false);
+      await c.perderPV(5);
+      const nivel = await c.recuperarConjuro(true);
+      if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
-      texto: 'Pierde 2 PV.\nGana 1 espacio de conjuro\ndurante este combate.\nSe agota.',
+      texto: 'Recupera el espacio de conjuro\ngastado de MAYOR nivel.\nSin coste de vida.',
       jugar: async (c) => {
-        await c.perderPV(2);
-        await c.ganarConjuro(false);
+        const nivel = await c.recuperarConjuro(true);
+        if (nivel === 0) await c.mensaje('No había conjuros gastados…');
       },
     },
   },
@@ -1158,14 +1158,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'estrellas',
-    texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.',
+    texto: 'Recupera el espacio de conjuro gastado\nde menor nivel.',
     jugar: async (c) => {
       const nivel = await c.recuperarConjuro();
       if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
       coste: 0,
-      texto: 'Recupera el espacio de conjuro gastado\nde mayor nivel.',
+      texto: 'Recupera el espacio de conjuro gastado\nde menor nivel.',
     },
   },
   {
@@ -1177,7 +1177,7 @@ export const MAGO: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'ola',
-    texto: 'Recupera los 2 espacios de conjuro\ngastados de mayor nivel.',
+    texto: 'Recupera los 2 espacios de conjuro\ngastados de menor nivel.',
     jugar: async (c) => {
       const a = await c.recuperarConjuro();
       const b = await c.recuperarConjuro();
@@ -1185,7 +1185,7 @@ export const MAGO: CartaDef[] = [
     },
     mejora: {
       coste: 1,
-      texto: 'Recupera los 2 espacios de conjuro\ngastados de mayor nivel.',
+      texto: 'Recupera los 2 espacios de conjuro\ngastados de menor nivel.',
     },
   },
   {
@@ -1328,7 +1328,7 @@ export function cartaPorId(id: string): CartaDef | undefined {
 }
 
 /** Elige 3 cartas de recompensa con pesos por rareza. */
-export function recompensaCartas(clase: ClaseId, rng: () => number, pesoRaro = 8): CartaDef[] {
+export function recompensaCartas(clase: ClaseId, rng: () => number, pesoRaro = 4): CartaDef[] {
   const pool = poolDeClase(clase);
   const elegidas: CartaDef[] = [];
   let intentos = 0;

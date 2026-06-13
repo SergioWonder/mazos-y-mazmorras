@@ -1,25 +1,30 @@
-# Música de fondo
+# Música y sonido
 
-El juego reproduce **efectos de sonido sintetizados** (Web Audio API, sin ficheros)
-y una **música lo-fi de mazmorreo**.
+El juego usa **efectos de sonido sintetizados** (Web Audio API, sin ficheros) y
+**música lo-fi de mazmorreo generada al vuelo**, con un tema distinto por capítulo
+y una variante más intensa (con bombo) durante el combate:
 
-Para la música hay dos modos, automáticos:
+| Capítulo | Exploración        | Combate                   |
+|----------|--------------------|---------------------------|
+| I        | `cap1`             | `cap1-combate`            |
+| II       | `cap2`             | `cap2-combate`            |
+| III      | `cap3`             | `cap3-combate`            |
 
-1. **Pista CC0 real (recomendada).** Coloca aquí un fichero llamado
-   `lofi-mazmorra.mp3`. El motor lo detecta y lo reproduce en bucle.
-2. **Loop lo-fi procedural (respaldo).** Si no existe ese fichero, se genera
-   al vuelo un pad de acordes con crepitar de vinilo, para que nunca haya silencio.
+La música se **pausa automáticamente** cuando la pestaña/app pasa a segundo plano
+y se reanuda al volver. El botón flotante 🔊/🔇 silencia todo (se recuerda).
 
-## Dónde conseguir una pista lo-fi libre (CC0 / dominio público)
+## Usar pistas CC0 reales (opcional)
 
-Elige una pista con licencia **CC0** o **dominio público** (sin atribución) o
-**CC-BY** (requiere acreditar al autor en el README):
+Cada tema admite una pista real que sustituye al loop procedural. Para activarla:
 
-- **OpenGameArt** — https://opengameart.org/ (filtra por «CC0» y «music»; busca
-  «lofi», «dungeon ambient», «chillhop»).
-- **Freesound** — https://freesound.org/ (filtra por licencia «Creative Commons 0»).
-- **Pixabay Music** — https://pixabay.com/music/ (licencia propia tipo CC0, sin atribución).
-- **Incompetech** (Kevin MacLeod) — https://incompetech.com/ (CC-BY: requiere atribución).
+1. Consigue una pista con licencia **CC0 / dominio público** (sin atribución) o
+   **CC-BY** (acredita al autor en el `README.md`). Fuentes:
+   - OpenGameArt — https://opengameart.org/ (filtra «CC0» + «music»)
+   - Freesound — https://freesound.org/ (licencia «Creative Commons 0»)
+   - Pixabay Music — https://pixabay.com/music/
+   - Incompetech (Kevin MacLeod) — https://incompetech.com/ (CC-BY)
+2. Déjala en esta carpeta, p. ej. `cap2-combate.mp3`.
+3. En `src/fx/audio.ts`, añade el campo `archivo` al tema correspondiente dentro
+   de `TEMAS`, p. ej.: `'cap2-combate': { …, archivo: 'cap2-combate.mp3' }`.
 
-Descarga el `.mp3`, renómbralo a `lofi-mazmorra.mp3` y déjalo en esta carpeta.
-Si usas una pista CC-BY, añade la atribución al `README.md` del proyecto.
+Si el fichero falta o falla la carga, el tema vuelve solo al loop procedural.

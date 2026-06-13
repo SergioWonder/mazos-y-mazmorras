@@ -126,6 +126,12 @@ export class Combate {
       },
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
+        // Bendición de la Tierra: las Raíces aplicadas a un enemigo perduran
+        // turnos extra si el jugador tiene el poder activo.
+        if (estado === 'raices' && obj !== self.jugador) {
+          const extra = self.jugador.estados.raizProlongada ?? 0;
+          if (extra > 0) obj.estados.raicesExtra = extra;
+        }
         await self.ui.fxEstado(obj, estado, n);
       },
       async curar(n) {
@@ -185,10 +191,12 @@ export class Combate {
           permanente ? '◈ ¡Espacio de conjuro permanente!' : '◈ Espacio de conjuro (este combate)',
         );
       },
-      async recuperarConjuro() {
+      async recuperarConjuro(masAlto = false) {
+        // por defecto se recupera el espacio gastado de MENOR nivel;
+        // con `masAlto` (Sacrificio Arcano) se recupera el de MAYOR nivel.
         const gastados = self.jugador.conjuros
           .filter((c) => c.gastado)
-          .sort((a, b) => b.nivel - a.nivel);
+          .sort((a, b) => (masAlto ? b.nivel - a.nivel : a.nivel - b.nivel));
         if (gastados.length === 0) return 0;
         gastados[0].gastado = false;
         await self.ui.fxMensaje(`◈ Conjuro de nivel ${gastados[0].nivel} recuperado`);
@@ -381,7 +389,13 @@ export class Combate {
       e.bloqueo = 0;
       await this.ejecutarMovimiento(e);
       this.decrementarEstados(e);
-      delete e.estados.raices; // las raíces solo aprietan durante un turno
+      // Las raíces aprietan un turno; con Bendición de la Tierra, turnos extra
+      if ((e.estados.raicesExtra ?? 0) > 0) {
+        e.estados.raicesExtra!--;
+        if (e.estados.raicesExtra! <= 0) delete e.estados.raicesExtra;
+      } else {
+        delete e.estados.raices;
+      }
       e.turnosVisto++;
       e.intencion = e.def.ia(
         e.turnosVisto, this.rng, e,

@@ -302,6 +302,53 @@ console.log('— Raíces (ataque anulado, 1 turno) —');
   check(!combate.ataqueAnulado(enemigo), 'sin ataque conocido no se considera anulado');
 }
 
+console.log('— Raíces Profundas (Círculo de la Tierra) —');
+{
+  const tierra = DRUIDA.find((c) => c.id === 'circulo-tierra')!;
+  check(tierra.nombre === 'Raíces Profundas' && tierra.tipo === 'poder', 'la carta de Tierra es un poder de Raíces');
+
+  const run = nuevaRun('druida', 909);
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(909), uiSilenciosa);
+  await combate.iniciar();
+  const enemigo = combate.enemigos[0];
+  enemigo.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 6 };
+  const ctx = combate.contexto(enemigo);
+
+  // sin el poder: las raíces duran 1 turno del enemigo
+  await ctx.aplicarEstado(enemigo, 'raices', 3);
+  await combate.terminarTurno();
+  check((enemigo.estados.raices ?? 0) === 0, 'sin el poder, las raíces expiran tras 1 turno');
+
+  // con el poder activo: las raíces aguantan 1 turno adicional
+  await ctx.aplicarEstado(combate.jugador, 'raizProlongada', 1);
+  await ctx.aplicarEstado(enemigo, 'raices', 3);
+  check((enemigo.estados.raicesExtra ?? 0) === 1, 'el poder marca 1 turno extra de raíces');
+  await combate.terminarTurno();
+  check((enemigo.estados.raices ?? 0) === 3, 'tras el 1.er turno las raíces siguen activas');
+  await combate.terminarTurno();
+  check((enemigo.estados.raices ?? 0) === 0, 'y expiran tras el turno adicional');
+}
+
+console.log('— Recuperación de conjuros: menor vs mayor nivel —');
+{
+  const run = nuevaRun('mago', 4242);
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(4242), uiSilenciosa);
+  await combate.iniciar();
+  const ctx = combate.contexto();
+  combate.jugador.conjuros = [
+    { nivel: 1, gastado: true },
+    { nivel: 2, gastado: true },
+    { nivel: 3, gastado: true },
+  ];
+  check((await ctx.recuperarConjuro()) === 1, 'por defecto recupera el de MENOR nivel');
+  check((await ctx.recuperarConjuro(true)) === 3, 'Sacrificio recupera el de MAYOR nivel');
+  check((await ctx.recuperarConjuro()) === 2, 'el último gastado restante es el nivel 2');
+  check((await ctx.recuperarConjuro()) === 0, 'sin gastados devuelve 0');
+
+  const sacrificio = MAGO.find((c) => c.id === 'sacrificio-arcano')!;
+  check(sacrificio.coste === 1 && !sacrificio.exhumar, 'Sacrificio Arcano cuesta 1 y ya no se agota');
+}
+
 console.log('— Mejoras de cartas —');
 {
   const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO];

@@ -6,7 +6,7 @@ import { el, anuncio } from './util.ts';
 import { renderCarta } from './carta.ts';
 
 /** Overlay de elección de carta tras un combate. */
-export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 8): Promise<void> {
+export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Promise<void> {
   return new Promise((resolver) => {
     const opciones = recompensaCartas(run.clase, rng, pesoRaro);
     if (opciones.length === 0) return resolver();
