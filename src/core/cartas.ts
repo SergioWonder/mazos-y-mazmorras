@@ -1289,6 +1289,110 @@ export const MAGO: CartaDef[] = [
   },
 ];
 
+// ── Cartas únicas incoloras (recompensa de la Vidente entre actos) ───────────
+
+export const NEUTRALES_ESPECIALES: CartaDef[] = [
+  {
+    id: 'seducir',
+    nombre: 'Seducir',
+    clase: 'neutral',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'corazones',
+    animRara: 'anim-corazon',
+    texto: 'Tira 1d20 y seduce al enemigo.\nEl azar decide tu suerte… o tu perdición.',
+    jugar: async (c) => {
+      const e = c.objetivo!;
+      const r = await c.tirarDado(20);
+      if (r === 1) {
+        await c.mensaje('💢 ¡Se revuelve furioso!');
+        await c.forzarAccion(e);
+      } else if (r <= 8) {
+        await c.aplicarEstado(c.jugador, 'fuerza', -1);
+      } else if (r <= 13) {
+        await c.aplicarEstado(c.jugador, 'fuerza', 1);
+      } else if (r <= 16) {
+        await c.aplicarEstado(e, 'debil', 3);
+        await c.aplicarEstado(c.jugador, 'fuerza', 2);
+      } else if (r <= 19) {
+        c.saltarAccion(e);
+        await c.aplicarEstado(c.jugador, 'fuerza', 2);
+        await c.mensaje('💗 Queda prendado: no atacará');
+      } else {
+        await c.efectoEn(e, 'corazones');
+        if (c.esJefe(e)) {
+          await c.danar(e, 40, 'corazones');
+          await c.aplicarEstado(e, 'debil', 3);
+          await c.aplicarEstado(c.jugador, 'fuerza', 3);
+        } else {
+          await c.mensaje('💘 ¡Sucumbe por completo!');
+          await c.matar(e);
+          await c.aplicarEstado(c.jugador, 'fuerza', 3);
+        }
+      }
+    },
+    mejora: {
+      coste: 1,
+      texto: 'Tira 1d20 y seduce al enemigo.\nEl azar decide tu suerte… o tu perdición.',
+    },
+  },
+  {
+    id: 'deseo',
+    nombre: 'Deseo',
+    clase: 'neutral',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 3,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    animRara: 'anim-estrellas',
+    texto: 'Tira 1d20 y formula tu deseo.\nLa fortuna —o la ruina— responderá.',
+    jugar: async (c) => {
+      const vivos = () => c.enemigos.filter((e) => e.vivo);
+      const r = await c.tirarDado(20);
+      if (r === 1) {
+        c.manaCero();
+        await c.mensaje('🌀 El deseo se vuelve en tu contra…');
+      } else if (r <= 8) {
+        for (const e of vivos()) await c.sanar(e, 20);
+        await c.aplicarEstado(c.jugador, 'vulnerable', 2);
+      } else if (r <= 13) {
+        for (const e of vivos()) {
+          await c.aplicarEstado(e, 'vulnerable', 2);
+          await c.aplicarEstado(e, 'debil', 2);
+        }
+      } else if (r <= 16) {
+        for (const e of vivos()) {
+          await c.aplicarEstado(e, 'vulnerable', 99);
+          await c.aplicarEstado(e, 'debil', 99);
+        }
+      } else if (r <= 19) {
+        for (const e of vivos()) {
+          await c.aplicarEstado(e, 'vulnerable', 99);
+          await c.aplicarEstado(e, 'debil', 99);
+          c.saltarAccion(e);
+        }
+      } else {
+        for (const e of vivos()) {
+          if (c.esJefe(e)) {
+            await c.danar(e, 50, 'ola');
+            await c.aplicarEstado(e, 'vulnerable', 99);
+            await c.aplicarEstado(e, 'debil', 99);
+          } else {
+            await c.matar(e);
+          }
+        }
+      }
+    },
+    mejora: {
+      coste: 2,
+      texto: 'Tira 1d20 y formula tu deseo.\nLa fortuna —o la ruina— responderá.',
+    },
+  },
+];
+
 // ── Mazos iniciales y recompensas ────────────────────────────────────────────
 
 /** Las 2 cartas de clase con las que arranca cada mazo. */

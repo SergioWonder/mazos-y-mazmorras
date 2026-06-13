@@ -1,7 +1,7 @@
 // Sistema de partículas sobre <canvas> a pantalla completa.
 // La UI emite efectos por nombre en coordenadas de pantalla.
 
-type Forma = 'circulo' | 'chispa' | 'hoja' | 'estrella';
+type Forma = 'circulo' | 'chispa' | 'hoja' | 'estrella' | 'corazon';
 
 interface Particula {
   x: number; y: number; vx: number; vy: number;
@@ -42,6 +42,7 @@ const EFECTOS: Record<string, ConfigEfecto> = {
   divino:     { cantidad: 36, colores: ['#ffd166', '#fff3b8', '#ffffff'], velocidad: [1, 6], vida: [0.5, 1.1], tam: [2, 5], forma: 'estrella', gravedad: -0.08, brillo: true },
   muerte:     { cantidad: 40, colores: ['#8d8db5', '#3a3a52', '#cfcfe8'], velocidad: [1, 6], vida: [0.5, 1.2], tam: [2, 6], forma: 'circulo', gravedad: -0.02 },
   aliento:    { cantidad: 72, colores: ['#ff3b00', '#ff7a18', '#ffb347', '#fff3b8'], velocidad: [3, 11], vida: [0.4, 1.0], tam: [3, 7], forma: 'chispa', gravedad: -0.05, brillo: true },
+  corazones:  { cantidad: 30, colores: ['#ff5d8f', '#ff8fb3', '#ffd0e0', '#ffffff'], velocidad: [1, 4], vida: [0.7, 1.4], tam: [4, 8], forma: 'corazon', gravedad: -0.06, brillo: true },
 };
 
 class MotorParticulas {
@@ -189,6 +190,15 @@ class MotorParticulas {
         ctx.strokeStyle = p.color;
         ctx.lineWidth = p.tam * 0.5;
         ctx.stroke();
+        break;
+      }
+      case 'corazon': {
+        const s = p.tam * 0.5;
+        ctx.beginPath();
+        ctx.moveTo(0, s);
+        ctx.bezierCurveTo(s * 1.6, -s * 0.6, s * 0.8, -s * 1.8, 0, -s * 0.6);
+        ctx.bezierCurveTo(-s * 0.8, -s * 1.8, -s * 1.6, -s * 0.6, 0, s);
+        ctx.fill();
         break;
       }
     }

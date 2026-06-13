@@ -67,7 +67,7 @@ export const GOBLIN_FAMELICO: EnemigoDef = {
 };
 
 export const JEFE_OGRO: EnemigoDef = {
-  id: 'jefe-ogro', nombre: 'Gorzug, Jefe Ogro', arte: '👹', pv: [115, 115], escala: 1.9,
+  id: 'jefe-ogro', nombre: 'Gorzug, Jefe Ogro', arte: '👹', pv: [115, 115], escala: 1.9, esJefe: true,
   rasgo: {
     nombre: 'Devorador',
     texto: 'Su despensa camina: invoca goblins famélicos, y devorarlos lo repara y lo enfurece.',
@@ -173,7 +173,7 @@ export const MOMIA_REAL: EnemigoDef = {
 
 export const SENOR_CRIPTA: EnemigoDef = {
   id: 'senor-cripta', nombre: "Vol'guth, Señor de la Cripta", arte: '🧙‍♂️', pv: [178, 178], escala: 1.8,
-  pasiva: 'filacteria',
+  pasiva: 'filacteria', esJefe: true,
   rasgo: {
     nombre: 'Filacteria',
     texto: 'Su alma está atada a una filacteria: para él, la muerte no es un final… sino un despertar.',
@@ -282,7 +282,7 @@ export const SUMO_CULTISTA: EnemigoDef = {
 };
 
 export const IGNIFAX: EnemigoDef = {
-  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [320, 320], escala: 2.2,
+  id: 'ignifax', nombre: 'Ignifax, el Dragón Rojo', arte: '🐉', pv: [320, 320], escala: 2.2, esJefe: true,
   estadosIniciales: { espinas: 4 }, // Escamas Ígneas: pasiva todo el combate
   rasgo: {
     nombre: 'Escamas Ígneas y Corazón de Magma',

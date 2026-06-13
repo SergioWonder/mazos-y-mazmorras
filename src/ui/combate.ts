@@ -144,6 +144,35 @@ export function pantallaCombate(
         sacudir(1);
         await espera(500);
       },
+      async fxParticulas(obj, efecto) {
+        const { x, y } = centroDe(elemDe(obj));
+        fx.emitir(efecto, x, y);
+        render();
+        await espera(220);
+      },
+      async fxDado(n, caras) {
+        audio.sfx('carta');
+        const overlay = el('div', 'dado-overlay');
+        overlay.innerHTML = `<div class="dado rodando"><span class="dado-num"></span></div>`;
+        document.body.appendChild(overlay);
+        const cubo = overlay.querySelector('.dado') as HTMLElement;
+        const num = overlay.querySelector('.dado-num') as HTMLElement;
+        // mientras "rueda", parpadea números aleatorios (puramente visual)
+        const flick = window.setInterval(() => {
+          num.textContent = String(1 + Math.floor(Math.random() * caras));
+        }, 70);
+        await espera(900);
+        window.clearInterval(flick);
+        num.textContent = String(n);
+        cubo.classList.remove('rodando');
+        cubo.classList.add('dado-final');
+        if (n === caras) { cubo.classList.add('dado-critico'); fx.estallido('estrellas'); }
+        else if (n === 1) cubo.classList.add('dado-pifia');
+        await espera(780);
+        overlay.classList.add('dado-fuera');
+        await espera(260);
+        overlay.remove();
+      },
     };
 
     const combate = new Combate(run, defs, rng, ui, esJefe || esElite);

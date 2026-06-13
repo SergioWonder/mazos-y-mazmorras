@@ -72,6 +72,8 @@ export interface EnemigoDef {
   estadosIniciales?: Partial<Record<EstadoId, number>>;
   /** Pasiva especial: 'filacteria' = la primera vez que muere revive con 30 PV. */
   pasiva?: 'filacteria';
+  /** Marca a los jefes (no muere por efectos «mata si no es jefe»). */
+  esJefe?: boolean;
   /** Decide el próximo movimiento (recibe a sus aliados vivos). */
   ia: (
     turno: number,
@@ -91,6 +93,8 @@ export interface EnemigoCombate extends Luchador {
   filacteriaUsada?: boolean;
   /** Rasgo único de un solo uso ya gastado (enfurecerse, etc.). */
   rasgoUsado?: boolean;
+  /** Si está activo, este enemigo se salta su próxima acción (Seducir/Deseo). */
+  saltaAccion?: boolean;
 }
 
 /** Espacio de conjuro del mago (pirámide de niveles 1-3). */
@@ -109,6 +113,7 @@ export interface JugadorCombate extends Luchador {
   efectosTemporales: EfectoTemporal[];
   furiaFuerza: number;        // fuerza otorgada por Furia (se puede perder)
   furiaDestreza: number;
+  energiaCero?: boolean;      // el próximo turno empiezas con 0 de energía (Deseo)
   conjuros: EspacioConjuro[]; // espacios de conjuro (mago); vacío en otras clases
 }
 
@@ -191,6 +196,24 @@ export interface ContextoEfecto {
   ataqueAnulado(e: EnemigoCombate): boolean;
   estaTransformado(): boolean;
   mensaje(txt: string): Promise<void>;
+  /** Tira un dado de N caras: anima el lanzamiento y devuelve el resultado (1..N). */
+  tirarDado(caras: number): Promise<number>;
+  /** El enemigo ejecuta su intención ahora mismo y vuelve a prepararse. */
+  forzarAccion(e: EnemigoCombate): Promise<void>;
+  /** Marca al enemigo para que se salte su próxima acción. */
+  saltarAccion(e: EnemigoCombate): void;
+  /** Daño directo (sin Fuerza del jugador) a un luchador. */
+  danar(obj: Luchador, n: number, fx?: string): Promise<void>;
+  /** Mata al instante a un enemigo (úsese tras comprobar que no es jefe). */
+  matar(e: EnemigoCombate): Promise<void>;
+  /** Cura PV a cualquier luchador (p. ej. a un enemigo). */
+  sanar(obj: Luchador, n: number): Promise<void>;
+  /** true si el enemigo es un jefe. */
+  esJefe(e: EnemigoCombate): boolean;
+  /** Pierdes todo el maná actual y el próximo turno empiezas con 0. */
+  manaCero(): void;
+  /** Lanza un efecto de partículas sobre un luchador (sin daño ni texto). */
+  efectoEn(obj: Luchador, efecto: string): Promise<void>;
 }
 
 export type TipoNodo = 'combate' | 'elite' | 'descanso' | 'cofre' | 'evento' | 'jefe';

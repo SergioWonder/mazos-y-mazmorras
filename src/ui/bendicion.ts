@@ -1,5 +1,6 @@
 import type { EstadoRun } from '../core/types.ts';
 import { reliquiaAleatoria } from '../core/eventos.ts';
+import { instanciar, NEUTRALES_ESPECIALES } from '../core/cartas.ts';
 import { barajar } from '../core/rng.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
@@ -48,7 +49,42 @@ const DONES: Don[] = [
       reliquiaAleatoria(run, rng);
     },
   },
+  {
+    icono: '🔮', nombre: 'Don del Maná Eterno',
+    detalle: '+1 de energía máxima en todos los combates',
+    aplicar: (run) => { run.permanentes.energia += 1; },
+  },
+  {
+    icono: '⚡', nombre: 'Don del Berserker',
+    detalle: '+1 de Fuerza y +1 de Destreza al inicio de cada combate',
+    aplicar: (run) => {
+      run.permanentes.fuerza += 1;
+      run.permanentes.destreza += 1;
+    },
+  },
+  {
+    icono: '🍀', nombre: 'Don del Peregrino',
+    detalle: '+10 PV máximos y obtienes 1 reliquia al azar',
+    aplicar: (run, rng) => {
+      run.pvMax += 10;
+      reliquiaAleatoria(run, rng);
+    },
+  },
 ];
+
+/** Cartas únicas incoloras que ofrece la Vidente según el acto que vas a empezar. */
+const DON_CARTA: Record<string, Don> = {
+  seducir: {
+    icono: '💘', nombre: 'Carta única: Seducir',
+    detalle: 'Añade «Seducir» a tu mazo (incolora, tira 1d20)',
+    aplicar: (run) => { run.mazo.push(instanciar(NEUTRALES_ESPECIALES.find((c) => c.id === 'seducir')!)); },
+  },
+  deseo: {
+    icono: '🌠', nombre: 'Carta única: Deseo',
+    detalle: 'Añade «Deseo» a tu mazo (incolora, tira 1d20)',
+    aplicar: (run) => { run.mazo.push(instanciar(NEUTRALES_ESPECIALES.find((c) => c.id === 'deseo')!)); },
+  },
+};
 
 /**
  * Encuentro especial entre actos: Síbila, la Vidente del Manantial.
@@ -56,7 +92,11 @@ const DONES: Don[] = [
  */
 export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<void> {
   return new Promise((resolver) => {
-    const ofrecidos = barajar(rng, DONES).slice(0, 3);
+    // Al pasar al Acto II se ofrece «Seducir»; al Acto III, «Deseo».
+    const especiales: Don[] = [];
+    if (run.capitulo === 0) especiales.push(DON_CARTA.seducir);
+    else if (run.capitulo === 1) especiales.push(DON_CARTA.deseo);
+    const ofrecidos = [...especiales, ...barajar(rng, DONES).slice(0, 3 - especiales.length)];
 
     const app = document.getElementById('app')!;
     app.innerHTML = '';

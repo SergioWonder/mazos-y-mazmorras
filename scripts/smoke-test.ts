@@ -10,7 +10,7 @@ import {
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
-  recompensaCartas, DRUIDA, BARBARO, MAGO, BASICAS, instanciar, mazoInicial, defDe,
+  recompensaCartas, DRUIDA, BARBARO, MAGO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
@@ -37,6 +37,8 @@ const uiSilenciosa: Presentador = {
   fxMensaje: async () => {},
   fxEnemigoActua: async () => {},
   fxFuriaPerdida: async () => {},
+  fxDado: async () => {},
+  fxParticulas: async () => {},
 };
 
 async function simular(clase: ClaseId, semilla: number, defs: EnemigoDef[]) {
@@ -527,6 +529,43 @@ console.log('— Quemadura (Aliento de Dragón) —');
   const aliento = IGNIFAX.ia(2, () => 0.5, { rasgoUsado: true, pv: 320, pvMax: 320 } as never, []);
   check(aliento.nombre === 'ALIENTO DE DRAGÓN' && (aliento.efectos ?? []).some(([e]) => e === 'quemadura'),
     'el Aliento de Dragón de Ignifax aplica Quemadura');
+}
+
+console.log('— Cartas de azar (Seducir / Deseo) —');
+{
+  const seducir = NEUTRALES_ESPECIALES.find((c) => c.id === 'seducir')!;
+  const deseo = NEUTRALES_ESPECIALES.find((c) => c.id === 'deseo')!;
+  check(!!seducir && !!deseo && seducir.clase === 'neutral' && deseo.clase === 'neutral',
+    'existen las cartas únicas incoloras Seducir y Deseo');
+
+  // Seducir con un 20 sobre un NO jefe: muere y ganas +3 de Fuerza
+  const run = nuevaRun('mago', 1);
+  const comb = new Combate(run, [GOBLIN_CORTADOR], () => 0.99, uiSilenciosa); // d20 → 20
+  await comb.iniciar();
+  const e = comb.enemigos[0];
+  const fAntes = comb.jugador.estados.fuerza ?? 0;
+  await seducir.jugar(comb.contexto(e));
+  check(!e.vivo, 'Seducir con 20 mata a un enemigo que no es jefe');
+  check((comb.jugador.estados.fuerza ?? 0) === fAntes + 3, 'y otorga +3 de Fuerza');
+
+  // Deseo con un 20 sobre un jefe: no muere, sufre 50 y queda 99/99
+  const run2 = nuevaRun('mago', 2);
+  const comb2 = new Combate(run2, [IGNIFAX], () => 0.99, uiSilenciosa);
+  await comb2.iniciar();
+  const jefe = comb2.enemigos[0];
+  const pvJefe = jefe.pv;
+  await deseo.jugar(comb2.contexto());
+  check(jefe.vivo && jefe.pv === pvJefe - 50, 'Deseo con 20: el jefe sufre 50 (no muere)');
+  check((jefe.estados.vulnerable ?? 0) >= 99 && (jefe.estados.debil ?? 0) >= 99, 'y queda 99 Vulnerable / 99 Débil');
+
+  // Deseo con un 1: pierdes el maná actual y el próximo turno empiezas a 0
+  const run3 = nuevaRun('mago', 3);
+  const comb3 = new Combate(run3, [GOBLIN_CORTADOR], () => 0, uiSilenciosa); // d20 → 1
+  await comb3.iniciar();
+  comb3.jugador.energia = 3;
+  await deseo.jugar(comb3.contexto());
+  check(comb3.jugador.energia === 0, 'Deseo con 1: pierdes todo el maná');
+  check(comb3.jugador.energiaCero === true, 'y el próximo turno empezará a 0 de maná');
 }
 
 console.log('— Imagen Espejo —');

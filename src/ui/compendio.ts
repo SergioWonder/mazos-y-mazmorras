@@ -1,5 +1,5 @@
 import type { CartaDef } from '../core/types.ts';
-import { BASICAS, DRUIDA, BARBARO, MAGO, defDe } from '../core/cartas.ts';
+import { BASICAS, DRUIDA, BARBARO, MAGO, NEUTRALES_ESPECIALES, defDe } from '../core/cartas.ts';
 import { renderCarta } from './carta.ts';
 import { el } from './util.ts';
 
@@ -25,6 +25,7 @@ const GRUPOS: { titulo: string; cartas: CartaDef[] }[] = [
   { titulo: '🌿 Druida', cartas: DRUIDA },
   { titulo: '🪓 Bárbaro', cartas: BARBARO },
   { titulo: '🔮 Mago', cartas: MAGO },
+  { titulo: '✨ Únicas (incoloras)', cartas: NEUTRALES_ESPECIALES },
 ];
 
 /** Compendio: todas las cartas por clase, con comentarios exportables a JSON. */

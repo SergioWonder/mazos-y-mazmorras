@@ -19,6 +19,10 @@ export interface Presentador {
   fxMensaje(txt: string): Promise<void>;
   fxEnemigoActua(e: EnemigoCombate): Promise<void>;
   fxFuriaPerdida(): Promise<void>;
+  /** Anima el lanzamiento de un dado de `caras` que cae en `n`. */
+  fxDado(n: number, caras: number): Promise<void>;
+  /** Lanza partículas sobre un luchador, sin número ni texto. */
+  fxParticulas(obj: Luchador, efecto: string): Promise<void>;
 }
 
 export class Combate {
@@ -210,6 +214,48 @@ export class Combate {
       ataqueAnulado: (e) => self.ataqueAnulado(e),
       estaTransformado: () => self.jugador.efectosTemporales.length > 0,
       mensaje: (txt) => self.ui.fxMensaje(txt),
+      async tirarDado(caras) {
+        const n = 1 + Math.floor(self.rng() * caras);
+        await self.ui.fxDado(n, caras);
+        return n;
+      },
+      async forzarAccion(e) {
+        if (!e.vivo || self.terminado) return;
+        await self.ejecutarMovimiento(e);
+        if (e.vivo && !self.terminado) {
+          e.turnosVisto++;
+          e.intencion = e.def.ia(e.turnosVisto, self.rng, e, self.enemigos.filter((x) => x.vivo && x !== e));
+          e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+          self.ui.render();
+        }
+      },
+      saltarAccion(e) {
+        e.saltaAccion = true;
+      },
+      async danar(obj, n, fx) {
+        await self.infligir(obj, n, fx ?? 'golpeEnemigo');
+      },
+      async matar(e) {
+        if (!e.vivo) return;
+        e.pv = 0;
+        e.vivo = false;
+        await self.ui.fxMuerte(e);
+        await self.comprobarFin();
+      },
+      async sanar(obj, n) {
+        const real = Math.min(n, obj.pvMax - obj.pv);
+        if (real > 0) {
+          obj.pv += real;
+          await self.ui.fxCura(obj, real);
+        }
+      },
+      esJefe: (e) => e.def.esJefe === true,
+      manaCero() {
+        self.jugador.energia = 0;
+        self.jugador.energiaCero = true;
+        self.ui.render();
+      },
+      efectoEn: (obj, efecto) => self.ui.fxParticulas(obj, efecto),
     };
   }
 
@@ -296,6 +342,10 @@ export class Combate {
     this.danoRecibidoEsteTurno = 0;
     if (!primero) this.jugador.bloqueo = 0;
     this.jugador.energia = this.jugador.energiaMax;
+    if (this.jugador.energiaCero) { // penalización de Deseo
+      this.jugador.energia = 0;
+      this.jugador.energiaCero = false;
+    }
     // regeneración y curas de efectos temporales
     const regen = this.jugador.estados.regeneracion ?? 0;
     const curaExtra = this.jugador.efectosTemporales.reduce((s, e) => s + (e.curaTurno ?? 0), 0);
@@ -446,6 +496,12 @@ export class Combate {
   }
 
   async ejecutarMovimiento(e: EnemigoCombate) {
+    // Seducción/Deseo: el enemigo se salta esta acción
+    if (e.saltaAccion) {
+      e.saltaAccion = false;
+      await this.ui.fxMensaje(`💤 ${e.nombre} no actúa este turno`);
+      return;
+    }
     const m = e.intencion;
     await this.ui.fxEnemigoActua(e);
 

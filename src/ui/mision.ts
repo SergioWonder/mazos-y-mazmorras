@@ -31,8 +31,8 @@ export function pantallaMision(run: EstadoRun, rng: () => number): Promise<void>
     const opciones = [
       {
         icono: '🗡️', nombre: 'Adiestramiento espartano',
-        detalle: 'Elimina hasta 2 cartas de tu mazo',
-        accion: () => vistaEliminar(2),
+        detalle: 'Elimina 1 carta de tu mazo',
+        accion: () => vistaEliminar(1),
       },
       {
         icono: '⚒️', nombre: 'La forja del torreón',

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.7.0';
+export const VERSION = '0.8.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.8.0',
+    fecha: '2026-06-13',
+    cambios: [
+      '🎲 ¡Cartas de azar! «Seducir» (Acto II) y «Deseo» (Acto III), incoloras: tiran un d20 con animación 3D y el destino decide… de la catástrofe al milagro.',
+      '🎁 Más variedad en las bendiciones de la Vidente entre actos (maná eterno, berserker, peregrino…).',
+      '🗡️ La mejora inicial «Adiestramiento» ahora elimina 1 carta (antes 2), para equilibrar con las demás.',
+      '💍 El Anillo de Protección da 1 de bloqueo por turno (antes 2).',
+    ],
+  },
   {
     version: '0.7.0',
     fecha: '2026-06-13',

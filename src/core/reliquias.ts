@@ -59,8 +59,8 @@ export const POOL_RELIQUIAS: ReliquiaDef[] = [
   },
   {
     id: 'anillo-proteccion', nombre: 'Anillo de Protección', icono: '💍',
-    texto: 'Gana 2 de bloqueo al final de cada turno.',
-    finTurno: async (ctx) => { await ctx.ganarBloqueo(2); },
+    texto: 'Gana 1 de bloqueo al final de cada turno.',
+    finTurno: async (ctx) => { await ctx.ganarBloqueo(1); },
   },
   {
     id: 'diadema-intelecto', nombre: 'Diadema de Intelecto', icono: '👑',

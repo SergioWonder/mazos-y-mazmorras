@@ -56,6 +56,9 @@ mecánicas de clase (Furia, transformaciones, raíces).
   Manos Ardientes).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un
   efecto permanente en la run (Voto de Sangre, Pacto con el Bosque, Estudio Arcano).
+- **Cartas de azar (incoloras)**: la Vidente puede dar «Seducir» (entrando al Acto II)
+  o «Deseo» (entrando al Acto III). Tiran un d20 con animación 3D y el resultado va
+  de la catástrofe al milagro (un 20 puede matar a un no-jefe / fulminar a un jefe).
 - Sistema de energía (3/turno), bloqueo, Vulnerable/Débil/Frágil idéntico a StS para
   facilitar el equilibrado inicial.
 - **Mejora de cartas**: todas las cartas tienen versión «+». En los campamentos se
