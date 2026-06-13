@@ -446,67 +446,42 @@
 
 body.arrastre-activo { cursor: grabbing; }
 
-/* ── Dado d20 (icosaedro) para las cartas de azar: Seducir, Deseo ────────── */
-.dado-overlay {
+/* ── Dado d20 (icosaedro 3D en WebGL): Seducir, Deseo ────────────────────── */
+.dado3d-overlay {
   position: fixed;
   inset: 0;
   z-index: 95;
-  display: grid;
-  place-items: center;
-  background: radial-gradient(ellipse at center, rgba(5, 8, 5, 0.4), rgba(5, 8, 5, 0.78));
-  perspective: 900px;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(5, 8, 5, 0.45), rgba(5, 8, 5, 0.82));
   transition: opacity 0.3s ease;
 }
-.dado-overlay.dado-fuera { opacity: 0; }
-.dado {
-  position: relative;
-  width: 132px;
-  height: 132px;
-  display: grid;
-  place-items: center;
-  transform-style: preserve-3d;
-  will-change: transform;
-}
-.d20-svg {
+.dado3d-overlay canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.7));
 }
-.dado-num {
+.dado3d-overlay.dado3d-fuera { opacity: 0; }
+.dado3d-num {
   position: absolute;
-  top: 56%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: var(--fuente-titulo), serif;
-  font-size: 2.1rem;
+  font-size: 2.6rem;
   font-weight: 800;
   color: #2b2316;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7), 0 0 10px rgba(0, 0, 0, 0.35);
   pointer-events: none;
 }
-/* Rueda despacio rebotando por la pantalla mientras gira en 3D, y aterriza de cara */
-.dado.rodando { animation: dado-rodar 2.6s cubic-bezier(0.25, 0.6, 0.3, 1) forwards; }
-@keyframes dado-rodar {
-  0%   { transform: translate(-42vw, -8vh) rotate3d(1, 1, 0.3, 0deg) scale(0.85); }
-  18%  { transform: translate(-22vw, 16vh) rotate3d(1, 0.7, 0.4, 540deg) scale(0.92); }
-  36%  { transform: translate(-2vw, -14vh) rotate3d(0.8, 1, 0.5, 1040deg); }
-  54%  { transform: translate(20vw, 12vh) rotate3d(1, 1, 0.3, 1560deg); }
-  70%  { transform: translate(28vw, -6vh) rotate3d(1, 0.8, 0.4, 1980deg) scale(0.96); }
-  85%  { transform: translate(10vw, 8vh) rotate3d(1, 1, 0.3, 2360deg); }
-  100% { transform: translate(0, 0) rotate3d(1, 1, 0, 2520deg) scale(1.18); }
+.dado3d-num.revelado { animation: dado-num-pop 0.45s ease-out; }
+@keyframes dado-num-pop {
+  0% { transform: translate(-50%, -50%) scale(1.7); }
+  60% { transform: translate(-50%, -50%) scale(0.9); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
-/* 2520 = 7×360 → cae de cara, número legible */
-.dado.dado-revelado { animation: dado-pulso 0.5s ease-out 1; transform: translate(0, 0) scale(1.18); }
-@keyframes dado-pulso {
-  0% { transform: translate(0, 0) scale(1.4); }
-  55% { transform: translate(0, 0) scale(1.08); }
-  100% { transform: translate(0, 0) scale(1.18); }
-}
-.dado.dado-critico .d20-svg {
-  filter: drop-shadow(0 0 22px #ffd166) drop-shadow(0 0 60px rgba(255, 209, 102, 0.8));
-}
-.dado.dado-critico .dado-num { color: #7a4a06; }
-.dado.dado-pifia .d20-svg {
-  filter: drop-shadow(0 0 20px rgba(179, 38, 30, 0.9)) saturate(0.6) brightness(0.8);
-}
+.dado3d-num.critico { color: #5a3a06; text-shadow: 0 0 16px #ffd166, 0 1px 0 #fff; }
+.dado3d-num.pifia { color: #fff0ec; text-shadow: 0 0 16px #b3261e; }
+.dado3d-num.sin-gl { font-size: 3.4rem; }
+
 .int-dormido { color: #b9c4ff; font-size: 1.35rem; }

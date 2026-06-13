@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.8.1';
+export const VERSION = '0.8.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.8.2',
+    fecha: '2026-06-13',
+    cambios: [
+      '🎲 El d20 ahora es un icosaedro 3D de verdad (WebGL): rueda y rebota por la pantalla con iluminación y facetas antes de revelar el resultado.',
+    ],
+  },
   {
     version: '0.8.1',
     fecha: '2026-06-13',
