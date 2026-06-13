@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.4.0';
+export const VERSION = '0.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.5.0',
+    fecha: '2026-06-13',
+    cambios: [
+      '🎼 ¡Banda sonora real! Música 8-bit de OpenGameArt (CC0): un tema propio para el menú y para cada acto, más un tema de jefe épico. Si una pista no carga, suena el chiptune de respaldo.',
+    ],
+  },
   {
     version: '0.4.0',
     fecha: '2026-06-13',

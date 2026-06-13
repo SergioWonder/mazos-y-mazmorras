@@ -92,42 +92,51 @@ interface TemaChip {
 }
 
 // 0 = silencio. Menú + (normal / jefe) único por acto. Los jefes son rápidos y épicos.
+// `archivo` apunta a una pista CC0 real (OpenGameArt); el chiptune queda de respaldo
+// si el fichero no carga. Créditos y licencias en public/audio/LEEME.md.
 const TEMAS: Record<string, TemaChip> = {
   // Menú principal: misterioso, tempo medio (La menor)
   'menu': {
+    archivo: 'menu.ogg',
     bpm: 104,
     bajo:    [45, 0, 45, 0, 41, 0, 43, 0, 45, 0, 45, 0, 40, 0, 43, 0],
     melodia: [69, 72, 76, 72, 65, 69, 72, 69, 67, 71, 74, 71, 64, 67, 71, 0],
   },
   // Cap. I — El Asentamiento Ogro (La menor): marcha decidida
   'cap1': {
+    archivo: 'cap1.ogg',
     bpm: 128, bateria: true,
     bajo:    [45, 45, 0, 45, 41, 41, 0, 43, 45, 45, 0, 45, 43, 0, 41, 0],
     melodia: [69, 76, 72, 69, 65, 72, 69, 65, 67, 74, 71, 67, 64, 71, 67, 64],
   },
   'cap1-jefe': {
+    archivo: 'jefe.ogg',
     bpm: 152, bateria: true, epico: true,
     bajo:    [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40],
     melodia: [81, 76, 72, 76, 77, 72, 69, 72, 79, 74, 71, 74, 76, 72, 69, 67],
   },
   // Cap. II — La Cripta (Re menor): oscuro, reptante
   'cap2': {
+    archivo: 'cap2.mp3',
     bpm: 116, bateria: true,
     bajo:    [38, 0, 38, 41, 36, 0, 36, 38, 34, 0, 34, 38, 33, 0, 36, 0],
     melodia: [62, 65, 69, 65, 60, 65, 62, 60, 58, 62, 65, 62, 57, 60, 62, 0],
   },
   'cap2-jefe': {
+    archivo: 'jefe.ogg',
     bpm: 146, bateria: true, epico: true,
     bajo:    [38, 38, 45, 38, 36, 36, 43, 36, 34, 34, 41, 34, 33, 33, 40, 33],
     melodia: [74, 69, 65, 69, 70, 65, 62, 65, 72, 67, 65, 67, 69, 65, 62, 60],
   },
   // Cap. III — La Guarida del Dragón (Mi menor): tenso, amenazante
   'cap3': {
+    archivo: 'cap3.mp3',
     bpm: 132, bateria: true,
     bajo:    [40, 40, 0, 40, 43, 0, 38, 0, 45, 0, 43, 0, 40, 0, 35, 0],
     melodia: [64, 71, 67, 64, 67, 74, 71, 67, 69, 76, 72, 69, 71, 67, 64, 62],
   },
   'cap3-jefe': {
+    archivo: 'jefe.ogg',
     bpm: 164, bateria: true, epico: true,
     bajo:    [40, 40, 47, 40, 35, 35, 42, 35, 43, 43, 50, 43, 38, 38, 45, 38],
     melodia: [76, 71, 67, 71, 72, 67, 64, 67, 79, 74, 71, 74, 71, 67, 64, 71],

@@ -1,32 +1,29 @@
 # Música y sonido
 
 El juego usa **efectos de sonido sintetizados** (Web Audio API, sin ficheros) y
-**música chiptune (8-bit) de mazmorreo generada al vuelo**: un tema de menú, y por
-cada acto un tema normal (exploración y combate corriente) y un tema de **jefe**
-rápido y épico:
+**música 8-bit/chiptune**: un tema de menú, y por cada acto un tema normal
+(exploración y combate corriente) y un tema de **jefe** rápido y épico.
 
-| Tema             | Cuándo suena                          |
-|------------------|---------------------------------------|
-| `menu`           | menú principal                        |
-| `cap1` / `cap1-jefe` | Acto I — El Asentamiento Ogro / su jefe |
-| `cap2` / `cap2-jefe` | Acto II — La Cripta / su jefe         |
-| `cap3` / `cap3-jefe` | Acto III — La Guarida del Dragón / su jefe |
+Cada tema reproduce una **pista CC0 real** (las de la tabla); si el fichero no
+carga, suena un **loop chiptune procedural de respaldo** equivalente. La música se
+**pausa automáticamente** en segundo plano y el botón flotante 🔊/🔇 silencia todo.
 
-La música se **pausa automáticamente** cuando la pestaña/app pasa a segundo plano
-y se reanuda al volver. El botón flotante 🔊/🔇 silencia todo (se recuerda).
+## Pistas usadas (todas CC0 / dominio público)
 
-## Usar pistas CC0 reales (opcional)
+Fuente: [OpenGameArt.org](https://opengameart.org/). La licencia CC0 no exige
+atribución; se acredita igualmente por cortesía.
 
-Cada tema admite una pista real que sustituye al loop procedural. Para activarla:
+| Fichero    | Tema                  | Pista            | Autor        |
+|------------|-----------------------|------------------|--------------|
+| `menu.ogg` | Menú principal        | *Exploring Town* | Spring Spring |
+| `cap1.ogg` | Acto I — Asentamiento Ogro | *Overworld Theme* | Louswan |
+| `cap2.mp3` | Acto II — La Cripta   | *Spooky Dungeon* | Memoraphile  |
+| `cap3.mp3` | Acto III — Guarida del Dragón | *Fire Level* | Spring Spring |
+| `jefe.ogg` | Jefes (los tres actos)| *Great Boss*     | Spring Spring |
 
-1. Consigue una pista con licencia **CC0 / dominio público** (sin atribución) o
-   **CC-BY** (acredita al autor en el `README.md`). Fuentes:
-   - OpenGameArt — https://opengameart.org/ (filtra «CC0» + «music»)
-   - Freesound — https://freesound.org/ (licencia «Creative Commons 0»)
-   - Pixabay Music — https://pixabay.com/music/
-   - Incompetech (Kevin MacLeod) — https://incompetech.com/ (CC-BY)
-2. Déjala en esta carpeta, p. ej. `cap2-combate.mp3`.
-3. En `src/fx/audio.ts`, añade el campo `archivo` al tema correspondiente dentro
-   de `TEMAS`, p. ej.: `'cap2-combate': { …, archivo: 'cap2-combate.mp3' }`.
+## Cambiar o ampliar pistas
 
-Si el fichero falta o falla la carga, el tema vuelve solo al loop procedural.
+Para usar otra pista en un tema: déjala en esta carpeta y ajusta el campo
+`archivo` del tema correspondiente en `TEMAS` (`src/fx/audio.ts`). Usa preferiblemente
+**CC0**; si es **CC-BY**, añade la atribución aquí. Para dar a cada jefe su propia
+pista, apunta `cap1-jefe` / `cap2-jefe` / `cap3-jefe` a ficheros distintos.

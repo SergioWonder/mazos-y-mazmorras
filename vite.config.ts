@@ -25,11 +25,19 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,mp3,ogg}'],
-        // la pista lo-fi puede pesar varios MB: súbele el tope de precaché
-        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
-        // Las fuentes de Google se cachean al vuelo para jugar sin conexión
+        // El audio NO se precachea (varios MB): se cachea al vuelo la primera
+        // vez que suena cada pista, así la primera carga sigue siendo ligera.
+        globPatterns: ['**/*.{js,css,html,png,svg}'],
         runtimeCaching: [
+          {
+            urlPattern: /\/audio\/.*\.(?:mp3|ogg)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'musica',
+              expiration: { maxEntries: 16, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              rangeRequests: true,
+            },
+          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
