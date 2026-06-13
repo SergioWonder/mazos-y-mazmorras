@@ -68,6 +68,8 @@ console.log('— Pirámide de conjuros —');
   const esperado: Array<[number, number[]]> = [
     [1, [1, 0, 0]], [2, [2, 0, 0]], [3, [2, 1, 0]], [4, [3, 1, 0]],
     [5, [3, 2, 0]], [6, [3, 2, 1]], [7, [4, 2, 1]],
+    // a partir del sexto, los extra son siempre de nivel 1 (no engordan 2 ni 3)
+    [8, [5, 2, 1]], [9, [6, 2, 1]],
   ];
   for (const [total, forma] of esperado) {
     const r = piramideConjuros(total);
@@ -451,7 +453,19 @@ console.log('— Imagen Espejo —');
 {
   const espejo = MAGO.find((c) => c.id === 'escuela-ilusion')!;
   check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 1, 'Imagen Espejo: coste 1');
-  check(!espejo.requiereConjuro, 'ya no gasta espacio de conjuro');
+  check(espejo.requiereConjuro === 1, 'gasta un espacio de conjuro');
+
+  // al jugarse: 40 % base (2 cargas) + 20 % (1 carga) por nivel del espacio gastado
+  const runE = nuevaRun('mago', 13);
+  const combE = new Combate(runE, [GOBLIN_CORTADOR], () => 0.5, uiSilenciosa);
+  await combE.iniciar();
+  combE.jugador.conjuros = [{ nivel: 1, gastado: false }, { nivel: 2, gastado: false }];
+  combE.jugador.energia = 3;
+  const instE = { uid: 9999, def: espejo, mejorada: false };
+  combE.jugador.mano.push(instE);
+  await combE.jugarCarta(instE, undefined);
+  check((combE.jugador.estados.espejismo ?? 0) === 4, 'nivel 2 gastado → 4 cargas (80 %)');
+  check(combE.jugador.conjuros.filter((c) => !c.gastado).length === 1, 'consume el espacio de mayor nivel');
 
   // rng constante 0.01 → siempre esquiva (0.01 < cargas×0.2)
   const runA = nuevaRun('mago', 11);

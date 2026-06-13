@@ -1280,13 +1280,15 @@ export const MAGO: CartaDef[] = [
     subclase: 'Ilusión',
     fx: 'luna',
     animRara: 'anim-ilusion',
-    texto: 'Te rodean copias ilusorias durante 1 turno:\n80 % de esquivar cada ataque (−20 % por\nesquiva; un golpe recibido las disipa).',
+    requiereConjuro: 1,
+    texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n40 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'espejismo', 4); // 4 cargas × 20 %
+      const nivel = await c.gastarConjuro(1);
+      await c.aplicarEstado(c.jugador, 'espejismo', 2 + nivel); // 40 % base + 20 % por nivel
     },
     mejora: {
       coste: 0,
-      texto: 'Te rodean copias ilusorias durante 1 turno:\n80 % de esquivar cada ataque (−20 % por\nesquiva; un golpe recibido las disipa).',
+      texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n40 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
     },
   },
 ];

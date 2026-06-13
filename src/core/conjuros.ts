@@ -4,24 +4,24 @@ export const NIVEL_MAX_CONJURO = 3;
 
 /**
  * Construye la pirámide de espacios de conjuro a partir del total acumulado.
- * Cada espacio nuevo se coloca en el nivel MÁS ALTO posible, con la condición
- * de que cada nivel siempre tenga menos espacios que el nivel inferior:
+ * Los espacios aparecen SIEMPRE en este orden de nivel conforme se añaden:
  *
- *   1 → [1]            (1 de nivel 1)
- *   2 → [2]            (2 de nivel 1)
- *   3 → [2,1]          (2 de nivel 1, 1 de nivel 2)
- *   4 → [3,1]
- *   5 → [3,2]
- *   6 → [3,2,1]        pirámide completa
- *   7 → [4,2,1] …
+ *   1, 1, 2, 1, 2, 3   → completa la pirámide [3,2,1]
+ *
+ * y, a partir del sexto, todos los espacios extra son de nivel 1 (los niveles
+ * 2 y 3 quedan topados en 2 y 1 respectivamente). Así:
+ *
+ *   1 → [1]            5 → [3,2]
+ *   2 → [2]            6 → [3,2,1]   pirámide completa
+ *   3 → [2,1]          7 → [4,2,1]
+ *   4 → [3,1]          8 → [5,2,1] …
  */
+const ORDEN_NIVELES = [1, 1, 2, 1, 2, 3]; // nivel de cada espacio según se añade
+
 export function piramideConjuros(total: number): number[] {
   const cuenta = [0, 0, 0]; // índice 0 = nivel 1
   for (let i = 0; i < total; i++) {
-    let nivel = 1;
-    for (let k = 2; k <= NIVEL_MAX_CONJURO; k++) {
-      if (cuenta[k - 1] + 1 < cuenta[k - 2]) nivel = k;
-    }
+    const nivel = ORDEN_NIVELES[i] ?? 1; // a partir del sexto, todos nivel 1
     cuenta[nivel - 1]++;
   }
   return cuenta;
