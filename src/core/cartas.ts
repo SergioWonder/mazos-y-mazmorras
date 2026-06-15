@@ -1309,11 +1309,11 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
       if (r === 1) {
         await c.mensaje('💢 ¡Se revuelve furioso!');
         await c.forzarAccion(e);
-      } else if (r <= 8) {
+      } else if (r <= 5) {
         await c.aplicarEstado(c.jugador, 'fuerza', -1);
-      } else if (r <= 13) {
+      } else if (r <= 11) {
         await c.aplicarEstado(c.jugador, 'fuerza', 1);
-      } else if (r <= 16) {
+      } else if (r <= 15) {
         await c.aplicarEstado(e, 'debil', 3);
         await c.aplicarEstado(c.jugador, 'fuerza', 2);
       } else if (r <= 19) {
@@ -1355,10 +1355,10 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
       if (r === 1) {
         c.manaCero();
         await c.mensaje('🌀 El deseo se vuelve en tu contra…');
-      } else if (r <= 8) {
+      } else if (r <= 5) {
         for (const e of vivos()) await c.sanar(e, 20);
         await c.aplicarEstado(c.jugador, 'vulnerable', 2);
-      } else if (r <= 13) {
+      } else if (r <= 12) {
         for (const e of vivos()) {
           await c.aplicarEstado(e, 'vulnerable', 2);
           await c.aplicarEstado(e, 'debil', 2);

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.8.2';
+export const VERSION = '0.8.3';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.8.3',
+    fecha: '2026-06-15',
+    cambios: [
+      '🎲 El d20 3D lleva ahora los números grabados en cada cara y aterriza con el resultado mirando a la cámara (se quitó el número superpuesto).',
+      '⚖️ Cartas de azar (Seducir/Deseo): el resultado malo se concentra en 2-5 y los buenos abarcan rangos más amplios.',
+    ],
+  },
   {
     version: '0.8.2',
     fecha: '2026-06-13',
