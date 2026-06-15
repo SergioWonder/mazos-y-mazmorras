@@ -131,29 +131,21 @@ export const DRUIDA: CartaDef[] = [
   },
   {
     id: 'enredadera',
-    nombre: 'Enredadera',
+    nombre: 'Raíces Enredaderas',
     clase: 'druida',
     tipo: 'habilidad',
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
     fx: 'raices',
-    texto: 'Raíces: −6 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 8 de daño.',
+    texto: 'Raíces: −6 al ataque del enemigo\ndurante 1 turno.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'raices', 6);
-      if (c.ataqueAnulado(c.objetivo!)) {
-        await c.mensaje('¡Las raíces aprietan!');
-        await c.atacar(c.objetivo!, 8, 1, 'raices');
-      }
+      await c.aplicarRaices(c.objetivo!, 6, 1);
     },
     mejora: {
-      texto: 'Raíces: −8 de Fuerza al enemigo\ndurante 1 turno. Si su ataque queda\nanulado (0 o menos), inflige 12 de daño.',
+      texto: 'Raíces: −8 al ataque del enemigo\ndurante 1 turno.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'raices', 8);
-        if (c.ataqueAnulado(c.objetivo!)) {
-          await c.mensaje('¡Las raíces aprietan!');
-          await c.atacar(c.objetivo!, 12, 1, 'raices');
-        }
+        await c.aplicarRaices(c.objetivo!, 8, 1);
       },
     },
   },
@@ -272,17 +264,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'raices',
-    texto: 'Raíces: −10 de Fuerza al enemigo\ndurante 2 turnos.',
+    texto: 'Raíces: −10 al ataque del enemigo\ndurante 2 turnos.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'raices', 10);
-      // dura 2 turnos de base (1 turno + 1 extra), respetando Raíces Profundas si da más
-      c.objetivo!.estados.raicesExtra = Math.max(c.objetivo!.estados.raicesExtra ?? 0, 1);
+      await c.aplicarRaices(c.objetivo!, 10, 2);
     },
     mejora: {
-      texto: 'Raíces: −14 de Fuerza al enemigo\ndurante 2 turnos.',
+      texto: 'Raíces: −14 al ataque del enemigo\ndurante 2 turnos.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'raices', 14);
-        c.objetivo!.estados.raicesExtra = Math.max(c.objetivo!.estados.raicesExtra ?? 0, 1);
+        await c.aplicarRaices(c.objetivo!, 14, 2);
       },
     },
   },
@@ -365,13 +354,13 @@ export const DRUIDA: CartaDef[] = [
     subclase: 'Círculo de la Tierra',
     fx: 'tierra',
     animRara: 'anim-tierra',
-    texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 1 turno adicional.',
+    texto: 'Poder: cada carta de Raíces que juegues\ndura 1 turno más.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'raizProlongada', 1);
     },
     mejora: {
       coste: 1,
-      texto: 'Poder: tus Raíces reducen la Fuerza\ndel enemigo 1 turno adicional.',
+      texto: 'Poder: cada carta de Raíces que juegues\ndura 1 turno más.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'raizProlongada', 1);
       },

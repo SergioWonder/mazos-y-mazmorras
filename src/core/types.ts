@@ -8,9 +8,8 @@ export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
 /** Estados acumulables al estilo Slay the Spire. */
 export type EstadoId =
   | 'fuerza'        // +daño por ataque (puede ser negativo)
-  | 'raices'        // −Fuerza SOLO durante el próximo turno del enemigo (druida)
-  | 'raizProlongada' // (jugador) las Raíces que aplique duran N turnos extra
-  | 'raicesExtra'   // (enemigo) turnos extra que le quedan a sus Raíces antes de expirar
+  | 'raices'        // −ataque del enemigo; total de todas sus instancias activas (druida)
+  | 'raizProlongada' // (jugador) cada carta de Raíces que apliques dura +N turnos
   | 'destreza'      // +bloqueo por carta
   | 'vulnerable'    // recibe +50% daño, N turnos
   | 'debil'         // inflige -25% daño, N turnos
@@ -95,6 +94,8 @@ export interface EnemigoCombate extends Luchador {
   rasgoUsado?: boolean;
   /** Si está activo, este enemigo se salta su próxima acción (Seducir/Deseo). */
   saltaAccion?: boolean;
+  /** Instancias de Raíces activas: cada carta aporta su cantidad y su duración. */
+  raicesInstancias?: Array<{ cantidad: number; turnos: number }>;
 }
 
 /** Espacio de conjuro del mago (pirámide de niveles 1-3). */
@@ -166,6 +167,8 @@ export interface ContextoEfecto {
   atacarTodos(base: number, fx?: string): Promise<void>;
   ganarBloqueo(base: number): Promise<void>;
   aplicarEstado(obj: Luchador, estado: EstadoId, n: number): Promise<void>;
+  /** Aplica una instancia de Raíces (cantidad + duración propia) a un enemigo. */
+  aplicarRaices(e: EnemigoCombate, cantidad: number, turnos: number): Promise<void>;
   curar(n: number): Promise<void>;
   /** Pierde PV (sin pasar por el bloqueo). Cuenta como daño recibido
    *  para la Furia del bárbaro. Nunca mata (mínimo 1 PV). */

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.8.3';
+export const VERSION = '0.9.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.9.0',
+    fecha: '2026-06-15',
+    cambios: [
+      '🌿 Rework de las Raíces: ahora reducen el ATAQUE del enemigo y cada carta es una instancia con su propia duración (se acumulan). Si su ataque queda en 0 o menos, al atacar el enemigo pierde PV (3 + el exceso, ignorando bloqueo).',
+      '🪢 Raíces Enredaderas: coste 1, −6/−8 (1 turno). Raíces Estranguladoras: coste 2, −10/−14 (2 turnos). Raíces Profundas: cada carta de Raíces dura 1 turno más.',
+      '🎲 Los números del d20 son un poco más pequeños para caber mejor en cada cara.',
+    ],
+  },
   {
     version: '0.8.3',
     fecha: '2026-06-15',

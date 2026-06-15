@@ -130,13 +130,16 @@ export class Combate {
       },
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
-        // Bendición de la Tierra: las Raíces aplicadas a un enemigo perduran
-        // turnos extra si el jugador tiene el poder activo.
-        if (estado === 'raices' && obj !== self.jugador) {
-          const extra = self.jugador.estados.raizProlongada ?? 0;
-          if (extra > 0) obj.estados.raicesExtra = extra;
-        }
         await self.ui.fxEstado(obj, estado, n);
+      },
+      async aplicarRaices(e, cantidad, turnos) {
+        // Cada carta de Raíces es una instancia con su propia duración. Raíces
+        // Profundas (raizProlongada) suma turnos a cada nueva instancia.
+        const extra = self.jugador.estados.raizProlongada ?? 0;
+        e.raicesInstancias = e.raicesInstancias ?? [];
+        e.raicesInstancias.push({ cantidad, turnos: turnos + extra });
+        e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
+        await self.ui.fxEstado(e, 'raices', cantidad);
       },
       async curar(n) {
         const real = Math.min(n, self.jugador.pvMax - self.jugador.pv);
@@ -413,6 +416,17 @@ export class Combate {
     }
   }
 
+  /** Tras el turno del enemigo, cada instancia de Raíces pierde 1 turno. */
+  private envejecerRaices(e: EnemigoCombate) {
+    if (!e.raicesInstancias?.length) { delete e.estados.raices; return; }
+    e.raicesInstancias = e.raicesInstancias
+      .map((r) => ({ cantidad: r.cantidad, turnos: r.turnos - 1 }))
+      .filter((r) => r.turnos > 0);
+    const total = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
+    if (total > 0) e.estados.raices = total;
+    else delete e.estados.raices;
+  }
+
   async terminarTurno() {
     if (this.enResolucion || this.terminado) return;
     this.enResolucion = true;
@@ -448,13 +462,7 @@ export class Combate {
       e.bloqueo = 0;
       await this.ejecutarMovimiento(e);
       this.decrementarEstados(e);
-      // Las raíces aprietan un turno; con Bendición de la Tierra, turnos extra
-      if ((e.estados.raicesExtra ?? 0) > 0) {
-        e.estados.raicesExtra!--;
-        if (e.estados.raicesExtra! <= 0) delete e.estados.raicesExtra;
-      } else {
-        delete e.estados.raices;
-      }
+      this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
       e.turnosVisto++;
       e.intencion = e.def.ia(
         e.turnosVisto, this.rng, e,
@@ -506,6 +514,17 @@ export class Combate {
     await this.ui.fxEnemigoActua(e);
 
     if (m.dano !== undefined) {
+      // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
+      // atacar el enemigo pierde PV = 3 + el exceso negativo (ignorando bloqueo).
+      const raices = e.estados.raices ?? 0;
+      let efectivo = m.dano + (e.estados.fuerza ?? 0) - raices;
+      if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
+      if (raices > 0 && efectivo <= 0) {
+        const dolor = 3 + (-efectivo);
+        await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
+        await this.infligir(e, dolor, 'raices');
+        return;
+      }
       const veces = m.veces ?? 1;
       for (let i = 0; i < veces; i++) {
         if (this.terminado) return;

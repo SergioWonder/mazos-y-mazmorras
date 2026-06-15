@@ -258,85 +258,65 @@ console.log('— Cartas de 1 uso —');
   check(combate.jugador.conjuros.length === 2, 'la pirámide se reconstruye en combate');
 }
 
-console.log('— Raíces (ataque anulado, 1 turno) —');
+console.log('— Raíces: instancias con duración individual —');
 {
   const run = nuevaRun('druida', 777);
   const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(777), uiSilenciosa);
   await combate.iniciar();
-  const enemigo = combate.enemigos[0];
-  enemigo.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 6 };
-  enemigo.danoBaseMax = 6;
-  const ctx = combate.contexto(enemigo);
-  await ctx.aplicarEstado(enemigo, 'raices', 4);
-  check(combate.danoIntencion(enemigo) === 2, 'las raíces reducen el daño de la intención');
-  check(!combate.ataqueAnulado(enemigo), 'con el ataque aún positivo no está anulado');
-  await ctx.aplicarEstado(enemigo, 'raices', 2);
-  check(combate.ataqueAnulado(enemigo), 'anulado cuando el ataque queda exactamente en 0');
-  await ctx.aplicarEstado(enemigo, 'raices', 5);
-  check(combate.ataqueAnulado(enemigo), 'sigue anulado con reducción muy superior (no solo 0 exacto)');
-
-  // Si NO pretende atacar este turno (defiende), las raíces no "aprietan":
-  // el daño extra solo aplica cuando hay un ataque real que anular.
-  enemigo.intencion = { nombre: 'Esconderse', intencion: 'defensa', bloqueo: 6 };
-  check(!combate.ataqueAnulado(enemigo), 'al defender (sin intención de atacar) NO cuenta como anulado');
-
-  // la carta NO inflige daño extra a un enemigo que defiende
-  const enredadera = instanciar(DRUIDA.find((c) => c.id === 'enredadera')!);
-  combate.jugador.mano.push(enredadera);
-  const pvAntes = enemigo.pv;
-  await combate.jugarCarta(enredadera, enemigo);
-  check(
-    enemigo.pv === pvAntes,
-    'Enredadera no daña a un enemigo que defiende (sin ataque que anular)',
-  );
-
-  // pero SÍ aprieta cuando el enemigo pretende atacar y su ataque queda anulado
-  enemigo.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 5 };
-  const enredadera2 = instanciar(DRUIDA.find((c) => c.id === 'enredadera')!);
-  combate.jugador.mano.push(enredadera2);
-  const pvAtaque = enemigo.pv;
-  await combate.jugarCarta(enredadera2, enemigo);
-  check(enemigo.pv < pvAtaque || !enemigo.vivo, 'con intención de atacar y ataque anulado, sí inflige daño extra');
-
-  // las raíces expiran tras el turno del enemigo
+  const e = combate.enemigos[0];
+  const ctx = combate.contexto(e);
+  const defender = () => { e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 }; };
+  defender();
+  e.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 30 }; // alto: no se anula
+  await ctx.aplicarRaices(e, 6, 1);  // Enredaderas (1 turno)
+  await ctx.aplicarRaices(e, 10, 2); // Estranguladoras (2 turnos)
+  check((e.estados.raices ?? 0) === 16, 'este turno: 6 + 10 = 16 de raíces');
+  check(combate.danoIntencion(e) === 14, 'la intención se reduce: 30 − 16 = 14');
+  combate.jugador.bloqueo = 999; defender();
   await combate.terminarTurno();
-  if (enemigo.vivo) {
-    check((enemigo.estados.raices ?? 0) === 0, 'las raíces expiran tras el turno del enemigo');
-    check((enemigo.estados.fuerza ?? 0) >= 0, 'la Fuerza real del enemigo no se ha tocado');
-  }
-
-  // sin ataque conocido aún, nunca cuenta como anulado
-  delete enemigo.estados.raices;
-  enemigo.danoBaseMax = 0;
-  enemigo.intencion = { nombre: 'Cántico', intencion: 'mejora' };
-  check(!combate.ataqueAnulado(enemigo), 'sin ataque conocido no se considera anulado');
+  check((e.estados.raices ?? 0) === 10, 'al turno siguiente las Enredaderas expiran: quedan 10');
+  await ctx.aplicarRaices(e, 10, 2); // otras Estranguladoras
+  check((e.estados.raices ?? 0) === 20, 'tras otras Estranguladoras: 10 + 10 = 20');
+  combate.jugador.bloqueo = 999; defender();
+  await combate.terminarTurno();
+  check((e.estados.raices ?? 0) === 10, 'y al siguiente vuelve a 10');
 }
 
-console.log('— Raíces Profundas (Círculo de la Tierra) —');
+console.log('— Raíces aplastan al atacar anulado —');
+{
+  const run = nuevaRun('druida', 555);
+  const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(555), uiSilenciosa);
+  await combate.iniciar();
+  const e = combate.enemigos[0];
+  e.pv = e.pvMax = 30;
+  e.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 7 };
+  const ctx = combate.contexto(e);
+  await ctx.aplicarRaices(e, 10, 1); // 7 − 10 = −3
+  combate.jugador.bloqueo = 999;
+  const pvJ = combate.jugador.pv;
+  await combate.terminarTurno();
+  check(combate.jugador.pv === pvJ, 'el jugador no recibe daño: el ataque queda anulado');
+  check(30 - e.pv === 6, 'el enemigo pierde 3 + 3 (exceso) = 6 PV (ignora bloqueo)');
+}
+
+console.log('— Raíces Profundas: +1 turno por carta —');
 {
   const tierra = DRUIDA.find((c) => c.id === 'circulo-tierra')!;
-  check(tierra.nombre === 'Raíces Profundas' && tierra.tipo === 'poder', 'la carta de Tierra es un poder de Raíces');
+  check(tierra.nombre === 'Raíces Profundas' && tierra.tipo === 'poder', 'la carta de Tierra es el poder Raíces Profundas');
 
   const run = nuevaRun('druida', 909);
   const combate = new Combate(run, [GOBLIN_CORTADOR], crearRng(909), uiSilenciosa);
   await combate.iniciar();
-  const enemigo = combate.enemigos[0];
-  enemigo.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 6 };
-  const ctx = combate.contexto(enemigo);
-
-  // sin el poder: las raíces duran 1 turno del enemigo
-  await ctx.aplicarEstado(enemigo, 'raices', 3);
-  await combate.terminarTurno();
-  check((enemigo.estados.raices ?? 0) === 0, 'sin el poder, las raíces expiran tras 1 turno');
-
-  // con el poder activo: las raíces aguantan 1 turno adicional
+  const e = combate.enemigos[0];
+  const ctx = combate.contexto(e);
+  const defender = () => { e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 }; };
   await ctx.aplicarEstado(combate.jugador, 'raizProlongada', 1);
-  await ctx.aplicarEstado(enemigo, 'raices', 3);
-  check((enemigo.estados.raicesExtra ?? 0) === 1, 'el poder marca 1 turno extra de raíces');
-  await combate.terminarTurno();
-  check((enemigo.estados.raices ?? 0) === 3, 'tras el 1.er turno las raíces siguen activas');
-  await combate.terminarTurno();
-  check((enemigo.estados.raices ?? 0) === 0, 'y expiran tras el turno adicional');
+  await ctx.aplicarRaices(e, 6, 1); // Enredaderas → con el poder duran 2 turnos
+  check((e.estados.raices ?? 0) === 6, 'aplica 6 de raíces');
+  combate.jugador.bloqueo = 999; defender(); await combate.terminarTurno();
+  check((e.estados.raices ?? 0) === 6, 'con Raíces Profundas siguen activas al 2.º turno');
+  combate.jugador.bloqueo = 999; defender(); await combate.terminarTurno();
+  check((e.estados.raices ?? 0) === 0, 'y expiran tras el turno extra');
 }
 
 console.log('— Recuperación de conjuros: menor vs mayor nivel —');

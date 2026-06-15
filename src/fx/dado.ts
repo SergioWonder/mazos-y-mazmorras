@@ -144,7 +144,7 @@ function crearTextura(gl: WebGLRenderingContext): WebGLTexture | null {
   c.fillStyle = '#241a08';
   c.textAlign = 'center';
   c.textBaseline = 'middle';
-  c.font = `bold ${Math.round(ch * 0.4)}px Georgia, "Times New Roman", serif`;
+  c.font = `bold ${Math.round(ch * 0.3)}px Georgia, "Times New Roman", serif`;
   for (let i = 0; i < 20; i++) {
     const col = i % COLS, fila = Math.floor(i / COLS);
     const x0 = col * cw, y0 = fila * ch;

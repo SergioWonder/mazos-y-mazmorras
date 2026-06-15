@@ -36,7 +36,9 @@ mecánicas de clase (Furia, transformaciones, raíces).
 ## Diseño
 
 - **Druida** (70 PV): transformaciones (efectos temporales de Fuerza/Destreza por N turnos),
-  raíces que reducen la Fuerza del enemigo (con daño extra si su ataque queda en 0).
+  raíces que reducen el ataque del enemigo —cada carta es una instancia con su propia
+  duración, se acumulan— y, si el ataque queda en 0 o menos, al intentar atacar el enemigo
+  pierde PV (3 + el exceso, ignorando bloqueo).
   Cartas raras: una por subclase de D&D 2024 (Tierra, Luna, Mar, Estrellas).
 - **Bárbaro** (80 PV): Furia que acumula Fuerza/Destreza de forma permanente, pero se
   pierde si terminas el turno sin hacer daño. Cartas que escalan con Fuerza/Destreza.
@@ -52,7 +54,7 @@ mecánicas de clase (Furia, transformaciones, raíces).
   Arcano» recupera el de MAYOR (cuesta 1 maná y PV; mejorado, sin coste de vida).
   Cartas raras: una por escuela de magia (Evocación, Abjuración, Ilusión).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
-  Enredadera · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
+  Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
   Manos Ardientes).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un
   efecto permanente en la run (Voto de Sangre, Pacto con el Bosque, Estudio Arcano).

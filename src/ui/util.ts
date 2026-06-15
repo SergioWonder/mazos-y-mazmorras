@@ -104,7 +104,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
   fuerza: '+1 de daño por ataque por cada punto (negativo: lo reduce).',
-  raices: 'Reduce la Fuerza esa cantidad SOLO durante el próximo turno del enemigo.',
+  raices: 'Reduce el ataque del enemigo esa cantidad. Si su ataque queda en 0 o menos, al intentar atacar pierde PV (3 + el exceso), ignorando el bloqueo.',
   destreza: '+1 de bloqueo por carta por cada punto.',
   vulnerable: 'Recibe un 50 % más de daño. Baja 1 por turno.',
   debil: 'Inflige un 25 % menos de daño. Baja 1 por turno.',
