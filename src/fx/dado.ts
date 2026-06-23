@@ -204,6 +204,7 @@ function compilar(gl: WebGLRenderingContext, tipo: number, src: string): WebGLSh
 const COLOR_NORMAL: [number, number, number] = [0.92, 0.84, 0.58];
 const COLOR_CRITICO: [number, number, number] = [1.0, 0.82, 0.3];
 const COLOR_PIFIA: [number, number, number] = [0.78, 0.26, 0.18];
+const COLOR_TENUE: [number, number, number] = [0.42, 0.4, 0.34]; // dado perdedor (ventaja)
 
 const RODAR_MS = 2600;
 const MANTENER_MS = 2100;
@@ -212,8 +213,15 @@ const FIN_TUMBO = 0.74; // hasta aquí da tumbos; luego se orienta a la cara
 function easeOut(t: number): number { return 1 - Math.pow(1 - t, 3); }
 function suave(t: number): number { return t * t * (3 - 2 * t); }
 
-/** Lanza el dado: icosaedro 3D rodando por la pantalla; aterriza con `n` de cara. */
+/** Lanza un único dado (atajo de `rodarDados`). */
 export function rodarDado(n: number, caras: number): Promise<void> {
+  return rodarDados([n], caras);
+}
+
+/** Lanza 1 o más icosaedros 3D a la vez; cada uno aterriza con su valor de cara.
+ *  Con varios dados, el de mayor resultado se resalta (el resto se atenúa). */
+export function rodarDados(valores: number[], caras: number): Promise<void> {
+  const n = valores[0];
   return new Promise((resolver) => {
     const overlay = document.createElement('div');
     overlay.className = 'dado3d-overlay';
@@ -229,11 +237,11 @@ export function rodarDado(n: number, caras: number): Promise<void> {
     const gl = (canvas.getContext('webgl', { alpha: true }) ||
       canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
     if (!gl) {
-      // Respaldo sin WebGL: número girando en el centro
+      // Respaldo sin WebGL: número(s) girando en el centro
       const num = document.createElement('span');
       num.className = 'dado3d-num sin-gl';
       overlay.appendChild(num);
-      num.textContent = String(n);
+      num.textContent = valores.join('  ·  ');
       setTimeout(cerrar, MANTENER_MS);
       return;
     }
@@ -271,23 +279,32 @@ export function rodarDado(n: number, caras: number): Promise<void> {
     const FOV = (50 * Math.PI) / 180;
     const RADIO = Math.tan(FOV / 2) * DEPTH;
 
-    // Cara con el número n (índice n-1) → orientación que la deja mirando a cámara
-    const qDestino = qHaciaCamara(normalCara[Math.min(n, caras) - 1] ?? [0, 0, 1]);
-    // Orientación libre justo antes de empezar a corregir
-    const qTumbo = (p: number): Quat =>
-      qMul(qAxis(0.3, 1, 0.2, easeOut(p) * Math.PI * 9), qAxis(1, 0.25, 0.5, easeOut(p) * Math.PI * 7));
-    const qFinTumbo = qTumbo(FIN_TUMBO);
-    let color = COLOR_NORMAL;
-    let estallado = false;
+    const ganador = Math.max(...valores);
+    let ganadorUsado = false; // resalta un único dado ganador (el mejor)
+    // Datos por dado: cara destino, ranura horizontal y desfase de tumbo
+    const dados = valores.map((v, i) => ({
+      v,
+      qDestino: qHaciaCamara(normalCara[Math.min(v, caras) - 1] ?? [0, 0, 1]),
+      slot: valores.length === 1 ? 0 : (i / (valores.length - 1)) * 2 - 1, // −1..+1
+      fase: i * 1.9,
+    }));
+    const varios = valores.length > 1;
 
-    const dibujar = (proj: Mat4, x: number, y: number, q: Quat, s: number) => {
+    const qTumbo = (p: number, fase: number): Quat =>
+      qMul(
+        qAxis(0.3, 1, 0.2, (easeOut(p) * Math.PI * 9) + fase),
+        qAxis(1, 0.25, 0.5, (easeOut(p) * Math.PI * 7) + fase),
+      );
+    const qFinTumbo = (fase: number) => qTumbo(FIN_TUMBO, fase);
+    let color = COLOR_NORMAL;
+
+    const dibujarUno = (proj: Mat4, x: number, y: number, q: Quat, s: number) => {
       let mv = traslacion(x, y, -DEPTH);
       mv = multiplicar(mv, qToMat4(q));
       mv = multiplicar(mv, escala(s));
       gl.uniformMatrix4fv(uProj, false, proj);
       gl.uniformMatrix4fv(uMV, false, mv);
       gl.uniform3fv(uColor, color);
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.drawArrays(gl.TRIANGLES, 0, pos.length / 3);
     };
 
@@ -305,30 +322,46 @@ export function rodarDado(n: number, caras: number): Promise<void> {
       const aspect = canvas.width / canvas.height;
       const proj = perspectiva(FOV, aspect, 0.1, 100);
       const halfW = RADIO * aspect;
+      const slotX = halfW * (varios ? 0.42 : 0); // separación entre dados en reposo
 
-      if (e < RODAR_MS) {
-        const p = e / RODAR_MS;
-        const k = 1 - easeOut(p);
-        const x = halfW * 0.8 * k * Math.cos(p * Math.PI * 3.2);
-        const y = RADIO * 0.7 * k * Math.sin(p * Math.PI * 4.4);
-        const s = 1.05 + 0.2 * (1 - k);
-        let q: Quat;
-        if (p < FIN_TUMBO) {
-          q = qTumbo(p);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+      for (const d of dados) {
+        if (e < RODAR_MS) {
+          const p = e / RODAR_MS;
+          const k = 1 - easeOut(p);
+          const wob = varios ? 0.32 : 0.8;
+          const x = d.slot * slotX + halfW * wob * k * Math.cos(p * Math.PI * 3.2 + d.fase);
+          const y = RADIO * (varios ? 0.45 : 0.7) * k * Math.sin(p * Math.PI * 4.4 + d.fase);
+          const s = (varios ? 0.92 : 1.05) + 0.2 * (1 - k);
+          let q: Quat;
+          if (p < FIN_TUMBO) {
+            q = qTumbo(p, d.fase);
+          } else {
+            q = qSlerp(qFinTumbo(d.fase), d.qDestino, suave((p - FIN_TUMBO) / (1 - FIN_TUMBO)));
+          }
+          // color base mientras ruedan
+          color = COLOR_NORMAL;
+          dibujarUno(proj, x, y, q, s);
         } else {
-          // se orienta suavemente hasta dejar la cara del resultado de frente
-          q = qSlerp(qFinTumbo, qDestino, suave((p - FIN_TUMBO) / (1 - FIN_TUMBO)));
+          // En reposo: resalta el dado ganador; atenúa los perdedores
+          const esGanador = !ganadorUsado || d.v === ganador;
+          if (varios) {
+            if (d.v === ganador && !ganadorUsado) {
+              ganadorUsado = true;
+              color = ganador === caras ? COLOR_CRITICO : ganador === 1 ? COLOR_PIFIA : COLOR_NORMAL;
+            } else if (d.v === ganador && esGanador) {
+              color = ganador === caras ? COLOR_CRITICO : COLOR_NORMAL;
+            } else {
+              color = COLOR_TENUE;
+            }
+          } else {
+            color = d.v === caras ? COLOR_CRITICO : d.v === 1 ? COLOR_PIFIA : COLOR_NORMAL;
+          }
+          const base = 1.28 + Math.sin((e - RODAR_MS) * 0.004 + d.fase) * 0.03;
+          const s = varios ? base * (d.v === ganador ? 0.92 : 0.74) : base;
+          dibujarUno(proj, d.slot * slotX, 0, d.qDestino, s);
         }
-        dibujar(proj, x, y, q, s);
-      } else {
-        if (!estallado) {
-          estallado = true;
-          if (n === caras) color = COLOR_CRITICO;
-          else if (n === 1) color = COLOR_PIFIA;
-        }
-        // reposa centrado, con la cara del resultado mirando a cámara (leve bob)
-        const s = 1.28 + Math.sin((e - RODAR_MS) * 0.004) * 0.03;
-        dibujar(proj, 0, 0, qDestino, s);
       }
 
       if (e < RODAR_MS + MANTENER_MS) requestAnimationFrame(frame);

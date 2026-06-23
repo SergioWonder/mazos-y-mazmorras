@@ -201,6 +201,8 @@ export interface ContextoEfecto {
   mensaje(txt: string): Promise<void>;
   /** Tira un dado de N caras: anima el lanzamiento y devuelve el resultado (1..N). */
   tirarDado(caras: number): Promise<number>;
+  /** Con ventaja: lanza 2 dados de N caras a la vez y devuelve el mejor. */
+  tirarDadoVentaja(caras: number): Promise<number>;
   /** El enemigo ejecuta su intención ahora mismo y vuelve a prepararse. */
   forzarAccion(e: EnemigoCombate): Promise<void>;
   /** Marca al enemigo para que se salte su próxima acción. */

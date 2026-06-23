@@ -4,7 +4,7 @@ import type {
 } from '../core/types.ts';
 import { fx } from '../fx/particulas.ts';
 import { audio } from '../fx/audio.ts';
-import { rodarDado } from '../fx/dado.ts';
+import { rodarDado, rodarDados } from '../fx/dado.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
 } from './util.ts';
@@ -155,6 +155,11 @@ export function pantallaCombate(
         audio.sfx('carta');
         await rodarDado(n, caras); // icosaedro 3D (WebGL) rodando por la pantalla
         if (n === caras) fx.estallido('estrellas');
+      },
+      async fxDadoVentaja(a, b, caras) {
+        audio.sfx('carta');
+        await rodarDados([a, b], caras); // los dos dados ruedan a la vez
+        if (Math.max(a, b) === caras) fx.estallido('estrellas');
       },
     };
 

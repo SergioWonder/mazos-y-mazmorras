@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.9.0';
+export const VERSION = '0.10.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.10.0',
+    fecha: '2026-06-23',
+    cambios: [
+      '🎲 Cartas mejoradas de Seducir y Deseo: ahora tiran 2d20 con VENTAJA (los dos dados ruedan a la vez y se usa el mejor). Ambas bajan de coste y se agotan.',
+      '🔮 Mago: Globo de Invulnerabilidad se sustituye por Clarividencia (poder: +1/+2 de energía cada turno). Manos Ardientes aplica Vulnerable por espacio de conjuro, e Imagen Espejo sube al 60% de esquiva. Rayo Abrasador y Toque Electrizante pegan más; Proyectil Mágico golpea dos veces.',
+      '🪓 Bárbaro: Tajo Brutal pasa a Hendidura (3 golpes a enemigos aleatorios). Furia Primaria/Creciente/Ágil y la Savia del Árbol del Mundo dan más Furia; Furia Divina dobla también el bloqueo. Postura Firme cuesta 1.',
+      '🌿 Druida: Zarpazo aplica más Vulnerable y las Raíces (Enredaderas y Estranguladoras) reducen aún más el ataque enemigo.',
+    ],
+  },
   {
     version: '0.9.0',
     fecha: '2026-06-15',

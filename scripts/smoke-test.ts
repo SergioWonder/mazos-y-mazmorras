@@ -38,6 +38,7 @@ const uiSilenciosa: Presentador = {
   fxEnemigoActua: async () => {},
   fxFuriaPerdida: async () => {},
   fxDado: async () => {},
+  fxDadoVentaja: async () => {},
   fxParticulas: async () => {},
 };
 
@@ -554,7 +555,7 @@ console.log('— Imagen Espejo —');
   check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 1, 'Imagen Espejo: coste 1');
   check(espejo.requiereConjuro === 1, 'gasta un espacio de conjuro');
 
-  // al jugarse: 40 % base (2 cargas) + 20 % (1 carga) por nivel del espacio gastado
+  // al jugarse: 60 % base (3 cargas) + 20 % (1 carga) por nivel del espacio gastado
   const runE = nuevaRun('mago', 13);
   const combE = new Combate(runE, [GOBLIN_CORTADOR], () => 0.5, uiSilenciosa);
   await combE.iniciar();
@@ -563,7 +564,7 @@ console.log('— Imagen Espejo —');
   const instE = { uid: 9999, def: espejo, mejorada: false };
   combE.jugador.mano.push(instE);
   await combE.jugarCarta(instE, undefined);
-  check((combE.jugador.estados.espejismo ?? 0) === 4, 'nivel 2 gastado → 4 cargas (80 %)');
+  check((combE.jugador.estados.espejismo ?? 0) === 5, 'nivel 2 gastado → 5 cargas (60 % + 40 %)');
   check(combE.jugador.conjuros.filter((c) => !c.gastado).length === 1, 'consume el espacio de mayor nivel');
 
   // rng constante 0.01 → siempre esquiva (0.01 < cargas×0.2)

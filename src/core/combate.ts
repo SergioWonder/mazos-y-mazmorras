@@ -21,6 +21,7 @@ export interface Presentador {
   fxFuriaPerdida(): Promise<void>;
   /** Anima el lanzamiento de un dado de `caras` que cae en `n`. */
   fxDado(n: number, caras: number): Promise<void>;
+  fxDadoVentaja(a: number, b: number, caras: number): Promise<void>;
   /** Lanza partículas sobre un luchador, sin número ni texto. */
   fxParticulas(obj: Luchador, efecto: string): Promise<void>;
 }
@@ -221,6 +222,12 @@ export class Combate {
         const n = 1 + Math.floor(self.rng() * caras);
         await self.ui.fxDado(n, caras);
         return n;
+      },
+      async tirarDadoVentaja(caras) {
+        const a = 1 + Math.floor(self.rng() * caras);
+        const b = 1 + Math.floor(self.rng() * caras);
+        await self.ui.fxDadoVentaja(a, b, caras);
+        return Math.max(a, b);
       },
       async forzarAccion(e) {
         if (!e.vivo || self.terminado) return;
