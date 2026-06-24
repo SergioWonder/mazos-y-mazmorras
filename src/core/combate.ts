@@ -24,6 +24,8 @@ export interface Presentador {
   fxDadoVentaja(a: number, b: number, caras: number): Promise<void>;
   /** Lanza partículas sobre un luchador, sin número ni texto. */
   fxParticulas(obj: Luchador, efecto: string): Promise<void>;
+  /** Deja al jugador elegir una carta de una lista (o cancelar). */
+  elegirCarta(cartas: CartaInstancia[], titulo: string): Promise<CartaInstancia | null>;
 }
 
 export class Combate {
@@ -245,6 +247,21 @@ export class Combate {
       async danar(obj, n, fx) {
         await self.infligir(obj, n, fx ?? 'golpeEnemigo');
       },
+      async danarPerforante(obj, n, fx) {
+        await self.infligir(obj, n, fx ?? 'impacto', true);
+      },
+      async recuperarDelDescarte() {
+        const pila = self.jugador.descarte;
+        if (pila.length === 0) {
+          await self.ui.fxMensaje('No hay nada en el descarte…');
+          return;
+        }
+        const elegida = await self.ui.elegirCarta(pila, 'Devuelve una carta a lo alto del mazo');
+        if (!elegida) return;
+        pila.splice(pila.indexOf(elegida), 1);
+        self.jugador.mazo.push(elegida); // pop() roba del final = lo alto del mazo
+        self.ui.render();
+      },
       async matar(e) {
         if (!e.vivo) return;
         e.pv = 0;
@@ -269,15 +286,21 @@ export class Combate {
     };
   }
 
-  /** Aplica daño real a un luchador (atraviesa bloqueo primero). */
-  async infligir(obj: Luchador, dano: number, fx?: string): Promise<number> {
+  /** Aplica daño real a un luchador (atraviesa bloqueo primero).
+   *  Si `perforante`, ignora el bloqueo y además lo destruye (lo pone a 0). */
+  async infligir(obj: Luchador, dano: number, fx?: string, perforante = false): Promise<number> {
     // Invulnerable: no recibe daño alguno
     if ((obj.estados.invulnerable ?? 0) > 0) {
       await this.ui.fxGolpe(obj, 0, fx);
       return 0;
     }
-    const absorbido = Math.min(obj.bloqueo, dano);
-    obj.bloqueo -= absorbido;
+    let absorbido = 0;
+    if (perforante) {
+      obj.bloqueo = 0; // destruye el bloqueo
+    } else {
+      absorbido = Math.min(obj.bloqueo, dano);
+      obj.bloqueo -= absorbido;
+    }
     const real = dano - absorbido;
     obj.pv = Math.max(0, obj.pv - real);
     if (obj !== this.jugador) this.danoHechoEsteTurno += real;
@@ -366,7 +389,17 @@ export class Combate {
         await this.ui.fxCura(this.jugador, real);
       }
     }
-    this.robarCartas(this.cartasPorTurno());
+    let aRobar = this.cartasPorTurno();
+    if (primero) {
+      // Cartas innatas: empiezan en la mano y cuentan para el robo inicial
+      const innatas = this.jugador.mazo.filter((c) => defDe(c).innato);
+      for (const c of innatas) {
+        this.jugador.mazo.splice(this.jugador.mazo.indexOf(c), 1);
+        if (this.jugador.mano.length < 10) this.jugador.mano.push(c);
+      }
+      aRobar = Math.max(0, aRobar - innatas.length);
+    }
+    this.robarCartas(aRobar);
     this.ui.render();
   }
 

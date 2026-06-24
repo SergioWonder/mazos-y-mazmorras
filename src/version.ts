@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.10.0';
+export const VERSION = '0.11.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.11.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '💥 Desintegrar (Mago, antes Meteorito): gasta un conjuro de nivel 2+ e inflige 20 (+10 por nivel) IGNORANDO y destruyendo el bloqueo enemigo.',
+      '🔮 Clarividencia mejorada ahora es Innata: empiezas cada combate con ella en la mano. Proyectil Mágico golpea varias veces ignorando bloqueo, y Toque Electrizante devuelve una carta del descarte a lo alto del mazo.',
+      '🐾 Druida: Tormenta de Zarpas (3×3), Luna Creciente y Raíces Estranguladoras pasan a golpear a TODOS los enemigos, Mordisco devuelve energía en forma salvaje y Forma Estelar ahora se agota.',
+      '🪓 Bárbaro: Postura Firme escala con tu Fuerza desde el principio y Sangre Caliente pega muchísimo más en Furia (hasta 15).',
+      '🛡️ Escudo Arcano y Cólera del Mar reajustados (más Débil; el escudo escala con el nivel de tus espacios de conjuro).',
+    ],
+  },
   {
     version: '0.10.0',
     fecha: '2026-06-23',

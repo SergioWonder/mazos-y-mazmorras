@@ -139,6 +139,8 @@ export interface CartaDef {
   requiereConjuro?: number;
   /** 1 uso: al jugarse se elimina del mazo para el resto de la partida. */
   unUso?: boolean;
+  /** Innata: empiezas cada combate con ella en la mano. */
+  innato?: boolean;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
   /** Versión mejorada (hogueras): sobreescribe texto/coste/efecto. */
   mejora?: MejoraCarta;
@@ -148,6 +150,7 @@ export interface MejoraCarta {
   texto: string;
   coste?: number;
   requiereConjuro?: number;
+  innato?: boolean;
   jugar?: (ctx: ContextoEfecto) => Promise<void>;
 }
 
@@ -209,6 +212,10 @@ export interface ContextoEfecto {
   saltarAccion(e: EnemigoCombate): void;
   /** Daño directo (sin Fuerza del jugador) a un luchador. */
   danar(obj: Luchador, n: number, fx?: string): Promise<void>;
+  /** Daño que IGNORA el bloqueo y además lo destruye (pone el bloqueo a 0). */
+  danarPerforante(obj: Luchador, n: number, fx?: string): Promise<void>;
+  /** Deja elegir una carta del descarte y la pone en lo alto del mazo. */
+  recuperarDelDescarte(): Promise<void>;
   /** Mata al instante a un enemigo (úsese tras comprobar que no es jefe). */
   matar(e: EnemigoCombate): Promise<void>;
   /** Cura PV a cualquier luchador (p. ej. a un enemigo). */

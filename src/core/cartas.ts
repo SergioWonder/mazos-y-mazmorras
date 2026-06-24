@@ -15,8 +15,14 @@ export function defDe(inst: CartaInstancia): CartaDef {
     texto: m.texto,
     coste: m.coste ?? inst.def.coste,
     requiereConjuro: m.requiereConjuro ?? inst.def.requiereConjuro,
+    innato: m.innato ?? inst.def.innato,
     jugar: m.jugar ?? inst.def.jugar,
   };
+}
+
+/** Suma de los niveles de los espacios de conjuro libres (mago). */
+function nivelesLibres(c: ContextoEfecto): number {
+  return c.jugador.conjuros.filter((e) => !e.gastado).reduce((s, e) => s + e.nivel, 0);
 }
 
 // ── Cartas básicas ───────────────────────────────────────────────────────────
@@ -97,15 +103,17 @@ export const DRUIDA: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
-    texto: 'Inflige 5 de daño.\nSi estás transformado, inflige 9.',
+    texto: 'Inflige 5 de daño.\nSi estás transformado,\nrecuperas 2 de energía.',
     fx: 'zarpa',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, c.estaTransformado() ? 9 : 5, 1, 'zarpa');
+      await c.atacar(c.objetivo!, 5, 1, 'zarpa');
+      if (c.estaTransformado()) c.ganarEnergia(2);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nSi estás transformado, inflige 12.',
+      texto: 'Inflige 7 de daño.\nSi estás transformado,\nrecuperas 2 de energía.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, c.estaTransformado() ? 12 : 7, 1, 'zarpa');
+        await c.atacar(c.objetivo!, 7, 1, 'zarpa');
+        if (c.estaTransformado()) c.ganarEnergia(2);
       },
     },
   },
@@ -151,21 +159,21 @@ export const DRUIDA: CartaDef[] = [
   },
   {
     id: 'zarpa-doble',
-    nombre: 'Zarpa Doble',
+    nombre: 'Tormenta de Zarpas',
     clase: 'druida',
     tipo: 'ataque',
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
-    texto: 'Inflige 4 de daño dos veces.',
+    texto: 'Inflige 3 de daño tres veces.',
     fx: 'zarpa',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 4, 2, 'zarpa');
+      await c.atacar(c.objetivo!, 3, 3, 'zarpa');
     },
     mejora: {
-      texto: 'Inflige 6 de daño dos veces.',
+      texto: 'Inflige 4 de daño tres veces.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 6, 2, 'zarpa');
+        await c.atacar(c.objetivo!, 4, 3, 'zarpa');
       },
     },
   },
@@ -262,16 +270,16 @@ export const DRUIDA: CartaDef[] = [
     tipo: 'habilidad',
     rareza: 'infrecuente',
     coste: 2,
-    objetivo: 'enemigo',
+    objetivo: 'todos',
     fx: 'raices',
-    texto: 'Aplica 12 de Raíces\ndurante 2 turnos.',
+    texto: 'Aplica 12 de Raíces a TODOS\nlos enemigos durante 1 turno.',
     jugar: async (c) => {
-      await c.aplicarRaices(c.objetivo!, 12, 2);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 12, 1);
     },
     mejora: {
-      texto: 'Aplica 16 de Raíces\ndurante 2 turnos.',
+      texto: 'Aplica 16 de Raíces a TODOS\nlos enemigos durante 1 turno.',
       jugar: async (c) => {
-        await c.aplicarRaices(c.objetivo!, 16, 2);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 16, 1);
       },
     },
   },
@@ -302,18 +310,20 @@ export const DRUIDA: CartaDef[] = [
     tipo: 'ataque',
     rareza: 'infrecuente',
     coste: 2,
-    objetivo: 'enemigo',
+    objetivo: 'todos',
     fx: 'luna',
-    texto: 'Inflige 10 de daño.\nSi estás transformado, aplica 2 de Vulnerable.',
+    texto: 'Inflige 9 de daño a TODOS los enemigos.\nSi estás transformado, aplica 2 de Vulnerable.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 10, 1, 'luna');
-      if (c.estaTransformado()) await c.aplicarEstado(c.objetivo!, 'vulnerable', 2);
+      await c.atacarTodos(9, 'luna');
+      if (c.estaTransformado())
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'vulnerable', 2);
     },
     mejora: {
-      texto: 'Inflige 14 de daño.\nSi estás transformado, aplica 3 de Vulnerable.',
+      texto: 'Inflige 13 de daño a TODOS los enemigos.\nSi estás transformado, aplica 3 de Vulnerable.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 14, 1, 'luna');
-        if (c.estaTransformado()) await c.aplicarEstado(c.objetivo!, 'vulnerable', 3);
+        await c.atacarTodos(13, 'luna');
+        if (c.estaTransformado())
+          for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'vulnerable', 3);
       },
     },
   },
@@ -401,16 +411,16 @@ export const DRUIDA: CartaDef[] = [
     subclase: 'Círculo del Mar',
     fx: 'ola',
     animRara: 'anim-mar',
-    texto: 'Inflige 10 de daño a TODOS los enemigos\ny les aplica 1 de Débil.',
+    texto: 'Inflige 10 de daño a TODOS los enemigos\ny les aplica 2 de Débil.',
     jugar: async (c) => {
       await c.atacarTodos(10, 'ola');
-      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 1);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
     },
     mejora: {
-      texto: 'Inflige 13 de daño a TODOS los enemigos\ny les aplica 2 de Débil.',
+      texto: 'Inflige 13 de daño a TODOS los enemigos\ny les aplica 3 de Débil.',
       jugar: async (c) => {
         await c.atacarTodos(13, 'ola');
-        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 3);
       },
     },
   },
@@ -425,7 +435,8 @@ export const DRUIDA: CartaDef[] = [
     subclase: 'Círculo de las Estrellas',
     fx: 'estrellas',
     animRara: 'anim-estrellas',
-    texto: 'Roba 2 cartas.\nDurante 3 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.',
+    exhumar: true,
+    texto: 'Roba 2 cartas.\nDurante 3 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
     jugar: async (c) => {
       await c.robar(2);
       await c.efectoTemporal({
@@ -438,7 +449,7 @@ export const DRUIDA: CartaDef[] = [
       });
     },
     mejora: {
-      texto: 'Roba 3 cartas.\nDurante 4 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.',
+      texto: 'Roba 3 cartas.\nDurante 4 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
       jugar: async (c) => {
         await c.robar(3);
         await c.efectoTemporal({
@@ -535,15 +546,15 @@ export const BARBARO: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'ninguno',
-    texto: 'Gana 5 de bloqueo.',
+    texto: 'Gana 5 de bloqueo, más tu Fuerza.',
     fx: 'bloqueo',
     jugar: async (c) => {
-      await c.ganarBloqueo(5);
+      await c.ganarBloqueo(5 + Math.max(0, c.jugador.estados.fuerza ?? 0));
     },
     mejora: {
       texto: 'Gana 8 de bloqueo, más tu Fuerza.',
       jugar: async (c) => {
-        await c.ganarBloqueo(8 + (c.jugador.estados.fuerza ?? 0));
+        await c.ganarBloqueo(8 + Math.max(0, c.jugador.estados.fuerza ?? 0));
       },
     },
   },
@@ -682,16 +693,16 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'furia',
-    texto: 'Inflige 5 de daño.\nSi tienes Furia activa, inflige 9.',
+    texto: 'Inflige 4 de daño.\nSi tienes Furia activa, inflige 10.',
     jugar: async (c) => {
       const conFuria = c.jugador.furiaFuerza + c.jugador.furiaDestreza > 0;
-      await c.atacar(c.objetivo!, conFuria ? 9 : 5, 1, conFuria ? 'furia' : 'tajo');
+      await c.atacar(c.objetivo!, conFuria ? 10 : 4, 1, conFuria ? 'furia' : 'tajo');
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nSi tienes Furia activa, inflige 12.',
+      texto: 'Inflige 6 de daño.\nSi tienes Furia activa, inflige 15.',
       jugar: async (c) => {
         const conFuria = c.jugador.furiaFuerza + c.jugador.furiaDestreza > 0;
-        await c.atacar(c.objetivo!, conFuria ? 12 : 7, 1, conFuria ? 'furia' : 'tajo');
+        await c.atacar(c.objetivo!, conFuria ? 15 : 6, 1, conFuria ? 'furia' : 'tajo');
       },
     },
   },
@@ -895,15 +906,15 @@ export const MAGO: CartaDef[] = [
     rareza: 'comun',
     coste: 0,
     objetivo: 'enemigo',
-    texto: 'Inflige 3 de daño dos veces.\nNunca falla.',
+    texto: 'Inflige 2 de daño 3 veces.\nIgnora el bloqueo.',
     fx: 'estrellas',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 3, 2, 'estrellas');
+      for (let i = 0; i < 3; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
     },
     mejora: {
-      texto: 'Inflige 3 de daño tres veces.\nNunca falla.',
+      texto: 'Inflige 2 de daño 5 veces.\nIgnora el bloqueo.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 3, 3, 'estrellas');
+        for (let i = 0; i < 5; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
       },
     },
   },
@@ -937,15 +948,17 @@ export const MAGO: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
-    texto: 'Inflige 9 de daño.',
+    texto: 'Inflige 9 de daño.\nDevuelve una carta del descarte\na lo alto de tu mazo.',
     fx: 'impacto',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 9, 1, 'impacto');
+      await c.recuperarDelDescarte();
     },
     mejora: {
-      texto: 'Inflige 12 de daño.',
+      texto: 'Inflige 12 de daño.\nDevuelve una carta del descarte\na lo alto de tu mazo.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 12, 1, 'impacto');
+        await c.recuperarDelDescarte();
       },
     },
   },
@@ -1000,14 +1013,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Gana 4 de bloqueo\n+2 por cada espacio de conjuro disponible.',
+    texto: 'Gana 4 de bloqueo\n+2 por cada NIVEL de espacio disponible.',
     jugar: async (c) => {
-      await c.ganarBloqueo(4 + 2 * c.conjurosLibres());
+      await c.ganarBloqueo(4 + 2 * nivelesLibres(c));
     },
     mejora: {
-      texto: 'Gana 6 de bloqueo\n+3 por cada espacio de conjuro disponible.',
+      texto: 'Gana 6 de bloqueo\n+3 por cada NIVEL de espacio disponible.',
       jugar: async (c) => {
-        await c.ganarBloqueo(6 + 3 * c.conjurosLibres());
+        await c.ganarBloqueo(6 + 3 * nivelesLibres(c));
       },
     },
   },
@@ -1210,26 +1223,26 @@ export const MAGO: CartaDef[] = [
   // — Cartas raras: una por escuela de magia —
   {
     id: 'escuela-evocacion',
-    nombre: 'Meteorito',
+    nombre: 'Desintegrar',
     clase: 'mago',
     tipo: 'ataque',
     rareza: 'rara',
     coste: 2,
-    objetivo: 'todos',
+    objetivo: 'enemigo',
     subclase: 'Evocación',
-    requiereConjuro: 1,
+    requiereConjuro: 2,
     fx: 'impacto',
     animRara: 'anim-evocacion',
-    texto: 'Gasta un conjuro: inflige 14 de daño\n(+6 por nivel) a TODOS los enemigos.',
+    texto: 'Gasta un conjuro de nivel 2+:\ninflige 20 de daño (+10 por nivel).\nIgnora y destruye el bloqueo.',
     jugar: async (c) => {
-      const nivel = await c.gastarConjuro(1);
-      await c.atacarTodos(14 + 6 * nivel, 'impacto');
+      const nivel = await c.gastarConjuro(2);
+      await c.danarPerforante(c.objetivo!, 20 + 10 * nivel, 'impacto');
     },
     mejora: {
-      texto: 'Gasta un conjuro: inflige 18 de daño\n(+8 por nivel) a TODOS los enemigos.',
+      texto: 'Gasta un conjuro de nivel 2+:\ninflige 28 de daño (+12 por nivel).\nIgnora y destruye el bloqueo.',
       jugar: async (c) => {
-        const nivel = await c.gastarConjuro(1);
-        await c.atacarTodos(18 + 8 * nivel, 'impacto');
+        const nivel = await c.gastarConjuro(2);
+        await c.danarPerforante(c.objetivo!, 28 + 12 * nivel, 'impacto');
       },
     },
   },
@@ -1250,10 +1263,11 @@ export const MAGO: CartaDef[] = [
       c.ganarEnergia(1);
     },
     mejora: {
-      texto: 'Poder: ganas 2 de energía\nal inicio de cada turno.',
+      innato: true,
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: ganas 1 de energía\nal inicio de cada turno.',
       jugar: async (c) => {
-        c.jugador.energiaMax += 2;
-        c.ganarEnergia(2);
+        c.jugador.energiaMax += 1;
+        c.ganarEnergia(1);
       },
     },
   },

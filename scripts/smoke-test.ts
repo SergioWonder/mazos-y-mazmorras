@@ -40,6 +40,7 @@ const uiSilenciosa: Presentador = {
   fxDado: async () => {},
   fxDadoVentaja: async () => {},
   fxParticulas: async () => {},
+  elegirCarta: async (cartas) => cartas[0] ?? null,
 };
 
 async function simular(clase: ClaseId, semilla: number, defs: EnemigoDef[]) {

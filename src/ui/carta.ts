@@ -77,6 +77,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
       }</div>`
     : '';
   const unUso = def.unUso ? ' · <strong>1 uso</strong>' : '';
+  const innata = def.innato ? ' · <strong>Innata</strong>' : '';
 
   carta.innerHTML = `
     <div class="carta-coste">${def.coste}</div>
@@ -87,7 +88,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     <div class="carta-arte">${arteDeCarta(def)}</div>
     <div class="carta-tipo">${ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
       def.subclase ? ` · <em>${def.subclase}</em>` : ''
-    }${unUso}</div>
+    }${unUso}${innata}</div>
     <div class="carta-texto">${formatearTexto(def.texto, mods)}</div>
   `;
   ajustarTexto(carta);

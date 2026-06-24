@@ -161,6 +161,38 @@ export function pantallaCombate(
         await rodarDados([a, b], caras); // los dos dados ruedan a la vez
         if (Math.max(a, b) === caras) fx.estallido('estrellas');
       },
+      elegirCarta(cartas, titulo) {
+        return new Promise((resolver) => {
+          const overlay = document.getElementById('overlay')!;
+          overlay.innerHTML = '';
+          overlay.className = 'overlay-activo';
+          const panel = el('div', 'panel-recompensa panel-mejora');
+          panel.innerHTML = `<h2>🔎 ${titulo}</h2><div class="mejora-rejilla"></div>
+            <button class="btn-saltar">Cancelar <span class="atajo">[Esc]</span></button>`;
+          overlay.appendChild(panel);
+          const rejilla = panel.querySelector('.mejora-rejilla') as HTMLElement;
+
+          const cerrar = (elegida: CartaInstancia | null) => {
+            window.removeEventListener('keydown', teclado);
+            overlay.className = '';
+            overlay.innerHTML = '';
+            resolver(elegida);
+          };
+          cartas.forEach((inst, i) => {
+            const c = renderCarta(defDe(inst), modsEnCombate());
+            if (inst.mejorada) c.classList.add('carta-mejorada');
+            c.classList.add('carta-recompensa');
+            c.style.setProperty('--retraso', `${Math.min(i * 0.04, 0.5)}s`);
+            c.addEventListener('click', () => cerrar(inst));
+            rejilla.appendChild(c);
+          });
+          const teclado = (ev: KeyboardEvent) => {
+            if (ev.code === 'Escape') cerrar(null);
+          };
+          window.addEventListener('keydown', teclado);
+          panel.querySelector('.btn-saltar')!.addEventListener('click', () => cerrar(null));
+        });
+      },
     };
 
     const combate = new Combate(run, defs, rng, ui, esJefe || esElite);
