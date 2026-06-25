@@ -5,7 +5,7 @@ import type {
 import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
-import { defDe } from './cartas.ts';
+import { defDe, cartaPorId, instanciar } from './cartas.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -34,6 +34,7 @@ export class Combate {
   turno = 0;
   danoHechoEsteTurno = 0;
   danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
+  danoBloqueadoEsteTurno = 0; // daño absorbido por el bloqueo en la ronda
   terminado: 'victoria' | 'derrota' | null = null;
   enResolucion = false;
   run: EstadoRun;
@@ -301,6 +302,7 @@ export class Combate {
       absorbido = Math.min(obj.bloqueo, dano);
       obj.bloqueo -= absorbido;
     }
+    if (obj === this.jugador) this.danoBloqueadoEsteTurno += absorbido;
     const real = dano - absorbido;
     obj.pv = Math.max(0, obj.pv - real);
     if (obj !== this.jugador) this.danoHechoEsteTurno += real;
@@ -373,11 +375,33 @@ export class Combate {
     this.turno++;
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
+    this.danoBloqueadoEsteTurno = 0;
     if (!primero) this.jugador.bloqueo = 0;
     this.jugador.energia = this.jugador.energiaMax;
     if (this.jugador.energiaCero) { // penalización de Deseo
       this.jugador.energia = 0;
       this.jugador.energiaCero = false;
+    } else if (this.turno <= 2) {
+      // Don del Maná Eterno: energía extra solo en los 2 primeros turnos
+      this.jugador.energia += this.run.permanentes.energiaInicial;
+    }
+    // Furia Indómita: bloqueo igual a tu Fuerza mientras tengas Furia activa
+    if (
+      (this.jugador.estados.furiaIndomita ?? 0) > 0 &&
+      this.jugador.furiaFuerza + this.jugador.furiaDestreza > 0
+    ) {
+      const f = Math.max(0, this.jugador.estados.fuerza ?? 0);
+      if (f > 0) {
+        this.jugador.bloqueo += f;
+        await this.ui.fxBloqueo(this.jugador, f);
+      }
+    }
+    // Maestría de Conjuros: añade un Proyectil Mágico a la mano cada turno
+    const maestria = this.jugador.estados.maestria ?? 0;
+    if (maestria > 0 && this.jugador.mano.length < 10) {
+      const inst = instanciar(cartaPorId('proyectil-magico')!);
+      if (maestria >= 2) inst.mejorada = true;
+      this.jugador.mano.push(inst);
     }
     // regeneración y curas de efectos temporales
     const regen = this.jugador.estados.regeneracion ?? 0;
@@ -519,9 +543,16 @@ export class Combate {
     // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
     // (el daño absorbido por el bloqueo no cuenta). El Frenesí la rompe siempre.
     const frenesi = (j.estados.frenesi ?? 0) > 0;
+    // Furia Indómita: la Furia aguanta si bloqueaste daño y te queda poco bloqueo
+    const indomitaSalva =
+      !frenesi &&
+      (j.estados.furiaIndomita ?? 0) > 0 &&
+      this.danoBloqueadoEsteTurno > 0 &&
+      j.bloqueo < 10;
     if (
       !this.terminado &&
       (this.danoRecibidoEsteTurno === 0 || frenesi) &&
+      !indomitaSalva &&
       j.furiaFuerza + j.furiaDestreza > 0
     ) {
       j.estados.fuerza = (j.estados.fuerza ?? 0) - j.furiaFuerza;

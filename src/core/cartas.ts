@@ -291,15 +291,15 @@ export const DRUIDA: CartaDef[] = [
     rareza: 'infrecuente',
     coste: 1,
     objetivo: 'ninguno',
-    texto: 'Gana 3 de Espinas.\n(Devuelve daño a los atacantes.)',
+    texto: 'Gana 4 de Espinas.\n(Devuelve daño a los atacantes.)',
     fx: 'hojas',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'espinas', 3);
+      await c.aplicarEstado(c.jugador, 'espinas', 4);
     },
     mejora: {
-      texto: 'Gana 5 de Espinas.\n(Devuelve daño a los atacantes.)',
+      texto: 'Gana 7 de Espinas.\n(Devuelve daño a los atacantes.)',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'espinas', 5);
+        await c.aplicarEstado(c.jugador, 'espinas', 7);
       },
     },
   },
@@ -460,6 +460,41 @@ export const DRUIDA: CartaDef[] = [
           robaExtra: 1,
           curaTurno: 1,
         });
+      },
+    },
+  },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'tormenta-venganza',
+    nombre: 'Tormenta de Venganza',
+    clase: 'druida',
+    tipo: 'ataque',
+    rareza: 'especial',
+    coste: 3,
+    objetivo: 'todos',
+    fx: 'ola',
+    animRara: 'anim-mar',
+    exhumar: true,
+    texto: 'Inflige 18 de daño a TODOS los enemigos,\nles aplica 2 Débil, 2 Vulnerable y 10 Raíces.\nGana 8 de bloqueo. Se agota.',
+    jugar: async (c) => {
+      await c.atacarTodos(18, 'ola');
+      for (const e of c.enemigos.filter((x) => x.vivo)) {
+        await c.aplicarEstado(e, 'debil', 2);
+        await c.aplicarEstado(e, 'vulnerable', 2);
+        await c.aplicarRaices(e, 10, 1);
+      }
+      await c.ganarBloqueo(8);
+    },
+    mejora: {
+      texto: 'Inflige 24 de daño a TODOS los enemigos,\nles aplica 3 Débil, 3 Vulnerable y 14 Raíces.\nGana 12 de bloqueo. Se agota.',
+      jugar: async (c) => {
+        await c.atacarTodos(24, 'ola');
+        for (const e of c.enemigos.filter((x) => x.vivo)) {
+          await c.aplicarEstado(e, 'debil', 3);
+          await c.aplicarEstado(e, 'vulnerable', 3);
+          await c.aplicarRaices(e, 14, 1);
+        }
+        await c.ganarBloqueo(12);
       },
     },
   },
@@ -845,6 +880,29 @@ export const BARBARO: CartaDef[] = [
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 12 + c.jugador.furiaFuerza, 1, 'divino');
         await c.ganarBloqueo(11 + 2 * c.jugador.furiaFuerza);
+      },
+    },
+  },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'furia-indomita',
+    nombre: 'Furia Indómita',
+    clase: 'barbaro',
+    tipo: 'poder',
+    rareza: 'especial',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'furia',
+    animRara: 'anim-berserker',
+    texto: 'Poder: mientras estés en Furia, al inicio\nde tu turno ganas bloqueo igual a tu Fuerza.\nLa Furia no se rompe si bloqueaste daño\ny te queda menos de 10 de bloqueo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'furiaIndomita', 1);
+    },
+    mejora: {
+      coste: 1,
+      texto: 'Poder: mientras estés en Furia, al inicio\nde tu turno ganas bloqueo igual a tu Fuerza.\nLa Furia no se rompe si bloqueaste daño\ny te queda menos de 10 de bloqueo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'furiaIndomita', 1);
       },
     },
   },
@@ -1293,6 +1351,30 @@ export const MAGO: CartaDef[] = [
       texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n60 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
     },
   },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'maestria-conjuros',
+    nombre: 'Maestría de Conjuros',
+    clase: 'mago',
+    tipo: 'poder',
+    rareza: 'especial',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    animRara: 'anim-evocacion',
+    texto: 'Poder: al inicio de cada turno\nañades un Proyectil Mágico a tu mano.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'maestria', 1);
+    },
+    mejora: {
+      innato: true,
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: al inicio de cada turno añades\nun Proyectil Mágico+ a tu mano.',
+      jugar: async (c) => {
+        // valor 2 = añade la versión mejorada del Proyectil Mágico
+        await c.aplicarEstado(c.jugador, 'maestria', 2);
+      },
+    },
+  },
 ];
 
 // ── Cartas únicas incoloras (recompensa de la Vidente entre actos) ───────────
@@ -1439,7 +1521,14 @@ export function mazoInicial(clase: ClaseId): CartaInstancia[] {
 }
 
 export function poolDeClase(clase: ClaseId): CartaDef[] {
-  return POOLS[clase].filter((c) => c.rareza !== 'inicial');
+  // 'especial' (cartas únicas de clase) no aparecen en recompensas normales:
+  // solo se obtienen como don de la Vidente al iniciar el Acto III.
+  return POOLS[clase].filter((c) => c.rareza !== 'inicial' && c.rareza !== 'especial');
+}
+
+/** Devuelve la carta única de clase (rareza 'especial') de cada clase. */
+export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
+  return POOLS[clase].find((c) => c.rareza === 'especial')!;
 }
 
 /** Registro completo (para guardar/cargar partidas por id). */

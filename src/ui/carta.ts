@@ -63,7 +63,7 @@ function ajustarTexto(carta: HTMLElement) {
 /** Crea el elemento DOM de una carta. */
 export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo}`);
-  if (def.rareza === 'rara') carta.classList.add('carta-rara-brillo');
+  if (def.rareza === 'rara' || def.rareza === 'especial') carta.classList.add('carta-rara-brillo');
 
   // Textos largos (frecuentes en el mago): reduce la fuente para que quepan
   const caracteres = def.texto.replaceAll('\n', ' ').length;

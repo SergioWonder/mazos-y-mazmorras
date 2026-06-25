@@ -3,6 +3,8 @@ import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { renderCarta } from './carta.ts';
 import { elegirCarta } from './recompensa.ts';
+import { instanciar, poolDeClase } from '../core/cartas.ts';
+import { elegir } from '../core/rng.ts';
 
 /**
  * Encuentro inicial: Aldric, el Senescal del Valle, encomienda la misión
@@ -32,23 +34,27 @@ export function pantallaMision(run: EstadoRun, rng: () => number): Promise<void>
       {
         icono: '🗡️', nombre: 'Adiestramiento espartano',
         detalle: 'Elimina 1 carta de tu mazo',
-        accion: () => vistaEliminar(1),
-      },
-      {
-        icono: '⚒️', nombre: 'La forja del torreón',
-        detalle: 'Mejora 1 carta a tu elección',
-        accion: () => vistaMejorar(),
+        accion: () => vistaEliminar(1, 0),
       },
       {
         icono: '📖', nombre: 'El tomo prohibido',
-        detalle: 'Elige 1 carta rara… pero su saber pesa: −5 PV máximos',
+        detalle: 'Elige 1 carta rara (entre 3)… a cambio de 8 PV',
         accion: async () => {
-          run.pvMax = Math.max(20, run.pvMax - 5);
-          run.pv = Math.min(run.pv, run.pvMax);
-          anuncio('−5 PV máximos', 'anuncio-error');
+          run.pv = Math.max(1, run.pv - 8);
+          anuncio('−8 PV', 'anuncio-error');
           await elegirCarta(run, rng, 100); // garantiza raras
           terminar();
         },
+      },
+      {
+        icono: '⚔️', nombre: 'Sangre y disciplina',
+        detalle: 'Elimina 2 cartas… pero pierdes 5 PV máximos',
+        accion: () => vistaEliminar(2, 5),
+      },
+      {
+        icono: '🔁', nombre: 'Capricho del destino',
+        detalle: 'Transforma 1 carta en otra al azar de tu clase',
+        accion: () => vistaTransformar(),
       },
     ];
 
@@ -93,20 +99,28 @@ export function pantallaMision(run: EstadoRun, rng: () => number): Promise<void>
       resolver();
     }
 
-    /** Rejilla para eliminar hasta `restantes` cartas del mazo. */
-    function vistaEliminar(restantes: number) {
+    /** Rejilla para eliminar `restantes` cartas; al acabar resta `pvMaxCoste`. */
+    function vistaEliminar(restantes: number, pvMaxCoste: number) {
       const overlay = document.getElementById('overlay')!;
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
       const panel = el('div', 'panel-recompensa panel-mejora');
+      const aviso = pvMaxCoste > 0 ? ` · al terminar: −${pvMaxCoste} PV máximos` : '';
       panel.innerHTML = `
-        <h2>🗡️ Adiestramiento</h2>
-        <p>Elige una carta para eliminarla (te quedan ${restantes})</p>
+        <h2>🗡️ Sacrificio</h2>
+        <p>Elige una carta para eliminarla (te quedan ${restantes})${aviso}</p>
         <div class="mejora-rejilla"></div>
-        <button class="btn-saltar">Terminar <span class="atajo">[Esc]</span></button>
       `;
       overlay.appendChild(panel);
       const rejilla = panel.querySelector('.mejora-rejilla') as HTMLElement;
+
+      const aplicarCoste = () => {
+        if (pvMaxCoste > 0) {
+          run.pvMax = Math.max(20, run.pvMax - pvMaxCoste);
+          run.pv = Math.min(run.pv, run.pvMax);
+          anuncio(`−${pvMaxCoste} PV máximos`, 'anuncio-error');
+        }
+      };
 
       run.mazo.forEach((inst, i) => {
         const c = renderCarta(inst.def);
@@ -115,45 +129,36 @@ export function pantallaMision(run: EstadoRun, rng: () => number): Promise<void>
         c.addEventListener('click', () => {
           run.mazo.splice(run.mazo.indexOf(inst), 1);
           anuncio(`🗑️ ${inst.def.nombre} eliminada`, 'anuncio-botin');
-          if (restantes > 1 && run.mazo.length > 5) vistaEliminar(restantes - 1);
-          else terminar();
+          if (restantes > 1 && run.mazo.length > 5) vistaEliminar(restantes - 1, pvMaxCoste);
+          else { aplicarCoste(); terminar(); }
         });
         rejilla.appendChild(c);
       });
-
-      const fin = (ev?: KeyboardEvent) => {
-        if (ev && ev.code !== 'Escape') return;
-        window.removeEventListener('keydown', fin);
-        terminar();
-      };
-      window.addEventListener('keydown', fin);
-      panel.querySelector('.btn-saltar')!.addEventListener('click', () => fin());
     }
 
-    /** Rejilla para mejorar 1 carta a elección. */
-    function vistaMejorar() {
+    /** Rejilla para transformar 1 carta en otra al azar de la clase. */
+    function vistaTransformar() {
       const overlay = document.getElementById('overlay')!;
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
-      const mejorables = run.mazo.filter((c: CartaInstancia) => !c.mejorada && c.def.mejora);
       const panel = el('div', 'panel-recompensa panel-mejora');
       panel.innerHTML = `
-        <h2>⚒️ La forja del torreón</h2>
-        <p>Elige la carta que quieres mejorar</p>
+        <h2>🔁 Capricho del destino</h2>
+        <p>Elige la carta que quieres transformar</p>
         <div class="mejora-rejilla"></div>
       `;
       overlay.appendChild(panel);
       const rejilla = panel.querySelector('.mejora-rejilla') as HTMLElement;
 
-      mejorables.forEach((inst, i) => {
+      run.mazo.forEach((inst: CartaInstancia, i) => {
         const c = renderCarta(inst.def);
-        const m = inst.def.mejora!;
-        c.dataset.tip = `<strong>⚒️ ${inst.def.nombre}+</strong><br>${m.texto.replaceAll('\n', '<br>')}`;
         c.classList.add('carta-recompensa');
         c.style.setProperty('--retraso', `${Math.min(i * 0.03, 0.4)}s`);
         c.addEventListener('click', () => {
-          inst.mejorada = true;
-          anuncio(`⚒️ ${inst.def.nombre} → ${inst.def.nombre}+`, 'anuncio-botin');
+          const idx = run.mazo.indexOf(inst);
+          const nueva = instanciar(elegir(rng, poolDeClase(run.clase)));
+          run.mazo.splice(idx, 1, nueva);
+          anuncio(`🔁 ${inst.def.nombre} → ${nueva.def.nombre}`, 'anuncio-botin');
           terminar();
         });
         rejilla.appendChild(c);

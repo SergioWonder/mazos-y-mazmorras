@@ -2,7 +2,7 @@
 
 export type ClaseId = 'druida' | 'barbaro' | 'mago';
 export type TipoCarta = 'ataque' | 'habilidad' | 'poder';
-export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara';
+export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara' | 'especial';
 export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
 
 /** Estados acumulables al estilo Slay the Spire. */
@@ -20,7 +20,9 @@ export type EstadoId =
   | 'corazonSalvaje' // al perder la Furia, ganas esta cantidad de Fuerza y Destreza para el combate
   | 'frenesi'       // la Furia se romperá al final del turno aunque recibas daño (Frenesí)
   | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
-  | 'invulnerable'; // no recibe daño (N turnos)
+  | 'invulnerable'  // no recibe daño (N turnos)
+  | 'furiaIndomita' // (bárbaro) bloqueo=Fuerza al inicio de turno; Furia aguanta si bloqueaste
+  | 'maestria';     // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
 
 export interface EfectoTemporal {
   etiqueta: string;     // p.ej. "Forma de Lobo"
@@ -270,11 +272,12 @@ export interface EstadoRun {
   espaciosConjuro: number;
   /** Efectos permanentes (cartas de 1 uso, bendiciones entre actos). */
   permanentes: {
-    fuerza: number;       // Fuerza al inicio de cada combate
-    destreza: number;     // Destreza al inicio de cada combate
-    energia: number;      // energía máxima adicional
-    energiaElite: number; // energía máxima adicional SOLO en élites y jefes
-    robo: number;         // cartas adicionales robadas por turno
+    fuerza: number;        // Fuerza al inicio de cada combate
+    destreza: number;      // Destreza al inicio de cada combate
+    energia: number;       // energía máxima adicional
+    energiaElite: number;  // energía máxima adicional SOLO en élites y jefes
+    energiaInicial: number; // energía extra SOLO en los 2 primeros turnos de cada combate
+    robo: number;          // cartas adicionales robadas por turno
   };
   /** Ids de eventos ya vividos (para no repetirlos). */
   eventosVistos: string[];

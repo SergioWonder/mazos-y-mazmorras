@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.11.0';
+export const VERSION = '0.12.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.12.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '🌟 Cartas únicas de clase (rareza especial): al empezar el Acto III, Síbila te ofrece la de tu héroe — Tormenta de Venganza (Druida), Furia Indómita (Bárbaro) o Maestría de Conjuros (Mago).',
+      '🎁 Dones del Senescal renovados: eliminar 1 carta; carta rara (entre 3) a cambio de PV; eliminar 2 cartas perdiendo PV máximos; o transformar una carta en otra al azar de tu clase.',
+      '🔮 Don del Maná Eterno ahora da +1 de energía solo en los 2 primeros turnos de cada combate. Los dones de Fuerza y Destreza se fusionan en el del Berserker (+1 de ambas).',
+      '🌵 Manto de Espinas reforzado (4 / 7 de Espinas).',
+    ],
+  },
   {
     version: '0.11.0',
     fecha: '2026-06-25',

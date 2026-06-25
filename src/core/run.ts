@@ -25,7 +25,7 @@ export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
     capitulo: 0,
     semilla,
     espaciosConjuro: clase === 'mago' ? 1 : 0,
-    permanentes: { fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, robo: 0 },
+    permanentes: { fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, energiaInicial: 0, robo: 0 },
     eventosVistos: [],
   };
 }

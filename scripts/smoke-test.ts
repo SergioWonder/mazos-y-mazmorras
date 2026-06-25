@@ -11,6 +11,7 @@ import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
+  poolDeClase, cartaUnicaDeClase,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
@@ -650,6 +651,54 @@ console.log('— Bendiciones de la Vidente —');
   const combate3 = new Combate(run3, [GOBLIN_CORTADOR], crearRng(57), uiSilenciosa);
   await combate3.iniciar();
   check((combate3.jugador.estados.destreza ?? 0) === 1, 'Don de la Destreza: +1 al inicio del combate');
+  // Don del Maná Eterno: +1 energía solo turnos 1 y 2
+  const run4 = nuevaRun('druida', 58);
+  run4.permanentes.energiaInicial = 1;
+  const combate4 = new Combate(run4, [GOBLIN_CORTADOR], crearRng(58), uiSilenciosa);
+  await combate4.iniciar();
+  check(combate4.jugador.energia === 4, 'Maná Eterno: +1 energía el turno 1');
+  combate4.enemigos[0].intencion = { nombre: 'x', intencion: 'defensa', bloqueo: 1 };
+  await combate4.terminarTurno();
+  check(combate4.jugador.energia === 4, 'Maná Eterno: +1 energía el turno 2');
+  await combate4.terminarTurno();
+  check(combate4.jugador.energia === 3, 'Maná Eterno: ya no da energía el turno 3');
+}
+
+console.log('— Cartas únicas de clase (Acto III) —');
+{
+  for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+    const u = cartaUnicaDeClase(clase);
+    check(u.rareza === 'especial' && u.clase === clase, `${clase}: carta única de rareza especial`);
+    check(!poolDeClase(clase).includes(u), `${clase}: la única NO aparece en recompensas normales`);
+  }
+
+  // Manto de Espinas: 4 / 7
+  const manto = DRUIDA.find((c) => c.id === 'espinas')!;
+  check(manto.texto.includes('4'), 'Manto de Espinas da 4 de Espinas');
+
+  // Furia Indómita: bloqueo = Fuerza al inicio de turno mientras hay Furia
+  const run = nuevaRun('barbaro', 71);
+  const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(71), uiSilenciosa);
+  await comb.iniciar();
+  const j = comb.jugador;
+  await comb.contexto().aplicarEstado(j, 'furiaIndomita', 1);
+  await comb.contexto().ganarFuria(5); // +5 Fuerza de Furia
+  comb.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 3 };
+  await comb.terminarTurno(); // pasa al turno 2
+  check(j.bloqueo >= 5, 'Furia Indómita: gana bloqueo igual a su Fuerza al inicio del turno');
+  check(j.furiaFuerza > 0, 'la Furia aguanta tras bloquear con poco bloqueo restante');
+
+  // Maestría de Conjuros: añade un Proyectil Mágico cada turno
+  const runM = nuevaRun('mago', 72);
+  const combM = new Combate(runM, [GOBLIN_CORTADOR], crearRng(72), uiSilenciosa);
+  await combM.iniciar();
+  combM.jugador.estados.maestria = 1;
+  combM.enemigos[0].intencion = { nombre: 'x', intencion: 'defensa', bloqueo: 1 };
+  await combM.terminarTurno();
+  check(
+    combM.jugador.mano.filter((c) => c.def.id === 'proyectil-magico').length >= 1,
+    'Maestría: añade un Proyectil Mágico a la mano cada turno',
+  );
 }
 
 console.log('— Recuperación de conjuros sostenible —');

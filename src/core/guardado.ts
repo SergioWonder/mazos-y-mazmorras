@@ -73,7 +73,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
     semilla: g.semilla,
     espaciosConjuro: g.espaciosConjuro,
     permanentes: {
-      fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, robo: 0,
+      fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, energiaInicial: 0, robo: 0,
       ...g.permanentes,
     },
     eventosVistos: [...g.eventosVistos],

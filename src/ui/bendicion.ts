@@ -1,6 +1,6 @@
 import type { EstadoRun } from '../core/types.ts';
 import { reliquiaAleatoria } from '../core/eventos.ts';
-import { instanciar, NEUTRALES_ESPECIALES } from '../core/cartas.ts';
+import { instanciar, NEUTRALES_ESPECIALES, cartaUnicaDeClase } from '../core/cartas.ts';
 import { barajar } from '../core/rng.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
@@ -32,16 +32,6 @@ const DONES: Don[] = [
     },
   },
   {
-    icono: '💪', nombre: 'Don de la Fuerza',
-    detalle: '+1 de Fuerza al inicio de cada combate',
-    aplicar: (run) => { run.permanentes.fuerza += 1; },
-  },
-  {
-    icono: '🌀', nombre: 'Don de la Destreza',
-    detalle: '+1 de Destreza al inicio de cada combate',
-    aplicar: (run) => { run.permanentes.destreza += 1; },
-  },
-  {
     icono: '👑', nombre: 'Don del Tesoro',
     detalle: 'Obtienes 2 reliquias al azar',
     aplicar: (run, rng) => {
@@ -51,8 +41,8 @@ const DONES: Don[] = [
   },
   {
     icono: '🔮', nombre: 'Don del Maná Eterno',
-    detalle: '+1 de energía máxima en todos los combates',
-    aplicar: (run) => { run.permanentes.energia += 1; },
+    detalle: '+1 de energía en los 2 primeros turnos de cada combate',
+    aplicar: (run) => { run.permanentes.energiaInicial += 1; },
   },
   {
     icono: '⚡', nombre: 'Don del Berserker',
@@ -92,11 +82,21 @@ const DON_CARTA: Record<string, Don> = {
  */
 export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<void> {
   return new Promise((resolver) => {
-    // Al pasar al Acto II se ofrece «Seducir»; al Acto III, «Deseo».
+    // Al pasar al Acto II se ofrece «Seducir»; al Acto III, «Deseo» + la carta
+    // única de tu clase (rareza especial).
     const especiales: Don[] = [];
-    if (run.capitulo === 0) especiales.push(DON_CARTA.seducir);
-    else if (run.capitulo === 1) especiales.push(DON_CARTA.deseo);
-    const ofrecidos = [...especiales, ...barajar(rng, DONES).slice(0, 3 - especiales.length)];
+    if (run.capitulo === 0) {
+      especiales.push(DON_CARTA.seducir);
+    } else if (run.capitulo === 1) {
+      const unica = cartaUnicaDeClase(run.clase);
+      especiales.push({
+        icono: '🌟', nombre: `Carta única: ${unica.nombre}`,
+        detalle: `Añade «${unica.nombre}» a tu mazo (única de clase)`,
+        aplicar: (r) => { r.mazo.push(instanciar(unica)); },
+      });
+      especiales.push(DON_CARTA.deseo);
+    }
+    const ofrecidos = [...especiales, ...barajar(rng, DONES).slice(0, Math.max(1, 3 - especiales.length))];
 
     const app = document.getElementById('app')!;
     app.innerHTML = '';
