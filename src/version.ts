@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.17.0';
+export const VERSION = '0.17.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.17.1',
+    fecha: '2026-06-25',
+    cambios: [
+      '🩸 Corregido: si la Hemorragia mataba al último enemigo, el combate se quedaba colgado sin terminar. Ahora se cierra con normalidad.',
+    ],
+  },
   {
     version: '0.17.0',
     fecha: '2026-06-25',

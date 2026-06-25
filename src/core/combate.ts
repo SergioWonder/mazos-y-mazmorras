@@ -733,6 +733,7 @@ export class Combate {
 
     this.enResolucion = false;
     if (!this.terminado) await this.inicioTurnoJugador();
+    else this.ui.render(); // cierra el combate (p. ej. si la Hemorragia mató al último enemigo)
   }
 
   async ejecutarMovimiento(e: EnemigoCombate) {
