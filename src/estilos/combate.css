@@ -63,7 +63,29 @@
 }
 
 /* ── Luchadores ─────────────────────────────────────────────────────────── */
-.lado-jugador { display: flex; align-items: flex-end; }
+.lado-jugador { display: flex; align-items: flex-end; gap: 1vw; }
+
+/* Invocación del druida: aliado más pequeño junto al héroe */
+.invocacion {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 84px;
+  padding-top: 2.6rem;
+  cursor: help;
+}
+.sprite-invocacion {
+  font-size: 3rem;
+  filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 12px rgba(125, 186, 78, 0.6));
+  animation: respirar 2.9s ease-in-out infinite;
+}
+.vida-inv { width: 78px; height: 11px; }
+.vida-relleno-inv { background: linear-gradient(180deg, #8fd36a, #3f7a2e); }
+.vida-inv .vida-texto { font-size: 0.6rem; }
+.invocacion.inv-ataca .sprite { animation: embestida 0.4s ease-in-out; }
+.invocacion.muriendo { animation: morir 0.45s ease-in forwards; }
 .lado-enemigos {
   display: flex;
   gap: 3vw;
@@ -111,7 +133,7 @@
   animation: respirar 1.1s ease-in-out infinite;
 }
 
-.enemigo.golpeado .sprite, .heroe.golpeado .sprite {
+.enemigo.golpeado .sprite, .heroe.golpeado .sprite, .invocacion.golpeado .sprite {
   animation: golpeado 0.34s ease-out;
 }
 @keyframes golpeado {

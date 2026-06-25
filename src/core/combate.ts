@@ -6,7 +6,7 @@ import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO } from './cartas.ts';
-import type { EfectoConjuro } from './types.ts';
+import type { EfectoConjuro, FormaInvocacion } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -25,6 +25,12 @@ export interface Presentador {
   fxDadoVentaja(a: number, b: number, caras: number): Promise<void>;
   /** Lanza partículas sobre un luchador, sin número ni texto. */
   fxParticulas(obj: Luchador, efecto: string): Promise<void>;
+  /** La invocación absorbe daño (número rojo sobre ella). */
+  fxInvocacionGolpe(dano: number): Promise<void>;
+  /** La invocación muere. */
+  fxInvocacionMuerte(): Promise<void>;
+  /** La invocación ataca (pequeña sacudida + partículas). */
+  fxInvocacionAtaca(): Promise<void>;
   /** Deja al jugador elegir una carta de una lista (o cancelar). */
   elegirCarta(cartas: CartaInstancia[], titulo: string): Promise<CartaInstancia | null>;
 }
@@ -219,6 +225,9 @@ export class Combate {
         return self.jugador.conjuros.filter((c) => !c.gastado && c.nivel >= nivelMin).length;
       },
       escribir: (n, efecto) => self.escribirConjuro(n, efecto),
+      invocar: (forma, vida) => self.invocar(forma, vida),
+      atacarInvocacion: (bono) => self.atacarInvocacion(bono),
+      hayInvocacion: () => !!self.jugador.invocacion && self.jugador.invocacion.vida > 0,
       run: self.run,
       danoIntencion: (e) => self.danoIntencion(e),
       ataqueAnulado: (e) => self.ataqueAnulado(e),
@@ -306,13 +315,29 @@ export class Combate {
       obj.bloqueo -= absorbido;
     }
     if (obj === this.jugador) this.danoBloqueadoEsteTurno += absorbido;
-    const real = dano - absorbido;
+    let real = dano - absorbido;
+    // Invocación del druida: absorbe el daño tras el bloqueo y antes que el héroe.
+    let soakInv = 0;
+    if (obj === this.jugador && real > 0) {
+      const inv = this.jugador.invocacion;
+      if (inv && inv.vida > 0) {
+        soakInv = Math.min(inv.vida, real);
+        inv.vida -= soakInv;
+        real -= soakInv;
+        await this.ui.fxInvocacionGolpe(soakInv);
+        if (inv.vida <= 0) {
+          this.jugador.invocacion = undefined;
+          await this.ui.fxInvocacionMuerte();
+        }
+      }
+    }
     obj.pv = Math.max(0, obj.pv - real);
     if (obj !== this.jugador) {
       this.danoHechoEsteTurno += real;
       if (real > 0) (obj as EnemigoCombate).heridoEsteTurno = true; // mantiene la Hemorragia
     } else this.danoRecibidoEsteTurno += real; // solo el daño que atraviesa el bloqueo
-    await this.ui.fxGolpe(obj, real, fx);
+    // El héroe no muestra golpe si la invocación absorbió todo el daño.
+    if (!(obj === this.jugador && soakInv > 0 && real === 0)) await this.ui.fxGolpe(obj, real, fx);
     if (obj.pv <= 0 && obj.vivo) {
       const e = obj as EnemigoCombate;
       // Pasiva del liche: la primera muerte no cuenta
@@ -356,6 +381,57 @@ export class Combate {
       await this.ui.fxMensaje(`📜 ¡Conjuro Prodigioso! ${10 + j.conjuroEscrito} de daño`);
     }
     this.ui.render();
+  }
+
+  /** Invoca (druida): crea la invocación o le suma vida (actual y máxima).
+   *  La forma visual la fija la primera; las pasivas de todas se combinan. */
+  async invocar(forma: FormaInvocacion, vida: number) {
+    const j = this.jugador;
+    const pasiva = forma === 'lobo' || forma === 'oso' ? null : forma;
+    if (!j.invocacion) {
+      j.invocacion = { forma, vida, vidaMax: vida, efectos: pasiva ? [pasiva] : [] };
+      await this.ui.fxMensaje(`🐾 ¡Invocas (${vida} de vida)!`);
+    } else {
+      j.invocacion.vida += vida;
+      j.invocacion.vidaMax += vida;
+      if (pasiva && !j.invocacion.efectos.includes(pasiva)) j.invocacion.efectos.push(pasiva);
+      await this.ui.fxMensaje(`🐾 La invocación crece (+${vida} de vida)`);
+    }
+    this.ui.render();
+  }
+
+  /** La invocación ataca: daño = 25 % de su vida máxima (+ bonus opcional). */
+  async atacarInvocacion(bono = 0) {
+    const inv = this.jugador.invocacion;
+    if (!inv || inv.vida <= 0) return;
+    const base = Math.max(1, Math.round(inv.vidaMax * 0.25)) + bono;
+    const fuego = inv.efectos.includes('fuego');
+    const arbol = inv.efectos.includes('arbol');
+    const golpes = inv.efectos.includes('aire') ? 2 : 1; // Aire golpea dos veces
+    for (let i = 0; i < golpes; i++) {
+      const vivos = this.enemigos.filter((e) => e.vivo);
+      if (vivos.length === 0 || this.terminado) break;
+      const e = vivos[Math.min(i, vivos.length - 1)]; // Aire reparte entre 2 si los hay
+      await this.ui.fxInvocacionAtaca();
+      await this.golpeInvocacion(e, base, fuego);
+      if (arbol && e.vivo) {
+        e.raicesInstancias = e.raicesInstancias ?? [];
+        e.raicesInstancias.push({ cantidad: 2, turnos: 1 });
+        e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
+        await this.ui.fxEstado(e, 'raices', 2);
+      }
+    }
+  }
+
+  /** Golpe de la invocación (no escala con la Fuerza del jugador).
+   *  Fuego: el daño contra el bloqueo cuenta doble (lo destruye al doble de ritmo). */
+  private async golpeInvocacion(e: EnemigoCombate, dano: number, fuego: boolean) {
+    if (fuego && e.bloqueo > 0) {
+      const gastado = Math.min(dano, Math.ceil(e.bloqueo / 2));
+      e.bloqueo = Math.max(0, e.bloqueo - gastado * 2);
+      dano -= gastado;
+    }
+    await this.infligir(e, dano, fuego ? 'furia' : 'zarpa');
   }
 
   // ── Flujo de turnos ────────────────────────────────────────────────────────
@@ -423,6 +499,23 @@ export class Combate {
         this.jugador.bloqueo += f;
         await this.ui.fxBloqueo(this.jugador, f);
       }
+    }
+    // Invocación del druida: efectos de inicio de turno y ataque
+    const inv = this.jugador.invocacion;
+    if (inv && inv.vida > 0) {
+      if (inv.efectos.includes('agua')) { // cura al inicio del turno
+        const real = Math.min(2, this.jugador.pvMax - this.jugador.pv);
+        if (real > 0) {
+          this.jugador.pv += real;
+          await this.ui.fxCura(this.jugador, real);
+        }
+      }
+      if (inv.efectos.includes('tierra')) { // bloqueo al inicio del turno
+        const b = Math.ceil(inv.vidaMax * 0.4);
+        this.jugador.bloqueo += b;
+        await this.ui.fxBloqueo(this.jugador, b);
+      }
+      if (!primero) await this.atacarInvocacion();
     }
     // Tratado Prohibido: escribe en el Conjuro Prodigioso al inicio de cada turno
     const escribania = this.jugador.estados.escribania ?? 0;

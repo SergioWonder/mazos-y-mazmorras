@@ -31,6 +31,19 @@ export type EstadoId =
 /** Efectos permanentes que las cartas «Escribir» pueden añadir al Conjuro Prodigioso. */
 export type EfectoConjuro = 'area' | 'vulnerable' | 'bloqueo' | 'perforante';
 
+/** Forma visual de la invocación del druida (la fija la primera carta que invocó). */
+export type FormaInvocacion = 'lobo' | 'oso' | 'fuego' | 'agua' | 'aire' | 'arbol' | 'tierra';
+/** Pasivas que se combinan en la invocación (lobo y oso no aportan ninguna). */
+export type EfectoInvocacion = 'fuego' | 'agua' | 'aire' | 'arbol' | 'tierra';
+
+/** Criatura invocada por el druida: absorbe daño y ataca cada turno. */
+export interface Invocacion {
+  forma: FormaInvocacion;
+  vida: number;
+  vidaMax: number;
+  efectos: EfectoInvocacion[]; // pasivas acumuladas (sin repetir)
+}
+
 export interface EfectoTemporal {
   etiqueta: string;     // p.ej. "Forma de Lobo"
   turnos: number;       // turnos restantes (cuenta el actual)
@@ -133,6 +146,8 @@ export interface JugadorCombate extends Luchador {
   conjuroEfectos: EfectoConjuro[];
   /** true en cuanto se ha escrito al menos una vez (muestra el indicador). */
   conjuroActivo: boolean;
+  /** Invocación activa del druida (absorbe daño y ataca cada turno). */
+  invocacion?: Invocacion;
 }
 
 export interface CartaDef {
@@ -213,6 +228,13 @@ export interface ContextoEfecto {
   /** Escribe N en el Conjuro Prodigioso (lo genera en la mano si no existe) y,
    *  opcionalmente, le añade un efecto permanente (no se apila si ya lo tenía). */
   escribir(n: number, efecto?: EfectoConjuro): Promise<void>;
+  /** Invoca (druida): suma `vida` a la invocación o crea una con esa forma.
+   *  La forma visual la fija la primera; las pasivas de todas se combinan. */
+  invocar(forma: FormaInvocacion, vida: number): Promise<void>;
+  /** La invocación ataca ahora mismo (con un bonus de daño opcional). */
+  atacarInvocacion(bono?: number): Promise<void>;
+  /** true si hay una invocación viva. */
+  hayInvocacion(): boolean;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */
   run: EstadoRun;
   /** Daño de la intención actual del enemigo tras modificadores (0 si no ataca). */

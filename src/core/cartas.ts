@@ -352,6 +352,129 @@ export const DRUIDA: CartaDef[] = [
       },
     },
   },
+  // — Invocaciones: aliado que absorbe daño y ataca cada turno —
+  {
+    id: 'comunion-salvaje',
+    nombre: 'Comunión Salvaje',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'hojas',
+    texto: 'Invoca 5.\nForma Lobo: sin pasiva.',
+    jugar: async (c) => {
+      await c.invocar('lobo', 5);
+    },
+    mejora: {
+      texto: 'Invoca 7.\nForma Lobo: sin pasiva.',
+      jugar: async (c) => {
+        await c.invocar('lobo', 7);
+      },
+    },
+  },
+  {
+    id: 'oso-espiritual',
+    nombre: 'Oso Espiritual',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'tierra',
+    texto: 'Invoca 10.\nForma Oso: sin pasiva (puro muro de vida).',
+    jugar: async (c) => {
+      await c.invocar('oso', 10);
+    },
+    mejora: {
+      texto: 'Invoca 13.\nForma Oso: sin pasiva (puro muro de vida).',
+      jugar: async (c) => {
+        await c.invocar('oso', 13);
+      },
+    },
+  },
+  {
+    id: 'elemental-agua',
+    nombre: 'Elemental de Agua',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'ola',
+    texto: 'Invoca 7.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
+    jugar: async (c) => {
+      await c.invocar('agua', 7);
+    },
+    mejora: {
+      texto: 'Invoca 9.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
+      jugar: async (c) => {
+        await c.invocar('agua', 9);
+      },
+    },
+  },
+  {
+    id: 'elemental-fuego',
+    nombre: 'Elemental de Fuego',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'furia',
+    texto: 'Invoca 8.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
+    jugar: async (c) => {
+      await c.invocar('fuego', 8);
+    },
+    mejora: {
+      texto: 'Invoca 11.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
+      jugar: async (c) => {
+        await c.invocar('fuego', 11);
+      },
+    },
+  },
+  {
+    id: 'elemental-aire',
+    nombre: 'Elemental de Aire',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'aullido',
+    texto: 'Invoca 6.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
+    jugar: async (c) => {
+      await c.invocar('aire', 6);
+    },
+    mejora: {
+      texto: 'Invoca 8.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
+      jugar: async (c) => {
+        await c.invocar('aire', 8);
+      },
+    },
+  },
+  {
+    id: 'vinculo-feroz',
+    nombre: 'Vínculo Feroz',
+    clase: 'druida',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'zarpa',
+    texto: 'Tu invocación ataca de inmediato\ne inflige 5 de daño adicional.',
+    jugar: async (c) => {
+      if (c.hayInvocacion()) await c.atacarInvocacion(5);
+      else await c.mensaje('No tienes ninguna invocación…');
+    },
+    mejora: {
+      texto: 'Tu invocación ataca de inmediato\ne inflige 8 de daño adicional.',
+      jugar: async (c) => {
+        if (c.hayInvocacion()) await c.atacarInvocacion(8);
+        else await c.mensaje('No tienes ninguna invocación…');
+      },
+    },
+  },
   // — Cartas raras: una por subclase de druida (D&D 2024) —
   {
     id: 'circulo-tierra',
@@ -460,6 +583,49 @@ export const DRUIDA: CartaDef[] = [
           robaExtra: 1,
           curaTurno: 1,
         });
+      },
+    },
+  },
+  // — Raras de invocación —
+  {
+    id: 'guardian-roble',
+    nombre: 'Guardián de Roble',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'hojas',
+    animRara: 'anim-arbol',
+    texto: 'Invoca 9.\nForma Árbol: cuando ataca,\naplica 2 de Raíces.',
+    jugar: async (c) => {
+      await c.invocar('arbol', 9);
+    },
+    mejora: {
+      texto: 'Invoca 12.\nForma Árbol: cuando ataca,\naplica 2 de Raíces.',
+      jugar: async (c) => {
+        await c.invocar('arbol', 12);
+      },
+    },
+  },
+  {
+    id: 'elemental-tierra',
+    nombre: 'Elemental de Tierra',
+    clase: 'druida',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'tierra',
+    animRara: 'anim-tierra',
+    texto: 'Invoca 8.\nForma Tierra: al inicio de tu turno ganas\nbloqueo igual al 40 % de su vida máx.',
+    jugar: async (c) => {
+      await c.invocar('tierra', 8);
+    },
+    mejora: {
+      texto: 'Invoca 11.\nForma Tierra: al inicio de tu turno ganas\nbloqueo igual al 40 % de su vida máx.',
+      jugar: async (c) => {
+        await c.invocar('tierra', 11);
       },
     },
   },

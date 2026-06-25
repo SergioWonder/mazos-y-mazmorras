@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.15.0';
+export const VERSION = '0.16.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.16.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '🐾 Nueva mecánica del druida — Invocaciones: un aliado con vida propia que aparece junto a ti. «Invoca X» le suma vida o crea uno nuevo. Ataca al inicio de tu turno por el 25 % de su vida máxima y absorbe el daño enemigo después de tu bloqueo y antes que tú.',
+      '🐻 La forma la fija la primera carta; las pasivas de todas se combinan. Comunes: Comunión Salvaje (Lobo) y Oso Espiritual (muro de vida).',
+      '🔥 Infrecuentes: Elemental de Agua (te cura cada turno), de Fuego (doble daño al bloqueo), de Aire (ataca a dos enemigos) y Vínculo Feroz (tu invocación ataca al instante).',
+      '🌳 Raras: Guardián de Roble (aplica Raíces al atacar) y Elemental de Tierra (te da bloqueo cada turno).',
+    ],
+  },
   {
     version: '0.15.0',
     fecha: '2026-06-25',

@@ -43,6 +43,8 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
     desc: 'Al jugarse va a la pila de agotadas: no vuelve este combate (sí en el siguiente).' },
   { test: (d) => d.unUso === true, icono: '🔚', nombre: '1 uso',
     desc: 'Se consume para siempre: desaparece de tu mazo el resto de la partida.' },
+  { test: (_d, t) => t.includes('invoca') || t.includes('invocación'), icono: '🐾', nombre: 'Invocación',
+    desc: 'Aliado del druida con vida propia. «Invoca X» le suma X de vida (actual y máxima) o crea uno nuevo. Ataca al inicio de tu turno por el 25 % de su vida máxima, y absorbe el daño enemigo después de tu bloqueo y antes que tú. La forma la fija la primera carta; las pasivas de todas se combinan.' },
 ];
 
 /** Lista de palabras clave presentes en una carta, sin repetir. */
@@ -195,6 +197,9 @@ function arteDeCarta(def: CartaDef): string {
     'corte-sangrante': '🩸', 'doble-tajo': '🗡️', desgarro: '🪓',
     'hacha-carnicera': '🪓', 'furia-sanguinaria': '🔥', 'sed-de-sangre': '🧛',
     'reabrir-heridas': '🩸', 'festin-carmesi': '🍷',
+    'comunion-salvaje': '🐺', 'oso-espiritual': '🐻', 'elemental-agua': '💧',
+    'elemental-fuego': '🔥', 'elemental-aire': '🌬️', 'vinculo-feroz': '🐾',
+    'guardian-roble': '🌳', 'elemental-tierra': '⛰️',
     'manos-ardientes': '🔥', 'proyectil-magico': '✨', 'rayo-escarcha': '❄️',
     'toque-electrizante': '⚡', 'armadura-mago': '🧥', 'truco-magia': '🎩',
     'escudo-arcano': '🛡️', 'bola-fuego': '☄️', 'rayo-abrasador': '🔆',

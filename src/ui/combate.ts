@@ -19,6 +19,16 @@ const SPRITE_FORMA: Record<string, string> = {
   'Forma de Lobo': '🐺', 'Forma de Oso': '🐻', 'Forma de Águila': '🦅',
   'Forma Lunar': '🐺', 'Forma Estelar': '🦌',
 };
+const SPRITE_INVOCACION: Record<string, string> = {
+  lobo: '🐺', oso: '🐻', fuego: '🔥', agua: '💧', aire: '🌬️', arbol: '🌳', tierra: '⛰️',
+};
+const PASIVA_INVOCACION: Record<string, string> = {
+  fuego: 'Doble daño al bloqueo',
+  agua: 'Te cura 2 PV al inicio de tu turno',
+  aire: 'Ataca a dos enemigos',
+  arbol: 'Aplica 2 de Raíces al atacar',
+  tierra: 'Te da bloqueo (40 % de su vida máx.) al inicio de tu turno',
+};
 
 export function pantallaCombate(
   run: EstadoRun,
@@ -74,6 +84,7 @@ export function pantallaCombate(
       const idx = combate.enemigos.indexOf(obj as EnemigoCombate);
       return raiz.querySelector(`.enemigo[data-idx="${idx}"]`);
     };
+    const elemInvocacion = (): HTMLElement | null => raiz.querySelector('.invocacion');
 
     const ui: Presentador = {
       render,
@@ -150,6 +161,36 @@ export function pantallaCombate(
         fx.emitir(efecto, x, y);
         render();
         await espera(220);
+      },
+      async fxInvocacionGolpe(dano) {
+        const elem = elemInvocacion();
+        const { x, y } = centroDe(elem);
+        fx.emitir('golpeEnemigo', x, y);
+        audio.sfx(dano > 0 ? 'golpeEnemigo' : 'bloqueo');
+        if (dano > 0) {
+          numeroFlotante(elem, `${dano}`, 'dano');
+          elem?.classList.add('golpeado');
+          setTimeout(() => elem?.classList.remove('golpeado'), 350);
+        }
+        render();
+        await espera(240);
+      },
+      async fxInvocacionMuerte() {
+        const elem = elemInvocacion();
+        const { x, y } = centroDe(elem);
+        fx.emitir('muerte', x, y);
+        audio.sfx('muerte');
+        elem?.classList.add('muriendo');
+        await espera(450);
+        render();
+      },
+      async fxInvocacionAtaca() {
+        const elem = elemInvocacion();
+        const { x, y } = centroDe(elem);
+        fx.emitir('zarpa', x, y);
+        elem?.classList.add('inv-ataca');
+        setTimeout(() => elem?.classList.remove('inv-ataca'), 300);
+        await espera(120);
       },
       async fxDado(n, caras) {
         audio.sfx('carta');
@@ -241,6 +282,27 @@ export function pantallaCombate(
       return `<div class="estados">${fichas}</div>`;
     }
 
+    /** Panel de la invocación del druida (vida, forma y pasivas). */
+    function renderInvocacionHTML(): string {
+      const inv = combate.jugador.invocacion;
+      if (!inv || inv.vida <= 0) return '';
+      const emoji = SPRITE_INVOCACION[inv.forma] ?? '🐾';
+      const dmg = Math.max(1, Math.round(inv.vidaMax * 0.25));
+      const pasivas = inv.efectos.map((e) => PASIVA_INVOCACION[e]).filter(Boolean);
+      const tip = `<strong>${emoji} Invocación</strong><br>Vida ${inv.vida}/${inv.vidaMax}<br>Ataca por ${dmg} cada turno.${
+        pasivas.length ? `<br>${pasivas.map((p) => `· ${p}`).join('<br>')}` : ''
+      }`.replace(/"/g, '&quot;');
+      const pct = Math.max(0, (inv.vida / inv.vidaMax) * 100);
+      return `
+        <div class="invocacion" data-tip="${tip}">
+          <div class="sprite sprite-invocacion">${emoji}</div>
+          <div class="vida vida-inv">
+            <div class="vida-relleno vida-relleno-inv" style="width:${pct}%"></div>
+            <span class="vida-texto">${inv.vida}/${inv.vidaMax}</span>
+          </div>
+        </div>`;
+    }
+
     /** Indicador flotante del Conjuro Prodigioso (daño y efectos actuales). */
     function indicadorConjuro(): string {
       const j = combate.jugador;
@@ -282,7 +344,8 @@ export function pantallaCombate(
           ${fichasEstados(j)}
           <div class="temporales">${temporales}</div>
           ${furiaActiva ? `<div class="furia-ficha" data-tip="<strong>🔥 Furia</strong><br>Fuerza/Destreza acumulada. Se rompe si acabas la ronda sin recibir daño (lo bloqueado no cuenta).">🔥 Furia +${j.furiaFuerza}F${j.furiaDestreza ? ` +${j.furiaDestreza}D` : ''}</div>` : ''}
-        </div>`;
+        </div>
+        ${renderInvocacionHTML()}`;
     }
 
     function textoIntencion(e: EnemigoCombate): string {
