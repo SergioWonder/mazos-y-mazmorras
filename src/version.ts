@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.12.0';
+export const VERSION = '0.13.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.13.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '📖 Al ver una carta en grande (tócala en combate o haz clic en el Compendio) aparece un cuadro que explica todas sus palabras clave: Ataque, Bloqueo, Furia, Raíces, Innata…',
+      '💨 Acelerar rediseñada: poder de coste 1 que roba 1 carta extra al inicio de tus turnos; se disipa si te quedas sin cartas en la mano (su versión mejorada es innata).',
+      '🐺 Mordisco Feroz: cuesta 1 y, transformado, te devuelve 1 de energía (la mejorada pega más).',
+      '🌀 Recuperación Arcana ahora recupera el espacio de conjuro de MAYOR nivel. Aullido aplica 2/3 de Débil.',
+    ],
+  },
   {
     version: '0.12.0',
     fecha: '2026-06-25',

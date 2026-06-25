@@ -92,7 +92,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   fuerza: '💪', raices: '🪾', destreza: '🌀', vulnerable: '🎯', debil: '💧',
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', corazonSalvaje: '🐾', frenesi: '🔥',
   espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', quemadura: '🔥',
-  furiaIndomita: '🛡️', maestria: '✨',
+  furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -101,6 +101,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   regeneracion: 'Regeneración', corazonSalvaje: 'Corazón Salvaje', frenesi: 'Frenesí',
   espejismo: 'Espejismo', invulnerable: 'Invulnerable', raizProlongada: 'Raíces Profundas',
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
+  roboAcelerado: 'Acelerar',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -122,6 +123,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   furiaIndomita:
     'Mientras estés en Furia, al inicio de tu turno ganas bloqueo igual a tu Fuerza. La Furia no se rompe si bloqueaste daño y te queda menos de 10 de bloqueo.',
   maestria: 'Al inicio de cada turno añades un Proyectil Mágico a tu mano.',
+  roboAcelerado: 'Robas 1 carta adicional al inicio de tus turnos. Desaparece si te quedas sin cartas en la mano.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

@@ -1,7 +1,21 @@
 import type { CartaDef } from '../core/types.ts';
 import { BASICAS, DRUIDA, BARBARO, MAGO, NEUTRALES_ESPECIALES, defDe } from '../core/cartas.ts';
-import { renderCarta } from './carta.ts';
+import { renderCarta, cuadroPalabrasClave } from './carta.ts';
 import { el } from './util.ts';
+
+/** Vista en grande de una carta con su cuadro de palabras clave. */
+function ampliarEnGrande(def: CartaDef, mejorada: boolean) {
+  const zoom = el('div', 'zoom-carta');
+  const fila = el('div', 'zoom-fila');
+  const grande = renderCarta(def);
+  if (mejorada) grande.classList.add('carta-mejorada');
+  fila.appendChild(grande);
+  fila.appendChild(cuadroPalabrasClave(def));
+  zoom.appendChild(fila);
+  zoom.appendChild(el('p', 'zoom-ayuda', 'Toca para cerrar'));
+  zoom.addEventListener('pointerdown', () => zoom.remove());
+  document.body.appendChild(zoom);
+}
 
 const CLAVE_COMENTARIOS = 'mazmorra-comentarios';
 
@@ -60,6 +74,9 @@ export function pantallaCompendio(): Promise<void> {
           const celda = el('div', 'compendio-celda');
           const carta = renderCarta(visible);
           if (mejoradas && def.mejora) carta.classList.add('carta-mejorada');
+          carta.style.cursor = 'zoom-in';
+          carta.title = 'Ver en grande';
+          carta.addEventListener('click', () => ampliarEnGrande(visible, mejoradas && !!def.mejora));
           celda.appendChild(carta);
 
           const ta = document.createElement('textarea');

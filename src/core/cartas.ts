@@ -103,17 +103,17 @@ export const DRUIDA: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
-    texto: 'Inflige 5 de daño.\nSi estás transformado,\nrecuperas 2 de energía.',
+    texto: 'Inflige 5 de daño.\nSi estás transformado,\nrecuperas 1 de energía.',
     fx: 'zarpa',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 5, 1, 'zarpa');
-      if (c.estaTransformado()) c.ganarEnergia(2);
+      if (c.estaTransformado()) c.ganarEnergia(1);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nSi estás transformado,\nrecuperas 2 de energía.',
+      texto: 'Inflige 8 de daño.\nSi estás transformado,\nrecuperas 1 de energía.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 7, 1, 'zarpa');
-        if (c.estaTransformado()) c.ganarEnergia(2);
+        await c.atacar(c.objetivo!, 8, 1, 'zarpa');
+        if (c.estaTransformado()) c.ganarEnergia(1);
       },
     },
   },
@@ -185,15 +185,15 @@ export const DRUIDA: CartaDef[] = [
     rareza: 'comun',
     coste: 0,
     objetivo: 'enemigo',
-    texto: 'Aplica 1 de Débil.',
+    texto: 'Aplica 2 de Débil.',
     fx: 'aullido',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'debil', 1);
+      await c.aplicarEstado(c.objetivo!, 'debil', 2);
     },
     mejora: {
-      texto: 'Aplica 2 de Débil.',
+      texto: 'Aplica 3 de Débil.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'debil', 2);
+        await c.aplicarEstado(c.objetivo!, 'debil', 3);
       },
     },
   },
@@ -291,13 +291,13 @@ export const DRUIDA: CartaDef[] = [
     rareza: 'infrecuente',
     coste: 1,
     objetivo: 'ninguno',
-    texto: 'Gana 4 de Espinas.\n(Devuelve daño a los atacantes.)',
+    texto: 'Gana 4 de Espinas.',
     fx: 'hojas',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'espinas', 4);
     },
     mejora: {
-      texto: 'Gana 7 de Espinas.\n(Devuelve daño a los atacantes.)',
+      texto: 'Gana 7 de Espinas.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'espinas', 7);
       },
@@ -1226,14 +1226,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'estrellas',
-    texto: 'Recupera el espacio de conjuro gastado\nde menor nivel.',
+    texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel.',
     jugar: async (c) => {
-      const nivel = await c.recuperarConjuro();
+      const nivel = await c.recuperarConjuro(true);
       if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
       coste: 0,
-      texto: 'Recupera el espacio de conjuro gastado\nde menor nivel.',
+      texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel.',
     },
   },
   {
@@ -1260,21 +1260,20 @@ export const MAGO: CartaDef[] = [
     id: 'acelerar',
     nombre: 'Acelerar',
     clase: 'mago',
-    tipo: 'habilidad',
+    tipo: 'poder',
     rareza: 'infrecuente',
     coste: 1,
     objetivo: 'ninguno',
-    texto: 'Gana 1 de energía.\nRoba 1 carta.',
+    texto: 'Poder: roba 1 carta adicional al inicio\nde tus turnos. Se disipa si te quedas\nsin cartas en la mano.',
     fx: 'estrellas',
     jugar: async (c) => {
-      c.ganarEnergia(1);
-      await c.robar(1);
+      await c.aplicarEstado(c.jugador, 'roboAcelerado', 1);
     },
     mejora: {
-      texto: 'Gana 2 de energía.\nRoba 1 carta.',
+      innato: true,
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: roba 1 carta adicional al inicio\nde tus turnos. Se disipa si te quedas\nsin cartas en la mano.',
       jugar: async (c) => {
-        c.ganarEnergia(2);
-        await c.robar(1);
+        await c.aplicarEstado(c.jugador, 'roboAcelerado', 1);
       },
     },
   },

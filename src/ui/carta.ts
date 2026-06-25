@@ -1,9 +1,75 @@
 import type { CartaDef } from '../core/types.ts';
-import { el } from './util.ts';
+import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
   ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder',
 };
+
+// ── Glosario de palabras clave (cuadro de la vista en grande) ────────────────
+
+const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+interface Clave { icono: string; nombre: string; desc: string; }
+
+const DESC_TIPO: Record<string, string> = {
+  ataque: 'Inflige daño. Algunos efectos enemigos reaccionan a recibir ataques.',
+  habilidad: 'Efecto sin daño directo: bloqueo, estados o utilidad.',
+  poder: 'Efecto que dura todo el combate; la carta se retira de tu mazo al jugarse.',
+};
+
+/** Estados (de util) que se reconocen buscando su nombre en el texto. */
+const ESTADOS_CLAVE: string[] = [
+  'fuerza', 'destreza', 'vulnerable', 'debil', 'fragil', 'espinas',
+  'regeneracion', 'raices', 'espejismo', 'quemadura',
+];
+
+/** Palabras clave que no son estados (mecánicas y propiedades de carta). */
+const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolean }> = [
+  { test: (_d, t) => t.includes('bloqueo'), icono: '🛡️', nombre: 'Bloqueo',
+    desc: 'Absorbe el daño recibido hasta agotarse. Se pierde al inicio de tu turno.' },
+  { test: (d, t) => !!d.requiereConjuro || t.includes('conjuro'), icono: '◈', nombre: 'Espacio de conjuro',
+    desc: 'Recurso del mago en pirámide (máx. nivel 3). Las cartas de conjuro gastan el de mayor nivel; se recuperan al acabar el combate.' },
+  { test: (_d, t) => t.includes('furia'), icono: '🔥', nombre: 'Furia',
+    desc: 'Fuerza/Destreza acumulada del bárbaro; se rompe si acabas la ronda sin recibir daño real.' },
+  { test: (_d, t) => t.includes('transformacion') || t.includes('transformad'), icono: '🐾', nombre: 'Transformación',
+    desc: 'Forma salvaje del druida: bonus temporal de Fuerza o Destreza durante varios turnos.' },
+  { test: (_d, t) => t.includes('ignora') && t.includes('bloqueo'), icono: '💥', nombre: 'Ignora el bloqueo',
+    desc: 'El daño atraviesa el bloqueo del enemigo y, además, lo destruye.' },
+  { test: (d) => d.innato === true, icono: '🌟', nombre: 'Innata',
+    desc: 'Empiezas cada combate con esta carta en la mano.' },
+  { test: (d, t) => d.exhumar === true || t.includes('se agota'), icono: '♻️', nombre: 'Se agota',
+    desc: 'Al jugarse va a la pila de agotadas: no vuelve este combate (sí en el siguiente).' },
+  { test: (d) => d.unUso === true, icono: '🔚', nombre: '1 uso',
+    desc: 'Se consume para siempre: desaparece de tu mazo el resto de la partida.' },
+];
+
+/** Lista de palabras clave presentes en una carta, sin repetir. */
+export function palabrasClaveDe(def: CartaDef): Clave[] {
+  const txt = norm(def.texto);
+  const claves: Clave[] = [{ icono: '🃏', nombre: NOMBRE_TIPO[def.tipo], desc: DESC_TIPO[def.tipo] }];
+  for (const id of ESTADOS_CLAVE) {
+    if (txt.includes(norm(NOMBRE_ESTADO[id] ?? id))) {
+      claves.push({ icono: ICONO_ESTADO[id], nombre: NOMBRE_ESTADO[id], desc: DESCRIPCION_ESTADO[id] });
+    }
+  }
+  for (const k of CLAVES_EXTRA) {
+    if (k.test(def, txt)) claves.push({ icono: k.icono, nombre: k.nombre, desc: k.desc });
+  }
+  // dedup por nombre conservando el orden
+  const vistos = new Set<string>();
+  return claves.filter((c) => (vistos.has(c.nombre) ? false : (vistos.add(c.nombre), true)));
+}
+
+/** Cuadro con la descripción de las palabras clave de la carta (vista grande). */
+export function cuadroPalabrasClave(def: CartaDef): HTMLElement {
+  const caja = el('div', 'claves-caja');
+  caja.innerHTML = `<h4 class="claves-titulo">Palabras clave</h4>` +
+    palabrasClaveDe(def)
+      .map((c) => `<div class="clave"><span class="clave-nombre">${c.icono} ${c.nombre}</span>` +
+        `<span class="clave-desc">${c.desc}</span></div>`)
+      .join('');
+  return caja;
+}
 
 const ICONO_CLASE: Record<string, string> = {
   druida: '🌿', barbaro: '🪓', mago: '🔮', neutral: '⚔️',

@@ -368,6 +368,7 @@ export class Combate {
     let n = 5 + this.run.permanentes.robo;
     for (const r of this.run.reliquias) n += r.robaExtraPorTurno ?? 0;
     for (const e of this.jugador.efectosTemporales) n += e.robaExtra ?? 0;
+    if ((this.jugador.estados.roboAcelerado ?? 0) > 0) n += 1; // Acelerar
     return n;
   }
 
@@ -468,6 +469,11 @@ export class Combate {
       this.jugador.agotadas.push(carta);
     } else {
       this.jugador.descarte.push(carta);
+    }
+    // Acelerar: si te quedas sin cartas en la mano, el efecto desaparece
+    if ((this.jugador.estados.roboAcelerado ?? 0) > 0 && this.jugador.mano.length === 0) {
+      delete this.jugador.estados.roboAcelerado;
+      await this.ui.fxMensaje('💨 El impulso de Acelerar se disipa');
     }
     this.enResolucion = false;
     this.ui.render();

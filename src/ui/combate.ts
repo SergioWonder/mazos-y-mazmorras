@@ -8,7 +8,7 @@ import { rodarDado, rodarDados } from '../fx/dado.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
 } from './util.ts';
-import { renderCarta, actualizarTextoCarta, type ModsCarta } from './carta.ts';
+import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
 const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️' };
@@ -447,9 +447,12 @@ export function pantallaCombate(
     /** Vista ampliada de una carta (toque en móvil: leer, no jugar). */
     function ampliarCarta(inst: CartaInstancia) {
       const zoom = el('div', 'zoom-carta');
+      const fila = el('div', 'zoom-fila');
       const grande = renderCarta(defDe(inst));
       if (inst.mejorada) grande.classList.add('carta-mejorada');
-      zoom.appendChild(grande);
+      fila.appendChild(grande);
+      fila.appendChild(cuadroPalabrasClave(defDe(inst)));
+      zoom.appendChild(fila);
       zoom.appendChild(el('p', 'zoom-ayuda', 'Arrastra la carta para jugarla · toca para cerrar'));
       zoom.addEventListener('pointerdown', () => zoom.remove());
       document.body.appendChild(zoom);

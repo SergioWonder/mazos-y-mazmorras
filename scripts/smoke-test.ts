@@ -699,6 +699,31 @@ console.log('— Cartas únicas de clase (Acto III) —');
     combM.jugador.mano.filter((c) => c.def.id === 'proyectil-magico').length >= 1,
     'Maestría: añade un Proyectil Mágico a la mano cada turno',
   );
+
+  // Acelerar: poder que roba +1 al inicio del turno y se cae al quedarte sin mano
+  const acel = MAGO.find((c) => c.id === 'acelerar')!;
+  check(acel.tipo === 'poder' && acel.mejora?.innato === true, 'Acelerar es un poder; su mejora es innata');
+  const runA = nuevaRun('mago', 73);
+  const combA = new Combate(runA, [GOBLIN_CORTADOR], crearRng(73), uiSilenciosa);
+  await combA.iniciar();
+  combA.jugador.estados.roboAcelerado = 1;
+  combA.enemigos[0].intencion = { nombre: 'x', intencion: 'defensa', bloqueo: 1 };
+  await combA.terminarTurno();
+  check(combA.jugador.mano.length === 6, 'Acelerar: roba 6 cartas al inicio del turno');
+  // vaciar la mano disipa el efecto
+  while (combA.jugador.mano.length > 0) {
+    combA.jugador.descarte.push(combA.jugador.mano.pop()!);
+    if (combA.jugador.mano.length === 0) {
+      // simula el chequeo de jugarCarta vaciando la mano mediante una carta jugada
+    }
+  }
+  // forzar el chequeo jugando una carta cuando la mano queda vacía
+  const truco = instanciar(MAGO.find((c) => c.id === 'truco-magia')!);
+  combA.jugador.mano = [truco];
+  combA.jugador.mazo = []; // sin nada que robar → la mano quedará vacía
+  combA.jugador.descarte = [];
+  await combA.jugarCarta(truco);
+  check((combA.jugador.estados.roboAcelerado ?? 0) === 0, 'Acelerar se disipa al quedarte sin cartas en la mano');
 }
 
 console.log('— Recuperación de conjuros sostenible —');
