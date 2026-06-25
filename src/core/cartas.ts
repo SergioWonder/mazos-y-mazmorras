@@ -1101,6 +1101,41 @@ export const BARBARO: CartaDef[] = [
 
 // ── Mago ─────────────────────────────────────────────────────────────────────
 
+/**
+ * Conjuro Prodigioso: carta generada (no aparece en recompensas). Las cartas
+ * «Escribir X» suman daño a su base de 10 durante el combate y, algunas, le
+ * añaden un efecto permanente. Su estado vive en el JugadorCombate, así que la
+ * misma instancia refleja siempre el daño acumulado aunque se baraje.
+ */
+export const CONJURO_PRODIGIOSO: CartaDef = {
+  id: 'conjuro-prodigioso',
+  nombre: 'Conjuro Prodigioso',
+  clase: 'mago',
+  tipo: 'ataque',
+  rareza: 'especial',
+  coste: 2,
+  objetivo: 'enemigo',
+  fx: 'estrellas',
+  texto: 'Inflige 10 de daño.\nSu daño y sus efectos crecen\ncon las cartas «Escribir».',
+  jugar: async (c) => {
+    const dmg = 10 + (c.jugador.conjuroEscrito ?? 0);
+    const ef = c.jugador.conjuroEfectos ?? [];
+    const area = ef.includes('area');
+    const perforante = ef.includes('perforante');
+    const vulnera = ef.includes('vulnerable');
+    if (ef.includes('bloqueo')) await c.ganarBloqueo(6);
+    if (area) {
+      if (perforante) for (const e of c.enemigos.filter((x) => x.vivo)) await c.danarPerforante(e, dmg, 'estrellas');
+      else await c.atacarTodos(dmg, 'estrellas');
+      if (vulnera) for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'vulnerable', 2);
+    } else {
+      if (perforante) await c.danarPerforante(c.objetivo!, dmg, 'impacto');
+      else await c.atacar(c.objetivo!, dmg, 1, 'estrellas');
+      if (vulnera && c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'vulnerable', 2);
+    }
+  },
+};
+
 export const MAGO: CartaDef[] = [
   {
     id: 'manos-ardientes',
@@ -1468,6 +1503,135 @@ export const MAGO: CartaDef[] = [
       },
     },
   },
+  // — Creación de conjuros: escriben en el Conjuro Prodigioso —
+  {
+    id: 'inscripcion-arcana',
+    nombre: 'Inscripción Arcana',
+    clase: 'mago',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    texto: 'Escribir 4 en el Conjuro Prodigioso.',
+    jugar: async (c) => {
+      await c.escribir(4);
+    },
+    mejora: {
+      texto: 'Escribir 6 en el Conjuro Prodigioso.',
+      jugar: async (c) => {
+        await c.escribir(6);
+      },
+    },
+  },
+  {
+    id: 'glifo-mordiente',
+    nombre: 'Glifo Mordiente',
+    clase: 'mago',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'impacto',
+    texto: 'Inflige 5 de daño.\nEscribir 3 en el Conjuro Prodigioso.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 5, 1, 'impacto');
+      await c.escribir(3);
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño.\nEscribir 4 en el Conjuro Prodigioso.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 7, 1, 'impacto');
+        await c.escribir(4);
+      },
+    },
+  },
+  {
+    id: 'dictado-veloz',
+    nombre: 'Dictado Veloz',
+    clase: 'mago',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'estrellas',
+    texto: 'Inflige 4 de daño dos veces.\nEscribir 2 por cada golpe.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 4, 1, 'estrellas');
+      await c.escribir(2);
+      if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 4, 1, 'estrellas');
+      await c.escribir(2);
+    },
+    mejora: {
+      texto: 'Inflige 5 de daño dos veces.\nEscribir 3 por cada golpe.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 5, 1, 'estrellas');
+        await c.escribir(3);
+        if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 5, 1, 'estrellas');
+        await c.escribir(3);
+      },
+    },
+  },
+  {
+    id: 'runa-flamigera',
+    nombre: 'Runa Flamígera',
+    clase: 'mago',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'impacto',
+    texto: 'Escribir 5.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.escribir(5, 'area');
+    },
+    mejora: {
+      texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.escribir(7, 'area');
+      },
+    },
+  },
+  {
+    id: 'runa-de-ruina',
+    nombre: 'Runa de Ruina',
+    clase: 'mago',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'muerte',
+    texto: 'Escribir 5.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
+    jugar: async (c) => {
+      await c.escribir(5, 'vulnerable');
+    },
+    mejora: {
+      texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
+      jugar: async (c) => {
+        await c.escribir(7, 'vulnerable');
+      },
+    },
+  },
+  {
+    id: 'runa-egida',
+    nombre: 'Runa Égida',
+    clase: 'mago',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Escribir 4.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
+    jugar: async (c) => {
+      await c.escribir(4, 'bloqueo');
+    },
+    mejora: {
+      texto: 'Escribir 6.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
+      jugar: async (c) => {
+        await c.escribir(6, 'bloqueo');
+      },
+    },
+  },
   // — Cartas raras: una por escuela de magia —
   {
     id: 'escuela-evocacion',
@@ -1539,6 +1703,51 @@ export const MAGO: CartaDef[] = [
     mejora: {
       coste: 0,
       texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n60 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
+    },
+  },
+  // — Raras de Creación de conjuros —
+  {
+    id: 'tratado-prohibido',
+    nombre: 'Tratado Prohibido',
+    clase: 'mago',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    animRara: 'anim-evocacion',
+    texto: 'Poder: al inicio de cada turno,\nEscribir 3 en el Conjuro Prodigioso.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'escribania', 3);
+      await c.escribir(3);
+    },
+    mejora: {
+      texto: 'Poder: al inicio de cada turno,\nEscribir 4 en el Conjuro Prodigioso.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'escribania', 4);
+        await c.escribir(4);
+      },
+    },
+  },
+  {
+    id: 'palabra-de-poder',
+    nombre: 'Palabra de Poder',
+    clase: 'mago',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'impacto',
+    animRara: 'anim-evocacion',
+    texto: 'Escribir 12.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
+    jugar: async (c) => {
+      await c.escribir(12, 'perforante');
+    },
+    mejora: {
+      texto: 'Escribir 16.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
+      jugar: async (c) => {
+        await c.escribir(16, 'perforante');
+      },
     },
   },
   // — Carta única de clase (don del inicio del Acto III) —
@@ -1723,7 +1932,7 @@ export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function cartaPorId(id: string): CartaDef | undefined {
-  return [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO].find((c) => c.id === id);
+  return [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, CONJURO_PRODIGIOSO].find((c) => c.id === id);
 }
 
 /** Elige 3 cartas de recompensa con pesos por rareza. */

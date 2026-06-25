@@ -93,7 +93,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', corazonSalvaje: '🐾', frenesi: '🔥',
   espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', quemadura: '🔥',
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
-  hemorragia: '🩸', sedSangre: '🧛',
+  hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -103,6 +103,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   espejismo: 'Espejismo', invulnerable: 'Invulnerable', raizProlongada: 'Raíces Profundas',
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
   roboAcelerado: 'Acelerar', hemorragia: 'Hemorragia', sedSangre: 'Sed de Sangre',
+  escribania: 'Escribanía',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -128,6 +129,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   hemorragia:
     'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',
   sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas esa cantidad de bloqueo.',
+  escribania: 'Al inicio de cada turno escribes esa cantidad en el Conjuro Prodigioso.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

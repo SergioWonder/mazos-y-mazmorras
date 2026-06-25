@@ -27,8 +27,10 @@ const ESTADOS_CLAVE: string[] = [
 const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolean }> = [
   { test: (_d, t) => t.includes('bloqueo'), icono: '🛡️', nombre: 'Bloqueo',
     desc: 'Absorbe el daño recibido hasta agotarse. Se pierde al inicio de tu turno.' },
-  { test: (d, t) => !!d.requiereConjuro || t.includes('conjuro'), icono: '◈', nombre: 'Espacio de conjuro',
+  { test: (d, t) => !!d.requiereConjuro || (t.includes('conjuro') && !t.includes('prodigioso')), icono: '◈', nombre: 'Espacio de conjuro',
     desc: 'Recurso del mago en pirámide (máx. nivel 3). Las cartas de conjuro gastan el de mayor nivel; se recuperan al acabar el combate.' },
+  { test: (_d, t) => t.includes('escribir') || t.includes('conjuro prodigioso'), icono: '📜', nombre: 'Conjuro Prodigioso',
+    desc: 'Carta generada (coste 2, daño base 10) que crece durante el combate. «Escribir X» le suma X de daño y, algunas cartas, le añaden un efecto permanente (área, Vulnerable, bloqueo o ignorar bloqueo). Aparece en tu mano si no está ya en tu mazo, mano o descarte.' },
   { test: (_d, t) => t.includes('furia'), icono: '🔥', nombre: 'Furia',
     desc: 'Fuerza/Destreza acumulada del bárbaro; se rompe si acabas la ronda sin recibir daño real.' },
   { test: (_d, t) => t.includes('transformacion') || t.includes('transformad'), icono: '🐾', nombre: 'Transformación',
@@ -73,6 +75,14 @@ export function cuadroPalabrasClave(def: CartaDef): HTMLElement {
 
 const ICONO_CLASE: Record<string, string> = {
   druida: '🌿', barbaro: '🪓', mago: '🔮', neutral: '⚔️',
+};
+
+/** Descripción corta de cada efecto acumulable en el Conjuro Prodigioso. */
+export const EFECTO_CONJURO: Record<string, string> = {
+  area: 'Golpea a TODOS los enemigos',
+  vulnerable: 'Aplica 2 de Vulnerable',
+  bloqueo: 'Te da 6 de bloqueo al lanzarlo',
+  perforante: 'Ignora y destruye el bloqueo',
 };
 
 /** Modificadores en vivo para los valores del texto (los aporta el combate). */
@@ -193,6 +203,9 @@ function arteDeCarta(def: CartaDef): string {
     'marea-arcana': '🌊',
     acelerar: '💨', 'escuela-evocacion': '☄️', 'escuela-abjuracion': '🔵',
     'escuela-ilusion': '🎭',
+    'conjuro-prodigioso': '📜', 'inscripcion-arcana': '✒️', 'glifo-mordiente': '🔣',
+    'dictado-veloz': '✍️', 'runa-flamigera': '🔥', 'runa-de-ruina': '☠️',
+    'runa-egida': '🛡️', 'tratado-prohibido': '📕', 'palabra-de-poder': '💬',
   };
   return ARTE[def.id] ?? '✦';
 }

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.14.0';
+export const VERSION = '0.15.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.15.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '📜 Nueva mecánica del mago — Conjuro Prodigioso: una carta generada (coste 2, daño base 10) que crece durante el combate. Las cartas «Escribir X» le suman daño y algunas le añaden un efecto permanente. Aparece junto al héroe un indicador con su daño y efectos actuales.',
+      '✒️ Cartas comunes: Inscripción Arcana (Escribir 4) y Glifo Mordiente (5 de daño + Escribir 3).',
+      '🔥 Cartas infrecuentes: Dictado Veloz, Runa Flamígera (el conjuro golpea en área), Runa de Ruina (aplica Vulnerable) y Runa Égida (te da bloqueo al lanzarlo).',
+      '📕 Cartas raras: Tratado Prohibido (Escribes cada turno) y Palabra de Poder (Escribir 12; el conjuro ignora el bloqueo).',
+    ],
+  },
   {
     version: '0.14.0',
     fecha: '2026-06-25',

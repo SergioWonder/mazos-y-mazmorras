@@ -1,6 +1,6 @@
 import { Combate, type Presentador } from '../core/combate.ts';
 import type {
-  CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
+  CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
 } from '../core/types.ts';
 import { fx } from '../fx/particulas.ts';
 import { audio } from '../fx/audio.ts';
@@ -8,7 +8,7 @@ import { rodarDado, rodarDados } from '../fx/dado.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
 } from './util.ts';
-import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, type ModsCarta } from './carta.ts';
+import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
 const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️' };
@@ -241,6 +241,17 @@ export function pantallaCombate(
       return `<div class="estados">${fichas}</div>`;
     }
 
+    /** Indicador flotante del Conjuro Prodigioso (daño y efectos actuales). */
+    function indicadorConjuro(): string {
+      const j = combate.jugador;
+      const dmg = 10 + (j.conjuroEscrito ?? 0);
+      const efectos = (j.conjuroEfectos ?? []).map((e) => `· ${EFECTO_CONJURO[e]}`).join('<br>');
+      const tip = `<strong>📜 Conjuro Prodigioso</strong><br>Inflige ${dmg} de daño.${
+        efectos ? `<br>${efectos}` : ''
+      }`.replace(/"/g, '&quot;');
+      return `<div class="conjuro-ficha" data-tip="${tip}">📜 ${dmg}</div>`;
+    }
+
     function renderJugador() {
       const j = combate.jugador;
       const forma = j.efectosTemporales.find((e) => SPRITE_FORMA[e.etiqueta]);
@@ -259,11 +270,13 @@ export function pantallaCombate(
               .join(' · ')} — quedan ${e.turnos} turnos.">✦ ${e.etiqueta} (${e.turnos})</span>`,
         )
         .join('');
+      const conjuro = j.conjuroActivo ? indicadorConjuro() : '';
       $('.lado-jugador').innerHTML = `
         <div class="heroe ${furiaActiva ? 'con-furia' : ''} ${forma ? 'transformado' : ''} ${
           (j.estados.espejismo ?? 0) > 0 ? 'con-espejismo' : ''
         }" data-luchador="jugador">
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
+          ${conjuro}
           <div class="sprite sprite-jugador">${sprite}</div>
           ${barraVida(j)}
           ${fichasEstados(j)}
@@ -371,10 +384,12 @@ export function pantallaCombate(
 
     /** Modificadores en vivo para el texto de las cartas (Fuerza, Débil,
      *  Destreza, Frágil… y Vulnerable del objetivo si se conoce). */
-    function modsEnCombate(objetivo?: EnemigoCombate | null): ModsCarta {
+    function modsEnCombate(objetivo?: EnemigoCombate | null, def?: CartaDef): ModsCarta {
+      // El Conjuro Prodigioso muestra su daño acumulado (10 base + lo escrito).
+      const extra = def?.id === 'conjuro-prodigioso' ? (combate.jugador.conjuroEscrito ?? 0) : 0;
       return {
         dano: (base) => {
-          const d = combate.danoDeAtaque(combate.jugador, base);
+          const d = combate.danoDeAtaque(combate.jugador, base + extra);
           return objetivo?.vivo ? combate.danoRecibido(objetivo, d) : d;
         },
         bloqueo: (base) => combate.bloqueoDeCarta(base),
@@ -390,7 +405,7 @@ export function pantallaCombate(
         // la carta pendiente de objetivo muestra el daño contra el enemigo marcado
         const objetivo =
           cartaPendiente === inst ? combate.enemigos[objetivoIdxValido()] : undefined;
-        const c = renderCarta(defDe(inst), modsEnCombate(objetivo));
+        const c = renderCarta(defDe(inst), modsEnCombate(objetivo, defDe(inst)));
         if (inst.mejorada) c.classList.add('carta-mejorada');
         c.dataset.mano = String(i);
         const n = cartas.length;
@@ -531,7 +546,7 @@ export function pantallaCombate(
               actualizarTextoCarta(
                 elemCarta,
                 defDe(inst),
-                modsEnCombate(idx >= 0 ? combate.enemigos[idx] : null),
+                modsEnCombate(idx >= 0 ? combate.enemigos[idx] : null, defDe(inst)),
               );
             }
           }

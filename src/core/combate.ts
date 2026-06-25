@@ -5,7 +5,8 @@ import type {
 import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
-import { defDe, cartaPorId, instanciar } from './cartas.ts';
+import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO } from './cartas.ts';
+import type { EfectoConjuro } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -62,6 +63,7 @@ export class Combate {
       mano: [], descarte: [], agotadas: [],
       efectosTemporales: [], furiaFuerza: 0, furiaDestreza: 0,
       conjuros: crearEspacios(run.espaciosConjuro),
+      conjuroEscrito: 0, conjuroEfectos: [], conjuroActivo: false,
     };
     this.enemigos = defs.map((d) => crearEnemigo(d, rng));
   }
@@ -216,6 +218,7 @@ export class Combate {
       conjurosLibres(nivelMin = 1) {
         return self.jugador.conjuros.filter((c) => !c.gastado && c.nivel >= nivelMin).length;
       },
+      escribir: (n, efecto) => self.escribirConjuro(n, efecto),
       run: self.run,
       danoIntencion: (e) => self.danoIntencion(e),
       ataqueAnulado: (e) => self.ataqueAnulado(e),
@@ -334,6 +337,27 @@ export class Combate {
     else if (this.enemigos.every((e) => !e.vivo)) this.terminado = 'victoria';
   }
 
+  /** Escribe en el Conjuro Prodigioso: suma daño, añade efecto (sin apilar) y
+   *  lo genera en la mano si no está ya en ninguna pila del combate. */
+  async escribirConjuro(n: number, efecto?: EfectoConjuro) {
+    const j = this.jugador;
+    j.conjuroEscrito += n;
+    j.conjuroActivo = true;
+    if (efecto && !j.conjuroEfectos.includes(efecto)) j.conjuroEfectos.push(efecto);
+    const existe = [...j.mano, ...j.mazo, ...j.descarte, ...j.agotadas].some(
+      (c) => c.def.id === 'conjuro-prodigioso',
+    );
+    if (existe) {
+      await this.ui.fxMensaje(`✍️ Conjuro Prodigioso: ${10 + j.conjuroEscrito} de daño`);
+    } else {
+      const inst = instanciar(CONJURO_PRODIGIOSO);
+      if (j.mano.length < 10) j.mano.push(inst);
+      else j.descarte.push(inst);
+      await this.ui.fxMensaje(`📜 ¡Conjuro Prodigioso! ${10 + j.conjuroEscrito} de daño`);
+    }
+    this.ui.render();
+  }
+
   // ── Flujo de turnos ────────────────────────────────────────────────────────
 
   robarCartas(n: number) {
@@ -400,6 +424,9 @@ export class Combate {
         await this.ui.fxBloqueo(this.jugador, f);
       }
     }
+    // Tratado Prohibido: escribe en el Conjuro Prodigioso al inicio de cada turno
+    const escribania = this.jugador.estados.escribania ?? 0;
+    if (escribania > 0) await this.escribirConjuro(escribania);
     // Maestría de Conjuros: añade un Proyectil Mágico a la mano cada turno
     const maestria = this.jugador.estados.maestria ?? 0;
     if (maestria > 0 && this.jugador.mano.length < 10) {

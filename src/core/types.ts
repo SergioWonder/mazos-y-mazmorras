@@ -24,8 +24,12 @@ export type EstadoId =
   | 'furiaIndomita' // (bárbaro) bloqueo=Fuerza al inicio de turno; Furia aguanta si bloqueaste
   | 'hemorragia'    // (enemigo) pierde esta cantidad de PV al inicio de su turno (ignora bloqueo)
   | 'sedSangre'     // (bárbaro) ganas este bloqueo cada vez que un enemigo sangra
+  | 'escribania'    // (mago) Escribe esta cantidad en el Conjuro Prodigioso al inicio del turno
   | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
   | 'roboAcelerado'; // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
+
+/** Efectos permanentes que las cartas «Escribir» pueden añadir al Conjuro Prodigioso. */
+export type EfectoConjuro = 'area' | 'vulnerable' | 'bloqueo' | 'perforante';
 
 export interface EfectoTemporal {
   etiqueta: string;     // p.ej. "Forma de Lobo"
@@ -123,6 +127,12 @@ export interface JugadorCombate extends Luchador {
   furiaDestreza: number;
   energiaCero?: boolean;      // el próximo turno empiezas con 0 de energía (Deseo)
   conjuros: EspacioConjuro[]; // espacios de conjuro (mago); vacío en otras clases
+  /** Conjuro Prodigioso (mago): daño escrito acumulado este combate (la base son 10). */
+  conjuroEscrito: number;
+  /** Efectos permanentes acumulados en el Conjuro Prodigioso (sin repetir). */
+  conjuroEfectos: EfectoConjuro[];
+  /** true en cuanto se ha escrito al menos una vez (muestra el indicador). */
+  conjuroActivo: boolean;
 }
 
 export interface CartaDef {
@@ -200,6 +210,9 @@ export interface ContextoEfecto {
   recuperarConjuro(masAlto?: boolean): Promise<number>;
   /** Nº de espacios de conjuro libres (opcionalmente de nivel ≥ nivelMin). */
   conjurosLibres(nivelMin?: number): number;
+  /** Escribe N en el Conjuro Prodigioso (lo genera en la mano si no existe) y,
+   *  opcionalmente, le añade un efecto permanente (no se apila si ya lo tenía). */
+  escribir(n: number, efecto?: EfectoConjuro): Promise<void>;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */
   run: EstadoRun;
   /** Daño de la intención actual del enemigo tras modificadores (0 si no ataca). */
