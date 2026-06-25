@@ -56,8 +56,26 @@ function mostrarAvisoActualizar(alActualizar: () => void) {
     <button class="btn-cerrar-aviso" aria-label="Cerrar">✕</button>
   `;
   document.body.appendChild(aviso);
-  aviso.querySelector('.btn-actualizar')!.addEventListener('click', alActualizar);
-  aviso.querySelector('.btn-cerrar-aviso')!.addEventListener('click', () => {
+
+  const btn = aviso.querySelector('.btn-actualizar') as HTMLButtonElement;
+  const cerrarBtn = aviso.querySelector('.btn-cerrar-aviso') as HTMLButtonElement;
+  let actualizando = false;
+
+  btn.addEventListener('click', () => {
+    if (actualizando) return;
+    actualizando = true;
+    // Estado de carga: el SW puede tardar en activarse y recargar la página
+    aviso.classList.add('actualizando');
+    btn.disabled = true;
+    cerrarBtn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Actualizando…';
+    alActualizar();
+    // Fallback: si en 8 s el nuevo service worker no ha recargado, recarga a mano
+    setTimeout(() => location.reload(), 8000);
+  });
+
+  cerrarBtn.addEventListener('click', () => {
+    if (actualizando) return;
     aviso.classList.add('aviso-fuera');
     setTimeout(() => aviso.remove(), 400);
   });

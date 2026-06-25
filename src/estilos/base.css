@@ -145,6 +145,42 @@ body::before {
   transform: translateY(20px);
 }
 
+/* Estado de carga al pulsar «Actualizar» */
+.aviso-actualizar .btn-actualizar:disabled {
+  cursor: progress;
+  opacity: 0.85;
+}
+.aviso-actualizar .btn-actualizar .spinner {
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-right: 0.45em;
+  vertical-align: -0.1em;
+  border: 2px solid rgba(255, 209, 102, 0.35);
+  border-top-color: var(--brasa-viva);
+  border-radius: 50%;
+  animation: girar-spinner 0.7s linear infinite;
+}
+/* barra de progreso indeterminada bajo el aviso mientras actualiza */
+.aviso-actualizar.actualizando::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 40%;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(90deg, transparent, var(--brasa-viva), transparent);
+  animation: barra-indeterminada 1.1s ease-in-out infinite;
+}
+@keyframes girar-spinner {
+  to { transform: rotate(360deg); }
+}
+@keyframes barra-indeterminada {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
 /* Ventana de novedades / registro de cambios */
 .novedades-fondo {
   position: fixed;
