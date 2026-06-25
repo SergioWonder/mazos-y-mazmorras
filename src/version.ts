@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.13.0';
+export const VERSION = '0.13.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.13.1',
+    fecha: '2026-06-25',
+    cambios: [
+      '⚖️ Ajustes de equilibrio: Proyectil Mágico+ pasa a 4 golpes (8 de daño), Sangre Caliente+ inflige 13 con Furia (antes 15) y Toque Vampírico baja un poco su daño (8/+4 por nivel; 10/+5 mejorado).',
+    ],
+  },
   {
     version: '0.13.0',
     fecha: '2026-06-25',

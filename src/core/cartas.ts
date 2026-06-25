@@ -734,10 +734,10 @@ export const BARBARO: CartaDef[] = [
       await c.atacar(c.objetivo!, conFuria ? 10 : 4, 1, conFuria ? 'furia' : 'tajo');
     },
     mejora: {
-      texto: 'Inflige 6 de daño.\nSi tienes Furia activa, inflige 15.',
+      texto: 'Inflige 6 de daño.\nSi tienes Furia activa, inflige 13.',
       jugar: async (c) => {
         const conFuria = c.jugador.furiaFuerza + c.jugador.furiaDestreza > 0;
-        await c.atacar(c.objetivo!, conFuria ? 15 : 6, 1, conFuria ? 'furia' : 'tajo');
+        await c.atacar(c.objetivo!, conFuria ? 13 : 6, 1, conFuria ? 'furia' : 'tajo');
       },
     },
   },
@@ -970,9 +970,9 @@ export const MAGO: CartaDef[] = [
       for (let i = 0; i < 3; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
     },
     mejora: {
-      texto: 'Inflige 2 de daño 5 veces.\nIgnora el bloqueo.',
+      texto: 'Inflige 2 de daño 4 veces.\nIgnora el bloqueo.',
       jugar: async (c) => {
-        for (let i = 0; i < 5; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
+        for (let i = 0; i < 4; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
       },
     },
   },
@@ -1138,17 +1138,17 @@ export const MAGO: CartaDef[] = [
     objetivo: 'enemigo',
     requiereConjuro: 2,
     fx: 'muerte',
-    texto: 'Gasta un conjuro de nivel 2+:\ninflige 9 de daño (+5 por nivel)\ny cura la mitad del daño.',
+    texto: 'Gasta un conjuro de nivel 2+:\ninflige 8 de daño (+4 por nivel)\ny cura la mitad del daño.',
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(2);
-      const hecho = await c.atacar(c.objetivo!, 9 + 5 * nivel, 1, 'muerte');
+      const hecho = await c.atacar(c.objetivo!, 8 + 4 * nivel, 1, 'muerte');
       await c.curar(Math.ceil(hecho / 2));
     },
     mejora: {
-      texto: 'Gasta un conjuro de nivel 2+:\ninflige 12 de daño (+6 por nivel)\ny cura la mitad del daño.',
+      texto: 'Gasta un conjuro de nivel 2+:\ninflige 10 de daño (+5 por nivel)\ny cura la mitad del daño.',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(2);
-        const hecho = await c.atacar(c.objetivo!, 12 + 6 * nivel, 1, 'muerte');
+        const hecho = await c.atacar(c.objetivo!, 10 + 5 * nivel, 1, 'muerte');
         await c.curar(Math.ceil(hecho / 2));
       },
     },
