@@ -22,6 +22,8 @@ export type EstadoId =
   | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
   | 'invulnerable'  // no recibe daño (N turnos)
   | 'furiaIndomita' // (bárbaro) bloqueo=Fuerza al inicio de turno; Furia aguanta si bloqueaste
+  | 'hemorragia'    // (enemigo) pierde esta cantidad de PV al inicio de su turno (ignora bloqueo)
+  | 'sedSangre'     // (bárbaro) ganas este bloqueo cada vez que un enemigo sangra
   | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
   | 'roboAcelerado'; // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
 
@@ -99,6 +101,8 @@ export interface EnemigoCombate extends Luchador {
   saltaAccion?: boolean;
   /** Instancias de Raíces activas: cada carta aporta su cantidad y su duración. */
   raicesInstancias?: Array<{ cantidad: number; turnos: number }>;
+  /** Recibió daño no bloqueado durante el turno del jugador (para la Hemorragia). */
+  heridoEsteTurno?: boolean;
 }
 
 /** Espacio de conjuro del mago (pirámide de niveles 1-3). */

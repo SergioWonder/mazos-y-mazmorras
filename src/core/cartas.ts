@@ -784,6 +784,137 @@ export const BARBARO: CartaDef[] = [
       },
     },
   },
+  // — Hemorragia: sangrado que persiste mientras lo mantengas herido —
+  {
+    id: 'corte-sangrante',
+    nombre: 'Corte Sangrante',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    texto: 'Inflige 5 de daño.\nAplica 3 de Hemorragia.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 5, 1, 'sangre');
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 3);
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño.\nAplica 4 de Hemorragia.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 7, 1, 'sangre');
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 4);
+      },
+    },
+  },
+  {
+    id: 'doble-tajo',
+    nombre: 'Doble Tajo',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 3 de daño dos veces.\nAplica 2 de Hemorragia.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 3, 2, 'tajo');
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 2);
+    },
+    mejora: {
+      texto: 'Inflige 4 de daño dos veces.\nAplica 3 de Hemorragia.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 4, 2, 'tajo');
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 3);
+      },
+    },
+  },
+  {
+    id: 'desgarro',
+    nombre: 'Desgarro',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    texto: 'Inflige 8 de daño.\nAplica 5 de Hemorragia.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 8, 1, 'sangre');
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 5);
+    },
+    mejora: {
+      texto: 'Inflige 10 de daño.\nAplica 7 de Hemorragia.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 10, 1, 'sangre');
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 7);
+      },
+    },
+  },
+  {
+    id: 'hacha-carnicera',
+    nombre: 'Hacha Carnicera',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'todos',
+    fx: 'sangre',
+    texto: 'Inflige 5 de daño a TODOS los enemigos.\nAplica 2 de Hemorragia a todos.',
+    jugar: async (c) => {
+      await c.atacarTodos(5, 'sangre');
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 2);
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño a TODOS los enemigos.\nAplica 3 de Hemorragia a todos.',
+      jugar: async (c) => {
+        await c.atacarTodos(7, 'sangre');
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
+      },
+    },
+  },
+  {
+    id: 'furia-sanguinaria',
+    nombre: 'Furia Sanguinaria',
+    clase: 'barbaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'furia',
+    texto: 'Furia: gana 2 de Fuerza.\nAplica 3 de Hemorragia a TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.ganarFuria(2);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
+    },
+    mejora: {
+      texto: 'Furia: gana 3 de Fuerza.\nAplica 4 de Hemorragia a TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.ganarFuria(3);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
+      },
+    },
+  },
+  {
+    id: 'sed-de-sangre',
+    nombre: 'Sed de Sangre',
+    clase: 'barbaro',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'sangre',
+    texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas 1 de bloqueo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'sedSangre', 1);
+    },
+    mejora: {
+      texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas 2 de bloqueo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'sedSangre', 2);
+      },
+    },
+  },
   // — Cartas raras: una por subclase de bárbaro (D&D 2024) —
   {
     id: 'senda-berserker',
@@ -880,6 +1011,66 @@ export const BARBARO: CartaDef[] = [
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 12 + c.jugador.furiaFuerza, 1, 'divino');
         await c.ganarBloqueo(11 + 2 * c.jugador.furiaFuerza);
+      },
+    },
+  },
+  // — Raras de Hemorragia: pagan el sangrado acumulado —
+  {
+    id: 'reabrir-heridas',
+    nombre: 'Reabrir Heridas',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    animRara: 'anim-berserker',
+    texto: 'Inflige 6 de daño.\nDuplica la Hemorragia del objetivo.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 6, 1, 'sangre');
+      const hem = c.objetivo!.estados.hemorragia ?? 0;
+      if (hem > 0) await c.aplicarEstado(c.objetivo!, 'hemorragia', hem);
+    },
+    mejora: {
+      texto: 'Inflige 8 de daño.\nDuplica la Hemorragia del objetivo.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 8, 1, 'sangre');
+        const hem = c.objetivo!.estados.hemorragia ?? 0;
+        if (hem > 0) await c.aplicarEstado(c.objetivo!, 'hemorragia', hem);
+      },
+    },
+  },
+  {
+    id: 'festin-carmesi',
+    nombre: 'Festín Carmesí',
+    clase: 'barbaro',
+    tipo: 'ataque',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    animRara: 'anim-berserker',
+    texto: 'Consume la Hemorragia del objetivo\ne inflige el doble de esa cantidad.',
+    jugar: async (c) => {
+      const hem = c.objetivo!.estados.hemorragia ?? 0;
+      if (hem > 0) {
+        await c.danar(c.objetivo!, hem * 2, 'sangre');
+        delete c.objetivo!.estados.hemorragia;
+      } else {
+        await c.mensaje('El objetivo no sangra…');
+      }
+    },
+    mejora: {
+      texto: 'Consume la Hemorragia del objetivo,\ninflige el doble de esa cantidad\ny cúrate esa cantidad.',
+      jugar: async (c) => {
+        const hem = c.objetivo!.estados.hemorragia ?? 0;
+        if (hem > 0) {
+          await c.danar(c.objetivo!, hem * 2, 'sangre');
+          delete c.objetivo!.estados.hemorragia;
+          await c.curar(hem);
+        } else {
+          await c.mensaje('El objetivo no sangra…');
+        }
       },
     },
   },

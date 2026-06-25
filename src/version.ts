@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.13.2';
+export const VERSION = '0.14.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.14.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '🩸 Nueva mecánica del bárbaro — Hemorragia: el enemigo pierde PV al inicio de su turno ignorando el bloqueo. No decae sola: hace un tic garantizado y se cierra si pasas un turno sin volver a herirlo.',
+      '🗡️ Cartas comunes: Corte Sangrante (5 de daño + 3 de Hemorragia) y Doble Tajo (3×2 + 2 de Hemorragia).',
+      '🪓 Cartas infrecuentes: Desgarro (8 + 5 de Hemorragia), Hacha Carnicera (5 a todos + sangrado), Furia Sanguinaria (Furia + sangrado en área) y Sed de Sangre (ganas bloqueo cuando un enemigo sangra).',
+      '🍷 Cartas raras: Reabrir Heridas (duplica la Hemorragia del objetivo) y Festín Carmesí (consume el sangrado e inflige el doble).',
+    ],
+  },
   {
     version: '0.13.2',
     fecha: '2026-06-25',

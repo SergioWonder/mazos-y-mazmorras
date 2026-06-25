@@ -43,6 +43,7 @@ const EFECTOS: Record<string, ConfigEfecto> = {
   muerte:     { cantidad: 40, colores: ['#8d8db5', '#3a3a52', '#cfcfe8'], velocidad: [1, 6], vida: [0.5, 1.2], tam: [2, 6], forma: 'circulo', gravedad: -0.02 },
   aliento:    { cantidad: 72, colores: ['#ff3b00', '#ff7a18', '#ffb347', '#fff3b8'], velocidad: [3, 11], vida: [0.4, 1.0], tam: [3, 7], forma: 'chispa', gravedad: -0.05, brillo: true },
   corazones:  { cantidad: 30, colores: ['#ff5d8f', '#ff8fb3', '#ffd0e0', '#ffffff'], velocidad: [1, 4], vida: [0.7, 1.4], tam: [4, 8], forma: 'corazon', gravedad: -0.06, brillo: true },
+  sangre:     { cantidad: 22, colores: ['#a01616', '#7a0d0d', '#d63b3b'], velocidad: [1, 4], vida: [0.4, 0.9], tam: [2, 5], forma: 'circulo', gravedad: 0.32 },
 };
 
 class MotorParticulas {

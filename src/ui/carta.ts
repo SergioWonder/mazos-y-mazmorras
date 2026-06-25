@@ -20,7 +20,7 @@ const DESC_TIPO: Record<string, string> = {
 /** Estados (de util) que se reconocen buscando su nombre en el texto. */
 const ESTADOS_CLAVE: string[] = [
   'fuerza', 'destreza', 'vulnerable', 'debil', 'fragil', 'espinas',
-  'regeneracion', 'raices', 'espejismo', 'quemadura',
+  'regeneracion', 'raices', 'espejismo', 'quemadura', 'hemorragia',
 ];
 
 /** Palabras clave que no son estados (mecánicas y propiedades de carta). */
@@ -182,6 +182,9 @@ function arteDeCarta(def: CartaDef): string {
     'senda-berserker': '😡', 'senda-corazon-salvaje': '🫀',
     'senda-arbol-mundo': '🌲', 'senda-fanatico': '⚡',
     'pacto-bosque': '🍃', 'voto-sangre': '🩸',
+    'corte-sangrante': '🩸', 'doble-tajo': '🗡️', desgarro: '🪓',
+    'hacha-carnicera': '🪓', 'furia-sanguinaria': '🔥', 'sed-de-sangre': '🧛',
+    'reabrir-heridas': '🩸', 'festin-carmesi': '🍷',
     'manos-ardientes': '🔥', 'proyectil-magico': '✨', 'rayo-escarcha': '❄️',
     'toque-electrizante': '⚡', 'armadura-mago': '🧥', 'truco-magia': '🎩',
     'escudo-arcano': '🛡️', 'bola-fuego': '☄️', 'rayo-abrasador': '🔆',

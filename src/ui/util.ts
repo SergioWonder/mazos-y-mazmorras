@@ -93,6 +93,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', corazonSalvaje: '🐾', frenesi: '🔥',
   espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', quemadura: '🔥',
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
+  hemorragia: '🩸', sedSangre: '🧛',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -101,7 +102,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   regeneracion: 'Regeneración', corazonSalvaje: 'Corazón Salvaje', frenesi: 'Frenesí',
   espejismo: 'Espejismo', invulnerable: 'Invulnerable', raizProlongada: 'Raíces Profundas',
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
-  roboAcelerado: 'Acelerar',
+  roboAcelerado: 'Acelerar', hemorragia: 'Hemorragia', sedSangre: 'Sed de Sangre',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -124,6 +125,9 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
     'Mientras estés en Furia, al inicio de tu turno ganas bloqueo igual a tu Fuerza. La Furia no se rompe si bloqueaste daño y te queda menos de 10 de bloqueo.',
   maestria: 'Al inicio de cada turno añades un Proyectil Mágico a tu mano.',
   roboAcelerado: 'Robas 1 carta adicional al inicio de tus turnos. Desaparece si te quedas sin cartas en la mano.',
+  hemorragia:
+    'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',
+  sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas esa cantidad de bloqueo.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

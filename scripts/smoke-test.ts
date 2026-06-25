@@ -126,7 +126,7 @@ console.log('— Recompensas y pools —');
   }
   console.log('  ✓ 60 tiradas de recompensa sin repetidas y de la clase correcta');
   check(DRUIDA.filter((c) => c.rareza === 'rara').length === 4, 'druida: 4 raras (subclases)');
-  check(BARBARO.filter((c) => c.rareza === 'rara').length === 4, 'bárbaro: 4 raras (subclases)');
+  check(BARBARO.filter((c) => c.rareza === 'rara').length === 6, 'bárbaro: 6 raras (4 subclases + 2 de Hemorragia)');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 3, 'mago: 3 raras (escuelas de magia)');
   for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
     const mazo = mazoInicial(clase);

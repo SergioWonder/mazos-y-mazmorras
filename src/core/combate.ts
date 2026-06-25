@@ -305,8 +305,10 @@ export class Combate {
     if (obj === this.jugador) this.danoBloqueadoEsteTurno += absorbido;
     const real = dano - absorbido;
     obj.pv = Math.max(0, obj.pv - real);
-    if (obj !== this.jugador) this.danoHechoEsteTurno += real;
-    else this.danoRecibidoEsteTurno += real; // solo el daño que atraviesa el bloqueo
+    if (obj !== this.jugador) {
+      this.danoHechoEsteTurno += real;
+      if (real > 0) (obj as EnemigoCombate).heridoEsteTurno = true; // mantiene la Hemorragia
+    } else this.danoRecibidoEsteTurno += real; // solo el daño que atraviesa el bloqueo
     await this.ui.fxGolpe(obj, real, fx);
     if (obj.pv <= 0 && obj.vivo) {
       const e = obj as EnemigoCombate;
@@ -377,6 +379,7 @@ export class Combate {
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
+    for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
     if (!primero) this.jugador.bloqueo = 0;
     this.jugador.energia = this.jugador.energiaMax;
     if (this.jugador.energiaCero) { // penalización de Deseo
@@ -529,6 +532,23 @@ export class Combate {
     // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
     for (const e of [...this.enemigos]) {
       if (!e.vivo || this.terminado) continue;
+      // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
+      // se cierra si durante tu turno no recibió daño no bloqueado.
+      const hem = e.estados.hemorragia ?? 0;
+      if (hem > 0) {
+        const mantenida = e.heridoEsteTurno === true;
+        await this.infligir(e, hem, 'sangre', true);
+        const sed = j.estados.sedSangre ?? 0;
+        if (sed > 0 && j.vivo) {
+          j.bloqueo += sed;
+          await this.ui.fxBloqueo(j, sed);
+        }
+        if (!mantenida && e.vivo) {
+          delete e.estados.hemorragia;
+          await this.ui.fxMensaje(`🩸 La herida de ${e.nombre} se cierra`);
+        }
+      }
+      if (!e.vivo || this.terminado) continue; // la Hemorragia pudo matarlo
       e.bloqueo = 0;
       await this.ejecutarMovimiento(e);
       this.decrementarEstados(e);
