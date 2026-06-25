@@ -44,6 +44,7 @@ const uiSilenciosa: Presentador = {
   fxInvocacionGolpe: async () => {},
   fxInvocacionMuerte: async () => {},
   fxInvocacionAtaca: async () => {},
+  fxInvocacionCura: async () => {},
   elegirCarta: async (cartas) => cartas[0] ?? null,
 };
 

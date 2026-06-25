@@ -362,14 +362,16 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'hojas',
-    texto: 'Invoca 5.\nForma Lobo: sin pasiva.',
+    texto: 'Invoca 5.\nCura hasta 10 de vida a tu invocación.',
     jugar: async (c) => {
       await c.invocar('lobo', 5);
+      await c.curarInvocacion(10);
     },
     mejora: {
-      texto: 'Invoca 7.\nForma Lobo: sin pasiva.',
+      texto: 'Invoca 7.\nCura hasta 10 de vida a tu invocación.',
       jugar: async (c) => {
         await c.invocar('lobo', 7);
+        await c.curarInvocacion(10);
       },
     },
   },
@@ -382,12 +384,12 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'tierra',
-    texto: 'Invoca 10.\nForma Oso: sin pasiva (puro muro de vida).',
+    texto: 'Invoca 10.',
     jugar: async (c) => {
       await c.invocar('oso', 10);
     },
     mejora: {
-      texto: 'Invoca 13.\nForma Oso: sin pasiva (puro muro de vida).',
+      texto: 'Invoca 13.',
       jugar: async (c) => {
         await c.invocar('oso', 13);
       },
@@ -618,12 +620,12 @@ export const DRUIDA: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'tierra',
     animRara: 'anim-tierra',
-    texto: 'Invoca 8.\nForma Tierra: al inicio de tu turno ganas\nbloqueo igual al 40 % de su vida máx.',
+    texto: 'Invoca 8.\nForma Tierra: al inicio de tu turno\nganas 6 de bloqueo.',
     jugar: async (c) => {
       await c.invocar('tierra', 8);
     },
     mejora: {
-      texto: 'Invoca 11.\nForma Tierra: al inicio de tu turno ganas\nbloqueo igual al 40 % de su vida máx.',
+      texto: 'Invoca 11.\nForma Tierra: al inicio de tu turno\nganas 6 de bloqueo.',
       jugar: async (c) => {
         await c.invocar('tierra', 11);
       },
@@ -1282,7 +1284,8 @@ export const CONJURO_PRODIGIOSO: CartaDef = {
   coste: 2,
   objetivo: 'enemigo',
   fx: 'estrellas',
-  texto: 'Inflige 10 de daño.\nSu daño y sus efectos crecen\ncon las cartas «Escribir».',
+  retener: true,
+  texto: 'Inflige 10 de daño. Retener.\nSu daño y sus efectos crecen\ncon las cartas «Escribir».',
   jugar: async (c) => {
     const dmg = 10 + (c.jugador.conjuroEscrito ?? 0);
     const ef = c.jugador.conjuroEfectos ?? [];

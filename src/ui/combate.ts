@@ -27,7 +27,7 @@ const PASIVA_INVOCACION: Record<string, string> = {
   agua: 'Te cura 2 PV al inicio de tu turno',
   aire: 'Ataca a dos enemigos',
   arbol: 'Aplica 2 de Raíces al atacar',
-  tierra: 'Te da bloqueo (40 % de su vida máx.) al inicio de tu turno',
+  tierra: 'Te da 6 de bloqueo al inicio de tu turno',
 };
 
 export function pantallaCombate(
@@ -192,6 +192,15 @@ export function pantallaCombate(
         setTimeout(() => elem?.classList.remove('inv-ataca'), 300);
         await espera(120);
       },
+      async fxInvocacionCura(n) {
+        const elem = elemInvocacion();
+        const { x, y } = centroDe(elem);
+        fx.emitir('cura', x, y);
+        audio.sfx('cura');
+        numeroFlotante(elem, `+${n}`, 'cura');
+        render();
+        await espera(220);
+      },
       async fxDado(n, caras) {
         audio.sfx('carta');
         await rodarDado(n, caras); // icosaedro 3D (WebGL) rodando por la pantalla
@@ -287,7 +296,7 @@ export function pantallaCombate(
       const inv = combate.jugador.invocacion;
       if (!inv || inv.vida <= 0) return '';
       const emoji = SPRITE_INVOCACION[inv.forma] ?? '🐾';
-      const dmg = Math.max(1, Math.round(inv.vidaMax * 0.25));
+      const dmg = Math.max(1, Math.round(inv.vida * 0.3));
       const pasivas = inv.efectos.map((e) => PASIVA_INVOCACION[e]).filter(Boolean);
       const tip = `<strong>${emoji} Invocación</strong><br>Vida ${inv.vida}/${inv.vidaMax}<br>Ataca por ${dmg} cada turno.${
         pasivas.length ? `<br>${pasivas.map((p) => `· ${p}`).join('<br>')}` : ''

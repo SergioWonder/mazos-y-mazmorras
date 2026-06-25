@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.16.0';
+export const VERSION = '0.17.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.17.0',
+    fecha: '2026-06-25',
+    cambios: [
+      '📜 El Conjuro Prodigioso ahora tiene Retener: si no lo juegas, se queda en tu mano al final del turno en vez de descartarse.',
+      '🐾 El ataque de las invocaciones pasa a ser el 30 % de su vida actual (antes, 25 % de la máxima): pegan más fuerte sanas y menos a medida que las hieren.',
+      '🐺 Comunión Salvaje, además de Invocar, cura hasta 10 de vida a tu invocación.',
+      '⛰️ Elemental de Tierra: ahora da 6 de bloqueo fijo al inicio de tu turno.',
+    ],
+  },
   {
     version: '0.16.0',
     fecha: '2026-06-25',

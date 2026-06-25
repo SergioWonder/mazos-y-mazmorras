@@ -41,10 +41,12 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
     desc: 'Empiezas cada combate con esta carta en la mano.' },
   { test: (d, t) => d.exhumar === true || t.includes('se agota'), icono: '♻️', nombre: 'Se agota',
     desc: 'Al jugarse va a la pila de agotadas: no vuelve este combate (sí en el siguiente).' },
+  { test: (d, t) => d.retener === true || t.includes('retener'), icono: '✋', nombre: 'Retener',
+    desc: 'No se descarta al final del turno: se queda en tu mano.' },
   { test: (d) => d.unUso === true, icono: '🔚', nombre: '1 uso',
     desc: 'Se consume para siempre: desaparece de tu mazo el resto de la partida.' },
   { test: (_d, t) => t.includes('invoca') || t.includes('invocación'), icono: '🐾', nombre: 'Invocación',
-    desc: 'Aliado del druida con vida propia. «Invoca X» le suma X de vida (actual y máxima) o crea uno nuevo. Ataca al inicio de tu turno por el 25 % de su vida máxima, y absorbe el daño enemigo después de tu bloqueo y antes que tú. La forma la fija la primera carta; las pasivas de todas se combinan.' },
+    desc: 'Aliado del druida con vida propia. «Invoca X» le suma X de vida (actual y máxima) o crea uno nuevo. Ataca al inicio de tu turno por el 30 % de su vida actual, y absorbe el daño enemigo después de tu bloqueo y antes que tú. La forma la fija la primera carta; las pasivas de todas se combinan.' },
 ];
 
 /** Lista de palabras clave presentes en una carta, sin repetir. */
@@ -156,6 +158,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     : '';
   const unUso = def.unUso ? ' · <strong>1 uso</strong>' : '';
   const innata = def.innato ? ' · <strong>Innata</strong>' : '';
+  const retencion = def.retener ? ' · <strong>Retener</strong>' : '';
 
   carta.innerHTML = `
     <div class="carta-coste">${def.coste}</div>
@@ -166,7 +169,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     <div class="carta-arte">${arteDeCarta(def)}</div>
     <div class="carta-tipo">${ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
       def.subclase ? ` · <em>${def.subclase}</em>` : ''
-    }${unUso}${innata}</div>
+    }${unUso}${innata}${retencion}</div>
     <div class="carta-texto">${formatearTexto(def.texto, mods)}</div>
   `;
   ajustarTexto(carta);

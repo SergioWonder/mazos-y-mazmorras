@@ -31,6 +31,8 @@ export interface Presentador {
   fxInvocacionMuerte(): Promise<void>;
   /** La invocación ataca (pequeña sacudida + partículas). */
   fxInvocacionAtaca(): Promise<void>;
+  /** La invocación se cura (número verde sobre ella). */
+  fxInvocacionCura(n: number): Promise<void>;
   /** Deja al jugador elegir una carta de una lista (o cancelar). */
   elegirCarta(cartas: CartaInstancia[], titulo: string): Promise<CartaInstancia | null>;
 }
@@ -227,6 +229,7 @@ export class Combate {
       escribir: (n, efecto) => self.escribirConjuro(n, efecto),
       invocar: (forma, vida) => self.invocar(forma, vida),
       atacarInvocacion: (bono) => self.atacarInvocacion(bono),
+      curarInvocacion: (n) => self.curarInvocacion(n),
       hayInvocacion: () => !!self.jugador.invocacion && self.jugador.invocacion.vida > 0,
       run: self.run,
       danoIntencion: (e) => self.danoIntencion(e),
@@ -400,11 +403,11 @@ export class Combate {
     this.ui.render();
   }
 
-  /** La invocación ataca: daño = 25 % de su vida máxima (+ bonus opcional). */
+  /** La invocación ataca: daño = 30 % de su vida actual (+ bonus opcional). */
   async atacarInvocacion(bono = 0) {
     const inv = this.jugador.invocacion;
     if (!inv || inv.vida <= 0) return;
-    const base = Math.max(1, Math.round(inv.vidaMax * 0.25)) + bono;
+    const base = Math.max(1, Math.round(inv.vida * 0.3)) + bono;
     const fuego = inv.efectos.includes('fuego');
     const arbol = inv.efectos.includes('arbol');
     const golpes = inv.efectos.includes('aire') ? 2 : 1; // Aire golpea dos veces
@@ -421,6 +424,18 @@ export class Combate {
         await this.ui.fxEstado(e, 'raices', 2);
       }
     }
+  }
+
+  /** Cura a la invocación hasta su vida máxima. */
+  async curarInvocacion(n: number) {
+    const inv = this.jugador.invocacion;
+    if (!inv || inv.vida <= 0) return;
+    const real = Math.min(n, inv.vidaMax - inv.vida);
+    if (real > 0) {
+      inv.vida += real;
+      await this.ui.fxInvocacionCura(real);
+    }
+    this.ui.render();
   }
 
   /** Golpe de la invocación (no escala con la Fuerza del jugador).
@@ -510,10 +525,9 @@ export class Combate {
           await this.ui.fxCura(this.jugador, real);
         }
       }
-      if (inv.efectos.includes('tierra')) { // bloqueo al inicio del turno
-        const b = Math.ceil(inv.vidaMax * 0.4);
-        this.jugador.bloqueo += b;
-        await this.ui.fxBloqueo(this.jugador, b);
+      if (inv.efectos.includes('tierra')) { // bloqueo fijo al inicio del turno
+        this.jugador.bloqueo += 6;
+        await this.ui.fxBloqueo(this.jugador, 6);
       }
       if (!primero) await this.atacarInvocacion();
     }
@@ -643,9 +657,10 @@ export class Combate {
 
     this.decrementarEstados(j);
 
-    // Descartar mano
-    j.descarte.push(...j.mano);
-    j.mano = [];
+    // Descartar mano (salvo las cartas con Retener, que se quedan)
+    const retenidas = j.mano.filter((c) => defDe(c).retener);
+    j.descarte.push(...j.mano.filter((c) => !defDe(c).retener));
+    j.mano = retenidas;
     this.ui.render();
     await this.ui.espera(300);
 

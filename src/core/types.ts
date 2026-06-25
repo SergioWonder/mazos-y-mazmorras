@@ -173,6 +173,8 @@ export interface CartaDef {
   unUso?: boolean;
   /** Innata: empiezas cada combate con ella en la mano. */
   innato?: boolean;
+  /** Retener: no se descarta al final del turno; se queda en tu mano. */
+  retener?: boolean;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
   /** Versión mejorada (hogueras): sobreescribe texto/coste/efecto. */
   mejora?: MejoraCarta;
@@ -233,6 +235,8 @@ export interface ContextoEfecto {
   invocar(forma: FormaInvocacion, vida: number): Promise<void>;
   /** La invocación ataca ahora mismo (con un bonus de daño opcional). */
   atacarInvocacion(bono?: number): Promise<void>;
+  /** Cura a la invocación hasta su vida máxima. */
+  curarInvocacion(n: number): Promise<void>;
   /** true si hay una invocación viva. */
   hayInvocacion(): boolean;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */
