@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.17.1';
+export const VERSION = '0.18.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '0.18.0',
+    fecha: '2026-06-26',
+    cambios: [
+      '🩸 La Hemorragia pega más fuerte: las cartas del bárbaro aplican +1 de sangrado (Corte Sangrante, Doble Tajo, Desgarro y Hacha Carnicera).',
+      '😡 Furia Sanguinaria ahora también inflige daño a TODOS los enemigos, así que el sangrado que aplica se mantiene aunque no juegues otra carta.',
+      '🐾 Las invocaciones del druida nacen un poco más débiles (menos vida y, por tanto, menos pegada) para equilibrarlas.',
+    ],
+  },
   {
     version: '0.17.1',
     fecha: '2026-06-25',

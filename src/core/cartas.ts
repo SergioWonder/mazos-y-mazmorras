@@ -362,15 +362,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'hojas',
-    texto: 'Invoca 5.\nCura hasta 10 de vida a tu invocación.',
+    texto: 'Invoca 4.\nCura hasta 10 de vida a tu invocación.',
     jugar: async (c) => {
-      await c.invocar('lobo', 5);
+      await c.invocar('lobo', 4);
       await c.curarInvocacion(10);
     },
     mejora: {
-      texto: 'Invoca 7.\nCura hasta 10 de vida a tu invocación.',
+      texto: 'Invoca 6.\nCura hasta 10 de vida a tu invocación.',
       jugar: async (c) => {
-        await c.invocar('lobo', 7);
+        await c.invocar('lobo', 6);
         await c.curarInvocacion(10);
       },
     },
@@ -384,14 +384,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'tierra',
-    texto: 'Invoca 10.',
+    texto: 'Invoca 8.',
     jugar: async (c) => {
-      await c.invocar('oso', 10);
+      await c.invocar('oso', 8);
     },
     mejora: {
-      texto: 'Invoca 13.',
+      texto: 'Invoca 11.',
       jugar: async (c) => {
-        await c.invocar('oso', 13);
+        await c.invocar('oso', 11);
       },
     },
   },
@@ -404,14 +404,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'ola',
-    texto: 'Invoca 7.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
+    texto: 'Invoca 6.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
     jugar: async (c) => {
-      await c.invocar('agua', 7);
+      await c.invocar('agua', 6);
     },
     mejora: {
-      texto: 'Invoca 9.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
+      texto: 'Invoca 8.\nForma Agua: te cura 2 PV\nal inicio de cada turno.',
       jugar: async (c) => {
-        await c.invocar('agua', 9);
+        await c.invocar('agua', 8);
       },
     },
   },
@@ -424,14 +424,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'furia',
-    texto: 'Invoca 8.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
+    texto: 'Invoca 7.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
     jugar: async (c) => {
-      await c.invocar('fuego', 8);
+      await c.invocar('fuego', 7);
     },
     mejora: {
-      texto: 'Invoca 11.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
+      texto: 'Invoca 10.\nForma Fuego: sus ataques hacen\nel doble de daño al bloqueo.',
       jugar: async (c) => {
-        await c.invocar('fuego', 11);
+        await c.invocar('fuego', 10);
       },
     },
   },
@@ -444,14 +444,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'aullido',
-    texto: 'Invoca 6.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
+    texto: 'Invoca 5.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
     jugar: async (c) => {
-      await c.invocar('aire', 6);
+      await c.invocar('aire', 5);
     },
     mejora: {
-      texto: 'Invoca 8.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
+      texto: 'Invoca 7.\nForma Aire: ataca a dos enemigos\n(o dos veces si solo hay uno).',
       jugar: async (c) => {
-        await c.invocar('aire', 8);
+        await c.invocar('aire', 7);
       },
     },
   },
@@ -962,16 +962,16 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'sangre',
-    texto: 'Inflige 5 de daño.\nAplica 3 de Hemorragia.',
+    texto: 'Inflige 5 de daño.\nAplica 4 de Hemorragia.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 5, 1, 'sangre');
-      await c.aplicarEstado(c.objetivo!, 'hemorragia', 3);
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 4);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nAplica 4 de Hemorragia.',
+      texto: 'Inflige 7 de daño.\nAplica 5 de Hemorragia.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 7, 1, 'sangre');
-        await c.aplicarEstado(c.objetivo!, 'hemorragia', 4);
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 5);
       },
     },
   },
@@ -984,16 +984,16 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'tajo',
-    texto: 'Inflige 3 de daño dos veces.\nAplica 2 de Hemorragia.',
+    texto: 'Inflige 3 de daño dos veces.\nAplica 3 de Hemorragia.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 3, 2, 'tajo');
-      await c.aplicarEstado(c.objetivo!, 'hemorragia', 2);
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 3);
     },
     mejora: {
-      texto: 'Inflige 4 de daño dos veces.\nAplica 3 de Hemorragia.',
+      texto: 'Inflige 4 de daño dos veces.\nAplica 4 de Hemorragia.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 4, 2, 'tajo');
-        await c.aplicarEstado(c.objetivo!, 'hemorragia', 3);
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 4);
       },
     },
   },
@@ -1006,16 +1006,16 @@ export const BARBARO: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'sangre',
-    texto: 'Inflige 8 de daño.\nAplica 5 de Hemorragia.',
+    texto: 'Inflige 8 de daño.\nAplica 6 de Hemorragia.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 8, 1, 'sangre');
-      await c.aplicarEstado(c.objetivo!, 'hemorragia', 5);
+      await c.aplicarEstado(c.objetivo!, 'hemorragia', 6);
     },
     mejora: {
-      texto: 'Inflige 10 de daño.\nAplica 7 de Hemorragia.',
+      texto: 'Inflige 10 de daño.\nAplica 8 de Hemorragia.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 10, 1, 'sangre');
-        await c.aplicarEstado(c.objetivo!, 'hemorragia', 7);
+        await c.aplicarEstado(c.objetivo!, 'hemorragia', 8);
       },
     },
   },
@@ -1028,16 +1028,16 @@ export const BARBARO: CartaDef[] = [
     coste: 2,
     objetivo: 'todos',
     fx: 'sangre',
-    texto: 'Inflige 5 de daño a TODOS los enemigos.\nAplica 2 de Hemorragia a todos.',
+    texto: 'Inflige 5 de daño a TODOS los enemigos.\nAplica 3 de Hemorragia a todos.',
     jugar: async (c) => {
       await c.atacarTodos(5, 'sangre');
-      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 2);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
     },
     mejora: {
-      texto: 'Inflige 7 de daño a TODOS los enemigos.\nAplica 3 de Hemorragia a todos.',
+      texto: 'Inflige 7 de daño a TODOS los enemigos.\nAplica 4 de Hemorragia a todos.',
       jugar: async (c) => {
         await c.atacarTodos(7, 'sangre');
-        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
       },
     },
   },
@@ -1050,16 +1050,18 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'todos',
     fx: 'furia',
-    texto: 'Furia: gana 2 de Fuerza.\nAplica 3 de Hemorragia a TODOS los enemigos.',
+    texto: 'Furia: gana 2 de Fuerza.\nInflige 4 de daño a TODOS los enemigos.\nAplica 4 de Hemorragia a TODOS los enemigos.',
     jugar: async (c) => {
       await c.ganarFuria(2);
-      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
+      await c.atacarTodos(4, 'sangre');
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
     },
     mejora: {
-      texto: 'Furia: gana 3 de Fuerza.\nAplica 4 de Hemorragia a TODOS los enemigos.',
+      texto: 'Furia: gana 3 de Fuerza.\nInflige 6 de daño a TODOS los enemigos.\nAplica 5 de Hemorragia a TODOS los enemigos.',
       jugar: async (c) => {
         await c.ganarFuria(3);
-        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
+        await c.atacarTodos(6, 'sangre');
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 5);
       },
     },
   },
