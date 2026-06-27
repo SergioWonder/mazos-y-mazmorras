@@ -94,6 +94,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', quemadura: '🔥',
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
+  veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -104,6 +105,8 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
   roboAcelerado: 'Acelerar', hemorragia: 'Hemorragia', sedSangre: 'Sed de Sangre',
   escribania: 'Escribanía',
+  veneno: 'Veneno', cartasAgotan: 'Cartas que se Agotan', cartasSobrecoste: 'Sobrecarga',
+  cartasEtereas: 'Cartas Etéreas',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -130,6 +133,10 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
     'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',
   sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas esa cantidad de bloqueo.',
   escribania: 'Al inicio de cada turno escribes esa cantidad en el Conjuro Prodigioso.',
+  veneno: 'Al inicio de tu turno pierdes esa cantidad de PV, ignorando el bloqueo. Baja 1 cada turno.',
+  cartasAgotan: 'Este turno, cada carta que juegues se agota (sale del mazo el resto del combate).',
+  cartasSobrecoste: 'Este turno, cada carta cuesta 1 de energía más.',
+  cartasEtereas: 'Al final de este turno, las cartas que no hayas jugado se agotan en vez de descartarse.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

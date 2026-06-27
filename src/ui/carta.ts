@@ -95,6 +95,8 @@ export interface ModsCarta {
   dano?: (base: number) => number;
   /** bloqueo final de una carta con base `b` (Destreza, Frágil…) */
   bloqueo?: (base: number) => number;
+  /** coste real este turno (Sobrecarga del Contemplador lo encarece) */
+  coste?: (base: number) => number;
 }
 
 /**
@@ -143,6 +145,7 @@ function ajustarTexto(carta: HTMLElement) {
 /** Crea el elemento DOM de una carta. */
 export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo}`);
+  const coste = mods?.coste ? mods.coste(def.coste) : def.coste;
   if (def.rareza === 'rara' || def.rareza === 'especial') carta.classList.add('carta-rara-brillo');
 
   // Textos largos (frecuentes en el mago): reduce la fuente para que quepan
@@ -161,7 +164,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const retencion = def.retener ? ' · <strong>Retener</strong>' : '';
 
   carta.innerHTML = `
-    <div class="carta-coste">${def.coste}</div>
+    <div class="carta-coste${coste > def.coste ? ' coste-recargado' : ''}">${coste}</div>
     ${conjuro}
     <div class="carta-cabecera">
       <span class="carta-nombre">${def.nombre}</span>

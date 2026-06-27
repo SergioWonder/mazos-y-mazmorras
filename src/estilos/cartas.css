@@ -104,6 +104,13 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
   z-index: 2;
 }
+/* coste encarecido por la Sobrecarga del Contemplador */
+.carta-coste.coste-recargado {
+  color: #fff;
+  background: radial-gradient(circle at 32% 28%, #ff8a8a, #c0392b 60%, #6e1b13);
+  border-color: #4a0f0a;
+  box-shadow: 0 0 10px rgba(255, 70, 70, 0.8);
+}
 
 /* insignia de espacio de conjuro */
 .carta-conjuro {

@@ -1,5 +1,5 @@
 import type {
-  CartaInstancia, ContextoEfecto, EfectoTemporal, EnemigoCombate, EnemigoDef,
+  CartaDef, CartaInstancia, ContextoEfecto, EfectoTemporal, EnemigoCombate, EnemigoDef,
   EstadoId, EstadoRun, JugadorCombate, Luchador, Movimiento,
 } from './types.ts';
 import { barajar } from './rng.ts';
@@ -93,6 +93,11 @@ export class Combate {
     let b = base + (this.jugador.estados.destreza ?? 0);
     if ((this.jugador.estados.fragil ?? 0) > 0) b = Math.floor(b * 0.75);
     return Math.max(0, b);
+  }
+
+  /** Coste real de una carta este turno (el Rayo Carmesí del Contemplador lo encarece). */
+  costeEfectivo(def: CartaDef): number {
+    return def.coste + ((this.jugador.estados.cartasSobrecoste ?? 0) > 0 ? 1 : 0);
   }
 
   /** Daño que hará la intención actual de un enemigo (para mostrar y para Raíces). */
@@ -353,6 +358,13 @@ export class Combate {
       } else {
         obj.vivo = false;
         if (obj !== this.jugador) await this.ui.fxMuerte(e);
+        // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
+        if (obj !== this.jugador && e.def.invocaAlMorir) {
+          const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
+          this.enemigos.push(liberado);
+          await this.ui.fxMensaje(`¡De las entrañas de ${e.nombre} se alza ${liberado.nombre}!`);
+          this.ui.render();
+        }
       }
     }
     await this.comprobarFin();
@@ -496,6 +508,21 @@ export class Combate {
     this.danoBloqueadoEsteTurno = 0;
     for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
     if (!primero) this.jugador.bloqueo = 0;
+    // Veneno: pierdes PV al inicio del turno (ignora bloqueo) y baja 1
+    const ven = this.jugador.estados.veneno ?? 0;
+    if (ven > 0) {
+      this.jugador.pv = Math.max(0, this.jugador.pv - ven);
+      this.danoRecibidoEsteTurno += ven;
+      await this.ui.fxGolpe(this.jugador, ven, 'veneno');
+      this.jugador.estados.veneno = ven - 1;
+      if ((this.jugador.estados.veneno ?? 0) <= 0) delete this.jugador.estados.veneno;
+      if (this.jugador.pv <= 0) {
+        this.jugador.vivo = false;
+        await this.comprobarFin();
+        this.ui.render();
+        return;
+      }
+    }
     this.jugador.energia = this.jugador.energiaMax;
     if (this.jugador.energiaCero) { // penalización de Deseo
       this.jugador.energia = 0;
@@ -568,7 +595,7 @@ export class Combate {
   puedeJugar(carta: CartaInstancia): boolean {
     if (this.enResolucion || this.terminado) return false;
     const def = defDe(carta);
-    if (this.jugador.energia < def.coste) return false;
+    if (this.jugador.energia < this.costeEfectivo(def)) return false;
     if (def.requiereConjuro) {
       const libres = this.jugador.conjuros.filter(
         (c) => !c.gastado && c.nivel >= def.requiereConjuro!,
@@ -584,7 +611,7 @@ export class Combate {
     const def = defDe(carta);
     const idx = this.jugador.mano.indexOf(carta);
     if (idx >= 0) this.jugador.mano.splice(idx, 1);
-    this.jugador.energia -= def.coste;
+    this.jugador.energia -= this.costeEfectivo(def);
     this.ui.render();
     await def.jugar(this.contexto(objetivo));
     // Quemadura (Aliento de Dragón): cada carta jugada cuesta 3 PV mientras dure
@@ -604,6 +631,8 @@ export class Combate {
       await this.ui.fxMensaje(`«${carta.def.nombre}» se consume para siempre`);
     } else if (carta.def.exhumar || carta.def.tipo === 'poder') {
       this.jugador.agotadas.push(carta);
+    } else if ((this.jugador.estados.cartasAgotan ?? 0) > 0) {
+      this.jugador.agotadas.push(carta); // Rayo Áureo del Contemplador
     } else {
       this.jugador.descarte.push(carta);
     }
@@ -618,7 +647,10 @@ export class Combate {
 
   /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador. */
   private decrementarEstados(l: Luchador) {
-    for (const k of ['vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura'] as EstadoId[]) {
+    for (const k of [
+      'vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura',
+      'cartasAgotan', 'cartasSobrecoste', 'cartasEtereas',
+    ] as EstadoId[]) {
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
     }
   }
@@ -657,9 +689,12 @@ export class Combate {
 
     this.decrementarEstados(j);
 
-    // Descartar mano (salvo las cartas con Retener, que se quedan)
+    // Descartar mano (salvo las cartas con Retener, que se quedan). Con el Rayo
+    // Espectral del Contemplador, lo que no jugaste se agota en vez de descartarse.
     const retenidas = j.mano.filter((c) => defDe(c).retener);
-    j.descarte.push(...j.mano.filter((c) => !defDe(c).retener));
+    const sobrantes = j.mano.filter((c) => !defDe(c).retener);
+    if ((j.estados.cartasEtereas ?? 0) > 0) j.agotadas.push(...sobrantes);
+    else j.descarte.push(...sobrantes);
     j.mano = retenidas;
     this.ui.render();
     await this.ui.espera(300);

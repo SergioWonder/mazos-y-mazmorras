@@ -316,77 +316,448 @@ export const IGNIFAX: EnemigoDef = {
   },
 };
 
+// ═══ Capítulo I (alt.): La Guarida de los Contrabandistas ═════════════════════
+
+export const LADRON_FURTIVO: EnemigoDef = {
+  id: 'ladron-furtivo', nombre: 'Ladrón Furtivo', arte: '🗡️', pv: [16, 20],
+  ia: (turno, rng) => {
+    if (rng() < 0.35) return atk('Corte y Carrera', 6, 1, [['debil', 1, true]]);
+    return rng() < 0.5 ? atk('Puñaladas', 5, 2) : atk('Tajo Rápido', 8);
+  },
+};
+
+export const BANDIDO_BALLESTERO: EnemigoDef = {
+  id: 'bandido-ballestero', nombre: 'Bandido Ballestero', arte: '🏹', pv: [15, 18],
+  ia: (turno, rng) => {
+    if (rng() < 0.3) return atk('Virote Trampa', 5, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Disparo', 4, 2) : atk('Ballestazo', 7);
+  },
+};
+
+export const MATON: EnemigoDef = {
+  id: 'maton', nombre: 'Matón', arte: '💪', pv: [24, 28], escala: 1.15,
+  ia: (turno, rng) => {
+    if (turno % 3 === 2) return def('Cubrirse', 8);
+    return rng() < 0.4 ? atk('Empujón', 6, 1, [['vulnerable', 1, true]]) : atk('Garrotazo', 11);
+  },
+};
+
+export const NINJA_SOMBRAS: EnemigoDef = {
+  id: 'ninja-sombras', nombre: 'Ninja de las Sombras', arte: '🥷', pv: [18, 22],
+  ia: (turno, rng) => {
+    if (turno % 4 === 1) return def('Paso Sombrío', 10, [['debil', 1, true]]);
+    return rng() < 0.45 ? atk('Shuriken', 4, 3) : atk('Filo Veloz', 9);
+  },
+};
+
+export const PICARO_ENVENENADOR: EnemigoDef = {
+  id: 'picaro-envenenador', nombre: 'Pícaro Envenenador', arte: '🧪', pv: [18, 22],
+  ia: (turno, rng) => (rng() < 0.4 ? atk('Daga Untada', 5, 1, [['veneno', 2, true]]) : atk('Corte Sucio', 7)),
+};
+
+export const SABUESO_CONTRABANDO: EnemigoDef = {
+  id: 'sabueso-contrabando', nombre: 'Sabueso de Contrabando', arte: '🐕', pv: [22, 26], escala: 1.1,
+  ia: (turno, rng) =>
+    rng() < 0.4 ? atk('Dentellada', 6, 1, [['vulnerable', 1, true]]) : atk('Mordisco', 9),
+};
+
+export const CAPITAN_BANDIDO: EnemigoDef = {
+  id: 'capitan-bandido', nombre: 'Capitán Bandido', arte: '⚔️', pv: [66, 72], escala: 1.25,
+  ia: (turno, rng) => {
+    if (turno % 3 === 0) return def('¡Cerrad Filas!', 12, [['fuerza', 2, false]]);
+    return rng() < 0.45 ? atk('Golpe Bajo', 10, 1, [['debil', 2, true]]) : atk('Sablazo', 18);
+  },
+};
+
+export const MAESTRO_NINJA: EnemigoDef = {
+  id: 'maestro-ninja', nombre: 'Maestro Ninja', arte: '🥷', pv: [70, 78], escala: 1.3,
+  ia: (turno, rng) => {
+    if (turno % 4 === 1) return def('Humo Cegador', 12, [['debil', 2, true]]);
+    if (rng() < 0.4) return atk('Estrellas Arrojadizas', 5, 3);
+    if (rng() < 0.4) return atk('Filo Envenenado', 9, 1, [['veneno', 3, true]]);
+    return atk('Tajo del Maestro', 19);
+  },
+};
+
+export const IMAGEN_ILUSORIA: EnemigoDef = {
+  id: 'imagen-ilusoria', nombre: 'Imagen Ilusoria', arte: '🃏', pv: [8, 10], escala: 0.85,
+  ia: (turno, rng) => (rng() < 0.4 ? def('Parpadeo', 4) : atk('Cuchillada Falsa', 5)),
+};
+
+export const EMBAUCADOR_ARCANO: EnemigoDef = {
+  id: 'embaucador-arcano', nombre: 'Vexis, el Embaucador Arcano', arte: '🃏', pv: [120, 128], escala: 1.9, esJefe: true,
+  rasgo: {
+    nombre: 'Mil Rostros',
+    texto: 'Ladrón, asesino e ilusionista a la vez: nunca golpeas al que crees. Sus dagas van untadas y sus copias bailan a tu alrededor.',
+  },
+  ia: (turno, rng, self, aliados) => {
+    if (turno === 0)
+      return {
+        nombre: 'Manto de Espejismos', intencion: 'mejora',
+        invocar: [{ def: IMAGEN_ILUSORIA, pv: 9 }, { def: IMAGEN_ILUSORIA, pv: 9 }],
+        efectos: [['debil', 1, true]],
+      };
+    const ciclo = turno % 4;
+    if (ciclo === 0 && aliados.length === 0)
+      return {
+        nombre: 'Más Espejismos', intencion: 'mejora',
+        invocar: [{ def: IMAGEN_ILUSORIA, pv: 9 }, { def: IMAGEN_ILUSORIA, pv: 9 }],
+      };
+    if (ciclo === 1) return atk('Abanico de Cuchillos', 5, 3);
+    if (ciclo === 2) return atk('Daga Envenenada', 8, 1, [['veneno', 3, true]]);
+    if (ciclo === 3) return { nombre: 'Truco de Humo', intencion: 'defensa', bloqueo: 14, efectos: [['debil', 2, true]] };
+    return atk('Estocada Arcana', 16);
+  },
+};
+
+// ═══ Capítulo II (alt.): El Templo Oscuro ════════════════════════════════════
+
+export const ACOLITO_VELADO: EnemigoDef = {
+  id: 'acolito-velado', nombre: 'Acólito Velado', arte: '🧎', pv: [20, 24],
+  ia: (turno, rng) => {
+    if (turno === 0) return { nombre: 'Cántico Impío', intencion: 'mejora', fuerzaAliados: 2 };
+    if (rng() < 0.35) return { nombre: 'Maldición Leve', intencion: 'perjuicio', efectos: [['debil', 2, true]] };
+    return atk('Golpe de Báculo', 8);
+  },
+};
+
+export const LANZADOR_VACIO: EnemigoDef = {
+  id: 'lanzador-vacio', nombre: 'Lanzador del Vacío', arte: '📿', pv: [18, 22],
+  ia: (turno, rng) => {
+    if (rng() < 0.3) return atk('Esquirla del Vacío', 6, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Saeta Oscura', 5, 2) : atk('Saeta Oscura', 9);
+  },
+};
+
+export const DIABLILLO: EnemigoDef = {
+  id: 'diablillo', nombre: 'Diablillo', arte: '👿', pv: [16, 20],
+  ia: (turno, rng) => (rng() < 0.35 ? atk('Pinchazo Ardiente', 4, 2) : atk('Tridente', 8)),
+};
+
+export const SABUESO_INFERNAL: EnemigoDef = {
+  id: 'sabueso-infernal', nombre: 'Sabueso Infernal', arte: '🐕', pv: [30, 34], escala: 1.15,
+  ia: (turno, rng) =>
+    rng() < 0.4 ? atk('Mordisco Ígneo', 7, 1, [['vulnerable', 1, true]]) : atk('Embestida', 11),
+};
+
+export const POSEIDO: EnemigoDef = {
+  id: 'poseido', nombre: 'Poseído', arte: '🫥', pv: [26, 30], escala: 1.1,
+  ia: (turno, rng) => {
+    if (rng() < 0.25) return { nombre: 'Convulsión', intencion: 'defensa', bloqueo: 6, cura: 4 };
+    if (rng() < 0.4) return atk('Zarpazo Errático', 7, 1, [['debil', 1, true]]);
+    return atk('Arremetida', 12);
+  },
+};
+
+export const FLAGELANTE: EnemigoDef = {
+  id: 'flagelante', nombre: 'Flagelante', arte: '🩸', pv: [22, 26],
+  ia: (turno, rng) => (rng() < 0.4 ? atk('Látigo Espinado', 5, 1, [['veneno', 2, true]]) : atk('Azote', 8)),
+};
+
+export const DEMONIO_MENOR: EnemigoDef = {
+  id: 'demonio-menor', nombre: 'Demonio Menor', arte: '😈', pv: [86, 94], escala: 1.3,
+  ia: (turno, rng) => {
+    if (turno % 4 === 3) return { nombre: 'Rugido Infernal', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
+    return rng() < 0.4 ? atk('Garra Demoníaca', 12, 2, [['vulnerable', 1, true]]) : atk('Mazazo Ígneo', 20);
+  },
+};
+
+export const INQUISIDOR_OSCURO: EnemigoDef = {
+  id: 'inquisidor-oscuro', nombre: 'Inquisidor Oscuro', arte: '🕯️', pv: [80, 88], escala: 1.3,
+  ia: (turno, rng) => {
+    if (turno % 4 === 0)
+      return {
+        nombre: 'Anatema', intencion: 'perjuicio',
+        efectos: [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true]],
+      };
+    if (rng() < 0.3) return { nombre: 'Plegaria Profana', intencion: 'mejora', cura: 10, fuerzaAliados: 2 };
+    return atk('Verbo Oscuro', 18);
+  },
+};
+
+export const DEMONIO_MAYOR: EnemigoDef = {
+  id: 'demonio-mayor', nombre: 'Abaddon, el Demonio Mayor', arte: '😈', pv: [108, 108], escala: 2.0, esJefe: true,
+  rasgo: {
+    nombre: 'Furia del Abismo',
+    texto: 'Lo que el Heraldo guardaba en su carne. Ahora libre, arde por arrastrarte con él al pozo.',
+  },
+  ia: (turno, rng) => {
+    if (turno === 0)
+      return { nombre: 'Alarido del Abismo', intencion: 'mejora', efectos: [['fuerza', 3, false], ['debil', 2, true]] };
+    const ciclo = turno % 3;
+    if (ciclo === 0) return atk('Garra Abisal', 14, 1, [['vulnerable', 2, true]]);
+    if (ciclo === 1)
+      return { nombre: 'Llamarada Infernal', intencion: 'ataque', dano: 11, veces: 2, fx: 'aliento', efectos: [['veneno', 3, true]] };
+    return atk('Aplastamiento Demoníaco', 24);
+  },
+};
+
+export const HERALDO_CULTO: EnemigoDef = {
+  id: 'heraldo-culto', nombre: "Malachar, Heraldo del Culto", arte: '🕯️', pv: [140, 146], escala: 1.7, esJefe: true,
+  invocaAlMorir: DEMONIO_MAYOR,
+  rasgo: {
+    nombre: 'Recipiente del Pacto',
+    texto: 'Su cuerpo es solo la cáscara de un pacto: derríbalo y lo que mora dentro se alzará en su lugar.',
+  },
+  ia: (turno, rng, self, aliados) => {
+    if (turno === 0) return { nombre: 'Invocar Acólitos', intencion: 'mejora', invocar: [{ def: ACOLITO_VELADO, pv: 20 }] };
+    const ciclo = turno % 4;
+    if (ciclo === 0 && aliados.length === 0)
+      return { nombre: 'Invocar Acólitos', intencion: 'mejora', invocar: [{ def: ACOLITO_VELADO, pv: 20 }] };
+    if (ciclo === 1)
+      return {
+        nombre: 'Maldición del Pacto', intencion: 'perjuicio',
+        efectos: [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true]],
+      };
+    if (ciclo === 2) return { nombre: 'Drenar Fe', intencion: 'ataque', dano: 15, cura: 9 };
+    if (ciclo === 3) return atk('Cuchillo Ritual', 9, 2, [['veneno', 2, true]]);
+    return atk('Verbo de Ruina', 20);
+  },
+};
+
+// ═══ Capítulo III (alt.): El Laberinto del Contemplador ══════════════════════
+
+export const AZOTAMENTES: EnemigoDef = {
+  id: 'azotamentes', nombre: 'Azotamentes', arte: '🦑', pv: [34, 38],
+  ia: (turno, rng) => {
+    if (rng() < 0.3)
+      return { nombre: 'Estallido Mental', intencion: 'ataque', dano: 9, efectos: [['cartasSobrecoste', 1, true]] };
+    return rng() < 0.5 ? atk('Tentáculos', 5, 2) : atk('Sacudida Psíquica', 12);
+  },
+};
+
+export const LACAYO_ENGENDRADO: EnemigoDef = {
+  id: 'lacayo-engendrado', nombre: 'Lacayo Engendrado', arte: '🧟', pv: [30, 34],
+  ia: (turno, rng) => {
+    if (turno % 3 === 2) return def('Carne Coriácea', 8);
+    return atk('Garras Deformes', 11);
+  },
+};
+
+export const CUBO_GELATINOSO: EnemigoDef = {
+  id: 'cubo-gelatinoso', nombre: 'Cubo Gelatinoso', arte: '🟩', pv: [44, 50], escala: 1.3,
+  ia: (turno, rng) =>
+    rng() < 0.35 ? atk('Embestida Ácida', 8, 1, [['fragil', 2, true]]) : atk('Engullir', 13),
+};
+
+export const REPTADOR_CARRONERO: EnemigoDef = {
+  id: 'reptador-carronero', nombre: 'Reptador Carroñero', arte: '🪲', pv: [30, 34],
+  ia: (turno, rng) => (rng() < 0.4 ? atk('Pinzas', 5, 2) : atk('Mordisco Quitinoso', 10)),
+};
+
+export const OJO_FLOTANTE: EnemigoDef = {
+  id: 'ojo-flotante', nombre: 'Ojo Flotante', arte: '👁️', pv: [22, 26],
+  ia: (turno, rng) =>
+    rng() < 0.35 ? atk('Rayo Debilitador', 5, 1, [['vulnerable', 1, true]]) : atk('Rayo Ocular', 9),
+};
+
+export const HORROR_TENTACULAR: EnemigoDef = {
+  id: 'horror-tentacular', nombre: 'Horror Tentacular', arte: '🐙', pv: [38, 42], escala: 1.2,
+  ia: (turno, rng) =>
+    rng() < 0.35 ? atk('Constricción', 7, 1, [['debil', 2, true]]) : atk('Azote de Tentáculos', 13),
+};
+
+export const AZOTAMENTES_ANCIANO: EnemigoDef = {
+  id: 'azotamentes-anciano', nombre: 'Azotamentes Anciano', arte: '🦑', pv: [112, 120], escala: 1.4,
+  ia: (turno, rng) => {
+    if (turno % 4 === 2)
+      return { nombre: 'Devorar Mente', intencion: 'ataque', dano: 14, cura: 10, efectos: [['cartasSobrecoste', 1, true]] };
+    if (rng() < 0.4)
+      return { nombre: 'Onda Psíquica', intencion: 'ataque', dano: 10, efectos: [['cartasEtereas', 1, true]] };
+    return atk('Tentáculos Cerebrales', 20);
+  },
+};
+
+export const CEREBRO_ANCIANO: EnemigoDef = {
+  id: 'cerebro-anciano', nombre: 'Cerebro Anciano', arte: '🧠', pv: [108, 116], escala: 1.35,
+  ia: (turno, rng, self, aliados) => {
+    if (turno % 4 === 0 && aliados.length === 0)
+      return { nombre: 'Brotar un Ojo', intencion: 'mejora', invocar: [{ def: OJO_FLOTANTE, pv: 22 }] };
+    if (turno % 4 === 2)
+      return { nombre: 'Dominar Mente', intencion: 'perjuicio', efectos: [['debil', 3, true], ['cartasSobrecoste', 1, true]] };
+    if (rng() < 0.4) return { nombre: 'Pulso Aniquilador', intencion: 'ataque', dano: 16, cura: 6 };
+    return atk('Salva Psíquica', 9, 2);
+  },
+};
+
+export const OBSERVADOR: EnemigoDef = {
+  id: 'observador', nombre: 'Observador', arte: '👁️‍🗨️', pv: [20, 24], escala: 0.8,
+  ia: (turno, rng) => {
+    if (rng() < 0.3) return atk('Rayo de Debilidad', 5, 1, [['debil', 1, true]]);
+    return rng() < 0.5 ? atk('Rayo Gemelo', 4, 2) : atk('Rayo Menor', 7);
+  },
+};
+
+/** Rayos cromáticos del Contemplador: cada color tuerce tu próximo turno. */
+const RAYOS_CONTEMPLADOR: Movimiento[] = [
+  { nombre: 'Rayo Carmesí', intencion: 'ataque', dano: 13, fx: 'aliento', efectos: [['cartasSobrecoste', 1, true]] },
+  { nombre: 'Rayo Áureo', intencion: 'ataque', dano: 11, fx: 'aliento', efectos: [['cartasAgotan', 1, true]] },
+  { nombre: 'Rayo Espectral', intencion: 'ataque', dano: 11, fx: 'aliento', efectos: [['cartasEtereas', 1, true]] },
+  { nombre: 'Rayo Pútrido', intencion: 'ataque', dano: 9, fx: 'aliento', efectos: [['veneno', 4, true]] },
+  { nombre: 'Rayo Necrótico', intencion: 'ataque', dano: 15, fx: 'aliento', efectos: [['vulnerable', 2, true]] },
+];
+
+export const CONTEMPLADOR: EnemigoDef = {
+  id: 'contemplador', nombre: 'El Contemplador', arte: '👁️', pv: [280, 280], escala: 2.3, esJefe: true,
+  rasgo: {
+    nombre: 'Ojos del Caos',
+    texto: 'Diez tallos oculares, diez magias distintas. Cada rayo tuerce las reglas de tu próximo turno… y sus Observadores nunca dejan de mirar.',
+  },
+  ia: (turno, rng, self, aliados) => {
+    if (turno === 0)
+      return {
+        nombre: 'Despertar de Ojos', intencion: 'mejora',
+        invocar: [{ def: OBSERVADOR, pv: 22 }, { def: OBSERVADOR, pv: 22 }],
+      };
+    const ciclo = turno % 4;
+    if (ciclo === 0 && aliados.length === 0)
+      return {
+        nombre: 'Llamada del Enjambre', intencion: 'mejora',
+        invocar: [{ def: OBSERVADOR, pv: 22 }, { def: OBSERVADOR, pv: 22 }],
+      };
+    if (ciclo === 0) return { nombre: 'MIRADA ANIQUILADORA', intencion: 'ataque', dano: 30, fx: 'aliento' };
+    return RAYOS_CONTEMPLADOR[(turno - 1) % RAYOS_CONTEMPLADOR.length];
+  },
+};
+
 // ═══ Capítulos ═══════════════════════════════════════════════════════════════
 
 export interface Capitulo {
   nombre: string;
   subtitulo: string;
   intro: string;
-  ambiente: 'brasas' | 'almas';
+  ambiente: 'brasas' | 'almas' | 'sombras' | 'abismo' | 'arcano';
   normales: EnemigoDef[][];
   elites: EnemigoDef[][];
   jefe: EnemigoDef[];
 }
 
-export const CAPITULOS: Capitulo[] = [
-  {
-    nombre: 'El Asentamiento Ogro',
-    subtitulo: 'Capítulo I',
-    intro:
-      'Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio del temible Gorzug, asola las aldeas del condado.',
-    ambiente: 'brasas',
-    normales: [
-      [GOBLIN_CORTADOR, GOBLIN_ARQUERO],
-      [GOBLIN_ARQUERO, GOBLIN_ARQUERO],
-      [WORG],
-      [GOBLIN_CHAMAN, GOBLIN_CORTADOR],
-      [WORG, GOBLIN_ARQUERO],
-      [WORG, GOBLIN_CORTADOR],
-      [GOBLIN_CORTADOR, GOBLIN_CORTADOR, GOBLIN_ARQUERO],
-      [GOBLIN_CHAMAN, WORG],
-    ],
-    elites: [[HOBGOBLIN], [OGRO_JOVEN]],
-    jefe: [JEFE_OGRO],
-  },
-  {
-    nombre: 'La Cripta',
-    subtitulo: 'Capítulo II',
-    intro:
-      'Bajo las ruinas del asentamiento se abre una escalera de piedra negra. Del fondo asciende un frío antiguo: la cripta de Vol\'guth, donde los muertos no descansan.',
-    ambiente: 'almas',
-    normales: [
-      [ESQUELETO_GUERRERO],
-      [ESQUELETO_GUERRERO, ESQUELETO_ARQUERO],
-      [ZOMBI],
-      [NECROFAGO, ESQUELETO_ARQUERO],
-      [ESPECTRO],
-      [ESPECTRO, ZOMBI],
-      [ESQUELETO_GUERRERO, ESQUELETO_GUERRERO, ESQUELETO_ARQUERO],
-      [NECROFAGO, ESPECTRO],
-    ],
-    elites: [[CABALLERO_TUMBARIO], [MOMIA_REAL]],
-    jefe: [SENOR_CRIPTA],
-  },
-  {
-    nombre: 'La Guarida del Dragón',
-    subtitulo: 'Capítulo III',
-    intro:
-      'Más allá de la cripta, los túneles descienden hacia un calor imposible. Los kobolds susurran un nombre entre reverencias: Ignifax. El señor oculto del valle, el origen de todo… y tu última batalla.',
-    ambiente: 'brasas',
-    normales: [
-      [KOBOLD_LANCERO, KOBOLD_LANCERO],
-      [KOBOLD_HECHICERO, KOBOLD_LANCERO],
-      [CULTISTA_DRAGON],
-      [DRACO_JOVEN],
-      [ELEMENTAL_MAGMA],
-      [CULTISTA_DRAGON, KOBOLD_HECHICERO],
-      [DRACO_JOVEN, KOBOLD_LANCERO],
-      [KOBOLD_LANCERO, KOBOLD_LANCERO, KOBOLD_HECHICERO],
-      [ELEMENTAL_MAGMA, CULTISTA_DRAGON],
-    ],
-    elites: [[DRACO_VETERANO], [SUMO_CULTISTA]],
-    jefe: [IGNIFAX],
-  },
+/**
+ * Cada acto tiene dos escenarios posibles; al empezar el acto se elige uno al
+ * azar (determinista por semilla). `ACTOS[acto][escenario]`.
+ */
+export const ACTOS: Capitulo[][] = [
+  [
+    {
+      nombre: 'El Asentamiento Ogro',
+      subtitulo: 'Capítulo I',
+      intro:
+        'Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio del temible Gorzug, asola las aldeas del condado.',
+      ambiente: 'brasas',
+      normales: [
+        [GOBLIN_CORTADOR, GOBLIN_ARQUERO],
+        [GOBLIN_ARQUERO, GOBLIN_ARQUERO],
+        [WORG],
+        [GOBLIN_CHAMAN, GOBLIN_CORTADOR],
+        [WORG, GOBLIN_ARQUERO],
+        [WORG, GOBLIN_CORTADOR],
+        [GOBLIN_CORTADOR, GOBLIN_CORTADOR, GOBLIN_ARQUERO],
+        [GOBLIN_CHAMAN, WORG],
+      ],
+      elites: [[HOBGOBLIN], [OGRO_JOVEN]],
+      jefe: [JEFE_OGRO],
+    },
+    {
+      nombre: 'La Guarida de los Contrabandistas',
+      subtitulo: 'Capítulo I',
+      intro:
+        'Las aldeas no arden por azar: una hermandad de ladrones y ninjas usa el valle como ruta de contrabando. En su guarida, bajo la posada vieja, te espera el más escurridizo de todos.',
+      ambiente: 'sombras',
+      normales: [
+        [LADRON_FURTIVO, BANDIDO_BALLESTERO],
+        [BANDIDO_BALLESTERO, BANDIDO_BALLESTERO],
+        [MATON],
+        [PICARO_ENVENENADOR, LADRON_FURTIVO],
+        [NINJA_SOMBRAS],
+        [SABUESO_CONTRABANDO, BANDIDO_BALLESTERO],
+        [LADRON_FURTIVO, LADRON_FURTIVO, BANDIDO_BALLESTERO],
+        [NINJA_SOMBRAS, PICARO_ENVENENADOR],
+      ],
+      elites: [[CAPITAN_BANDIDO], [MAESTRO_NINJA]],
+      jefe: [EMBAUCADOR_ARCANO],
+    },
+  ],
+  [
+    {
+      nombre: 'La Cripta',
+      subtitulo: 'Capítulo II',
+      intro:
+        'Bajo las ruinas del asentamiento se abre una escalera de piedra negra. Del fondo asciende un frío antiguo: la cripta de Vol\'guth, donde los muertos no descansan.',
+      ambiente: 'almas',
+      normales: [
+        [ESQUELETO_GUERRERO],
+        [ESQUELETO_GUERRERO, ESQUELETO_ARQUERO],
+        [ZOMBI],
+        [NECROFAGO, ESQUELETO_ARQUERO],
+        [ESPECTRO],
+        [ESPECTRO, ZOMBI],
+        [ESQUELETO_GUERRERO, ESQUELETO_GUERRERO, ESQUELETO_ARQUERO],
+        [NECROFAGO, ESPECTRO],
+      ],
+      elites: [[CABALLERO_TUMBARIO], [MOMIA_REAL]],
+      jefe: [SENOR_CRIPTA],
+    },
+    {
+      nombre: 'El Templo Oscuro',
+      subtitulo: 'Capítulo II',
+      intro:
+        'La escalera no lleva a una cripta, sino a un templo profanado. Entre cánticos y velas negras, un culto abre la puerta del Abismo… y su Heraldo no piensa cerrarla.',
+      ambiente: 'abismo',
+      normales: [
+        [ACOLITO_VELADO],
+        [ACOLITO_VELADO, LANZADOR_VACIO],
+        [SABUESO_INFERNAL],
+        [DIABLILLO, LANZADOR_VACIO],
+        [POSEIDO],
+        [FLAGELANTE, DIABLILLO],
+        [ACOLITO_VELADO, ACOLITO_VELADO, LANZADOR_VACIO],
+        [POSEIDO, FLAGELANTE],
+      ],
+      elites: [[DEMONIO_MENOR], [INQUISIDOR_OSCURO]],
+      jefe: [HERALDO_CULTO],
+    },
+  ],
+  [
+    {
+      nombre: 'La Guarida del Dragón',
+      subtitulo: 'Capítulo III',
+      intro:
+        'Más allá de la cripta, los túneles descienden hacia un calor imposible. Los kobolds susurran un nombre entre reverencias: Ignifax. El señor oculto del valle, el origen de todo… y tu última batalla.',
+      ambiente: 'brasas',
+      normales: [
+        [KOBOLD_LANCERO, KOBOLD_LANCERO],
+        [KOBOLD_HECHICERO, KOBOLD_LANCERO],
+        [CULTISTA_DRAGON],
+        [DRACO_JOVEN],
+        [ELEMENTAL_MAGMA],
+        [CULTISTA_DRAGON, KOBOLD_HECHICERO],
+        [DRACO_JOVEN, KOBOLD_LANCERO],
+        [KOBOLD_LANCERO, KOBOLD_LANCERO, KOBOLD_HECHICERO],
+        [ELEMENTAL_MAGMA, CULTISTA_DRAGON],
+      ],
+      elites: [[DRACO_VETERANO], [SUMO_CULTISTA]],
+      jefe: [IGNIFAX],
+    },
+    {
+      nombre: 'El Laberinto del Contemplador',
+      subtitulo: 'Capítulo III',
+      intro:
+        'Los túneles no descienden hacia el fuego, sino que se retuercen sobre sí mismos hasta perder el sentido. En el corazón del laberinto, un único ojo gigante lo observa todo: el Contemplador, señor de las aberraciones.',
+      ambiente: 'arcano',
+      normales: [
+        [AZOTAMENTES],
+        [LACAYO_ENGENDRADO, OJO_FLOTANTE],
+        [CUBO_GELATINOSO],
+        [REPTADOR_CARRONERO, REPTADOR_CARRONERO],
+        [HORROR_TENTACULAR],
+        [AZOTAMENTES, OJO_FLOTANTE],
+        [LACAYO_ENGENDRADO, LACAYO_ENGENDRADO, OJO_FLOTANTE],
+        [HORROR_TENTACULAR, REPTADOR_CARRONERO],
+      ],
+      elites: [[AZOTAMENTES_ANCIANO], [CEREBRO_ANCIANO]],
+      jefe: [CONTEMPLADOR],
+    },
+  ],
 ];
 
 export function crearEnemigo(def: EnemigoDef, rng: () => number): EnemigoCombate {

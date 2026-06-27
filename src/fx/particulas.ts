@@ -44,6 +44,26 @@ const EFECTOS: Record<string, ConfigEfecto> = {
   aliento:    { cantidad: 72, colores: ['#ff3b00', '#ff7a18', '#ffb347', '#fff3b8'], velocidad: [3, 11], vida: [0.4, 1.0], tam: [3, 7], forma: 'chispa', gravedad: -0.05, brillo: true },
   corazones:  { cantidad: 30, colores: ['#ff5d8f', '#ff8fb3', '#ffd0e0', '#ffffff'], velocidad: [1, 4], vida: [0.7, 1.4], tam: [4, 8], forma: 'corazon', gravedad: -0.06, brillo: true },
   sangre:     { cantidad: 22, colores: ['#a01616', '#7a0d0d', '#d63b3b'], velocidad: [1, 4], vida: [0.4, 0.9], tam: [2, 5], forma: 'circulo', gravedad: 0.32 },
+  veneno:     { cantidad: 22, colores: ['#7cff5a', '#39a824', '#caffb8'], velocidad: [1, 4], vida: [0.4, 0.9], tam: [2, 5], forma: 'circulo', gravedad: -0.06, brillo: true },
+};
+
+/** Atmósferas ambientales: partículas que ascienden de fondo en cada escenario. */
+export type EstiloAmbiente = 'brasas' | 'almas' | 'sombras' | 'abismo' | 'arcano';
+interface ConfigAmbiente {
+  intervalo: number; vxAmp: number; vyBase: number; vyVar: number;
+  tamBase: number; tamVar: number; colores: string[];
+}
+const AMBIENTES: Record<EstiloAmbiente, ConfigAmbiente> = {
+  // brasas anaranjadas (asentamiento ogro / guarida del dragón)
+  brasas:  { intervalo: 0.4, vxAmp: 0.6, vyBase: 0.4, vyVar: 0.8, tamBase: 1, tamVar: 2.2, colores: ['#ff8c3b', '#ff8c3b', '#ffd166'] },
+  // almas frías azuladas (la cripta)
+  almas:   { intervalo: 0.7, vxAmp: 0.3, vyBase: 0.25, vyVar: 0.45, tamBase: 1.6, tamVar: 2.6, colores: ['#9bb4ff', '#9bb4ff', '#b8ffd9'] },
+  // polvo y penumbra (guarida de contrabandistas)
+  sombras: { intervalo: 0.55, vxAmp: 0.4, vyBase: 0.16, vyVar: 0.4, tamBase: 1.4, tamVar: 2.2, colores: ['#6b7280', '#8a7fa0', '#4b5563'] },
+  // pavesas infernales rojas y violetas (templo oscuro)
+  abismo:  { intervalo: 0.45, vxAmp: 0.5, vyBase: 0.35, vyVar: 0.7, tamBase: 1.4, tamVar: 2.6, colores: ['#ff3b3b', '#b026ff', '#ff6b3b'] },
+  // motas arcanas iridiscentes (laberinto del contemplador)
+  arcano:  { intervalo: 0.5, vxAmp: 0.5, vyBase: 0.2, vyVar: 0.5, tamBase: 1.6, tamVar: 2.8, colores: ['#b06bff', '#6bd8ff', '#ff6bd8'] },
 };
 
 class MotorParticulas {
@@ -67,8 +87,8 @@ class MotorParticulas {
     requestAnimationFrame((t) => this.bucle(t));
   }
 
-  /** Estilo de la atmósfera: brasas (asentamiento en llamas) o almas (cripta). */
-  estiloAmbiente: 'brasas' | 'almas' = 'brasas';
+  /** Estilo de la atmósfera de cada escenario. */
+  estiloAmbiente: EstiloAmbiente = 'brasas';
 
   /** Partículas ambientales flotando. */
   ambiente(activo: boolean) {
@@ -116,19 +136,17 @@ class MotorParticulas {
 
     if (this.brasasActivas) {
       this.acumuladorBrasas += dt;
-      if (this.acumuladorBrasas > (this.estiloAmbiente === 'almas' ? 0.7 : 0.4)) {
+      const amb = AMBIENTES[this.estiloAmbiente] ?? AMBIENTES.brasas;
+      if (this.acumuladorBrasas > amb.intervalo) {
         this.acumuladorBrasas = 0;
-        const almas = this.estiloAmbiente === 'almas';
         this.particulas.push({
           x: Math.random() * window.innerWidth,
           y: window.innerHeight + 10,
-          vx: (Math.random() - 0.5) * (almas ? 0.3 : 0.6),
-          vy: -(almas ? 0.25 + Math.random() * 0.45 : 0.4 + Math.random() * 0.8),
+          vx: (Math.random() - 0.5) * amb.vxAmp,
+          vy: -(amb.vyBase + Math.random() * amb.vyVar),
           vida: 6 + Math.random() * 4, vidaMax: 10,
-          tam: almas ? 1.6 + Math.random() * 2.6 : 1 + Math.random() * 2.2,
-          color: almas
-            ? Math.random() < 0.6 ? '#9bb4ff' : '#b8ffd9'
-            : Math.random() < 0.7 ? '#ff8c3b' : '#ffd166',
+          tam: amb.tamBase + Math.random() * amb.tamVar,
+          color: amb.colores[Math.floor(Math.random() * amb.colores.length)],
           forma: 'circulo', gravedad: -0.001,
           giro: 0, angulo: 0, brillo: true,
         });

@@ -438,6 +438,16 @@ body[data-capitulo='1'] .pantalla-capitulo .capitulo-nombre,
 body[data-capitulo='1'] .capitulo-nombre {
   text-shadow: 0 0 36px rgba(138, 122, 224, 0.65);
 }
+/* títulos de los escenarios alternativos */
+body[data-capitulo='0'][data-escenario='1'] .capitulo-nombre {
+  text-shadow: 0 0 36px rgba(150, 130, 180, 0.6);
+}
+body[data-capitulo='1'][data-escenario='1'] .capitulo-nombre {
+  text-shadow: 0 0 38px rgba(220, 50, 60, 0.7);
+}
+body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
+  text-shadow: 0 0 40px rgba(176, 107, 255, 0.7);
+}
 
 /* ── Compendio de cartas ────────────────────────────────────────────────── */
 .compendio-fondo {

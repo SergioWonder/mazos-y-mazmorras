@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '0.18.0';
+export const VERSION = '1.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '1.0.0',
+    fecha: '2026-06-27',
+    cambios: [
+      '🗺️ ¡El doble de mundo! Cada acto tiene ahora dos escenarios posibles y en cada partida sale uno al azar.',
+      '🗡️ Nuevo Acto I alternativo — La Guarida de los Contrabandistas: ladrones y ninjas, y el jefe Vexis, el Embaucador Arcano, con cuchillos, veneno e ilusiones que te confunden.',
+      '⛪ Nuevo Acto II alternativo — El Templo Oscuro: cultistas y demonios, y el Heraldo del Culto, que al caer libera de su propia carne a Abaddon, el Demonio Mayor.',
+      '👁️ Nuevo Acto III alternativo — El Laberinto del Contemplador: aberraciones y azotamentes, con el Contemplador y sus Observadores, cuyos rayos de colores retuercen tu siguiente turno (cartas que se agotan, sobrecarga de energía, cartas etéreas…).',
+      '🧪 Nuevo estado Veneno: pierdes vida al inicio de tu turno (ignora el bloqueo) y baja con el tiempo.',
+      '✨ Cada escenario estrena su propia atmósfera de partículas y temática.',
+    ],
+  },
   {
     version: '0.18.0',
     fecha: '2026-06-26',

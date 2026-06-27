@@ -1,8 +1,10 @@
 # Mazo y Mazmorra
 
 Roguelike de construcción de mazos al estilo *Slay the Spire* con ambientación de
-fantasía medieval tipo D&D. Tres capítulos: **El Asentamiento Ogro**, **La Cripta**
-y **La Guarida del Dragón**.
+fantasía medieval tipo D&D. Tres actos, cada uno con **dos escenarios posibles**
+elegidos al azar en cada partida: el Acto I es **El Asentamiento Ogro** o **La
+Guarida de los Contrabandistas**; el Acto II, **La Cripta** o **El Templo Oscuro**;
+el Acto III, **La Guarida del Dragón** o **El Laberinto del Contemplador**.
 
 🎮 **Jugar**: https://sergiowonder.github.io/mazos-y-mazmorras/
 
@@ -71,13 +73,18 @@ mecánicas de clase (Furia, transformaciones, raíces).
   verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
 - Mapa de 10 filas por capítulo con ≥2 eventos, cofres, élites y descansos.
 - Reliquias inspiradas en objetos clásicos de D&D.
-- **Capítulo II — La Cripta**: no-muertos con drenajes y curas (espectros, zombis,
-  momias) y jefe final Vol'guth (178 PV). Entre capítulos: reliquia + carta rara
-  garantizada + cura del 35%.
-- **Élites y jefes exigentes**: los élites pegan fuerte y los jefes de los Actos II
-  y III combinan Débil/Vulnerable con ataques especiales. El **Aliento de Dragón**
-  de Ignifax (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas
-  te cuesta 3 PV.
+- **Dos escenarios por acto** (elegidos al azar): cada uno con sus enemigos, su
+  atmósfera y su jefe final propios, equilibrados a la dificultad del acto.
+- **Jefes únicos**: Gorzug (jefe ogro), Vexis el Embaucador Arcano (cuchillos,
+  veneno e ilusiones), Vol'guth el liche, Malachar Heraldo del Culto (al morir
+  libera al Demonio Mayor), Ignifax el Dragón Rojo y el Contemplador, cuyos rayos
+  de colores tuercen tu siguiente turno (cartas que se agotan, sobrecarga de
+  energía, cartas etéreas…) mientras sus Observadores no dejan de mirar.
+- **Estado de Veneno**: algunos enemigos te envenenan; pierdes PV al inicio de
+  cada turno (ignora el bloqueo) y baja 1 con el tiempo.
+- **Élites y jefes exigentes**: los élites pegan fuerte y los jefes combinan
+  Débil/Vulnerable con ataques especiales. El **Aliento de Dragón** de Ignifax
+  (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas te cuesta 3 PV.
 - **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
   con floritura especial al jugar cartas raras, y música 8-bit con **pistas CC0
   reales** (OpenGameArt): tema de menú y, por acto, un tema normal y un tema de jefe

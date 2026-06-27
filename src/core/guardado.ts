@@ -14,6 +14,7 @@ export interface Guardado {
   nodoActual: number;
   piso: number;
   capitulo: number;
+  escenario?: number; // los guardados antiguos no lo tienen (escenario 0 por defecto)
   semilla: number;
   espaciosConjuro: number;
   /** Parcial: los guardados antiguos pueden no tener los campos más nuevos. */
@@ -33,6 +34,7 @@ export function serializarRun(run: EstadoRun): Guardado {
     nodoActual: run.nodoActual,
     piso: run.piso,
     capitulo: run.capitulo,
+    escenario: run.escenario,
     semilla: run.semilla,
     espaciosConjuro: run.espaciosConjuro,
     permanentes: { ...run.permanentes },
@@ -70,6 +72,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
     nodoActual: g.nodoActual,
     piso: g.piso,
     capitulo: g.capitulo,
+    escenario: g.escenario ?? 0,
     semilla: g.semilla,
     espaciosConjuro: g.espaciosConjuro,
     permanentes: {

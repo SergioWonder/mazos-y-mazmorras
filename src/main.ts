@@ -6,7 +6,7 @@ import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
 import { nuevaRun, avanzarCapitulo } from './core/run.ts';
-import { CAPITULOS } from './core/enemigos.ts';
+import { ACTOS } from './core/enemigos.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
 import { audio } from './fx/audio.ts';
@@ -56,7 +56,9 @@ async function juego() {
     const rng = crearRng((run.semilla ^ 0x9e3779b9) + run.piso * 7919);
 
     if (eleccion.tipo === 'nueva') {
-      await pantallaCapitulo(CAPITULOS[0]);
+      document.body.dataset.escenario = String(run.escenario);
+      fx.estiloAmbiente = ACTOS[0][run.escenario].ambiente;
+      await pantallaCapitulo(ACTOS[0][run.escenario]);
       await pantallaMision(run, rng); // el Senescal encomienda la misión
       guardarRun(run);
     }
@@ -64,8 +66,9 @@ async function juego() {
     let campanaCompleta = false;
 
     while (vivo && !campanaCompleta) {
-      const cap = CAPITULOS[run.capitulo];
+      const cap = ACTOS[run.capitulo][run.escenario];
       document.body.dataset.capitulo = String(run.capitulo);
+      document.body.dataset.escenario = String(run.escenario);
       fx.estiloAmbiente = cap.ambiente;
       audio.musica(run.capitulo); // música de exploración del capítulo
 
@@ -105,13 +108,13 @@ async function juego() {
           const resultado = await pantallaCombate(run, cap.jefe, rng, true, cap.nombre);
           if (resultado === 'derrota') {
             vivo = false;
-          } else if (run.capitulo + 1 < CAPITULOS.length) {
+          } else if (run.capitulo + 1 < ACTOS.length) {
             // botín de jefe, bendición de la Vidente y siguiente capítulo
             await obtenerReliquia(run, rng);
             await elegirCarta(run, rng, 100); // garantiza elección de rara
             await pantallaBendicion(run, rng);
             avanzarCapitulo(run, rng);
-            await pantallaCapitulo(CAPITULOS[run.capitulo]);
+            await pantallaCapitulo(ACTOS[run.capitulo][run.escenario]);
           } else {
             campanaCompleta = true;
           }

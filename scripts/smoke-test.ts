@@ -5,7 +5,8 @@ import { Combate, type Presentador } from '../src/core/combate.ts';
 import { nuevaRun, avanzarCapitulo } from '../src/core/run.ts';
 import { crearRng } from '../src/core/rng.ts';
 import {
-  CAPITULOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
+  ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
+  HERALDO_CULTO, CONTEMPLADOR,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
@@ -144,23 +145,23 @@ console.log('— Recompensas y pools —');
   );
 }
 
-console.log('— Combates simulados (cap. I y II, 3 clases) —');
+console.log('— Combates simulados (los 6 escenarios, 3 clases) —');
 {
-  for (const [capIdx, cap] of CAPITULOS.entries()) {
+  for (const [capIdx, cap] of ACTOS.flat().entries()) {
     let victorias = 0, total = 0;
     for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
       for (let s = 1; s <= 10; s++) {
         const defs = cap.normales[s % cap.normales.length];
         const { combate } = await simular(clase, s * 131 + capIdx, defs);
         total++;
-        if (combate.terminado === null) check(false, `${clase} cap${capIdx} s${s}: combate no termina`);
+        if (combate.terminado === null) check(false, `${clase} ${cap.nombre} s${s}: combate no termina`);
         if (combate.terminado === 'victoria') victorias++;
       }
     }
     console.log(`  ✓ ${cap.nombre}: ${total} combates terminan · ${victorias}/${total} victorias con IA tonta`);
   }
   // jefes
-  for (const [capIdx, cap] of CAPITULOS.entries()) {
+  for (const [capIdx, cap] of ACTOS.flat().entries()) {
     const { combate } = await simular('barbaro', 31337 + capIdx, cap.jefe);
     check(combate.terminado !== null, `jefe de ${cap.nombre} termina (${combate.terminado})`);
   }
@@ -762,6 +763,56 @@ console.log('— Avance de capítulo —');
   check(run.capitulo === 1, 'el capítulo avanza');
   check(run.nodoActual === -1 && run.mapa.length > 0, 'nuevo mapa generado');
   check(run.pv > pvAntes, 'cura parcial entre capítulos');
+}
+
+console.log('— Escenarios alternativos: jefes y estados nuevos —');
+{
+  // Heraldo del Culto: al morir libera al Demonio Mayor (fase 2)
+  const run = nuevaRun('barbaro', 2026);
+  const comb = new Combate(run, [HERALDO_CULTO], crearRng(2026), uiSilenciosa);
+  await comb.iniciar();
+  const heraldo = comb.enemigos[0];
+  await comb.contexto(heraldo).danar(heraldo, 999);
+  check(!heraldo.vivo, 'el Heraldo del Culto muere');
+  check(comb.terminado === null, 'el combate NO termina: aún queda su demonio');
+  check(
+    comb.enemigos.some((e) => e.vivo && e.def.id === 'demonio-mayor'),
+    'al morir libera al Demonio Mayor',
+  );
+
+  // Veneno: pierde PV al inicio del turno y baja 1
+  const run2 = nuevaRun('mago', 2027);
+  const comb2 = new Combate(run2, [GOBLIN_CORTADOR], crearRng(2027), uiSilenciosa);
+  await comb2.iniciar();
+  comb2.jugador.estados.veneno = 3;
+  comb2.jugador.pv = comb2.jugador.pvMax;
+  const pvAntes = comb2.jugador.pv;
+  comb2.jugador.bloqueo = 999;
+  comb2.enemigos[0].intencion = { nombre: 'x', intencion: 'defensa', bloqueo: 1 };
+  await comb2.terminarTurno(); // pasa al turno 2: tica el veneno
+  check(comb2.jugador.pv === pvAntes - 3, 'el Veneno hace 3 de daño al inicio del turno');
+  check((comb2.jugador.estados.veneno ?? 0) === 2, 'el Veneno baja 1 por turno');
+
+  // Contemplador: invoca 2 Observadores en su primer turno
+  const run3 = nuevaRun('druida', 2028);
+  const comb3 = new Combate(run3, [CONTEMPLADOR], crearRng(2028), uiSilenciosa);
+  await comb3.iniciar();
+  check(comb3.enemigos[0].intencion.invocar !== undefined, 'el Contemplador abre invocando Observadores');
+  comb3.jugador.bloqueo = 999;
+  await comb3.terminarTurno();
+  check(
+    comb3.enemigos.filter((e) => e.def.id === 'observador').length === 2,
+    'invoca 2 Observadores',
+  );
+
+  // Sobrecarga (Rayo Carmesí): las cartas cuestan +1 este turno
+  const run4 = nuevaRun('mago', 2029);
+  const comb4 = new Combate(run4, [GOBLIN_CORTADOR], crearRng(2029), uiSilenciosa);
+  await comb4.iniciar();
+  const carta = comb4.jugador.mano[0];
+  const costeBase = comb4.costeEfectivo(carta.def);
+  comb4.jugador.estados.cartasSobrecoste = 1;
+  check(comb4.costeEfectivo(carta.def) === costeBase + 1, 'Sobrecarga: la carta cuesta +1');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

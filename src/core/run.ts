@@ -13,6 +13,7 @@ export const PV_POR_CLASE: Record<ClaseId, number> = {
 export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
   const rng = crearRng(semilla);
   const pvMax = PV_POR_CLASE[clase];
+  const escenario = Math.floor(rng() * 2);
   return {
     clase,
     pvMax,
@@ -23,6 +24,7 @@ export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
     nodoActual: -1,
     piso: 0,
     capitulo: 0,
+    escenario,
     semilla,
     espaciosConjuro: clase === 'mago' ? 1 : 0,
     permanentes: { fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, energiaInicial: 0, robo: 0 },
@@ -33,6 +35,7 @@ export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
 /** Prepara la run para el siguiente capítulo: nuevo mapa y respiro. */
 export function avanzarCapitulo(run: EstadoRun, rng: () => number) {
   run.capitulo++;
+  run.escenario = Math.floor(rng() * 2); // uno de los dos escenarios del nuevo acto
   run.mapa = generarMapa(rng);
   run.nodoActual = -1;
   run.piso = 0;

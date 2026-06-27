@@ -26,7 +26,11 @@ export type EstadoId =
   | 'sedSangre'     // (bárbaro) ganas este bloqueo cada vez que un enemigo sangra
   | 'escribania'    // (mago) Escribe esta cantidad en el Conjuro Prodigioso al inicio del turno
   | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
-  | 'roboAcelerado'; // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
+  | 'roboAcelerado' // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
+  | 'veneno'         // (jugador) pierde esta cantidad de PV al inicio del turno; baja 1 cada turno
+  | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
+  | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
+  | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
 
 /** Efectos permanentes que las cartas «Escribir» pueden añadir al Conjuro Prodigioso. */
 export type EfectoConjuro = 'area' | 'vulnerable' | 'bloqueo' | 'perforante';
@@ -93,6 +97,8 @@ export interface EnemigoDef {
   estadosIniciales?: Partial<Record<EstadoId, number>>;
   /** Pasiva especial: 'filacteria' = la primera vez que muere revive con 30 PV. */
   pasiva?: 'filacteria';
+  /** Al morir, libera a este enemigo en el campo (Heraldo del Culto → Demonio Mayor). */
+  invocaAlMorir?: EnemigoDef;
   /** Marca a los jefes (no muere por efectos «mata si no es jefe»). */
   esJefe?: boolean;
   /** Decide el próximo movimiento (recibe a sus aliados vivos). */
@@ -310,7 +316,8 @@ export interface EstadoRun {
   mapa: NodoMapa[];
   nodoActual: number; // -1 = aún sin empezar
   piso: number;
-  capitulo: number;   // índice en CAPITULOS
+  capitulo: number;   // índice de acto en ACTOS
+  escenario: number;  // variante de escenario elegida para el acto actual (0 o 1)
   semilla: number;
   /** Total de espacios de conjuro (mago); la pirámide se deriva de aquí. */
   espaciosConjuro: number;

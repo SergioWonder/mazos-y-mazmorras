@@ -465,6 +465,7 @@ export function pantallaCombate(
           return objetivo?.vivo ? combate.danoRecibido(objetivo, d) : d;
         },
         bloqueo: (base) => combate.bloqueoDeCarta(base),
+        coste: (base) => (def ? combate.costeEfectivo(def) : base),
       };
     }
 
