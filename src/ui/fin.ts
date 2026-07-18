@@ -8,7 +8,7 @@ export function pantallaFin(victoria: boolean, clase: string): Promise<void> {
     app.className = `pantalla-fin ${victoria ? 'fin-victoria' : 'fin-derrota'}`;
 
     const raiz = el('div', 'fin');
-    const nombreClase = { druida: 'Druida 🌿', barbaro: 'Bárbaro 🪓', mago: 'Mago 🔮' }[clase] ?? clase;
+    const nombreClase = { druida: 'Druida 🌿', barbaro: 'Bárbaro 🪓', mago: 'Mago 🔮', picaro: 'Pícaro 🗡️' }[clase] ?? clase;
     raiz.innerHTML = victoria
       ? `
         <h1 class="fin-titulo">🏆 ¡VICTORIA!</h1>

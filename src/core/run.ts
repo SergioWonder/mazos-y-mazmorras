@@ -8,6 +8,7 @@ export const PV_POR_CLASE: Record<ClaseId, number> = {
   druida: 70,
   barbaro: 80,
   mago: 62,
+  picaro: 66,
 };
 
 export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {

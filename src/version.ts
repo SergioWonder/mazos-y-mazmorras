@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '1.0.0';
+export const VERSION = '2.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '2.0.0',
+    fecha: '2026-07-18',
+    cambios: [
+      '🗡️ ¡Nueva clase, el Pícaro! Acrobacias que conservan tu bloqueo, dagas, ataques furtivos y mucho robo y descarte de cartas.',
+      '🃏 Sus subclases raras: el Asesino (tus ataques envenenan), el Psiónico (una lluvia de dagas cada turno) y el Embaucador Arcano (ilusiones y trucos).',
+      '🎭 Cartas nuevas como Emboscada (arrasa si el enemigo no piensa atacar) y Cambiazo (le cambias la intención por la del turno siguiente).',
+      '🌿 Las raíces del druida se reequilibran: al aplastar un ataque anulado el enemigo pierde solo la diferencia, y su efecto baja ligeramente.',
+      '📜 El mago escribe más: todas las cartas de «Escribir» del Conjuro Prodigioso suben sus cantidades.',
+    ],
+  },
   {
     version: '1.0.0',
     fecha: '2026-06-27',

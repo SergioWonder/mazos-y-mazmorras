@@ -11,9 +11,9 @@ import {
 import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
-const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️' };
+const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️', picaro: '🥷' };
 const NOMBRE_CLASE: Record<string, string> = {
-  druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago',
+  druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
 };
 const SPRITE_FORMA: Record<string, string> = {
   'Forma de Lobo': '🐺', 'Forma de Oso': '🐻', 'Forma de Águila': '🦅',

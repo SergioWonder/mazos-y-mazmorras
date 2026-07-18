@@ -21,6 +21,7 @@ const DESC_TIPO: Record<string, string> = {
 const ESTADOS_CLAVE: string[] = [
   'fuerza', 'destreza', 'vulnerable', 'debil', 'fragil', 'espinas',
   'regeneracion', 'raices', 'espejismo', 'quemadura', 'hemorragia',
+  'veneno', 'acrobacias',
 ];
 
 /** Palabras clave que no son estados (mecánicas y propiedades de carta). */
@@ -47,6 +48,12 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
     desc: 'Se consume para siempre: desaparece de tu mazo el resto de la partida.' },
   { test: (_d, t) => t.includes('invoca') || t.includes('invocación'), icono: '🐾', nombre: 'Invocación',
     desc: 'Aliado del druida con vida propia. «Invoca X» le suma X de vida (actual y máxima) o crea uno nuevo. Ataca al inicio de tu turno por el 30 % de su vida actual, y absorbe el daño enemigo después de tu bloqueo y antes que tú. La forma la fija la primera carta; las pasivas de todas se combinan.' },
+  { test: (d, t) => t.includes('daga') && d.id !== 'daga', icono: '🗡️', nombre: 'Dagas',
+    desc: 'Ataques del pícaro de 0 de coste que se agotan al jugarse (infligen 4 de daño, más lo que sumen tus poderes). Se generan en la mano; no ocupan tu mazo.' },
+  { test: (_d, t) => t.includes('descarta'), icono: '🗑️', nombre: 'Descartar',
+    desc: 'Manda cartas de tu mano a la pila de descarte. Algunas cartas y poderes del pícaro se benefician de cada descarte.' },
+  { test: (_d, t) => t.includes('no pretende atacar') || t.includes('intención'), icono: '🎭', nombre: 'Intención',
+    desc: 'Lo que el enemigo hará en su turno (el icono sobre su cabeza). Varios ataques del pícaro golpean más fuerte si el enemigo no pretende atacar.' },
 ];
 
 /** Lista de palabras clave presentes en una carta, sin repetir. */
@@ -78,7 +85,7 @@ export function cuadroPalabrasClave(def: CartaDef): HTMLElement {
 }
 
 const ICONO_CLASE: Record<string, string> = {
-  druida: '🌿', barbaro: '🪓', mago: '🔮', neutral: '⚔️',
+  druida: '🌿', barbaro: '🪓', mago: '🔮', picaro: '🗡️', neutral: '⚔️',
 };
 
 /** Descripción corta de cada efecto acumulable en el Conjuro Prodigioso. */
@@ -217,6 +224,15 @@ function arteDeCarta(def: CartaDef): string {
     'conjuro-prodigioso': '📜', 'inscripcion-arcana': '✒️', 'glifo-mordiente': '🔣',
     'dictado-veloz': '✍️', 'runa-flamigera': '🔥', 'runa-de-ruina': '☠️',
     'runa-egida': '🛡️', 'tratado-prohibido': '📕', 'palabra-de-poder': '💬',
+    daga: '🗡️', 'filo-rapido': '🗡️', pirueta: '🤸', 'daga-veloz': '🔪',
+    'lanzamiento-daga': '🎯', finta: '🌀', 'golpe-bajo': '👊', rodar: '🤸',
+    distraccion: '💫', 'punalada-trapera': '🔪', 'ataque-sutil': '🗡️',
+    'trabajo-de-pies': '👣', esfumarse: '💨', 'mano-rapida': '🤹',
+    cuchilladas: '🔪', preparacion: '🎒', cambiazo: '🎭', emboscada: '🥷',
+    'filo-toxico': '🧪', 'giro-veloz': '🌀', atraco: '💰',
+    asesino: '☠️', psionico: '🔮', 'embaucador-arcano': '🎩',
+    'maestria-cuchillas': '⚔️', escapada: '🏃', 'tempestad-acero': '🌪️',
+    'danza-mortal': '💃',
   };
   return ARTE[def.id] ?? '✦';
 }

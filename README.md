@@ -22,8 +22,8 @@ npm run build    # build de producción en dist/
 node --experimental-strip-types scripts/smoke-test.ts
 ```
 
-Simula combates completos con ambas clases, valida la generación de mapas y las
-mecánicas de clase (Furia, transformaciones, raíces).
+Simula combates completos con las cuatro clases, valida la generación de mapas y las
+mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas del pícaro).
 
 ## Controles
 
@@ -40,7 +40,7 @@ mecánicas de clase (Furia, transformaciones, raíces).
 - **Druida** (70 PV): transformaciones (efectos temporales de Fuerza/Destreza por N turnos),
   raíces que reducen el ataque del enemigo —cada carta es una instancia con su propia
   duración, se acumulan— y, si el ataque queda en 0 o menos, al intentar atacar el enemigo
-  pierde PV (3 + el exceso, ignorando bloqueo).
+  pierde PV igual a la diferencia (lo que las raíces superan a su ataque, ignorando bloqueo).
   Cartas raras: una por subclase de D&D 2024 (Tierra, Luna, Mar, Estrellas).
 - **Bárbaro** (80 PV): Furia que acumula Fuerza/Destreza de forma permanente, pero se
   pierde si terminas el turno sin hacer daño. Cartas que escalan con Fuerza/Destreza.
@@ -55,9 +55,15 @@ mecánicas de clase (Furia, transformaciones, raíces).
   3 arriba). La recuperación devuelve el espacio gastado de MENOR nivel; «Sacrificio
   Arcano» recupera el de MAYOR (cuesta 1 maná y PV; mejorado, sin coste de vida).
   Cartas raras: una por escuela de magia (Evocación, Abjuración, Ilusión).
+- **Pícaro** (66 PV): Acrobacias (tu bloqueo no se limpia al inicio del turno mientras
+  dure), Destreza y ataques que escalan con ella, ataques furtivos (más daño si el enemigo
+  no pretende atacar), Cambiazo (intercambia la intención del enemigo por la del turno
+  siguiente), mucho robo/descarte con sinergias y Dagas (ataques de 0 de coste que se
+  agotan). Cartas raras: subclases de D&D 2024 (Asesino → veneno, Psiónico → dagas,
+  Embaucador Arcano → ilusiones).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
-  Manos Ardientes).
+  Manos Ardientes · Pícaro: Filo Rápido y Pirueta).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un
   efecto permanente en la run (Voto de Sangre, Pacto con el Bosque, Estudio Arcano).
 - **Cartas de azar (incoloras)**: la Vidente puede dar «Seducir» (entrando al Acto II)

@@ -25,6 +25,7 @@
 .carta-druida { --marco: #4e7a35; }
 .carta-barbaro { --marco: #9e4530; }
 .carta-mago { --marco: #5e50b0; }
+.carta-picaro { --marco: #2f7a70; }
 .carta-neutral { --marco: #6e6356; }
 
 /* marcos por rareza */
@@ -269,6 +270,8 @@
 .anim-evocacion { filter: drop-shadow(0 0 34px #ff8c3b) drop-shadow(0 0 80px #ffd166); animation-duration: 0.7s; }
 .anim-abjuracion { filter: drop-shadow(0 0 34px #5aa7d6) drop-shadow(0 0 80px #cfeaff); }
 .anim-ilusion { filter: drop-shadow(0 0 34px #c89aff) drop-shadow(0 0 80px #ffd9f2); }
+.anim-veneno { filter: drop-shadow(0 0 34px #6bd66b) drop-shadow(0 0 80px #d6ff9a); }
+.anim-psionico { filter: drop-shadow(0 0 34px #3fd0c0) drop-shadow(0 0 80px #baf7f0); animation-duration: 0.7s; }
 
 /* ── Cartas de recompensa ───────────────────────────────────────────────── */
 .carta-recompensa {

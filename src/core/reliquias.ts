@@ -20,13 +20,19 @@ export const PENDULO_AMBAR: ReliquiaDef = {
   alGastarConjuro: async (ctx) => { await ctx.ganarBloqueo(2); },
 };
 
+export const GUANTE_LADRON: ReliquiaDef = {
+  id: 'guante-ladron', nombre: 'Guante del Ladrón', icono: '🧤',
+  texto: 'Empiezas cada combate con 1 de Destreza.',
+  inicioCombate: async (ctx) => { await ctx.aplicarEstado(ctx.jugador, 'destreza', 1); },
+};
+
 export function reliquiaInicial(clase: ClaseId): ReliquiaDef {
-  return { druida: TOTEM_ROBLE, barbaro: HACHA_ANCESTRO, mago: PENDULO_AMBAR }[clase];
+  return { druida: TOTEM_ROBLE, barbaro: HACHA_ANCESTRO, mago: PENDULO_AMBAR, picaro: GUANTE_LADRON }[clase];
 }
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function reliquiaPorId(id: string): ReliquiaDef | undefined {
-  return [TOTEM_ROBLE, HACHA_ANCESTRO, PENDULO_AMBAR, ...POOL_RELIQUIAS].find((r) => r.id === id);
+  return [TOTEM_ROBLE, HACHA_ANCESTRO, PENDULO_AMBAR, GUANTE_LADRON, ...POOL_RELIQUIAS].find((r) => r.id === id);
 }
 
 // ── Pool de reliquias (objetos clásicos de D&D) ──────────────────────────────

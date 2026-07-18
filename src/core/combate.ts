@@ -5,7 +5,7 @@ import type {
 import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
-import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO } from './cartas.ts';
+import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import type { EfectoConjuro, FormaInvocacion } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
@@ -44,6 +44,7 @@ export class Combate {
   danoHechoEsteTurno = 0;
   danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
   danoBloqueadoEsteTurno = 0; // daño absorbido por el bloqueo en la ronda
+  descartadasEsteTurno = 0; // cartas descartadas por efectos este turno (pícaro)
   terminado: 'victoria' | 'derrota' | null = null;
   enResolucion = false;
   run: EstadoRun;
@@ -60,7 +61,7 @@ export class Combate {
     this.run = run;
     this.rng = rng;
     this.ui = ui;
-    const nombres = { druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago' };
+    const nombres = { druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro' };
     const energiaMax =
       3 + run.permanentes.energia + (eliteOJefe ? run.permanentes.energiaElite : 0);
     this.jugador = {
@@ -133,6 +134,12 @@ export class Combate {
           const espinas = obj.estados.espinas ?? 0;
           if (espinas > 0 && self.jugador.vivo) await self.infligir(self.jugador, espinas, 'raices');
           if (veces > 1) await self.ui.espera(220);
+        }
+        // Filo Venenoso (Asesino): cada ataque envenena al objetivo
+        const filo = self.jugador.estados.filoVenenoso ?? 0;
+        if (filo > 0 && obj.vivo) {
+          obj.estados.veneno = (obj.estados.veneno ?? 0) + filo;
+          await self.ui.fxEstado(obj, 'veneno', filo);
         }
         return total;
       },
@@ -257,7 +264,12 @@ export class Combate {
         await self.ejecutarMovimiento(e);
         if (e.vivo && !self.terminado) {
           e.turnosVisto++;
-          e.intencion = e.def.ia(e.turnosVisto, self.rng, e, self.enemigos.filter((x) => x.vivo && x !== e));
+          if (e.intencionForzada) {
+            e.intencion = e.intencionForzada;
+            delete e.intencionForzada;
+          } else {
+            e.intencion = e.def.ia(e.turnosVisto, self.rng, e, self.enemigos.filter((x) => x.vivo && x !== e));
+          }
           e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
           self.ui.render();
         }
@@ -281,6 +293,32 @@ export class Combate {
         if (!elegida) return;
         pila.splice(pila.indexOf(elegida), 1);
         self.jugador.mazo.push(elegida); // pop() roba del final = lo alto del mazo
+        self.ui.render();
+      },
+      async descartar(n) {
+        let hechos = 0;
+        for (let i = 0; i < n; i++) {
+          const mano = self.jugador.mano.slice();
+          if (mano.length === 0) break;
+          const elegida = await self.ui.elegirCarta(mano, `Descarta una carta (${i + 1}/${n})`);
+          if (!elegida) break; // se puede descartar menos de N
+          await self.descartarCarta(elegida);
+          hechos++;
+        }
+        return hechos;
+      },
+      descartadasEsteTurno: () => self.descartadasEsteTurno,
+      crearDagas: (n) => self.crearDagas(n),
+      async intercambiarIntencion(e) {
+        if (!e.vivo || self.terminado) return;
+        const siguiente = e.def.ia(
+          e.turnosVisto + 1, self.rng, e,
+          self.enemigos.filter((x) => x.vivo && x !== e),
+        );
+        e.intencionForzada = e.intencion; // lo que iba a hacer → lo hará después
+        e.intencion = siguiente;
+        e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+        await self.ui.fxMensaje(`🎭 Confundes a ${e.nombre}`);
         self.ui.render();
       },
       async matar(e) {
@@ -475,6 +513,35 @@ export class Combate {
     }
   }
 
+  /** Descarta una carta concreta de la mano y dispara la sinergia de Preparación. */
+  async descartarCarta(carta: CartaInstancia) {
+    const idx = this.jugador.mano.indexOf(carta);
+    if (idx < 0) return;
+    this.jugador.mano.splice(idx, 1);
+    this.jugador.descarte.push(carta);
+    this.descartadasEsteTurno++;
+    await this.ui.fxMensaje(`🗑 Descartas «${defDe(carta).nombre}»`);
+    // Preparación: ganas bloqueo por cada carta descartada
+    const prep = this.jugador.estados.preparacion ?? 0;
+    if (prep > 0) {
+      this.jugador.bloqueo += prep;
+      await this.ui.fxBloqueo(this.jugador, prep);
+    }
+    this.ui.render();
+  }
+
+  /** Añade N Dagas a la mano (pícaro), si hay hueco. */
+  async crearDagas(n: number) {
+    let creadas = 0;
+    for (let i = 0; i < n; i++) {
+      if (this.jugador.mano.length >= 10) break;
+      this.jugador.mano.push(instanciar(DAGA));
+      creadas++;
+    }
+    if (creadas > 0) await this.ui.fxMensaje(`🗡️ +${creadas} Daga${creadas > 1 ? 's' : ''}`);
+    this.ui.render();
+  }
+
   async iniciar() {
     // Efectos permanentes (cartas de 1 uso, bendiciones)
     if (this.run.permanentes.fuerza > 0) {
@@ -506,8 +573,17 @@ export class Combate {
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
+    this.descartadasEsteTurno = 0;
     for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
-    if (!primero) this.jugador.bloqueo = 0;
+    // Acrobacias (pícaro): el bloqueo NO se elimina mientras dure; si no, se limpia.
+    if (!primero) {
+      if ((this.jugador.estados.acrobacias ?? 0) > 0) {
+        this.jugador.estados.acrobacias!--;
+        if ((this.jugador.estados.acrobacias ?? 0) <= 0) delete this.jugador.estados.acrobacias;
+      } else {
+        this.jugador.bloqueo = 0;
+      }
+    }
     // Veneno: pierdes PV al inicio del turno (ignora bloqueo) y baja 1
     const ven = this.jugador.estados.veneno ?? 0;
     if (ven > 0) {
@@ -567,6 +643,15 @@ export class Combate {
       const inst = instanciar(cartaPorId('proyectil-magico')!);
       if (maestria >= 2) inst.mejorada = true;
       this.jugador.mano.push(inst);
+    }
+    // Psiónico: Dagas por turno. Danza Mortal: 1 Daga por cada 2 de Destreza.
+    const dpt = this.jugador.estados.dagasPorTurno ?? 0;
+    if (dpt > 0) await this.crearDagas(dpt);
+    // Danza Mortal: 1 Daga por cada N de Destreza (el valor del estado es el divisor N).
+    const divisor = this.jugador.estados.danzaMortal ?? 0;
+    if (divisor > 0) {
+      const porDestreza = Math.floor(Math.max(0, this.jugador.estados.destreza ?? 0) / divisor);
+      if (porDestreza > 0) await this.crearDagas(porDestreza);
     }
     // regeneración y curas de efectos temporales
     const regen = this.jugador.estados.regeneracion ?? 0;
@@ -719,15 +804,30 @@ export class Combate {
         }
       }
       if (!e.vivo || this.terminado) continue; // la Hemorragia pudo matarlo
+      // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
+      const ven = e.estados.veneno ?? 0;
+      if (ven > 0) {
+        await this.infligir(e, ven, 'veneno', true);
+        e.estados.veneno = ven - 1;
+        if ((e.estados.veneno ?? 0) <= 0) delete e.estados.veneno;
+      }
+      if (!e.vivo || this.terminado) continue; // el Veneno pudo matarlo
       e.bloqueo = 0;
       await this.ejecutarMovimiento(e);
       this.decrementarEstados(e);
       this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
       e.turnosVisto++;
-      e.intencion = e.def.ia(
-        e.turnosVisto, this.rng, e,
-        this.enemigos.filter((x) => x.vivo && x !== e),
-      );
+      // Cambiazo: si tiene una intención forzada, la ejecuta ahora en vez de
+      // generar una nueva; si no, la IA decide su siguiente movimiento.
+      if (e.intencionForzada) {
+        e.intencion = e.intencionForzada;
+        delete e.intencionForzada;
+      } else {
+        e.intencion = e.def.ia(
+          e.turnosVisto, this.rng, e,
+          this.enemigos.filter((x) => x.vivo && x !== e),
+        );
+      }
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
       this.ui.render();
       await this.ui.espera(250);
@@ -783,14 +883,15 @@ export class Combate {
 
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
-      // atacar el enemigo pierde PV = 3 + el exceso negativo (ignorando bloqueo).
+      // atacar el enemigo pierde PV igual a la DIFERENCIA (cuánto superan las
+      // raíces a su ataque), ignorando el bloqueo. Sin daño base extra.
       const raices = e.estados.raices ?? 0;
       let efectivo = m.dano + (e.estados.fuerza ?? 0) - raices;
       if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
       if (raices > 0 && efectivo <= 0) {
-        const dolor = 3 + (-efectivo);
+        const dolor = -efectivo; // solo el exceso de raíces sobre el ataque
         await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
-        await this.infligir(e, dolor, 'raices');
+        if (dolor > 0) await this.infligir(e, dolor, 'raices');
         return;
       }
       const veces = m.veces ?? 1;

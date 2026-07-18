@@ -98,6 +98,10 @@
   border-color: var(--mago);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(138, 122, 224, 0.45);
 }
+.clase-picaro:hover, .clase-picaro.clase-activa {
+  border-color: var(--picaro);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(79, 176, 160, 0.45);
+}
 
 .clase-icono { font-size: 3.4rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); }
 .clase-nombre { font-family: var(--fuente-titulo); font-size: 1.7rem; }

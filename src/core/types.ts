@@ -1,6 +1,6 @@
 // ── Tipos centrales del juego ────────────────────────────────────────────────
 
-export type ClaseId = 'druida' | 'barbaro' | 'mago';
+export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro';
 export type TipoCarta = 'ataque' | 'habilidad' | 'poder';
 export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara' | 'especial';
 export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
@@ -27,7 +27,13 @@ export type EstadoId =
   | 'escribania'    // (mago) Escribe esta cantidad en el Conjuro Prodigioso al inicio del turno
   | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
   | 'roboAcelerado' // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
-  | 'veneno'         // (jugador) pierde esta cantidad de PV al inicio del turno; baja 1 cada turno
+  | 'veneno'         // pierde esta cantidad de PV al inicio de su turno (ignora bloqueo); baja 1 cada turno
+  | 'acrobacias'     // (pícaro) tu bloqueo NO se elimina al inicio del turno; dura esta cantidad de turnos
+  | 'filoVenenoso'   // (pícaro/Asesino) tus ataques aplican esta cantidad de Veneno al objetivo
+  | 'preparacion'    // (pícaro) cada vez que descartas una carta, ganas esta cantidad de bloqueo
+  | 'dagasPorTurno'  // (pícaro/Psiónico) al inicio de cada turno añades esta cantidad de Dagas a la mano
+  | 'dagasFuerza'    // (pícaro) tus Dagas infligen esta cantidad de daño adicional
+  | 'danzaMortal'    // (pícaro) al inicio del turno añades 1 Daga por cada 2 puntos de Destreza
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
   | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
@@ -126,6 +132,9 @@ export interface EnemigoCombate extends Luchador {
   raicesInstancias?: Array<{ cantidad: number; turnos: number }>;
   /** Recibió daño no bloqueado durante el turno del jugador (para la Hemorragia). */
   heridoEsteTurno?: boolean;
+  /** Intención que ejecutará en su PRÓXIMO turno en vez de generar una nueva
+   *  (Cambiazo del pícaro: intercambia la intención actual por la siguiente). */
+  intencionForzada?: Movimiento;
 }
 
 /** Espacio de conjuro del mago (pirámide de niveles 1-3). */
@@ -268,6 +277,16 @@ export interface ContextoEfecto {
   danarPerforante(obj: Luchador, n: number, fx?: string): Promise<void>;
   /** Deja elegir una carta del descarte y la pone en lo alto del mazo. */
   recuperarDelDescarte(): Promise<void>;
+  /** Descarta hasta N cartas de la mano (las elige el jugador). Devuelve cuántas
+   *  se descartaron. Cada descarte dispara la sinergia de Preparación. */
+  descartar(n: number): Promise<number>;
+  /** Nº de cartas que has descartado en lo que va de turno (para pagos de descarte). */
+  descartadasEsteTurno(): number;
+  /** Añade N Dagas a la mano (pícaro): ataques de 0 de coste que se agotan. */
+  crearDagas(n: number): Promise<void>;
+  /** Intercambia la intención actual del enemigo por la que iba a hacer el turno
+   *  siguiente (Cambiazo): este turno hará la próxima; la actual la hará después. */
+  intercambiarIntencion(e: EnemigoCombate): Promise<void>;
   /** Mata al instante a un enemigo (úsese tras comprobar que no es jefe). */
   matar(e: EnemigoCombate): Promise<void>;
   /** Cura PV a cualquier luchador (p. ej. a un enemigo). */

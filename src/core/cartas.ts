@@ -146,14 +146,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'raices',
-    texto: 'Aplica 8 de Raíces\ndurante 1 turno.',
+    texto: 'Aplica 7 de Raíces\ndurante 1 turno.',
     jugar: async (c) => {
-      await c.aplicarRaices(c.objetivo!, 8, 1);
+      await c.aplicarRaices(c.objetivo!, 7, 1);
     },
     mejora: {
-      texto: 'Aplica 11 de Raíces\ndurante 1 turno.',
+      texto: 'Aplica 10 de Raíces\ndurante 1 turno.',
       jugar: async (c) => {
-        await c.aplicarRaices(c.objetivo!, 11, 1);
+        await c.aplicarRaices(c.objetivo!, 10, 1);
       },
     },
   },
@@ -272,14 +272,14 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'todos',
     fx: 'raices',
-    texto: 'Aplica 12 de Raíces a TODOS\nlos enemigos durante 1 turno.',
+    texto: 'Aplica 11 de Raíces a TODOS\nlos enemigos durante 1 turno.',
     jugar: async (c) => {
-      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 12, 1);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 11, 1);
     },
     mejora: {
-      texto: 'Aplica 16 de Raíces a TODOS\nlos enemigos durante 1 turno.',
+      texto: 'Aplica 14 de Raíces a TODOS\nlos enemigos durante 1 turno.',
       jugar: async (c) => {
-        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 16, 1);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarRaices(e, 14, 1);
       },
     },
   },
@@ -643,24 +643,24 @@ export const DRUIDA: CartaDef[] = [
     fx: 'ola',
     animRara: 'anim-mar',
     exhumar: true,
-    texto: 'Inflige 18 de daño a TODOS los enemigos,\nles aplica 2 Débil, 2 Vulnerable y 10 Raíces.\nGana 8 de bloqueo. Se agota.',
+    texto: 'Inflige 18 de daño a TODOS los enemigos,\nles aplica 2 Débil, 2 Vulnerable y 9 Raíces.\nGana 8 de bloqueo. Se agota.',
     jugar: async (c) => {
       await c.atacarTodos(18, 'ola');
       for (const e of c.enemigos.filter((x) => x.vivo)) {
         await c.aplicarEstado(e, 'debil', 2);
         await c.aplicarEstado(e, 'vulnerable', 2);
-        await c.aplicarRaices(e, 10, 1);
+        await c.aplicarRaices(e, 9, 1);
       }
       await c.ganarBloqueo(8);
     },
     mejora: {
-      texto: 'Inflige 24 de daño a TODOS los enemigos,\nles aplica 3 Débil, 3 Vulnerable y 14 Raíces.\nGana 12 de bloqueo. Se agota.',
+      texto: 'Inflige 24 de daño a TODOS los enemigos,\nles aplica 3 Débil, 3 Vulnerable y 12 Raíces.\nGana 12 de bloqueo. Se agota.',
       jugar: async (c) => {
         await c.atacarTodos(24, 'ola');
         for (const e of c.enemigos.filter((x) => x.vivo)) {
           await c.aplicarEstado(e, 'debil', 3);
           await c.aplicarEstado(e, 'vulnerable', 3);
-          await c.aplicarRaices(e, 14, 1);
+          await c.aplicarRaices(e, 12, 1);
         }
         await c.ganarBloqueo(12);
       },
@@ -1307,6 +1307,27 @@ export const CONJURO_PRODIGIOSO: CartaDef = {
   },
 };
 
+/**
+ * Daga: carta generada por el pícaro (no aparece en recompensas ni en el
+ * Compendio). Cuesta 0, se agota al jugarse y su daño crece con «Maestría con
+ * Cuchillas» (dagasFuerza). Escala con la Fuerza como cualquier ataque.
+ */
+export const DAGA: CartaDef = {
+  id: 'daga',
+  nombre: 'Daga',
+  clase: 'picaro',
+  tipo: 'ataque',
+  rareza: 'especial',
+  coste: 0,
+  objetivo: 'enemigo',
+  fx: 'tajo',
+  exhumar: true,
+  texto: 'Inflige 4 de daño. Se agota.',
+  jugar: async (c) => {
+    await c.atacar(c.objetivo!, 4 + (c.jugador.estados.dagasFuerza ?? 0), 1, 'tajo');
+  },
+};
+
 export const MAGO: CartaDef[] = [
   {
     id: 'manos-ardientes',
@@ -1684,14 +1705,14 @@ export const MAGO: CartaDef[] = [
     coste: 0,
     objetivo: 'ninguno',
     fx: 'estrellas',
-    texto: 'Escribir 4 en el Conjuro Prodigioso.',
+    texto: 'Escribir 5 en el Conjuro Prodigioso.',
     jugar: async (c) => {
-      await c.escribir(4);
+      await c.escribir(5);
     },
     mejora: {
-      texto: 'Escribir 6 en el Conjuro Prodigioso.',
+      texto: 'Escribir 8 en el Conjuro Prodigioso.',
       jugar: async (c) => {
-        await c.escribir(6);
+        await c.escribir(8);
       },
     },
   },
@@ -1704,16 +1725,16 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'impacto',
-    texto: 'Inflige 5 de daño.\nEscribir 3 en el Conjuro Prodigioso.',
+    texto: 'Inflige 5 de daño.\nEscribir 4 en el Conjuro Prodigioso.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 5, 1, 'impacto');
-      await c.escribir(3);
+      await c.escribir(4);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nEscribir 4 en el Conjuro Prodigioso.',
+      texto: 'Inflige 7 de daño.\nEscribir 6 en el Conjuro Prodigioso.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 7, 1, 'impacto');
-        await c.escribir(4);
+        await c.escribir(6);
       },
     },
   },
@@ -1726,20 +1747,20 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'estrellas',
-    texto: 'Inflige 4 de daño dos veces.\nEscribir 2 por cada golpe.',
+    texto: 'Inflige 4 de daño dos veces.\nEscribir 3 por cada golpe.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 4, 1, 'estrellas');
-      await c.escribir(2);
+      await c.escribir(3);
       if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 4, 1, 'estrellas');
-      await c.escribir(2);
+      await c.escribir(3);
     },
     mejora: {
-      texto: 'Inflige 5 de daño dos veces.\nEscribir 3 por cada golpe.',
+      texto: 'Inflige 5 de daño dos veces.\nEscribir 4 por cada golpe.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 5, 1, 'estrellas');
-        await c.escribir(3);
+        await c.escribir(4);
         if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 5, 1, 'estrellas');
-        await c.escribir(3);
+        await c.escribir(4);
       },
     },
   },
@@ -1752,14 +1773,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'impacto',
-    texto: 'Escribir 5.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
+    texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
     jugar: async (c) => {
-      await c.escribir(5, 'area');
+      await c.escribir(7, 'area');
     },
     mejora: {
-      texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
+      texto: 'Escribir 9.\nEl Conjuro Prodigioso pasa a golpear\na TODOS los enemigos.',
       jugar: async (c) => {
-        await c.escribir(7, 'area');
+        await c.escribir(9, 'area');
       },
     },
   },
@@ -1772,14 +1793,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'muerte',
-    texto: 'Escribir 5.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
+    texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
     jugar: async (c) => {
-      await c.escribir(5, 'vulnerable');
+      await c.escribir(7, 'vulnerable');
     },
     mejora: {
-      texto: 'Escribir 7.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
+      texto: 'Escribir 9.\nEl Conjuro Prodigioso pasa a aplicar\n2 de Vulnerable.',
       jugar: async (c) => {
-        await c.escribir(7, 'vulnerable');
+        await c.escribir(9, 'vulnerable');
       },
     },
   },
@@ -1792,14 +1813,14 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Escribir 4.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
+    texto: 'Escribir 6.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
     jugar: async (c) => {
-      await c.escribir(4, 'bloqueo');
+      await c.escribir(6, 'bloqueo');
     },
     mejora: {
-      texto: 'Escribir 6.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
+      texto: 'Escribir 8.\nAl lanzar el Conjuro Prodigioso\nganas 6 de bloqueo.',
       jugar: async (c) => {
-        await c.escribir(6, 'bloqueo');
+        await c.escribir(8, 'bloqueo');
       },
     },
   },
@@ -1887,16 +1908,16 @@ export const MAGO: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'estrellas',
     animRara: 'anim-evocacion',
-    texto: 'Poder: al inicio de cada turno,\nEscribir 3 en el Conjuro Prodigioso.',
+    texto: 'Poder: al inicio de cada turno,\nEscribir 4 en el Conjuro Prodigioso.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'escribania', 3);
-      await c.escribir(3);
+      await c.aplicarEstado(c.jugador, 'escribania', 4);
+      await c.escribir(4);
     },
     mejora: {
-      texto: 'Poder: al inicio de cada turno,\nEscribir 4 en el Conjuro Prodigioso.',
+      texto: 'Poder: al inicio de cada turno,\nEscribir 5 en el Conjuro Prodigioso.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'escribania', 4);
-        await c.escribir(4);
+        await c.aplicarEstado(c.jugador, 'escribania', 5);
+        await c.escribir(5);
       },
     },
   },
@@ -1910,14 +1931,14 @@ export const MAGO: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'impacto',
     animRara: 'anim-evocacion',
-    texto: 'Escribir 12.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
+    texto: 'Escribir 16.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
     jugar: async (c) => {
-      await c.escribir(12, 'perforante');
+      await c.escribir(16, 'perforante');
     },
     mejora: {
-      texto: 'Escribir 16.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
+      texto: 'Escribir 20.\nEl Conjuro Prodigioso pasa a ignorar\ny destruir el bloqueo.',
       jugar: async (c) => {
-        await c.escribir(16, 'perforante');
+        await c.escribir(20, 'perforante');
       },
     },
   },
@@ -1942,6 +1963,615 @@ export const MAGO: CartaDef[] = [
       jugar: async (c) => {
         // valor 2 = añade la versión mejorada del Proyectil Mágico
         await c.aplicarEstado(c.jugador, 'maestria', 2);
+      },
+    },
+  },
+];
+
+// ── Pícaro ───────────────────────────────────────────────────────────────────
+// Mecánicas: Acrobacias (el bloqueo persiste), Destreza y ataques que escalan
+// con ella, robo/descarte con sinergias, ataques furtivos y Dagas. Subclases
+// raras: Asesino (Veneno), Psiónico (Dagas) y Embaucador Arcano (ilusiones).
+
+export const PICARO: CartaDef[] = [
+  {
+    id: 'filo-rapido',
+    nombre: 'Filo Rápido',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'inicial',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 6 de daño.\nRoba 1 carta.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 6);
+      await c.robar(1);
+    },
+    mejora: {
+      texto: 'Inflige 8 de daño.\nRoba 1 carta.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 8);
+        await c.robar(1);
+      },
+    },
+  },
+  // — Comunes —
+  {
+    id: 'pirueta',
+    nombre: 'Pirueta',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 5 de bloqueo.\nAcrobacias: tu bloqueo persiste 1 turno.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(5);
+      await c.aplicarEstado(c.jugador, 'acrobacias', 1);
+    },
+    mejora: {
+      texto: 'Gana 8 de bloqueo.\nAcrobacias: tu bloqueo persiste 1 turno.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(8);
+        await c.aplicarEstado(c.jugador, 'acrobacias', 1);
+      },
+    },
+  },
+  {
+    id: 'daga-veloz',
+    nombre: 'Daga Veloz',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 4 de daño.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 4);
+    },
+    mejora: {
+      texto: 'Inflige 6 de daño.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 6);
+      },
+    },
+  },
+  {
+    id: 'lanzamiento-daga',
+    nombre: 'Lanzamiento de Daga',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 9 de daño.\nRoba 1 carta, luego descarta 1 carta.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 9);
+      await c.robar(1);
+      await c.descartar(1);
+    },
+    mejora: {
+      texto: 'Inflige 12 de daño.\nRoba 1 carta, luego descarta 1 carta.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 12);
+        await c.robar(1);
+        await c.descartar(1);
+      },
+    },
+  },
+  {
+    id: 'finta',
+    nombre: 'Finta',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 5 de bloqueo.\nSi no tenías bloqueo, gánalo de nuevo.',
+    jugar: async (c) => {
+      const sinBloqueo = c.jugador.bloqueo === 0;
+      await c.ganarBloqueo(5);
+      if (sinBloqueo) await c.ganarBloqueo(5);
+    },
+    mejora: {
+      texto: 'Gana 7 de bloqueo.\nSi no tenías bloqueo, gánalo de nuevo.',
+      jugar: async (c) => {
+        const sinBloqueo = c.jugador.bloqueo === 0;
+        await c.ganarBloqueo(7);
+        if (sinBloqueo) await c.ganarBloqueo(7);
+      },
+    },
+  },
+  {
+    id: 'golpe-bajo',
+    nombre: 'Golpe Bajo',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 7 de daño.\nAplica 1 de Débil.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 7);
+      if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'debil', 1);
+    },
+    mejora: {
+      texto: 'Inflige 9 de daño.\nAplica 2 de Débil.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 9);
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'debil', 2);
+      },
+    },
+  },
+  {
+    id: 'rodar',
+    nombre: 'Rodar',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 4 de bloqueo dos veces.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(4);
+      await c.ganarBloqueo(4);
+    },
+    mejora: {
+      texto: 'Gana 5 de bloqueo dos veces.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(5);
+        await c.ganarBloqueo(5);
+      },
+    },
+  },
+  {
+    id: 'distraccion',
+    nombre: 'Distracción',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    texto: 'Roba 2 cartas.\nDescarta 1 carta.',
+    jugar: async (c) => {
+      await c.robar(2);
+      await c.descartar(1);
+    },
+    mejora: {
+      texto: 'Roba 3 cartas.\nDescarta 1 carta.',
+      jugar: async (c) => {
+        await c.robar(3);
+        await c.descartar(1);
+      },
+    },
+  },
+  {
+    id: 'punalada-trapera',
+    nombre: 'Puñalada Trapera',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 6 de daño.\nInflige 4 más si el enemigo\nno pretende atacar.',
+    jugar: async (c) => {
+      const extra = c.objetivo!.intencion.intencion !== 'ataque' ? 4 : 0;
+      await c.atacar(c.objetivo!, 6 + extra);
+    },
+    mejora: {
+      texto: 'Inflige 8 de daño.\nInflige 6 más si el enemigo\nno pretende atacar.',
+      jugar: async (c) => {
+        const extra = c.objetivo!.intencion.intencion !== 'ataque' ? 6 : 0;
+        await c.atacar(c.objetivo!, 8 + extra);
+      },
+    },
+  },
+  // — Infrecuentes —
+  {
+    id: 'ataque-sutil',
+    nombre: 'Ataque Sutil',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 4 de daño.\nInflige 1 más por cada\npunto de Destreza.',
+    jugar: async (c) => {
+      const dex = Math.max(0, c.jugador.estados.destreza ?? 0);
+      await c.atacar(c.objetivo!, 4 + dex);
+    },
+    mejora: {
+      texto: 'Inflige 6 de daño.\nInflige 1 más por cada\npunto de Destreza.',
+      jugar: async (c) => {
+        const dex = Math.max(0, c.jugador.estados.destreza ?? 0);
+        await c.atacar(c.objetivo!, 6 + dex);
+      },
+    },
+  },
+  {
+    id: 'trabajo-de-pies',
+    nombre: 'Trabajo de Pies',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    texto: 'Gana 2 de Destreza.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'destreza', 2);
+    },
+    mejora: {
+      texto: 'Gana 3 de Destreza.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'destreza', 3);
+      },
+    },
+  },
+  {
+    id: 'esfumarse',
+    nombre: 'Esfumarse',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'luna',
+    texto: 'Gana 6 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(6);
+      await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+    },
+    mejora: {
+      texto: 'Gana 9 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(9);
+        await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+      },
+    },
+  },
+  {
+    id: 'mano-rapida',
+    nombre: 'Mano Rápida',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    texto: 'Descarta hasta 2 cartas.\nRoba esa cantidad +1.',
+    jugar: async (c) => {
+      const d = await c.descartar(2);
+      await c.robar(d + 1);
+    },
+    mejora: {
+      texto: 'Descarta hasta 3 cartas.\nRoba esa cantidad +1.',
+      jugar: async (c) => {
+        const d = await c.descartar(3);
+        await c.robar(d + 1);
+      },
+    },
+  },
+  {
+    id: 'cuchilladas',
+    nombre: 'Cuchilladas',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 3 de daño tres veces.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 3, 3, 'tajo');
+    },
+    mejora: {
+      texto: 'Inflige 4 de daño tres veces.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 4, 3, 'tajo');
+      },
+    },
+  },
+  {
+    id: 'preparacion',
+    nombre: 'Preparación',
+    clase: 'picaro',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Poder: cada vez que descartes\nuna carta, gana 3 de bloqueo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'preparacion', 3);
+    },
+    mejora: {
+      texto: 'Poder: cada vez que descartes\nuna carta, gana 4 de bloqueo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'preparacion', 4);
+      },
+    },
+  },
+  {
+    id: 'cambiazo',
+    nombre: 'Cambiazo',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'enemigo',
+    fx: 'luna',
+    texto: 'Cambia la intención del enemigo por la\nque iba a hacer el turno siguiente\n(luego hará la que iba a hacer ahora).',
+    jugar: async (c) => {
+      await c.intercambiarIntencion(c.objetivo!);
+    },
+    mejora: {
+      texto: 'Cambia la intención del enemigo por la\nque iba a hacer el turno siguiente.\nRoba 1 carta.',
+      jugar: async (c) => {
+        await c.intercambiarIntencion(c.objetivo!);
+        await c.robar(1);
+      },
+    },
+  },
+  {
+    id: 'emboscada',
+    nombre: 'Emboscada',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'impacto',
+    texto: 'Inflige 10 de daño.\nInflige 14 más si el enemigo\nno pretende atacar.',
+    jugar: async (c) => {
+      const extra = c.objetivo!.intencion.intencion !== 'ataque' ? 14 : 0;
+      await c.atacar(c.objetivo!, 10 + extra, 1, 'impacto');
+    },
+    mejora: {
+      texto: 'Inflige 14 de daño.\nInflige 18 más si el enemigo\nno pretende atacar.',
+      jugar: async (c) => {
+        const extra = c.objetivo!.intencion.intencion !== 'ataque' ? 18 : 0;
+        await c.atacar(c.objetivo!, 14 + extra, 1, 'impacto');
+      },
+    },
+  },
+  {
+    id: 'filo-toxico',
+    nombre: 'Filo Tóxico',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'veneno',
+    texto: 'Inflige 5 de daño.\nAplica 4 de Veneno.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 5, 1, 'veneno');
+      if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'veneno', 4);
+    },
+    mejora: {
+      texto: 'Inflige 6 de daño.\nAplica 6 de Veneno.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 6, 1, 'veneno');
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'veneno', 6);
+      },
+    },
+  },
+  {
+    id: 'giro-veloz',
+    nombre: 'Giro Veloz',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 4 de bloqueo dos veces.\nRoba 1 carta.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(4);
+      await c.ganarBloqueo(4);
+      await c.robar(1);
+    },
+    mejora: {
+      texto: 'Gana 5 de bloqueo dos veces.\nRoba 1 carta.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(5);
+        await c.ganarBloqueo(5);
+        await c.robar(1);
+      },
+    },
+  },
+  {
+    id: 'atraco',
+    nombre: 'Atraco',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 7 de daño.\nRoba 2 cartas.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 7);
+      await c.robar(2);
+    },
+    mejora: {
+      texto: 'Inflige 10 de daño.\nRoba 2 cartas.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 10);
+        await c.robar(2);
+      },
+    },
+  },
+  // — Raras: subclases del pícaro y remates —
+  {
+    id: 'asesino',
+    nombre: 'Golpe del Asesino',
+    clase: 'picaro',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Asesino',
+    fx: 'veneno',
+    animRara: 'anim-veneno',
+    texto: 'Poder: tus ataques aplican\n2 de Veneno al objetivo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'filoVenenoso', 2);
+    },
+    mejora: {
+      texto: 'Poder: tus ataques aplican\n3 de Veneno al objetivo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'filoVenenoso', 3);
+      },
+    },
+  },
+  {
+    id: 'psionico',
+    nombre: 'Alma de Cuchillas',
+    clase: 'picaro',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Psiónico',
+    fx: 'estrellas',
+    animRara: 'anim-psionico',
+    texto: 'Poder: al inicio de cada turno\nañades 2 Dagas a tu mano.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'dagasPorTurno', 2);
+      await c.crearDagas(2);
+    },
+    mejora: {
+      texto: 'Poder: al inicio de cada turno\nañades 3 Dagas a tu mano.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'dagasPorTurno', 3);
+        await c.crearDagas(3);
+      },
+    },
+  },
+  {
+    id: 'embaucador-arcano',
+    nombre: 'Mano Fantasmal',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Embaucador Arcano',
+    fx: 'luna',
+    animRara: 'anim-ilusion',
+    texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'espejismo', 3);
+      await c.robar(2);
+    },
+    mejora: {
+      coste: 0,
+      texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas. Acrobacias 1.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'espejismo', 3);
+        await c.robar(2);
+        await c.aplicarEstado(c.jugador, 'acrobacias', 1);
+      },
+    },
+  },
+  {
+    id: 'maestria-cuchillas',
+    nombre: 'Maestría con Cuchillas',
+    clase: 'picaro',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'tajo',
+    animRara: 'anim-psionico',
+    texto: 'Poder: tus Dagas infligen\n3 de daño adicional.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'dagasFuerza', 3);
+    },
+    mejora: {
+      texto: 'Poder: tus Dagas infligen\n4 de daño adicional.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'dagasFuerza', 4);
+      },
+    },
+  },
+  {
+    id: 'escapada',
+    nombre: 'Escapada Perfecta',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    animRara: 'anim-ilusion',
+    texto: 'Gana 10 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.\nRoba 1 carta.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(10);
+      await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+      await c.robar(1);
+    },
+    mejora: {
+      texto: 'Gana 14 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.\nRoba 2 cartas.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(14);
+        await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+        await c.robar(2);
+      },
+    },
+  },
+  {
+    id: 'tempestad-acero',
+    nombre: 'Tempestad de Acero',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'impacto',
+    animRara: 'anim-psionico',
+    texto: 'Inflige 6 de daño.\nInflige 3 más por cada carta que\nhayas descartado este turno.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 6 + 3 * c.descartadasEsteTurno(), 1, 'impacto');
+    },
+    mejora: {
+      texto: 'Inflige 8 de daño.\nInflige 4 más por cada carta que\nhayas descartado este turno.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 8 + 4 * c.descartadasEsteTurno(), 1, 'impacto');
+      },
+    },
+  },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'danza-mortal',
+    nombre: 'Danza Mortal',
+    clase: 'picaro',
+    tipo: 'poder',
+    rareza: 'especial',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'tajo',
+    animRara: 'anim-psionico',
+    texto: 'Poder: al inicio de tu turno, añade\n1 Daga por cada 2 puntos de Destreza.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'danzaMortal', 2); // valor = divisor de Destreza
+    },
+    mejora: {
+      texto: 'Poder: al inicio de tu turno, añade\n1 Daga por cada punto de Destreza.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'danzaMortal', 1);
       },
     },
   },
@@ -2075,9 +2705,11 @@ const INICIALES_DE_CLASE: Record<ClaseId, [string, string]> = {
   barbaro: ['furia-primaria', 'golpe-imprudente'],
   // un poder que genera espacio de conjuro y una carta que lo gasta
   mago: ['canalizar-mana', 'manos-ardientes'],
+  // un ataque con robo + una defensa con Acrobacias
+  picaro: ['filo-rapido', 'pirueta'],
 };
 
-const POOLS: Record<ClaseId, CartaDef[]> = { druida: DRUIDA, barbaro: BARBARO, mago: MAGO };
+const POOLS: Record<ClaseId, CartaDef[]> = { druida: DRUIDA, barbaro: BARBARO, mago: MAGO, picaro: PICARO };
 
 export function mazoInicial(clase: ClaseId): CartaInstancia[] {
   const golpe = BASICAS.find((c) => c.id === 'golpe')!;
@@ -2103,7 +2735,9 @@ export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function cartaPorId(id: string): CartaDef | undefined {
-  return [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, CONJURO_PRODIGIOSO].find((c) => c.id === id);
+  return [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, CONJURO_PRODIGIOSO, DAGA].find(
+    (c) => c.id === id,
+  );
 }
 
 /** Elige 3 cartas de recompensa con pesos por rareza. */

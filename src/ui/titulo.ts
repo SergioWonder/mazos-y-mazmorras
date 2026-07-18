@@ -46,6 +46,13 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             <span class="clase-desc">Espacios de conjuro que crecen en pirámide
             y conjuros devastadores que los consumen.</span>
           </button>
+          <button class="clase-carta clase-picaro" data-clase="picaro">
+            <span class="clase-icono">🗡️</span>
+            <span class="clase-nombre">Pícaro</span>
+            <span class="clase-pv">❤️ ${PV_POR_CLASE.picaro} PV</span>
+            <span class="clase-desc">Acrobacias, dagas y ataques furtivos;
+            roba, descarta y envenena desde las sombras.</span>
+          </button>
         </div>
         ${
           puedeContinuar

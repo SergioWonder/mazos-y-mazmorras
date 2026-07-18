@@ -11,7 +11,7 @@ import {
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
-  recompensaCartas, DRUIDA, BARBARO, MAGO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
+  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
   poolDeClase, cartaUnicaDeClase,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
@@ -121,7 +121,7 @@ console.log('— Mapa —');
 console.log('— Recompensas y pools —');
 {
   const rng = crearRng(7);
-  for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
     for (let i = 0; i < 20; i++) {
       const r = recompensaCartas(clase, rng);
       if (new Set(r.map((c) => c.id)).size !== r.length)
@@ -133,7 +133,8 @@ console.log('— Recompensas y pools —');
   check(DRUIDA.filter((c) => c.rareza === 'rara').length === 6, 'druida: 6 raras (4 subclases + 2 de invocación)');
   check(BARBARO.filter((c) => c.rareza === 'rara').length === 6, 'bárbaro: 6 raras (4 subclases + 2 de Hemorragia)');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 5, 'mago: 5 raras (3 escuelas + 2 de Creación de conjuros)');
-  for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+  check(PICARO.filter((c) => c.rareza === 'rara').length === 6, 'pícaro: 6 raras (3 subclases + 3 remates)');
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
     const mazo = mazoInicial(clase);
     check(mazo.length === 11, `${clase}: mazo inicial de 11 cartas (5 golpe + 4 defender + 2 de clase)`);
   }
@@ -149,7 +150,7 @@ console.log('— Combates simulados (los 6 escenarios, 3 clases) —');
 {
   for (const [capIdx, cap] of ACTOS.flat().entries()) {
     let victorias = 0, total = 0;
-    for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+    for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
       for (let s = 1; s <= 10; s++) {
         const defs = cap.normales[s % cap.normales.length];
         const { combate } = await simular(clase, s * 131 + capIdx, defs);
@@ -304,7 +305,7 @@ console.log('— Raíces aplastan al atacar anulado —');
   const pvJ = combate.jugador.pv;
   await combate.terminarTurno();
   check(combate.jugador.pv === pvJ, 'el jugador no recibe daño: el ataque queda anulado');
-  check(30 - e.pv === 6, 'el enemigo pierde 3 + 3 (exceso) = 6 PV (ignora bloqueo)');
+  check(30 - e.pv === 3, 'el enemigo pierde solo la diferencia (10 − 7 = 3) PV (ignora bloqueo)');
 }
 
 console.log('— Raíces Profundas: +1 turno por carta —');
@@ -392,7 +393,7 @@ console.log('— Eventos —');
   let opcionesProbadas = 0;
   for (const ev of [...EVENTOS_POSITIVOS, ...EVENTOS_NEGATIVOS]) {
     for (const [i, op] of ev.opciones.entries()) {
-      for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+      for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
         for (let s = 0; s < 5; s++) {
           const run = nuevaRun(clase, s * 17 + i);
           run.pv = 5; // al borde de la muerte: los eventos no deben matar
@@ -671,7 +672,7 @@ console.log('— Bendiciones de la Vidente —');
 
 console.log('— Cartas únicas de clase (Acto III) —');
 {
-  for (const clase of ['druida', 'barbaro', 'mago'] as ClaseId[]) {
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
     const u = cartaUnicaDeClase(clase);
     check(u.rareza === 'especial' && u.clase === clase, `${clase}: carta única de rareza especial`);
     check(!poolDeClase(clase).includes(u), `${clase}: la única NO aparece en recompensas normales`);
@@ -813,6 +814,111 @@ console.log('— Escenarios alternativos: jefes y estados nuevos —');
   const costeBase = comb4.costeEfectivo(carta.def);
   comb4.jugador.estados.cartasSobrecoste = 1;
   check(comb4.costeEfectivo(carta.def) === costeBase + 1, 'Sobrecarga: la carta cuesta +1');
+}
+
+console.log('— Pícaro: mecánicas nuevas —');
+{
+  // Acrobacias: el bloqueo persiste al inicio del turno siguiente
+  {
+    const run = nuevaRun('picaro', 4001);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4001), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.bloqueo = 12;
+    comb.jugador.estados.acrobacias = 1;
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 12, 'Acrobacias: el bloqueo persiste al turno siguiente');
+    check((comb.jugador.estados.acrobacias ?? 0) === 0, 'Acrobacias baja 1 por turno');
+  }
+  // Sin Acrobacias el bloqueo se limpia
+  {
+    const run = nuevaRun('picaro', 4002);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4002), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.bloqueo = 12;
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 0, 'sin Acrobacias el bloqueo se limpia al inicio del turno');
+  }
+  // Veneno sobre el enemigo: pierde PV al inicio de SU turno y baja 1
+  {
+    const run = nuevaRun('picaro', 4003);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4003), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 40; e.bloqueo = 5;
+    e.estados.veneno = 5;
+    e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(40 - e.pv === 5, 'el Veneno hace 5 de daño al enemigo (ignora bloqueo)');
+    check((e.estados.veneno ?? 0) === 4, 'el Veneno del enemigo baja 1 por turno');
+  }
+  // Filo Venenoso (Asesino): cada ataque envenena al objetivo
+  {
+    const run = nuevaRun('picaro', 4004);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4004), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 40;
+    comb.jugador.estados.filoVenenoso = 3;
+    await comb.contexto(e).atacar(e, 5);
+    check((e.estados.veneno ?? 0) === 3, 'Filo Venenoso: el ataque aplica 3 de Veneno');
+  }
+  // Preparación + descartar: gana bloqueo por cada descarte y cuenta el descarte
+  {
+    const run = nuevaRun('picaro', 4005);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4005), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.bloqueo = 0;
+    comb.jugador.estados.preparacion = 3;
+    const antes = comb.jugador.mano.length;
+    const n = await comb.contexto().descartar(2);
+    check(n === 2, 'descartar(2) descarta 2 cartas');
+    check(comb.jugador.mano.length === antes - 2, 'la mano pierde 2 cartas');
+    check(comb.jugador.bloqueo === 6, 'Preparación: +3 de bloqueo por cada descarte');
+    check(comb.descartadasEsteTurno === 2, 'se contabilizan 2 descartes este turno');
+  }
+  // Dagas: crearDagas añade Dagas y su daño crece con dagasFuerza
+  {
+    const run = nuevaRun('picaro', 4006);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4006), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.mano = []; // sitio de sobra
+    await comb.contexto().crearDagas(3);
+    const dagas = comb.jugador.mano.filter((c) => c.def.id === 'daga');
+    check(dagas.length === 3, 'crearDagas(3) añade 3 Dagas a la mano');
+    check(dagas[0].def.coste === 0, 'las Dagas cuestan 0 y se agotan');
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 40; e.bloqueo = 0;
+    comb.jugador.estados.dagasFuerza = 5;
+    await dagas[0].def.jugar(comb.contexto(e));
+    check(40 - e.pv === 9, 'la Daga inflige 4 + 5 (Maestría con Cuchillas) = 9');
+  }
+  // Cambiazo: intercambia la intención actual por la del turno siguiente
+  {
+    const run = nuevaRun('picaro', 4007);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4007), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    const original = e.intencion;
+    await comb.contexto(e).intercambiarIntencion(e);
+    check(e.intencionForzada === original, 'Cambiazo guarda la intención original para después');
+    check(e.intencion !== original, 'Cambiazo cambia la intención de este turno');
+  }
+  // Ataque furtivo (Emboscada): daño extra si el enemigo no pretende atacar
+  {
+    const emboscada = PICARO.find((c) => c.id === 'emboscada')!;
+    const run = nuevaRun('picaro', 4008);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4008), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
+    e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await emboscada.jugar(comb.contexto(e));
+    check(60 - e.pv === 24, 'Emboscada: 10 + 14 = 24 si el enemigo no ataca');
+    const e2 = comb.enemigos[0]; e2.pv = e2.pvMax = 60; e2.bloqueo = 0;
+    e2.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 8 };
+    await emboscada.jugar(comb.contexto(e2));
+    check(60 - e2.pv === 10, 'Emboscada: solo 10 si el enemigo sí ataca');
+  }
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

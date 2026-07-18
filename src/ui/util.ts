@@ -95,6 +95,8 @@ export const ICONO_ESTADO: Record<string, string> = {
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
+  acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
+  dagasPorTurno: '🔪', dagasFuerza: '⚔️', danzaMortal: '💃',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -107,11 +109,13 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   escribania: 'Escribanía',
   veneno: 'Veneno', cartasAgotan: 'Cartas que se Agotan', cartasSobrecoste: 'Sobrecarga',
   cartasEtereas: 'Cartas Etéreas',
+  acrobacias: 'Acrobacias', filoVenenoso: 'Filo Venenoso', preparacion: 'Preparación',
+  dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', danzaMortal: 'Danza Mortal',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
   fuerza: '+1 de daño por ataque por cada punto (negativo: lo reduce).',
-  raices: 'Reduce el ataque del enemigo esa cantidad. Si su ataque queda en 0 o menos, al intentar atacar pierde PV (3 + el exceso), ignorando el bloqueo.',
+  raices: 'Reduce el ataque del enemigo esa cantidad. Si su ataque queda en 0 o menos, al intentar atacar pierde PV igual a la diferencia (lo que las raíces superan a su ataque), ignorando el bloqueo.',
   destreza: '+1 de bloqueo por carta por cada punto.',
   vulnerable: 'Recibe un 50 % más de daño. Baja 1 por turno.',
   debil: 'Inflige un 25 % menos de daño. Baja 1 por turno.',
@@ -133,10 +137,16 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
     'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',
   sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas esa cantidad de bloqueo.',
   escribania: 'Al inicio de cada turno escribes esa cantidad en el Conjuro Prodigioso.',
-  veneno: 'Al inicio de tu turno pierdes esa cantidad de PV, ignorando el bloqueo. Baja 1 cada turno.',
+  veneno: 'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. Baja 1 cada turno.',
   cartasAgotan: 'Este turno, cada carta que juegues se agota (sale del mazo el resto del combate).',
   cartasSobrecoste: 'Este turno, cada carta cuesta 1 de energía más.',
   cartasEtereas: 'Al final de este turno, las cartas que no hayas jugado se agotan en vez de descartarse.',
+  acrobacias: 'Tu bloqueo NO se elimina al inicio de tu turno mientras dure. Baja 1 por turno.',
+  filoVenenoso: 'Cada uno de tus ataques aplica esa cantidad de Veneno al objetivo.',
+  preparacion: 'Cada vez que descartas una carta, ganas esa cantidad de bloqueo.',
+  dagasPorTurno: 'Al inicio de cada turno añades esa cantidad de Dagas a tu mano.',
+  dagasFuerza: 'Tus Dagas infligen esa cantidad de daño adicional.',
+  danzaMortal: 'Al inicio de tu turno añades 1 Daga por cada esa cantidad de puntos de Destreza.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */
