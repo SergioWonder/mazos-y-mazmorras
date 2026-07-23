@@ -95,8 +95,8 @@ export const ICONO_ESTADO: Record<string, string> = {
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
-  acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
-  dagasPorTurno: '🔪', dagasFuerza: '⚔️', danzaMortal: '💃',
+  acrobacias: '🤸', piruetaProlongada: '🌀', filoVenenoso: '🗡️', preparacion: '🎒',
+  dagasPorTurno: '🔪', dagasFuerza: '⚔️', dagasDestreza: '💃',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -109,8 +109,9 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   escribania: 'Escribanía',
   veneno: 'Veneno', cartasAgotan: 'Cartas que se Agotan', cartasSobrecoste: 'Sobrecarga',
   cartasEtereas: 'Cartas Etéreas',
-  acrobacias: 'Acrobacias', filoVenenoso: 'Filo Venenoso', preparacion: 'Preparación',
-  dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', danzaMortal: 'Danza Mortal',
+  acrobacias: 'Acrobacias', piruetaProlongada: 'Piruetas Prolongadas',
+  filoVenenoso: 'Filo Venenoso', preparacion: 'Preparación',
+  dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', dagasDestreza: 'Danza Mortal',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -141,12 +142,13 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   cartasAgotan: 'Este turno, cada carta que juegues se agota (sale del mazo el resto del combate).',
   cartasSobrecoste: 'Este turno, cada carta cuesta 1 de energía más.',
   cartasEtereas: 'Al final de este turno, las cartas que no hayas jugado se agotan en vez de descartarse.',
-  acrobacias: 'Tu bloqueo NO se elimina al inicio de tu turno mientras dure. Baja 1 por turno.',
+  acrobacias: 'Bloqueo aplazado: al inicio de tu próximo turno recuperas esa cantidad de bloqueo (el que aplicaron tus cartas de Acrobacias).',
+  piruetaProlongada: 'Tus Acrobacias reaplican su bloqueo 1 turno más (2 turnos en total en vez de 1).',
   filoVenenoso: 'Cada uno de tus ataques aplica esa cantidad de Veneno al objetivo.',
   preparacion: 'Cada vez que descartas una carta, ganas esa cantidad de bloqueo.',
   dagasPorTurno: 'Al inicio de cada turno añades esa cantidad de Dagas a tu mano.',
   dagasFuerza: 'Tus Dagas infligen esa cantidad de daño adicional.',
-  danzaMortal: 'Al inicio de tu turno añades 1 Daga por cada esa cantidad de puntos de Destreza.',
+  dagasDestreza: 'Tus Dagas infligen daño adicional igual a tu Destreza.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

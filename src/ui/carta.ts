@@ -231,7 +231,7 @@ function arteDeCarta(def: CartaDef): string {
     cuchilladas: '🔪', preparacion: '🎒', cambiazo: '🎭', emboscada: '🥷',
     'filo-toxico': '🧪', 'giro-veloz': '🌀', atraco: '💰',
     asesino: '☠️', psionico: '🔮', 'embaucador-arcano': '🎩',
-    'maestria-cuchillas': '⚔️', escapada: '🏃', 'tempestad-acero': '🌪️',
+    'maestria-cuchillas': '⚔️', escapada: '🌀', 'tempestad-acero': '🌪️',
     'danza-mortal': '💃',
   };
   return ARTE[def.id] ?? '✦';

@@ -818,17 +818,37 @@ console.log('— Escenarios alternativos: jefes y estados nuevos —');
 
 console.log('— Pícaro: mecánicas nuevas —');
 {
-  // Acrobacias: el bloqueo persiste al inicio del turno siguiente
+  // Acrobacias (pirueta): el bloqueo de esa carta se reaplica el turno siguiente (1 turno)
   {
     const run = nuevaRun('picaro', 4001);
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4001), uiSilenciosa);
     await comb.iniciar();
-    comb.jugador.bloqueo = 12;
-    comb.jugador.estados.acrobacias = 1;
-    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
-    await comb.terminarTurno();
-    check(comb.jugador.bloqueo === 12, 'Acrobacias: el bloqueo persiste al turno siguiente');
-    check((comb.jugador.estados.acrobacias ?? 0) === 0, 'Acrobacias baja 1 por turno');
+    comb.jugador.estados.destreza = 0; // números limpios
+    const defender = () => { comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 }; };
+    await comb.contexto().ganarBloqueoAcrobatico(14);
+    check(comb.jugador.bloqueo === 14, 'Acrobacias: 14 de bloqueo este turno');
+    check((comb.jugador.estados.acrobacias ?? 0) === 14, 'el indicador muestra 14 de bloqueo aplazado');
+    defender(); await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 14, 'Acrobacias: 14 de bloqueo también el turno siguiente');
+    check((comb.jugador.estados.acrobacias ?? 0) === 0, 'ya no queda bloqueo aplazado (solo 1 turno)');
+    defender(); await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 0, 'y al turno siguiente el bloqueo ya no vuelve');
+  }
+  // Piruetas Prolongadas (Reflejos de Sombra): duran 2 turnos
+  {
+    const run = nuevaRun('picaro', 4009);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4009), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.estados.destreza = 0;
+    comb.jugador.estados.piruetaProlongada = 1;
+    const defender = () => { comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 }; };
+    await comb.contexto().ganarBloqueoAcrobatico(10);
+    defender(); await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 10, 'Prolongadas: 10 de bloqueo el 2.º turno');
+    defender(); await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 10, 'Prolongadas: 10 de bloqueo también el 3.er turno');
+    defender(); await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 0, 'Prolongadas: tras 2 turnos deja de volver');
   }
   // Sin Acrobacias el bloqueo se limpia
   {
@@ -890,8 +910,16 @@ console.log('— Pícaro: mecánicas nuevas —');
     check(dagas[0].def.coste === 0, 'las Dagas cuestan 0 y se agotan');
     const e = comb.enemigos[0]; e.pv = e.pvMax = 40; e.bloqueo = 0;
     comb.jugador.estados.dagasFuerza = 5;
+    comb.jugador.estados.destreza = 0;
     await dagas[0].def.jugar(comb.contexto(e));
     check(40 - e.pv === 9, 'la Daga inflige 4 + 5 (Maestría con Cuchillas) = 9');
+    // Danza Mortal: las Dagas hacen daño extra igual a la Destreza
+    e.pv = e.pvMax = 40; e.bloqueo = 0;
+    comb.jugador.estados.dagasFuerza = 0;
+    comb.jugador.estados.destreza = 6;
+    comb.jugador.estados.dagasDestreza = 1;
+    await dagas[1].def.jugar(comb.contexto(e));
+    check(40 - e.pv === 10, 'Danza Mortal: la Daga inflige 4 + 6 (Destreza) = 10');
   }
   // Cambiazo: intercambia la intención actual por la del turno siguiente
   {

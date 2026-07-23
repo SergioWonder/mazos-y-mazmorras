@@ -1324,7 +1324,11 @@ export const DAGA: CartaDef = {
   exhumar: true,
   texto: 'Inflige 4 de daño. Se agota.',
   jugar: async (c) => {
-    await c.atacar(c.objetivo!, 4 + (c.jugador.estados.dagasFuerza ?? 0), 1, 'tajo');
+    const porDestreza = (c.jugador.estados.dagasDestreza ?? 0) > 0
+      ? Math.max(0, c.jugador.estados.destreza ?? 0)
+      : 0;
+    const bonus = (c.jugador.estados.dagasFuerza ?? 0) + porDestreza;
+    await c.atacar(c.objetivo!, 4 + bonus, 1, 'tajo');
   },
 };
 
@@ -2006,16 +2010,14 @@ export const PICARO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Gana 5 de bloqueo.\nAcrobacias: tu bloqueo persiste 1 turno.',
+    texto: 'Acrobacias: gana 5 de bloqueo\ny vuelve a ganarlo el próximo turno.',
     jugar: async (c) => {
-      await c.ganarBloqueo(5);
-      await c.aplicarEstado(c.jugador, 'acrobacias', 1);
+      await c.ganarBloqueoAcrobatico(5);
     },
     mejora: {
-      texto: 'Gana 8 de bloqueo.\nAcrobacias: tu bloqueo persiste 1 turno.',
+      texto: 'Acrobacias: gana 8 de bloqueo\ny vuelve a ganarlo el próximo turno.',
       jugar: async (c) => {
-        await c.ganarBloqueo(8);
-        await c.aplicarEstado(c.jugador, 'acrobacias', 1);
+        await c.ganarBloqueoAcrobatico(8);
       },
     },
   },
@@ -2227,16 +2229,14 @@ export const PICARO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'luna',
-    texto: 'Gana 6 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.',
+    texto: 'Acrobacias: gana 8 de bloqueo\ny vuelve a ganarlo el próximo turno.',
     jugar: async (c) => {
-      await c.ganarBloqueo(6);
-      await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+      await c.ganarBloqueoAcrobatico(8);
     },
     mejora: {
-      texto: 'Gana 9 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.',
+      texto: 'Acrobacias: gana 11 de bloqueo\ny vuelve a ganarlo el próximo turno.',
       jugar: async (c) => {
-        await c.ganarBloqueo(9);
-        await c.aplicarEstado(c.jugador, 'acrobacias', 2);
+        await c.ganarBloqueoAcrobatico(11);
       },
     },
   },
@@ -2425,14 +2425,15 @@ export const PICARO: CartaDef[] = [
     subclase: 'Asesino',
     fx: 'veneno',
     animRara: 'anim-veneno',
-    texto: 'Poder: tus ataques aplican\n2 de Veneno al objetivo.',
+    texto: 'Poder: tus ataques aplican\n1 de Veneno al objetivo.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'filoVenenoso', 2);
+      await c.aplicarEstado(c.jugador, 'filoVenenoso', 1);
     },
     mejora: {
-      texto: 'Poder: tus ataques aplican\n3 de Veneno al objetivo.',
+      coste: 0,
+      texto: 'Poder: tus ataques aplican\n1 de Veneno al objetivo.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'filoVenenoso', 3);
+        await c.aplicarEstado(c.jugador, 'filoVenenoso', 1);
       },
     },
   },
@@ -2447,16 +2448,17 @@ export const PICARO: CartaDef[] = [
     subclase: 'Psiónico',
     fx: 'estrellas',
     animRara: 'anim-psionico',
-    texto: 'Poder: al inicio de cada turno\nañades 2 Dagas a tu mano.',
+    texto: 'Poder: al inicio de cada turno\nañades 1 Daga a tu mano.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'dagasPorTurno', 2);
-      await c.crearDagas(2);
+      await c.aplicarEstado(c.jugador, 'dagasPorTurno', 1);
+      await c.crearDagas(1);
     },
     mejora: {
-      texto: 'Poder: al inicio de cada turno\nañades 3 Dagas a tu mano.',
+      coste: 0,
+      texto: 'Poder: al inicio de cada turno\nañades 1 Daga a tu mano.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'dagasPorTurno', 3);
-        await c.crearDagas(3);
+        await c.aplicarEstado(c.jugador, 'dagasPorTurno', 1);
+        await c.crearDagas(1);
       },
     },
   },
@@ -2478,11 +2480,10 @@ export const PICARO: CartaDef[] = [
     },
     mejora: {
       coste: 0,
-      texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas. Acrobacias 1.',
+      texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'espejismo', 3);
         await c.robar(2);
-        await c.aplicarEstado(c.jugador, 'acrobacias', 1);
       },
     },
   },
@@ -2509,26 +2510,23 @@ export const PICARO: CartaDef[] = [
   },
   {
     id: 'escapada',
-    nombre: 'Escapada Perfecta',
+    nombre: 'Reflejos de Sombra',
     clase: 'picaro',
-    tipo: 'habilidad',
+    tipo: 'poder',
     rareza: 'rara',
     coste: 1,
     objetivo: 'ninguno',
-    fx: 'bloqueo',
+    fx: 'luna',
     animRara: 'anim-ilusion',
-    texto: 'Gana 10 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.\nRoba 1 carta.',
+    texto: 'Poder: tus Acrobacias reaplican\nsu bloqueo 1 turno más (2 en total).',
     jugar: async (c) => {
-      await c.ganarBloqueo(10);
-      await c.aplicarEstado(c.jugador, 'acrobacias', 2);
-      await c.robar(1);
+      await c.aplicarEstado(c.jugador, 'piruetaProlongada', 1);
     },
     mejora: {
-      texto: 'Gana 14 de bloqueo.\nAcrobacias: tu bloqueo persiste 2 turnos.\nRoba 2 cartas.',
+      coste: 0,
+      texto: 'Poder: tus Acrobacias reaplican\nsu bloqueo 1 turno más (2 en total).',
       jugar: async (c) => {
-        await c.ganarBloqueo(14);
-        await c.aplicarEstado(c.jugador, 'acrobacias', 2);
-        await c.robar(2);
+        await c.aplicarEstado(c.jugador, 'piruetaProlongada', 1);
       },
     },
   },
@@ -2564,14 +2562,15 @@ export const PICARO: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'tajo',
     animRara: 'anim-psionico',
-    texto: 'Poder: al inicio de tu turno, añade\n1 Daga por cada 2 puntos de Destreza.',
+    texto: 'Poder: tus Dagas infligen daño\nadicional igual a tu Destreza.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'danzaMortal', 2); // valor = divisor de Destreza
+      await c.aplicarEstado(c.jugador, 'dagasDestreza', 1);
     },
     mejora: {
-      texto: 'Poder: al inicio de tu turno, añade\n1 Daga por cada punto de Destreza.',
+      coste: 0,
+      texto: 'Poder: tus Dagas infligen daño\nadicional igual a tu Destreza.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'danzaMortal', 1);
+        await c.aplicarEstado(c.jugador, 'dagasDestreza', 1);
       },
     },
   },

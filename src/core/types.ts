@@ -28,12 +28,13 @@ export type EstadoId =
   | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
   | 'roboAcelerado' // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
   | 'veneno'         // pierde esta cantidad de PV al inicio de su turno (ignora bloqueo); baja 1 cada turno
-  | 'acrobacias'     // (pícaro) tu bloqueo NO se elimina al inicio del turno; dura esta cantidad de turnos
+  | 'acrobacias'     // (pícaro) bloqueo aplazado total pendiente de reaplicarse el próximo turno (solo indicador)
+  | 'piruetaProlongada' // (pícaro) tus piruetas reaplican su bloqueo 1 turno más (2 turnos en total)
   | 'filoVenenoso'   // (pícaro/Asesino) tus ataques aplican esta cantidad de Veneno al objetivo
   | 'preparacion'    // (pícaro) cada vez que descartas una carta, ganas esta cantidad de bloqueo
   | 'dagasPorTurno'  // (pícaro/Psiónico) al inicio de cada turno añades esta cantidad de Dagas a la mano
   | 'dagasFuerza'    // (pícaro) tus Dagas infligen esta cantidad de daño adicional
-  | 'danzaMortal'    // (pícaro) al inicio del turno añades 1 Daga por cada 2 puntos de Destreza
+  | 'dagasDestreza'  // (pícaro/Danza Mortal) tus Dagas infligen daño adicional igual a tu Destreza
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
   | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
@@ -163,6 +164,9 @@ export interface JugadorCombate extends Luchador {
   conjuroActivo: boolean;
   /** Invocación activa del druida (absorbe daño y ataca cada turno). */
   invocacion?: Invocacion;
+  /** Bloqueo aplazado del pícaro (Acrobacias): cada entrada reaplica su bloqueo
+   *  al inicio de los próximos `turnos` turnos. */
+  bloqueoAplazado: Array<{ cantidad: number; turnos: number }>;
 }
 
 export interface CartaDef {
@@ -218,6 +222,9 @@ export interface ContextoEfecto {
   atacar(obj: EnemigoCombate, base: number, veces?: number, fx?: string): Promise<number>;
   atacarTodos(base: number, fx?: string): Promise<void>;
   ganarBloqueo(base: number): Promise<void>;
+  /** Bloqueo acrobático (pícaro): gana el bloqueo ahora y lo vuelve a aplicar al
+   *  inicio del próximo turno (2 turnos si tienes Piruetas Prolongadas). */
+  ganarBloqueoAcrobatico(base: number): Promise<void>;
   aplicarEstado(obj: Luchador, estado: EstadoId, n: number): Promise<void>;
   /** Aplica una instancia de Raíces (cantidad + duración propia) a un enemigo. */
   aplicarRaices(e: EnemigoCombate, cantidad: number, turnos: number): Promise<void>;

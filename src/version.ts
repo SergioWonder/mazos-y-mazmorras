@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '2.0.0';
+export const VERSION = '2.0.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '2.0.1',
+    fecha: '2026-07-18',
+    cambios: [
+      '🗡️ El Pícaro se reequilibra: Alma de Cuchillas genera 1 Daga por turno (adiós a la lluvia infinita de dagas).',
+      '💃 Danza Mortal ya no crea dagas: ahora tus Dagas infligen daño adicional igual a tu Destreza.',
+      '🤸 Acrobacias reescritas: el bloqueo de esa carta se vuelve a aplicar el turno siguiente (solo ese bloqueo, 1 turno).',
+      '🌀 Reflejos de Sombra (antes Escapada Perfecta): ahora es un poder que hace que tus Acrobacias duren 2 turnos.',
+      '🧪 Golpe del Asesino aplica 1 de Veneno; mejorado, cuesta menos energía (igual que Alma de Cuchillas).',
+    ],
+  },
   {
     version: '2.0.0',
     fecha: '2026-07-18',

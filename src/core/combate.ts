@@ -73,6 +73,7 @@ export class Combate {
       efectosTemporales: [], furiaFuerza: 0, furiaDestreza: 0,
       conjuros: crearEspacios(run.espaciosConjuro),
       conjuroEscrito: 0, conjuroEfectos: [], conjuroActivo: false,
+      bloqueoAplazado: [],
     };
     this.enemigos = defs.map((d) => crearEnemigo(d, rng));
   }
@@ -153,6 +154,17 @@ export class Combate {
         const b = self.bloqueoDeCarta(base);
         self.jugador.bloqueo += b;
         await self.ui.fxBloqueo(self.jugador, b);
+      },
+      async ganarBloqueoAcrobatico(base) {
+        const b = self.bloqueoDeCarta(base);
+        self.jugador.bloqueo += b;
+        await self.ui.fxBloqueo(self.jugador, b);
+        // Piruetas: reaplica este bloqueo al inicio del próximo turno (o de los 2
+        // próximos con Piruetas Prolongadas). Es SOLO el bloqueo de esta carta.
+        const turnos = 1 + ((self.jugador.estados.piruetaProlongada ?? 0) > 0 ? 1 : 0);
+        self.jugador.bloqueoAplazado.push({ cantidad: b, turnos });
+        self.actualizarIndicadorAcrobacias();
+        self.ui.render();
       },
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
@@ -542,6 +554,13 @@ export class Combate {
     this.ui.render();
   }
 
+  /** Refresca el indicador «🤸 Acrobacias» = bloqueo aplazado total pendiente. */
+  private actualizarIndicadorAcrobacias() {
+    const total = this.jugador.bloqueoAplazado.reduce((s, p) => s + p.cantidad, 0);
+    if (total > 0) this.jugador.estados.acrobacias = total;
+    else delete this.jugador.estados.acrobacias;
+  }
+
   async iniciar() {
     // Efectos permanentes (cartas de 1 uso, bendiciones)
     if (this.run.permanentes.fuerza > 0) {
@@ -575,14 +594,17 @@ export class Combate {
     this.danoBloqueadoEsteTurno = 0;
     this.descartadasEsteTurno = 0;
     for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
-    // Acrobacias (pícaro): el bloqueo NO se elimina mientras dure; si no, se limpia.
     if (!primero) {
-      if ((this.jugador.estados.acrobacias ?? 0) > 0) {
-        this.jugador.estados.acrobacias!--;
-        if ((this.jugador.estados.acrobacias ?? 0) <= 0) delete this.jugador.estados.acrobacias;
-      } else {
-        this.jugador.bloqueo = 0;
+      this.jugador.bloqueo = 0;
+      // Piruetas (pícaro): reaplica el bloqueo aplazado de la carta jugada antes.
+      const pendientes = this.jugador.bloqueoAplazado;
+      this.jugador.bloqueoAplazado = [];
+      for (const p of pendientes) {
+        this.jugador.bloqueo += p.cantidad;
+        await this.ui.fxBloqueo(this.jugador, p.cantidad);
+        if (p.turnos - 1 > 0) this.jugador.bloqueoAplazado.push({ cantidad: p.cantidad, turnos: p.turnos - 1 });
       }
+      this.actualizarIndicadorAcrobacias();
     }
     // Veneno: pierdes PV al inicio del turno (ignora bloqueo) y baja 1
     const ven = this.jugador.estados.veneno ?? 0;
@@ -644,15 +666,9 @@ export class Combate {
       if (maestria >= 2) inst.mejorada = true;
       this.jugador.mano.push(inst);
     }
-    // Psiónico: Dagas por turno. Danza Mortal: 1 Daga por cada 2 de Destreza.
+    // Psiónico (Alma de Cuchillas): Dagas por turno.
     const dpt = this.jugador.estados.dagasPorTurno ?? 0;
     if (dpt > 0) await this.crearDagas(dpt);
-    // Danza Mortal: 1 Daga por cada N de Destreza (el valor del estado es el divisor N).
-    const divisor = this.jugador.estados.danzaMortal ?? 0;
-    if (divisor > 0) {
-      const porDestreza = Math.floor(Math.max(0, this.jugador.estados.destreza ?? 0) / divisor);
-      if (porDestreza > 0) await this.crearDagas(porDestreza);
-    }
     // regeneración y curas de efectos temporales
     const regen = this.jugador.estados.regeneracion ?? 0;
     const curaExtra = this.jugador.efectosTemporales.reduce((s, e) => s + (e.curaTurno ?? 0), 0);
