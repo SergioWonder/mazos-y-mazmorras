@@ -55,12 +55,20 @@ mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas d
   3 arriba). La recuperación devuelve el espacio gastado de MENOR nivel; «Sacrificio
   Arcano» recupera el de MAYOR (cuesta 1 maná y PV; mejorado, sin coste de vida).
   Cartas raras: una por escuela de magia (Evocación, Abjuración, Ilusión).
-- **Pícaro** (66 PV): Acrobacias (tu bloqueo no se limpia al inicio del turno mientras
-  dure), Destreza y ataques que escalan con ella, ataques furtivos (más daño si el enemigo
-  no pretende atacar), Cambiazo (intercambia la intención del enemigo por la del turno
-  siguiente), mucho robo/descarte con sinergias y Dagas (ataques de 0 de coste que se
-  agotan). Cartas raras: subclases de D&D 2024 (Asesino → veneno, Psiónico → dagas,
-  Embaucador Arcano → ilusiones).
+- **Pícaro** (66 PV): cuatro ejes que se cruzan entre sí:
+  - **Acrobacias**: el bloqueo de esas cartas se vuelve a aplicar al turno siguiente.
+  - **Veneno**: Filo Tóxico y Toxina Paralizante lo aplican, Filo Venenoso (Asesino) lo
+    reparte con cada ataque, Golpe Séptico pega más cuanto más envenenado está el objetivo
+    y **Nube Nauseabunda** envenena a todos y **detona el Veneno al instante**.
+  - **Dagas** (ataques generados de 0 de coste que se agotan): Lluvia de Dagas y Alma de
+    Cuchillas las generan; Maestría con Cuchillas, Danza Mortal y **Guardia de Cuchillas**
+    (bloqueo por cada Daga jugada) las potencian.
+  - **Ataques furtivos**: más daño si el enemigo no pretende atacar (Puñalada Trapera,
+    Emboscada, **Oportunista**). **Cambiazo** (coste 0) le fuerza una intención que no sea
+    de ataque; si solo sabe atacar, se queda desconcertado y pierde el turno.
+  Además, Trabajo de Pies es un poder que suma Destreza cada turno, y hay mucho
+  robo/descarte con sinergias (Preparación, Tempestad de Acero). Cartas raras: subclases
+  de D&D 2024 (Asesino → veneno, Psiónico → dagas, Embaucador Arcano → ilusiones).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
   Manos Ardientes · Pícaro: Filo Rápido y Pirueta).
@@ -86,8 +94,9 @@ mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas d
   libera al Demonio Mayor), Ignifax el Dragón Rojo y el Contemplador, cuyos rayos
   de colores tuercen tu siguiente turno (cartas que se agotan, sobrecarga de
   energía, cartas etéreas…) mientras sus Observadores no dejan de mirar.
-- **Estado de Veneno**: algunos enemigos te envenenan; pierdes PV al inicio de
-  cada turno (ignora el bloqueo) y baja 1 con el tiempo.
+- **Estado de Veneno**: al inicio de su turno, quien lo sufre pierde PV ignorando el
+  bloqueo (no lo destruye) y su Veneno baja 1. Algunos enemigos te envenenan; el pícaro
+  lo reparte y puede detonarlo al instante con Nube Nauseabunda.
 - **Élites y jefes exigentes**: los élites pegan fuerte y los jefes combinan
   Débil/Vulnerable con ataques especiales. El **Aliento de Dragón** de Ignifax
   (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas te cuesta 3 PV.

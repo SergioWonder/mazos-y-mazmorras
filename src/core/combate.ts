@@ -116,6 +116,29 @@ export class Combate {
     return this.danoDeAtaque(e, e.intencion.dano) <= 0;
   }
 
+  /** El enemigo no va a atacarte este turno: base de los ataques furtivos del
+   *  pícaro (se defiende, se potencia, está desconcertado o pierde el turno). */
+  noPretendeAtacar(e: EnemigoCombate): boolean {
+    if (e.saltaAccion) return true;
+    return e.intencion.intencion !== 'ataque' && e.intencion.dano === undefined;
+  }
+
+  /** Oportunista (pícaro): daño extra por golpe contra quien no pretende atacar. */
+  ventajaFurtivaContra(e: EnemigoCombate): number {
+    const v = this.jugador.estados.ventajaFurtiva ?? 0;
+    return v > 0 && this.noPretendeAtacar(e) ? v : 0;
+  }
+
+  /** Activa el Veneno de un enemigo: pierde PV igual a su Veneno (ignorando el
+   *  bloqueo) y su Veneno baja 1. */
+  async tickVeneno(e: EnemigoCombate) {
+    const ven = e.estados.veneno ?? 0;
+    if (ven <= 0) return;
+    await this.infligir(e, ven, 'veneno', true, true);
+    e.estados.veneno = ven - 1;
+    if ((e.estados.veneno ?? 0) <= 0) delete e.estados.veneno;
+  }
+
   // ── Contexto que se pasa a las cartas y reliquias ─────────────────────────
 
   contexto(objetivo?: EnemigoCombate): ContextoEfecto {
@@ -127,9 +150,11 @@ export class Combate {
       rng: self.rng,
       async atacar(obj, base, veces = 1, fx) {
         let total = 0;
+        // Oportunista (pícaro): más daño por golpe si el objetivo no pretende atacar
+        const furtivo = self.ventajaFurtivaContra(obj);
         for (let i = 0; i < veces; i++) {
           if (!obj.vivo) break;
-          const dano = self.danoRecibido(obj, self.danoDeAtaque(self.jugador, base));
+          const dano = self.danoRecibido(obj, self.danoDeAtaque(self.jugador, base + furtivo));
           total += await self.infligir(obj, dano, fx);
           // Espinas del enemigo (Escamas Ígneas, etc.): devuelven daño al atacante
           const espinas = obj.estados.espinas ?? 0;
@@ -146,7 +171,8 @@ export class Combate {
       },
       async atacarTodos(base, fx) {
         for (const e of self.enemigos.filter((x) => x.vivo)) {
-          const dano = self.danoRecibido(e, self.danoDeAtaque(self.jugador, base));
+          const extra = self.ventajaFurtivaContra(e);
+          const dano = self.danoRecibido(e, self.danoDeAtaque(self.jugador, base + extra));
           await self.infligir(e, dano, fx);
         }
       },
@@ -159,10 +185,9 @@ export class Combate {
         const b = self.bloqueoDeCarta(base);
         self.jugador.bloqueo += b;
         await self.ui.fxBloqueo(self.jugador, b);
-        // Piruetas: reaplica este bloqueo al inicio del próximo turno (o de los 2
-        // próximos con Piruetas Prolongadas). Es SOLO el bloqueo de esta carta.
-        const turnos = 1 + ((self.jugador.estados.piruetaProlongada ?? 0) > 0 ? 1 : 0);
-        self.jugador.bloqueoAplazado.push({ cantidad: b, turnos });
+        // Piruetas: reaplica este bloqueo al inicio del próximo turno. Es SOLO el
+        // bloqueo de esta carta.
+        self.jugador.bloqueoAplazado.push({ cantidad: b, turnos: 1 });
         self.actualizarIndicadorAcrobacias();
         self.ui.render();
       },
@@ -257,6 +282,7 @@ export class Combate {
       hayInvocacion: () => !!self.jugador.invocacion && self.jugador.invocacion.vida > 0,
       run: self.run,
       danoIntencion: (e) => self.danoIntencion(e),
+      noPretendeAtacar: (e) => self.noPretendeAtacar(e),
       ataqueAnulado: (e) => self.ataqueAnulado(e),
       estaTransformado: () => self.jugador.efectosTemporales.length > 0,
       mensaje: (txt) => self.ui.fxMensaje(txt),
@@ -321,16 +347,38 @@ export class Combate {
       },
       descartadasEsteTurno: () => self.descartadasEsteTurno,
       crearDagas: (n) => self.crearDagas(n),
+      async detonarVenenos() {
+        const envenenados = self.enemigos.filter((e) => e.vivo && (e.estados.veneno ?? 0) > 0);
+        if (envenenados.length === 0) {
+          await self.ui.fxMensaje('Nadie está envenenado…');
+          return;
+        }
+        for (const e of envenenados) {
+          if (!e.vivo || self.terminado) break;
+          await self.tickVeneno(e);
+        }
+        self.ui.render();
+      },
       async intercambiarIntencion(e) {
         if (!e.vivo || self.terminado) return;
-        const siguiente = e.def.ia(
-          e.turnosVisto + 1, self.rng, e,
-          self.enemigos.filter((x) => x.vivo && x !== e),
-        );
+        const aliados = self.enemigos.filter((x) => x.vivo && x !== e);
+        // Busca entre sus próximos movimientos uno que NO sea de ataque.
+        let pacifica: Movimiento | undefined;
+        for (let i = 1; i <= 16 && !pacifica; i++) {
+          const m = e.def.ia(e.turnosVisto + i, self.rng, e, aliados);
+          if (m.intencion !== 'ataque' && m.dano === undefined) pacifica = m;
+        }
         e.intencionForzada = e.intencion; // lo que iba a hacer → lo hará después
-        e.intencion = siguiente;
+        if (pacifica) {
+          e.intencion = pacifica;
+          await self.ui.fxMensaje(`🎭 Confundes a ${e.nombre}`);
+        } else {
+          // Solo sabe atacar: se queda desconcertado y pierde el turno.
+          e.saltaAccion = true;
+          e.intencion = { nombre: 'Desconcertado', intencion: 'desconocido' };
+          await self.ui.fxMensaje(`🎭 ${e.nombre} se queda desconcertado`);
+        }
         e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
-        await self.ui.fxMensaje(`🎭 Confundes a ${e.nombre}`);
         self.ui.render();
       },
       async matar(e) {
@@ -358,8 +406,11 @@ export class Combate {
   }
 
   /** Aplica daño real a un luchador (atraviesa bloqueo primero).
-   *  Si `perforante`, ignora el bloqueo y además lo destruye (lo pone a 0). */
-  async infligir(obj: Luchador, dano: number, fx?: string, perforante = false): Promise<number> {
+   *  Si `perforante`, ignora el bloqueo; además lo destruye (lo pone a 0) salvo
+   *  que se pida `conservarBloqueo` (el Veneno lo ignora, pero no lo rompe). */
+  async infligir(
+    obj: Luchador, dano: number, fx?: string, perforante = false, conservarBloqueo = false,
+  ): Promise<number> {
     // Invulnerable: no recibe daño alguno
     if ((obj.estados.invulnerable ?? 0) > 0) {
       await this.ui.fxGolpe(obj, 0, fx);
@@ -367,7 +418,7 @@ export class Combate {
     }
     let absorbido = 0;
     if (perforante) {
-      obj.bloqueo = 0; // destruye el bloqueo
+      if (!conservarBloqueo) obj.bloqueo = 0; // destruye el bloqueo
     } else {
       absorbido = Math.min(obj.bloqueo, dano);
       obj.bloqueo -= absorbido;
@@ -666,6 +717,12 @@ export class Combate {
       if (maestria >= 2) inst.mejorada = true;
       this.jugador.mano.push(inst);
     }
+    // Trabajo de Pies (pícaro): Destreza al inicio de cada turno.
+    const dxt = this.jugador.estados.destrezaPorTurno ?? 0;
+    if (dxt > 0) {
+      this.jugador.estados.destreza = (this.jugador.estados.destreza ?? 0) + dxt;
+      await this.ui.fxEstado(this.jugador, 'destreza', dxt);
+    }
     // Psiónico (Alma de Cuchillas): Dagas por turno.
     const dpt = this.jugador.estados.dagasPorTurno ?? 0;
     if (dpt > 0) await this.crearDagas(dpt);
@@ -715,6 +772,12 @@ export class Combate {
     this.jugador.energia -= this.costeEfectivo(def);
     this.ui.render();
     await def.jugar(this.contexto(objetivo));
+    // Guardia de Cuchillas (pícaro): cada Daga que juegas te da bloqueo
+    const guardia = this.jugador.estados.dagasBloqueo ?? 0;
+    if (guardia > 0 && carta.def.id === DAGA.id && !this.terminado) {
+      this.jugador.bloqueo += guardia;
+      await this.ui.fxBloqueo(this.jugador, guardia);
+    }
     // Quemadura (Aliento de Dragón): cada carta jugada cuesta 3 PV mientras dure
     if ((this.jugador.estados.quemadura ?? 0) > 0 && !this.terminado) {
       const real = Math.min(3, this.jugador.pv - 1); // no mata
@@ -821,12 +884,7 @@ export class Combate {
       }
       if (!e.vivo || this.terminado) continue; // la Hemorragia pudo matarlo
       // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
-      const ven = e.estados.veneno ?? 0;
-      if (ven > 0) {
-        await this.infligir(e, ven, 'veneno', true);
-        e.estados.veneno = ven - 1;
-        if ((e.estados.veneno ?? 0) <= 0) delete e.estados.veneno;
-      }
+      await this.tickVeneno(e);
       if (!e.vivo || this.terminado) continue; // el Veneno pudo matarlo
       e.bloqueo = 0;
       await this.ejecutarMovimiento(e);

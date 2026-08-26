@@ -95,8 +95,9 @@ export const ICONO_ESTADO: Record<string, string> = {
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
-  acrobacias: '🤸', piruetaProlongada: '🌀', filoVenenoso: '🗡️', preparacion: '🎒',
-  dagasPorTurno: '🔪', dagasFuerza: '⚔️', dagasDestreza: '💃',
+  acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
+  dagasPorTurno: '🔪', dagasFuerza: '⚔️', dagasDestreza: '💃', dagasBloqueo: '🔰',
+  destrezaPorTurno: '👟', ventajaFurtiva: '🎭',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -109,9 +110,11 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   escribania: 'Escribanía',
   veneno: 'Veneno', cartasAgotan: 'Cartas que se Agotan', cartasSobrecoste: 'Sobrecarga',
   cartasEtereas: 'Cartas Etéreas',
-  acrobacias: 'Acrobacias', piruetaProlongada: 'Piruetas Prolongadas',
+  acrobacias: 'Acrobacias',
   filoVenenoso: 'Filo Venenoso', preparacion: 'Preparación',
   dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', dagasDestreza: 'Danza Mortal',
+  dagasBloqueo: 'Guardia de Cuchillas', destrezaPorTurno: 'Trabajo de Pies',
+  ventajaFurtiva: 'Oportunista',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -143,12 +146,14 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   cartasSobrecoste: 'Este turno, cada carta cuesta 1 de energía más.',
   cartasEtereas: 'Al final de este turno, las cartas que no hayas jugado se agotan en vez de descartarse.',
   acrobacias: 'Bloqueo aplazado: al inicio de tu próximo turno recuperas esa cantidad de bloqueo (el que aplicaron tus cartas de Acrobacias).',
-  piruetaProlongada: 'Tus Acrobacias reaplican su bloqueo 1 turno más (2 turnos en total en vez de 1).',
   filoVenenoso: 'Cada uno de tus ataques aplica esa cantidad de Veneno al objetivo.',
   preparacion: 'Cada vez que descartas una carta, ganas esa cantidad de bloqueo.',
   dagasPorTurno: 'Al inicio de cada turno añades esa cantidad de Dagas a tu mano.',
   dagasFuerza: 'Tus Dagas infligen esa cantidad de daño adicional.',
   dagasDestreza: 'Tus Dagas infligen daño adicional igual a tu Destreza.',
+  dagasBloqueo: 'Cada vez que juegas una Daga, ganas esa cantidad de bloqueo.',
+  destrezaPorTurno: 'Al inicio de cada turno ganas esa cantidad de Destreza.',
+  ventajaFurtiva: 'Tus ataques infligen esa cantidad de daño adicional por golpe a los enemigos que no pretenden atacar.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

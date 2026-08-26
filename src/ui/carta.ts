@@ -53,7 +53,7 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
   { test: (_d, t) => t.includes('descarta'), icono: '🗑️', nombre: 'Descartar',
     desc: 'Manda cartas de tu mano a la pila de descarte. Algunas cartas y poderes del pícaro se benefician de cada descarte.' },
   { test: (_d, t) => t.includes('no pretende atacar') || t.includes('intención'), icono: '🎭', nombre: 'Intención',
-    desc: 'Lo que el enemigo hará en su turno (el icono sobre su cabeza). Varios ataques del pícaro golpean más fuerte si el enemigo no pretende atacar.' },
+    desc: 'Lo que el enemigo hará en su turno (el icono sobre su cabeza). Varios ataques del pícaro golpean más fuerte si el enemigo no pretende atacar (defenderse, potenciarse, quedarse desconcertado o perder el turno). Cambiazo le fuerza una intención sin ataque.' },
 ];
 
 /** Lista de palabras clave presentes en una carta, sin repetir. */
@@ -230,8 +230,11 @@ function arteDeCarta(def: CartaDef): string {
     'trabajo-de-pies': '👣', esfumarse: '💨', 'mano-rapida': '🤹',
     cuchilladas: '🔪', preparacion: '🎒', cambiazo: '🎭', emboscada: '🥷',
     'filo-toxico': '🧪', 'giro-veloz': '🌀', atraco: '💰',
+    'lluvia-de-dagas': '🌧️', 'guardia-de-cuchillas': '🔰',
+    'golpe-septico': '🦠', 'toxina-paralizante': '💉',
     asesino: '☠️', psionico: '🔮', 'embaucador-arcano': '🎩',
-    'maestria-cuchillas': '⚔️', escapada: '🌀', 'tempestad-acero': '🌪️',
+    'maestria-cuchillas': '⚔️', 'tempestad-acero': '🌪️',
+    'nube-nauseabunda': '☁️', oportunista: '🕵️',
     'danza-mortal': '💃',
   };
   return ARTE[def.id] ?? '✦';

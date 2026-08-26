@@ -5,7 +5,7 @@ import { Combate, type Presentador } from '../src/core/combate.ts';
 import { nuevaRun, avanzarCapitulo } from '../src/core/run.ts';
 import { crearRng } from '../src/core/rng.ts';
 import {
-  ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
+  ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, GOBLIN_FAMELICO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
   HERALDO_CULTO, CONTEMPLADOR,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
@@ -133,7 +133,7 @@ console.log('— Recompensas y pools —');
   check(DRUIDA.filter((c) => c.rareza === 'rara').length === 6, 'druida: 6 raras (4 subclases + 2 de invocación)');
   check(BARBARO.filter((c) => c.rareza === 'rara').length === 6, 'bárbaro: 6 raras (4 subclases + 2 de Hemorragia)');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 5, 'mago: 5 raras (3 escuelas + 2 de Creación de conjuros)');
-  check(PICARO.filter((c) => c.rareza === 'rara').length === 6, 'pícaro: 6 raras (3 subclases + 3 remates)');
+  check(PICARO.filter((c) => c.rareza === 'rara').length === 7, 'pícaro: 7 raras (3 subclases + 4 remates)');
   for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
     const mazo = mazoInicial(clase);
     check(mazo.length === 11, `${clase}: mazo inicial de 11 cartas (5 golpe + 4 defender + 2 de clase)`);
@@ -834,22 +834,6 @@ console.log('— Pícaro: mecánicas nuevas —');
     defender(); await comb.terminarTurno();
     check(comb.jugador.bloqueo === 0, 'y al turno siguiente el bloqueo ya no vuelve');
   }
-  // Piruetas Prolongadas (Reflejos de Sombra): duran 2 turnos
-  {
-    const run = nuevaRun('picaro', 4009);
-    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4009), uiSilenciosa);
-    await comb.iniciar();
-    comb.jugador.estados.destreza = 0;
-    comb.jugador.estados.piruetaProlongada = 1;
-    const defender = () => { comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 }; };
-    await comb.contexto().ganarBloqueoAcrobatico(10);
-    defender(); await comb.terminarTurno();
-    check(comb.jugador.bloqueo === 10, 'Prolongadas: 10 de bloqueo el 2.º turno');
-    defender(); await comb.terminarTurno();
-    check(comb.jugador.bloqueo === 10, 'Prolongadas: 10 de bloqueo también el 3.er turno');
-    defender(); await comb.terminarTurno();
-    check(comb.jugador.bloqueo === 0, 'Prolongadas: tras 2 turnos deja de volver');
-  }
   // Sin Acrobacias el bloqueo se limpia
   {
     const run = nuevaRun('picaro', 4002);
@@ -931,6 +915,20 @@ console.log('— Pícaro: mecánicas nuevas —');
     await comb.contexto(e).intercambiarIntencion(e);
     check(e.intencionForzada === original, 'Cambiazo guarda la intención original para después');
     check(e.intencion !== original, 'Cambiazo cambia la intención de este turno');
+    check(comb.noPretendeAtacar(e), 'Cambiazo garantiza que este turno no atacará');
+  }
+  // Cambiazo contra un enemigo que solo sabe atacar: se queda desconcertado
+  {
+    const run = nuevaRun('picaro', 4107);
+    const comb = new Combate(run, [GOBLIN_FAMELICO], crearRng(4107), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    const pvAntes = comb.jugador.pv;
+    await comb.contexto(e).intercambiarIntencion(e);
+    check(e.saltaAccion === true, 'Cambiazo: si solo ataca, se queda desconcertado');
+    check(comb.noPretendeAtacar(e), 'desconcertado cuenta como «no pretende atacar»');
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pvAntes, 'el enemigo desconcertado no actúa este turno');
   }
   // Ataque furtivo (Emboscada): daño extra si el enemigo no pretende atacar
   {
@@ -946,6 +944,136 @@ console.log('— Pícaro: mecánicas nuevas —');
     e2.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 8 };
     await emboscada.jugar(comb.contexto(e2));
     check(60 - e2.pv === 10, 'Emboscada: solo 10 si el enemigo sí ataca');
+  }
+  // Trabajo de Pies: poder que da Destreza al inicio de cada turno (no al jugarlo)
+  {
+    const tdp = PICARO.find((c) => c.id === 'trabajo-de-pies')!;
+    check(tdp.tipo === 'poder', 'Trabajo de Pies es un poder');
+    const run = nuevaRun('picaro', 4110);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4110), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.estados.destreza = 0;
+    await tdp.jugar(comb.contexto());
+    check((comb.jugador.estados.destreza ?? 0) === 0, 'Trabajo de Pies no da Destreza el turno que lo juegas');
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check((comb.jugador.estados.destreza ?? 0) === 1, 'Trabajo de Pies: +1 de Destreza al inicio del turno siguiente');
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check((comb.jugador.estados.destreza ?? 0) === 2, 'Trabajo de Pies acumula Destreza cada turno');
+  }
+  // Guardia de Cuchillas: bloqueo por cada Daga jugada
+  {
+    const guardia = PICARO.find((c) => c.id === 'guardia-de-cuchillas')!;
+    const run = nuevaRun('picaro', 4111);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4111), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.estados.destreza = 0;
+    comb.jugador.bloqueo = 0;
+    await guardia.jugar(comb.contexto());
+    check(comb.jugador.bloqueo === 0, 'Guardia de Cuchillas no da bloqueo al jugarse');
+    comb.jugador.mano = [];
+    await comb.contexto().crearDagas(2);
+    const dagas = comb.jugador.mano.filter((c) => c.def.id === 'daga');
+    await comb.jugarCarta(dagas[0], comb.enemigos[0]);
+    check(comb.jugador.bloqueo === 3, 'Guardia de Cuchillas: +3 de bloqueo al jugar una Daga');
+    await comb.jugarCarta(dagas[1], comb.enemigos[0]);
+    check(comb.jugador.bloqueo === 6, 'Guardia de Cuchillas: cada Daga suma su bloqueo');
+  }
+  // Lluvia de Dagas: genera 3 Dagas
+  {
+    const lluvia = PICARO.find((c) => c.id === 'lluvia-de-dagas')!;
+    const run = nuevaRun('picaro', 4112);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4112), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.mano = [];
+    await lluvia.jugar(comb.contexto());
+    check(comb.jugador.mano.filter((c) => c.def.id === 'daga').length === 3, 'Lluvia de Dagas añade 3 Dagas');
+  }
+  // Nube Nauseabunda: envenena a todos y detona el Veneno al instante
+  {
+    const nube = PICARO.find((c) => c.id === 'nube-nauseabunda')!;
+    const run = nuevaRun('picaro', 4113);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(4113), uiSilenciosa);
+    await comb.iniciar();
+    const [a, b] = comb.enemigos;
+    a.pv = a.pvMax = 60; a.bloqueo = 10; a.estados.veneno = 3;
+    b.pv = b.pvMax = 60; b.bloqueo = 0;
+    await nube.jugar(comb.contexto());
+    check(60 - a.pv === 7, 'Nube Nauseabunda: 3 + 4 de Veneno detonan 7 (ignora el bloqueo)');
+    check(a.bloqueo === 10, 'el Veneno detonado no gasta el bloqueo del enemigo');
+    check((a.estados.veneno ?? 0) === 6, 'tras detonar, el Veneno baja 1 (7 → 6)');
+    check(60 - b.pv === 4, 'Nube Nauseabunda envenena y detona también al segundo enemigo');
+  }
+  // Golpe Séptico: daño extra igual al Veneno del objetivo
+  {
+    const septico = PICARO.find((c) => c.id === 'golpe-septico')!;
+    const run = nuevaRun('picaro', 4114);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4114), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
+    e.estados.veneno = 8;
+    await septico.jugar(comb.contexto(e));
+    check(60 - e.pv === 13, 'Golpe Séptico: 5 + 8 de Veneno = 13');
+  }
+  // Toxina Paralizante: dobla el Veneno si el enemigo no pretende atacar
+  {
+    const toxina = PICARO.find((c) => c.id === 'toxina-paralizante')!;
+    const run = nuevaRun('picaro', 4115);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4115), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 8 };
+    await toxina.jugar(comb.contexto(e));
+    check((e.estados.veneno ?? 0) === 5, 'Toxina Paralizante: 5 de Veneno si el enemigo ataca');
+    delete e.estados.veneno;
+    e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await toxina.jugar(comb.contexto(e));
+    check((e.estados.veneno ?? 0) === 10, 'Toxina Paralizante: 10 de Veneno si no pretende atacar');
+  }
+  // Oportunista: daño extra por golpe contra quien no pretende atacar
+  {
+    const oportunista = PICARO.find((c) => c.id === 'oportunista')!;
+    const cuchilladas = PICARO.find((c) => c.id === 'cuchilladas')!;
+    const run = nuevaRun('picaro', 4116);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4116), uiSilenciosa);
+    await comb.iniciar();
+    await oportunista.jugar(comb.contexto());
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 90; e.bloqueo = 0;
+    e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await cuchilladas.jugar(comb.contexto(e));
+    check(90 - e.pv === 18, 'Oportunista: Cuchilladas hace (3+3)×3 = 18 si el enemigo no ataca');
+    e.pv = e.pvMax = 90; e.bloqueo = 0;
+    e.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 8 };
+    await cuchilladas.jugar(comb.contexto(e));
+    check(90 - e.pv === 9, 'Oportunista: solo 3×3 = 9 si el enemigo sí ataca');
+  }
+  // Bug corregido: los poderes de «inicio de turno» no se aplican al jugarse
+  {
+    const psionico = PICARO.find((c) => c.id === 'psionico')!;
+    const run = nuevaRun('picaro', 4117);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4117), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.mano = [];
+    await psionico.jugar(comb.contexto());
+    check(comb.jugador.mano.length === 0, 'Alma de Cuchillas no crea Dagas el turno que la juegas');
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(
+      comb.jugador.mano.filter((c) => c.def.id === 'daga').length === 1,
+      'Alma de Cuchillas crea 1 Daga al inicio del turno siguiente',
+    );
+  }
+  {
+    const tratado = MAGO.find((c) => c.id === 'tratado-prohibido')!;
+    const run = nuevaRun('mago', 4118);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(4118), uiSilenciosa);
+    await comb.iniciar();
+    await tratado.jugar(comb.contexto());
+    check(comb.jugador.conjuroEscrito === 0, 'Tratado Prohibido no escribe el turno que lo juegas');
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(comb.jugador.conjuroEscrito === 4, 'Tratado Prohibido escribe 4 al inicio del turno siguiente');
   }
 }
 

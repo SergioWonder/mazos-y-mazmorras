@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '2.0.1';
+export const VERSION = '2.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,19 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '2.1.0',
+    fecha: '2026-08-26',
+    cambios: [
+      '🐛 Corregido: los poderes de «al inicio de cada turno» ya no se disparan el turno que los juegas (Alma de Cuchillas y Tratado Prohibido).',
+      '👟 Trabajo de Pies es ahora un poder: ganas 1 de Destreza al inicio de cada turno (mejorado, cuesta 0).',
+      '🧪 Nueva rara Nube Nauseabunda (coste 2): envenena a TODOS los enemigos y detona su Veneno al instante.',
+      '🧪 Dos infrecuentes de veneno: Golpe Séptico (pega más cuanto más envenenado esté el enemigo) y Toxina Paralizante (dobla el Veneno si no pretende atacar).',
+      '🗡️ Las Dagas ya tienen mazo propio: Lluvia de Dagas añade 3 a tu mano y Guardia de Cuchillas te da bloqueo por cada Daga que juegas.',
+      '🎭 Cambiazo (coste 0) ahora garantiza que el enemigo no ataque este turno; si solo sabe atacar, se queda desconcertado y pierde el turno. Y la nueva rara Oportunista suma daño a cada golpe contra quien no pretende atacar.',
+      '🌀 Fuera Reflejos de Sombra: las Acrobacias vuelven a durar siempre 1 turno.',
+    ],
+  },
   {
     version: '2.0.1',
     fecha: '2026-07-18',

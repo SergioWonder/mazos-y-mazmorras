@@ -29,12 +29,14 @@ export type EstadoId =
   | 'roboAcelerado' // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
   | 'veneno'         // pierde esta cantidad de PV al inicio de su turno (ignora bloqueo); baja 1 cada turno
   | 'acrobacias'     // (pícaro) bloqueo aplazado total pendiente de reaplicarse el próximo turno (solo indicador)
-  | 'piruetaProlongada' // (pícaro) tus piruetas reaplican su bloqueo 1 turno más (2 turnos en total)
   | 'filoVenenoso'   // (pícaro/Asesino) tus ataques aplican esta cantidad de Veneno al objetivo
   | 'preparacion'    // (pícaro) cada vez que descartas una carta, ganas esta cantidad de bloqueo
   | 'dagasPorTurno'  // (pícaro/Psiónico) al inicio de cada turno añades esta cantidad de Dagas a la mano
   | 'dagasFuerza'    // (pícaro) tus Dagas infligen esta cantidad de daño adicional
   | 'dagasDestreza'  // (pícaro/Danza Mortal) tus Dagas infligen daño adicional igual a tu Destreza
+  | 'dagasBloqueo'   // (pícaro/Guardia de Cuchillas) cada Daga que juegas te da esta cantidad de bloqueo
+  | 'destrezaPorTurno' // (pícaro/Trabajo de Pies) ganas esta Destreza al inicio de cada turno
+  | 'ventajaFurtiva' // (pícaro/Oportunista) tus ataques hacen +N a quien no pretende atacar
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
   | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
@@ -134,7 +136,7 @@ export interface EnemigoCombate extends Luchador {
   /** Recibió daño no bloqueado durante el turno del jugador (para la Hemorragia). */
   heridoEsteTurno?: boolean;
   /** Intención que ejecutará en su PRÓXIMO turno en vez de generar una nueva
-   *  (Cambiazo del pícaro: intercambia la intención actual por la siguiente). */
+   *  (Cambiazo del pícaro: aparta la intención actual para el turno siguiente). */
   intencionForzada?: Movimiento;
 }
 
@@ -223,7 +225,7 @@ export interface ContextoEfecto {
   atacarTodos(base: number, fx?: string): Promise<void>;
   ganarBloqueo(base: number): Promise<void>;
   /** Bloqueo acrobático (pícaro): gana el bloqueo ahora y lo vuelve a aplicar al
-   *  inicio del próximo turno (2 turnos si tienes Piruetas Prolongadas). */
+   *  inicio del próximo turno. */
   ganarBloqueoAcrobatico(base: number): Promise<void>;
   aplicarEstado(obj: Luchador, estado: EstadoId, n: number): Promise<void>;
   /** Aplica una instancia de Raíces (cantidad + duración propia) a un enemigo. */
@@ -265,6 +267,9 @@ export interface ContextoEfecto {
   run: EstadoRun;
   /** Daño de la intención actual del enemigo tras modificadores (0 si no ataca). */
   danoIntencion(e: EnemigoCombate): number;
+  /** true si el enemigo NO va a atacarte este turno (se defiende, se potencia,
+   *  está desconcertado o pierde el turno): base de los ataques furtivos. */
+  noPretendeAtacar(e: EnemigoCombate): boolean;
   /** true si el ataque del enemigo está anulado: su mejor ataque conocido,
    *  con su Fuerza actual, queda en 0 o menos (para las Raíces del druida). */
   ataqueAnulado(e: EnemigoCombate): boolean;
@@ -291,8 +296,12 @@ export interface ContextoEfecto {
   descartadasEsteTurno(): number;
   /** Añade N Dagas a la mano (pícaro): ataques de 0 de coste que se agotan. */
   crearDagas(n: number): Promise<void>;
-  /** Intercambia la intención actual del enemigo por la que iba a hacer el turno
-   *  siguiente (Cambiazo): este turno hará la próxima; la actual la hará después. */
+  /** Activa ahora el Veneno de todos los enemigos vivos: cada uno pierde PV
+   *  igual a su Veneno (ignora el bloqueo) y su Veneno baja 1. */
+  detonarVenenos(): Promise<void>;
+  /** Cambiazo: sustituye la intención actual del enemigo por otra suya que NO sea
+   *  de ataque (la actual pasa a su próximo turno). Si todos sus movimientos son
+   *  ataques, se queda confundido y no actúa este turno. */
   intercambiarIntencion(e: EnemigoCombate): Promise<void>;
   /** Mata al instante a un enemigo (úsese tras comprobar que no es jefe). */
   matar(e: EnemigoCombate): Promise<void>;
