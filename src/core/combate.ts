@@ -717,12 +717,6 @@ export class Combate {
       if (maestria >= 2) inst.mejorada = true;
       this.jugador.mano.push(inst);
     }
-    // Trabajo de Pies (pícaro): Destreza al inicio de cada turno.
-    const dxt = this.jugador.estados.destrezaPorTurno ?? 0;
-    if (dxt > 0) {
-      this.jugador.estados.destreza = (this.jugador.estados.destreza ?? 0) + dxt;
-      await this.ui.fxEstado(this.jugador, 'destreza', dxt);
-    }
     // Psiónico (Alma de Cuchillas): Dagas por turno.
     const dpt = this.jugador.estados.dagasPorTurno ?? 0;
     if (dpt > 0) await this.crearDagas(dpt);

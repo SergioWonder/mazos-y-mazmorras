@@ -3,3 +3,8 @@ dist/
 dev-dist/
 .DS_Store
 *.local
+
+# graphify: internos (rutas absolutas, caché y contadores locales)
+graphify-out/.graphify_*
+graphify-out/cache/
+graphify-out/cost.json

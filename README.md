@@ -66,7 +66,7 @@ mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas d
   - **Ataques furtivos**: más daño si el enemigo no pretende atacar (Puñalada Trapera,
     Emboscada, **Oportunista**). **Cambiazo** (coste 0) le fuerza una intención que no sea
     de ataque; si solo sabe atacar, se queda desconcertado y pierde el turno.
-  Además, Trabajo de Pies es un poder que suma Destreza cada turno, y hay mucho
+  Además, Trabajo de Pies es un poder de 2 de Destreza (3 mejorado), y hay mucho
   robo/descarte con sinergias (Preparación, Tempestad de Acero). Cartas raras: subclases
   de D&D 2024 (Asesino → veneno, Psiónico → dagas, Embaucador Arcano → ilusiones).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y

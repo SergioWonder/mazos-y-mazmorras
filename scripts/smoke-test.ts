@@ -945,7 +945,7 @@ console.log('— Pícaro: mecánicas nuevas —');
     await emboscada.jugar(comb.contexto(e2));
     check(60 - e2.pv === 10, 'Emboscada: solo 10 si el enemigo sí ataca');
   }
-  // Trabajo de Pies: poder que da Destreza al inicio de cada turno (no al jugarlo)
+  // Trabajo de Pies: poder con 2 de Destreza fijos (se agota, no escala por turno)
   {
     const tdp = PICARO.find((c) => c.id === 'trabajo-de-pies')!;
     check(tdp.tipo === 'poder', 'Trabajo de Pies es un poder');
@@ -954,13 +954,11 @@ console.log('— Pícaro: mecánicas nuevas —');
     await comb.iniciar();
     comb.jugador.estados.destreza = 0;
     await tdp.jugar(comb.contexto());
-    check((comb.jugador.estados.destreza ?? 0) === 0, 'Trabajo de Pies no da Destreza el turno que lo juegas');
+    check((comb.jugador.estados.destreza ?? 0) === 2, 'Trabajo de Pies: +2 de Destreza al jugarlo');
+    check(tdp.mejora!.texto.includes('3 de Destreza'), 'Trabajo de Pies+ da 3 de Destreza');
     comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
     await comb.terminarTurno();
-    check((comb.jugador.estados.destreza ?? 0) === 1, 'Trabajo de Pies: +1 de Destreza al inicio del turno siguiente');
-    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
-    await comb.terminarTurno();
-    check((comb.jugador.estados.destreza ?? 0) === 2, 'Trabajo de Pies acumula Destreza cada turno');
+    check((comb.jugador.estados.destreza ?? 0) === 2, 'la Destreza se mantiene, no crece cada turno');
   }
   // Guardia de Cuchillas: bloqueo por cada Daga jugada
   {

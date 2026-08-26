@@ -97,7 +97,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
   acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
   dagasPorTurno: '🔪', dagasFuerza: '⚔️', dagasDestreza: '💃', dagasBloqueo: '🔰',
-  destrezaPorTurno: '👟', ventajaFurtiva: '🎭',
+  ventajaFurtiva: '🎭',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -113,7 +113,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   acrobacias: 'Acrobacias',
   filoVenenoso: 'Filo Venenoso', preparacion: 'Preparación',
   dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', dagasDestreza: 'Danza Mortal',
-  dagasBloqueo: 'Guardia de Cuchillas', destrezaPorTurno: 'Trabajo de Pies',
+  dagasBloqueo: 'Guardia de Cuchillas',
   ventajaFurtiva: 'Oportunista',
 };
 
@@ -152,7 +152,6 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   dagasFuerza: 'Tus Dagas infligen esa cantidad de daño adicional.',
   dagasDestreza: 'Tus Dagas infligen daño adicional igual a tu Destreza.',
   dagasBloqueo: 'Cada vez que juegas una Daga, ganas esa cantidad de bloqueo.',
-  destrezaPorTurno: 'Al inicio de cada turno ganas esa cantidad de Destreza.',
   ventajaFurtiva: 'Tus ataques infligen esa cantidad de daño adicional por golpe a los enemigos que no pretenden atacar.',
 };
 

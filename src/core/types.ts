@@ -35,7 +35,6 @@ export type EstadoId =
   | 'dagasFuerza'    // (pícaro) tus Dagas infligen esta cantidad de daño adicional
   | 'dagasDestreza'  // (pícaro/Danza Mortal) tus Dagas infligen daño adicional igual a tu Destreza
   | 'dagasBloqueo'   // (pícaro/Guardia de Cuchillas) cada Daga que juegas te da esta cantidad de bloqueo
-  | 'destrezaPorTurno' // (pícaro/Trabajo de Pies) ganas esta Destreza al inicio de cada turno
   | 'ventajaFurtiva' // (pícaro/Oportunista) tus ataques hacen +N a quien no pretende atacar
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)

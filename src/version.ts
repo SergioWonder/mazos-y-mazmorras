@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '2.1.0';
+export const VERSION = '2.1.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '2.1.1',
+    fecha: '2026-08-26',
+    cambios: [
+      '👟 Trabajo de Pies se reequilibra: era demasiado ganar Destreza cada turno. Ahora es un poder que da 2 de Destreza de golpe (3 mejorado).',
+    ],
+  },
   {
     version: '2.1.0',
     fecha: '2026-08-26',

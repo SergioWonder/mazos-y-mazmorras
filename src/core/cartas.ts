@@ -2207,15 +2207,14 @@ export const PICARO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'estrellas',
-    texto: 'Poder: al inicio de cada turno\nganas 1 de Destreza.',
+    texto: 'Poder: gana 2 de Destreza.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'destrezaPorTurno', 1);
+      await c.aplicarEstado(c.jugador, 'destreza', 2);
     },
     mejora: {
-      coste: 0,
-      texto: 'Poder: al inicio de cada turno\nganas 1 de Destreza.',
+      texto: 'Poder: gana 3 de Destreza.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'destrezaPorTurno', 1);
+        await c.aplicarEstado(c.jugador, 'destreza', 3);
       },
     },
   },
