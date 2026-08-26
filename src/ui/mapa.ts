@@ -23,7 +23,10 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
     raiz.innerHTML = `
       <div class="barra-superior">
         <span class="bs-clase">${
-          { druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro' }[run.clase]
+          {
+            druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago',
+            picaro: '🗡️ Pícaro', brujo: '🕳️ Brujo',
+          }[run.clase]
         }</span>
         <span class="bs-pv">❤️ ${run.pv}/${run.pvMax}</span>
         <span class="bs-reliquias">${run.reliquias

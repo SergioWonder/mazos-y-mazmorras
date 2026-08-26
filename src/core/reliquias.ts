@@ -26,13 +26,28 @@ export const GUANTE_LADRON: ReliquiaDef = {
   inicioCombate: async (ctx) => { await ctx.aplicarEstado(ctx.jugador, 'destreza', 1); },
 };
 
+export const SELLO_PACTO: ReliquiaDef = {
+  id: 'sello-pacto', nombre: 'Sello del Pacto', icono: '🕳️',
+  texto: 'Empiezas cada combate aplicando 4 de Condena a todos los enemigos.',
+  inicioCombate: async (ctx) => {
+    for (const e of ctx.enemigos.filter((x) => x.vivo)) {
+      await ctx.aplicarEstado(e, 'condena', 4);
+    }
+  },
+};
+
 export function reliquiaInicial(clase: ClaseId): ReliquiaDef {
-  return { druida: TOTEM_ROBLE, barbaro: HACHA_ANCESTRO, mago: PENDULO_AMBAR, picaro: GUANTE_LADRON }[clase];
+  return {
+    druida: TOTEM_ROBLE, barbaro: HACHA_ANCESTRO, mago: PENDULO_AMBAR,
+    picaro: GUANTE_LADRON, brujo: SELLO_PACTO,
+  }[clase];
 }
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function reliquiaPorId(id: string): ReliquiaDef | undefined {
-  return [TOTEM_ROBLE, HACHA_ANCESTRO, PENDULO_AMBAR, GUANTE_LADRON, ...POOL_RELIQUIAS].find((r) => r.id === id);
+  return [
+    TOTEM_ROBLE, HACHA_ANCESTRO, PENDULO_AMBAR, GUANTE_LADRON, SELLO_PACTO, ...POOL_RELIQUIAS,
+  ].find((r) => r.id === id);
 }
 
 // ── Pool de reliquias (objetos clásicos de D&D) ──────────────────────────────

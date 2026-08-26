@@ -6,7 +6,7 @@ import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
-import type { EfectoConjuro, FormaInvocacion } from './types.ts';
+import type { EfectoConjuro, EfectoInvocacion, FormaInvocacion } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -61,7 +61,9 @@ export class Combate {
     this.run = run;
     this.rng = rng;
     this.ui = ui;
-    const nombres = { druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro' };
+    const nombres = {
+      druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo',
+    };
     const energiaMax =
       3 + run.permanentes.energia + (eliteOJefe ? run.permanentes.energiaElite : 0);
     this.jugador = {
@@ -81,7 +83,9 @@ export class Combate {
   // ── Cálculo de daño/bloqueo (reglas StS) ──────────────────────────────────
 
   danoDeAtaque(atacante: Luchador, base: number): number {
-    let dano = base + (atacante.estados.fuerza ?? 0) - (atacante.estados.raices ?? 0);
+    let dano = base + (atacante.estados.fuerza ?? 0)
+      - (atacante.estados.raices ?? 0)
+      - (atacante.estados.oscuridad ?? 0);
     if ((atacante.estados.debil ?? 0) > 0) dano = Math.floor(dano * 0.75);
     return Math.max(0, dano);
   }
@@ -121,6 +125,12 @@ export class Combate {
   noPretendeAtacar(e: EnemigoCombate): boolean {
     if (e.saltaAccion) return true;
     return e.intencion.intencion !== 'ataque' && e.intencion.dano === undefined;
+  }
+
+  /** Condena (brujo): la Condena acumulada alcanza los PV actuales del enemigo,
+   *  así que al final de su turno morirá. */
+  condenaLetal(e: EnemigoCombate): boolean {
+    return e.vivo && (e.estados.condena ?? 0) >= e.pv;
   }
 
   /** Oportunista (pícaro): daño extra por golpe contra quien no pretende atacar. */
@@ -167,13 +177,32 @@ export class Combate {
           obj.estados.veneno = (obj.estados.veneno ?? 0) + filo;
           await self.ui.fxEstado(obj, 'veneno', filo);
         }
+        // Mente del Gran Antiguo (brujo): cada ataque condena al objetivo
+        const cond = self.jugador.estados.condenaPorAtaque ?? 0;
+        if (cond > 0 && obj.vivo) {
+          obj.estados.condena = (obj.estados.condena ?? 0) + cond;
+          await self.ui.fxEstado(obj, 'condena', cond);
+        }
         return total;
       },
       async atacarTodos(base, fx) {
+        // Los añadidos «por ataque» (Filo Venenoso, Gran Antiguo) también valen
+        // aquí: en un golpe de área todos los enemigos son el objetivo.
+        const filo = self.jugador.estados.filoVenenoso ?? 0;
+        const cond = self.jugador.estados.condenaPorAtaque ?? 0;
         for (const e of self.enemigos.filter((x) => x.vivo)) {
           const extra = self.ventajaFurtivaContra(e);
           const dano = self.danoRecibido(e, self.danoDeAtaque(self.jugador, base + extra));
           await self.infligir(e, dano, fx);
+          if (!e.vivo) continue;
+          if (filo > 0) {
+            e.estados.veneno = (e.estados.veneno ?? 0) + filo;
+            await self.ui.fxEstado(e, 'veneno', filo);
+          }
+          if (cond > 0) {
+            e.estados.condena = (e.estados.condena ?? 0) + cond;
+            await self.ui.fxEstado(e, 'condena', cond);
+          }
         }
       },
       async ganarBloqueo(base) {
@@ -280,6 +309,17 @@ export class Combate {
       atacarInvocacion: (bono) => self.atacarInvocacion(bono),
       curarInvocacion: (n) => self.curarInvocacion(n),
       hayInvocacion: () => !!self.jugador.invocacion && self.jugador.invocacion.vida > 0,
+      invocarEfimero: (forma, vida, dano) => self.invocarEfimero(forma, vida, dano),
+      vidaInvocacion: () => self.jugador.invocacion?.vida ?? 0,
+      async sacrificarInvocacion() {
+        const inv = self.jugador.invocacion;
+        if (!inv || inv.vida <= 0) return 0;
+        const vida = inv.vida;
+        self.jugador.invocacion = undefined;
+        await self.ui.fxInvocacionMuerte();
+        self.ui.render();
+        return vida;
+      },
       run: self.run,
       danoIntencion: (e) => self.danoIntencion(e),
       noPretendeAtacar: (e) => self.noPretendeAtacar(e),
@@ -459,6 +499,12 @@ export class Combate {
       } else {
         obj.vivo = false;
         if (obj !== this.jugador) await this.ui.fxMuerte(e);
+        // Pacto Infernal (brujo): cada muerte enemiga te blinda
+        const bend = this.jugador.estados.bendicionOscura ?? 0;
+        if (obj !== this.jugador && bend > 0 && this.jugador.vivo) {
+          this.jugador.bloqueo += bend;
+          await this.ui.fxBloqueo(this.jugador, bend);
+        }
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
         if (obj !== this.jugador && e.def.invocaAlMorir) {
           const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
@@ -468,8 +514,29 @@ export class Combate {
         }
       }
     }
+    // Armadura de Agathys (brujo): lo que tu bloqueo absorbe se devuelve a TODOS
+    if (obj === this.jugador && absorbido > 0 && (this.jugador.estados.agathys ?? 0) > 0) {
+      await this.rebotarAgathys(absorbido);
+    }
     await this.comprobarFin();
     return real;
+  }
+
+  /** Devuelve `n` de daño a todos los enemigos vivos (Armadura de Agathys).
+   *  El flag evita reentrar si el rebote mata y desencadena más daño. */
+  private rebotandoAgathys = false;
+  private async rebotarAgathys(n: number) {
+    if (this.rebotandoAgathys || n <= 0) return;
+    this.rebotandoAgathys = true;
+    try {
+      await this.ui.fxMensaje(`🩸 Armadura de Agathys: ${n} a todos`);
+      for (const e of this.enemigos.filter((x) => x.vivo)) {
+        if (this.terminado) break;
+        await this.infligir(e, n, 'agathys');
+      }
+    } finally {
+      this.rebotandoAgathys = false;
+    }
   }
 
   async comprobarFin() {
@@ -503,7 +570,10 @@ export class Combate {
    *  La forma visual la fija la primera; las pasivas de todas se combinan. */
   async invocar(forma: FormaInvocacion, vida: number) {
     const j = this.jugador;
-    const pasiva = forma === 'lobo' || forma === 'oso' ? null : forma;
+    // Solo las formas elementales del druida aportan pasiva (lobo, oso y las
+    // formas efímeras del brujo no aportan ninguna).
+    const PASIVAS: EfectoInvocacion[] = ['fuego', 'agua', 'aire', 'arbol', 'tierra'];
+    const pasiva = PASIVAS.find((x) => x === forma) ?? null;
     if (!j.invocacion) {
       j.invocacion = { forma, vida, vidaMax: vida, efectos: pasiva ? [pasiva] : [] };
       await this.ui.fxMensaje(`🐾 ¡Invocas (${vida} de vida)!`);
@@ -516,11 +586,40 @@ export class Combate {
     this.ui.render();
   }
 
-  /** La invocación ataca: daño = 30 % de su vida actual (+ bonus opcional). */
+  /** Invoca (brujo): criatura efímera, más gorda y pegona que la del druida
+   *  porque solo aguanta una ronda. Si ya hay una, suma vida y se queda con el
+   *  mayor daño de las dos. */
+  async invocarEfimero(forma: FormaInvocacion, vida: number, dano: number) {
+    const j = this.jugador;
+    if (!j.invocacion) {
+      j.invocacion = { forma, vida, vidaMax: vida, efectos: [], efimera: true, dano };
+      await this.ui.fxMensaje(`👁️ ¡Invocas algo del más allá (${vida} de vida)!`);
+    } else {
+      j.invocacion.vida += vida;
+      j.invocacion.vidaMax += vida;
+      j.invocacion.dano = Math.max(j.invocacion.dano ?? 0, dano);
+      await this.ui.fxMensaje(`👁️ La invocación crece (+${vida} de vida)`);
+    }
+    this.ui.render();
+  }
+
+  /** Cierre de ronda de la invocación efímera: si sobrevivió, golpea y se va. */
+  private async resolverInvocacionEfimera() {
+    const inv = this.jugador.invocacion;
+    if (!inv?.efimera) return;
+    if (inv.vida > 0 && !this.terminado) await this.atacarInvocacion();
+    this.jugador.invocacion = undefined;
+    await this.ui.fxInvocacionMuerte();
+    await this.ui.fxMensaje('👁️ La invocación se desvanece');
+    this.ui.render();
+  }
+
+  /** La invocación ataca: daño = 30 % de su vida actual (+ bonus opcional).
+   *  Las efímeras del brujo pegan por su daño fijo, no por su vida. */
   async atacarInvocacion(bono = 0) {
     const inv = this.jugador.invocacion;
     if (!inv || inv.vida <= 0) return;
-    const base = Math.max(1, Math.round(inv.vida * 0.3)) + bono;
+    const base = (inv.efimera ? (inv.dano ?? 0) : Math.max(1, Math.round(inv.vida * 0.3))) + bono;
     const fuego = inv.efectos.includes('fuego');
     const arbol = inv.efectos.includes('arbol');
     const golpes = inv.efectos.includes('aire') ? 2 : 1; // Aire golpea dos veces
@@ -705,7 +804,22 @@ export class Combate {
         this.jugador.bloqueo += 6;
         await this.ui.fxBloqueo(this.jugador, 6);
       }
-      if (!primero) await this.atacarInvocacion();
+      // Las efímeras del brujo ya atacaron al cerrar la ronda anterior.
+      if (!primero && !inv.efimera) await this.atacarInvocacion();
+    }
+    // Presencia Feérica (brujo): Oscuridad a todos al inicio de cada turno
+    const oxt = this.jugador.estados.oscuridadPorTurno ?? 0;
+    if (oxt > 0) {
+      for (const e of this.enemigos.filter((x) => x.vivo)) {
+        e.estados.oscuridad = (e.estados.oscuridad ?? 0) + oxt;
+        await this.ui.fxEstado(e, 'oscuridad', oxt);
+      }
+    }
+    // Bendición Celestial (brujo): bloqueo al inicio de cada turno
+    const bxt = this.jugador.estados.bloqueoPorTurno ?? 0;
+    if (bxt > 0) {
+      this.jugador.bloqueo += bxt;
+      await this.ui.fxBloqueo(this.jugador, bxt);
     }
     // Tratado Prohibido: escribe en el Conjuro Prodigioso al inicio de cada turno
     const escribania = this.jugador.estados.escribania ?? 0;
@@ -787,6 +901,9 @@ export class Combate {
       if (enRun >= 0) this.run.mazo.splice(enRun, 1);
       this.jugador.agotadas.push(carta);
       await this.ui.fxMensaje(`«${carta.def.nombre}» se consume para siempre`);
+    } else if (carta.def.alTopeDelMazo) {
+      // Explosión Sobrenatural: siempre vuelve, incluso con el Rayo Áureo activo
+      this.jugador.mazo.push(carta); // pop() roba del final = lo alto del mazo
     } else if (carta.def.exhumar || carta.def.tipo === 'poder') {
       this.jugador.agotadas.push(carta);
     } else if ((this.jugador.estados.cartasAgotan ?? 0) > 0) {
@@ -845,6 +962,17 @@ export class Combate {
       if (r.finTurno) await r.finTurno(this.contexto());
     }
 
+    // Pacto Final (brujo): tu bloqueo se convierte en Condena para todos
+    const cxb = j.estados.condenaPorBloqueo ?? 0;
+    if (cxb > 0 && j.bloqueo > 0) {
+      const n = j.bloqueo;
+      await this.ui.fxMensaje(`🕳️ Pacto Final: ${n} de Condena a todos`);
+      for (const e of this.enemigos.filter((x) => x.vivo)) {
+        e.estados.condena = (e.estados.condena ?? 0) + n;
+        await this.ui.fxEstado(e, 'condena', n);
+      }
+    }
+
     this.decrementarEstados(j);
 
     // Descartar mano (salvo las cartas con Retener, que se quedan). Con el Rayo
@@ -901,8 +1029,24 @@ export class Combate {
       await this.ui.espera(250);
     }
 
+    // Invocación efímera del brujo: si aguantó la ronda, golpea y se desvanece
+    await this.resolverInvocacionEfimera();
+
+    // Condena (brujo): al final del turno enemigo, quien tenga Condena ≥ sus PV
+    // actuales sucumbe. Va por la vía normal de daño, así que respeta la
+    // filacteria del liche y dispara los efectos de muerte (Heraldo, Infernal).
+    for (const e of [...this.enemigos]) {
+      if (this.terminado) break;
+      if (!this.condenaLetal(e)) continue;
+      await this.ui.fxMensaje(`🕳️ La Condena consume a ${e.nombre}`);
+      await this.infligir(e, e.pv, 'condena', true, true);
+    }
+
     // Imagen Espejo dura 1 turno: lo que quede se disipa
     delete j.estados.espejismo;
+    // Armadura de Agathys y las mejoras de un solo turno de la Explosión
+    delete j.estados.agathys;
+    delete j.estados.explosionTurno;
 
     // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
     // (el daño absorbido por el bloqueo no cuenta). El Frenesí la rompe siempre.

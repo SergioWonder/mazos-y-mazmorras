@@ -1,6 +1,6 @@
 // ── Tipos centrales del juego ────────────────────────────────────────────────
 
-export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro';
+export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo';
 export type TipoCarta = 'ataque' | 'habilidad' | 'poder';
 export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara' | 'especial';
 export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
@@ -36,6 +36,18 @@ export type EstadoId =
   | 'dagasDestreza'  // (pícaro/Danza Mortal) tus Dagas infligen daño adicional igual a tu Destreza
   | 'dagasBloqueo'   // (pícaro/Guardia de Cuchillas) cada Daga que juegas te da esta cantidad de bloqueo
   | 'ventajaFurtiva' // (pícaro/Oportunista) tus ataques hacen +N a quien no pretende atacar
+  | 'condena'        // (enemigo) al final de su turno muere si su Condena ≥ sus PV actuales (brujo)
+  | 'oscuridad'      // (enemigo) reduce su ataque esta cantidad; no decae (brujo)
+  | 'agathys'        // (jugador) este turno el daño que bloquees se devuelve a TODOS los enemigos
+  | 'explosionFuerza'// (jugador) tu Explosión Sobrenatural inflige +N de daño todo el combate
+  | 'explosionTurno' // (jugador) tu Explosión Sobrenatural inflige +N de daño SOLO este turno
+  | 'explosionVeces' // (jugador) tu Explosión Sobrenatural golpea N veces más
+  | 'explosionArea'  // (jugador) tu Explosión Sobrenatural golpea a todos los enemigos
+  | 'condenaPorAtaque'// (brujo/Gran Antiguo) tus ataques aplican esta Condena al objetivo
+  | 'oscuridadPorTurno'// (brujo/Archifata) al inicio de cada turno aplicas esta Oscuridad a todos
+  | 'bloqueoPorTurno'// (brujo/Celestial) ganas este bloqueo al inicio de cada turno
+  | 'bendicionOscura'// (brujo/Infernal) ganas este bloqueo cada vez que un enemigo muere
+  | 'condenaPorBloqueo'// (brujo/Pacto Final) al final de tu turno aplicas Condena = tu bloqueo a todos
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
   | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
@@ -44,16 +56,24 @@ export type EstadoId =
 export type EfectoConjuro = 'area' | 'vulnerable' | 'bloqueo' | 'perforante';
 
 /** Forma visual de la invocación del druida (la fija la primera carta que invocó). */
-export type FormaInvocacion = 'lobo' | 'oso' | 'fuego' | 'agua' | 'aire' | 'arbol' | 'tierra';
+export type FormaInvocacion =
+  | 'lobo' | 'oso' | 'fuego' | 'agua' | 'aire' | 'arbol' | 'tierra' // druida (permanentes)
+  | 'sabueso' | 'demonio';                                          // brujo (efímeras)
 /** Pasivas que se combinan en la invocación (lobo y oso no aportan ninguna). */
 export type EfectoInvocacion = 'fuego' | 'agua' | 'aire' | 'arbol' | 'tierra';
 
-/** Criatura invocada por el druida: absorbe daño y ataca cada turno. */
+/** Criatura invocada: absorbe daño y ataca. Las del druida son permanentes y
+ *  atacan al inicio de cada turno; las del brujo son efímeras (`efimera`): si
+ *  sobreviven al turno enemigo atacan por `dano` y luego se desvanecen. */
 export interface Invocacion {
   forma: FormaInvocacion;
   vida: number;
   vidaMax: number;
   efectos: EfectoInvocacion[]; // pasivas acumuladas (sin repetir)
+  /** (brujo) desaparece al acabar la ronda; ataca antes de irse si sigue viva. */
+  efimera?: boolean;
+  /** (brujo) daño fijo de su golpe; las del druida usan el 30 % de su vida. */
+  dano?: number;
 }
 
 export interface EfectoTemporal {
@@ -195,6 +215,9 @@ export interface CartaDef {
   innato?: boolean;
   /** Retener: no se descarta al final del turno; se queda en tu mano. */
   retener?: boolean;
+  /** Al jugarse vuelve a lo alto del mazo de robo en vez de al descarte
+   *  (Explosión Sobrenatural del brujo). Tiene prioridad sobre «se agota». */
+  alTopeDelMazo?: boolean;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
   /** Versión mejorada (hogueras): sobreescribe texto/coste/efecto. */
   mejora?: MejoraCarta;
@@ -262,6 +285,13 @@ export interface ContextoEfecto {
   curarInvocacion(n: number): Promise<void>;
   /** true si hay una invocación viva. */
   hayInvocacion(): boolean;
+  /** Invoca (brujo): criatura efímera que absorbe daño y, si sobrevive al turno
+   *  enemigo, golpea por `dano` y se desvanece. Otra invocación suma su vida. */
+  invocarEfimero(forma: FormaInvocacion, vida: number, dano: number): Promise<void>;
+  /** Vida actual de la invocación (0 si no hay ninguna). */
+  vidaInvocacion(): number;
+  /** Sacrifica la invocación: la retira y devuelve la vida que le quedaba. */
+  sacrificarInvocacion(): Promise<number>;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */
   run: EstadoRun;
   /** Daño de la intención actual del enemigo tras modificadores (0 si no ataca). */

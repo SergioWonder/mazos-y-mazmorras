@@ -11,7 +11,7 @@ import {
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
-  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
+  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
   poolDeClase, cartaUnicaDeClase,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
@@ -121,7 +121,7 @@ console.log('— Mapa —');
 console.log('— Recompensas y pools —');
 {
   const rng = crearRng(7);
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
     for (let i = 0; i < 20; i++) {
       const r = recompensaCartas(clase, rng);
       if (new Set(r.map((c) => c.id)).size !== r.length)
@@ -134,7 +134,8 @@ console.log('— Recompensas y pools —');
   check(BARBARO.filter((c) => c.rareza === 'rara').length === 6, 'bárbaro: 6 raras (4 subclases + 2 de Hemorragia)');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 5, 'mago: 5 raras (3 escuelas + 2 de Creación de conjuros)');
   check(PICARO.filter((c) => c.rareza === 'rara').length === 7, 'pícaro: 7 raras (3 subclases + 4 remates)');
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
+  check(BRUJO.filter((c) => c.rareza === 'rara').length === 7, 'brujo: 7 raras (4 subclases + 3 remates)');
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
     const mazo = mazoInicial(clase);
     check(mazo.length === 11, `${clase}: mazo inicial de 11 cartas (5 golpe + 4 defender + 2 de clase)`);
   }
@@ -150,7 +151,7 @@ console.log('— Combates simulados (los 6 escenarios, 3 clases) —');
 {
   for (const [capIdx, cap] of ACTOS.flat().entries()) {
     let victorias = 0, total = 0;
-    for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
+    for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
       for (let s = 1; s <= 10; s++) {
         const defs = cap.normales[s % cap.normales.length];
         const { combate } = await simular(clase, s * 131 + capIdx, defs);
@@ -393,7 +394,7 @@ console.log('— Eventos —');
   let opcionesProbadas = 0;
   for (const ev of [...EVENTOS_POSITIVOS, ...EVENTOS_NEGATIVOS]) {
     for (const [i, op] of ev.opciones.entries()) {
-      for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
+      for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
         for (let s = 0; s < 5; s++) {
           const run = nuevaRun(clase, s * 17 + i);
           run.pv = 5; // al borde de la muerte: los eventos no deben matar
@@ -672,7 +673,7 @@ console.log('— Bendiciones de la Vidente —');
 
 console.log('— Cartas únicas de clase (Acto III) —');
 {
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro'] as ClaseId[]) {
+  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
     const u = cartaUnicaDeClase(clase);
     check(u.rareza === 'especial' && u.clase === clase, `${clase}: carta única de rareza especial`);
     check(!poolDeClase(clase).includes(u), `${clase}: la única NO aparece en recompensas normales`);
@@ -1072,6 +1073,317 @@ console.log('— Pícaro: mecánicas nuevas —');
     comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
     await comb.terminarTurno();
     check(comb.jugador.conjuroEscrito === 4, 'Tratado Prohibido escribe 4 al inicio del turno siguiente');
+  }
+}
+
+console.log('— Brujo: mecánicas nuevas —');
+{
+  const carta = (id: string) => BRUJO.find((c) => c.id === id)!;
+  const defender = (comb: Combate) => {
+    comb.enemigos.filter((e) => e.vivo).forEach((e) => {
+      e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    });
+  };
+  /** Borra la Condena que deja puesta el Sello del Pacto (reliquia inicial),
+   *  para medir solo lo que aporta la carta bajo prueba. */
+  const sinCondena = (comb: Combate) => {
+    comb.enemigos.forEach((e) => { delete e.estados.condena; });
+  };
+
+  // Sello del Pacto: la reliquia inicial del brujo condena de entrada
+  {
+    const run = nuevaRun('brujo', 5000);
+    check(run.reliquias[0].id === 'sello-pacto', 'el brujo arranca con el Sello del Pacto');
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5000), uiSilenciosa);
+    await comb.iniciar();
+    check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 4),
+      'Sello del Pacto: 4 de Condena a todos al empezar el combate');
+  }
+
+  // Explosión Sobrenatural: vuelve a lo alto del mazo, no al descarte
+  {
+    const run = nuevaRun('brujo', 5001);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5001), uiSilenciosa);
+    await comb.iniciar();
+    const exp = comb.jugador.mazo.concat(comb.jugador.mano)
+      .find((c) => c.def.id === 'explosion-sobrenatural')!;
+    check(!!exp, 'el mazo inicial del brujo trae la Explosión Sobrenatural');
+    // la ponemos en la mano a mano para jugarla
+    comb.jugador.mazo = comb.jugador.mazo.filter((c) => c.uid !== exp.uid);
+    comb.jugador.mano = [exp];
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
+    const descarteAntes = comb.jugador.descarte.length;
+    await comb.jugarCarta(exp, e);
+    check(60 - e.pv === 6, 'la Explosión inflige 6 de daño base');
+    check(comb.jugador.descarte.length === descarteAntes, 'no va al descarte');
+    check(comb.jugador.mazo[comb.jugador.mazo.length - 1].uid === exp.uid,
+      'la Explosión vuelve a lo alto del mazo de robo');
+  }
+
+  // El Rayo Áureo del Contemplador no se la lleva por delante
+  {
+    const run = nuevaRun('brujo', 5002);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5002), uiSilenciosa);
+    await comb.iniciar();
+    const exp = instanciar(carta('explosion-sobrenatural'));
+    comb.jugador.mano = [exp];
+    comb.jugador.estados.cartasAgotan = 1;
+    await comb.jugarCarta(exp, comb.enemigos[0]);
+    check(comb.jugador.agotadas.every((c) => c.uid !== exp.uid),
+      'con cartasAgotan activo la Explosión NO se agota');
+    check(comb.jugador.mazo.some((c) => c.uid === exp.uid), 'sigue volviendo al mazo');
+  }
+
+  // Mejoras de la Explosión: permanentes, de un turno, área y golpes extra
+  {
+    const run = nuevaRun('brujo', 5003);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5003), uiSilenciosa);
+    await comb.iniciar();
+    const exp = carta('explosion-sobrenatural');
+    const [a, b] = comb.enemigos;
+    a.pv = a.pvMax = 200; a.bloqueo = 0;
+    b.pv = b.pvMax = 200; b.bloqueo = 0;
+
+    comb.jugador.estados.explosionFuerza = 3; // Verbo Agonizante
+    await exp.jugar(comb.contexto(a));
+    check(200 - a.pv === 9, 'Verbo Agonizante: 6 + 3 = 9');
+
+    a.pv = 200;
+    comb.jugador.estados.explosionTurno = 5; // Canalizar el Pacto
+    await exp.jugar(comb.contexto(a));
+    check(200 - a.pv === 14, 'con mejora de turno: 6 + 3 + 5 = 14');
+
+    a.pv = 200;
+    comb.jugador.estados.explosionVeces = 1; // Haz Desdoblado
+    await exp.jugar(comb.contexto(a));
+    check(200 - a.pv === 28, 'Haz Desdoblado: golpea dos veces (14 + 14)');
+
+    a.pv = 200; b.pv = 200;
+    delete comb.jugador.estados.explosionVeces;
+    comb.jugador.estados.explosionArea = 1; // Explosión Trifurcada
+    await exp.jugar(comb.contexto(a));
+    check(200 - a.pv === 14 && 200 - b.pv === 14, 'Explosión Trifurcada: golpea a todos');
+
+    // la mejora de un turno se limpia al acabar el turno; la permanente no
+    defender(comb);
+    await comb.terminarTurno();
+    check((comb.jugador.estados.explosionTurno ?? 0) === 0, 'la mejora de un turno se disipa');
+    check((comb.jugador.estados.explosionFuerza ?? 0) === 3, 'la mejora permanente se queda');
+  }
+
+  // Armadura de Agathys: el daño bloqueado rebota a TODOS los enemigos
+  {
+    const run = nuevaRun('brujo', 5004);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5004), uiSilenciosa);
+    await comb.iniciar();
+    const [a, b] = comb.enemigos;
+    a.pv = a.pvMax = 60; b.pv = b.pvMax = 60;
+    comb.jugador.mano = [];
+    comb.jugador.bloqueo = 0;
+    await carta('armadura-agathys').jugar(comb.contexto());
+    check(comb.jugador.bloqueo === 8, 'Armadura de Agathys da 8 de bloqueo');
+    check((comb.jugador.estados.agathys ?? 0) === 1, 'y arma el rebote este turno');
+    // un solo golpe enemigo de 5: lo absorbe el bloqueo y rebota a los dos
+    a.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 5 };
+    b.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    b.bloqueo = 0;
+    await comb.terminarTurno();
+    check(60 - a.pv === 5, 'el atacante recibe de vuelta los 5 que bloqueaste');
+    check(60 - b.pv === 5, 'y el otro enemigo también (rebota a todos)');
+    check((comb.jugador.estados.agathys ?? 0) === 0, 'Agathys solo dura ese turno');
+  }
+
+  // Condena: mata al final del turno enemigo cuando iguala sus PV actuales
+  {
+    const run = nuevaRun('brujo', 5005);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5005), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 20;
+    sinCondena(comb);
+    await comb.contexto().aplicarEstado(e, 'condena', 19);
+    check(!comb.condenaLetal(e), '19 de Condena sobre 20 PV todavía no es letal');
+    defender(comb);
+    await comb.terminarTurno();
+    check(e.vivo, 'con Condena por debajo de sus PV sobrevive');
+    await comb.contexto().aplicarEstado(e, 'condena', 1);
+    check(comb.condenaLetal(e), '20 de Condena sobre 20 PV ya es letal');
+    defender(comb);
+    await comb.terminarTurno();
+    check(!e.vivo, 'la Condena lo remata al final de su turno');
+    check(comb.terminado === 'victoria', 'y el combate se cierra con victoria');
+  }
+
+  // La Condena no decae y se alcanza también bajando los PV del enemigo
+  {
+    const run = nuevaRun('brujo', 5006);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5006), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 40; e.bloqueo = 0;
+    sinCondena(comb);
+    await comb.contexto().aplicarEstado(e, 'condena', 12);
+    defender(comb);
+    await comb.terminarTurno();
+    check((e.estados.condena ?? 0) === 12, 'la Condena no baja con el tiempo');
+    e.bloqueo = 0; // se cubrió en su turno: le quitamos el bloqueo para medir limpio
+    await comb.contexto().atacar(e, 30); // lo dejamos en 10 PV
+    check(e.pv === 10 && comb.condenaLetal(e), 'bajarle los PV por debajo de la Condena la vuelve letal');
+  }
+
+  // Brazos de Hadar: Condena y Débil a todos
+  {
+    const run = nuevaRun('brujo', 5007);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5007), uiSilenciosa);
+    await comb.iniciar();
+    sinCondena(comb);
+    await carta('brazos-hadar').jugar(comb.contexto());
+    check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 6), 'Brazos de Hadar: 6 de Condena a todos');
+    check(comb.enemigos.every((e) => (e.estados.debil ?? 0) === 1), 'Brazos de Hadar: 1 de Débil a todos');
+  }
+
+  // Oscuridad: baja el ataque de todos y se suma a las Raíces
+  {
+    const run = nuevaRun('brujo', 5008);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5008), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 10 };
+    check(comb.danoIntencion(e) === 10, 'sin Oscuridad el ataque es de 10');
+    await carta('oscuridad').jugar(comb.contexto());
+    check(comb.enemigos.every((x) => (x.estados.oscuridad ?? 0) === 2), 'Oscuridad: 2 a todos');
+    check(comb.danoIntencion(e) === 8, 'la Oscuridad le resta 2 al ataque');
+    defender(comb);
+    await comb.terminarTurno();
+    check((e.estados.oscuridad ?? 0) === 2, 'la Oscuridad no decae con el tiempo');
+  }
+
+  // Invocación efímera: absorbe daño, golpea si sobrevive y se desvanece
+  {
+    const run = nuevaRun('brujo', 5009);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5009), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 60; e.bloqueo = 0;
+    await carta('invocacion-sobrenatural').jugar(comb.contexto());
+    check(comb.jugador.invocacion?.vida === 22, 'Invocación Sobrenatural: 22 de vida');
+    check(comb.jugador.invocacion?.efimera === true, 'es efímera');
+    e.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+    const pvAntes = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pvAntes, 'la invocación absorbe el golpe: el brujo no pierde PV');
+    check(60 - e.pv === 16, 'sobrevive y golpea por 16');
+    check(comb.jugador.invocacion === undefined, 'y se desvanece al acabar la ronda');
+  }
+
+  // Si la matan, no llega a atacar
+  {
+    const run = nuevaRun('brujo', 5010);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5010), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 60; e.bloqueo = 0;
+    await carta('sabueso-sombra').jugar(comb.contexto()); // 12 de vida
+    e.intencion = { nombre: 'Mazazo', intencion: 'ataque', dano: 40 };
+    await comb.terminarTurno();
+    check(comb.jugador.invocacion === undefined, 'la invocación muere al recibir 40');
+    check(e.pv === 60, 'y no llega a devolver el golpe');
+  }
+
+  // Sacrificio del Familiar: convierte la vida restante en daño
+  {
+    const run = nuevaRun('brujo', 5011);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5011), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 60; e.bloqueo = 0;
+    await carta('sabueso-sombra').jugar(comb.contexto()); // 12 de vida
+    await carta('sacrificio-familiar').jugar(comb.contexto(e));
+    check(60 - e.pv === 12, 'Sacrificio del Familiar inflige los 12 de vida que quedaban');
+    check(comb.jugador.invocacion === undefined, 'la invocación desaparece');
+  }
+
+  // Mente del Gran Antiguo: cada ataque condena
+  {
+    const run = nuevaRun('brujo', 5012);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5012), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 90; e.bloqueo = 0;
+    sinCondena(comb);
+    await carta('gran-antiguo').jugar(comb.contexto());
+    await comb.contexto().atacar(e, 5);
+    check((e.estados.condena ?? 0) === 2, 'Gran Antiguo: el ataque aplica 2 de Condena');
+    await comb.contexto().atacar(e, 5, 3);
+    check((e.estados.condena ?? 0) === 4, 'un ataque múltiple condena una sola vez');
+    // en área también condena, y a todos (Explosión Trifurcada + Gran Antiguo)
+    sinCondena(comb);
+    comb.jugador.estados.explosionArea = 1;
+    await carta('explosion-sobrenatural').jugar(comb.contexto(e));
+    check((e.estados.condena ?? 0) === 2, 'la Explosión en área también aplica Condena');
+  }
+
+  // Pacto Infernal: bloqueo por cada muerte enemiga
+  {
+    const run = nuevaRun('brujo', 5013);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5013), uiSilenciosa);
+    await comb.iniciar();
+    await carta('infernal').jugar(comb.contexto());
+    comb.jugador.bloqueo = 0;
+    const e = comb.enemigos[0];
+    e.pv = 4; e.bloqueo = 0;
+    await comb.contexto().atacar(e, 30);
+    check(!e.vivo, 'el enemigo cae');
+    check(comb.jugador.bloqueo === 8, 'Pacto Infernal: +8 de bloqueo por la muerte');
+  }
+
+  // Pacto Final: tu bloqueo se convierte en Condena para todos
+  {
+    const run = nuevaRun('brujo', 5014);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5014), uiSilenciosa);
+    await comb.iniciar();
+    await cartaUnicaDeClase('brujo').jugar(comb.contexto());
+    comb.jugador.bloqueo = 13;
+    sinCondena(comb);
+    comb.enemigos.forEach((e) => { e.pv = e.pvMax = 80; });
+    defender(comb);
+    await comb.terminarTurno();
+    check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 13),
+      'Pacto Final: 13 de bloqueo → 13 de Condena a todos');
+  }
+
+  // Presencia Feérica y Bendición Celestial: efectos de inicio de turno
+  {
+    const run = nuevaRun('brujo', 5015);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5015), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    await carta('archifata').jugar(comb.contexto());
+    await carta('celestial').jugar(comb.contexto());
+    check((e.estados.oscuridad ?? 0) === 0, 'Presencia Feérica no actúa el turno que la juegas');
+    check(comb.jugador.bloqueo === 0, 'Bendición Celestial tampoco');
+    comb.jugador.pv = comb.jugador.pvMax - 10;
+    defender(comb);
+    await comb.terminarTurno();
+    check((e.estados.oscuridad ?? 0) === 2, 'Presencia Feérica: 2 de Oscuridad al inicio del turno');
+    check(comb.jugador.bloqueo === 5, 'Bendición Celestial: 5 de bloqueo al inicio del turno');
+    check(comb.jugador.pv === comb.jugador.pvMax - 6, 'Bendición Celestial: cura 4 PV');
+  }
+
+  // Palabra de Ruina y Verbo de Aniquilación
+  {
+    const run = nuevaRun('brujo', 5016);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5016), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 50;
+    sinCondena(comb);
+    await comb.contexto().aplicarEstado(e, 'condena', 9);
+    await carta('palabra-ruina').jugar(comb.contexto(e));
+    check((e.estados.condena ?? 0) === 18, 'Palabra de Ruina duplica la Condena (9 → 18)');
+    delete e.estados.condena;
+    await carta('verbo-aniquilacion').jugar(comb.contexto(e));
+    check((e.estados.condena ?? 0) === 25, 'Verbo de Aniquilación: la mitad de sus 50 PV = 25');
   }
 }
 

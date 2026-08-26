@@ -272,6 +272,7 @@
 .anim-ilusion { filter: drop-shadow(0 0 34px #c89aff) drop-shadow(0 0 80px #ffd9f2); }
 .anim-veneno { filter: drop-shadow(0 0 34px #6bd66b) drop-shadow(0 0 80px #d6ff9a); }
 .anim-psionico { filter: drop-shadow(0 0 34px #3fd0c0) drop-shadow(0 0 80px #baf7f0); animation-duration: 0.7s; }
+.anim-abisal { filter: drop-shadow(0 0 34px #a15ce0) drop-shadow(0 0 80px #e8d0ff); animation-duration: 0.7s; }
 
 /* ── Cartas de recompensa ───────────────────────────────────────────────── */
 .carta-recompensa {

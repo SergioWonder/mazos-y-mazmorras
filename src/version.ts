@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '2.1.1';
+export const VERSION = '3.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.0.0',
+    fecha: '2026-08-26',
+    cambios: [
+      '🕳️ ¡Nueva clase, el Brujo (64 PV)! Un pacto con cuatro patas: la Explosión Sobrenatural, la Condena, invocaciones de usar y tirar y bloqueo que muerde.',
+      '💥 Explosión Sobrenatural: su carta inicial de coste 1 vuelve a lo alto de tu mazo al jugarla, así que la lanzas casi cada turno. Los poderes la engordan (más daño, un golpe más, o golpear a todos) y otras cartas la mejoran solo ese turno.',
+      '⚖️ Condena: puntos que no decaen. Al final del turno del enemigo, si su Condena llega a sus PV actuales, muere — también los jefes. Brazos de Hadar la reparte con Débil a todos y Palabra de Ruina la duplica.',
+      '🩸 Armadura de Agathys: gana bloqueo y, ese turno, todo el daño que bloquees se devuelve a TODOS los enemigos.',
+      '👁️ Invocaciones efímeras: solo duran un turno, pero pegan y aguantan más. Absorben el golpe enemigo y, si sobreviven, contraatacan antes de desvanecerse.',
+      '🌑 Oscuridad: baja el ataque de todos los enemigos y no decae. Y sus cuatro subclases raras: Archifata, Celestial, Infernal y Gran Antiguo.',
+    ],
+  },
   {
     version: '2.1.1',
     fecha: '2026-08-26',

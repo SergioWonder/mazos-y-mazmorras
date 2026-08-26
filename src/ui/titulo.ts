@@ -53,6 +53,13 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             <span class="clase-desc">Acrobacias, dagas y ataques furtivos;
             roba, descarta y envenena desde las sombras.</span>
           </button>
+          <button class="clase-carta clase-brujo" data-clase="brujo">
+            <span class="clase-icono">🕳️</span>
+            <span class="clase-nombre">Brujo</span>
+            <span class="clase-pv">❤️ ${PV_POR_CLASE.brujo} PV</span>
+            <span class="clase-desc">Una Explosión que siempre vuelve, pactos
+            que condenan a muerte y bloqueo que muerde.</span>
+          </button>
         </div>
         ${
           puedeContinuar

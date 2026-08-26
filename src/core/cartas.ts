@@ -2682,6 +2682,720 @@ export const PICARO: CartaDef[] = [
   },
 ];
 
+// ── Brujo ────────────────────────────────────────────────────────────────────
+// Mecánicas: la Explosión Sobrenatural (vuelve a lo alto del mazo y se mejora
+// con poderes permanentes y con cartas del turno), Condena (mata al enemigo al
+// final de su turno cuando iguala sus PV actuales), invocaciones efímeras que
+// solo aguantan una ronda, Oscuridad (baja el ataque de todos) y bloqueo que
+// muerde con la Armadura de Agathys. Subclases raras: Archifata, Celestial,
+// Infernal y Gran Antiguo.
+
+/** Daño real de la Explosión Sobrenatural con todas sus mejoras acumuladas. */
+function danoExplosion(c: ContextoEfecto, base: number): number {
+  return base
+    + (c.jugador.estados.explosionFuerza ?? 0)
+    + (c.jugador.estados.explosionTurno ?? 0);
+}
+
+/** Lanza la Explosión: 1 golpe (+ los que sumen los poderes), a uno o a todos. */
+async function lanzarExplosion(c: ContextoEfecto, base: number) {
+  const dmg = danoExplosion(c, base);
+  const golpes = 1 + (c.jugador.estados.explosionVeces ?? 0);
+  const area = (c.jugador.estados.explosionArea ?? 0) > 0;
+  for (let i = 0; i < golpes; i++) {
+    if (area) await c.atacarTodos(dmg, 'abisal');
+    else {
+      const obj = c.objetivo!.vivo ? c.objetivo! : c.enemigos.find((e) => e.vivo);
+      if (!obj) break;
+      await c.atacar(obj, dmg, 1, 'abisal');
+    }
+  }
+}
+
+export const BRUJO: CartaDef[] = [
+  // — Iniciales —
+  {
+    id: 'explosion-sobrenatural',
+    nombre: 'Explosión Sobrenatural',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'inicial',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'abisal',
+    alTopeDelMazo: true,
+    texto: 'Inflige 6 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
+    jugar: async (c) => {
+      await lanzarExplosion(c, 6);
+    },
+    mejora: {
+      texto: 'Inflige 9 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
+      jugar: async (c) => {
+        await lanzarExplosion(c, 9);
+      },
+    },
+  },
+  {
+    id: 'armadura-agathys',
+    nombre: 'Armadura de Agathys',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'inicial',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 8 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(8);
+      await c.aplicarEstado(c.jugador, 'agathys', 1);
+    },
+    mejora: {
+      texto: 'Gana 11 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(11);
+        await c.aplicarEstado(c.jugador, 'agathys', 1);
+      },
+    },
+  },
+  // — Comunes —
+  {
+    id: 'sacudida-abisal',
+    nombre: 'Sacudida Abisal',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'abisal',
+    texto: 'Inflige 9 de daño.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 9, 1, 'abisal');
+    },
+    mejora: {
+      texto: 'Inflige 12 de daño.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 12, 1, 'abisal');
+      },
+    },
+  },
+  {
+    id: 'manto-sombras',
+    nombre: 'Manto de Sombras',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 7 de bloqueo.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(7);
+    },
+    mejora: {
+      texto: 'Gana 10 de bloqueo.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(10);
+      },
+    },
+  },
+  {
+    id: 'marca-condena',
+    nombre: 'Marca de Condena',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'condena',
+    texto: 'Aplica 8 de Condena.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.objetivo!, 'condena', 8);
+    },
+    mejora: {
+      texto: 'Aplica 11 de Condena.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.objetivo!, 'condena', 11);
+      },
+    },
+  },
+  {
+    id: 'susurro-maldito',
+    nombre: 'Susurro Maldito',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'condena',
+    texto: 'Inflige 6 de daño.\nAplica 4 de Condena.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 6, 1, 'condena');
+      if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', 4);
+    },
+    mejora: {
+      texto: 'Inflige 8 de daño.\nAplica 6 de Condena.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 8, 1, 'condena');
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', 6);
+      },
+    },
+  },
+  {
+    id: 'sabueso-sombra',
+    nombre: 'Sabueso de Sombra',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'oscuridad',
+    texto: 'Invoca un Sabueso: 12 de vida y 9 de daño.\nSolo dura este turno.',
+    jugar: async (c) => {
+      await c.invocarEfimero('sabueso', 12, 9);
+    },
+    mejora: {
+      texto: 'Invoca un Sabueso: 15 de vida y 11 de daño.\nSolo dura este turno.',
+      jugar: async (c) => {
+        await c.invocarEfimero('sabueso', 15, 11);
+      },
+    },
+  },
+  {
+    id: 'oscuridad',
+    nombre: 'Oscuridad',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'oscuridad',
+    texto: 'Aplica 2 de Oscuridad a todos\nlos enemigos (baja su ataque).',
+    jugar: async (c) => {
+      for (const e of c.enemigos.filter((x) => x.vivo)) {
+        await c.aplicarEstado(e, 'oscuridad', 2);
+      }
+    },
+    mejora: {
+      texto: 'Aplica 3 de Oscuridad a todos\nlos enemigos (baja su ataque).',
+      jugar: async (c) => {
+        for (const e of c.enemigos.filter((x) => x.vivo)) {
+          await c.aplicarEstado(e, 'oscuridad', 3);
+        }
+      },
+    },
+  },
+  {
+    id: 'canalizar-pacto',
+    nombre: 'Canalizar el Pacto',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Este turno tu Explosión Sobrenatural\ninflige 5 más. Roba 1 carta.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionTurno', 5);
+      await c.robar(1);
+    },
+    mejora: {
+      texto: 'Este turno tu Explosión Sobrenatural\ninflige 7 más. Roba 1 carta.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionTurno', 7);
+        await c.robar(1);
+      },
+    },
+  },
+  {
+    id: 'diezmo-sangre',
+    nombre: 'Diezmo de Sangre',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    texto: 'Inflige 7 de daño.\nInflige 4 más si el enemigo\nya tiene Condena.',
+    jugar: async (c) => {
+      const extra = (c.objetivo!.estados.condena ?? 0) > 0 ? 4 : 0;
+      await c.atacar(c.objetivo!, 7 + extra, 1, 'sangre');
+    },
+    mejora: {
+      texto: 'Inflige 9 de daño.\nInflige 6 más si el enemigo\nya tiene Condena.',
+      jugar: async (c) => {
+        const extra = (c.objetivo!.estados.condena ?? 0) > 0 ? 6 : 0;
+        await c.atacar(c.objetivo!, 9 + extra, 1, 'sangre');
+      },
+    },
+  },
+  // — Infrecuentes —
+  {
+    id: 'brazos-hadar',
+    nombre: 'Brazos de Hadar',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'condena',
+    texto: 'Aplica 6 de Condena y 1 de Débil\na TODOS los enemigos.',
+    jugar: async (c) => {
+      for (const e of c.enemigos.filter((x) => x.vivo)) {
+        await c.aplicarEstado(e, 'condena', 6);
+        await c.aplicarEstado(e, 'debil', 1);
+      }
+    },
+    mejora: {
+      texto: 'Aplica 8 de Condena y 2 de Débil\na TODOS los enemigos.',
+      jugar: async (c) => {
+        for (const e of c.enemigos.filter((x) => x.vivo)) {
+          await c.aplicarEstado(e, 'condena', 8);
+          await c.aplicarEstado(e, 'debil', 2);
+        }
+      },
+    },
+  },
+  {
+    id: 'invocacion-sobrenatural',
+    nombre: 'Invocación Sobrenatural',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Invoca un Demonio: 22 de vida y 16 de daño.\nSolo dura este turno.',
+    jugar: async (c) => {
+      await c.invocarEfimero('demonio', 22, 16);
+    },
+    mejora: {
+      texto: 'Invoca un Demonio: 28 de vida y 20 de daño.\nSolo dura este turno.',
+      jugar: async (c) => {
+        await c.invocarEfimero('demonio', 28, 20);
+      },
+    },
+  },
+  {
+    id: 'blindaje-infernal',
+    nombre: 'Blindaje Infernal',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Gana 14 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(14);
+      await c.aplicarEstado(c.jugador, 'agathys', 1);
+    },
+    mejora: {
+      texto: 'Gana 18 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(18);
+        await c.aplicarEstado(c.jugador, 'agathys', 1);
+      },
+    },
+  },
+  {
+    id: 'cosecha-almas',
+    nombre: 'Cosecha de Almas',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'muerte',
+    texto: 'Inflige 5 de daño a TODOS los enemigos\ny aplica 3 de Condena a todos.',
+    jugar: async (c) => {
+      await c.atacarTodos(5, 'muerte');
+      for (const e of c.enemigos.filter((x) => x.vivo)) {
+        await c.aplicarEstado(e, 'condena', 3);
+      }
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño a TODOS los enemigos\ny aplica 4 de Condena a todos.',
+      jugar: async (c) => {
+        await c.atacarTodos(7, 'muerte');
+        for (const e of c.enemigos.filter((x) => x.vivo)) {
+          await c.aplicarEstado(e, 'condena', 4);
+        }
+      },
+    },
+  },
+  {
+    id: 'palabra-ruina',
+    nombre: 'Palabra de Ruina',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'condena',
+    texto: 'Duplica la Condena del enemigo.',
+    jugar: async (c) => {
+      const n = c.objetivo!.estados.condena ?? 0;
+      if (n <= 0) await c.mensaje('El objetivo no está condenado…');
+      else await c.aplicarEstado(c.objetivo!, 'condena', n);
+    },
+    mejora: {
+      coste: 1,
+      texto: 'Duplica la Condena del enemigo.',
+      jugar: async (c) => {
+        const n = c.objetivo!.estados.condena ?? 0;
+        if (n <= 0) await c.mensaje('El objetivo no está condenado…');
+        else await c.aplicarEstado(c.objetivo!, 'condena', n);
+      },
+    },
+  },
+  {
+    id: 'velo-tinieblas',
+    nombre: 'Velo de Tinieblas',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'oscuridad',
+    texto: 'Gana 8 de bloqueo y aplica 2 de\nOscuridad a todos los enemigos.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(8);
+      for (const e of c.enemigos.filter((x) => x.vivo)) {
+        await c.aplicarEstado(e, 'oscuridad', 2);
+      }
+    },
+    mejora: {
+      texto: 'Gana 11 de bloqueo y aplica 3 de\nOscuridad a todos los enemigos.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(11);
+        for (const e of c.enemigos.filter((x) => x.vivo)) {
+          await c.aplicarEstado(e, 'oscuridad', 3);
+        }
+      },
+    },
+  },
+  {
+    id: 'sacrificio-familiar',
+    nombre: 'Sacrificio del Familiar',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    texto: 'Sacrifica tu invocación:\ninflige daño igual a su vida restante.',
+    jugar: async (c) => {
+      if (!c.hayInvocacion()) {
+        await c.mensaje('No tienes ninguna invocación…');
+        return;
+      }
+      const vida = await c.sacrificarInvocacion();
+      await c.danar(c.objetivo!, vida, 'sangre');
+    },
+    mejora: {
+      texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante y aplica\nesa misma Condena.',
+      jugar: async (c) => {
+        if (!c.hayInvocacion()) {
+          await c.mensaje('No tienes ninguna invocación…');
+          return;
+        }
+        const vida = await c.sacrificarInvocacion();
+        await c.danar(c.objetivo!, vida, 'sangre');
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', vida);
+      },
+    },
+  },
+  {
+    id: 'pacto-sangriento',
+    nombre: 'Pacto Sangriento',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'sangre',
+    texto: 'Pierde 4 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 4 más.',
+    jugar: async (c) => {
+      await c.perderPV(4);
+      await c.robar(2);
+      await c.aplicarEstado(c.jugador, 'explosionTurno', 4);
+    },
+    mejora: {
+      texto: 'Pierde 2 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 6 más.',
+      jugar: async (c) => {
+        await c.perderPV(2);
+        await c.robar(2);
+        await c.aplicarEstado(c.jugador, 'explosionTurno', 6);
+      },
+    },
+  },
+  {
+    id: 'verbo-agonizante',
+    nombre: 'Verbo Agonizante',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Poder: tu Explosión Sobrenatural\ninflige 3 de daño adicional.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionFuerza', 3);
+    },
+    mejora: {
+      texto: 'Poder: tu Explosión Sobrenatural\ninflige 5 de daño adicional.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionFuerza', 5);
+      },
+    },
+  },
+  {
+    id: 'repulsion-sobrenatural',
+    nombre: 'Repulsión Sobrenatural',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'impacto',
+    texto: 'Inflige 10 de daño.\nGana 6 de bloqueo.',
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 10, 1, 'impacto');
+      await c.ganarBloqueo(6);
+    },
+    mejora: {
+      texto: 'Inflige 13 de daño.\nGana 8 de bloqueo.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 13, 1, 'impacto');
+        await c.ganarBloqueo(8);
+      },
+    },
+  },
+  {
+    id: 'cadenas-carceri',
+    nombre: 'Cadenas de Carceri',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'oscuridad',
+    texto: 'Aplica 3 de Oscuridad y 2 de Vulnerable.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.objetivo!, 'oscuridad', 3);
+      await c.aplicarEstado(c.objetivo!, 'vulnerable', 2);
+    },
+    mejora: {
+      texto: 'Aplica 4 de Oscuridad y 3 de Vulnerable.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.objetivo!, 'oscuridad', 4);
+        await c.aplicarEstado(c.objetivo!, 'vulnerable', 3);
+      },
+    },
+  },
+  {
+    id: 'devorar-vida',
+    nombre: 'Devorar Vida',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'sangre',
+    texto: 'Inflige 12 de daño.\nCúrate la mitad del daño infligido.',
+    jugar: async (c) => {
+      const d = await c.atacar(c.objetivo!, 12, 1, 'sangre');
+      await c.curar(Math.floor(d / 2));
+    },
+    mejora: {
+      texto: 'Inflige 16 de daño.\nCúrate la mitad del daño infligido.',
+      jugar: async (c) => {
+        const d = await c.atacar(c.objetivo!, 16, 1, 'sangre');
+        await c.curar(Math.floor(d / 2));
+      },
+    },
+  },
+  // — Raras: subclases del brujo y remates —
+  {
+    id: 'archifata',
+    nombre: 'Presencia Feérica',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Archifata',
+    fx: 'luna',
+    animRara: 'anim-ilusion',
+    texto: 'Poder: al inicio de cada turno aplicas\n2 de Oscuridad a todos los enemigos.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'oscuridadPorTurno', 2);
+    },
+    mejora: {
+      texto: 'Poder: al inicio de cada turno aplicas\n3 de Oscuridad a todos los enemigos.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'oscuridadPorTurno', 3);
+      },
+    },
+  },
+  {
+    id: 'celestial',
+    nombre: 'Bendición Celestial',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Celestial',
+    fx: 'divino',
+    animRara: 'anim-divino',
+    texto: 'Poder: al inicio de cada turno\ncúrate 4 PV y gana 5 de bloqueo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'regeneracion', 4);
+      await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 5);
+    },
+    mejora: {
+      texto: 'Poder: al inicio de cada turno\ncúrate 6 PV y gana 7 de bloqueo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'regeneracion', 6);
+        await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 7);
+      },
+    },
+  },
+  {
+    id: 'infernal',
+    nombre: 'Pacto Infernal',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Infernal',
+    fx: 'furia',
+    animRara: 'anim-evocacion',
+    texto: 'Poder: cada vez que un enemigo\nmuera, gana 8 de bloqueo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'bendicionOscura', 8);
+    },
+    mejora: {
+      texto: 'Poder: cada vez que un enemigo\nmuera, gana 11 de bloqueo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'bendicionOscura', 11);
+      },
+    },
+  },
+  {
+    id: 'gran-antiguo',
+    nombre: 'Mente del Gran Antiguo',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    subclase: 'Gran Antiguo',
+    fx: 'condena',
+    animRara: 'anim-psionico',
+    texto: 'Poder: tus ataques aplican\n2 de Condena al objetivo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'condenaPorAtaque', 2);
+    },
+    mejora: {
+      texto: 'Poder: tus ataques aplican\n3 de Condena al objetivo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'condenaPorAtaque', 3);
+      },
+    },
+  },
+  {
+    id: 'explosion-trifurcada',
+    nombre: 'Explosión Trifurcada',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    animRara: 'anim-evocacion',
+    texto: 'Poder: tu Explosión Sobrenatural\ngolpea a TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionArea', 1);
+    },
+    mejora: {
+      coste: 0,
+      texto: 'Poder: tu Explosión Sobrenatural\ngolpea a TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionArea', 1);
+      },
+    },
+  },
+  {
+    id: 'haz-desdoblado',
+    nombre: 'Haz Desdoblado',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    animRara: 'anim-psionico',
+    texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
+    },
+    mejora: {
+      coste: 1,
+      texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
+      },
+    },
+  },
+  {
+    id: 'verbo-aniquilacion',
+    nombre: 'Verbo de Aniquilación',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'rara',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'condena',
+    animRara: 'anim-veneno',
+    texto: 'Aplica Condena igual a la mitad\nde los PV actuales del enemigo.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.objetivo!, 'condena', Math.floor(c.objetivo!.pv / 2));
+    },
+    mejora: {
+      texto: 'Aplica Condena igual a dos tercios\nde los PV actuales del enemigo.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.objetivo!, 'condena', Math.floor((c.objetivo!.pv * 2) / 3));
+      },
+    },
+  },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'pacto-final',
+    nombre: 'Pacto Final',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'especial',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'condena',
+    animRara: 'anim-veneno',
+    texto: 'Poder: al final de cada turno aplicas\nCondena igual a tu bloqueo\na TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'condenaPorBloqueo', 1);
+    },
+    mejora: {
+      coste: 0,
+      texto: 'Poder: al final de cada turno aplicas\nCondena igual a tu bloqueo\na TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'condenaPorBloqueo', 1);
+      },
+    },
+  },
+];
+
 // ── Cartas únicas incoloras (recompensa de la Vidente entre actos) ───────────
 
 /** Resuelve el efecto de Seducir según la tirada de 1d20. */
@@ -2812,9 +3526,13 @@ const INICIALES_DE_CLASE: Record<ClaseId, [string, string]> = {
   mago: ['canalizar-mana', 'manos-ardientes'],
   // un ataque con robo + una defensa con Acrobacias
   picaro: ['filo-rapido', 'pirueta'],
+  // el cañón que siempre vuelve + la defensa que muerde
+  brujo: ['explosion-sobrenatural', 'armadura-agathys'],
 };
 
-const POOLS: Record<ClaseId, CartaDef[]> = { druida: DRUIDA, barbaro: BARBARO, mago: MAGO, picaro: PICARO };
+const POOLS: Record<ClaseId, CartaDef[]> = {
+  druida: DRUIDA, barbaro: BARBARO, mago: MAGO, picaro: PICARO, brujo: BRUJO,
+};
 
 export function mazoInicial(clase: ClaseId): CartaInstancia[] {
   const golpe = BASICAS.find((c) => c.id === 'golpe')!;
@@ -2840,7 +3558,10 @@ export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function cartaPorId(id: string): CartaDef | undefined {
-  return [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, CONJURO_PRODIGIOSO, DAGA].find(
+  return [
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
+    CONJURO_PRODIGIOSO, DAGA,
+  ].find(
     (c) => c.id === id,
   );
 }

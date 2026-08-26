@@ -64,13 +64,14 @@
 
 .seleccion-clase {
   display: flex;
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1.2rem;
   justify-content: center;
   margin-bottom: 1.4rem;
 }
 
 .clase-carta {
-  width: 225px;
+  width: 200px;
   padding: 1.5rem 1.3rem;
   display: flex;
   flex-direction: column;
@@ -101,6 +102,10 @@
 .clase-picaro:hover, .clase-picaro.clase-activa {
   border-color: var(--picaro);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(79, 176, 160, 0.45);
+}
+.clase-brujo:hover, .clase-brujo.clase-activa {
+  border-color: var(--brujo);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(161, 92, 224, 0.45);
 }
 
 .clase-icono { font-size: 3.4rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6)); }

@@ -8,3 +8,6 @@ dev-dist/
 graphify-out/.graphify_*
 graphify-out/cache/
 graphify-out/cost.json
+
+# graphify: copias de seguridad del grafo curado
+graphify-out/[0-9]*/

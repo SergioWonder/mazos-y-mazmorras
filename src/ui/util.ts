@@ -98,6 +98,10 @@ export const ICONO_ESTADO: Record<string, string> = {
   acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
   dagasPorTurno: '🔪', dagasFuerza: '⚔️', dagasDestreza: '💃', dagasBloqueo: '🔰',
   ventajaFurtiva: '🎭',
+  condena: '🕳️', oscuridad: '🌑', agathys: '🩸', explosionFuerza: '💥',
+  explosionTurno: '✨', explosionVeces: '🔀', explosionArea: '🌌',
+  condenaPorAtaque: '👁️', oscuridadPorTurno: '🌘', bloqueoPorTurno: '😇',
+  bendicionOscura: '😈', condenaPorBloqueo: '⚖️',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -115,6 +119,12 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   dagasPorTurno: 'Alma de Cuchillas', dagasFuerza: 'Maestría con Cuchillas', dagasDestreza: 'Danza Mortal',
   dagasBloqueo: 'Guardia de Cuchillas',
   ventajaFurtiva: 'Oportunista',
+  condena: 'Condena', oscuridad: 'Oscuridad', agathys: 'Armadura de Agathys',
+  explosionFuerza: 'Verbo Agonizante', explosionTurno: 'Pacto Canalizado',
+  explosionVeces: 'Haz Desdoblado', explosionArea: 'Explosión Trifurcada',
+  condenaPorAtaque: 'Mente del Gran Antiguo', oscuridadPorTurno: 'Presencia Feérica',
+  bloqueoPorTurno: 'Bendición Celestial', bendicionOscura: 'Pacto Infernal',
+  condenaPorBloqueo: 'Pacto Final',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -153,6 +163,19 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   dagasDestreza: 'Tus Dagas infligen daño adicional igual a tu Destreza.',
   dagasBloqueo: 'Cada vez que juegas una Daga, ganas esa cantidad de bloqueo.',
   ventajaFurtiva: 'Tus ataques infligen esa cantidad de daño adicional por golpe a los enemigos que no pretenden atacar.',
+  condena:
+    'Al final de su turno, si su Condena iguala o supera sus PV actuales, muere. No decae con el tiempo: solo hay que acumularla más rápido de lo que se cura.',
+  oscuridad: 'Reduce su ataque esa cantidad (se suma a las Raíces). No decae con el tiempo.',
+  agathys: 'Este turno, cada punto de daño que absorba tu bloqueo se devuelve a TODOS los enemigos.',
+  explosionFuerza: 'Tu Explosión Sobrenatural inflige esa cantidad de daño adicional durante todo el combate.',
+  explosionTurno: 'Solo este turno, tu Explosión Sobrenatural inflige esa cantidad de daño adicional.',
+  explosionVeces: 'Tu Explosión Sobrenatural golpea esa cantidad de veces más.',
+  explosionArea: 'Tu Explosión Sobrenatural golpea a todos los enemigos.',
+  condenaPorAtaque: 'Cada uno de tus ataques aplica esa cantidad de Condena al objetivo.',
+  oscuridadPorTurno: 'Al inicio de cada turno aplicas esa cantidad de Oscuridad a todos los enemigos.',
+  bloqueoPorTurno: 'Ganas esa cantidad de bloqueo al inicio de cada turno.',
+  bendicionOscura: 'Cada vez que un enemigo muere, ganas esa cantidad de bloqueo.',
+  condenaPorBloqueo: 'Al final de cada turno aplicas Condena igual a tu bloqueo restante a todos los enemigos.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

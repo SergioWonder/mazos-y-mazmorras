@@ -45,6 +45,10 @@ const EFECTOS: Record<string, ConfigEfecto> = {
   corazones:  { cantidad: 30, colores: ['#ff5d8f', '#ff8fb3', '#ffd0e0', '#ffffff'], velocidad: [1, 4], vida: [0.7, 1.4], tam: [4, 8], forma: 'corazon', gravedad: -0.06, brillo: true },
   sangre:     { cantidad: 22, colores: ['#a01616', '#7a0d0d', '#d63b3b'], velocidad: [1, 4], vida: [0.4, 0.9], tam: [2, 5], forma: 'circulo', gravedad: 0.32 },
   veneno:     { cantidad: 22, colores: ['#7cff5a', '#39a824', '#caffb8'], velocidad: [1, 4], vida: [0.4, 0.9], tam: [2, 5], forma: 'circulo', gravedad: -0.06, brillo: true },
+  abisal:     { cantidad: 34, colores: ['#b46bff', '#6c2fb5', '#e8d0ff', '#ffffff'], velocidad: [2, 9], vida: [0.35, 0.8], tam: [2, 5], forma: 'chispa', gravedad: -0.04, brillo: true },
+  condena:    { cantidad: 26, colores: ['#7a3fc7', '#2a1040', '#cfa8ff'], velocidad: [1, 4], vida: [0.5, 1.1], tam: [2, 6], forma: 'circulo', gravedad: -0.03, brillo: true },
+  oscuridad:  { cantidad: 30, colores: ['#2a1040', '#4a2a6a', '#8d8db5'], velocidad: [0.5, 3], vida: [0.6, 1.3], tam: [3, 7], forma: 'circulo', gravedad: -0.02 },
+  agathys:    { cantidad: 24, colores: ['#9fd8ff', '#b46bff', '#e8f6ff'], velocidad: [2, 7], vida: [0.35, 0.8], tam: [2, 5], forma: 'chispa', gravedad: 0.04, brillo: true },
 };
 
 /** Atmósferas ambientales: partículas que ascienden de fondo en cada escenario. */

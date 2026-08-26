@@ -1,23 +1,23 @@
 {
   "/Users/sergio/WonderBits/videogame/package.json": {
-    "mtime": 1787776621.1463559,
-    "ast_hash": "c961c2169ee514c50ee2e682ba717d5a",
-    "semantic_hash": "c961c2169ee514c50ee2e682ba717d5a"
+    "mtime": 1787779462.574945,
+    "ast_hash": "185396130716b92bc6b64bd4a417c146",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/scripts/smoke-test.ts": {
-    "mtime": 1787776604.0903306,
-    "ast_hash": "6e4dd56977ab5aaa3cdded5e20ac4b72",
-    "semantic_hash": "6e4dd56977ab5aaa3cdded5e20ac4b72"
+    "mtime": 1787779427.022379,
+    "ast_hash": "d34f3d836c31e8e3220e026b8061b194",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/cartas.ts": {
-    "mtime": 1787776579.5989416,
-    "ast_hash": "e1a3fa69690061d5abf24dc8b4520476",
-    "semantic_hash": "e1a3fa69690061d5abf24dc8b4520476"
+    "mtime": 1787779062.6754632,
+    "ast_hash": "58cd9383c9d36534ca5e95cc75a5b52b",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/combate.ts": {
-    "mtime": 1787776579.6001525,
-    "ast_hash": "b2197efd8f23110e92978ac1420d6d7c",
-    "semantic_hash": "b2197efd8f23110e92978ac1420d6d7c"
+    "mtime": 1787779427.022079,
+    "ast_hash": "e57805f99b2a0ea2299d3e15e30cad1b",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/conjuros.ts": {
     "mtime": 1781309501.4335706,
@@ -45,9 +45,9 @@
     "semantic_hash": "74c3b3dd941d990b7783e18e55c31823"
   },
   "/Users/sergio/WonderBits/videogame/src/core/reliquias.ts": {
-    "mtime": 1784380613.3148558,
-    "ast_hash": "ccf22e4c9d102f7cbe21948cde3f250f",
-    "semantic_hash": "ccf22e4c9d102f7cbe21948cde3f250f"
+    "mtime": 1787779090.9774065,
+    "ast_hash": "362b5e084594f311a417be744669f4b0",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/rng.ts": {
     "mtime": 1781259227.620969,
@@ -55,14 +55,14 @@
     "semantic_hash": "0a0decc74bbabd7362dc11053a62e7a2"
   },
   "/Users/sergio/WonderBits/videogame/src/core/run.ts": {
-    "mtime": 1784380597.9926183,
-    "ast_hash": "fe8b620ab2e63fedb16c18d4598068ec",
-    "semantic_hash": "fe8b620ab2e63fedb16c18d4598068ec"
+    "mtime": 1787779090.9770932,
+    "ast_hash": "1c07bc550b0e91eb19896c48baa2a788",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/types.ts": {
-    "mtime": 1787776579.5998046,
-    "ast_hash": "cead29328694832ba4c8425d6c71fb5d",
-    "semantic_hash": "cead29328694832ba4c8425d6c71fb5d"
+    "mtime": 1787778837.1246715,
+    "ast_hash": "6e03ce70743bfe5b43b2d5cd6fc9cdf0",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/fx/audio.ts": {
     "mtime": 1781329841.274313,
@@ -75,9 +75,9 @@
     "semantic_hash": "57a2135f1ab08dede59927988128ea6a"
   },
   "/Users/sergio/WonderBits/videogame/src/fx/particulas.ts": {
-    "mtime": 1782562688.6374922,
-    "ast_hash": "4ab82bf93d871b41d4b6daa503164560",
-    "semantic_hash": "4ab82bf93d871b41d4b6daa503164560"
+    "mtime": 1787779133.558783,
+    "ast_hash": "4daf78177583c4704416b0faa75d7049",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/main.ts": {
     "mtime": 1782562772.73104,
@@ -100,19 +100,19 @@
     "semantic_hash": "e383addf197eea0cbb72bbe3ffb7fdf7"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/carta.ts": {
-    "mtime": 1787774829.4886386,
-    "ast_hash": "bedb80ec9fa3f3d51995302a58da3cad",
-    "semantic_hash": "bedb80ec9fa3f3d51995302a58da3cad"
+    "mtime": 1787779200.9417973,
+    "ast_hash": "c3464372b3bce61519234cf31842abec",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/combate.ts": {
-    "mtime": 1784380936.034435,
-    "ast_hash": "a0be06931f45fcb077c6493ae6addf15",
-    "semantic_hash": "a0be06931f45fcb077c6493ae6addf15"
+    "mtime": 1787779176.9269109,
+    "ast_hash": "9a5751189da83e091947a5062e71356f",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/compendio.ts": {
-    "mtime": 1784380717.7327006,
-    "ast_hash": "c7b3cae0ea1d632a31fb276ed1e33b7a",
-    "semantic_hash": "c7b3cae0ea1d632a31fb276ed1e33b7a"
+    "mtime": 1787779090.9792528,
+    "ast_hash": "f8773a1d257da08a845b834c5c6aedc8",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/evento.ts": {
     "mtime": 1781269375.7306314,
@@ -120,9 +120,9 @@
     "semantic_hash": "e720a0e308b28e7791c807200083b3b3"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/fin.ts": {
-    "mtime": 1784380708.5131757,
-    "ast_hash": "3bdc7220251f18c45ac1efcb85ec0e20",
-    "semantic_hash": "3bdc7220251f18c45ac1efcb85ec0e20"
+    "mtime": 1787779090.9780984,
+    "ast_hash": "ae25cda675ea4c65fdd4131455fb2076",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/instalar.ts": {
     "mtime": 1781277366.6842449,
@@ -130,9 +130,9 @@
     "semantic_hash": "43839d51ac1d106ba75c28d9240a4de9"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/mapa.ts": {
-    "mtime": 1784380815.3315237,
-    "ast_hash": "3fb02c67fccc1d432cfeda0fb51dbf26",
-    "semantic_hash": "3fb02c67fccc1d432cfeda0fb51dbf26"
+    "mtime": 1787779090.9778352,
+    "ast_hash": "9c5688a715bb6778269cee839460db51",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/mision.ts": {
     "mtime": 1782371134.1867232,
@@ -145,19 +145,19 @@
     "semantic_hash": "74d112cbde1452dbaee5567437324938"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/titulo.ts": {
-    "mtime": 1784380725.10766,
-    "ast_hash": "484ab3fc335d66cf0629a5844983483b",
-    "semantic_hash": "484ab3fc335d66cf0629a5844983483b"
+    "mtime": 1787779133.5536757,
+    "ast_hash": "c19818bf6da52f4b2a72a69aa178b1dd",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/util.ts": {
-    "mtime": 1787776579.6003911,
-    "ast_hash": "1ac894dea726efaf67265291a14b73ff",
-    "semantic_hash": "1ac894dea726efaf67265291a14b73ff"
+    "mtime": 1787779133.5545409,
+    "ast_hash": "1e3f0624d1f2d72e300345be3449d27b",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/version.ts": {
-    "mtime": 1787776621.1381278,
-    "ast_hash": "69ecb30f93df8a354216923374fdad5d",
-    "semantic_hash": "69ecb30f93df8a354216923374fdad5d"
+    "mtime": 1787779462.5712342,
+    "ast_hash": "c08bb0afd74bd4aa3f6b2c7886f05c87",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/vite-env.d.ts": {
     "mtime": 1781308552.335959,
@@ -190,9 +190,9 @@
     "semantic_hash": "f43ad2869c454ef74d5cd6b5974c5105"
   },
   "/Users/sergio/WonderBits/videogame/README.md": {
-    "mtime": 1787776621.1377366,
-    "ast_hash": "734d347b08e3589660ec446ac12d9293",
-    "semantic_hash": "734d347b08e3589660ec446ac12d9293"
+    "mtime": 1787779462.570748,
+    "ast_hash": "b1537046ac374f4a765e6a2c13dee929",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/index.html": {
     "mtime": 1781273882.1237957,
@@ -203,5 +203,50 @@
     "mtime": 1781329882.787649,
     "ast_hash": "8be3de2cbafe879c1b79d12620bd908e",
     "semantic_hash": "8be3de2cbafe879c1b79d12620bd908e"
+  },
+  "/Users/sergio/WonderBits/videogame/public/apple-touch-icon.png": {
+    "mtime": 1781273852.589825,
+    "ast_hash": "5365037f344852669d3d116c5e2e41ba",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/icono-192.png": {
+    "mtime": 1781273852.5747035,
+    "ast_hash": "97c4cc4df950a4a51ca000bfb8eaf611",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/icono-512.png": {
+    "mtime": 1781273852.5409985,
+    "ast_hash": "b327edb3d34dc64311bfbea55c15c9d6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/icono.svg": {
+    "mtime": 1781273843.8315003,
+    "ast_hash": "9726ced5c6fe856e7f99392a639e2fd6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/audio/cap1.ogg": {
+    "mtime": 1781329811.0902221,
+    "ast_hash": "1923e614eec7c169e122b144303f1f0d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/audio/cap2.mp3": {
+    "mtime": 1781329812.5898058,
+    "ast_hash": "3d24270c3a6335c949fbfb664e85b142",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/audio/cap3.mp3": {
+    "mtime": 1781329814.3124044,
+    "ast_hash": "179b99e1e28ba329ad3de8246fe11271",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/audio/jefe.ogg": {
+    "mtime": 1781329816.3815045,
+    "ast_hash": "73e89ca6c3613257e741029551ae2f65",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/videogame/public/audio/menu.ogg": {
+    "mtime": 1781329809.680867,
+    "ast_hash": "501968090e4145ccda336d0c52189af3",
+    "semantic_hash": ""
   }
 }

@@ -66,6 +66,9 @@
 .lado-jugador { display: flex; align-items: flex-end; gap: 1vw; }
 
 /* Invocación del druida: aliado más pequeño junto al héroe */
+/* Invocación efímera del brujo: solo aguanta una ronda. */
+.inv-efimera { filter: drop-shadow(0 0 10px rgba(161, 92, 224, 0.75)); }
+
 .invocacion {
   position: relative;
   display: flex;
@@ -291,6 +294,17 @@
   cursor: help;
 }
 .estado-neg { border-color: rgba(179, 38, 30, 0.6); color: #ff9d8a; }
+/* Condena que ya iguala los PV del enemigo: morirá al final de su turno. */
+.estado-letal {
+  border-color: var(--brujo);
+  color: #e8d0ff;
+  background: rgba(60, 28, 94, 0.75);
+  animation: pulso-letal 0.9s ease-in-out infinite;
+}
+@keyframes pulso-letal {
+  0%, 100% { box-shadow: 0 0 0 rgba(161, 92, 224, 0); }
+  50% { box-shadow: 0 0 14px rgba(161, 92, 224, 0.9); }
+}
 
 .temporales { display: flex; flex-direction: column; gap: 2px; min-height: 1px; }
 .efecto-temporal {

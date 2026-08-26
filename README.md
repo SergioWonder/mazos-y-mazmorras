@@ -1,7 +1,7 @@
 # Mazo y Mazmorra
 
 Roguelike de construcción de mazos al estilo *Slay the Spire* con ambientación de
-fantasía medieval tipo D&D. Tres actos, cada uno con **dos escenarios posibles**
+fantasía medieval tipo D&D. Cinco clases jugables (Druida, Bárbaro, Mago, Pícaro y Brujo). Tres actos, cada uno con **dos escenarios posibles**
 elegidos al azar en cada partida: el Acto I es **El Asentamiento Ogro** o **La
 Guarida de los Contrabandistas**; el Acto II, **La Cripta** o **El Templo Oscuro**;
 el Acto III, **La Guarida del Dragón** o **El Laberinto del Contemplador**.
@@ -22,8 +22,9 @@ npm run build    # build de producción en dist/
 node --experimental-strip-types scripts/smoke-test.ts
 ```
 
-Simula combates completos con las cuatro clases, valida la generación de mapas y las
-mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas del pícaro).
+Simula combates completos con las cinco clases, valida la generación de mapas y las
+mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas del pícaro,
+Explosión/Condena/Agathys del brujo).
 
 ## Controles
 
@@ -69,9 +70,34 @@ mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas d
   Además, Trabajo de Pies es un poder de 2 de Destreza (3 mejorado), y hay mucho
   robo/descarte con sinergias (Preparación, Tempestad de Acero). Cartas raras: subclases
   de D&D 2024 (Asesino → veneno, Psiónico → dagas, Embaucador Arcano → ilusiones).
+- **Brujo** (64 PV): un pacto con cuatro patas que se cruzan:
+  - **Explosión Sobrenatural**: carta inicial de coste 1 que **al jugarse vuelve a lo alto
+    de tu mazo** en vez de al descarte, así que la lanzas casi todos los turnos (aguanta
+    incluso el Rayo Áureo del Contemplador). Hace daño y nada más… hasta que la engordas:
+    poderes permanentes (Verbo Agonizante → +daño, Haz Desdoblado → un golpe más,
+    Explosión Trifurcada → golpea a todos) y cartas que la mejoran **solo ese turno**
+    (Canalizar el Pacto, Pacto Sangriento).
+  - **Condena**: puntos que se acumulan sobre el enemigo y **no decaen**. Al final de su
+    turno, si su Condena iguala o supera sus PV **actuales**, muere — así que vale tanto
+    subir la Condena como bajarle la vida. Brazos de Hadar la reparte con Débil a todos,
+    Palabra de Ruina la duplica, Verbo de Aniquilación planta de golpe la mitad de sus PV
+    y la Mente del Gran Antiguo condena con cada ataque. Funciona también sobre jefes: el
+    umbral sube con su vida.
+  - **Invocaciones efímeras**: a diferencia de las del druida, solo duran el turno en que
+    las invocas — y justo por eso pegan y aguantan más. Absorben el daño enemigo y, si
+    sobreviven al turno del enemigo, golpean y se desvanecen. El Sacrificio del Familiar
+    convierte su vida restante en daño (y en Condena, mejorado).
+  - **Bloqueo que muerde**: la **Armadura de Agathys** da bloqueo y, ese turno, **todo el
+    daño que bloquees se devuelve a TODOS los enemigos** — cuanto más bloqueo acumules y
+    más te peguen, más devuelves. El Pacto Infernal te blinda con cada muerte enemiga y
+    el **Pacto Final** (carta única de clase) convierte tu bloqueo restante en Condena
+    para todos al final de cada turno.
+  Y **Oscuridad**, que reduce el ataque de todos los enemigos y tampoco decae. Cartas
+  raras: subclases de D&D 2024 (Archifata, Celestial, Infernal y Gran Antiguo).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
-  Manos Ardientes · Pícaro: Filo Rápido y Pirueta).
+  Manos Ardientes · Pícaro: Filo Rápido y Pirueta · Brujo: Explosión Sobrenatural y
+  Armadura de Agathys).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un
   efecto permanente en la run (Voto de Sangre, Pacto con el Bosque, Estudio Arcano).
 - **Cartas de azar (incoloras)**: la Vidente puede dar «Seducir» (entrando al Acto II)

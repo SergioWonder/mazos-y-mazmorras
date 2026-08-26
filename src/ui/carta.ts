@@ -21,7 +21,7 @@ const DESC_TIPO: Record<string, string> = {
 const ESTADOS_CLAVE: string[] = [
   'fuerza', 'destreza', 'vulnerable', 'debil', 'fragil', 'espinas',
   'regeneracion', 'raices', 'espejismo', 'quemadura', 'hemorragia',
-  'veneno', 'acrobacias',
+  'veneno', 'acrobacias', 'condena', 'oscuridad',
 ];
 
 /** Palabras clave que no son estados (mecánicas y propiedades de carta). */
@@ -46,12 +46,18 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
     desc: 'No se descarta al final del turno: se queda en tu mano.' },
   { test: (d) => d.unUso === true, icono: '🔚', nombre: '1 uso',
     desc: 'Se consume para siempre: desaparece de tu mazo el resto de la partida.' },
-  { test: (_d, t) => t.includes('invoca') || t.includes('invocación'), icono: '🐾', nombre: 'Invocación',
+  { test: (d, t) => d.clase !== 'brujo' && (t.includes('invoca') || t.includes('invocación')), icono: '🐾', nombre: 'Invocación',
     desc: 'Aliado del druida con vida propia. «Invoca X» le suma X de vida (actual y máxima) o crea uno nuevo. Ataca al inicio de tu turno por el 30 % de su vida actual, y absorbe el daño enemigo después de tu bloqueo y antes que tú. La forma la fija la primera carta; las pasivas de todas se combinan.' },
   { test: (d, t) => t.includes('daga') && d.id !== 'daga', icono: '🗡️', nombre: 'Dagas',
     desc: 'Ataques del pícaro de 0 de coste que se agotan al jugarse (infligen 4 de daño, más lo que sumen tus poderes). Se generan en la mano; no ocupan tu mazo.' },
   { test: (_d, t) => t.includes('descarta'), icono: '🗑️', nombre: 'Descartar',
     desc: 'Manda cartas de tu mano a la pila de descarte. Algunas cartas y poderes del pícaro se benefician de cada descarte.' },
+  { test: (d, t) => d.clase === 'brujo' && (t.includes('invoca') || t.includes('invocación')), icono: '👁️', nombre: 'Invocación efímera',
+    desc: 'Criatura del brujo que solo dura el turno en que la invocas. Absorbe el daño enemigo después de tu bloqueo y antes que tú; si sobrevive al turno del enemigo, golpea por su daño y se desvanece. Pega y aguanta más que la del druida justo porque no se queda.' },
+  { test: (d, t) => d.alTopeDelMazo === true || t.includes('lo alto de tu mazo'), icono: '🔁', nombre: 'Vuelve a lo alto del mazo',
+    desc: 'Al jugarse no va al descarte: vuelve a lo alto de tu pila de robo, así que la robarás en tu próximo turno. Aguanta incluso el Rayo Áureo del Contemplador.' },
+  { test: (_d, t) => t.includes('agathys') || t.includes('daño que bloquees'), icono: '🩸', nombre: 'Armadura de Agathys',
+    desc: 'Este turno, cada punto de daño que absorba tu bloqueo se devuelve a TODOS los enemigos. Cuanto más bloqueo acumules y más te peguen, más devuelves.' },
   { test: (_d, t) => t.includes('no pretende atacar') || t.includes('intención'), icono: '🎭', nombre: 'Intención',
     desc: 'Lo que el enemigo hará en su turno (el icono sobre su cabeza). Varios ataques del pícaro golpean más fuerte si el enemigo no pretende atacar (defenderse, potenciarse, quedarse desconcertado o perder el turno). Cambiazo le fuerza una intención sin ataque.' },
 ];
@@ -85,7 +91,7 @@ export function cuadroPalabrasClave(def: CartaDef): HTMLElement {
 }
 
 const ICONO_CLASE: Record<string, string> = {
-  druida: '🌿', barbaro: '🪓', mago: '🔮', picaro: '🗡️', neutral: '⚔️',
+  druida: '🌿', barbaro: '🪓', mago: '🔮', picaro: '🗡️', brujo: '🕳️', neutral: '⚔️',
 };
 
 /** Descripción corta de cada efecto acumulable en el Conjuro Prodigioso. */

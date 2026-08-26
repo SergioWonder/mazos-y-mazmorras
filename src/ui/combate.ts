@@ -11,9 +11,12 @@ import {
 import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 
-const SPRITE_JUGADOR: Record<string, string> = { druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️', picaro: '🥷' };
+const SPRITE_JUGADOR: Record<string, string> = {
+  druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️', picaro: '🥷', brujo: '🧛‍♂️',
+};
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
+  brujo: '🕳️ Brujo',
 };
 const SPRITE_FORMA: Record<string, string> = {
   'Forma de Lobo': '🐺', 'Forma de Oso': '🐻', 'Forma de Águila': '🦅',
@@ -21,6 +24,7 @@ const SPRITE_FORMA: Record<string, string> = {
 };
 const SPRITE_INVOCACION: Record<string, string> = {
   lobo: '🐺', oso: '🐻', fuego: '🔥', agua: '💧', aire: '🌬️', arbol: '🌳', tierra: '⛰️',
+  sabueso: '🐕‍🦺', demonio: '👹',
 };
 const PASIVA_INVOCACION: Record<string, string> = {
   fuego: 'Doble daño al bloqueo',
@@ -280,13 +284,16 @@ export function pantallaCombate(
         </div>`;
     }
 
+    const ESTADOS_MALOS = ['raices', 'oscuridad', 'condena'];
     function fichasEstados(l: Luchador): string {
       const fichas = Object.entries(l.estados)
         .filter(([k, v]) => v !== 0 && v !== undefined && k !== 'raicesExtra')
-        .map(
-          ([k, v]) =>
-            `<span class="estado ${v! < 0 || k === 'raices' ? 'estado-neg' : ''}" data-tip="${tipEstado(k, v!)}">${ICONO_ESTADO[k]}${v}</span>`,
-        )
+        .map(([k, v]) => {
+          // Condena que ya alcanza sus PV: el enemigo morirá al final de su turno
+          const letal = k === 'condena' && v! >= l.pv;
+          const clase = letal ? 'estado-letal' : (v! < 0 || ESTADOS_MALOS.includes(k)) ? 'estado-neg' : '';
+          return `<span class="estado ${clase}" data-tip="${tipEstado(k, v!)}">${ICONO_ESTADO[k]}${v}</span>`;
+        })
         .join('');
       return `<div class="estados">${fichas}</div>`;
     }
@@ -296,14 +303,17 @@ export function pantallaCombate(
       const inv = combate.jugador.invocacion;
       if (!inv || inv.vida <= 0) return '';
       const emoji = SPRITE_INVOCACION[inv.forma] ?? '🐾';
-      const dmg = Math.max(1, Math.round(inv.vida * 0.3));
+      const dmg = inv.efimera ? (inv.dano ?? 0) : Math.max(1, Math.round(inv.vida * 0.3));
       const pasivas = inv.efectos.map((e) => PASIVA_INVOCACION[e]).filter(Boolean);
-      const tip = `<strong>${emoji} Invocación</strong><br>Vida ${inv.vida}/${inv.vidaMax}<br>Ataca por ${dmg} cada turno.${
+      const cuando = inv.efimera
+        ? `Si sobrevive al turno enemigo, golpea por ${dmg} y se desvanece.`
+        : `Ataca por ${dmg} cada turno.`;
+      const tip = `<strong>${emoji} Invocación</strong><br>Vida ${inv.vida}/${inv.vidaMax}<br>${cuando}${
         pasivas.length ? `<br>${pasivas.map((p) => `· ${p}`).join('<br>')}` : ''
       }`.replace(/"/g, '&quot;');
       const pct = Math.max(0, (inv.vida / inv.vidaMax) * 100);
       return `
-        <div class="invocacion" data-tip="${tip}">
+        <div class="invocacion ${inv.efimera ? 'inv-efimera' : ''}" data-tip="${tip}">
           <div class="sprite sprite-invocacion">${emoji}</div>
           <div class="vida vida-inv">
             <div class="vida-relleno vida-relleno-inv" style="width:${pct}%"></div>
