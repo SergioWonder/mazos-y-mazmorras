@@ -209,10 +209,19 @@
       "norm_label": "smoke-test.ts"
     },
     {
-      "label": "check()",
+      "label": "CLASES",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L22",
+      "id": "scripts_smoke_test_clases",
+      "community": 3,
+      "norm_label": "clases"
+    },
+    {
+      "label": "check()",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L25",
       "id": "scripts_smoke_test_check",
       "community": 3,
       "norm_label": "check()"
@@ -221,19 +230,73 @@
       "label": "uiSilenciosa",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L31",
+      "source_location": "L34",
       "id": "scripts_smoke_test_uisilenciosa",
-      "community": 5,
+      "community": 3,
       "norm_label": "uisilenciosa"
+    },
+    {
+      "label": "sinTildes()",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L61",
+      "id": "scripts_smoke_test_sintildes",
+      "community": 3,
+      "norm_label": "sintildes()"
+    },
+    {
+      "label": "danoEntrante()",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L64",
+      "id": "scripts_smoke_test_danoentrante",
+      "community": 3,
+      "norm_label": "danoentrante()"
+    },
+    {
+      "label": "puntuarCarta()",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L71",
+      "id": "scripts_smoke_test_puntuarcarta",
+      "community": 3,
+      "norm_label": "puntuarcarta()"
+    },
+    {
+      "label": "mejorObjetivo()",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L99",
+      "id": "scripts_smoke_test_mejorobjetivo",
+      "community": 3,
+      "norm_label": "mejorobjetivo()"
+    },
+    {
+      "label": "OpcionesSim",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L107",
+      "id": "scripts_smoke_test_opcionessim",
+      "community": 3,
+      "norm_label": "opcionessim"
     },
     {
       "label": "simular()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L52",
+      "source_location": "L109",
       "id": "scripts_smoke_test_simular",
       "community": 3,
       "norm_label": "simular()"
+    },
+    {
+      "label": "Cap",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L251",
+      "id": "scripts_smoke_test_cap",
+      "community": 3,
+      "norm_label": "cap"
     },
     {
       "label": "cartas.ts",
@@ -250,7 +313,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L4",
       "id": "core_cartas_instanciar",
-      "community": 2,
+      "community": 8,
       "norm_label": "instanciar()"
     },
     {
@@ -295,7 +358,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L673",
       "id": "core_cartas_barbaro",
-      "community": 12,
+      "community": 15,
       "norm_label": "barbaro"
     },
     {
@@ -358,14 +421,14 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2715",
       "id": "core_cartas_brujo",
-      "community": 19,
+      "community": 12,
       "norm_label": "brujo"
     },
     {
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3402",
+      "source_location": "L3404",
       "id": "core_cartas_resolverseducir",
       "community": 10,
       "norm_label": "resolverseducir()"
@@ -374,7 +437,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3433",
+      "source_location": "L3435",
       "id": "core_cartas_resolverdeseo",
       "community": 10,
       "norm_label": "resolverdeseo()"
@@ -383,7 +446,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3470",
+      "source_location": "L3472",
       "id": "core_cartas_neutrales_especiales",
       "community": 10,
       "norm_label": "neutrales_especiales"
@@ -392,7 +455,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3520",
+      "source_location": "L3522",
       "id": "core_cartas_iniciales_de_clase",
       "community": 16,
       "norm_label": "iniciales_de_clase"
@@ -401,7 +464,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3533",
+      "source_location": "L3535",
       "id": "core_cartas_pools",
       "community": 10,
       "norm_label": "pools"
@@ -410,7 +473,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3537",
+      "source_location": "L3539",
       "id": "core_cartas_mazoinicial",
       "community": 3,
       "norm_label": "mazoinicial()"
@@ -419,7 +482,7 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3548",
+      "source_location": "L3550",
       "id": "core_cartas_pooldeclase",
       "community": 8,
       "norm_label": "pooldeclase()"
@@ -428,7 +491,7 @@
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3555",
+      "source_location": "L3557",
       "id": "core_cartas_cartaunicadeclase",
       "community": 10,
       "norm_label": "cartaunicadeclase()"
@@ -437,16 +500,16 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3560",
+      "source_location": "L3562",
       "id": "core_cartas_cartaporid",
-      "community": 3,
+      "community": 8,
       "norm_label": "cartaporid()"
     },
     {
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3570",
+      "source_location": "L3572",
       "id": "core_cartas_recompensacartas",
       "community": 8,
       "norm_label": "recompensacartas()"
@@ -466,7 +529,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L12",
       "id": "core_combate_presentador",
-      "community": 5,
+      "community": 3,
       "norm_label": "presentador"
     },
     {
@@ -484,7 +547,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L54",
       "id": "core_combate_combate_constructor",
-      "community": 5,
+      "community": 1,
       "norm_label": ".constructor()"
     },
     {
@@ -590,7 +653,7 @@
       "label": ".infligir()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L451",
+      "source_location": "L452",
       "id": "core_combate_combate_infligir",
       "community": 2,
       "norm_label": ".infligir()"
@@ -599,7 +662,7 @@
       "label": ".rebotarAgathys()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L528",
+      "source_location": "L529",
       "id": "core_combate_combate_rebotaragathys",
       "community": 2,
       "norm_label": ".rebotaragathys()"
@@ -608,7 +671,7 @@
       "label": ".comprobarFin()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L542",
+      "source_location": "L543",
       "id": "core_combate_combate_comprobarfin",
       "community": 2,
       "norm_label": ".comprobarfin()"
@@ -617,7 +680,7 @@
       "label": ".escribirConjuro()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L550",
+      "source_location": "L551",
       "id": "core_combate_combate_escribirconjuro",
       "community": 2,
       "norm_label": ".escribirconjuro()"
@@ -626,7 +689,7 @@
       "label": ".invocar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L571",
+      "source_location": "L572",
       "id": "core_combate_combate_invocar",
       "community": 5,
       "norm_label": ".invocar()"
@@ -635,7 +698,7 @@
       "label": ".invocarEfimero()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L592",
+      "source_location": "L593",
       "id": "core_combate_combate_invocarefimero",
       "community": 5,
       "norm_label": ".invocarefimero()"
@@ -644,7 +707,7 @@
       "label": ".resolverInvocacionEfimera()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L607",
+      "source_location": "L609",
       "id": "core_combate_combate_resolverinvocacionefimera",
       "community": 2,
       "norm_label": ".resolverinvocacionefimera()"
@@ -653,7 +716,7 @@
       "label": ".atacarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L619",
+      "source_location": "L621",
       "id": "core_combate_combate_atacarinvocacion",
       "community": 2,
       "norm_label": ".atacarinvocacion()"
@@ -662,7 +725,7 @@
       "label": ".curarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L642",
+      "source_location": "L650",
       "id": "core_combate_combate_curarinvocacion",
       "community": 2,
       "norm_label": ".curarinvocacion()"
@@ -671,7 +734,7 @@
       "label": ".golpeInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L655",
+      "source_location": "L663",
       "id": "core_combate_combate_golpeinvocacion",
       "community": 2,
       "norm_label": ".golpeinvocacion()"
@@ -680,7 +743,7 @@
       "label": ".robarCartas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L666",
+      "source_location": "L674",
       "id": "core_combate_combate_robarcartas",
       "community": 2,
       "norm_label": ".robarcartas()"
@@ -689,7 +752,7 @@
       "label": ".descartarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L679",
+      "source_location": "L687",
       "id": "core_combate_combate_descartarcarta",
       "community": 2,
       "norm_label": ".descartarcarta()"
@@ -698,7 +761,7 @@
       "label": ".crearDagas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L696",
+      "source_location": "L704",
       "id": "core_combate_combate_creardagas",
       "community": 2,
       "norm_label": ".creardagas()"
@@ -707,7 +770,7 @@
       "label": ".actualizarIndicadorAcrobacias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L708",
+      "source_location": "L716",
       "id": "core_combate_combate_actualizarindicadoracrobacias",
       "community": 2,
       "norm_label": ".actualizarindicadoracrobacias()"
@@ -716,7 +779,7 @@
       "label": ".iniciar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L714",
+      "source_location": "L722",
       "id": "core_combate_combate_iniciar",
       "community": 2,
       "norm_label": ".iniciar()"
@@ -725,7 +788,7 @@
       "label": ".cartasPorTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L732",
+      "source_location": "L740",
       "id": "core_combate_combate_cartasporturno",
       "community": 2,
       "norm_label": ".cartasporturno()"
@@ -734,7 +797,7 @@
       "label": ".inicioTurnoJugador()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L740",
+      "source_location": "L748",
       "id": "core_combate_combate_inicioturnojugador",
       "community": 2,
       "norm_label": ".inicioturnojugador()"
@@ -743,7 +806,7 @@
       "label": ".puedeJugar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L861",
+      "source_location": "L869",
       "id": "core_combate_combate_puedejugar",
       "community": 2,
       "norm_label": ".puedejugar()"
@@ -752,7 +815,7 @@
       "label": ".jugarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L874",
+      "source_location": "L882",
       "id": "core_combate_combate_jugarcarta",
       "community": 2,
       "norm_label": ".jugarcarta()"
@@ -761,7 +824,7 @@
       "label": ".decrementarEstados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L924",
+      "source_location": "L932",
       "id": "core_combate_combate_decrementarestados",
       "community": 2,
       "norm_label": ".decrementarestados()"
@@ -770,7 +833,7 @@
       "label": ".envejecerRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L934",
+      "source_location": "L942",
       "id": "core_combate_combate_envejecerraices",
       "community": 2,
       "norm_label": ".envejecerraices()"
@@ -779,7 +842,7 @@
       "label": ".terminarTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L944",
+      "source_location": "L952",
       "id": "core_combate_combate_terminarturno",
       "community": 2,
       "norm_label": ".terminarturno()"
@@ -788,7 +851,7 @@
       "label": ".ejecutarMovimiento()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1086",
+      "source_location": "L1094",
       "id": "core_combate_combate_ejecutarmovimiento",
       "community": 2,
       "norm_label": ".ejecutarmovimiento()"
@@ -1519,7 +1582,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 3,
+      "community": 8,
       "norm_label": "guardado.ts"
     },
     {
@@ -1528,7 +1591,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L9",
       "id": "core_guardado_guardado",
-      "community": 3,
+      "community": 8,
       "norm_label": "guardado"
     },
     {
@@ -1537,7 +1600,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L28",
       "id": "core_guardado_serializarrun",
-      "community": 3,
+      "community": 8,
       "norm_label": "serializarrun()"
     },
     {
@@ -1546,7 +1609,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L48",
       "id": "core_guardado_rehidratarrun",
-      "community": 3,
+      "community": 8,
       "norm_label": "rehidratarrun()"
     },
     {
@@ -1555,7 +1618,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L86",
       "id": "core_guardado_guardarrun",
-      "community": 3,
+      "community": 8,
       "norm_label": "guardarrun()"
     },
     {
@@ -1564,7 +1627,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L94",
       "id": "core_guardado_cargarrun",
-      "community": 3,
+      "community": 8,
       "norm_label": "cargarrun()"
     },
     {
@@ -1618,7 +1681,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L1",
       "id": "core_reliquias",
-      "community": 3,
+      "community": 8,
       "norm_label": "reliquias.ts"
     },
     {
@@ -1627,7 +1690,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L5",
       "id": "core_reliquias_totem_roble",
-      "community": 3,
+      "community": 8,
       "norm_label": "totem_roble"
     },
     {
@@ -1636,7 +1699,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L11",
       "id": "core_reliquias_hacha_ancestro",
-      "community": 3,
+      "community": 8,
       "norm_label": "hacha_ancestro"
     },
     {
@@ -1645,7 +1708,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L17",
       "id": "core_reliquias_pendulo_ambar",
-      "community": 3,
+      "community": 8,
       "norm_label": "pendulo_ambar"
     },
     {
@@ -1654,7 +1717,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L23",
       "id": "core_reliquias_guante_ladron",
-      "community": 3,
+      "community": 8,
       "norm_label": "guante_ladron"
     },
     {
@@ -1681,7 +1744,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L47",
       "id": "core_reliquias_reliquiaporid",
-      "community": 3,
+      "community": 8,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -1690,7 +1753,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L55",
       "id": "core_reliquias_pool_reliquias",
-      "community": 3,
+      "community": 8,
       "norm_label": "pool_reliquias"
     },
     {
@@ -1699,7 +1762,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L1",
       "id": "core_rng",
-      "community": 3,
+      "community": 1,
       "norm_label": "rng.ts"
     },
     {
@@ -1717,7 +1780,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L13",
       "id": "core_rng_entre",
-      "community": 3,
+      "community": 1,
       "norm_label": "entre()"
     },
     {
@@ -1726,7 +1789,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 3,
+      "community": 1,
       "norm_label": "elegir()"
     },
     {
@@ -1735,7 +1798,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L21",
       "id": "core_rng_barajar",
-      "community": 5,
+      "community": 1,
       "norm_label": "barajar()"
     },
     {
@@ -1789,7 +1852,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 3,
+      "community": 8,
       "norm_label": "claseid"
     },
     {
@@ -1868,7 +1931,7 @@
       "label": "EfectoTemporal",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L79",
+      "source_location": "L81",
       "id": "core_types_efectotemporal",
       "community": 5,
       "norm_label": "efectotemporal"
@@ -1877,7 +1940,7 @@
       "label": "Luchador",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L88",
+      "source_location": "L90",
       "id": "core_types_luchador",
       "community": 2,
       "norm_label": "luchador"
@@ -1886,7 +1949,7 @@
       "label": "TipoIntencion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L97",
+      "source_location": "L99",
       "id": "core_types_tipointencion",
       "community": 5,
       "norm_label": "tipointencion"
@@ -1895,7 +1958,7 @@
       "label": "Movimiento",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L99",
+      "source_location": "L101",
       "id": "core_types_movimiento",
       "community": 2,
       "norm_label": "movimiento"
@@ -1904,7 +1967,7 @@
       "label": "EnemigoDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L116",
+      "source_location": "L118",
       "id": "core_types_enemigodef",
       "community": 5,
       "norm_label": "enemigodef"
@@ -1913,7 +1976,7 @@
       "label": "EnemigoCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L141",
+      "source_location": "L143",
       "id": "core_types_enemigocombate",
       "community": 2,
       "norm_label": "enemigocombate"
@@ -1922,7 +1985,7 @@
       "label": "EspacioConjuro",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L163",
+      "source_location": "L165",
       "id": "core_types_espacioconjuro",
       "community": 5,
       "norm_label": "espacioconjuro"
@@ -1931,7 +1994,7 @@
       "label": "JugadorCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L168",
+      "source_location": "L170",
       "id": "core_types_jugadorcombate",
       "community": 2,
       "norm_label": "jugadorcombate"
@@ -1940,7 +2003,7 @@
       "label": "CartaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L193",
+      "source_location": "L195",
       "id": "core_types_cartadef",
       "community": 6,
       "norm_label": "cartadef"
@@ -1949,7 +2012,7 @@
       "label": "MejoraCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L226",
+      "source_location": "L228",
       "id": "core_types_mejoracarta",
       "community": 5,
       "norm_label": "mejoracarta"
@@ -1958,7 +2021,7 @@
       "label": "CartaInstancia",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L234",
+      "source_location": "L236",
       "id": "core_types_cartainstancia",
       "community": 2,
       "norm_label": "cartainstancia"
@@ -1967,43 +2030,43 @@
       "label": "ContextoEfecto",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L241",
+      "source_location": "L243",
       "id": "core_types_contextoefecto",
-      "community": 5,
+      "community": 3,
       "norm_label": "contextoefecto"
     },
     {
       "label": "TipoNodo",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L347",
+      "source_location": "L352",
       "id": "core_types_tiponodo",
-      "community": 5,
+      "community": 3,
       "norm_label": "tiponodo"
     },
     {
       "label": "NodoMapa",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L349",
+      "source_location": "L354",
       "id": "core_types_nodomapa",
-      "community": 3,
+      "community": 8,
       "norm_label": "nodomapa"
     },
     {
       "label": "ReliquiaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L358",
+      "source_location": "L363",
       "id": "core_types_reliquiadef",
-      "community": 3,
+      "community": 8,
       "norm_label": "reliquiadef"
     },
     {
       "label": "EstadoRun",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L374",
+      "source_location": "L379",
       "id": "core_types_estadorun",
       "community": 1,
       "norm_label": "estadorun"
@@ -2671,7 +2734,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L1",
       "id": "ui_actualizacion",
-      "community": 13,
+      "community": 1,
       "norm_label": "actualizacion.ts"
     },
     {
@@ -2680,7 +2743,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L15",
       "id": "ui_actualizacion_iniciaractualizaciones",
-      "community": 13,
+      "community": 1,
       "norm_label": "iniciaractualizaciones()"
     },
     {
@@ -2689,7 +2752,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L37",
       "id": "ui_actualizacion_mostrarnovedadessinuevo",
-      "community": 13,
+      "community": 1,
       "norm_label": "mostrarnovedadessinuevo()"
     },
     {
@@ -2698,7 +2761,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L50",
       "id": "ui_actualizacion_mostraravisoactualizar",
-      "community": 13,
+      "community": 1,
       "norm_label": "mostraravisoactualizar()"
     },
     {
@@ -2707,7 +2770,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L85",
       "id": "ui_actualizacion_mostrarnovedades",
-      "community": 13,
+      "community": 1,
       "norm_label": "mostrarnovedades()"
     },
     {
@@ -2927,10 +2990,19 @@
       "norm_label": "actualizartextocarta()"
     },
     {
+      "label": "ARTE_CARTA",
+      "file_type": "code",
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L203",
+      "id": "ui_carta_arte_carta",
+      "community": 3,
+      "norm_label": "arte_carta"
+    },
+    {
       "label": "arteDeCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L202",
+      "source_location": "L266",
       "id": "ui_carta_artedecarta",
       "community": 6,
       "norm_label": "artedecarta()"
@@ -3355,7 +3427,7 @@
       "source_file": "src/version.ts",
       "source_location": "L1",
       "id": "src_version",
-      "community": 13,
+      "community": 1,
       "norm_label": "version.ts"
     },
     {
@@ -3364,7 +3436,7 @@
       "source_file": "src/version.ts",
       "source_location": "L6",
       "id": "src_version_entradacambios",
-      "community": 13,
+      "community": 1,
       "norm_label": "entradacambios"
     },
     {
@@ -3373,7 +3445,7 @@
       "source_file": "src/version.ts",
       "source_location": "L12",
       "id": "src_version_changelog",
-      "community": 13,
+      "community": 1,
       "norm_label": "changelog"
     },
     {
@@ -3548,24 +3620,6 @@
       "norm_label": "vite.config.ts"
     },
     {
-      "label": "README.md",
-      "file_type": "document",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "id": "readme",
-      "community": 12,
-      "norm_label": "readme.md"
-    },
-    {
-      "label": "LEEME.md",
-      "file_type": "document",
-      "source_file": "public/audio/LEEME.md",
-      "source_location": "L1",
-      "id": "audio_leeme",
-      "community": 22,
-      "norm_label": "leeme.md"
-    },
-    {
       "label": "SKILL.md",
       "file_type": "document",
       "source_file": ".claude/skills/editar-carta/SKILL.md",
@@ -3656,6 +3710,15 @@
       "norm_label": "notas"
     },
     {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "id": "readme",
+      "community": 12,
+      "norm_label": "readme.md"
+    },
+    {
       "label": "Mazo y Mazmorra",
       "file_type": "document",
       "source_file": "README.md",
@@ -3686,7 +3749,7 @@
       "label": "Controles",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L29",
+      "source_location": "L37",
       "id": "readme_controles",
       "community": 12,
       "norm_label": "controles"
@@ -3695,7 +3758,7 @@
       "label": "Dise\u00f1o",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L39",
+      "source_location": "L47",
       "id": "readme_dise\u00f1o",
       "community": 12,
       "norm_label": "diseno"
@@ -3704,10 +3767,19 @@
       "label": "Estructura",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L138",
+      "source_location": "L148",
       "id": "readme_estructura",
       "community": 12,
       "norm_label": "estructura"
+    },
+    {
+      "label": "LEEME.md",
+      "file_type": "document",
+      "source_file": "public/audio/LEEME.md",
+      "source_location": "L1",
+      "id": "audio_leeme",
+      "community": 22,
+      "norm_label": "leeme.md"
     },
     {
       "label": "M\u00fasica y sonido",
@@ -3745,9 +3817,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_deckbuilder_roguelike",
       "community": 12,
-      "norm_label": "roguelike de construccion de mazos"
+      "norm_label": "roguelike de construccion de mazos",
+      "id": "readme_deckbuilder_roguelike"
     },
     {
       "label": "Slay the Spire (referencia de dise\u00f1o)",
@@ -3758,9 +3830,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_slay_the_spire",
       "community": 12,
-      "norm_label": "slay the spire (referencia de diseno)"
+      "norm_label": "slay the spire (referencia de diseno)",
+      "id": "readme_slay_the_spire"
     },
     {
       "label": "Ambientaci\u00f3n fantas\u00eda medieval D&D",
@@ -3771,9 +3843,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_ambientacion_dnd",
-      "community": 19,
-      "norm_label": "ambientacion fantasia medieval d&d"
+      "community": 12,
+      "norm_label": "ambientacion fantasia medieval d&d",
+      "id": "readme_ambientacion_dnd"
     },
     {
       "label": "Tres actos con dos escenarios cada uno",
@@ -3784,9 +3856,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_tres_actos",
       "community": 4,
-      "norm_label": "tres actos con dos escenarios cada uno"
+      "norm_label": "tres actos con dos escenarios cada uno",
+      "id": "readme_tres_actos"
     },
     {
       "label": "Clase Druida (70 PV)",
@@ -3797,9 +3869,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_clase_druida",
       "community": 18,
-      "norm_label": "clase druida (70 pv)"
+      "norm_label": "clase druida (70 pv)",
+      "id": "readme_clase_druida"
     },
     {
       "label": "Clase B\u00e1rbaro (80 PV)",
@@ -3810,9 +3882,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_clase_barbaro",
-      "community": 12,
-      "norm_label": "clase barbaro (80 pv)"
+      "community": 15,
+      "norm_label": "clase barbaro (80 pv)",
+      "id": "readme_clase_barbaro"
     },
     {
       "label": "Clase Mago (62 PV)",
@@ -3823,9 +3895,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_clase_mago",
       "community": 10,
-      "norm_label": "clase mago (62 pv)"
+      "norm_label": "clase mago (62 pv)",
+      "id": "readme_clase_mago"
     },
     {
       "label": "Clase P\u00edcaro (66 PV)",
@@ -3836,9 +3908,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_clase_picaro",
       "community": 16,
-      "norm_label": "clase picaro (66 pv)"
+      "norm_label": "clase picaro (66 pv)",
+      "id": "readme_clase_picaro"
     },
     {
       "label": "Transformaciones (druida)",
@@ -3849,9 +3921,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_transformaciones",
       "community": 18,
-      "norm_label": "transformaciones (druida)"
+      "norm_label": "transformaciones (druida)",
+      "id": "readme_transformaciones"
     },
     {
       "label": "Ra\u00edces (druida)",
@@ -3862,9 +3934,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_raices",
       "community": 18,
-      "norm_label": "raices (druida)"
+      "norm_label": "raices (druida)",
+      "id": "readme_raices"
     },
     {
       "label": "Invocaci\u00f3n del druida",
@@ -3875,9 +3947,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_invocacion",
       "community": 5,
-      "norm_label": "invocacion del druida"
+      "norm_label": "invocacion del druida",
+      "id": "readme_invocacion"
     },
     {
       "label": "Furia (b\u00e1rbaro)",
@@ -3888,9 +3960,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_furia",
-      "community": 12,
-      "norm_label": "furia (barbaro)"
+      "community": 15,
+      "norm_label": "furia (barbaro)",
+      "id": "readme_furia"
     },
     {
       "label": "Hemorragia (b\u00e1rbaro)",
@@ -3901,9 +3973,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_hemorragia",
       "community": 14,
-      "norm_label": "hemorragia (barbaro)"
+      "norm_label": "hemorragia (barbaro)",
+      "id": "readme_hemorragia"
     },
     {
       "label": "Espacios de conjuro en pir\u00e1mide (mago)",
@@ -3914,9 +3986,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_espacios_conjuro",
       "community": 5,
-      "norm_label": "espacios de conjuro en piramide (mago)"
+      "norm_label": "espacios de conjuro en piramide (mago)",
+      "id": "readme_espacios_conjuro"
     },
     {
       "label": "Conjuro Prodigioso (mago)",
@@ -3927,9 +3999,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_conjuro_prodigioso",
       "community": 10,
-      "norm_label": "conjuro prodigioso (mago)"
+      "norm_label": "conjuro prodigioso (mago)",
+      "id": "readme_conjuro_prodigioso"
     },
     {
       "label": "Acrobacias (p\u00edcaro)",
@@ -3940,9 +4012,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_acrobacias",
       "community": 14,
-      "norm_label": "acrobacias (picaro)"
+      "norm_label": "acrobacias (picaro)",
+      "id": "readme_acrobacias"
     },
     {
       "label": "Veneno",
@@ -3953,9 +4025,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_veneno",
       "community": 14,
-      "norm_label": "veneno"
+      "norm_label": "veneno",
+      "id": "readme_veneno"
     },
     {
       "label": "Dagas (p\u00edcaro)",
@@ -3966,9 +4038,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_dagas",
       "community": 16,
-      "norm_label": "dagas (picaro)"
+      "norm_label": "dagas (picaro)",
+      "id": "readme_dagas"
     },
     {
       "label": "Ataques furtivos (p\u00edcaro)",
@@ -3979,9 +4051,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_ataques_furtivos",
       "community": 2,
-      "norm_label": "ataques furtivos (picaro)"
+      "norm_label": "ataques furtivos (picaro)",
+      "id": "readme_ataques_furtivos"
     },
     {
       "label": "Intenci\u00f3n enemiga",
@@ -3992,9 +4064,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_intencion_enemiga",
       "community": 2,
-      "norm_label": "intencion enemiga"
+      "norm_label": "intencion enemiga",
+      "id": "readme_intencion_enemiga"
     },
     {
       "label": "Robo y descarte con sinergias (p\u00edcaro)",
@@ -4005,9 +4077,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_descarte_sinergias",
       "community": 16,
-      "norm_label": "robo y descarte con sinergias (picaro)"
+      "norm_label": "robo y descarte con sinergias (picaro)",
+      "id": "readme_descarte_sinergias"
     },
     {
       "label": "Subclases de D&D 2024 como cartas raras",
@@ -4018,9 +4090,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_subclases_dnd_2024",
-      "community": 19,
-      "norm_label": "subclases de d&d 2024 como cartas raras"
+      "community": 12,
+      "norm_label": "subclases de d&d 2024 como cartas raras",
+      "id": "readme_subclases_dnd_2024"
     },
     {
       "label": "Mazos iniciales (5 Golpe + 4 Defender + 2 de clase)",
@@ -4031,9 +4103,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_mazos_iniciales",
       "community": 16,
-      "norm_label": "mazos iniciales (5 golpe + 4 defender + 2 de clase)"
+      "norm_label": "mazos iniciales (5 golpe + 4 defender + 2 de clase)",
+      "id": "readme_mazos_iniciales"
     },
     {
       "label": "Cartas de 1 uso",
@@ -4044,9 +4116,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_cartas_un_uso",
       "community": 24,
-      "norm_label": "cartas de 1 uso"
+      "norm_label": "cartas de 1 uso",
+      "id": "readme_cartas_un_uso"
     },
     {
       "label": "Cartas de azar incoloras (Seducir / Deseo, d20)",
@@ -4057,9 +4129,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_cartas_incoloras",
       "community": 10,
-      "norm_label": "cartas de azar incoloras (seducir / deseo, d20)"
+      "norm_label": "cartas de azar incoloras (seducir / deseo, d20)",
+      "id": "readme_cartas_incoloras"
     },
     {
       "label": "Energ\u00eda, bloqueo y Vulnerable/D\u00e9bil/Fr\u00e1gil al estilo StS",
@@ -4070,9 +4142,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_sistema_energia",
       "community": 14,
-      "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts"
+      "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts",
+      "id": "readme_sistema_energia"
     },
     {
       "label": "Mejora de cartas en campamentos",
@@ -4083,9 +4155,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_mejora_cartas",
       "community": 8,
-      "norm_label": "mejora de cartas en campamentos"
+      "norm_label": "mejora de cartas en campamentos",
+      "id": "readme_mejora_cartas"
     },
     {
       "label": "Eventos narrativos",
@@ -4096,9 +4168,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_eventos_narrativos",
       "community": 8,
-      "norm_label": "eventos narrativos"
+      "norm_label": "eventos narrativos",
+      "id": "readme_eventos_narrativos"
     },
     {
       "label": "Compendio de cartas",
@@ -4109,9 +4181,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_compendio",
-      "community": 15,
-      "norm_label": "compendio de cartas"
+      "community": 3,
+      "norm_label": "compendio de cartas",
+      "id": "readme_compendio"
     },
     {
       "label": "Mapa de 10 filas por cap\u00edtulo",
@@ -4122,9 +4194,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_mapa_capitulo",
       "community": 3,
-      "norm_label": "mapa de 10 filas por capitulo"
+      "norm_label": "mapa de 10 filas por capitulo",
+      "id": "readme_mapa_capitulo"
     },
     {
       "label": "Reliquias inspiradas en objetos de D&D",
@@ -4135,9 +4207,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_reliquias",
-      "community": 3,
-      "norm_label": "reliquias inspiradas en objetos de d&d"
+      "community": 8,
+      "norm_label": "reliquias inspiradas en objetos de d&d",
+      "id": "readme_reliquias"
     },
     {
       "label": "Jefes \u00fanicos con rasgo propio",
@@ -4148,9 +4220,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_jefes_unicos",
       "community": 23,
-      "norm_label": "jefes unicos con rasgo propio"
+      "norm_label": "jefes unicos con rasgo propio",
+      "id": "readme_jefes_unicos"
     },
     {
       "label": "Quemadura (Aliento de Drag\u00f3n de Ignifax)",
@@ -4161,9 +4233,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_quemadura",
       "community": 14,
-      "norm_label": "quemadura (aliento de dragon de ignifax)"
+      "norm_label": "quemadura (aliento de dragon de ignifax)",
+      "id": "readme_quemadura"
     },
     {
       "label": "Rayos del Contemplador (cartas que se agotan, sobrecarga, et\u00e9reas)",
@@ -4174,9 +4246,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_rayos_contemplador",
       "community": 14,
-      "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)"
+      "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
+      "id": "readme_rayos_contemplador"
     },
     {
       "label": "Controles de rat\u00f3n y modo mando por teclado",
@@ -4187,9 +4259,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_controles_mando",
       "community": 6,
-      "norm_label": "controles de raton y modo mando por teclado"
+      "norm_label": "controles de raton y modo mando por teclado",
+      "id": "readme_controles_mando"
     },
     {
       "label": "Arquitectura: n\u00facleo sin DOM + interfaz Presentador",
@@ -4200,9 +4272,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_arquitectura_presentador",
-      "community": 5,
-      "norm_label": "arquitectura: nucleo sin dom + interfaz presentador"
+      "community": 3,
+      "norm_label": "arquitectura: nucleo sin dom + interfaz presentador",
+      "id": "readme_arquitectura_presentador"
     },
     {
       "label": "Estructura de carpetas (core / ui / fx / estilos)",
@@ -4213,9 +4285,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_estructura_carpetas",
-      "community": 5,
-      "norm_label": "estructura de carpetas (core / ui / fx / estilos)"
+      "community": 3,
+      "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
+      "id": "readme_estructura_carpetas"
     },
     {
       "label": "Smoke test del motor sin navegador",
@@ -4226,9 +4298,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_smoke_test_motor",
-      "community": 5,
-      "norm_label": "smoke test del motor sin navegador"
+      "community": 3,
+      "norm_label": "smoke test del motor sin navegador",
+      "id": "readme_smoke_test_motor"
     },
     {
       "label": "PWA jugable sin conexi\u00f3n",
@@ -4239,9 +4311,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_pwa_offline",
       "community": 4,
-      "norm_label": "pwa jugable sin conexion"
+      "norm_label": "pwa jugable sin conexion",
+      "id": "readme_pwa_offline"
     },
     {
       "label": "M\u00fasica 8-bit con pistas CC0 de OpenGameArt",
@@ -4252,9 +4324,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "audio_leeme_musica_8bit",
       "community": 4,
-      "norm_label": "musica 8-bit con pistas cc0 de opengameart"
+      "norm_label": "musica 8-bit con pistas cc0 de opengameart",
+      "id": "audio_leeme_musica_8bit"
     },
     {
       "label": "Loop chiptune procedural de respaldo",
@@ -4265,9 +4337,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "audio_leeme_chiptune_respaldo",
       "community": 4,
-      "norm_label": "loop chiptune procedural de respaldo"
+      "norm_label": "loop chiptune procedural de respaldo",
+      "id": "audio_leeme_chiptune_respaldo"
     },
     {
       "label": "Efectos de sonido sintetizados (Web Audio API, sin ficheros)",
@@ -4278,9 +4350,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "audio_leeme_sfx_sintetizados",
       "community": 4,
-      "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)"
+      "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
+      "id": "audio_leeme_sfx_sintetizados"
     },
     {
       "label": "Despliegue en GitHub Pages (push a main)",
@@ -4291,9 +4363,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "workflows_deploy_github_pages",
-      "community": 13,
-      "norm_label": "despliegue en github pages (push a main)"
+      "community": 3,
+      "norm_label": "despliegue en github pages (push a main)",
+      "id": "workflows_deploy_github_pages"
     },
     {
       "label": "Los tests del motor son puerta del despliegue",
@@ -4304,9 +4376,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "workflows_deploy_tests_en_ci",
-      "community": 13,
-      "norm_label": "los tests del motor son puerta del despliegue"
+      "community": 3,
+      "norm_label": "los tests del motor son puerta del despliegue",
+      "id": "workflows_deploy_tests_en_ci"
     },
     {
       "label": "Skill /release (versi\u00f3n + changelog + push a main)",
@@ -4317,9 +4389,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "release_skill_flujo_release",
-      "community": 13,
-      "norm_label": "skill /release (version + changelog + push a main)"
+      "community": 3,
+      "norm_label": "skill /release (version + changelog + push a main)",
+      "id": "release_skill_flujo_release"
     },
     {
       "label": "Ventana de novedades alimentada por CHANGELOG",
@@ -4330,9 +4402,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "release_skill_ventana_novedades",
-      "community": 13,
-      "norm_label": "ventana de novedades alimentada por changelog"
+      "community": 3,
+      "norm_label": "ventana de novedades alimentada por changelog",
+      "id": "release_skill_ventana_novedades"
     },
     {
       "label": "Skill /editar-carta (aplica comentarios del Compendio)",
@@ -4343,9 +4415,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "editar_carta_skill_flujo",
-      "community": 15,
-      "norm_label": "skill /editar-carta (aplica comentarios del compendio)"
+      "community": 3,
+      "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
+      "id": "editar_carta_skill_flujo"
     },
     {
       "label": "Convenci\u00f3n: el texto de la carta debe cuadrar con su efecto",
@@ -4356,9 +4428,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "editar_carta_skill_texto_coherente",
       "community": 6,
-      "norm_label": "convencion: el texto de la carta debe cuadrar con su efecto"
+      "norm_label": "convencion: el texto de la carta debe cuadrar con su efecto",
+      "id": "editar_carta_skill_texto_coherente"
     },
     {
       "label": "Shell HTML del juego (canvas fx + #app + #overlay)",
@@ -4369,9 +4441,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "index_shell_html",
-      "community": 5,
-      "norm_label": "shell html del juego (canvas fx + #app + #overlay)"
+      "community": 3,
+      "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
+      "id": "index_shell_html"
     },
     {
       "label": "Clase Brujo (64 PV)",
@@ -4382,9 +4454,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_clase_brujo",
-      "community": 19,
-      "norm_label": "clase brujo (64 pv)"
+      "community": 12,
+      "norm_label": "clase brujo (64 pv)",
+      "id": "readme_clase_brujo"
     },
     {
       "label": "Explosi\u00f3n Sobrenatural (vuelve a lo alto del mazo)",
@@ -4395,9 +4467,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_explosion_sobrenatural",
       "community": 10,
-      "norm_label": "explosion sobrenatural (vuelve a lo alto del mazo)"
+      "norm_label": "explosion sobrenatural (vuelve a lo alto del mazo)",
+      "id": "readme_explosion_sobrenatural"
     },
     {
       "label": "Condena (ejecuta al igualar los PV actuales)",
@@ -4408,9 +4480,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_condena",
       "community": 14,
-      "norm_label": "condena (ejecuta al igualar los pv actuales)"
+      "norm_label": "condena (ejecuta al igualar los pv actuales)",
+      "id": "readme_condena"
     },
     {
       "label": "Invocaciones ef\u00edmeras (brujo)",
@@ -4421,9 +4493,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_invocacion_efimera",
       "community": 5,
-      "norm_label": "invocaciones efimeras (brujo)"
+      "norm_label": "invocaciones efimeras (brujo)",
+      "id": "readme_invocacion_efimera"
     },
     {
       "label": "Armadura de Agathys (el bloqueo devuelve da\u00f1o a todos)",
@@ -4434,9 +4506,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_armadura_agathys",
       "community": 2,
-      "norm_label": "armadura de agathys (el bloqueo devuelve dano a todos)"
+      "norm_label": "armadura de agathys (el bloqueo devuelve dano a todos)",
+      "id": "readme_armadura_agathys"
     },
     {
       "label": "Oscuridad (baja el ataque de todos)",
@@ -4447,9 +4519,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_oscuridad",
       "community": 18,
-      "norm_label": "oscuridad (baja el ataque de todos)"
+      "norm_label": "oscuridad (baja el ataque de todos)",
+      "id": "readme_oscuridad"
     },
     {
       "label": "Subclases del brujo: Archifata, Celestial, Infernal, Gran Antiguo",
@@ -4460,9 +4532,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_subclases_brujo",
-      "community": 19,
-      "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo"
+      "community": 12,
+      "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
+      "id": "readme_subclases_brujo"
     }
   ],
   "links": [
@@ -4660,6 +4732,28 @@
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "core_cartas_cartaunicadeclase"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_cartas_conjuro_prodigioso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_cartas_daga",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -5106,11 +5200,33 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_types_cartainstancia",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
       "source_location": "L19",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "core_types_claseid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_types_enemigocombate",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -5137,11 +5253,71 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/smoke-test.ts",
+      "source_location": "L251",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_cap",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
       "source_location": "L22",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "scripts_smoke_test_check"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_clases",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_danoentrante",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_mejorobjetivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_opcionessim",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_puntuarcarta",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -5157,11 +5333,43 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/smoke-test.ts",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_sintildes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
       "source_location": "L31",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "scripts_smoke_test_uisilenciosa"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "ui_carta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "ui_carta_arte_carta",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -5182,6 +5390,83 @@
       "weight": 1.0,
       "source": "scripts_smoke_test_uisilenciosa",
       "target": "readme_arquitectura_presentador"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_puntuarcarta",
+      "target": "scripts_smoke_test_sintildes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_puntuarcarta",
+      "target": "scripts_smoke_test_danoentrante",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_puntuarcarta",
+      "target": "core_cartas_defde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_simular",
+      "target": "scripts_smoke_test_mejorobjetivo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_simular",
+      "target": "core_cartas_defde",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_simular",
+      "target": "core_cartas_instanciar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "scripts_smoke_test_simular",
+      "target": "core_cartas_pooldeclase",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -12602,6 +12887,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/carta.ts",
+      "source_location": "L203",
+      "weight": 1.0,
+      "source": "ui_carta",
+      "target": "ui_carta_arte_carta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/carta.ts",
       "source_location": "L196",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -14129,26 +14424,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme",
-      "target": "readme_mazo_y_mazmorra"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "public/audio/LEEME.md",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "audio_leeme",
-      "target": "audio_leeme_m\u00fasica_y_sonido"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": ".claude/skills/editar-carta/SKILL.md",
       "source_location": "L7",
       "weight": 1.0,
@@ -14225,6 +14500,16 @@
       "confidence_score": 1.0,
       "source": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades",
       "target": "release_skill_uso"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme",
+      "target": "readme_mazo_y_mazmorra"
     },
     {
       "relation": "references",
@@ -14365,6 +14650,16 @@
       "weight": 1.0,
       "source": "release_skill_flujo_release",
       "target": "readme_mazo_y_mazmorra"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/audio/LEEME.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "audio_leeme",
+      "target": "audio_leeme_m\u00fasica_y_sonido"
     },
     {
       "relation": "contains",
@@ -14885,5 +15180,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "957ec4d6b2c0e52376616951f0f4e1de04fc360e"
+  "built_at_commit": "3365dc9f9e0738e660bb49f975e217ab8f3b1fea"
 }

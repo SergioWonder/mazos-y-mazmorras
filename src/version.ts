@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.0.0';
+export const VERSION = '3.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.1.0',
+    fecha: '2026-08-27',
+    cambios: [
+      '⚖️ Gran reajuste del Brujo: la Oscuridad ahora baja 1 por turno y sus invocaciones son mucho más modestas (el Sabueso 7/5 y el Demonio 12/9), porque cada punto de vida vale como bloqueo… y además atacaban.',
+      '👹 En cambio, el golpe del Demonio aplica 6 de Condena, y el Sacrificio del Familiar te devuelve 1 de energía (2 mejorado).',
+      '😇 Bendición Celestial (ahora cuesta 3) cura 12 PV al jugarla y luego solo da bloqueo cada turno: se acabó rellenar la vida a base de combates fáciles.',
+      '🌑 El Sello del Pacto empieza el combate con 2 de Oscuridad en vez de Condena, así el Diezmo de Sangre ya no está siempre activo. Presencia Feérica sube a coste 2 y Devorar Vida pasa a ser Marchitar (12 de daño y 2 de Vulnerable).',
+      '🎴 Todas las cartas del juego tienen ya su propio emoji: 35 se habían quedado con el comodín ✦, y ninguna repite dibujo dentro de un mismo mazo.',
+      '🤖 El simulador del motor juega mucho mejor: puntúa las cartas y las lanza por prioridad, apunta al enemigo más débil y prueba los cuatro tipos de encuentro (singular, grupo, élite y jefe) con mazos acordes a cada momento de la partida.',
+    ],
+  },
   {
     version: '3.0.0',
     fecha: '2026-08-26',

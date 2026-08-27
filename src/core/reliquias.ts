@@ -27,11 +27,11 @@ export const GUANTE_LADRON: ReliquiaDef = {
 };
 
 export const SELLO_PACTO: ReliquiaDef = {
-  id: 'sello-pacto', nombre: 'Sello del Pacto', icono: '🕳️',
-  texto: 'Empiezas cada combate aplicando 4 de Condena a todos los enemigos.',
+  id: 'sello-pacto', nombre: 'Sello del Pacto', icono: '🌑',
+  texto: 'Empiezas cada combate aplicando 2 de Oscuridad a todos los enemigos.',
   inicioCombate: async (ctx) => {
     for (const e of ctx.enemigos.filter((x) => x.vivo)) {
-      await ctx.aplicarEstado(e, 'condena', 4);
+      await ctx.aplicarEstado(e, 'oscuridad', 2);
     }
   },
 };

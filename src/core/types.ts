@@ -37,7 +37,7 @@ export type EstadoId =
   | 'dagasBloqueo'   // (pícaro/Guardia de Cuchillas) cada Daga que juegas te da esta cantidad de bloqueo
   | 'ventajaFurtiva' // (pícaro/Oportunista) tus ataques hacen +N a quien no pretende atacar
   | 'condena'        // (enemigo) al final de su turno muere si su Condena ≥ sus PV actuales (brujo)
-  | 'oscuridad'      // (enemigo) reduce su ataque esta cantidad; no decae (brujo)
+  | 'oscuridad'      // (enemigo) reduce su ataque esta cantidad; baja 1 por turno (brujo)
   | 'agathys'        // (jugador) este turno el daño que bloquees se devuelve a TODOS los enemigos
   | 'explosionFuerza'// (jugador) tu Explosión Sobrenatural inflige +N de daño todo el combate
   | 'explosionTurno' // (jugador) tu Explosión Sobrenatural inflige +N de daño SOLO este turno
@@ -74,6 +74,8 @@ export interface Invocacion {
   efimera?: boolean;
   /** (brujo) daño fijo de su golpe; las del druida usan el 30 % de su vida. */
   dano?: number;
+  /** (brujo) Condena que aplica su golpe al objetivo. */
+  condena?: number;
 }
 
 export interface EfectoTemporal {
@@ -286,8 +288,11 @@ export interface ContextoEfecto {
   /** true si hay una invocación viva. */
   hayInvocacion(): boolean;
   /** Invoca (brujo): criatura efímera que absorbe daño y, si sobrevive al turno
-   *  enemigo, golpea por `dano` y se desvanece. Otra invocación suma su vida. */
-  invocarEfimero(forma: FormaInvocacion, vida: number, dano: number): Promise<void>;
+   *  enemigo, golpea por `dano` (aplicando `condena` si la tiene) y se desvanece.
+   *  Otra invocación suma su vida y se queda con los mejores valores. */
+  invocarEfimero(
+    forma: FormaInvocacion, vida: number, dano: number, condena?: number,
+  ): Promise<void>;
   /** Vida actual de la invocación (0 si no hay ninguna). */
   vidaInvocacion(): number;
   /** Sacrifica la invocación: la retira y devuelve la vida que le quedaba. */

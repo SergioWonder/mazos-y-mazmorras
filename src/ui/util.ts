@@ -165,7 +165,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   ventajaFurtiva: 'Tus ataques infligen esa cantidad de daño adicional por golpe a los enemigos que no pretenden atacar.',
   condena:
     'Al final de su turno, si su Condena iguala o supera sus PV actuales, muere. No decae con el tiempo: solo hay que acumularla más rápido de lo que se cura.',
-  oscuridad: 'Reduce su ataque esa cantidad (se suma a las Raíces). No decae con el tiempo.',
+  oscuridad: 'Reduce su ataque esa cantidad (se suma a las Raíces). Baja 1 por turno.',
   agathys: 'Este turno, cada punto de daño que absorba tu bloqueo se devuelve a TODOS los enemigos.',
   explosionFuerza: 'Tu Explosión Sobrenatural inflige esa cantidad de daño adicional durante todo el combate.',
   explosionTurno: 'Solo este turno, tu Explosión Sobrenatural inflige esa cantidad de daño adicional.',

@@ -2849,14 +2849,14 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'oscuridad',
-    texto: 'Invoca un Sabueso: 12 de vida y 9 de daño.\nSolo dura este turno.',
+    texto: 'Invoca un Sabueso: 7 de vida y 5 de daño.\nSolo dura este turno.',
     jugar: async (c) => {
-      await c.invocarEfimero('sabueso', 12, 9);
+      await c.invocarEfimero('sabueso', 7, 5);
     },
     mejora: {
-      texto: 'Invoca un Sabueso: 15 de vida y 11 de daño.\nSolo dura este turno.',
+      texto: 'Invoca un Sabueso: 9 de vida y 7 de daño.\nSolo dura este turno.',
       jugar: async (c) => {
-        await c.invocarEfimero('sabueso', 15, 11);
+        await c.invocarEfimero('sabueso', 9, 7);
       },
     },
   },
@@ -2964,14 +2964,14 @@ export const BRUJO: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Invoca un Demonio: 22 de vida y 16 de daño.\nSolo dura este turno.',
+    texto: 'Invoca un Demonio: 12 de vida y 9 de daño,\ny su golpe aplica 6 de Condena.\nSolo dura este turno.',
     jugar: async (c) => {
-      await c.invocarEfimero('demonio', 22, 16);
+      await c.invocarEfimero('demonio', 12, 9, 6);
     },
     mejora: {
-      texto: 'Invoca un Demonio: 28 de vida y 20 de daño.\nSolo dura este turno.',
+      texto: 'Invoca un Demonio: 15 de vida y 11 de daño,\ny su golpe aplica 8 de Condena.\nSolo dura este turno.',
       jugar: async (c) => {
-        await c.invocarEfimero('demonio', 28, 20);
+        await c.invocarEfimero('demonio', 15, 11, 8);
       },
     },
   },
@@ -3083,7 +3083,7 @@ export const BRUJO: CartaDef[] = [
     coste: 0,
     objetivo: 'enemigo',
     fx: 'sangre',
-    texto: 'Sacrifica tu invocación:\ninflige daño igual a su vida restante.',
+    texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante.\nGana 1 de energía.',
     jugar: async (c) => {
       if (!c.hayInvocacion()) {
         await c.mensaje('No tienes ninguna invocación…');
@@ -3091,9 +3091,10 @@ export const BRUJO: CartaDef[] = [
       }
       const vida = await c.sacrificarInvocacion();
       await c.danar(c.objetivo!, vida, 'sangre');
+      c.ganarEnergia(1);
     },
     mejora: {
-      texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante y aplica\nesa misma Condena.',
+      texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante y aplica\nesa misma Condena. Gana 2 de energía.',
       jugar: async (c) => {
         if (!c.hayInvocacion()) {
           await c.mensaje('No tienes ninguna invocación…');
@@ -3102,6 +3103,7 @@ export const BRUJO: CartaDef[] = [
         const vida = await c.sacrificarInvocacion();
         await c.danar(c.objetivo!, vida, 'sangre');
         if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', vida);
+        c.ganarEnergia(2);
       },
     },
   },
@@ -3194,24 +3196,24 @@ export const BRUJO: CartaDef[] = [
     },
   },
   {
-    id: 'devorar-vida',
-    nombre: 'Devorar Vida',
+    id: 'marchitar',
+    nombre: 'Marchitar',
     clase: 'brujo',
     tipo: 'ataque',
     rareza: 'infrecuente',
     coste: 2,
     objetivo: 'enemigo',
-    fx: 'sangre',
-    texto: 'Inflige 12 de daño.\nCúrate la mitad del daño infligido.',
+    fx: 'muerte',
+    texto: 'Inflige 12 de daño.\nAplica 2 de Vulnerable.',
     jugar: async (c) => {
-      const d = await c.atacar(c.objetivo!, 12, 1, 'sangre');
-      await c.curar(Math.floor(d / 2));
+      await c.atacar(c.objetivo!, 12, 1, 'muerte');
+      if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'vulnerable', 2);
     },
     mejora: {
-      texto: 'Inflige 16 de daño.\nCúrate la mitad del daño infligido.',
+      texto: 'Inflige 16 de daño.\nAplica 3 de Vulnerable.',
       jugar: async (c) => {
-        const d = await c.atacar(c.objetivo!, 16, 1, 'sangre');
-        await c.curar(Math.floor(d / 2));
+        await c.atacar(c.objetivo!, 16, 1, 'muerte');
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'vulnerable', 3);
       },
     },
   },
@@ -3222,7 +3224,7 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 1,
+    coste: 2,
     objetivo: 'ninguno',
     subclase: 'Archifata',
     fx: 'luna',
@@ -3244,21 +3246,21 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 1,
+    coste: 3,
     objetivo: 'ninguno',
     subclase: 'Celestial',
     fx: 'divino',
     animRara: 'anim-divino',
-    texto: 'Poder: al inicio de cada turno\ncúrate 4 PV y gana 5 de bloqueo.',
+    texto: 'Cúrate 12 PV al jugarla.\nPoder: al inicio de cada turno\ngana 6 de bloqueo.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'regeneracion', 4);
-      await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 5);
+      await c.curar(12);
+      await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 6);
     },
     mejora: {
-      texto: 'Poder: al inicio de cada turno\ncúrate 6 PV y gana 7 de bloqueo.',
+      texto: 'Cúrate 16 PV al jugarla.\nPoder: al inicio de cada turno\ngana 8 de bloqueo.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'regeneracion', 6);
-        await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 7);
+        await c.curar(16);
+        await c.aplicarEstado(c.jugador, 'bloqueoPorTurno', 8);
       },
     },
   },

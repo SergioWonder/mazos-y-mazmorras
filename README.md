@@ -26,6 +26,14 @@ Simula combates completos con las cinco clases, valida la generación de mapas y
 mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas del pícaro,
 Explosión/Condena/Agathys del brujo).
 
+La simulación usa un **piloto heurístico**: puntúa cada carta de la mano según el estado
+del combate (daño entrante, bloqueo que falta, vida enemiga restante, turno actual) y las
+juega de mayor a menor puntuación, apuntando siempre al enemigo con menos PV. Cubre los
+**cuatro tipos de encuentro** —enemigo singular, grupo, élite y jefe— y para élites y
+jefes reparte recompensas y mejoras al mazo, porque a un jefe no se llega con el mazo
+inicial. Imprime una tabla de victorias por clase y tipo, y falla si una clase se
+descuelga de las demás en su mismo nivel.
+
 ## Controles
 
 | Acción | Ratón | Teclado (modo mando) |
@@ -84,15 +92,17 @@ Explosión/Condena/Agathys del brujo).
     y la Mente del Gran Antiguo condena con cada ataque. Funciona también sobre jefes: el
     umbral sube con su vida.
   - **Invocaciones efímeras**: a diferencia de las del druida, solo duran el turno en que
-    las invocas — y justo por eso pegan y aguantan más. Absorben el daño enemigo y, si
-    sobreviven al turno del enemigo, golpean y se desvanecen. El Sacrificio del Familiar
-    convierte su vida restante en daño (y en Condena, mejorado).
+    las invocas — y justo por eso pegan un poco más. Absorben el daño enemigo y, si
+    sobreviven al turno del enemigo, golpean y se desvanecen. El golpe del Demonio además
+    condena. El Sacrificio del Familiar convierte su vida restante en daño y te devuelve
+    energía (y aplica esa Condena, mejorado).
   - **Bloqueo que muerde**: la **Armadura de Agathys** da bloqueo y, ese turno, **todo el
     daño que bloquees se devuelve a TODOS los enemigos** — cuanto más bloqueo acumules y
     más te peguen, más devuelves. El Pacto Infernal te blinda con cada muerte enemiga y
     el **Pacto Final** (carta única de clase) convierte tu bloqueo restante en Condena
     para todos al final de cada turno.
-  Y **Oscuridad**, que reduce el ataque de todos los enemigos y tampoco decae. Cartas
+  Y **Oscuridad**, que reduce el ataque de todos los enemigos y baja 1 por turno (el
+  Sello del Pacto, su reliquia inicial, ya empieza el combate con 2 puesta). Cartas
   raras: subclases de D&D 2024 (Archifata, Celestial, Infernal y Gran Antiguo).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y

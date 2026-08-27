@@ -1,13 +1,18 @@
-# Graph Report - .  (2026-08-26)
+# Graph Report - videogame  (2026-08-27)
 
 ## Corpus Check
-- 41 files · ~70,296 words
+- 39 files · ~72,153 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 462 nodes · 985 edges · 27 communities (25 shown, 2 thin omitted)
+- 470 nodes · 1006 edges · 25 communities (23 shown, 2 thin omitted)
 - Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 78 edges (avg confidence: 0.91)
-- Token cost: 2,100 input · 3,400 output
+- Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `3365dc9f`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Bestiario de enemigos|Bestiario de enemigos]]
@@ -23,13 +28,11 @@
 - [[_COMMUNITY_Cartas registro y Explosión|Cartas: registro y Explosión]]
 - [[_COMMUNITY_Dependencias y scripts npm|Dependencias y scripts npm]]
 - [[_COMMUNITY_Diseño del juego y Bárbaro|Diseño del juego y Bárbaro]]
-- [[_COMMUNITY_Versionado y despliegue|Versionado y despliegue]]
 - [[_COMMUNITY_Estados de combate|Estados de combate]]
 - [[_COMMUNITY_Compendio y comentarios|Compendio y comentarios]]
 - [[_COMMUNITY_Cartas del Pícaro|Cartas del Pícaro]]
 - [[_COMMUNITY_Motor de partículas|Motor de partículas]]
 - [[_COMMUNITY_Druida y PV por clase|Druida y PV por clase]]
-- [[_COMMUNITY_Cartas del Brujo|Cartas del Brujo]]
 - [[_COMMUNITY_Skill editar-carta|Skill /editar-carta]]
 - [[_COMMUNITY_Skill release|Skill /release]]
 - [[_COMMUNITY_Créditos de audio|Créditos de audio]]
@@ -41,11 +44,11 @@
 2. `el()` - 24 edges
 3. `MotorAudio` - 23 edges
 4. `juego()` - 20 edges
-5. `EnemigoCombate` - 17 edges
+5. `EnemigoCombate` - 18 edges
 6. `EstadoRun` - 16 edges
 7. `compilerOptions` - 15 edges
 8. `Mazo y Mazmorra` - 15 edges
-9. `instanciar()` - 13 edges
+9. `instanciar()` - 14 edges
 10. `fx` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
@@ -70,31 +73,31 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (27 total, 2 thin omitted)
+## Communities (25 total, 2 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.04
 Nodes (47): ACOLITO_VELADO, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, CEREBRO_ANCIANO, CUBO_GELATINOSO (+39 more)
 
 ### Community 1 - "Persistencia y partículas"
-Cohesion: 0.11
-Nodes (35): borrarGuardado(), hayGuardado(), EstadoRun, AMBIENTES, ConfigAmbiente, ConfigEfecto, EFECTOS, EstiloAmbiente (+27 more)
+Cohesion: 0.08
+Nodes (43): borrarGuardado(), hayGuardado(), barajar(), elegir(), EstadoRun, AMBIENTES, ConfigAmbiente, ConfigEfecto (+35 more)
 
 ### Community 2 - "Motor de combate"
 Cohesion: 0.11
-Nodes (13): defDe(), instanciar(), Combate, crearEnemigo(), GOBLIN_FAMELICO, CartaInstancia, EnemigoCombate, JugadorCombate (+5 more)
+Nodes (12): defDe(), Combate, crearEnemigo(), GOBLIN_FAMELICO, CartaInstancia, EnemigoCombate, JugadorCombate, Luchador (+4 more)
 
 ### Community 3 - "Actos, mapa y guardado"
-Cohesion: 0.10
-Nodes (32): cartaPorId(), mazoInicial(), ACTOS, CONTEMPLADOR, GOBLIN_ARQUERO, GOBLIN_CORTADOR, HERALDO_CULTO, IGNIFAX (+24 more)
+Cohesion: 0.08
+Nodes (37): mazoInicial(), Presentador, ACTOS, CONTEMPLADOR, GOBLIN_ARQUERO, GOBLIN_CORTADOR, HERALDO_CULTO, IGNIFAX (+29 more)
 
 ### Community 4 - "Audio y música"
 Cohesion: 0.10
 Nodes (11): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de OpenGameArt, Efectos de sonido sintetizados (Web Audio API, sin ficheros), audio, Capa, MotorAudio, RECETAS, TemaChip (+3 more)
 
 ### Community 5 - "Combate: turnos e invocaciones"
-Cohesion: 0.09
-Nodes (27): Presentador, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), Capitulo, barajar(), ContextoEfecto, EfectoConjuro (+19 more)
+Cohesion: 0.13
+Nodes (18): crearEspacios(), ORDEN_NIVELES, piramideConjuros(), Capitulo, EfectoConjuro, EfectoInvocacion, EfectoTemporal, EnemigoDef (+10 more)
 
 ### Community 6 - "Renderizado de cartas"
 Cohesion: 0.09
@@ -105,8 +108,8 @@ Cohesion: 0.10
 Nodes (14): COLOR_CRITICO, COLOR_NORMAL, COLOR_PIFIA, COLOR_TENUE, escala(), identidad(), Mat4, qHaciaCamara() (+6 more)
 
 ### Community 8 - "Eventos y recompensas"
-Cohesion: 0.12
-Nodes (17): poolDeClase(), recompensaCartas(), cartaAleatoria(), curar(), defNombre(), elegirEvento(), EventoDef, EVENTOS_NEGATIVOS (+9 more)
+Cohesion: 0.07
+Nodes (34): cartaPorId(), instanciar(), poolDeClase(), recompensaCartas(), cartaAleatoria(), curar(), defNombre(), elegirEvento() (+26 more)
 
 ### Community 9 - "Configuración de TypeScript"
 Cohesion: 0.12
@@ -121,20 +124,16 @@ Cohesion: 0.15
 Nodes (12): devDependencies, typescript, vite, vite-plugin-pwa, name, private, scripts, build (+4 more)
 
 ### Community 12 - "Diseño del juego y Bárbaro"
-Cohesion: 0.17
-Nodes (11): BARBARO, Clase Bárbaro (80 PV), Controles, Roguelike de construcción de mazos, Diseño, Ejecutar, Estructura, Furia (bárbaro) (+3 more)
-
-### Community 13 - "Versionado y despliegue"
-Cohesion: 0.24
-Nodes (10): Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG, CHANGELOG, EntradaCambios, iniciarActualizaciones(), mostrarAvisoActualizar(), mostrarNovedades(), mostrarNovedadesSiNuevo() (+2 more)
+Cohesion: 0.15
+Nodes (13): BRUJO, Ambientación fantasía medieval D&D, Clase Brujo (64 PV), Controles, Roguelike de construcción de mazos, Diseño, Ejecutar, Estructura (+5 more)
 
 ### Community 14 - "Estados de combate"
 Cohesion: 0.22
 Nodes (10): SELLO_PACTO, EstadoId, Acrobacias (pícaro), Condena (ejecuta al igualar los PV actuales), Hemorragia (bárbaro), Quemadura (Aliento de Dragón de Ignifax), Rayos del Contemplador (cartas que se agotan, sobrecarga, etéreas), Energía, bloqueo y Vulnerable/Débil/Frágil al estilo StS (+2 more)
 
 ### Community 15 - "Compendio y comentarios"
-Cohesion: 0.20
-Nodes (7): BASICAS, Skill /editar-carta (aplica comentarios del Compendio), Compendio de cartas, Comentarios, GRUPOS, mostrarExportacion(), pantallaCompendio()
+Cohesion: 0.18
+Nodes (8): BARBARO, BASICAS, Clase Bárbaro (80 PV), Furia (bárbaro), Comentarios, GRUPOS, mostrarExportacion(), pantallaCompendio()
 
 ### Community 16 - "Cartas del Pícaro"
 Cohesion: 0.29
@@ -143,10 +142,6 @@ Nodes (7): DAGA, INICIALES_DE_CLASE, PICARO, Clase Pícaro (66 PV), Dagas (píca
 ### Community 18 - "Druida y PV por clase"
 Cohesion: 0.33
 Nodes (6): DRUIDA, PV_POR_CLASE, Clase Druida (70 PV), Oscuridad (baja el ataque de todos), Raíces (druida), Transformaciones (druida)
-
-### Community 19 - "Cartas del Brujo"
-Cohesion: 0.40
-Nodes (5): BRUJO, Ambientación fantasía medieval D&D, Clase Brujo (64 PV), Subclases del brujo: Archifata, Celestial, Infernal, Gran Antiguo, Subclases de D&D 2024 como cartas raras
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.40
@@ -165,7 +160,7 @@ Cohesion: 0.67
 Nodes (3): JEFE_OGRO, SENOR_CRIPTA, Jefes únicos con rasgo propio
 
 ## Knowledge Gaps
-- **134 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+129 more)
+- **137 isolated node(s):** `name`, `private`, `version`, `type`, `dev` (+132 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **2 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -173,16 +168,16 @@ Nodes (3): JEFE_OGRO, SENOR_CRIPTA, Jefes únicos con rasgo propio
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Combate` connect `Motor de combate` to `Persistencia y partículas`, `Actos, mapa y guardado`, `Combate: turnos e invocaciones`, `Renderizado de cartas`, `Estados de combate`?**
-  _High betweenness centrality (0.084) - this node is a cross-community bridge._
-- **Why does `Mazo y Mazmorra` connect `Diseño del juego y Bárbaro` to `Audio y música`, `Cartas: registro y Explosión`, `Versionado y despliegue`, `Cartas del Pícaro`, `Druida y PV por clase`, `Cartas del Brujo`?**
+  _High betweenness centrality (0.080) - this node is a cross-community bridge._
+- **Why does `Mazo y Mazmorra` connect `Diseño del juego y Bárbaro` to `Actos, mapa y guardado`, `Audio y música`, `Cartas: registro y Explosión`, `Compendio y comentarios`, `Cartas del Pícaro`, `Druida y PV por clase`?**
   _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **What connects `name`, `private`, `version` to the rest of the system?**
-  _139 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _142 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bestiario de enemigos` be split into smaller, more focused modules?**
   _Cohesion score 0.04 - nodes in this community are weakly interconnected._
 - **Should `Persistencia y partículas` be split into smaller, more focused modules?**
-  _Cohesion score 0.10815602836879433 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08306010928961749 - nodes in this community are weakly interconnected._
 - **Should `Motor de combate` be split into smaller, more focused modules?**
-  _Cohesion score 0.1109936575052854 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11295681063122924 - nodes in this community are weakly interconnected._
 - **Should `Actos, mapa y guardado` be split into smaller, more focused modules?**
-  _Cohesion score 0.09615384615384616 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07682926829268293 - nodes in this community are weakly interconnected._

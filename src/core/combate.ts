@@ -309,7 +309,8 @@ export class Combate {
       atacarInvocacion: (bono) => self.atacarInvocacion(bono),
       curarInvocacion: (n) => self.curarInvocacion(n),
       hayInvocacion: () => !!self.jugador.invocacion && self.jugador.invocacion.vida > 0,
-      invocarEfimero: (forma, vida, dano) => self.invocarEfimero(forma, vida, dano),
+      invocarEfimero: (forma, vida, dano, condena) =>
+        self.invocarEfimero(forma, vida, dano, condena),
       vidaInvocacion: () => self.jugador.invocacion?.vida ?? 0,
       async sacrificarInvocacion() {
         const inv = self.jugador.invocacion;
@@ -589,15 +590,16 @@ export class Combate {
   /** Invoca (brujo): criatura efímera, más gorda y pegona que la del druida
    *  porque solo aguanta una ronda. Si ya hay una, suma vida y se queda con el
    *  mayor daño de las dos. */
-  async invocarEfimero(forma: FormaInvocacion, vida: number, dano: number) {
+  async invocarEfimero(forma: FormaInvocacion, vida: number, dano: number, condena = 0) {
     const j = this.jugador;
     if (!j.invocacion) {
-      j.invocacion = { forma, vida, vidaMax: vida, efectos: [], efimera: true, dano };
+      j.invocacion = { forma, vida, vidaMax: vida, efectos: [], efimera: true, dano, condena };
       await this.ui.fxMensaje(`👁️ ¡Invocas algo del más allá (${vida} de vida)!`);
     } else {
       j.invocacion.vida += vida;
       j.invocacion.vidaMax += vida;
       j.invocacion.dano = Math.max(j.invocacion.dano ?? 0, dano);
+      j.invocacion.condena = Math.max(j.invocacion.condena ?? 0, condena);
       await this.ui.fxMensaje(`👁️ La invocación crece (+${vida} de vida)`);
     }
     this.ui.render();
@@ -629,6 +631,12 @@ export class Combate {
       const e = vivos[Math.min(i, vivos.length - 1)]; // Aire reparte entre 2 si los hay
       await this.ui.fxInvocacionAtaca();
       await this.golpeInvocacion(e, base, fuego);
+      // Invocación del brujo: su golpe puede condenar al objetivo
+      const cond = inv.condena ?? 0;
+      if (cond > 0 && e.vivo) {
+        e.estados.condena = (e.estados.condena ?? 0) + cond;
+        await this.ui.fxEstado(e, 'condena', cond);
+      }
       if (arbol && e.vivo) {
         e.raicesInstancias = e.raicesInstancias ?? [];
         e.raicesInstancias.push({ cantidad: 2, turnos: 1 });
@@ -923,7 +931,7 @@ export class Combate {
   /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador. */
   private decrementarEstados(l: Luchador) {
     for (const k of [
-      'vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura',
+      'vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura', 'oscuridad',
       'cartasAgotan', 'cartasSobrecoste', 'cartasEtereas',
     ] as EstadoId[]) {
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;

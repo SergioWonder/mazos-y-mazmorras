@@ -12,11 +12,14 @@ import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
-  poolDeClase, cartaUnicaDeClase,
+  poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
-import type { ClaseId, EnemigoDef } from '../src/core/types.ts';
+import { ARTE_CARTA } from '../src/ui/carta.ts';
+import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
+
+const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
 
 let fallos = 0;
 function check(cond: boolean, msg: string) {
@@ -49,9 +52,74 @@ const uiSilenciosa: Presentador = {
   elegirCarta: async (cartas) => cartas[0] ?? null,
 };
 
-async function simular(clase: ClaseId, semilla: number, defs: EnemigoDef[]) {
+// ── Piloto heurístico ────────────────────────────────────────────────────────
+// La IA de la simulación no busca jugar perfecto: busca jugar *plausible*, para
+// que las tasas de victoria signifiquen algo. Puntúa cada carta de la mano según
+// el estado del combate y juega de mayor a menor puntuación mientras le quede
+// energía, reevaluando tras cada carta (el estado cambia).
+
+const sinTildes = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+/** Daño que el jugador va a comer este turno si no hace nada. */
+function danoEntrante(comb: Combate): number {
+  return comb.enemigos
+    .filter((e) => e.vivo)
+    .reduce((s, e) => s + comb.danoIntencion(e) * (e.intencion.veces ?? 1), 0);
+}
+
+/** Prioridad de una carta: más alto = jugarla antes. */
+function puntuarCarta(comb: Combate, inst: CartaInstancia, turno: number): number {
+  const def = defDe(inst);
+  const t = sinTildes((inst.mejorada && def.mejora?.texto) || def.texto);
+  const faltaBloqueo = Math.max(0, danoEntrante(comb) - comb.jugador.bloqueo);
+  const vidaEnemiga = comb.enemigos.filter((e) => e.vivo).reduce((s, e) => s + e.pv, 0);
+
+  let p: number;
+  if (def.tipo === 'poder') {
+    // los poderes escalan con los turnos que les queden: cuanto antes, mejor
+    p = 100 - turno * 6;
+    // salvo que el combate esté a punto de acabar: entonces no compensan
+    if (vidaEnemiga < 15) p = 10;
+  } else if (t.includes('bloqueo') && faltaBloqueo > 0) {
+    p = 72 + Math.min(18, faltaBloqueo); // defenderse cuando de verdad hace falta
+  } else if (def.tipo === 'ataque') {
+    p = 62;
+  } else {
+    p = 42; // utilidad (estados, control, robo)
+  }
+  if (def.coste === 0) p += 14;                       // valor gratis: encadena
+  if (t.includes('roba')) p += 7;                     // más opciones este turno
+  if (t.includes('gana') && t.includes('energia')) p += 20;
+  if (t.includes('invoca')) p += 8;
+  if (def.unUso) p -= 30;                             // no quemar cartas de 1 uso a la ligera
+  return p;
+}
+
+/** Objetivo preferente: el enemigo vivo con menos PV (rematar reduce el daño entrante). */
+function mejorObjetivo(comb: Combate): EnemigoCombate | undefined {
+  const vivos = comb.enemigos.filter((e) => e.vivo);
+  if (vivos.length === 0) return undefined;
+  return vivos.reduce((a, b) => (b.pv < a.pv ? b : a));
+}
+
+/** Progresión simulada: un jefe no se pelea con el mazo inicial, así que para
+ *  los encuentros tardíos se añaden recompensas y mejoras al mazo. */
+interface OpcionesSim { extra?: number; mejoras?: number }
+
+async function simular(
+  clase: ClaseId, semilla: number, defs: EnemigoDef[], op: OpcionesSim = {},
+) {
   const run = nuevaRun(clase, semilla);
   const rng = crearRng(semilla);
+  const pool = poolDeClase(clase);
+  for (let i = 0; i < (op.extra ?? 0); i++) {
+    run.mazo.push(instanciar(pool[Math.floor(rng() * pool.length)]));
+  }
+  for (let i = 0; i < (op.mejoras ?? 0); i++) {
+    const mejorables = run.mazo.filter((c) => !c.mejorada && defDe(c).mejora);
+    if (mejorables.length === 0) break;
+    mejorables[Math.floor(rng() * mejorables.length)].mejorada = true;
+  }
   const combate = new Combate(run, defs, rng, uiSilenciosa);
   await combate.iniciar();
 
@@ -60,10 +128,13 @@ async function simular(clase: ClaseId, semilla: number, defs: EnemigoDef[]) {
     turnos++;
     let jugadas = 0;
     while (jugadas < 15) {
-      const jugable = combate.jugador.mano.find((c) => combate.puedeJugar(c));
-      if (!jugable) break;
-      const objetivo = combate.enemigos.find((e) => e.vivo);
-      await combate.jugarCarta(jugable, objetivo);
+      const jugables = combate.jugador.mano.filter((c) => combate.puedeJugar(c));
+      if (jugables.length === 0) break;
+      // la mejor carta según la heurística, con el estado actual del combate
+      const elegida = jugables
+        .map((c) => ({ c, p: puntuarCarta(combate, c, turnos) }))
+        .reduce((a, b) => (b.p > a.p ? b : a)).c;
+      await combate.jugarCarta(elegida, mejorObjetivo(combate));
       jugadas++;
       if (combate.terminado) break;
     }
@@ -121,7 +192,7 @@ console.log('— Mapa —');
 console.log('— Recompensas y pools —');
 {
   const rng = crearRng(7);
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
+  for (const clase of CLASES) {
     for (let i = 0; i < 20; i++) {
       const r = recompensaCartas(clase, rng);
       if (new Set(r.map((c) => c.id)).size !== r.length)
@@ -135,7 +206,7 @@ console.log('— Recompensas y pools —');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 5, 'mago: 5 raras (3 escuelas + 2 de Creación de conjuros)');
   check(PICARO.filter((c) => c.rareza === 'rara').length === 7, 'pícaro: 7 raras (3 subclases + 4 remates)');
   check(BRUJO.filter((c) => c.rareza === 'rara').length === 7, 'brujo: 7 raras (4 subclases + 3 remates)');
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
+  for (const clase of CLASES) {
     const mazo = mazoInicial(clase);
     check(mazo.length === 11, `${clase}: mazo inicial de 11 cartas (5 golpe + 4 defender + 2 de clase)`);
   }
@@ -147,26 +218,102 @@ console.log('— Recompensas y pools —');
   );
 }
 
-console.log('— Combates simulados (los 6 escenarios, 3 clases) —');
+console.log('— Arte de las cartas —');
 {
-  for (const [capIdx, cap] of ACTOS.flat().entries()) {
-    let victorias = 0, total = 0;
-    for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
-      for (let s = 1; s <= 10; s++) {
-        const defs = cap.normales[s % cap.normales.length];
-        const { combate } = await simular(clase, s * 131 + capIdx, defs);
-        total++;
-        if (combate.terminado === null) check(false, `${clase} ${cap.nombre} s${s}: combate no termina`);
-        if (combate.terminado === 'victoria') victorias++;
+  const TODAS = [
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
+    ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA,
+  ];
+  const sinArte = TODAS.filter((c) => !ARTE_CARTA[c.id]);
+  check(sinArte.length === 0, `todas las cartas tienen emoji propio (faltan: ${sinArte.map((c) => c.id).join(', ')})`);
+  const huerfanos = Object.keys(ARTE_CARTA).filter((id) => !TODAS.some((c) => c.id === id));
+  check(huerfanos.length === 0, `no hay emojis de cartas que ya no existen (${huerfanos.join(', ')})`);
+  // Golpe y Defender están en todos los mazos, así que cuentan siempre
+  const comunes = TODAS.filter((c) => c.clase === 'neutral');
+  for (const clase of CLASES) {
+    const mazo = [...TODAS.filter((c) => c.clase === clase), ...comunes];
+    const porEmoji = new Map<string, string[]>();
+    for (const c of mazo) {
+      const e = ARTE_CARTA[c.id] ?? '✦';
+      porEmoji.set(e, [...(porEmoji.get(e) ?? []), c.id]);
+    }
+    const repes = [...porEmoji.entries()].filter(([, v]) => v.length > 1);
+    check(repes.length === 0,
+      `${clase}: ningún emoji repetido en un mismo mazo (${repes.map(([e, v]) => `${e}=${v.join('/')}`).join(', ')})`);
+  }
+}
+
+console.log('— Combates simulados: los 6 escenarios × 5 clases × 4 tipos de encuentro —');
+{
+  /** Los tres tipos de encuentro se comportan muy distinto: un enemigo solo
+   *  premia el daño concentrado, un grupo premia el área y el bloqueo, y un jefe
+   *  premia aguantar muchos turnos. Si una clase falla, suele fallar en uno. */
+  type Cap = typeof ACTOS[0][0];
+  const tipos = [
+    // mazo inicial: es lo que llevas en los primeros combates del acto
+    { nombre: 'singular', op: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length === 1) },
+    { nombre: 'grupo', op: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length > 1) },
+    // a un élite o a un jefe se llega con mazo hecho: recompensas y mejoras
+    { nombre: 'élite', op: { extra: 6, mejoras: 2 }, grupos: (c: Cap) => c.elites },
+    { nombre: 'jefe', op: { extra: 14, mejoras: 6 }, grupos: (c: Cap) => [c.jefe] },
+  ];
+
+  // Resumen por tipo (agregado de todos los escenarios y clases)
+  const porTipo: Record<string, { v: number; t: number; turnos: number }> = {};
+  const porClase: Record<string, { v: number; t: number }> = {};
+  const porTipoClase: Record<string, Record<string, { v: number; t: number }>> = {};
+
+  for (const tipo of tipos) {
+    for (const [capIdx, cap] of ACTOS.flat().entries()) {
+      const grupos = tipo.grupos(cap);
+      if (grupos.length === 0) continue;
+      for (const clase of CLASES) {
+        for (let s = 1; s <= 4; s++) {
+          const defs = grupos[s % grupos.length];
+          const { combate, turnos } = await simular(clase, s * 131 + capIdx * 17, defs, tipo.op);
+          if (combate.terminado === null) {
+            check(false, `${clase} · ${cap.nombre} · ${tipo.nombre} s${s}: el combate no termina`);
+          }
+          const r = (porTipo[tipo.nombre] ??= { v: 0, t: 0, turnos: 0 });
+          const c = (porClase[clase] ??= { v: 0, t: 0 });
+          const tc = ((porTipoClase[tipo.nombre] ??= {})[clase] ??= { v: 0, t: 0 });
+          r.t++; c.t++; tc.t++; r.turnos += turnos;
+          if (combate.terminado === 'victoria') { r.v++; c.v++; tc.v++; }
+        }
       }
     }
-    console.log(`  ✓ ${cap.nombre}: ${total} combates terminan · ${victorias}/${total} victorias con IA tonta`);
   }
-  // jefes
-  for (const [capIdx, cap] of ACTOS.flat().entries()) {
-    const { combate } = await simular('barbaro', 31337 + capIdx, cap.jefe);
-    check(combate.terminado !== null, `jefe de ${cap.nombre} termina (${combate.terminado})`);
+
+  console.log('  Por tipo de encuentro:');
+  for (const [nombre, r] of Object.entries(porTipo)) {
+    const pct = Math.round((r.v / r.t) * 100);
+    console.log(`    ${nombre.padEnd(9)} ${String(r.v).padStart(3)}/${r.t} victorias (${pct}%) · ${(r.turnos / r.t).toFixed(1)} turnos`);
   }
+  console.log('  Por clase y tipo (% de victorias):');
+  const cab = CLASES.map((c) => c.slice(0, 7).padStart(8)).join('');
+  console.log(`    ${'tipo'.padEnd(10)}${cab}`);
+  for (const [nombre, porC] of Object.entries(porTipoClase)) {
+    const fila = CLASES.map((c) => `${Math.round((porC[c].v / porC[c].t) * 100)}%`.padStart(8)).join('');
+    console.log(`    ${nombre.padEnd(10)}${fila}`);
+  }
+
+  // Guardarraíles. Lo que importa no es el número absoluto (depende del mazo y
+  // del piloto heurístico) sino que ninguna clase se descuelgue del resto en su
+  // mismo nivel de encuentro, y que los jefes sigan siendo un reto.
+  for (const nombre of ['singular', 'grupo'] as const) {
+    for (const [clase, c] of Object.entries(porTipoClase[nombre])) {
+      const pct = Math.round((c.v / c.t) * 100);
+      check(pct >= 70, `${clase} · ${nombre}: ≥70 % con mazo inicial (${pct} %)`);
+    }
+  }
+  for (const [nombre, porC] of Object.entries(porTipoClase)) {
+    const pcts = CLASES.map((c) => (porC[c].v / porC[c].t) * 100);
+    const brecha = Math.round(Math.max(...pcts) - Math.min(...pcts));
+    check(brecha <= 45, `${nombre}: la brecha entre la mejor y la peor clase es de ${brecha} puntos (máx. 45)`);
+  }
+  const jefes = porTipo['jefe'];
+  check(jefes.v / jefes.t <= 0.9, `los jefes no se ganan siempre (${jefes.v}/${jefes.t})`);
+  check(jefes.v > 0, `los jefes se pueden ganar con un mazo hecho (${jefes.v}/${jefes.t})`);
 }
 
 console.log('— Mecánica de Furia (se rompe sin recibir daño) —');
@@ -394,7 +541,7 @@ console.log('— Eventos —');
   let opcionesProbadas = 0;
   for (const ev of [...EVENTOS_POSITIVOS, ...EVENTOS_NEGATIVOS]) {
     for (const [i, op] of ev.opciones.entries()) {
-      for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
+      for (const clase of CLASES) {
         for (let s = 0; s < 5; s++) {
           const run = nuevaRun(clase, s * 17 + i);
           run.pv = 5; // al borde de la muerte: los eventos no deben matar
@@ -673,7 +820,7 @@ console.log('— Bendiciones de la Vidente —');
 
 console.log('— Cartas únicas de clase (Acto III) —');
 {
-  for (const clase of ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[]) {
+  for (const clase of CLASES) {
     const u = cartaUnicaDeClase(clase);
     check(u.rareza === 'especial' && u.clase === clase, `${clase}: carta única de rareza especial`);
     check(!poolDeClase(clase).includes(u), `${clase}: la única NO aparece en recompensas normales`);
@@ -1084,20 +1231,22 @@ console.log('— Brujo: mecánicas nuevas —');
       e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
     });
   };
-  /** Borra la Condena que deja puesta el Sello del Pacto (reliquia inicial),
+  /** Borra la Oscuridad que deja puesta el Sello del Pacto (reliquia inicial),
    *  para medir solo lo que aporta la carta bajo prueba. */
-  const sinCondena = (comb: Combate) => {
-    comb.enemigos.forEach((e) => { delete e.estados.condena; });
+  const sinOscuridad = (comb: Combate) => {
+    comb.enemigos.forEach((e) => { delete e.estados.oscuridad; });
   };
 
-  // Sello del Pacto: la reliquia inicial del brujo condena de entrada
+  // Sello del Pacto: la reliquia inicial del brujo oscurece de entrada
   {
     const run = nuevaRun('brujo', 5000);
     check(run.reliquias[0].id === 'sello-pacto', 'el brujo arranca con el Sello del Pacto');
     const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5000), uiSilenciosa);
     await comb.iniciar();
-    check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 4),
-      'Sello del Pacto: 4 de Condena a todos al empezar el combate');
+    check(comb.enemigos.every((e) => (e.estados.oscuridad ?? 0) === 2),
+      'Sello del Pacto: 2 de Oscuridad a todos al empezar el combate');
+    check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 0),
+      'y ya no reparte Condena (Diezmo de Sangre no está siempre activo)');
   }
 
   // Explosión Sobrenatural: vuelve a lo alto del mazo, no al descarte
@@ -1118,6 +1267,20 @@ console.log('— Brujo: mecánicas nuevas —');
     check(comb.jugador.descarte.length === descarteAntes, 'no va al descarte');
     check(comb.jugador.mazo[comb.jugador.mazo.length - 1].uid === exp.uid,
       'la Explosión vuelve a lo alto del mazo de robo');
+  }
+
+  // Si NO la juegas, se descarta como cualquier otra carta (no se queda arriba)
+  {
+    const run = nuevaRun('brujo', 5017);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5017), uiSilenciosa);
+    await comb.iniciar();
+    const exp = instanciar(carta('explosion-sobrenatural'));
+    comb.jugador.mano = [exp];
+    defender(comb);
+    await comb.terminarTurno();
+    check(comb.jugador.descarte.some((c) => c.uid === exp.uid),
+      'la Explosión que no juegas acaba en el descarte');
+    check(!comb.jugador.mazo.some((c) => c.uid === exp.uid), 'y no se queda en el mazo');
   }
 
   // El Rayo Áureo del Contemplador no se la lleva por delante
@@ -1180,12 +1343,13 @@ console.log('— Brujo: mecánicas nuevas —');
     a.pv = a.pvMax = 60; b.pv = b.pvMax = 60;
     comb.jugador.mano = [];
     comb.jugador.bloqueo = 0;
+    sinOscuridad(comb); // si no, la reliquia rebaja el golpe enemigo
     await carta('armadura-agathys').jugar(comb.contexto());
     check(comb.jugador.bloqueo === 8, 'Armadura de Agathys da 8 de bloqueo');
     check((comb.jugador.estados.agathys ?? 0) === 1, 'y arma el rebote este turno');
     // un solo golpe enemigo de 5: lo absorbe el bloqueo y rebota a los dos
     a.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 5 };
-    b.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    b.intencion = { nombre: 'Esperar', intencion: 'mejora' }; // sin bloqueo propio
     b.bloqueo = 0;
     await comb.terminarTurno();
     check(60 - a.pv === 5, 'el atacante recibe de vuelta los 5 que bloqueaste');
@@ -1200,7 +1364,6 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 20;
-    sinCondena(comb);
     await comb.contexto().aplicarEstado(e, 'condena', 19);
     check(!comb.condenaLetal(e), '19 de Condena sobre 20 PV todavía no es letal');
     defender(comb);
@@ -1221,7 +1384,6 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 40; e.bloqueo = 0;
-    sinCondena(comb);
     await comb.contexto().aplicarEstado(e, 'condena', 12);
     defender(comb);
     await comb.terminarTurno();
@@ -1236,7 +1398,6 @@ console.log('— Brujo: mecánicas nuevas —');
     const run = nuevaRun('brujo', 5007);
     const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5007), uiSilenciosa);
     await comb.iniciar();
-    sinCondena(comb);
     await carta('brazos-hadar').jugar(comb.contexto());
     check(comb.enemigos.every((e) => (e.estados.condena ?? 0) === 6), 'Brazos de Hadar: 6 de Condena a todos');
     check(comb.enemigos.every((e) => (e.estados.debil ?? 0) === 1), 'Brazos de Hadar: 1 de Débil a todos');
@@ -1248,6 +1409,7 @@ console.log('— Brujo: mecánicas nuevas —');
     const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5008), uiSilenciosa);
     await comb.iniciar();
     const e = comb.enemigos[0];
+    sinOscuridad(comb);
     e.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 10 };
     check(comb.danoIntencion(e) === 10, 'sin Oscuridad el ataque es de 10');
     await carta('oscuridad').jugar(comb.contexto());
@@ -1255,7 +1417,10 @@ console.log('— Brujo: mecánicas nuevas —');
     check(comb.danoIntencion(e) === 8, 'la Oscuridad le resta 2 al ataque');
     defender(comb);
     await comb.terminarTurno();
-    check((e.estados.oscuridad ?? 0) === 2, 'la Oscuridad no decae con el tiempo');
+    check((e.estados.oscuridad ?? 0) === 1, 'la Oscuridad baja 1 por turno');
+    defender(comb);
+    await comb.terminarTurno();
+    check((e.estados.oscuridad ?? 0) === 0, 'y se agota al segundo turno');
   }
 
   // Invocación efímera: absorbe daño, golpea si sobrevive y se desvanece
@@ -1266,13 +1431,15 @@ console.log('— Brujo: mecánicas nuevas —');
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 60; e.bloqueo = 0;
     await carta('invocacion-sobrenatural').jugar(comb.contexto());
-    check(comb.jugador.invocacion?.vida === 22, 'Invocación Sobrenatural: 22 de vida');
+    check(comb.jugador.invocacion?.vida === 12, 'Invocación Sobrenatural: 12 de vida');
     check(comb.jugador.invocacion?.efimera === true, 'es efímera');
+    check(comb.jugador.invocacion?.condena === 6, 'y su golpe aplica 6 de Condena');
     e.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
     const pvAntes = comb.jugador.pv;
     await comb.terminarTurno();
     check(comb.jugador.pv === pvAntes, 'la invocación absorbe el golpe: el brujo no pierde PV');
-    check(60 - e.pv === 16, 'sobrevive y golpea por 16');
+    check(60 - e.pv === 9, 'sobrevive y golpea por 9');
+    check((e.estados.condena ?? 0) === 6, 'su golpe deja 6 de Condena');
     check(comb.jugador.invocacion === undefined, 'y se desvanece al acabar la ronda');
   }
 
@@ -1283,7 +1450,7 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 60; e.bloqueo = 0;
-    await carta('sabueso-sombra').jugar(comb.contexto()); // 12 de vida
+    await carta('sabueso-sombra').jugar(comb.contexto()); // 7 de vida
     e.intencion = { nombre: 'Mazazo', intencion: 'ataque', dano: 40 };
     await comb.terminarTurno();
     check(comb.jugador.invocacion === undefined, 'la invocación muere al recibir 40');
@@ -1297,10 +1464,12 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 60; e.bloqueo = 0;
-    await carta('sabueso-sombra').jugar(comb.contexto()); // 12 de vida
+    await carta('sabueso-sombra').jugar(comb.contexto()); // 7 de vida
+    const energiaAntes = comb.jugador.energia;
     await carta('sacrificio-familiar').jugar(comb.contexto(e));
-    check(60 - e.pv === 12, 'Sacrificio del Familiar inflige los 12 de vida que quedaban');
+    check(60 - e.pv === 7, 'Sacrificio del Familiar inflige los 7 de vida que quedaban');
     check(comb.jugador.invocacion === undefined, 'la invocación desaparece');
+    check(comb.jugador.energia === energiaAntes + 1, 'y devuelve 1 de energía');
   }
 
   // Mente del Gran Antiguo: cada ataque condena
@@ -1310,14 +1479,13 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 90; e.bloqueo = 0;
-    sinCondena(comb);
     await carta('gran-antiguo').jugar(comb.contexto());
     await comb.contexto().atacar(e, 5);
     check((e.estados.condena ?? 0) === 2, 'Gran Antiguo: el ataque aplica 2 de Condena');
     await comb.contexto().atacar(e, 5, 3);
     check((e.estados.condena ?? 0) === 4, 'un ataque múltiple condena una sola vez');
     // en área también condena, y a todos (Explosión Trifurcada + Gran Antiguo)
-    sinCondena(comb);
+    delete e.estados.condena;
     comb.jugador.estados.explosionArea = 1;
     await carta('explosion-sobrenatural').jugar(comb.contexto(e));
     check((e.estados.condena ?? 0) === 2, 'la Explosión en área también aplica Condena');
@@ -1344,7 +1512,6 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     await cartaUnicaDeClase('brujo').jugar(comb.contexto());
     comb.jugador.bloqueo = 13;
-    sinCondena(comb);
     comb.enemigos.forEach((e) => { e.pv = e.pvMax = 80; });
     defender(comb);
     await comb.terminarTurno();
@@ -1358,16 +1525,34 @@ console.log('— Brujo: mecánicas nuevas —');
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5015), uiSilenciosa);
     await comb.iniciar();
     const e = comb.enemigos[0];
+    check(carta('archifata').coste === 2, 'Presencia Feérica cuesta 2');
+    check(carta('celestial').coste === 3, 'Bendición Celestial cuesta 3');
+    sinOscuridad(comb);
+    comb.jugador.pv = comb.jugador.pvMax - 20;
     await carta('archifata').jugar(comb.contexto());
     await carta('celestial').jugar(comb.contexto());
     check((e.estados.oscuridad ?? 0) === 0, 'Presencia Feérica no actúa el turno que la juegas');
-    check(comb.jugador.bloqueo === 0, 'Bendición Celestial tampoco');
-    comb.jugador.pv = comb.jugador.pvMax - 10;
+    check(comb.jugador.bloqueo === 0, 'el bloqueo de Bendición Celestial tampoco');
+    check(comb.jugador.pv === comb.jugador.pvMax - 8, 'Bendición Celestial sí cura 12 PV al jugarla');
     defender(comb);
     await comb.terminarTurno();
     check((e.estados.oscuridad ?? 0) === 2, 'Presencia Feérica: 2 de Oscuridad al inicio del turno');
-    check(comb.jugador.bloqueo === 5, 'Bendición Celestial: 5 de bloqueo al inicio del turno');
-    check(comb.jugador.pv === comb.jugador.pvMax - 6, 'Bendición Celestial: cura 4 PV');
+    check(comb.jugador.bloqueo === 6, 'Bendición Celestial: 6 de bloqueo al inicio del turno');
+    check(comb.jugador.pv === comb.jugador.pvMax - 8, 'y ya no cura cada turno (nada de rellenar vida)');
+  }
+
+  // Marchitar: pega y aplica Vulnerable (antes curaba)
+  {
+    const run = nuevaRun('brujo', 5018);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5018), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.pv = e.pvMax = 90; e.bloqueo = 0;
+    comb.jugador.pv = comb.jugador.pvMax - 20;
+    await carta('marchitar').jugar(comb.contexto(e));
+    check(90 - e.pv === 12, 'Marchitar inflige 12 de daño');
+    check((e.estados.vulnerable ?? 0) === 2, 'y aplica 2 de Vulnerable');
+    check(comb.jugador.pv === comb.jugador.pvMax - 20, 'ya no cura al brujo');
   }
 
   // Palabra de Ruina y Verbo de Aniquilación
@@ -1377,7 +1562,6 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 50;
-    sinCondena(comb);
     await comb.contexto().aplicarEstado(e, 'condena', 9);
     await carta('palabra-ruina').jugar(comb.contexto(e));
     check((e.estados.condena ?? 0) === 18, 'Palabra de Ruina duplica la Condena (9 → 18)');
