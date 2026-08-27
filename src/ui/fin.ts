@@ -1,7 +1,25 @@
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 
-export function pantallaFin(victoria: boolean, clase: string): Promise<void> {
+/** Cierre de campaña por escenario final: el Acto III tiene dos jefes posibles. */
+const EPILOGO: Record<string, string> = {
+  ignifax:
+    `Ignifax se desploma y la montaña entera tiembla con su último rugido. El oro de su
+     tesoro ya no calienta a nadie. Arriba, el asentamiento es ceniza, los muertos
+     descansan… y el valle, por fin, vuelve a respirar. Los bardos tienen canción para
+     décadas.`,
+  contemplador:
+    `El último ojo del Contemplador se apaga y sus rayos de colores se deshacen en el aire.
+     El laberinto deja de retorcerse y las paredes vuelven a ser piedra y nada más. Arriba,
+     el asentamiento es ceniza, los muertos descansan… y el valle, por fin, vuelve a
+     respirar. Los bardos tienen canción para décadas.`,
+};
+
+export function pantallaFin(
+  victoria: boolean,
+  clase: string,
+  jefeFinal = 'ignifax',
+): Promise<void> {
   return new Promise((resolver) => {
     const app = document.getElementById('app')!;
     app.innerHTML = '';
@@ -15,10 +33,7 @@ export function pantallaFin(victoria: boolean, clase: string): Promise<void> {
     raiz.innerHTML = victoria
       ? `
         <h1 class="fin-titulo">🏆 ¡VICTORIA!</h1>
-        <p class="fin-texto">Ignifax se desploma y la montaña entera tiembla con su último
-        rugido. El oro de su tesoro ya no calienta a nadie. Arriba, el asentamiento es ceniza,
-        los muertos descansan… y el valle, por fin, vuelve a respirar. Los bardos tienen
-        canción para décadas.</p>
+        <p class="fin-texto">${EPILOGO[jefeFinal] ?? EPILOGO.ignifax}</p>
         <p class="fin-sub">Campaña completada con el ${nombreClase}</p>
         <button class="btn-tomar">Volver al título <span class="atajo">[Enter]</span></button>`
       : `

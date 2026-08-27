@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.2.0';
+export const VERSION = '3.2.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.2.1',
+    fecha: '2026-08-27',
+    cambios: [
+      '📜 Corregido: el texto de victoria hablaba siempre de Ignifax aunque hubieras derrotado al Contemplador. Ahora cada jefe final tiene su propio epílogo.',
+      '🤝 Nuevo Don del Patrón: tu Explosión Sobrenatural pasa a costar 0 (sustituye a Repulsión Sobrenatural, que pegaba y blindaba demasiado por 1 de energía).',
+      '📣 Nueva Llamada del Vacío (coste 0): pone la Explosión Sobrenatural en tu mano, esté en el mazo, en el descarte o incluso agotada, y este turno inflige 3 más.',
+      '🧚 Presencia Feérica se limita a 2 de Oscuridad por turno: ahora cuesta 3 y su mejora la abarata a 2 en vez de subir la cantidad.',
+    ],
+  },
   {
     version: '3.2.0',
     fecha: '2026-08-27',

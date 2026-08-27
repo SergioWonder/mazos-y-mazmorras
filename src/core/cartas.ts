@@ -3197,24 +3197,45 @@ export const BRUJO: CartaDef[] = [
     },
   },
   {
-    id: 'repulsion-sobrenatural',
-    nombre: 'Repulsión Sobrenatural',
+    id: 'don-del-patron',
+    nombre: 'Don del Patrón',
     clase: 'brujo',
-    tipo: 'ataque',
+    tipo: 'poder',
     rareza: 'infrecuente',
     coste: 1,
-    objetivo: 'enemigo',
-    fx: 'impacto',
-    texto: 'Inflige 10 de daño.\nGana 6 de bloqueo.',
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 10, 1, 'impacto');
-      await c.ganarBloqueo(6);
+      await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
     },
     mejora: {
-      texto: 'Inflige 13 de daño.\nGana 8 de bloqueo.',
+      coste: 0,
+      texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 13, 1, 'impacto');
-        await c.ganarBloqueo(8);
+        await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
+      },
+    },
+  },
+  {
+    id: 'llamada-vacio',
+    nombre: 'Llamada del Vacío',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 3 más.',
+    jugar: async (c) => {
+      await c.traerALaMano('explosion-sobrenatural');
+      await c.aplicarEstado(c.jugador, 'explosionTurno', 3);
+    },
+    mejora: {
+      texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 6 más.',
+      jugar: async (c) => {
+        await c.traerALaMano('explosion-sobrenatural');
+        await c.aplicarEstado(c.jugador, 'explosionTurno', 6);
       },
     },
   },
@@ -3269,7 +3290,7 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 2,
+    coste: 3,
     objetivo: 'ninguno',
     subclase: 'Archifata',
     fx: 'luna',
@@ -3279,9 +3300,10 @@ export const BRUJO: CartaDef[] = [
       await c.aplicarEstado(c.jugador, 'oscuridadPorTurno', 2);
     },
     mejora: {
-      texto: 'Poder: al inicio de cada turno aplicas\n3 de Oscuridad a todos los enemigos.',
+      coste: 2,
+      texto: 'Poder: al inicio de cada turno aplicas\n2 de Oscuridad a todos los enemigos.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'oscuridadPorTurno', 3);
+        await c.aplicarEstado(c.jugador, 'oscuridadPorTurno', 2);
       },
     },
   },

@@ -45,6 +45,7 @@ export type EstadoId =
   | 'explosionTurno' // (jugador) tu Explosión Sobrenatural inflige +N de daño SOLO este turno
   | 'explosionVeces' // (jugador) tu Explosión Sobrenatural golpea N veces más
   | 'explosionArea'  // (jugador) tu Explosión Sobrenatural golpea a todos los enemigos
+  | 'explosionGratis'// (jugador) tu Explosión Sobrenatural cuesta 0
   | 'condenaPorAtaque'// (brujo/Gran Antiguo) tus ataques aplican esta Condena al objetivo
   | 'oscuridadPorTurno'// (brujo/Archifata) al inicio de cada turno aplicas esta Oscuridad a todos
   | 'bloqueoPorTurno'// (brujo/Celestial) ganas este bloqueo al inicio de cada turno
@@ -332,6 +333,9 @@ export interface ContextoEfecto {
   descartadasEsteTurno(): number;
   /** Añade N Dagas a la mano (pícaro): ataques de 0 de coste que se agotan. */
   crearDagas(n: number): Promise<void>;
+  /** Busca una carta por id en el mazo, el descarte o las agotadas y la pone en
+   *  tu mano. Si ya estaba en la mano (o no hay hueco) no hace nada. */
+  traerALaMano(id: string): Promise<boolean>;
   /** Activa ahora el Veneno de todos los enemigos vivos: cada uno pierde PV
    *  igual a su Veneno (ignora el bloqueo) y su Veneno baja 1. */
   detonarVenenos(): Promise<void>;

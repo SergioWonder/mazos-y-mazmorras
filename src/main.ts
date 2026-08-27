@@ -127,7 +127,9 @@ async function juego() {
     }
 
     borrarGuardado(); // la run terminó: muerte o victoria
-    await pantallaFin(campanaCompleta, run.clase);
+    // el epílogo depende del jefe del escenario final que te haya tocado
+    const actoFinal = ACTOS[ACTOS.length - 1][run.escenario];
+    await pantallaFin(campanaCompleta, run.clase, actoFinal.jefe[0].id);
   }
 }
 

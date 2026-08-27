@@ -101,9 +101,13 @@ export class Combate {
     return Math.max(0, b);
   }
 
-  /** Coste real de una carta este turno (el Rayo Carmesí del Contemplador lo encarece). */
+  /** Coste real de una carta este turno: el Don del Patrón deja la Explosión
+   *  Sobrenatural a 0 y el Rayo Carmesí del Contemplador encarece todo. */
   costeEfectivo(def: CartaDef): number {
-    return def.coste + ((this.jugador.estados.cartasSobrecoste ?? 0) > 0 ? 1 : 0);
+    const gratis =
+      def.id === 'explosion-sobrenatural' && (this.jugador.estados.explosionGratis ?? 0) > 0;
+    const base = gratis ? 0 : def.coste;
+    return base + ((this.jugador.estados.cartasSobrecoste ?? 0) > 0 ? 1 : 0);
   }
 
   /** Daño que hará la intención actual de un enemigo (para mostrar y para Raíces). */
@@ -399,6 +403,28 @@ export class Combate {
       },
       descartadasEsteTurno: () => self.descartadasEsteTurno,
       crearDagas: (n) => self.crearDagas(n),
+      async traerALaMano(id) {
+        const j = self.jugador;
+        if (j.mano.some((c) => c.def.id === id)) {
+          await self.ui.fxMensaje('Ya la tienes en la mano');
+          return false;
+        }
+        if (j.mano.length >= 10) {
+          await self.ui.fxMensaje('La mano está llena…');
+          return false;
+        }
+        for (const pila of [j.mazo, j.descarte, j.agotadas]) {
+          const i = pila.findIndex((c) => c.def.id === id);
+          if (i < 0) continue;
+          const [carta] = pila.splice(i, 1);
+          j.mano.push(carta);
+          await self.ui.fxMensaje(`✋ ${defDe(carta).nombre} a tu mano`);
+          self.ui.render();
+          return true;
+        }
+        await self.ui.fxMensaje('No queda ninguna en tu mazo…');
+        return false;
+      },
       async detonarVenenos() {
         const envenenados = self.enemigos.filter((e) => e.vivo && (e.estados.veneno ?? 0) > 0);
         if (envenenados.length === 0) {

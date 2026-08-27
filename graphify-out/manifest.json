@@ -1,22 +1,22 @@
 {
   "/Users/sergio/WonderBits/videogame/package.json": {
-    "mtime": 1787817103.5317519,
-    "ast_hash": "99796e88ef7dff7242dac7b42710012f",
+    "mtime": 1787820627.5386417,
+    "ast_hash": "ac9439f26ce6321ccecb3429a5652bc7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/scripts/smoke-test.ts": {
-    "mtime": 1787817032.1713479,
-    "ast_hash": "c01420d4252e831bcbfc1bf4b33649c6",
+    "mtime": 1787820562.3310907,
+    "ast_hash": "97c4ce7f3696023ffcadd7ca7e5d5d92",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/cartas.ts": {
-    "mtime": 1787817076.1317708,
-    "ast_hash": "341d1fa24e0c47ed88775dc95fdc6616",
+    "mtime": 1787820529.7154648,
+    "ast_hash": "b21466523b976bce68f531c04e745d18",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/combate.ts": {
-    "mtime": 1787817032.1880336,
-    "ast_hash": "70cd4d8d3aca2f16219a75034095018a",
+    "mtime": 1787820529.7329907,
+    "ast_hash": "794a37e12d7fd1a2b9138a57b69273a1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/conjuros.ts": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/core/types.ts": {
-    "mtime": 1787816893.2558908,
-    "ast_hash": "adb14c7298e5860bab38c583561129bb",
+    "mtime": 1787820529.73254,
+    "ast_hash": "a928bdd0d1afd09a451f680787c140b6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/fx/audio.ts": {
@@ -80,9 +80,9 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/main.ts": {
-    "mtime": 1782562772.73104,
-    "ast_hash": "da0b6e17c269cfee300e6c7f995c8c26",
-    "semantic_hash": "da0b6e17c269cfee300e6c7f995c8c26"
+    "mtime": 1787820484.874053,
+    "ast_hash": "2478a59f84019a6a49d1a1b7db7dbb14",
+    "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/actualizacion.ts": {
     "mtime": 1782373042.3250837,
@@ -100,8 +100,8 @@
     "semantic_hash": "e383addf197eea0cbb72bbe3ffb7fdf7"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/carta.ts": {
-    "mtime": 1787816592.976501,
-    "ast_hash": "1a1aeb9a6c8d5cf4587fed7a9e6f78fe",
+    "mtime": 1787820529.7337613,
+    "ast_hash": "730efafc5e81819e195793f0f888aeda",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/combate.ts": {
@@ -120,8 +120,8 @@
     "semantic_hash": "e720a0e308b28e7791c807200083b3b3"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/fin.ts": {
-    "mtime": 1787779090.9780984,
-    "ast_hash": "ae25cda675ea4c65fdd4131455fb2076",
+    "mtime": 1787820484.8737617,
+    "ast_hash": "738d74f401cb5c0c2c5c9248e76a61ff",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/instalar.ts": {
@@ -145,18 +145,18 @@
     "semantic_hash": "74d112cbde1452dbaee5567437324938"
   },
   "/Users/sergio/WonderBits/videogame/src/ui/titulo.ts": {
-    "mtime": 1787779133.5536757,
-    "ast_hash": "c19818bf6da52f4b2a72a69aa178b1dd",
+    "mtime": 1787820607.273632,
+    "ast_hash": "ba79364cde7d9d04e1c6206299e62fa7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/ui/util.ts": {
-    "mtime": 1787816893.256667,
-    "ast_hash": "f48110d3119dbd8c14ef0dd57d389cf6",
+    "mtime": 1787820529.7332935,
+    "ast_hash": "ea831a0ecc5cff6bf8d6543d21c72ee6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/version.ts": {
-    "mtime": 1787817103.5230608,
-    "ast_hash": "174e3598d2570203c0bf77bb804a2e51",
+    "mtime": 1787820627.532069,
+    "ast_hash": "d18a7e5419798bac17f31182d2f2ad57",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/src/vite-env.d.ts": {
@@ -190,8 +190,8 @@
     "semantic_hash": "f43ad2869c454ef74d5cd6b5974c5105"
   },
   "/Users/sergio/WonderBits/videogame/README.md": {
-    "mtime": 1787817103.5227432,
-    "ast_hash": "4584eea9455c4a5a906815cba842d001",
+    "mtime": 1787820627.5315545,
+    "ast_hash": "0ebc52d11472db5b24f01c7192b90905",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/videogame/index.html": {

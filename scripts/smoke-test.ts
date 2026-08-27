@@ -1549,7 +1549,8 @@ console.log('— Brujo: mecánicas nuevas —');
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5015), uiSilenciosa);
     await comb.iniciar();
     const e = comb.enemigos[0];
-    check(carta('archifata').coste === 2, 'Presencia Feérica cuesta 2');
+    check(carta('archifata').coste === 3, 'Presencia Feérica cuesta 3');
+    check(carta('archifata').mejora!.coste === 2, 'y su mejora la abarata a 2 (la Oscuridad sigue en 2)');
     check(carta('celestial').coste === 3, 'Bendición Celestial cuesta 3');
     sinOscuridad(comb);
     comb.jugador.pv = comb.jugador.pvMax - 20;
@@ -1563,6 +1564,56 @@ console.log('— Brujo: mecánicas nuevas —');
     check((e.estados.oscuridad ?? 0) === 2, 'Presencia Feérica: 2 de Oscuridad al inicio del turno');
     check(comb.jugador.bloqueo === 6, 'Bendición Celestial: 6 de bloqueo al inicio del turno');
     check(comb.jugador.pv === comb.jugador.pvMax - 8, 'y ya no cura cada turno (nada de rellenar vida)');
+  }
+
+
+  // Don del Patrón: la Explosión pasa a costar 0
+  {
+    const run = nuevaRun('brujo', 5019);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5019), uiSilenciosa);
+    await comb.iniciar();
+    const exp = instanciar(carta('explosion-sobrenatural'));
+    check(comb.costeEfectivo(exp.def) === 1, 'la Explosión cuesta 1 de partida');
+    await carta('don-del-patron').jugar(comb.contexto());
+    check(comb.costeEfectivo(exp.def) === 0, 'Don del Patrón: la Explosión cuesta 0');
+    check(comb.costeEfectivo(carta('sacudida-abisal')) === 1, 'y no abarata otras cartas');
+    // el Rayo Carmesí del Contemplador sigue encareciendo por encima
+    comb.jugador.estados.cartasSobrecoste = 1;
+    check(comb.costeEfectivo(exp.def) === 1, 'con Sobrecarga vuelve a costar 1');
+    delete comb.jugador.estados.cartasSobrecoste;
+    // y se puede lanzar sin gastar energía
+    comb.jugador.mano = [exp];
+    comb.jugador.energia = 0;
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
+    await comb.jugarCarta(exp, e);
+    check(60 - e.pv === 6, 'se lanza con 0 de energía');
+  }
+
+  // Llamada del Vacío: recupera la Explosión de donde esté
+  {
+    const run = nuevaRun('brujo', 5020);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5020), uiSilenciosa);
+    await comb.iniciar();
+    const enMano = comb.jugador.mano.filter((c) => c.def.id === 'explosion-sobrenatural');
+    // la dejamos en el descarte para comprobar que la rescata
+    comb.jugador.mano = comb.jugador.mano.filter((c) => c.def.id !== 'explosion-sobrenatural');
+    const exp = enMano[0]
+      ?? comb.jugador.mazo.find((c) => c.def.id === 'explosion-sobrenatural')!;
+    comb.jugador.mazo = comb.jugador.mazo.filter((c) => c.uid !== exp.uid);
+    comb.jugador.descarte.push(exp);
+    await carta('llamada-vacio').jugar(comb.contexto());
+    check(comb.jugador.mano.some((c) => c.uid === exp.uid),
+      'Llamada del Vacío trae la Explosión del descarte a la mano');
+    check((comb.jugador.estados.explosionTurno ?? 0) === 3, 'y le da +3 de daño este turno');
+    // si ya está en la mano no la duplica
+    await carta('llamada-vacio').jugar(comb.contexto());
+    check(comb.jugador.mano.filter((c) => c.def.id === 'explosion-sobrenatural').length === 1,
+      'si ya la tienes en la mano no crea una copia');
+    // también la rescata de las agotadas (Rayo Espectral del Contemplador)
+    comb.jugador.mano = comb.jugador.mano.filter((c) => c.uid !== exp.uid);
+    comb.jugador.agotadas.push(exp);
+    await carta('llamada-vacio').jugar(comb.contexto());
+    check(comb.jugador.mano.some((c) => c.uid === exp.uid), 'y también de las agotadas');
   }
 
   // Marchitar: pega y aplica Vulnerable (antes curaba)

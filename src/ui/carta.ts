@@ -254,7 +254,7 @@ export const ARTE_CARTA: Record<string, string> = {
   'invocacion-sobrenatural': '👹', 'blindaje-infernal': '🧱',
   'cosecha-almas': '🌾', 'palabra-ruina': '📢', 'velo-tinieblas': '🕸️',
   'sacrificio-familiar': '🕯️', 'pacto-sangriento': '📜',
-  'verbo-agonizante': '😖', 'repulsion-sobrenatural': '💫',
+  'verbo-agonizante': '😖', 'don-del-patron': '🤝', 'llamada-vacio': '📣',
   'cadenas-carceri': '⛓️', marchitar: '🥀', archifata: '🧚',
   celestial: '😇', infernal: '😈', 'gran-antiguo': '👁️',
   'explosion-trifurcada': '🔱', 'haz-desdoblado': '🔀',

@@ -89,8 +89,9 @@ descuelga de las demás en su mismo nivel.
     de tu mazo** en vez de al descarte, así que la lanzas casi todos los turnos (aguanta
     incluso el Rayo Áureo del Contemplador). Hace daño y nada más… hasta que la engordas:
     poderes permanentes (Verbo Agonizante → +daño, Haz Desdoblado → un golpe más,
-    Explosión Trifurcada → golpea a todos) y cartas que la mejoran **solo ese turno**
-    (Canalizar el Pacto, Pacto Sangriento).
+    Explosión Trifurcada → golpea a todos), el **Don del Patrón** la deja a coste 0, la
+    **Llamada del Vacío** la rescata a tu mano desde donde esté (mazo, descarte o agotadas)
+    y varias cartas la mejoran **solo ese turno** (Canalizar el Pacto, Pacto Sangriento).
   - **Condena**: puntos que se acumulan sobre el enemigo y **no decaen**. Al final de su
     turno, si su Condena iguala o supera sus PV **actuales**, muere — así que vale tanto
     subir la Condena como bajarle la vida. Brazos de Hadar la reparte con Débil a todos,
