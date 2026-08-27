@@ -374,7 +374,7 @@
       "label": "BARBARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L718",
+      "source_location": "L725",
       "id": "core_cartas_barbaro",
       "community": 10,
       "norm_label": "barbaro"
@@ -383,7 +383,7 @@
       "label": "CONJURO_PRODIGIOSO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1325",
+      "source_location": "L1332",
       "id": "core_cartas_conjuro_prodigioso",
       "community": 10,
       "norm_label": "conjuro_prodigioso"
@@ -392,7 +392,7 @@
       "label": "DAGA",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1360",
+      "source_location": "L1367",
       "id": "core_cartas_daga",
       "community": 10,
       "norm_label": "daga"
@@ -401,7 +401,7 @@
       "label": "MAGO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1380",
+      "source_location": "L1387",
       "id": "core_cartas_mago",
       "community": 10,
       "norm_label": "mago"
@@ -410,7 +410,7 @@
       "label": "PICARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2023",
+      "source_location": "L2030",
       "id": "core_cartas_picaro",
       "community": 10,
       "norm_label": "picaro"
@@ -419,7 +419,7 @@
       "label": "danoExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2739",
+      "source_location": "L2746",
       "id": "core_cartas_danoexplosion",
       "community": 10,
       "norm_label": "danoexplosion()"
@@ -428,7 +428,7 @@
       "label": "lanzarExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2746",
+      "source_location": "L2753",
       "id": "core_cartas_lanzarexplosion",
       "community": 10,
       "norm_label": "lanzarexplosion()"
@@ -437,7 +437,7 @@
       "label": "BRUJO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2760",
+      "source_location": "L2767",
       "id": "core_cartas_brujo",
       "community": 10,
       "norm_label": "brujo"
@@ -446,7 +446,7 @@
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3471",
+      "source_location": "L3478",
       "id": "core_cartas_resolverseducir",
       "community": 10,
       "norm_label": "resolverseducir()"
@@ -455,7 +455,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3502",
+      "source_location": "L3509",
       "id": "core_cartas_resolverdeseo",
       "community": 10,
       "norm_label": "resolverdeseo()"
@@ -464,7 +464,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3539",
+      "source_location": "L3546",
       "id": "core_cartas_neutrales_especiales",
       "community": 10,
       "norm_label": "neutrales_especiales"
@@ -473,7 +473,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3589",
+      "source_location": "L3596",
       "id": "core_cartas_iniciales_de_clase",
       "community": 10,
       "norm_label": "iniciales_de_clase"
@@ -482,7 +482,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3603",
+      "source_location": "L3610",
       "id": "core_cartas_pools",
       "community": 10,
       "norm_label": "pools"
@@ -491,7 +491,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3607",
+      "source_location": "L3614",
       "id": "core_cartas_mazoinicial",
       "community": 10,
       "norm_label": "mazoinicial()"
@@ -500,7 +500,7 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3618",
+      "source_location": "L3625",
       "id": "core_cartas_pooldeclase",
       "community": 1,
       "norm_label": "pooldeclase()"
@@ -509,7 +509,7 @@
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3625",
+      "source_location": "L3632",
       "id": "core_cartas_cartaunicadeclase",
       "community": 1,
       "norm_label": "cartaunicadeclase()"
@@ -518,7 +518,7 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3630",
+      "source_location": "L3637",
       "id": "core_cartas_cartaporid",
       "community": 1,
       "norm_label": "cartaporid()"
@@ -527,7 +527,7 @@
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3640",
+      "source_location": "L3647",
       "id": "core_cartas_recompensacartas",
       "community": 1,
       "norm_label": "recompensacartas()"
@@ -680,7 +680,7 @@
       "label": ".infligir()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L489",
+      "source_location": "L491",
       "id": "core_combate_combate_infligir",
       "community": 2,
       "norm_label": ".infligir()"
@@ -689,7 +689,7 @@
       "label": ".rebotarAgathys()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L566",
+      "source_location": "L568",
       "id": "core_combate_combate_rebotaragathys",
       "community": 2,
       "norm_label": ".rebotaragathys()"
@@ -698,7 +698,7 @@
       "label": ".comprobarFin()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L580",
+      "source_location": "L582",
       "id": "core_combate_combate_comprobarfin",
       "community": 2,
       "norm_label": ".comprobarfin()"
@@ -707,7 +707,7 @@
       "label": ".escribirConjuro()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L588",
+      "source_location": "L590",
       "id": "core_combate_combate_escribirconjuro",
       "community": 2,
       "norm_label": ".escribirconjuro()"
@@ -716,7 +716,7 @@
       "label": ".invocar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L609",
+      "source_location": "L611",
       "id": "core_combate_combate_invocar",
       "community": 14,
       "norm_label": ".invocar()"
@@ -725,7 +725,7 @@
       "label": ".invocarEfimero()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L630",
+      "source_location": "L632",
       "id": "core_combate_combate_invocarefimero",
       "community": 14,
       "norm_label": ".invocarefimero()"
@@ -734,7 +734,7 @@
       "label": ".resolverInvocacionEfimera()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L646",
+      "source_location": "L648",
       "id": "core_combate_combate_resolverinvocacionefimera",
       "community": 2,
       "norm_label": ".resolverinvocacionefimera()"
@@ -743,7 +743,7 @@
       "label": ".atacarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L658",
+      "source_location": "L660",
       "id": "core_combate_combate_atacarinvocacion",
       "community": 2,
       "norm_label": ".atacarinvocacion()"
@@ -752,7 +752,7 @@
       "label": ".curarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L687",
+      "source_location": "L689",
       "id": "core_combate_combate_curarinvocacion",
       "community": 2,
       "norm_label": ".curarinvocacion()"
@@ -761,7 +761,7 @@
       "label": ".golpeInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L700",
+      "source_location": "L702",
       "id": "core_combate_combate_golpeinvocacion",
       "community": 2,
       "norm_label": ".golpeinvocacion()"
@@ -770,7 +770,7 @@
       "label": ".robarCartas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L711",
+      "source_location": "L713",
       "id": "core_combate_combate_robarcartas",
       "community": 2,
       "norm_label": ".robarcartas()"
@@ -779,7 +779,7 @@
       "label": ".descartarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L724",
+      "source_location": "L726",
       "id": "core_combate_combate_descartarcarta",
       "community": 2,
       "norm_label": ".descartarcarta()"
@@ -788,7 +788,7 @@
       "label": ".crearDagas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L741",
+      "source_location": "L743",
       "id": "core_combate_combate_creardagas",
       "community": 2,
       "norm_label": ".creardagas()"
@@ -797,7 +797,7 @@
       "label": ".actualizarIndicadorAcrobacias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L753",
+      "source_location": "L755",
       "id": "core_combate_combate_actualizarindicadoracrobacias",
       "community": 2,
       "norm_label": ".actualizarindicadoracrobacias()"
@@ -806,7 +806,7 @@
       "label": ".iniciar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L759",
+      "source_location": "L761",
       "id": "core_combate_combate_iniciar",
       "community": 2,
       "norm_label": ".iniciar()"
@@ -815,7 +815,7 @@
       "label": ".cartasPorTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L777",
+      "source_location": "L779",
       "id": "core_combate_combate_cartasporturno",
       "community": 2,
       "norm_label": ".cartasporturno()"
@@ -824,7 +824,7 @@
       "label": ".inicioTurnoJugador()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L785",
+      "source_location": "L787",
       "id": "core_combate_combate_inicioturnojugador",
       "community": 2,
       "norm_label": ".inicioturnojugador()"
@@ -833,7 +833,7 @@
       "label": ".puedeJugar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L906",
+      "source_location": "L919",
       "id": "core_combate_combate_puedejugar",
       "community": 2,
       "norm_label": ".puedejugar()"
@@ -842,7 +842,7 @@
       "label": ".jugarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L919",
+      "source_location": "L932",
       "id": "core_combate_combate_jugarcarta",
       "community": 2,
       "norm_label": ".jugarcarta()"
@@ -851,7 +851,7 @@
       "label": ".decrementarEstados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L969",
+      "source_location": "L982",
       "id": "core_combate_combate_decrementarestados",
       "community": 2,
       "norm_label": ".decrementarestados()"
@@ -860,7 +860,7 @@
       "label": ".envejecerRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L979",
+      "source_location": "L992",
       "id": "core_combate_combate_envejecerraices",
       "community": 2,
       "norm_label": ".envejecerraices()"
@@ -869,7 +869,7 @@
       "label": ".terminarTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L989",
+      "source_location": "L1002",
       "id": "core_combate_combate_terminarturno",
       "community": 2,
       "norm_label": ".terminarturno()"
@@ -878,7 +878,7 @@
       "label": ".ejecutarMovimiento()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1131",
+      "source_location": "L1145",
       "id": "core_combate_combate_ejecutarmovimiento",
       "community": 2,
       "norm_label": ".ejecutarmovimiento()"
@@ -1922,7 +1922,7 @@
       "label": "EfectoConjuro",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L59",
+      "source_location": "L61",
       "id": "core_types_efectoconjuro",
       "community": 2,
       "norm_label": "efectoconjuro"
@@ -1931,7 +1931,7 @@
       "label": "FormaInvocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L62",
+      "source_location": "L64",
       "id": "core_types_formainvocacion",
       "community": 14,
       "norm_label": "formainvocacion"
@@ -1940,7 +1940,7 @@
       "label": "EfectoInvocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L66",
+      "source_location": "L68",
       "id": "core_types_efectoinvocacion",
       "community": 2,
       "norm_label": "efectoinvocacion"
@@ -1949,7 +1949,7 @@
       "label": "Invocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L71",
+      "source_location": "L73",
       "id": "core_types_invocacion",
       "community": 14,
       "norm_label": "invocacion"
@@ -1958,7 +1958,7 @@
       "label": "EfectoTemporal",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L84",
+      "source_location": "L86",
       "id": "core_types_efectotemporal",
       "community": 2,
       "norm_label": "efectotemporal"
@@ -1967,7 +1967,7 @@
       "label": "Luchador",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L93",
+      "source_location": "L97",
       "id": "core_types_luchador",
       "community": 2,
       "norm_label": "luchador"
@@ -1976,7 +1976,7 @@
       "label": "TipoIntencion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L102",
+      "source_location": "L106",
       "id": "core_types_tipointencion",
       "community": 1,
       "norm_label": "tipointencion"
@@ -1985,7 +1985,7 @@
       "label": "Movimiento",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L104",
+      "source_location": "L108",
       "id": "core_types_movimiento",
       "community": 2,
       "norm_label": "movimiento"
@@ -1994,7 +1994,7 @@
       "label": "EnemigoDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L121",
+      "source_location": "L125",
       "id": "core_types_enemigodef",
       "community": 15,
       "norm_label": "enemigodef"
@@ -2003,7 +2003,7 @@
       "label": "EnemigoCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L146",
+      "source_location": "L150",
       "id": "core_types_enemigocombate",
       "community": 2,
       "norm_label": "enemigocombate"
@@ -2012,7 +2012,7 @@
       "label": "EspacioConjuro",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L168",
+      "source_location": "L172",
       "id": "core_types_espacioconjuro",
       "community": 5,
       "norm_label": "espacioconjuro"
@@ -2021,7 +2021,7 @@
       "label": "JugadorCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L173",
+      "source_location": "L177",
       "id": "core_types_jugadorcombate",
       "community": 2,
       "norm_label": "jugadorcombate"
@@ -2030,7 +2030,7 @@
       "label": "CartaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L198",
+      "source_location": "L202",
       "id": "core_types_cartadef",
       "community": 10,
       "norm_label": "cartadef"
@@ -2039,7 +2039,7 @@
       "label": "MejoraCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L231",
+      "source_location": "L235",
       "id": "core_types_mejoracarta",
       "community": 1,
       "norm_label": "mejoracarta"
@@ -2048,7 +2048,7 @@
       "label": "CartaInstancia",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L239",
+      "source_location": "L243",
       "id": "core_types_cartainstancia",
       "community": 2,
       "norm_label": "cartainstancia"
@@ -2057,7 +2057,7 @@
       "label": "ContextoEfecto",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L246",
+      "source_location": "L250",
       "id": "core_types_contextoefecto",
       "community": 2,
       "norm_label": "contextoefecto"
@@ -2066,7 +2066,7 @@
       "label": "TipoNodo",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L358",
+      "source_location": "L362",
       "id": "core_types_tiponodo",
       "community": 1,
       "norm_label": "tiponodo"
@@ -2075,7 +2075,7 @@
       "label": "NodoMapa",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L360",
+      "source_location": "L364",
       "id": "core_types_nodomapa",
       "community": 1,
       "norm_label": "nodomapa"
@@ -2084,7 +2084,7 @@
       "label": "ReliquiaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L369",
+      "source_location": "L373",
       "id": "core_types_reliquiadef",
       "community": 1,
       "norm_label": "reliquiadef"
@@ -2093,7 +2093,7 @@
       "label": "EstadoRun",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L385",
+      "source_location": "L389",
       "id": "core_types_estadorun",
       "community": 1,
       "norm_label": "estadorun"
@@ -3434,7 +3434,7 @@
       "label": "NOMBRE_ESTADO",
       "file_type": "code",
       "source_file": "src/ui/util.ts",
-      "source_location": "L108",
+      "source_location": "L109",
       "id": "ui_util_nombre_estado",
       "community": 6,
       "norm_label": "nombre_estado"
@@ -3443,7 +3443,7 @@
       "label": "DESCRIPCION_ESTADO",
       "file_type": "code",
       "source_file": "src/ui/util.ts",
-      "source_location": "L133",
+      "source_location": "L135",
       "id": "ui_util_descripcion_estado",
       "community": 2,
       "norm_label": "descripcion_estado"
@@ -3452,7 +3452,7 @@
       "label": "tipEstado()",
       "file_type": "code",
       "source_file": "src/ui/util.ts",
-      "source_location": "L188",
+      "source_location": "L192",
       "id": "ui_util_tipestado",
       "community": 6,
       "norm_label": "tipestado()"
@@ -3803,7 +3803,7 @@
       "label": "Estructura",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L156",
+      "source_location": "L159",
       "id": "readme_estructura",
       "community": 10,
       "norm_label": "estructura"
@@ -15267,5 +15267,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "9f1bbd468e55026109dbcd54ddaad62cb98090c1"
+  "built_at_commit": "7a025b12a3eb9aa5ddf0190d83ce2ac8d93b8a68"
 }

@@ -12,6 +12,8 @@ export type EstadoId =
   | 'raizProlongada' // (jugador) cada carta de Raíces que apliques dura +N turnos
   | 'formaProlongada'// (druida) tus Transformaciones duran +N turnos
   | 'formaPotenciada'// (druida) tus Transformaciones otorgan +N de Fuerza/Destreza
+  | 'fuerzaPorTurno' // (druida/Forma Lunar) ganas esta Fuerza al inicio de cada turno
+  | 'destrezaPorTurno'// (druida/Forma Lunar) ganas esta Destreza al inicio de cada turno
   | 'destreza'      // +bloqueo por carta
   | 'vulnerable'    // recibe +50% daño, N turnos
   | 'debil'         // inflige -25% daño, N turnos
@@ -88,6 +90,8 @@ export interface EfectoTemporal {
   destreza: number;     // destreza otorgada
   robaExtra?: number;   // cartas extra robadas al inicio del turno
   curaTurno?: number;   // curación al inicio del turno
+  /** No expira: dura todo el combate (Forma Lunar). `turnos` se ignora. */
+  permanente?: boolean;
 }
 
 export interface Luchador {

@@ -1696,7 +1696,35 @@ console.log('— Druida: transformaciones reforzadas —');
     // el refuerzo va al atributo propio de la forma: Águila da Destreza
     const dex = comb.jugador.estados.destreza ?? 0;
     await carta('forma-aguila').jugar(comb.contexto());
-    check((comb.jugador.estados.destreza ?? 0) === dex + 2, 'Forma de Águila pasa a dar +2 de Destreza');
+    check((comb.jugador.estados.destreza ?? 0) === dex + 3, 'Forma de Águila pasa a dar +3 de Destreza');
+  }
+
+
+  // Forma Lunar: poder permanente que acumula Fuerza y Destreza cada turno
+  {
+    const lunar = carta('circulo-luna');
+    check(lunar.tipo === 'poder', 'Forma Lunar es un poder');
+    check(lunar.coste === 3, 'y cuesta 3');
+    const run = nuevaRun('druida', 6006);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6006), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 200; e.bloqueo = 0;
+    comb.jugador.estados.fuerza = 0;
+    comb.jugador.estados.destreza = 0;
+    await lunar.jugar(comb.contexto());
+    check(e.pv === 200, 'Forma Lunar ya no hace daño');
+    check((comb.jugador.estados.fuerza ?? 0) === 0, 'ni da Fuerza el turno que la juegas');
+    check(comb.estaTransformadoPublico(), 'pero deja al druida transformado de inmediato');
+    defender(comb); await comb.terminarTurno();
+    check((comb.jugador.estados.fuerza ?? 0) === 2, 'al turno siguiente: +2 de Fuerza');
+    check((comb.jugador.estados.destreza ?? 0) === 1, 'y +1 de Destreza');
+    defender(comb); await comb.terminarTurno();
+    check((comb.jugador.estados.fuerza ?? 0) === 4, 'y se acumula: +4 de Fuerza al tercer turno');
+    check((comb.jugador.estados.destreza ?? 0) === 2, 'y +2 de Destreza');
+    // la transformación es permanente: no expira ni retira nada
+    for (let i = 0; i < 6; i++) { defender(comb); await comb.terminarTurno(); }
+    check(comb.estaTransformadoPublico(), 'la Forma Lunar no expira nunca');
+    check((comb.jugador.estados.fuerza ?? 0) === 16, 'tras 8 turnos acumula +16 de Fuerza');
   }
 
   // Forma de Enjambre: transformación con daño en área

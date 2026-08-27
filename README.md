@@ -52,7 +52,10 @@ descuelga de las demás en su mismo nivel.
   Un par de cartas pagan además por estar transformado —Mordisco Feroz devuelve energía,
   Luna Creciente añade Vulnerable— y la **Forma de Enjambre** golpea a todos los enemigos
   a la vez (da Destreza, así que no se autopotencia). **Corazón del Cambiante** hace que
-  cada forma dure 2 turnos más y otorgue +1 de Fuerza (o de Destreza). Su control son las **raíces**, que reducen el
+  cada forma dure 2 turnos más y otorgue +1 de Fuerza (o de Destreza), y la **Forma Lunar**
+  (rara, coste 3) es una transformación **permanente**: no hace daño, pero cada turno te da
+  2 de Fuerza y 1 de Destreza que se acumulan sin techo — pierde en combates cortos y gana
+  las peleas largas contra jefes. Su control son las **raíces**, que reducen el
   ataque del enemigo: cada carta es una instancia con su propia duración y se acumulan; si
   el ataque queda en 0 o menos, al intentar atacar el enemigo pierde PV igual a la
   diferencia (ignorando bloqueo). También tiene **invocaciones permanentes** que absorben

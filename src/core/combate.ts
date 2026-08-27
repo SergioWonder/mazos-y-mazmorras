@@ -273,7 +273,9 @@ export class Combate {
         self.jugador.efectosTemporales.push({ ...e, turnos, fuerza, destreza });
         if (fuerza) self.jugador.estados.fuerza = (self.jugador.estados.fuerza ?? 0) + fuerza;
         if (destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + destreza;
-        await self.ui.fxMensaje(`✦ ${e.etiqueta} (${turnos} turnos)`);
+        await self.ui.fxMensaje(
+          e.permanente ? `✦ ${e.etiqueta} (permanente)` : `✦ ${e.etiqueta} (${turnos} turnos)`,
+        );
       },
       async ganarFuria(fuerza, destreza = 0) {
         self.jugador.furiaFuerza += fuerza;
@@ -852,6 +854,17 @@ export class Combate {
       // Las efímeras del brujo ya atacaron al cerrar la ronda anterior.
       if (!primero && !inv.efimera) await this.atacarInvocacion();
     }
+    // Forma Lunar (druida): Fuerza y Destreza que se acumulan cada turno
+    const fxt = this.jugador.estados.fuerzaPorTurno ?? 0;
+    if (fxt > 0) {
+      this.jugador.estados.fuerza = (this.jugador.estados.fuerza ?? 0) + fxt;
+      await this.ui.fxEstado(this.jugador, 'fuerza', fxt);
+    }
+    const dxt = this.jugador.estados.destrezaPorTurno ?? 0;
+    if (dxt > 0) {
+      this.jugador.estados.destreza = (this.jugador.estados.destreza ?? 0) + dxt;
+      await this.ui.fxEstado(this.jugador, 'destreza', dxt);
+    }
     // Presencia Feérica (brujo): Oscuridad a todos al inicio de cada turno
     const oxt = this.jugador.estados.oscuridadPorTurno ?? 0;
     if (oxt > 0) {
@@ -991,8 +1004,9 @@ export class Combate {
     this.enResolucion = true;
     const j = this.jugador;
 
-    // Efectos temporales del druida: expiran
+    // Efectos temporales del druida: expiran (salvo los permanentes)
     for (const e of [...j.efectosTemporales]) {
+      if (e.permanente) continue;
       e.turnos--;
       if (e.turnos <= 0) {
         j.estados.fuerza = (j.estados.fuerza ?? 0) - e.fuerza;

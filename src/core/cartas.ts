@@ -250,15 +250,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'transformacion',
-    texto: 'Transformación: +1 de Destreza durante 4 turnos.\nRoba 2 cartas.',
+    texto: 'Transformación: +2 de Destreza durante 4 turnos.\nRoba 2 cartas.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 1 });
+      await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 2 });
       await c.robar(2);
     },
     mejora: {
-      texto: 'Transformación: +2 de Destreza durante 4 turnos.\nRoba 3 cartas.',
+      texto: 'Transformación: +3 de Destreza durante 4 turnos.\nRoba 3 cartas.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 2 });
+        await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 3 });
         await c.robar(3);
       },
     },
@@ -550,23 +550,30 @@ export const DRUIDA: CartaDef[] = [
     id: 'circulo-luna',
     nombre: 'Forma Lunar',
     clase: 'druida',
-    tipo: 'ataque',
+    tipo: 'poder',
     rareza: 'rara',
     coste: 3,
-    objetivo: 'enemigo',
+    objetivo: 'ninguno',
     subclase: 'Círculo de la Luna',
     fx: 'luna',
     animRara: 'anim-luna',
-    texto: 'Transformación: +4 de Fuerza durante 5 turnos.\nInflige 8 de daño dos veces.',
+    texto: 'Transformación permanente.\nPoder: al inicio de cada turno ganas\n2 de Fuerza y 1 de Destreza.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma Lunar', turnos: 5, fuerza: 4, destreza: 0 });
-      await c.atacar(c.objetivo!, 8, 2, 'luna');
+      // marca permanente: cuenta como «transformado» el resto del combate
+      await c.efectoTemporal({
+        etiqueta: 'Forma Lunar', turnos: 1, fuerza: 0, destreza: 0, permanente: true,
+      });
+      await c.aplicarEstado(c.jugador, 'fuerzaPorTurno', 2);
+      await c.aplicarEstado(c.jugador, 'destrezaPorTurno', 1);
     },
     mejora: {
-      texto: 'Transformación: +5 de Fuerza durante 5 turnos.\nInflige 11 de daño dos veces.',
+      texto: 'Transformación permanente.\nPoder: al inicio de cada turno ganas\n3 de Fuerza y 2 de Destreza.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma Lunar', turnos: 5, fuerza: 5, destreza: 0 });
-        await c.atacar(c.objetivo!, 11, 2, 'luna');
+        await c.efectoTemporal({
+          etiqueta: 'Forma Lunar', turnos: 1, fuerza: 0, destreza: 0, permanente: true,
+        });
+        await c.aplicarEstado(c.jugador, 'fuerzaPorTurno', 3);
+        await c.aplicarEstado(c.jugador, 'destrezaPorTurno', 2);
       },
     },
   },

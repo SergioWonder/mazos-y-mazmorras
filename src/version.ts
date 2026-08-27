@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.2.2';
+export const VERSION = '3.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.3.0',
+    fecha: '2026-08-27',
+    cambios: [
+      '🌕 Forma Lunar da un giro completo: ya no ataca. Ahora es un poder que te transforma para SIEMPRE y te da 2 de Fuerza y 1 de Destreza al inicio de cada turno, que se acumulan sin techo (mejorada, 3 y 2).',
+      '🦅 La Forma de Águila recupera sus +2 de Destreza (+3 mejorada).',
+    ],
+  },
   {
     version: '3.2.2',
     fecha: '2026-08-27',
