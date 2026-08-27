@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.1.0';
+export const VERSION = '3.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.2.0',
+    fecha: '2026-08-27',
+    cambios: [
+      '🐺 El Druida se pone al día: las Transformaciones son ya su motor de daño. Duran 4-5 turnos (antes 2-3), dan más Fuerza y ahora empieza la partida con la Forma de Lobo en el mazo.',
+      '🦟 Nueva Forma de Enjambre: te transformas y golpeas a TODOS los enemigos a la vez.',
+      '🦎 Nuevo poder, Corazón del Cambiante: tus Transformaciones duran 2 turnos más y otorgan +2 de Fuerza (o de Destreza) extra.',
+      '🐾 Tormenta de Zarpas pasa a infligir 5 de daño tres veces si estás transformado, y Mordisco Feroz sube a 7.',
+      '🌿 Raíces Enredaderas alcanzan ya a TODOS los enemigos (6 de Raíces), y el Zarpazo pega 5 en vez de 4.',
+      '📊 El simulador afina más: entiende que bajar el ataque enemigo (Raíces, Débil, Oscuridad) defiende igual que el bloqueo, adelanta las cartas que escalan y ajusta el mazo al acto en el que estás.',
+    ],
+  },
   {
     version: '3.1.0',
     fecha: '2026-08-27',

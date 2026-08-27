@@ -91,7 +91,8 @@ export function iniciarTooltips() {
 export const ICONO_ESTADO: Record<string, string> = {
   fuerza: '💪', raices: '🪾', destreza: '🌀', vulnerable: '🎯', debil: '💧',
   fragil: '🥚', espinas: '🌵', regeneracion: '🌿', corazonSalvaje: '🐾', frenesi: '🔥',
-  espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', quemadura: '🔥',
+  espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', formaProlongada: '🦎', formaPotenciada: '🐾',
+  quemadura: '🔥',
   furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
@@ -109,6 +110,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   vulnerable: 'Vulnerable', debil: 'Débil', fragil: 'Frágil', espinas: 'Espinas',
   regeneracion: 'Regeneración', corazonSalvaje: 'Corazón Salvaje', frenesi: 'Frenesí',
   espejismo: 'Espejismo', invulnerable: 'Invulnerable', raizProlongada: 'Raíces Profundas',
+  formaProlongada: 'Corazón del Cambiante', formaPotenciada: 'Furor del Cambiante',
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
   roboAcelerado: 'Acelerar', hemorragia: 'Hemorragia', sedSangre: 'Sed de Sangre',
   escribania: 'Escribanía',
@@ -142,6 +144,8 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
     'Copias ilusorias: 20 % de esquivar cada ataque por carga. Esquivar gasta 1 carga; recibir un golpe las disipa todas. Dura 1 turno.',
   invulnerable: 'No recibe ningún daño mientras dure.',
   raizProlongada: 'Las Raíces que apliques reducen la Fuerza del enemigo esa cantidad de turnos adicionales.',
+  formaProlongada: 'Tus Transformaciones duran esa cantidad de turnos adicionales.',
+  formaPotenciada: 'Tus Transformaciones otorgan esa cantidad adicional de Fuerza (o de Destreza, según la forma).',
   quemadura: 'Cada carta que juegues te hace perder 3 PV. Baja 1 por turno.',
   furiaIndomita:
     'Mientras estés en Furia, al inicio de tu turno ganas bloqueo igual a tu Fuerza. La Furia no se rompe si bloqueaste daño y te queda menos de 10 de bloqueo.',

@@ -67,6 +67,20 @@ function danoEntrante(comb: Combate): number {
     .reduce((s, e) => s + comb.danoIntencion(e) * (e.intencion.veces ?? 1), 0);
 }
 
+/** Palabras que delatan una carta de mitigación: bloqueo propio o menos ataque
+ *  enemigo. Vulnerable NO cuenta: sube el daño que recibe el enemigo, no baja
+ *  el que te hace a ti. */
+const MITIGA = ['bloqueo', 'raices', 'debil', 'oscuridad'];
+
+/** Una carta que deja Fuerza o Destreza durante varios turnos (Transformación
+ *  del druida, Furia del bárbaro) es una inversión que multiplica todo lo que
+ *  juegues después: como un poder, cuanto antes se ponga, mejor. */
+function esEscalado(t: string): boolean {
+  if (t.includes('transformacion')) return true;
+  if (t.startsWith('furia:')) return true;
+  return t.includes('gana') && (t.includes('de fuerza') || t.includes('de destreza'));
+}
+
 /** Prioridad de una carta: más alto = jugarla antes. */
 function puntuarCarta(comb: Combate, inst: CartaInstancia, turno: number): number {
   const def = defDe(inst);
@@ -75,13 +89,16 @@ function puntuarCarta(comb: Combate, inst: CartaInstancia, turno: number): numbe
   const vidaEnemiga = comb.enemigos.filter((e) => e.vivo).reduce((s, e) => s + e.pv, 0);
 
   let p: number;
-  if (def.tipo === 'poder') {
-    // los poderes escalan con los turnos que les queden: cuanto antes, mejor
+  if (def.tipo === 'poder' || esEscalado(t)) {
+    // los poderes y las inversiones escalan con los turnos que les queden
     p = 100 - turno * 6;
     // salvo que el combate esté a punto de acabar: entonces no compensan
-    if (vidaEnemiga < 15) p = 10;
-  } else if (t.includes('bloqueo') && faltaBloqueo > 0) {
-    p = 72 + Math.min(18, faltaBloqueo); // defenderse cuando de verdad hace falta
+    if (vidaEnemiga < 15) p = def.tipo === 'poder' ? 10 : 62;
+  } else if (faltaBloqueo > 0 && MITIGA.some((k) => t.includes(k))) {
+    // defenderse cuando de verdad hace falta. Bajar el ataque del enemigo
+    // (Raíces, Débil, Oscuridad) mitiga igual que el bloqueo: si el piloto no lo
+    // cuenta, subestima a las clases de control.
+    p = 72 + Math.min(18, faltaBloqueo);
   } else if (def.tipo === 'ataque') {
     p = 62;
   } else {
@@ -201,7 +218,7 @@ console.log('— Recompensas y pools —');
     }
   }
   console.log('  ✓ 60 tiradas de recompensa sin repetidas y de la clase correcta');
-  check(DRUIDA.filter((c) => c.rareza === 'rara').length === 6, 'druida: 6 raras (4 subclases + 2 de invocación)');
+  check(DRUIDA.filter((c) => c.rareza === 'rara').length === 7, 'druida: 7 raras (4 subclases + 2 de invocación + Corazón del Cambiante)');
   check(BARBARO.filter((c) => c.rareza === 'rara').length === 6, 'bárbaro: 6 raras (4 subclases + 2 de Hemorragia)');
   check(MAGO.filter((c) => c.rareza === 'rara').length === 5, 'mago: 5 raras (3 escuelas + 2 de Creación de conjuros)');
   check(PICARO.filter((c) => c.rareza === 'rara').length === 7, 'pícaro: 7 raras (3 subclases + 4 remates)');
@@ -249,13 +266,19 @@ console.log('— Combates simulados: los 6 escenarios × 5 clases × 4 tipos de 
    *  premia el daño concentrado, un grupo premia el área y el bloqueo, y un jefe
    *  premia aguantar muchos turnos. Si una clase falla, suele fallar en uno. */
   type Cap = typeof ACTOS[0][0];
+  /** El mazo con el que llegas a un encuentro depende del acto (has recogido
+   *  recompensas y pasado por campamentos) y de lo avanzado del acto: a un élite
+   *  o a un jefe se llega más tarde que a los combates normales. Medir el Acto III
+   *  con el mazo inicial no dice nada de la clase, solo de la escala del acto. */
+  const progresion = (capIdx: number, base: OpcionesSim): OpcionesSim => {
+    const acto = Math.floor(capIdx / 2); // 0, 1 o 2
+    return { extra: acto * 5 + (base.extra ?? 0), mejoras: acto * 2 + (base.mejoras ?? 0) };
+  };
   const tipos = [
-    // mazo inicial: es lo que llevas en los primeros combates del acto
-    { nombre: 'singular', op: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length === 1) },
-    { nombre: 'grupo', op: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length > 1) },
-    // a un élite o a un jefe se llega con mazo hecho: recompensas y mejoras
-    { nombre: 'élite', op: { extra: 6, mejoras: 2 }, grupos: (c: Cap) => c.elites },
-    { nombre: 'jefe', op: { extra: 14, mejoras: 6 }, grupos: (c: Cap) => [c.jefe] },
+    { nombre: 'singular', base: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length === 1) },
+    { nombre: 'grupo', base: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length > 1) },
+    { nombre: 'élite', base: { extra: 3, mejoras: 1 }, grupos: (c: Cap) => c.elites },
+    { nombre: 'jefe', base: { extra: 6, mejoras: 2 }, grupos: (c: Cap) => [c.jefe] },
   ];
 
   // Resumen por tipo (agregado de todos los escenarios y clases)
@@ -270,7 +293,8 @@ console.log('— Combates simulados: los 6 escenarios × 5 clases × 4 tipos de 
       for (const clase of CLASES) {
         for (let s = 1; s <= 4; s++) {
           const defs = grupos[s % grupos.length];
-          const { combate, turnos } = await simular(clase, s * 131 + capIdx * 17, defs, tipo.op);
+          const { combate, turnos } =
+            await simular(clase, s * 131 + capIdx * 17, defs, progresion(capIdx, tipo.base));
           if (combate.terminado === null) {
             check(false, `${clase} · ${cap.nombre} · ${tipo.nombre} s${s}: el combate no termina`);
           }
@@ -1568,6 +1592,101 @@ console.log('— Brujo: mecánicas nuevas —');
     delete e.estados.condena;
     await carta('verbo-aniquilacion').jugar(comb.contexto(e));
     check((e.estados.condena ?? 0) === 25, 'Verbo de Aniquilación: la mitad de sus 50 PV = 25');
+  }
+}
+
+console.log('— Druida: transformaciones reforzadas —');
+{
+  const carta = (id: string) => DRUIDA.find((c) => c.id === id)!;
+  const defender = (comb: Combate) => {
+    comb.enemigos.filter((e) => e.vivo).forEach((e) => {
+      e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    });
+  };
+
+  // El druida arranca con su motor de daño en la mano de salida
+  {
+    const mazo = mazoInicial('druida');
+    check(mazo.some((c) => c.def.id === 'forma-lobo'),
+      'el mazo inicial del druida trae una Transformación (Forma de Lobo)');
+    check(mazo.some((c) => c.def.id === 'zarpazo'), 'y el Zarpazo');
+  }
+
+  // Duración y Fuerza de las formas
+  {
+    const run = nuevaRun('druida', 6001);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6001), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 200; e.bloqueo = 0;
+    const base = comb.jugador.estados.fuerza ?? 0;
+    await carta('forma-lobo').jugar(comb.contexto(e));
+    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'Forma de Lobo: +3 de Fuerza');
+    check(comb.jugador.efectosTemporales[0].turnos === 4, 'y dura 4 turnos');
+    check(comb.estaTransformadoPublico(), 'el druida queda transformado');
+    // 4 turnos: aguanta y al quinto se cae
+    for (let i = 0; i < 3; i++) { defender(comb); await comb.terminarTurno(); }
+    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'la Fuerza sigue al cuarto turno');
+    defender(comb); await comb.terminarTurno();
+    check((comb.jugador.estados.fuerza ?? 0) === base, 'y se retira al expirar la forma');
+  }
+
+  // Corazón del Cambiante: más turnos y más Fuerza por forma
+  {
+    const run = nuevaRun('druida', 6002);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6002), uiSilenciosa);
+    await comb.iniciar();
+    const base = comb.jugador.estados.fuerza ?? 0;
+    await carta('corazon-cambiante').jugar(comb.contexto());
+    check((comb.jugador.estados.formaProlongada ?? 0) === 2, 'Corazón del Cambiante: +2 turnos');
+    check((comb.jugador.estados.formaPotenciada ?? 0) === 2, 'y +2 de Fuerza por forma');
+    await carta('forma-lobo').jugar(comb.contexto(comb.enemigos[0]));
+    check((comb.jugador.estados.fuerza ?? 0) === base + 5, 'Forma de Lobo pasa a dar +5 de Fuerza');
+    check(comb.jugador.efectosTemporales[0].turnos === 6, 'y a durar 6 turnos');
+    // el refuerzo va al atributo propio de la forma: Águila da Destreza
+    const dex = comb.jugador.estados.destreza ?? 0;
+    await carta('forma-aguila').jugar(comb.contexto());
+    check((comb.jugador.estados.destreza ?? 0) === dex + 4, 'Forma de Águila pasa a dar +4 de Destreza');
+  }
+
+  // Forma de Enjambre: transformación con daño en área
+  {
+    const run = nuevaRun('druida', 6003);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(6003), uiSilenciosa);
+    await comb.iniciar();
+    const [a, b] = comb.enemigos;
+    a.pv = a.pvMax = 90; a.bloqueo = 0;
+    b.pv = b.pvMax = 90; b.bloqueo = 0;
+    comb.jugador.estados.fuerza = 0;
+    await carta('forma-enjambre').jugar(comb.contexto());
+    // la propia forma da +3 de Fuerza antes de repartir el golpe
+    check(90 - a.pv === 9 && 90 - b.pv === 9,
+      'Forma de Enjambre: 6 + 3 de Fuerza propia = 9 a TODOS los enemigos');
+    check(comb.estaTransformadoPublico(), 'y deja al druida transformado');
+  }
+
+  // Raíces Enredaderas ahora alcanzan a todo el grupo
+  {
+    const run = nuevaRun('druida', 6004);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(6004), uiSilenciosa);
+    await comb.iniciar();
+    await carta('enredadera').jugar(comb.contexto(comb.enemigos[0]));
+    check(comb.enemigos.every((e) => (e.estados.raices ?? 0) === 6),
+      'Raíces Enredaderas: 6 de Raíces a TODOS los enemigos');
+  }
+
+  // Tormenta de Zarpas pega más si estás transformado
+  {
+    const run = nuevaRun('druida', 6005);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6005), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 200; e.bloqueo = 0;
+    comb.jugador.estados.fuerza = 0;
+    await carta('zarpa-doble').jugar(comb.contexto(e));
+    check(200 - e.pv === 9, 'sin transformar: 3 de daño tres veces = 9');
+    e.pv = 200;
+    comb.jugador.efectosTemporales.push({ etiqueta: 'Prueba', turnos: 5, fuerza: 0, destreza: 0 });
+    await carta('zarpa-doble').jugar(comb.contexto(e));
+    check(200 - e.pv === 15, 'transformado: 5 de daño tres veces = 15');
   }
 }
 

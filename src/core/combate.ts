@@ -120,6 +120,11 @@ export class Combate {
     return this.danoDeAtaque(e, e.intencion.dano) <= 0;
   }
 
+  /** true si hay alguna Transformación activa (efecto temporal del druida). */
+  estaTransformadoPublico(): boolean {
+    return this.jugador.efectosTemporales.length > 0;
+  }
+
   /** El enemigo no va a atacarte este turno: base de los ataques furtivos del
    *  pícaro (se defiende, se potencia, está desconcertado o pierde el turno). */
   noPretendeAtacar(e: EnemigoCombate): boolean {
@@ -255,10 +260,16 @@ export class Combate {
         self.ui.render();
       },
       async efectoTemporal(e: EfectoTemporal) {
-        self.jugador.efectosTemporales.push({ ...e });
-        if (e.fuerza) self.jugador.estados.fuerza = (self.jugador.estados.fuerza ?? 0) + e.fuerza;
-        if (e.destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + e.destreza;
-        await self.ui.fxMensaje(`✦ ${e.etiqueta} (${e.turnos} turnos)`);
+        // Corazón del Cambiante: cada Transformación aguanta más turnos y pega
+        // más. El refuerzo va al atributo que ya otorgaba la forma.
+        const turnos = e.turnos + (self.jugador.estados.formaProlongada ?? 0);
+        const bono = self.jugador.estados.formaPotenciada ?? 0;
+        const fuerza = e.fuerza + (e.fuerza > 0 ? bono : 0);
+        const destreza = e.destreza + (e.destreza > 0 ? bono : 0);
+        self.jugador.efectosTemporales.push({ ...e, turnos, fuerza, destreza });
+        if (fuerza) self.jugador.estados.fuerza = (self.jugador.estados.fuerza ?? 0) + fuerza;
+        if (destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + destreza;
+        await self.ui.fxMensaje(`✦ ${e.etiqueta} (${turnos} turnos)`);
       },
       async ganarFuria(fuerza, destreza = 0) {
         self.jugador.furiaFuerza += fuerza;
@@ -325,7 +336,7 @@ export class Combate {
       danoIntencion: (e) => self.danoIntencion(e),
       noPretendeAtacar: (e) => self.noPretendeAtacar(e),
       ataqueAnulado: (e) => self.ataqueAnulado(e),
-      estaTransformado: () => self.jugador.efectosTemporales.length > 0,
+      estaTransformado: () => self.estaTransformadoPublico(),
       mensaje: (txt) => self.ui.fxMensaje(txt),
       async tirarDado(caras) {
         const n = 1 + Math.floor(self.rng() * caras);

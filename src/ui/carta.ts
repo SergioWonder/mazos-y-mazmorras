@@ -211,6 +211,7 @@ export const ARTE_CARTA: Record<string, string> = {
   'comunion-salvaje': '🕊️', 'oso-espiritual': '🧸', 'elemental-agua': '💧',
   'elemental-fuego': '🔥', 'elemental-aire': '🌪️', 'vinculo-feroz': '🫂',
   'guardian-roble': '🌲', 'elemental-tierra': '🪨', 'tormenta-venganza': '⛈️',
+  'forma-enjambre': '🦟', 'corazon-cambiante': '🦎',
   // ── Bárbaro ──
   'furia-primaria': '🔥', 'golpe-imprudente': '💢', 'tajo-brutal': '⚔️',
   'postura-firme': '🪨', 'grito-intimidante': '📢', 'golpe-pomo': '🔨',

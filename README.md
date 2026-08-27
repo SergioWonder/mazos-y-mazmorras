@@ -46,11 +46,17 @@ descuelga de las demás en su mismo nivel.
 
 ## Diseño
 
-- **Druida** (70 PV): transformaciones (efectos temporales de Fuerza/Destreza por N turnos),
-  raíces que reducen el ataque del enemigo —cada carta es una instancia con su propia
-  duración, se acumulan— y, si el ataque queda en 0 o menos, al intentar atacar el enemigo
-  pierde PV igual a la diferencia (lo que las raíces superan a su ataque, ignorando bloqueo).
-  Cartas raras: una por subclase de D&D 2024 (Tierra, Luna, Mar, Estrellas).
+- **Druida** (70 PV): las **Transformaciones** son su motor de daño (Fuerza o Destreza
+  durante 4-5 turnos, y empieza con la Forma de Lobo en el mazo inicial). Varias cartas
+  pagan por estar transformado —Tormenta de Zarpas pega casi el doble, Mordisco Feroz
+  devuelve energía, Luna Creciente añade Vulnerable— y la **Forma de Enjambre** golpea a
+  todos los enemigos. **Corazón del Cambiante** hace que cada forma dure 2 turnos más y
+  otorgue +2 de Fuerza (o de Destreza). Su control son las **raíces**, que reducen el
+  ataque del enemigo: cada carta es una instancia con su propia duración y se acumulan; si
+  el ataque queda en 0 o menos, al intentar atacar el enemigo pierde PV igual a la
+  diferencia (ignorando bloqueo). También tiene **invocaciones permanentes** que absorben
+  daño y atacan cada turno por el 30 % de su vida. Cartas raras: una por subclase de
+  D&D 2024 (Tierra, Luna, Mar, Estrellas).
 - **Bárbaro** (80 PV): Furia que acumula Fuerza/Destreza de forma permanente, pero se
   pierde si terminas el turno sin hacer daño. Cartas que escalan con Fuerza/Destreza.
   Cartas raras: una por subclase de D&D 2024 (Berserker, Corazón Salvaje, Árbol del Mundo, Fanático).
@@ -105,7 +111,7 @@ descuelga de las demás en su mismo nivel.
   Sello del Pacto, su reliquia inicial, ya empieza el combate con 2 puesta). Cartas
   raras: subclases de D&D 2024 (Archifata, Celestial, Infernal y Gran Antiguo).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
-  Raíces Enredaderas · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
+  Forma de Lobo · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
   Manos Ardientes · Pícaro: Filo Rápido y Pirueta · Brujo: Explosión Sobrenatural y
   Armadura de Agathys).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un

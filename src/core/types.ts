@@ -10,6 +10,8 @@ export type EstadoId =
   | 'fuerza'        // +daño por ataque (puede ser negativo)
   | 'raices'        // −ataque del enemigo; total de todas sus instancias activas (druida)
   | 'raizProlongada' // (jugador) cada carta de Raíces que apliques dura +N turnos
+  | 'formaProlongada'// (druida) tus Transformaciones duran +N turnos
+  | 'formaPotenciada'// (druida) tus Transformaciones otorgan +N de Fuerza/Destreza
   | 'destreza'      // +bloqueo por carta
   | 'vulnerable'    // recibe +50% daño, N turnos
   | 'debil'         // inflige -25% daño, N turnos
