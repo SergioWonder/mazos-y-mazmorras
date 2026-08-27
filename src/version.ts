@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.2.1';
+export const VERSION = '3.2.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.2.2',
+    fecha: '2026-08-27',
+    cambios: [
+      '🐺 Las Transformaciones del druida se comedían: subir a la vez duración y Fuerza escalaba demasiado. Se queda la duración larga, pero todas las formas dan 1 punto menos.',
+      '🦎 Corazón del Cambiante otorga +1 de Fuerza (o Destreza) en vez de +2, y su mejora alarga las formas 4 turnos en lugar de subir la cifra.',
+      '🦟 La Forma de Enjambre pasa a dar Destreza: así su propio golpe en área no se autopotencia.',
+      '🐾 Tormenta de Zarpas vuelve a 3 de daño tres veces: el bono por estar transformado sobraba, porque para eso ya está la Fuerza que dan las formas.',
+    ],
+  },
   {
     version: '3.2.1',
     fecha: '2026-08-27',

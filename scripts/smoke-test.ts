@@ -1671,12 +1671,12 @@ console.log('— Druida: transformaciones reforzadas —');
     const e = comb.enemigos[0]; e.pv = e.pvMax = 200; e.bloqueo = 0;
     const base = comb.jugador.estados.fuerza ?? 0;
     await carta('forma-lobo').jugar(comb.contexto(e));
-    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'Forma de Lobo: +3 de Fuerza');
+    check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'Forma de Lobo: +2 de Fuerza');
     check(comb.jugador.efectosTemporales[0].turnos === 4, 'y dura 4 turnos');
     check(comb.estaTransformadoPublico(), 'el druida queda transformado');
     // 4 turnos: aguanta y al quinto se cae
     for (let i = 0; i < 3; i++) { defender(comb); await comb.terminarTurno(); }
-    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'la Fuerza sigue al cuarto turno');
+    check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'la Fuerza sigue al cuarto turno');
     defender(comb); await comb.terminarTurno();
     check((comb.jugador.estados.fuerza ?? 0) === base, 'y se retira al expirar la forma');
   }
@@ -1689,14 +1689,14 @@ console.log('— Druida: transformaciones reforzadas —');
     const base = comb.jugador.estados.fuerza ?? 0;
     await carta('corazon-cambiante').jugar(comb.contexto());
     check((comb.jugador.estados.formaProlongada ?? 0) === 2, 'Corazón del Cambiante: +2 turnos');
-    check((comb.jugador.estados.formaPotenciada ?? 0) === 2, 'y +2 de Fuerza por forma');
+    check((comb.jugador.estados.formaPotenciada ?? 0) === 1, 'y +1 de Fuerza por forma');
     await carta('forma-lobo').jugar(comb.contexto(comb.enemigos[0]));
-    check((comb.jugador.estados.fuerza ?? 0) === base + 5, 'Forma de Lobo pasa a dar +5 de Fuerza');
+    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'Forma de Lobo pasa a dar +3 de Fuerza');
     check(comb.jugador.efectosTemporales[0].turnos === 6, 'y a durar 6 turnos');
     // el refuerzo va al atributo propio de la forma: Águila da Destreza
     const dex = comb.jugador.estados.destreza ?? 0;
     await carta('forma-aguila').jugar(comb.contexto());
-    check((comb.jugador.estados.destreza ?? 0) === dex + 4, 'Forma de Águila pasa a dar +4 de Destreza');
+    check((comb.jugador.estados.destreza ?? 0) === dex + 2, 'Forma de Águila pasa a dar +2 de Destreza');
   }
 
   // Forma de Enjambre: transformación con daño en área
@@ -1709,9 +1709,11 @@ console.log('— Druida: transformaciones reforzadas —');
     b.pv = b.pvMax = 90; b.bloqueo = 0;
     comb.jugador.estados.fuerza = 0;
     await carta('forma-enjambre').jugar(comb.contexto());
-    // la propia forma da +3 de Fuerza antes de repartir el golpe
-    check(90 - a.pv === 9 && 90 - b.pv === 9,
-      'Forma de Enjambre: 6 + 3 de Fuerza propia = 9 a TODOS los enemigos');
+    // da Destreza, así que su propio golpe NO se autopotencia
+    check(90 - a.pv === 6 && 90 - b.pv === 6,
+      'Forma de Enjambre: 6 de daño a TODOS los enemigos');
+    check((comb.jugador.estados.destreza ?? 0) === 2, 'y +2 de Destreza (no de Fuerza)');
+    check((comb.jugador.estados.fuerza ?? 0) === 0, 'la Fuerza no se toca');
     check(comb.estaTransformadoPublico(), 'y deja al druida transformado');
   }
 
@@ -1725,7 +1727,7 @@ console.log('— Druida: transformaciones reforzadas —');
       'Raíces Enredaderas: 6 de Raíces a TODOS los enemigos');
   }
 
-  // Tormenta de Zarpas pega más si estás transformado
+  // Tormenta de Zarpas: el bono por transformado sobraba (las formas ya dan Fuerza)
   {
     const run = nuevaRun('druida', 6005);
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6005), uiSilenciosa);
@@ -1737,7 +1739,11 @@ console.log('— Druida: transformaciones reforzadas —');
     e.pv = 200;
     comb.jugador.efectosTemporales.push({ etiqueta: 'Prueba', turnos: 5, fuerza: 0, destreza: 0 });
     await carta('zarpa-doble').jugar(comb.contexto(e));
-    check(200 - e.pv === 15, 'transformado: 5 de daño tres veces = 15');
+    check(200 - e.pv === 9, 'transformado sin Fuerza: sigue haciendo 9 (sin bono propio)');
+    e.pv = 200;
+    comb.jugador.estados.fuerza = 2; // la Fuerza de la forma sí se nota, golpe a golpe
+    await carta('zarpa-doble').jugar(comb.contexto(e));
+    check(200 - e.pv === 15, 'con +2 de Fuerza: (3+2) tres veces = 15');
   }
 }
 

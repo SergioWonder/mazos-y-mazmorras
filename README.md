@@ -47,11 +47,12 @@ descuelga de las demás en su mismo nivel.
 ## Diseño
 
 - **Druida** (70 PV): las **Transformaciones** son su motor de daño (Fuerza o Destreza
-  durante 4-5 turnos, y empieza con la Forma de Lobo en el mazo inicial). Varias cartas
-  pagan por estar transformado —Tormenta de Zarpas pega casi el doble, Mordisco Feroz
-  devuelve energía, Luna Creciente añade Vulnerable— y la **Forma de Enjambre** golpea a
-  todos los enemigos. **Corazón del Cambiante** hace que cada forma dure 2 turnos más y
-  otorgue +2 de Fuerza (o de Destreza). Su control son las **raíces**, que reducen el
+  durante 4-5 turnos, y empieza con la Forma de Lobo en el mazo inicial). Su valor está en
+  la duración, no en la cifra: +2 o +3 sostenidos multiplican todo lo que juegues encima.
+  Un par de cartas pagan además por estar transformado —Mordisco Feroz devuelve energía,
+  Luna Creciente añade Vulnerable— y la **Forma de Enjambre** golpea a todos los enemigos
+  a la vez (da Destreza, así que no se autopotencia). **Corazón del Cambiante** hace que
+  cada forma dure 2 turnos más y otorgue +1 de Fuerza (o de Destreza). Su control son las **raíces**, que reducen el
   ataque del enemigo: cada carta es una instancia con su propia duración y se acumulan; si
   el ataque queda en 0 o menos, al intentar atacar el enemigo pierde PV igual a la
   diferencia (ignorando bloqueo). También tiene **invocaciones permanentes** que absorben
