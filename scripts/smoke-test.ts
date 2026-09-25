@@ -20,6 +20,8 @@ import { ARTE_CARTA } from '../src/ui/carta.ts';
 import * as ENEMIGOS from '../src/core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
+import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
+import { spawnEffect, stepParticles, type Particle } from '../src/fx/particle-sim.ts';
 import { puppetPose, puppetBones, puppetEffects } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
@@ -1899,6 +1901,41 @@ console.log('\n🎭 Galería de sprites');
   check(Object.keys(ENEMY_RIGS).every((id) => ids.includes(id)), 'están todos los enemigos ilustrados');
   check(ids.every((id) => !!ENEMY_RIGS[id]), 'y no aparecen jefes');
   check(secciones.filter((s) => s.act !== undefined).length === 6, 'una sección por escenario (3 actos × 2)');
+}
+
+// ── Motor gráfico WebGL: empaquetado de marionetas y simulación de partículas ─
+console.log('\n🖥️ Motor WebGL (partes puras)');
+{
+  const rigs = [...Object.values(HERO_RIGS), ...Object.values(FORM_RIGS), ...Object.values(ENEMY_RIGS), ...Object.values(INVOCATION_RIGS)];
+  const grandes = rigs.flatMap((r) => r.shapes).filter((s) => s.t === 'p' && s.pts.length > MAX_POLY);
+  check(grandes.length === 0, `ningún polígono pasa de ${MAX_POLY} vértices (límite de la GPU)`);
+  const gob = ENEMY_RIGS['goblin-cortador'];
+  const pk = packRig(gob, 'illustrated');
+  check(pk.count === gob.shapes.length && pk.data.length === pk.count * PIECE_TEXELS * 4, 'empaqueta una fila de datos por pieza');
+  const fila = (i: number, texel: number, c: number) => pk.data[(i * PIECE_TEXELS + texel) * 4 + c];
+  const iInk = gob.shapes.findIndex((s) => s.k === 'ink');
+  check((fila(iInk, 0, 2) & 2) === 2, 'las líneas de tinta van marcadas como tinta');
+  check(gob.shapes.every((_, i) => fila(i, 0, 1) >= 0 && fila(i, 0, 1) < 12), 'cada pieza apunta a un hueso válido');
+  check(Array.from(pk.data).every((v) => Number.isFinite(v)), 'sin valores NaN en los datos de la GPU');
+  const sil = packRig(HERO_RIGS.barbaro, 'silhouette');
+  const iSkin = HERO_RIGS.barbaro.shapes.findIndex((s) => s.k === 'skin');
+  const colorSkin = [0, 1, 2].map((c) => sil.data[(iSkin * PIECE_TEXELS + 3) * 4 + c]);
+  check(colorSkin.every((v) => v < 0.08), 'en silueta, la piel se pinta negra');
+  // viewBox → píxeles: los pies (58,129) caen donde toca, también en espejo
+  const m = spriteMatrix({ x: 100, y: 50, w: 140 }, false, 1);
+  const pie = [m[0] * 58 + m[2] * 129 + m[4], m[1] * 58 + m[3] * 129 + m[5]];
+  check(Math.abs(pie[0] - 158) < 1e-6 && Math.abs(pie[1] - 179) < 1e-6, 'la matriz de sprite coloca los pies en su sitio');
+  const me = spriteMatrix({ x: 100, y: 50, w: 140 }, true, 1);
+  check(Math.abs(me[0] * 58 + me[2] * 129 + me[4] - 182) < 1e-6, 'y los enemigos se reflejan para mirar al héroe');
+  // partículas: nacen, caen con la gravedad y caducan
+  const ps: Particle[] = [];
+  spawnEffect(ps, 'tajo', 100, 100);
+  check(ps.length === 18, 'un tajo lanza 18 chispas');
+  const vy0 = ps[0].vy;
+  stepParticles(ps, 0.016);
+  check(ps[0].vy > vy0, 'la gravedad tira de las chispas hacia abajo');
+  stepParticles(ps, 1);
+  check(ps.length === 0, 'y desaparecen al acabar su vida');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

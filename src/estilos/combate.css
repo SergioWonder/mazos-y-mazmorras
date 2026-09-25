@@ -133,7 +133,7 @@
   animation: none;
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
-.sprite-marioneta { display: block; height: auto; overflow: visible; }
+.sprite-marioneta { display: block; height: auto; aspect-ratio: 140 / 135; overflow: visible; }
 .sprite-silueta .sprite-marioneta { width: 8.6rem; }
 /* enemigos e invocaciones ilustrados: la marioneta ya respira y ataca sola */
 .sprite.sprite-ilustrado { font-size: 0; line-height: 0; animation: none; filter: none; }

@@ -188,5 +188,21 @@ la luna y un borde de luz del color de la luna del acto (`ui/puppet-sprite.ts`).
 construyen con arquetipos paramétricos (bípedo, cuadrúpedo, flotante, amorfo) en
 `fx/enemy-rigs.ts`. Atacan, reciben golpes y mueren con animación propia. Los jefes
 conservan su emoji por ahora. Desde el menú principal, la **Galería de sprites**
-muestra todos los héroes, formas, invocaciones y enemigos animados. El
+muestra todos los héroes, formas, invocaciones y enemigos animados.
+
+### Motor gráfico (WebGL2)
+
+Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en móvil:
+
+- **Marionetas** (`ui/puppet-stage.ts`): un canvas por escena (combate, galería), situado
+  entre el fondo y la interfaz, dibuja cada figura sobre el hueco de su marcador DOM. Cada
+  pieza es un quad instanciado cuyo *fragment shader* evalúa la forma como campo de
+  distancias (SDF) leído de una textura de datos (`fx/puppet-gpu.ts`). Contorno, sombra
+  recortada, trazo interior, luz de borde, auras y brillos salen en 4–6 dibujos por figura.
+- **Partículas** (`fx/particle-gl.ts`): un único dibujo instanciado por fotograma, con el
+  brillo calculado en el shader en lugar de `shadowBlur`. La simulación está en
+  `fx/particle-sim.ts`.
+- **Respaldo:** sin WebGL2 se usa automáticamente el renderizado SVG y canvas 2D.
+- **Diagnóstico en el dispositivo:** `?fps` muestra un contador de fotogramas y
+  `?render=svg` fuerza el motor antiguo para comparar. El
 cielo del combate tiene luna y bruma de horizonte con el tono de cada acto.

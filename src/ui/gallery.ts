@@ -5,6 +5,7 @@ import { rigOf, type RigId } from '../fx/hero-rig.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import type { ActionType } from '../fx/puppet.ts';
 import { PuppetSprite, LUZ_LUNA } from './puppet-sprite.ts';
+import { PuppetStage } from './puppet-stage.ts';
 import { galleryCatalogue, type GalleryCard } from './gallery-catalogue.ts';
 import { el } from './util.ts';
 
@@ -20,11 +21,11 @@ const SCRIPTS: Record<Exclude<Mode, 'idle'>, { period: number; steps: [number, A
 
 interface Entry { card: GalleryCard; sprite: PuppetSprite; offset: number; last: number }
 
-function spriteFor(card: GalleryCard, act: number): PuppetSprite {
+function spriteFor(card: GalleryCard, act: number, stage: PuppetStage | null): PuppetSprite {
   const rim = LUZ_LUNA[act] ?? LUZ_LUNA[0];
-  if (card.kind === 'enemy') return new PuppetSprite(ENEMY_RIGS[card.id], { style: 'illustrated', mirrored: true, rim });
-  if (card.kind === 'invocation') return new PuppetSprite(INVOCATION_RIGS[card.id], { style: 'illustrated', rim });
-  return new PuppetSprite(rigOf(card.id as RigId), { style: 'silhouette' });
+  if (card.kind === 'enemy') return new PuppetSprite(ENEMY_RIGS[card.id], { style: 'illustrated', mirrored: true, rim, stage });
+  if (card.kind === 'invocation') return new PuppetSprite(INVOCATION_RIGS[card.id], { style: 'illustrated', rim, stage });
+  return new PuppetSprite(rigOf(card.id as RigId), { style: 'silhouette', stage });
 }
 
 export function showGallery(): Promise<void> {
@@ -44,11 +45,14 @@ export function showGallery(): Promise<void> {
       </div>`;
     document.body.appendChild(backdrop);
     const body = backdrop.querySelector('.gallery-body') as HTMLElement;
+    // fixed WebGL canvas over the stages and under the sticky header
+    const stage = PuppetStage.create(backdrop, { fixed: true });
 
     const entries: Entry[] = [];
+    const byFigure = new Map<Element, Entry>();
     const observer = new IntersectionObserver((items) => {
       for (const it of items) {
-        const entry = entries.find((e) => e.sprite.element === it.target.querySelector('svg'));
+        const entry = byFigure.get(it.target);
         if (entry) entry.sprite.visible = it.isIntersecting;
       }
     }, { root: backdrop, rootMargin: '120px' });
@@ -56,11 +60,11 @@ export function showGallery(): Promise<void> {
     for (const section of galleryCatalogue()) {
       const sec = el('section', 'gallery-section');
       sec.innerHTML = `<h3 class="gallery-section-title">${section.title}${section.subtitle ? ` <small>${section.subtitle}</small>` : ''}</h3>`;
-      const stage = el('div', 'gallery-stage');
-      if (section.act !== undefined) stage.dataset.act = String(section.act);
-      else stage.dataset.act = section.cards[0]?.kind === 'invocation' ? '0' : 'heroes';
+      const strip = el('div', 'gallery-stage');
+      if (section.act !== undefined) strip.dataset.act = String(section.act);
+      else strip.dataset.act = section.cards[0]?.kind === 'invocation' ? '0' : 'heroes';
       for (const card of section.cards) {
-        const sprite = spriteFor(card, section.act ?? 0);
+        const sprite = spriteFor(card, section.act ?? 0, stage);
         const fig = el('figure', 'gallery-card');
         fig.tabIndex = 0;
         fig.setAttribute('role', 'button');
@@ -74,11 +78,13 @@ export function showGallery(): Promise<void> {
         const attack = () => sprite.play('attack');
         fig.addEventListener('click', attack);
         fig.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); attack(); } });
-        stage.appendChild(fig);
-        entries.push({ card, sprite, offset: entries.length * 0.23, last: -1 });
+        strip.appendChild(fig);
+        const entry = { card, sprite, offset: entries.length * 0.23, last: -1 };
+        entries.push(entry);
+        byFigure.set(fig, entry);
         observer.observe(fig);
       }
-      sec.appendChild(stage);
+      sec.appendChild(strip);
       body.appendChild(sec);
     }
 
@@ -118,6 +124,7 @@ export function showGallery(): Promise<void> {
       window.clearInterval(timer);
       observer.disconnect();
       for (const e of entries) e.sprite.destroy();
+      stage?.destroy();
       backdrop.remove();
       window.removeEventListener('keydown', onKey);
       resolve();

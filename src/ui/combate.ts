@@ -12,6 +12,7 @@ import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO,
 import { defDe } from '../core/cartas.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { PuppetSprite, LUZ_LUNA } from './puppet-sprite.ts';
+import { PuppetStage } from './puppet-stage.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
 
@@ -74,7 +75,10 @@ export function pantallaCombate(
     const $ = (s: string) => raiz.querySelector(s) as HTMLElement;
 
     // Persistent hero puppet: re-attached on every render so it keeps animating
-    const heroSprite = new HeroSprite(run.clase);
+    // WebGL stage between the sky and the UI (null: SVG fallback without WebGL2)
+    const escenarioEl = $('.escenario');
+    const stage = PuppetStage.create(escenarioEl, { before: escenarioEl.querySelector('.barra-superior') });
+    const heroSprite = new HeroSprite(run.clase, stage);
     // druid forms get their own backlit puppet, created on first use
     const formSprites = new Map<FormId, HeroSprite>();
     const formaActual = (): FormId | null => currentForm(combate.jugador.efectosTemporales);
@@ -86,7 +90,7 @@ export function pantallaCombate(
       const rig = ENEMY_RIGS[e.def.id];
       if (!rig) return null;
       let s = spritesEnemigo.get(e);
-      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', mirrored: true, rim: luzLuna }); spritesEnemigo.set(e, s); }
+      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', mirrored: true, rim: luzLuna, stage }); spritesEnemigo.set(e, s); }
       return s;
     };
     const spritesInvocacion = new Map<string, PuppetSprite>();
@@ -95,14 +99,14 @@ export function pantallaCombate(
       const rig = inv && INVOCATION_RIGS[inv.forma];
       if (!inv || !rig) return null;
       let s = spritesInvocacion.get(inv.forma);
-      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', rim: luzLuna }); spritesInvocacion.set(inv.forma, s); }
+      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', rim: luzLuna, stage }); spritesInvocacion.set(inv.forma, s); }
       return s;
     };
     const spriteActual = (): HeroSprite => {
       const f = formaActual();
       if (!f) return heroSprite;
       let s = formSprites.get(f);
-      if (!s) { s = new HeroSprite(f); formSprites.set(f, s); }
+      if (!s) { s = new HeroSprite(f, stage); formSprites.set(f, s); }
       return s;
     };
 
@@ -428,8 +432,14 @@ export function pantallaCombate(
         ${renderInvocacionHTML()}`;
       const actual = spriteActual();
       $('.sprite-silueta')?.appendChild(actual.element);
+      // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
+      actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
+      actual.setEchoes((j.estados.espejismo ?? 0) > 0);
       const inv = spriteInvocacion();
-      if (inv) $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
+      if (inv) {
+        $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
+        inv.setAura(combate.jugador.invocacion?.efimera ? '#a15ce0' : null);
+      }
       // a new form arrives with a roar and a burst of its colour
       if (forma !== formaMostrada) {
         if (forma) actual.play('spell');
@@ -825,6 +835,7 @@ export function pantallaCombate(
         for (const s of formSprites.values()) s.destroy();
         for (const s of spritesEnemigo.values()) s.destroy();
         for (const s of spritesInvocacion.values()) s.destroy();
+        stage?.destroy();
         resolver(combate.terminado!);
       }, 700);
     }

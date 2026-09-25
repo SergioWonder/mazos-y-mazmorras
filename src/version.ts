@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.5.0';
+export const VERSION = '3.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.6.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '🚀 Nuevo motor gráfico WebGL: héroes, enemigos, invocaciones y partículas se dibujan con la tarjeta gráfica, así que el combate va mucho más fluido en móvil.',
+      '✨ Mismo aspecto con bordes más nítidos en pantallas de alta densidad, y los brillos de magia y ojos se calculan en tiempo real.',
+      '🛟 En dispositivos sin WebGL2 el juego sigue usando el dibujado anterior automáticamente.',
+    ],
+  },
   {
     version: '3.5.0',
     fecha: '2026-09-25',
