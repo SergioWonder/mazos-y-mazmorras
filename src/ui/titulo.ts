@@ -4,6 +4,7 @@ import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { VERSION } from '../version.ts';
 import { pantallaCompendio } from './compendio.ts';
+import { showGallery } from './gallery.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
 
@@ -67,6 +68,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             : ''
         }
         <button class="btn-tomar btn-compendio">📖 Compendio de cartas</button>
+        <button class="btn-tomar btn-galeria">🎭 Galería de sprites</button>
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
         <p class="titulo-version">v${VERSION}</p>
       </div>
@@ -105,6 +107,13 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     raiz.querySelector('.btn-compendio')!.addEventListener('click', async () => {
       window.removeEventListener('keydown', teclado);
       await pantallaCompendio();
+      window.addEventListener('keydown', teclado);
+    });
+
+    // Sprite gallery: heroes, druid forms, invocations and enemies, animated
+    raiz.querySelector('.btn-galeria')!.addEventListener('click', async () => {
+      window.removeEventListener('keydown', teclado);
+      await showGallery();
       window.addEventListener('keydown', teclado);
     });
   });

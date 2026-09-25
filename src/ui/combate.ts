@@ -11,6 +11,8 @@ import {
 import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 import { HeroSprite } from './hero-sprite.ts';
+import { PuppetSprite, LUZ_LUNA } from './puppet-sprite.ts';
+import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
 
 const NOMBRE_CLASE: Record<string, string> = {
@@ -77,6 +79,25 @@ export function pantallaCombate(
     const formSprites = new Map<FormId, HeroSprite>();
     const formaActual = (): FormId | null => currentForm(combate.jugador.efectosTemporales);
     let formaMostrada: FormId | null = null;
+    // illustrated enemies and invocations (bosses keep their emoji for now)
+    const luzLuna = LUZ_LUNA[run.capitulo] ?? LUZ_LUNA[0];
+    const spritesEnemigo = new Map<EnemigoCombate, PuppetSprite>();
+    const spriteEnemigo = (e: EnemigoCombate): PuppetSprite | null => {
+      const rig = ENEMY_RIGS[e.def.id];
+      if (!rig) return null;
+      let s = spritesEnemigo.get(e);
+      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', mirrored: true, rim: luzLuna }); spritesEnemigo.set(e, s); }
+      return s;
+    };
+    const spritesInvocacion = new Map<string, PuppetSprite>();
+    const spriteInvocacion = (): PuppetSprite | null => {
+      const inv = combate.jugador.invocacion;
+      const rig = inv && INVOCATION_RIGS[inv.forma];
+      if (!inv || !rig) return null;
+      let s = spritesInvocacion.get(inv.forma);
+      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', rim: luzLuna }); spritesInvocacion.set(inv.forma, s); }
+      return s;
+    };
     const spriteActual = (): HeroSprite => {
       const f = formaActual();
       if (!f) return heroSprite;
@@ -110,6 +131,7 @@ export function pantallaCombate(
         audio.sfx(dano > 0 ? efecto : 'bloqueo');
         if (dano > 0) {
           if (obj === combate.jugador) spriteActual().play('hit');
+          else spriteEnemigo(obj as EnemigoCombate)?.play('hit');
           numeroFlotante(elem, `${dano}`, 'dano');
           elem?.classList.add('golpeado');
           setTimeout(() => elem?.classList.remove('golpeado'), 350);
@@ -151,8 +173,16 @@ export function pantallaCombate(
         const { x, y } = centroDe(elem);
         fx.emitir('muerte', x, y);
         audio.sfx('muerte');
-        elem?.classList.add('muriendo');
-        await espera(550);
+        const s = spriteEnemigo(e);
+        if (s) {
+          s.play('death');
+          await espera(750);
+          s.destroy();
+          spritesEnemigo.delete(e);
+        } else {
+          elem?.classList.add('muriendo');
+          await espera(550);
+        }
         render();
       },
       async fxMensaje(txt) {
@@ -160,6 +190,13 @@ export function pantallaCombate(
         await espera(350);
       },
       async fxEnemigoActua(e) {
+        const s = spriteEnemigo(e);
+        if (s) {
+          // the damage waits for the blow (or the spell) to land
+          const impacto = s.play(e.intencion.dano !== undefined ? 'attack' : 'spell');
+          await espera(impacto || 350);
+          return;
+        }
         const elem = elemDe(e);
         elem?.classList.add('actuando');
         setTimeout(() => elem?.classList.remove('actuando'), 450);
@@ -183,6 +220,7 @@ export function pantallaCombate(
         fx.emitir('golpeEnemigo', x, y);
         audio.sfx(dano > 0 ? 'golpeEnemigo' : 'bloqueo');
         if (dano > 0) {
+          spriteInvocacion()?.play('hit');
           numeroFlotante(elem, `${dano}`, 'dano');
           elem?.classList.add('golpeado');
           setTimeout(() => elem?.classList.remove('golpeado'), 350);
@@ -195,13 +233,25 @@ export function pantallaCombate(
         const { x, y } = centroDe(elem);
         fx.emitir('muerte', x, y);
         audio.sfx('muerte');
-        elem?.classList.add('muriendo');
-        await espera(450);
+        const s = spriteInvocacion();
+        if (s) {
+          s.play('death');
+          await espera(750);
+        } else {
+          elem?.classList.add('muriendo');
+          await espera(450);
+        }
         render();
       },
       async fxInvocacionAtaca() {
         const elem = elemInvocacion();
         const { x, y } = centroDe(elem);
+        const s = spriteInvocacion();
+        if (s) {
+          await espera(s.play('attack'));
+          fx.emitir('zarpa', x, y);
+          return;
+        }
         fx.emitir('zarpa', x, y);
         elem?.classList.add('inv-ataca');
         setTimeout(() => elem?.classList.remove('inv-ataca'), 300);
@@ -325,7 +375,7 @@ export function pantallaCombate(
       const pct = Math.max(0, (inv.vida / inv.vidaMax) * 100);
       return `
         <div class="invocacion ${inv.efimera ? 'inv-efimera' : ''}" data-tip="${tip}">
-          <div class="sprite sprite-invocacion">${emoji}</div>
+          ${spriteInvocacion() ? '<div class="sprite sprite-invocacion sprite-ilustrado"></div>' : `<div class="sprite sprite-invocacion">${emoji}</div>`}
           <div class="vida vida-inv">
             <div class="vida-relleno vida-relleno-inv" style="width:${pct}%"></div>
             <span class="vida-texto">${inv.vida}/${inv.vidaMax}</span>
@@ -378,6 +428,8 @@ export function pantallaCombate(
         ${renderInvocacionHTML()}`;
       const actual = spriteActual();
       $('.sprite-silueta')?.appendChild(actual.element);
+      const inv = spriteInvocacion();
+      if (inv) $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
       // a new form arrives with a roar and a burst of its colour
       if (forma !== formaMostrada) {
         if (forma) actual.play('spell');
@@ -425,7 +477,9 @@ export function pantallaCombate(
             tipInt[e.intencion.intencion]
           }.">${textoIntencion(e)}</div>
           ${e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
-          <div class="sprite sprite-enemigo" style="font-size:${escala * 4.2}rem">${e.def.arte}</div>
+          ${spriteEnemigo(e)
+            ? `<div class="sprite sprite-enemigo sprite-ilustrado" style="--esc:${escala}"></div>`
+            : `<div class="sprite sprite-enemigo" style="font-size:${escala * 4.2}rem">${e.def.arte}</div>`}
           <div class="enemigo-nombre">${e.nombre}</div>
           ${
             e.def.rasgo
@@ -438,6 +492,8 @@ export function pantallaCombate(
         div.addEventListener('click', () => {
           if (cartaPendiente) jugarSobre(idx);
         });
+        const se = spriteEnemigo(e);
+        if (se) div.querySelector('.sprite-ilustrado')?.appendChild(se.element);
         cont.appendChild(div);
       });
     }
@@ -767,6 +823,8 @@ export function pantallaCombate(
         }
         heroSprite.destroy();
         for (const s of formSprites.values()) s.destroy();
+        for (const s of spritesEnemigo.values()) s.destroy();
+        for (const s of spritesInvocacion.values()) s.destroy();
         resolver(combate.terminado!);
       }, 700);
     }

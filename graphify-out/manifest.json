@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790339043.382701,
-    "ast_hash": "7213ca9a92a3abbb37304f37f74d813a",
+    "mtime": 1790340163.891157,
+    "ast_hash": "0ac1c2c7296323c3bc551b2abc318128",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790338986.4904752,
-    "ast_hash": "313719b22791a436392966892a2d274b",
+    "mtime": 1790339955.8606386,
+    "ast_hash": "515b22e2e1e86ced0729c8aeef2b623d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/hero-rig.ts": {
-    "mtime": 1790339011.3102314,
-    "ast_hash": "88f33c29074ff63d648c04f61cb1176d",
+    "mtime": 1790339445.2792306,
+    "ast_hash": "b032e5dd941988afd693cb56899986ac",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790338948.6269512,
-    "ast_hash": "6e6b56450ddc3852f3eab55f73d1823e",
+    "mtime": 1790339904.0177665,
+    "ast_hash": "aaa900b63f8e21ea541f6ff9dbbe9f15",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/hero-sprite.ts": {
-    "mtime": 1790337990.9766946,
-    "ast_hash": "a6bf2ffbfb49a2a5015c5651a3b38f2c",
+    "mtime": 1790339498.6872675,
+    "ast_hash": "0a5506eb8dfe40b714ec12681c328806",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/instalar.ts": {
@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/titulo.ts": {
-    "mtime": 1787820607.273632,
-    "ast_hash": "ba79364cde7d9d04e1c6206299e62fa7",
+    "mtime": 1790340007.343898,
+    "ast_hash": "fa5463761a8e33c002cb91f6caf42ab9",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790339043.3825755,
-    "ast_hash": "2db9bbf3fb41568cd8be1daceccfc543",
+    "mtime": 1790340163.8908167,
+    "ast_hash": "db44bdc6180b5e7830b70a89eba18242",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790339043.3821397,
-    "ast_hash": "bcb354198c0c1a78acc12486cc1d3d78",
+    "mtime": 1790340163.8899333,
+    "ast_hash": "67707d3bfaa811c66991c6897603bde6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -262,6 +262,31 @@
   "/Users/sergio/WonderBits/personal/videogame/public/audio/menu.ogg": {
     "mtime": 1781329809.680867,
     "ast_hash": "501968090e4145ccda336d0c52189af3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/enemy-rigs.ts": {
+    "mtime": 1790340061.904255,
+    "ast_hash": "e3490002c43ad174a7ca48a1de8f9767",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet.ts": {
+    "mtime": 1790339429.465456,
+    "ast_hash": "0f69a413972929d24f05f7c880161268",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
+    "mtime": 1790339955.8640766,
+    "ast_hash": "339d2d0e9f7b8a58e7999d8d28dcd1dd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery.ts": {
+    "mtime": 1790340007.343175,
+    "ast_hash": "104c868b630b612340bd504a22c42c23",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-sprite.ts": {
+    "mtime": 1790340007.3430493,
+    "ast_hash": "e0689615a2c05c15f7356f1b80d7332c",
     "semantic_hash": ""
   }
 }

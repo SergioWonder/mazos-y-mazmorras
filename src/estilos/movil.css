@@ -43,7 +43,9 @@
 
   /* ── Combate: luchadores y HUD ── */
   .sprite { font-size: 3.2rem; }
-  .sprite-heroe { width: 6.2rem; }
+  .sprite-silueta .sprite-marioneta { width: 6.2rem; }
+  .sprite-enemigo.sprite-ilustrado .sprite-marioneta { width: calc(5.4rem * var(--esc, 1)); }
+  .sprite-invocacion.sprite-ilustrado .sprite-marioneta { width: 4.8rem; }
   .heroe::before { width: 9.5rem; height: 9rem; bottom: 1rem; }
   .heroe, .enemigo { min-width: 92px; padding-top: 2rem; }
   .vida { width: 92px; height: 13px; }

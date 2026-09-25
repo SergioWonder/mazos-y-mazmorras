@@ -133,7 +133,13 @@
   animation: none;
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
-.sprite-heroe { display: block; width: 8.6rem; height: auto; overflow: visible; }
+.sprite-marioneta { display: block; height: auto; overflow: visible; }
+.sprite-silueta .sprite-marioneta { width: 8.6rem; }
+/* enemigos e invocaciones ilustrados: la marioneta ya respira y ataca sola */
+.sprite.sprite-ilustrado { font-size: 0; line-height: 0; animation: none; filter: none; }
+.sprite-enemigo.sprite-ilustrado .sprite-marioneta { width: calc(7.6rem * var(--esc, 1)); }
+.sprite-invocacion.sprite-ilustrado .sprite-marioneta { width: 6.6rem; }
+.enemigo.actuando .sprite-ilustrado, .invocacion.inv-ataca .sprite-ilustrado { animation: none; }
 
 /* Cielo del combate: bruma de horizonte y luna que recortan al héroe */
 .cielo {

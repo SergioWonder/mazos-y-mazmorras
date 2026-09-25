@@ -17,6 +17,10 @@ import {
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
 import { ARTE_CARTA } from '../src/ui/carta.ts';
+import * as ENEMIGOS from '../src/core/enemigos.ts';
+import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
+import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
+import { puppetPose, puppetBones, puppetEffects } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
@@ -1849,6 +1853,52 @@ console.log('\n🐺 Siluetas de las transformaciones');
   // el águila no se posa: aletea aunque esté en reposo
   const ala1 = heroPose('aguila' as never, 0.0, null).p.armF, ala2 = heroPose('aguila' as never, 0.15, null).p.armF;
   check(Math.abs(ala1 - ala2) > 5, 'el águila aletea en reposo');
+}
+
+// ── Bestiario ilustrado: enemigos normales e invocaciones ────────────────────
+console.log('\n👹 Bestiario ilustrado');
+{
+  const defs = Object.values(ENEMIGOS).filter(
+    (v): v is EnemigoDef => typeof v === 'object' && v !== null && 'id' in v && 'pv' in v && 'ia' in v,
+  );
+  const normales = defs.filter((d) => !d.esJefe);
+  check(normales.length >= 40, `hay ${normales.length} enemigos normales y de élite`);
+  for (const d of normales) {
+    const rig = ENEMY_RIGS[d.id];
+    check(!!rig && rig.shapes.length >= 10, `${d.nombre}: tiene marioneta ilustrada`);
+  }
+  check(defs.filter((d) => d.esJefe).every((d) => !ENEMY_RIGS[d.id]), 'los jefes se quedan fuera por ahora');
+  for (const f of ['lobo', 'oso', 'fuego', 'agua', 'aire', 'arbol', 'tierra', 'sabueso', 'demonio']) {
+    check(!!INVOCATION_RIGS[f] && INVOCATION_RIGS[f].shapes.length >= 8, `invocación ${f}: tiene marioneta ilustrada`);
+  }
+  // muerte: destello, se desploma y se desvanece del todo
+  const rig = ENEMY_RIGS['goblin-cortador'];
+  check(!!puppetPose(rig, 0, { type: 'death', p: 0.03 }).fx.flash, 'muerte: destello al recibir el golpe final');
+  check(puppetPose(rig, 0, { type: 'death', p: 0.95 }).fx.opacity === 0, 'muerte: acaba desvanecido');
+  // los arqueros disparan flechas; los hechiceros, bolas de energía
+  const arquero = ENEMY_RIGS['goblin-arquero'];
+  const a = puppetPose(arquero, 0, { type: 'attack', p: 0.6 });
+  const g = puppetEffects(arquero, puppetBones(arquero, a.p), a.fx);
+  check(!!g.orb && arquero.projectile === 'arrow', 'el Goblin Arquero dispara una flecha');
+  const chaman = ENEMY_RIGS['goblin-chaman'];
+  const c2 = puppetPose(chaman, 0, { type: 'attack', p: 0.6 });
+  check(!!puppetEffects(chaman, puppetBones(chaman, c2.p), c2.fx).orb && chaman.projectile !== 'arrow', 'el Chamán lanza energía');
+}
+
+// ── Galería de sprites del menú principal ────────────────────────────────────
+console.log('\n🎭 Galería de sprites');
+{
+  const secciones = galleryCatalogue();
+  const todas = secciones.flatMap((s) => s.cards);
+  const de = (kind: string) => todas.filter((f) => f.kind === kind);
+  check(de('hero').length === 5, 'la galería muestra los 5 héroes');
+  check(de('form').length === 6, 'y las 6 transformaciones del druida');
+  check(de('invocation').length === 9, 'y las 9 invocaciones');
+  const ids = de('enemy').map((f) => f.id);
+  check(new Set(ids).size === ids.length, 'ningún enemigo sale repetido');
+  check(Object.keys(ENEMY_RIGS).every((id) => ids.includes(id)), 'están todos los enemigos ilustrados');
+  check(ids.every((id) => !!ENEMY_RIGS[id]), 'y no aparecen jefes');
+  check(secciones.filter((s) => s.act !== undefined).length === 6, 'una sección por escenario (3 actos × 2)');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

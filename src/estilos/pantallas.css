@@ -568,3 +568,65 @@ body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
 }
 .exportar-acciones { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 0.7rem; }
 .exportar-acciones .btn-tomar { cursor: pointer; }
+
+/* ── Galería de sprites ─────────────────────────────────────────────────── */
+.gallery-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #0a0e09 0%, var(--tinta) 60%, #141008 100%);
+}
+.gallery { max-width: 1180px; margin: 0 auto; padding: 1rem 1rem 3rem; }
+.gallery-head {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  padding: 0.7rem 0.4rem;
+  background: linear-gradient(180deg, rgba(13, 18, 12, 0.97), rgba(13, 18, 12, 0.85));
+  border-bottom: 1px solid rgba(217, 169, 63, 0.4);
+}
+.gallery-title { font-family: var(--fuente-titulo); color: var(--brasa-viva); margin: 0 auto 0 0; font-size: 1.4rem; }
+.gallery-modes { display: inline-flex; flex-wrap: wrap; border: 1px solid rgba(232, 217, 176, 0.2); border-radius: 8px; overflow: hidden; }
+.gallery-modes button {
+  font: inherit; font-size: 0.9rem; color: var(--pergamino-oscuro); background: transparent; border: 0;
+  border-right: 1px solid rgba(232, 217, 176, 0.2); padding: 0.3rem 0.75rem; cursor: pointer;
+}
+.gallery-modes button:last-child { border-right: 0; }
+.gallery-modes button[aria-pressed='true'] { background: var(--oro); color: #1a1208; }
+.gallery-help { margin: 0.6rem 0.4rem 0; font-style: italic; opacity: 0.7; }
+.gallery-section-title {
+  font-family: var(--fuente-display);
+  color: var(--pergamino);
+  margin: 1.4rem 0 0.6rem;
+  border-bottom: 1px solid rgba(217, 169, 63, 0.25);
+  padding-bottom: 0.2rem;
+}
+.gallery-section-title small { font-size: 0.8em; opacity: 0.6; font-style: italic; }
+.gallery-stage {
+  --cielo: #0d120c; --horizonte: rgba(255, 140, 59, 0.3); --luna-halo: rgba(255, 214, 160, 0.3);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 0.4rem 1.2rem;
+  padding: 1.2rem 1rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 217, 176, 0.12);
+  background:
+    radial-gradient(circle at 8% 14%, var(--luna-halo), transparent 18%),
+    radial-gradient(ellipse 70% 45% at 50% 100%, var(--horizonte), transparent 72%),
+    var(--cielo);
+}
+.gallery-stage[data-act='heroes'] { --cielo: #17122a; --horizonte: rgba(224, 138, 76, 0.55); --luna-halo: rgba(255, 236, 200, 0.4); }
+.gallery-stage[data-act='1'] { --cielo: #0a0c14; --horizonte: rgba(120, 150, 255, 0.28); --luna-halo: rgba(175, 195, 255, 0.35); }
+.gallery-stage[data-act='2'] { --cielo: #150a06; --horizonte: rgba(255, 90, 30, 0.35); --luna-halo: rgba(255, 110, 60, 0.35); }
+.gallery-card { margin: 0; display: grid; justify-items: center; gap: 0.15rem; cursor: pointer; border-radius: 8px; padding: 0.2rem; }
+.gallery-card:focus-visible { outline: 2px solid var(--brasa); outline-offset: 2px; }
+.gallery-sprite .sprite-marioneta { width: calc(7.4rem * var(--esc, 1)); max-width: 42vw; }
+.gallery-card figcaption { font-family: var(--fuente-titulo); font-size: 0.85rem; letter-spacing: 0.03em; text-align: center; display: flex; gap: 0.35rem; align-items: center; }
+.gallery-elite { font-size: 0.7rem; color: #1a1208; background: var(--oro); border-radius: 4px; padding: 0 0.3rem; }

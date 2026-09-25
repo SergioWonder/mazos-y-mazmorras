@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.4.2';
+export const VERSION = '3.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.5.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '👹 Bestiario ilustrado: los 48 enemigos normales y de élite de los tres actos tienen ya su propio dibujo animado, con tinta, sombras y la luz de la luna de cada acto.',
+      '⚔️ Los enemigos se mueven: atacan con su arma o lanzan conjuros y flechas, retroceden al recibir daño y, al morir, se desploman y se desvanecen.',
+      '🐺 Las invocaciones del druida y del brujo (lobo, oso, espíritus, sabueso y demonio) aparecen con el mismo estilo y luchan a tu lado.',
+      '🎭 Nueva Galería de sprites en el menú principal: todos los héroes, transformaciones, invocaciones y enemigos, animados y agrupados por acto.',
+      '👑 Los jefes mantienen de momento su aspecto actual: su dibujo llegará más adelante.',
+    ],
+  },
   {
     version: '3.4.2',
     fecha: '2026-09-25',

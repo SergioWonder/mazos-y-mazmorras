@@ -163,7 +163,7 @@ src/
   core/        Lógica pura (sin DOM): cartas, enemigos, combate, mapa, reliquias, rng
   ui/          Pantallas DOM: título, mapa, combate, recompensas, fin
   fx/          Partículas en <canvas> (chispas, hojas, luna, furia…), audio y
-               esqueletos animados de los héroes (hero-rig.ts, sin DOM)
+               marionetas animadas (puppet.ts motor, hero-rig.ts, enemy-rigs.ts)
   estilos/     CSS: base, cartas, combate, pantallas
 scripts/       smoke-test del motor
 ```
@@ -179,5 +179,14 @@ cuerpo o proyectil mágico) al jugar un ataque, conjura con el resto de cartas y
 retrocede con un destello al recibir daño. El daño espera al momento del golpe.
 Las transformaciones del druida (Lobo, Oso, Águila, Enjambre, Lunar y Estelar)
 tienen su propia marioneta con el mismo estilo; las invocaciones no. Si hay varias
-formas activas se ve la última lanzada, que entra con un rugido. El
+formas activas se ve la última lanzada, que entra con un rugido.
+
+Los **enemigos normales y de élite y las invocaciones** usan el estilo **ilustrado**:
+el mismo motor de marionetas (`fx/puppet.ts`), con contorno exterior grueso y líneas
+interiores finas. Cada pieza lleva una sombra recortada hacia el lado contrario a
+la luna y un borde de luz del color de la luna del acto (`ui/puppet-sprite.ts`). Se
+construyen con arquetipos paramétricos (bípedo, cuadrúpedo, flotante, amorfo) en
+`fx/enemy-rigs.ts`. Atacan, reciben golpes y mueren con animación propia. Los jefes
+conservan su emoji por ahora. Desde el menú principal, la **Galería de sprites**
+muestra todos los héroes, formas, invocaciones y enemigos animados. El
 cielo del combate tiene luna y bruma de horizonte con el tono de cada acto.
