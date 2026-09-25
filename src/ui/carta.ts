@@ -2,7 +2,7 @@ import type { CartaDef } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardArtUrl } from './card-art-render.ts';
 import { animateCardParticles } from './card-particles.ts';
-import { hasFullArt, CLASS_LOOK } from '../fx/card-art.ts';
+import { hasFullArt, lookOf } from '../fx/card-art.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
   ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder',
@@ -207,7 +207,9 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     fondo.draggable = false;
     const particulas = el('canvas', 'full-art-particulas');
     carta.prepend(fondo, particulas);
-    animateCardParticles(particulas, CLASS_LOOK[def.clase].glow);
+    const glow = lookOf(def).glow;
+    carta.style.setProperty('--brillo-full', `${glow}bf`);
+    animateCardParticles(particulas, glow);
   }
   ajustarTexto(carta);
   return carta;

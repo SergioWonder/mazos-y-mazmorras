@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790346705.7744381,
-    "ast_hash": "31838f85a1fd6a437f1fef166bc1ad61",
+    "mtime": 1790347433.9379988,
+    "ast_hash": "d2a97c634d818d2b6b8ddd503220e3d9",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790346291.4007437,
-    "ast_hash": "9eff88b9e8f8f19fd75e2c2ee20f5208",
+    "mtime": 1790347318.930344,
+    "ast_hash": "17eeb8704b6e0a804d9a6ff057757c87",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790346412.7171082,
-    "ast_hash": "30a8c892c2a947a07dc24593ab2bcca5",
+    "mtime": 1790347369.907695,
+    "ast_hash": "b138a0595d33c733d3b2095de4b74e16",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790346705.7741928,
-    "ast_hash": "278e448aceeca1f41710cd67d29d6ce7",
+    "mtime": 1790347433.937721,
+    "ast_hash": "be2731d0b5b91ab25235398d1120ba6a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790346705.7737432,
-    "ast_hash": "e988dd94dcd7f784712c3b23e64508ee",
+    "mtime": 1790347433.938498,
+    "ast_hash": "32a20b3df4b552c4ea84426143f724c8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -320,8 +320,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-art.ts": {
-    "mtime": 1790346643.1772988,
-    "ast_hash": "2deed7f4e2bc870652cd1daf9fd1c6d2",
+    "mtime": 1790347433.9373362,
+    "ast_hash": "fd5f177d282d0565c9415cce0a1bbf20",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-art-render.ts": {

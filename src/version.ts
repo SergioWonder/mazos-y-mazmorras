@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.0';
+export const VERSION = '3.9.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.1',
+    fecha: '2026-09-25',
+    cambios: [
+      '🎲 Seducir y Deseo pasan a ser «full art», con partículas rosas y doradas, y cuentan su historia: el d20 que decide tu suerte, un antifaz, rosas y un corazón flechado para Seducir, y una estrella fugaz con la fortuna y la ruina en juego para Deseo.',
+    ],
+  },
   {
     version: '3.9.0',
     fecha: '2026-09-25',

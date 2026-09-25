@@ -304,7 +304,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L44",
       "id": "scripts_smoke_test_uisilenciosa",
-      "community": 33,
+      "community": 3,
       "norm_label": "uisilenciosa"
     },
     {
@@ -358,7 +358,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L126",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 32,
+      "community": 3,
       "norm_label": "mejorobjetivo()"
     },
     {
@@ -430,7 +430,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L30",
       "id": "core_cartas_basicas",
-      "community": 35,
+      "community": 8,
       "norm_label": "basicas"
     },
     {
@@ -439,7 +439,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L75",
       "id": "core_cartas_druida",
-      "community": 41,
+      "community": 39,
       "norm_label": "druida"
     },
     {
@@ -448,7 +448,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L725",
       "id": "core_cartas_barbaro",
-      "community": 44,
+      "community": 27,
       "norm_label": "barbaro"
     },
     {
@@ -475,7 +475,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1387",
       "id": "core_cartas_mago",
-      "community": 45,
+      "community": 8,
       "norm_label": "mago"
     },
     {
@@ -511,7 +511,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2767",
       "id": "core_cartas_brujo",
-      "community": 43,
+      "community": 23,
       "norm_label": "brujo"
     },
     {
@@ -619,7 +619,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L12",
       "id": "core_combate_presentador",
-      "community": 33,
+      "community": 3,
       "norm_label": "presentador"
     },
     {
@@ -1024,7 +1024,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L12",
       "id": "core_enemigos_goblin_cortador",
-      "community": 3,
+      "community": 0,
       "norm_label": "goblin_cortador"
     },
     {
@@ -1033,7 +1033,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L20",
       "id": "core_enemigos_goblin_arquero",
-      "community": 3,
+      "community": 0,
       "norm_label": "goblin_arquero"
     },
     {
@@ -1231,7 +1231,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L284",
       "id": "core_enemigos_ignifax",
-      "community": 3,
+      "community": 0,
       "norm_label": "ignifax"
     },
     {
@@ -1411,7 +1411,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L495",
       "id": "core_enemigos_heraldo_culto",
-      "community": 3,
+      "community": 0,
       "norm_label": "heraldo_culto"
     },
     {
@@ -1510,7 +1510,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L600",
       "id": "core_enemigos_contemplador",
-      "community": 3,
+      "community": 0,
       "norm_label": "contemplador"
     },
     {
@@ -1555,7 +1555,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L6",
       "id": "core_eventos_opcionevento",
-      "community": 36,
+      "community": 5,
       "norm_label": "opcionevento"
     },
     {
@@ -1735,7 +1735,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L104",
       "id": "core_guardado_hayguardado",
-      "community": 15,
+      "community": 1,
       "norm_label": "hayguardado()"
     },
     {
@@ -1744,7 +1744,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L112",
       "id": "core_guardado_borrarguardado",
-      "community": 15,
+      "community": 1,
       "norm_label": "borrarguardado()"
     },
     {
@@ -1771,7 +1771,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L93",
       "id": "core_mapa_nodosdisponibles",
-      "community": 32,
+      "community": 3,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -1888,7 +1888,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 32,
+      "community": 1,
       "norm_label": "elegir()"
     },
     {
@@ -1915,7 +1915,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L7",
       "id": "core_run_pv_por_clase",
-      "community": 41,
+      "community": 39,
       "norm_label": "pv_por_clase"
     },
     {
@@ -1969,7 +1969,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L5",
       "id": "core_types_rareza",
-      "community": 5,
+      "community": 8,
       "norm_label": "rareza"
     },
     {
@@ -2086,7 +2086,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L172",
       "id": "core_types_espacioconjuro",
-      "community": 45,
+      "community": 8,
       "norm_label": "espacioconjuro"
     },
     {
@@ -2230,7 +2230,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "id": "fx_audio",
-      "community": 34,
+      "community": 33,
       "norm_label": "audio.ts"
     },
     {
@@ -2239,7 +2239,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L12",
       "id": "fx_audio_capa",
-      "community": 34,
+      "community": 33,
       "norm_label": "capa"
     },
     {
@@ -2248,7 +2248,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L23",
       "id": "fx_audio_recetas",
-      "community": 34,
+      "community": 33,
       "norm_label": "recetas"
     },
     {
@@ -2257,7 +2257,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L85",
       "id": "fx_audio_temachip",
-      "community": 34,
+      "community": 33,
       "norm_label": "temachip"
     },
     {
@@ -2266,7 +2266,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L97",
       "id": "fx_audio_temas",
-      "community": 37,
+      "community": 27,
       "norm_label": "temas"
     },
     {
@@ -2482,7 +2482,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L487",
       "id": "fx_audio_audio",
-      "community": 34,
+      "community": 33,
       "norm_label": "audio"
     },
     {
@@ -2491,7 +2491,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L1",
       "id": "fx_card_art",
-      "community": 18,
+      "community": 38,
       "norm_label": "card-art.ts"
     },
     {
@@ -2500,7 +2500,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L16",
       "id": "fx_card_art_pt",
-      "community": 18,
+      "community": 38,
       "norm_label": "pt"
     },
     {
@@ -2509,7 +2509,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L17",
       "id": "fx_card_art_c",
-      "community": 18,
+      "community": 38,
       "norm_label": "c()"
     },
     {
@@ -2518,7 +2518,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L18",
       "id": "fx_card_art_e",
-      "community": 18,
+      "community": 38,
       "norm_label": "e()"
     },
     {
@@ -2527,7 +2527,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L19",
       "id": "fx_card_art_p",
-      "community": 18,
+      "community": 38,
       "norm_label": "p()"
     },
     {
@@ -2536,7 +2536,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L20",
       "id": "fx_card_art_l",
-      "community": 18,
+      "community": 38,
       "norm_label": "l()"
     },
     {
@@ -2545,7 +2545,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L23",
       "id": "fx_card_art_arc",
-      "community": 18,
+      "community": 38,
       "norm_label": "arc()"
     },
     {
@@ -2554,7 +2554,7 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L28",
       "id": "fx_card_art_star",
-      "community": 18,
+      "community": 38,
       "norm_label": "star()"
     },
     {
@@ -2563,23 +2563,23 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L35",
       "id": "fx_card_art_motifs",
-      "community": 18,
+      "community": 38,
       "norm_label": "motifs"
     },
     {
       "label": "CREATURES",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L271",
+      "source_location": "L299",
       "id": "fx_card_art_creatures",
-      "community": 18,
+      "community": 38,
       "norm_label": "creatures"
     },
     {
       "label": "bbox()",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L280",
+      "source_location": "L308",
       "id": "fx_card_art_bbox",
       "community": 42,
       "norm_label": "bbox()"
@@ -2588,7 +2588,7 @@
       "label": "place()",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L294",
+      "source_location": "L322",
       "id": "fx_card_art_place",
       "community": 38,
       "norm_label": "place()"
@@ -2597,52 +2597,52 @@
       "label": "BASE_PALETTE",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L308",
+      "source_location": "L336",
       "id": "fx_card_art_base_palette",
-      "community": 18,
+      "community": 38,
       "norm_label": "base_palette"
     },
     {
       "label": "ClassLook",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L318",
+      "source_location": "L346",
       "id": "fx_card_art_classlook",
-      "community": 18,
+      "community": 38,
       "norm_label": "classlook"
     },
     {
       "label": "CLASS_LOOK",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L319",
+      "source_location": "L347",
       "id": "fx_card_art_class_look",
-      "community": 18,
+      "community": 38,
       "norm_label": "class_look"
     },
     {
       "label": "SCENES",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L329",
+      "source_location": "L357",
       "id": "fx_card_art_scenes",
-      "community": 18,
+      "community": 38,
       "norm_label": "scenes"
     },
     {
       "label": "FULL_SCENES",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L491",
+      "source_location": "L519",
       "id": "fx_card_art_full_scenes",
-      "community": 18,
+      "community": 38,
       "norm_label": "full_scenes"
     },
     {
       "label": "cardScene",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L511",
+      "source_location": "L549",
       "id": "fx_card_art_cardscene",
       "community": 38,
       "norm_label": "cardscene"
@@ -2651,10 +2651,28 @@
       "label": "hasFullArt()",
       "file_type": "code",
       "source_file": "src/fx/card-art.ts",
-      "source_location": "L508",
+      "source_location": "L538",
       "id": "fx_card_art_hasfullart",
       "community": 38,
       "norm_label": "hasfullart()"
+    },
+    {
+      "label": "LOOK_OVERRIDES",
+      "file_type": "code",
+      "source_file": "src/fx/card-art.ts",
+      "source_location": "L541",
+      "id": "fx_card_art_look_overrides",
+      "community": 38,
+      "norm_label": "look_overrides"
+    },
+    {
+      "label": "lookOf()",
+      "file_type": "code",
+      "source_file": "src/fx/card-art.ts",
+      "source_location": "L546",
+      "id": "fx_card_art_lookof",
+      "community": 19,
+      "norm_label": "lookof()"
     },
     {
       "label": "dado.ts",
@@ -3292,7 +3310,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L185",
       "id": "fx_hero_rig_formfromlabel",
-      "community": 3,
+      "community": 6,
       "norm_label": "formfromlabel()"
     },
     {
@@ -3301,7 +3319,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L191",
       "id": "fx_hero_rig_currentform",
-      "community": 3,
+      "community": 6,
       "norm_label": "currentform()"
     },
     {
@@ -3328,7 +3346,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L245",
       "id": "fx_hero_rig_form_rigs",
-      "community": 18,
+      "community": 38,
       "norm_label": "form_rigs"
     },
     {
@@ -4336,7 +4354,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L83",
       "id": "ui_bendicion_pantallabendicion",
-      "community": 36,
+      "community": 1,
       "norm_label": "pantallabendicion()"
     },
     {
@@ -4417,7 +4435,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L1",
       "id": "ui_card_particles",
-      "community": 19,
+      "community": 35,
       "norm_label": "card-particles.ts"
     },
     {
@@ -4426,7 +4444,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L5",
       "id": "ui_card_particles_mote",
-      "community": 19,
+      "community": 35,
       "norm_label": "mote"
     },
     {
@@ -4435,7 +4453,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L6",
       "id": "ui_card_particles_layer",
-      "community": 19,
+      "community": 35,
       "norm_label": "layer"
     },
     {
@@ -4444,7 +4462,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L8",
       "id": "ui_card_particles_layers",
-      "community": 19,
+      "community": 35,
       "norm_label": "layers"
     },
     {
@@ -4453,7 +4471,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L12",
       "id": "ui_card_particles_spawn",
-      "community": 19,
+      "community": 35,
       "norm_label": "spawn()"
     },
     {
@@ -4462,7 +4480,7 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L22",
       "id": "ui_card_particles_loop",
-      "community": 19,
+      "community": 35,
       "norm_label": "loop()"
     },
     {
@@ -4570,7 +4588,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L101",
       "id": "ui_carta_efecto_conjuro",
-      "community": 19,
+      "community": 34,
       "norm_label": "efecto_conjuro"
     },
     {
@@ -4579,7 +4597,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L109",
       "id": "ui_carta_modscarta",
-      "community": 34,
+      "community": 19,
       "norm_label": "modscarta"
     },
     {
@@ -4622,7 +4640,7 @@
       "label": "actualizarTextoCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L217",
+      "source_location": "L219",
       "id": "ui_carta_actualizartextocarta",
       "community": 19,
       "norm_label": "actualizartextocarta()"
@@ -4631,7 +4649,7 @@
       "label": "ARTE_CARTA",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L224",
+      "source_location": "L226",
       "id": "ui_carta_arte_carta",
       "community": 19,
       "norm_label": "arte_carta"
@@ -4640,7 +4658,7 @@
       "label": "arteDeCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L288",
+      "source_location": "L290",
       "id": "ui_carta_artedecarta",
       "community": 19,
       "norm_label": "artedecarta()"
@@ -4696,7 +4714,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L1",
       "id": "ui_compendio",
-      "community": 35,
+      "community": 37,
       "norm_label": "compendio.ts"
     },
     {
@@ -4714,7 +4732,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L22",
       "id": "ui_compendio_comentarios",
-      "community": 35,
+      "community": 37,
       "norm_label": "comentarios"
     },
     {
@@ -4723,7 +4741,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L24",
       "id": "ui_compendio_cargar",
-      "community": 35,
+      "community": 37,
       "norm_label": "cargar()"
     },
     {
@@ -4732,7 +4750,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L31",
       "id": "ui_compendio_guardar",
-      "community": 35,
+      "community": 37,
       "norm_label": "guardar()"
     },
     {
@@ -4741,7 +4759,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L37",
       "id": "ui_compendio_grupos",
-      "community": 35,
+      "community": 37,
       "norm_label": "grupos"
     },
     {
@@ -4759,7 +4777,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L133",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 35,
+      "community": 37,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -4768,7 +4786,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L1",
       "id": "ui_evento",
-      "community": 1,
+      "community": 36,
       "norm_label": "evento.ts"
     },
     {
@@ -4930,7 +4948,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L24",
       "id": "ui_gallery_spritefor",
-      "community": 14,
+      "community": 6,
       "norm_label": "spritefor()"
     },
     {
@@ -4993,7 +5011,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L1",
       "id": "ui_mapa",
-      "community": 46,
+      "community": 36,
       "norm_label": "mapa.ts"
     },
     {
@@ -5002,7 +5020,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L6",
       "id": "ui_mapa_icono_nodo",
-      "community": 46,
+      "community": 36,
       "norm_label": "icono_nodo"
     },
     {
@@ -5011,7 +5029,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L9",
       "id": "ui_mapa_nombre_nodo",
-      "community": 46,
+      "community": 36,
       "norm_label": "nombre_nodo"
     },
     {
@@ -5020,7 +5038,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L14",
       "id": "ui_mapa_pantallamapa",
-      "community": 46,
+      "community": 1,
       "norm_label": "pantallamapa()"
     },
     {
@@ -6288,7 +6306,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L74",
-      "community": 18,
+      "community": 6,
       "norm_label": "p()",
       "id": "fx_hero_rig_p"
     },
@@ -6297,7 +6315,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L75",
-      "community": 18,
+      "community": 6,
       "norm_label": "l()",
       "id": "fx_hero_rig_l"
     },
@@ -6777,7 +6795,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 27,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -6790,7 +6808,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 37,
+      "community": 27,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -6803,7 +6821,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 41,
+      "community": 39,
       "norm_label": "clase druida (70 pv)",
       "id": "readme_clase_druida"
     },
@@ -6816,7 +6834,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 27,
       "norm_label": "clase barbaro (80 pv)",
       "id": "readme_clase_barbaro"
     },
@@ -6829,7 +6847,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 45,
+      "community": 8,
       "norm_label": "clase mago (62 pv)",
       "id": "readme_clase_mago"
     },
@@ -6855,7 +6873,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 41,
+      "community": 39,
       "norm_label": "transformaciones (druida)",
       "id": "readme_transformaciones"
     },
@@ -6894,7 +6912,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 27,
       "norm_label": "furia (barbaro)",
       "id": "readme_furia"
     },
@@ -6907,7 +6925,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 44,
+      "community": 27,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -6920,7 +6938,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 45,
+      "community": 8,
       "norm_label": "espacios de conjuro en piramide (mago)",
       "id": "readme_espacios_conjuro"
     },
@@ -7024,7 +7042,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 27,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -7115,7 +7133,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 35,
+      "community": 23,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -7206,7 +7224,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 33,
+      "community": 3,
       "norm_label": "arquitectura: nucleo sin dom + interfaz presentador",
       "id": "readme_arquitectura_presentador"
     },
@@ -7219,7 +7237,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 33,
+      "community": 3,
       "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
       "id": "readme_estructura_carpetas"
     },
@@ -7232,7 +7250,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 33,
+      "community": 3,
       "norm_label": "smoke test del motor sin navegador",
       "id": "readme_smoke_test_motor"
     },
@@ -7258,7 +7276,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 37,
+      "community": 27,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -7271,7 +7289,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 37,
+      "community": 27,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -7284,7 +7302,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 34,
+      "community": 33,
       "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
       "id": "audio_leeme_sfx_sintetizados"
     },
@@ -7349,7 +7367,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 35,
+      "community": 23,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -7375,7 +7393,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 33,
+      "community": 3,
       "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
       "id": "index_shell_html"
     },
@@ -7388,7 +7406,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 23,
       "norm_label": "clase brujo (64 pv)",
       "id": "readme_clase_brujo"
     },
@@ -7466,7 +7484,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 43,
+      "community": 27,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -8229,9 +8247,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "imports",
@@ -8339,9 +8357,20 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "fx_card_art",
-      "confidence_score": 1.0
+      "target": "fx_card_art"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_card_art_cardscene"
     },
     {
       "relation": "imports",
@@ -8351,7 +8380,7 @@
       "source_location": "L25",
       "weight": 1.0,
       "source": "scripts_smoke_test",
-      "target": "fx_card_art_cardscene",
+      "target": "fx_card_art_hasfullart",
       "confidence_score": 1.0
     },
     {
@@ -8625,9 +8654,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L26",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "fx_puppet_gpu_shapebbox",
-      "confidence_score": 1.0
+      "target": "fx_puppet_gpu_shapebbox"
     },
     {
       "relation": "imports",
@@ -13945,9 +13974,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "core_types",
-      "confidence_score": 1.0
+      "target": "core_types"
     },
     {
       "relation": "imports_from",
@@ -13978,9 +14007,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "core_types",
-      "confidence_score": 1.0
+      "target": "core_types"
     },
     {
       "relation": "imports_from",
@@ -14352,9 +14381,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "references",
@@ -14363,9 +14392,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L502",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_cardscene",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "imports",
@@ -14374,9 +14403,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "imports",
@@ -15335,9 +15364,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_arc",
-      "confidence_score": 1.0
+      "target": "fx_card_art_arc"
     },
     {
       "relation": "contains",
@@ -15345,9 +15374,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L308",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_base_palette",
-      "confidence_score": 1.0
+      "target": "fx_card_art_base_palette"
     },
     {
       "relation": "contains",
@@ -15355,9 +15384,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L280",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_bbox",
-      "confidence_score": 1.0
+      "target": "fx_card_art_bbox"
     },
     {
       "relation": "contains",
@@ -15365,9 +15394,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_c",
-      "confidence_score": 1.0
+      "target": "fx_card_art_c"
     },
     {
       "relation": "contains",
@@ -15375,9 +15404,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L511",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_cardscene",
-      "confidence_score": 1.0
+      "target": "fx_card_art_cardscene"
     },
     {
       "relation": "contains",
@@ -15385,9 +15414,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L319",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_class_look",
-      "confidence_score": 1.0
+      "target": "fx_card_art_class_look"
     },
     {
       "relation": "contains",
@@ -15395,9 +15424,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L318",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_classlook",
-      "confidence_score": 1.0
+      "target": "fx_card_art_classlook"
     },
     {
       "relation": "contains",
@@ -15405,9 +15434,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L271",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_creatures",
-      "confidence_score": 1.0
+      "target": "fx_card_art_creatures"
     },
     {
       "relation": "contains",
@@ -15415,9 +15444,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_e",
-      "confidence_score": 1.0
+      "target": "fx_card_art_e"
     },
     {
       "relation": "contains",
@@ -15425,9 +15454,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L491",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_full_scenes",
-      "confidence_score": 1.0
+      "target": "fx_card_art_full_scenes"
     },
     {
       "relation": "contains",
@@ -15435,9 +15464,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L508",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_hasfullart",
-      "confidence_score": 1.0
+      "target": "fx_card_art_hasfullart"
     },
     {
       "relation": "contains",
@@ -15445,8 +15474,28 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_l",
+      "target": "fx_card_art_l"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/card-art.ts",
+      "source_location": "L541",
+      "weight": 1.0,
+      "source": "fx_card_art",
+      "target": "fx_card_art_look_overrides",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/card-art.ts",
+      "source_location": "L546",
+      "weight": 1.0,
+      "source": "fx_card_art",
+      "target": "fx_card_art_lookof",
       "confidence_score": 1.0
     },
     {
@@ -15455,9 +15504,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_motifs",
-      "confidence_score": 1.0
+      "target": "fx_card_art_motifs"
     },
     {
       "relation": "contains",
@@ -15465,9 +15514,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_p",
-      "confidence_score": 1.0
+      "target": "fx_card_art_p"
     },
     {
       "relation": "contains",
@@ -15475,9 +15524,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L294",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_place",
-      "confidence_score": 1.0
+      "target": "fx_card_art_place"
     },
     {
       "relation": "contains",
@@ -15485,9 +15534,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_pt",
-      "confidence_score": 1.0
+      "target": "fx_card_art_pt"
     },
     {
       "relation": "contains",
@@ -15495,9 +15544,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L329",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_scenes",
-      "confidence_score": 1.0
+      "target": "fx_card_art_scenes"
     },
     {
       "relation": "contains",
@@ -15505,9 +15554,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L28",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_card_art_star",
-      "confidence_score": 1.0
+      "target": "fx_card_art_star"
     },
     {
       "relation": "imports_from",
@@ -15516,9 +15565,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_enemy_rigs",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs"
     },
     {
       "relation": "imports",
@@ -15527,9 +15576,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_enemy_rigs_enemy_rigs",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_enemy_rigs"
     },
     {
       "relation": "imports",
@@ -15538,9 +15587,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_enemy_rigs_invocation_rigs",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_invocation_rigs"
     },
     {
       "relation": "imports_from",
@@ -15549,9 +15598,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_hero_rig",
-      "confidence_score": 1.0
+      "target": "fx_hero_rig"
     },
     {
       "relation": "imports",
@@ -15560,9 +15609,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L9",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_hero_rig_form_rigs",
-      "confidence_score": 1.0
+      "target": "fx_hero_rig_form_rigs"
     },
     {
       "relation": "imports_from",
@@ -15571,9 +15620,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet",
-      "confidence_score": 1.0
+      "target": "fx_puppet"
     },
     {
       "relation": "imports",
@@ -15582,9 +15631,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "imports",
@@ -15593,9 +15642,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "imports",
@@ -15604,9 +15653,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "imports",
@@ -15615,9 +15664,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "imports",
@@ -15626,9 +15675,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_puppetrig",
-      "confidence_score": 1.0
+      "target": "fx_puppet_puppetrig"
     },
     {
       "relation": "imports",
@@ -15637,9 +15686,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art",
-      "target": "fx_puppet_shape",
-      "confidence_score": 1.0
+      "target": "fx_puppet_shape"
     },
     {
       "relation": "imports_from",
@@ -15648,9 +15697,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "fx_card_art",
-      "confidence_score": 1.0
+      "target": "fx_card_art"
     },
     {
       "relation": "imports_from",
@@ -15659,9 +15708,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_art",
-      "confidence_score": 1.0
+      "target": "fx_card_art"
     },
     {
       "relation": "calls",
@@ -15670,9 +15719,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_c",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "calls",
@@ -15681,9 +15730,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_e",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "calls",
@@ -15692,9 +15741,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L19",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_p",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -15703,9 +15752,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L29",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_star",
-      "target": "fx_card_art_p",
-      "confidence_score": 1.0
+      "target": "fx_card_art_p"
     },
     {
       "relation": "calls",
@@ -15714,9 +15763,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_l",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -15736,9 +15785,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L532",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_cardscene",
-      "target": "fx_card_art_bbox",
-      "confidence_score": 1.0
+      "target": "fx_card_art_bbox"
     },
     {
       "relation": "calls",
@@ -15747,9 +15796,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L534",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_cardscene",
-      "target": "fx_card_art_place",
-      "confidence_score": 1.0
+      "target": "fx_card_art_place"
     },
     {
       "relation": "imports",
@@ -15758,8 +15807,19 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_art_class_look",
+      "target": "fx_card_art_class_look"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/card-art.ts",
+      "source_location": "L552",
+      "weight": 1.0,
+      "source": "fx_card_art_cardscene",
+      "target": "fx_card_art_lookof",
       "confidence_score": 1.0
     },
     {
@@ -15769,9 +15829,9 @@
       "source_file": "src/fx/card-art.ts",
       "source_location": "L500",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_art_cardscene",
-      "target": "fx_puppet_puppetrig",
-      "confidence_score": 1.0
+      "target": "fx_puppet_puppetrig"
     },
     {
       "relation": "imports",
@@ -15780,9 +15840,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "fx_card_art_cardscene",
-      "confidence_score": 1.0
+      "target": "fx_card_art_cardscene"
     },
     {
       "relation": "imports",
@@ -15791,9 +15851,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "fx_card_art_hasfullart",
-      "confidence_score": 1.0
+      "target": "fx_card_art_hasfullart"
     },
     {
       "relation": "calls",
@@ -15813,9 +15873,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_art_hasfullart",
-      "confidence_score": 1.0
+      "target": "fx_card_art_hasfullart"
     },
     {
       "relation": "calls",
@@ -15827,6 +15887,28 @@
       "weight": 1.0,
       "source": "ui_carta_rendercarta",
       "target": "fx_card_art_hasfullart"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_carta",
+      "target": "fx_card_art_lookof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L210",
+      "weight": 1.0,
+      "source": "ui_carta_rendercarta",
+      "target": "fx_card_art_lookof"
     },
     {
       "relation": "contains",
@@ -21125,9 +21207,9 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L301",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_stage_puppetstage_renderstill",
-      "target": "fx_puppet_puppetrig",
-      "confidence_score": 1.0
+      "target": "fx_puppet_puppetrig"
     },
     {
       "relation": "references",
@@ -22469,9 +22551,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_card_art_render_cache",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_cache"
     },
     {
       "relation": "contains",
@@ -22479,9 +22561,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_card_art_render_cardarturl",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_cardarturl"
     },
     {
       "relation": "contains",
@@ -22489,9 +22571,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L20",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_card_art_render_paintbackground",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_paintbackground"
     },
     {
       "relation": "contains",
@@ -22499,9 +22581,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_card_art_render_paintfinish",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_paintfinish"
     },
     {
       "relation": "contains",
@@ -22509,9 +22591,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_card_art_render_seeded",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_seeded"
     },
     {
       "relation": "imports_from",
@@ -22520,9 +22602,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_puppet_stage",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage"
     },
     {
       "relation": "imports",
@@ -22531,9 +22613,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render",
-      "target": "ui_puppet_stage_puppetstage",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage_puppetstage"
     },
     {
       "relation": "imports_from",
@@ -22542,9 +22624,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "ui_card_art_render",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render"
     },
     {
       "relation": "calls",
@@ -22553,9 +22635,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render_cardarturl",
-      "target": "ui_card_art_render_seeded",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_seeded"
     },
     {
       "relation": "calls",
@@ -22564,9 +22646,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render_cardarturl",
-      "target": "ui_card_art_render_paintbackground",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_paintbackground"
     },
     {
       "relation": "calls",
@@ -22575,9 +22657,9 @@
       "source_file": "src/ui/card-art-render.ts",
       "source_location": "L110",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_art_render_cardarturl",
-      "target": "ui_card_art_render_paintfinish",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_paintfinish"
     },
     {
       "relation": "imports",
@@ -22586,9 +22668,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "ui_card_art_render_cardarturl",
-      "confidence_score": 1.0
+      "target": "ui_card_art_render_cardarturl"
     },
     {
       "relation": "calls",
@@ -22607,9 +22689,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_animatecardparticles",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_animatecardparticles"
     },
     {
       "relation": "contains",
@@ -22617,9 +22699,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_layer",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_layer"
     },
     {
       "relation": "contains",
@@ -22627,9 +22709,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_layers",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_layers"
     },
     {
       "relation": "contains",
@@ -22637,9 +22719,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_loop",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_loop"
     },
     {
       "relation": "contains",
@@ -22647,9 +22729,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_mote",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_mote"
     },
     {
       "relation": "contains",
@@ -22657,9 +22739,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles",
-      "target": "ui_card_particles_spawn",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_spawn"
     },
     {
       "relation": "imports_from",
@@ -22668,9 +22750,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "ui_card_particles",
-      "confidence_score": 1.0
+      "target": "ui_card_particles"
     },
     {
       "relation": "calls",
@@ -22679,9 +22761,9 @@
       "source_file": "src/ui/card-particles.ts",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_card_particles_loop",
-      "target": "ui_card_particles_spawn",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_spawn"
     },
     {
       "relation": "imports",
@@ -22690,9 +22772,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "ui_card_particles_animatecardparticles",
-      "confidence_score": 1.0
+      "target": "ui_card_particles_animatecardparticles"
     },
     {
       "relation": "calls",
@@ -25224,9 +25306,9 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_stage_puppetstage",
-      "target": "ui_puppet_stage_puppetstage_offscreen",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage_puppetstage_offscreen"
     },
     {
       "relation": "method",
@@ -25244,9 +25326,9 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L301",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_stage_puppetstage",
-      "target": "ui_puppet_stage_puppetstage_renderstill",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage_puppetstage_renderstill"
     },
     {
       "relation": "method",
@@ -25287,9 +25369,9 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L292",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_stage_puppetstage_offscreen",
-      "target": "ui_puppet_stage_forcesvg",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage_forcesvg"
     },
     {
       "relation": "calls",
@@ -25298,9 +25380,9 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L315",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_stage_puppetstage_renderstill",
-      "target": "ui_puppet_stage_puppetstage_drawsprite",
-      "confidence_score": 1.0
+      "target": "ui_puppet_stage_puppetstage_drawsprite"
     },
     {
       "relation": "calls",
@@ -26124,9 +26206,9 @@
       "source_file": "README.md",
       "source_location": "L198",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_estructura",
-      "target": "readme_arte_de_las_cartas",
-      "confidence_score": 1.0
+      "target": "readme_arte_de_las_cartas"
     },
     {
       "relation": "contains",
@@ -26947,5 +27029,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "d986ab96623e90d0b62f1186f686232c5d269594"
+  "built_at_commit": "1293c33677ef040f7c36ef46a232bd8a3fa5c989"
 }

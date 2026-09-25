@@ -203,7 +203,7 @@ ilustrados (armas, llamas, runas, lunas, calaveras, tentáculos…) y criaturas 
 bestiario, descrita con una línea compacta por carta. `ui/card-art-render.ts` la pinta
 una sola vez: un fondo 2D con el color de la clase, un encuadre según el tipo (ataque,
 habilidad o poder), grano de papel y halo, y la escena encima con el renderizador WebGL.
-El resultado se guarda como imagen. Las **cartas únicas de clase** son **full art**: la
+El resultado se guarda como imagen. Las **cartas únicas de clase**, junto con *Seducir* y *Deseo*, son **full art**: la
 ilustración cubre toda la carta con una composición vertical, respira con una animación
 lenta, el marco late con el color de la clase y tiene partículas vivas
 (`ui/card-particles.ts`). Sin WebGL2 se mantienen los emojis.

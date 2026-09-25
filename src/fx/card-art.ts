@@ -261,6 +261,34 @@ const MOTIFS: Record<string, () => Shape[]> = {
     const tip = star('starGlow', 5, 3, 7) as Extract<Shape, { t: 'p' }>;
     return [l('wood', -14, 14, 10, -10, 2.2), l('gold', -14, 14, -9, 9, 2.6), p('starGlow', tip.pts.map(([x, y]) => [x + 12, y - 12] as Pt))];
   },
+  die: () => {
+    // d20: hexagonal silhouette, the upper face showing a 20
+    const hex = arc(0, 0, 15, -90, 210, 6);
+    return [
+      p('die', hex),
+      l('ink', 0, -8, 0, -15, 0.6), l('ink', 7, 5, 13, 7.5, 0.6), l('ink', 7, 5, 13, -7.5, 0.6), l('ink', -7, 5, -13, 7.5, 0.6),
+      l('ink', -7, 5, -13, -7.5, 0.6), l('ink', 7, 5, 0, 15, 0.6), l('ink', -7, 5, 0, 15, 0.6),
+      p('dieFace', [[0, -8], [7, 5], [-7, 5]]),
+      l('ink', -3.2, -1.2, -1.2, -1.8, 0.55), l('ink', -1.2, -1.8, -1.3, 0.2, 0.55), l('ink', -1.3, 0.2, -3.4, 2.6, 0.55), l('ink', -3.4, 2.6, -1, 2.6, 0.55),
+      e('ink', 1.9, 0.6, 1.4, 2.1), e('dieFace', 1.9, 0.6, 0.6, 1.3),
+    ];
+  },
+  eyeMask: () => [
+    p('feather', [[11, -7], [18, -22], [23, -21], [16, -5]]), l('ink', 13, -7, 20, -20, 0.5),
+    l('rose', -17, -2, -23, 8, 1.4), l('rose', -17, -2, -21, 11, 1.2),
+    p('roseMask', [[-18, -4], [-11, -9], [-2, -6], [0, -4], [2, -6], [11, -9], [18, -4], [15, 4], [7, 6], [1, 2], [-1, 2], [-7, 6], [-15, 4]]),
+    e('socket', -8, -1, 4.2, 2.4), e('socket', 8, -1, 4.2, 2.4), c('gold', 0, -3, 1.4), c('gem', -13, -5, 0.9), c('gem', 13, -5, 0.9),
+  ],
+  rose: () => [
+    l('leaf', 0, 6, -2, 26, 1.8), e('leaf', -6, 16, 4.5, 2), e('leaf', 4, 21, 4, 1.8),
+    p('leaf', [[-5, 5], [0, 8], [5, 5], [3, 9], [-3, 9]]),
+    c('rose', 0, 0, 7.5), c('rose', -4.5, -2.5, 4.8), c('rose', 4.5, -3, 4.8), c('roseDark', 0, -1.5, 3.4),
+    l('ink', -2, -1, 1.5, -3, 0.5), l('ink', 1.5, -3, 2.2, 0.5, 0.5), l('ink', -5, 3, 5, 3.5, 0.5),
+  ],
+  shootingStar: () => [
+    p('starGlow', [[-22, 14], [-3, -3], [3, 3]]), p('frost', [[-14, 10], [-2, -1], [1, 2]]),
+    star('starGlow', 5, 4.5, 11),
+  ],
   cloak: () => [
     p('cloth', [[-6, -18], [6, -18], [14, 18], [8, 14], [4, 18], [0, 14], [-4, 18], [-8, 14], [-14, 18]]),
     p('socket', [[-5, -12], [5, -12], [4, -2], [-4, -2]]), c('eyeGlow', -2, -8, 1), c('eyeGlow', 2, -8, 1),
@@ -312,7 +340,7 @@ const BASE_PALETTE: Record<string, string> = {
   water: '#3a7ab0', poison: '#7ce05a', magic: '#a98bff', sclera: '#ece4d4', card: '#eadcb8', flesh: '#8a5a6a', wing: '#4a2a3a',
   void: '#4a1a78', voidCore: '#e0b0ff', wind: '#b8c8d8', breeze: '#eef4f8', toxic: '#86a850', stone: '#7a7068', fur: '#7a6a58', gem: '#7ae0ff', wax: '#e8dcc0',
   slash: '#fff2d8', cloudy: '#7a8a6a', soul: '#9fe8ff', hat: '#3a3aa0', feather: '#e8e0d0', violetFire: '#c070ff',
-  violetCore: '#f0d0ff', greenFire: '#8ce06a', redMagic: '#ff5a5a', horn: '#d8c7a0', sparkle: '#fff8e0', ink: '#140d0a',
+  violetCore: '#f0d0ff', greenFire: '#8ce06a', redMagic: '#ff5a5a', horn: '#d8c7a0', sparkle: '#fff8e0', die: '#efe4c8', dieFace: '#f8f0dc', rose: '#c0284a', roseDark: '#8a1030', roseMask: '#f0c8d8', ink: '#140d0a',
 };
 
 export interface ClassLook { top: string; bottom: string; glow: string; magic: string; rim: string }
@@ -481,8 +509,8 @@ const SCENES: Record<string, string> = {
   'verbo-aniquilacion': 'voidSpiral@70,40,1.2;skull@70,40,0.9',
   'pacto-final': 'voidSpiral@70,40,1.7;chain@70,62,1.2',
   // Incoloras y generadas
-  seducir: 'heart@70,40,1.4{blood=redMagic};sparkle@40,22,0.6;sparkle@100,58,0.5',
-  deseo: 'wand@70,42,1.4;sparkle@34,22,0.6;star@108,60,0.5',
+  seducir: 'heart@60,40,1.1{blood=rose};arrow@60,40,1.5,-35;rose@26,50,0.7,-20;die@104,48,0.85',
+  deseo: 'shootingStar@88,24,1.0,-20;wand@46,46,1.1;sun@104,54,0.55;die@104,54,0.7',
   'conjuro-prodigioso': 'scroll@70,46,1.5;runes@70,22,0.7',
   daga: 'dagger@70,40,1.6,45',
 };
@@ -493,6 +521,8 @@ const FULL_SCENES: Record<string, string> = {
   'furia-indomita': 'horn@38,70,1.7;horn@102,70,1.7,0,f;skull@70,56,1.1;flame@70,150,1.5;axe@54,122,1.9,-28;axe@86,122,1.9,28,f;flame@26,186,0.8;flame@114,186,0.8;drop@28,110,0.6;drop@112,112,0.5',
   'maestria-conjuros': 'runes@70,92,3.2;runes@70,92,1.8{magic=gem};orb@70,92,1.0;crown@70,34,1.2;book@70,160,1.6;sparkle@26,46,0.8;sparkle@116,62,0.7;star@24,128,0.6;star@118,132,0.5;candle@20,176,0.7;candle@120,176,0.7',
   'danza-mortal': 'wind@70,100,2.4;dagger@70,40,1.2,0;dagger@112,70,1.2,60;dagger@112,130,1.2,120;dagger@70,160,1.2,180;dagger@28,130,1.2,240;dagger@28,70,1.2,300;mask@70,100,1.1;sparkle@40,34,0.6;sparkle@104,182,0.6',
+  seducir: 'eyeMask@70,50,1.8;heart@70,104,1.9{blood=rose};arrow@70,104,2.3,-35;rose@28,150,1.1,-20;rose@114,158,0.95,20,f;sun@70,168,0.9{gold=rose,flameCore=roseMask};die@70,168,1.15;heart@26,70,0.5{blood=rose};heart@116,82,0.42{blood=rose};heart@112,30,0.34{blood=rose};sparkle@30,108,0.6;sparkle@108,128,0.5;sparkle@44,190,0.4',
+  deseo: 'shootingStar@100,32,1.7,-20;wand@46,104,1.7;sun@70,152,1.15;die@70,152,1.45;coins@26,176,1.15;skull@114,172,0.9{eyeGlow=violetFire};sparkle@30,62,0.7;sparkle@112,94,0.6;star@24,120,0.5;star@118,128,0.45;sparkle@70,116,0.5',
   'pacto-final': 'voidSpiral@70,96,3.0;eye@70,96,0.9{magic=violetFire};chain@70,52,1.6,-20;chain@70,142,1.6,20;tentacle@28,176,1.1;tentacle@112,176,1.1,0,f;skull@70,22,0.7{eyeGlow=violetFire};soul@24,90,0.6;soul@118,104,0.5',
 };
 
@@ -504,14 +534,22 @@ export interface CardScene {
   full: boolean;
 }
 
-/** Cards drawn full-art: the unique class cards. */
-export const hasFullArt = (def: CartaDef) => def.rareza === 'especial' && def.id in FULL_SCENES;
+/** Cards drawn full-art: the unique class cards and the two d20 cards. */
+export const hasFullArt = (def: CartaDef) => def.id in FULL_SCENES;
+
+/** Cards that do not follow their class colours. */
+const LOOK_OVERRIDES: Record<string, ClassLook> = {
+  seducir: { top: '#5a1a44', bottom: '#1c0714', glow: '#ff7ab0', magic: '#ff7ab0', rim: 'rgba(255,190,220,0.55)' },
+  deseo: { top: '#34285e', bottom: '#0e0a22', glow: '#ffd86a', magic: '#ffd86a', rim: 'rgba(255,235,170,0.55)' },
+};
+/** Background, glow and rim colours of a card. */
+export const lookOf = (def: CartaDef): ClassLook => LOOK_OVERRIDES[def.id] ?? CLASS_LOOK[def.clase];
 
 /** Builds the illustrated scene of a card (throws if the card has none). */
 export function cardScene(def: CartaDef, full = false): CardScene {
   const spec = full ? FULL_SCENES[def.id] : SCENES[def.id];
   if (!spec) throw new Error('sin escena');
-  const look = CLASS_LOOK[def.clase];
+  const look = lookOf(def);
   const palette: Record<string, string> = { ...BASE_PALETTE, magic: look.magic };
   const shapes: Shape[] = [];
   for (const part of spec.split(';')) {

@@ -22,7 +22,7 @@ import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
 import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
-import { cardScene, SCENE_W, SCENE_H, FULL_H } from '../src/fx/card-art.ts';
+import { cardScene, SCENE_W, SCENE_H, FULL_H, hasFullArt } from '../src/fx/card-art.ts';
 import { shapeBBox } from '../src/fx/puppet-gpu.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
@@ -2019,6 +2019,12 @@ console.log('\n🖼️ Arte de las cartas');
     const sc = cardScene(unica, true);
     const dentro = sc.rig.shapes.every((sh) => { const [x0, y0, x1, y1] = shapeBBox(sh); return x0 > -20 && y0 > -20 && x1 < SCENE_W + 20 && y1 < FULL_H + 20; });
     check(sc.full && sc.rig.shapes.length >= 12 && dentro, `${unica.nombre}: arte a toda carta`);
+  }
+  // Seducir y Deseo (las cartas del d20) también son full art, con su dado
+  for (const def of NEUTRALES_ESPECIALES) {
+    const sc = cardScene(def, true);
+    check(hasFullArt(def) && sc.rig.shapes.length >= 20, `${def.nombre}: arte a toda carta`);
+    check(sc.rig.shapes.some((sh) => sh.k === 'die'), `${def.nombre}: el dibujo muestra el d20 que decide su suerte`);
   }
 }
 
