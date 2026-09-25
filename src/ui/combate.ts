@@ -13,7 +13,7 @@ import { defDe } from '../core/cartas.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { PuppetSprite, LUZ_LUNA } from './puppet-sprite.ts';
 import { PuppetStage } from './puppet-stage.ts';
-import { backgroundTheme } from '../fx/background.ts';
+import { sceneBackground } from '../fx/background.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
 
@@ -79,8 +79,7 @@ export function pantallaCombate(
     // WebGL stage between the sky and the UI (null: SVG fallback without WebGL2)
     const escenarioEl = $('.escenario');
     const stage = PuppetStage.create(escenarioEl, { before: escenarioEl.querySelector('.barra-superior') });
-    // the sky, moon and silhouettes move to the GPU too (the CSS layers stay as fallback)
-    if (stage?.setBackdrop(backgroundTheme(run.capitulo))) escenarioEl.classList.add('fondo-webgl');
+    montarFondo(escenarioEl, run.capitulo, run.escenario);
     const heroSprite = new HeroSprite(run.clase, stage);
     // druid forms get their own backlit puppet, created on first use
     const formSprites = new Map<FormId, HeroSprite>();
@@ -854,4 +853,29 @@ export function pantallaCombate(
     );
     void combate.iniciar();
   });
+}
+
+// Hashed URLs, so a repainted background replaces the cached one.
+const BACKGROUND_URLS = import.meta.glob('../arte/fondos/*.webp', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+
+/**
+ * Painted scenario background: a static image under the WebGL stage (no per-frame
+ * cost). The CSS sky and silhouettes stay underneath until it has loaded.
+ */
+function montarFondo(escenarioEl: HTMLElement, capitulo: number, escenario: number) {
+  const fondo = sceneBackground(capitulo, escenario);
+  const wide = BACKGROUND_URLS[`../arte/fondos/${fondo.wide}`];
+  const tall = BACKGROUND_URLS[`../arte/fondos/${fondo.tall}`] ?? wide;
+  if (!wide) return;
+  // pick by the scene's own shape: on a portrait phone the scene strip is still wide
+  const { clientWidth: w, clientHeight: h } = escenarioEl;
+  const capa = document.createElement('div');
+  capa.className = 'fondo-escena';
+  const img = document.createElement('img');
+  img.alt = '';
+  img.decoding = 'async';
+  img.addEventListener('load', () => escenarioEl.classList.add('fondo-pintado'), { once: true });
+  img.src = h > w ? tall : wide;
+  capa.append(img);
+  escenarioEl.prepend(capa);
 }

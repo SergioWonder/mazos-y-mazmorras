@@ -1,9 +1,9 @@
-// Original soundtrack: one track per theme in public/audio/, composed and synthesised
-// for the game (see public/audio/LEEME.md). Every track is an exact loop; the loop
+// Original soundtrack: one track per theme in src/audio/, composed and synthesised
+// for the game (see src/audio/LEEME.md). Every track is an exact loop; the loop
 // length is stored so playback can skip the MP3 codec padding and loop without a gap.
 
 export interface MusicTrack {
-  file: string;        // file name inside public/audio/
+  file: string;        // file name inside src/audio/
   loopSamples: number; // exact loop length in samples at 44.1 kHz
 }
 

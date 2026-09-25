@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790353745.406583,
-    "ast_hash": "4333ef2a8661da84a6f73ec91df8b9a4",
+    "mtime": 1790367106.9031856,
+    "ast_hash": "df77a434caca0fc57f4cb549c0b95e00",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790353600.3476396,
-    "ast_hash": "8127ffc1830bad024537d8ff1253e6ba",
+    "mtime": 1790363956.0290225,
+    "ast_hash": "9a3747a03e288b031c93985a13394652",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
-    "mtime": 1781329841.274313,
-    "ast_hash": "ae2c069e7468f26cf9d87de186e4d6a7",
+    "mtime": 1790363956.0255897,
+    "ast_hash": "209621fd705b11f4d371fc32e970cb59",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/dado.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790352958.8554037,
-    "ast_hash": "bf07f35edcab827d0cc63c6279d851dd",
+    "mtime": 1790367059.5879345,
+    "ast_hash": "76efc16c6423141707310efdf8e71423",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790353745.4064364,
-    "ast_hash": "5b92ddbefdf67c6a444cf7f1989279bb",
+    "mtime": 1790367106.9028192,
+    "ast_hash": "1a4976162cd66bd982acd9b2cad449d2",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -185,8 +185,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/vite.config.ts": {
-    "mtime": 1790345590.954835,
-    "ast_hash": "3c14fb56e0141069d22371f56a6f1d14",
+    "mtime": 1790363956.0840728,
+    "ast_hash": "31fff33068c2273c420e6def828cbf4c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/skills/editar-carta/SKILL.md": {
@@ -205,18 +205,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790353739.2965577,
-    "ast_hash": "d4f39b82b9ab11bbe7f813f16d02bd92",
+    "mtime": 1790367106.9022605,
+    "ast_hash": "b7dd5c23cb4f59c672dc399eef2aa1e6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
     "mtime": 1781273882.1237957,
     "ast_hash": "0a03de0ffebba38bca9b9ebab0b0fa3c",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/LEEME.md": {
-    "mtime": 1781329882.787649,
-    "ast_hash": "8be3de2cbafe879c1b79d12620bd908e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/apple-touch-icon.png": {
@@ -237,31 +232,6 @@
   "/Users/sergio/WonderBits/personal/videogame/public/icono.svg": {
     "mtime": 1781273843.8315003,
     "ast_hash": "9726ced5c6fe856e7f99392a639e2fd6",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/cap1.ogg": {
-    "mtime": 1781329811.0902221,
-    "ast_hash": "1923e614eec7c169e122b144303f1f0d",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/cap2.mp3": {
-    "mtime": 1781329812.5898058,
-    "ast_hash": "3d24270c3a6335c949fbfb664e85b142",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/cap3.mp3": {
-    "mtime": 1781329814.3124044,
-    "ast_hash": "179b99e1e28ba329ad3de8246fe11271",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/jefe.ogg": {
-    "mtime": 1781329816.3815045,
-    "ast_hash": "73e89ca6c3613257e741029551ae2f65",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/audio/menu.ogg": {
-    "mtime": 1781329809.680867,
-    "ast_hash": "501968090e4145ccda336d0c52189af3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/enemy-rigs.ts": {
@@ -305,8 +275,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-stage.ts": {
-    "mtime": 1790353618.6178436,
-    "ast_hash": "e89cb08f463da30e35b9b8151c730dfa",
+    "mtime": 1790363893.9961534,
+    "ast_hash": "157f427d75e98c8b1fc14353820784c5",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/sw-avisos.js": {
@@ -485,8 +455,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/background.ts": {
-    "mtime": 1790352655.7563734,
-    "ast_hash": "74ed3a83acfab5174cbbb3a57a44b5c4",
+    "mtime": 1790363956.0302355,
+    "ast_hash": "5669752c8c5a4f21b06f0c450b9df592",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/corte-sangrante.svg": {
@@ -510,8 +480,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/full/furia-indomita.svg": {
-    "mtime": 1790351747.59641,
-    "ast_hash": "23639880ea4505147a6ce0076c7b2718",
+    "mtime": 1790354783.3718138,
+    "ast_hash": "aa8d05fc4070d9b9343ea28bb56733f4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-agil.svg": {
@@ -520,13 +490,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-creciente.svg": {
-    "mtime": 1790351747.5602543,
-    "ast_hash": "13535964d3fd8b93bda944d5e6c0a995",
+    "mtime": 1790354364.603401,
+    "ast_hash": "c750b462fc1283ae185251238996f113",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-indomita.svg": {
-    "mtime": 1790351747.5939615,
-    "ast_hash": "cfdfb6f438a612ae50fcf75a2edda91c",
+    "mtime": 1790354574.0215452,
+    "ast_hash": "1cd3324b1226ef68e8949b85b19da831",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-primaria.svg": {
@@ -1132,6 +1102,276 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/verbo-aniquilacion.svg": {
     "mtime": 1790353414.5805347,
     "ast_hash": "160198ded42518b2552ba521d9bd82f3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/asentamiento-ogro/build.py": {
+    "mtime": 1790364542.8552694,
+    "ast_hash": "6af7b5d6116dfe66c6e1091d1d290b95",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/cripta/generate.py": {
+    "mtime": 1790365748.91623,
+    "ast_hash": "745013f1bd86cce55cefe7b241fe74be",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/cripta/paint_kit.py": {
+    "mtime": 1790364866.0245633,
+    "ast_hash": "73e2e45f13ad0aea3558f32a4c67f301",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/guarida-contrabandistas/build.py": {
+    "mtime": 1790365125.184253,
+    "ast_hash": "12208ab7290c274f64b55d5f01ebc5d5",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/guarida-dragon/generate.py": {
+    "mtime": 1790365659.370074,
+    "ast_hash": "bf353c2dd10124cacda0f40c9f458404",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/guarida-dragon/paint_tools.py": {
+    "mtime": 1790364359.0831268,
+    "ast_hash": "d01d90eca439933e3e70d58fe66f6913",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/laberinto-contemplador/generate.py": {
+    "mtime": 1790365659.3708255,
+    "ast_hash": "e58b02eaa1de08d0aa483901f3001c82",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/laberinto-contemplador/paint_tools.py": {
+    "mtime": 1790365203.2354016,
+    "ast_hash": "d01d90eca439933e3e70d58fe66f6913",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/templo-oscuro/generate.py": {
+    "mtime": 1790366688.525221,
+    "ast_hash": "cab6790a3cf10c7f3afb1c0ae824b7d9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/templo-oscuro/paint_kit.py": {
+    "mtime": 1790365748.927736,
+    "ast_hash": "73e2e45f13ad0aea3558f32a4c67f301",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto1/acto1_b.py": {
+    "mtime": 1790356758.1909664,
+    "ast_hash": "56c6124d7a412b04385019a527699b74",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto1/stems_check.py": {
+    "mtime": 1790356758.191502,
+    "ast_hash": "3588cdf920a1fbe5c0c3eb5882a99fd6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto1/synth_lib.py": {
+    "mtime": 1790356758.1921244,
+    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/cap2.py": {
+    "mtime": 1790356758.2048762,
+    "ast_hash": "e68529d816fd8ada5cb6785bdd240fb3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/stems_check.py": {
+    "mtime": 1790356758.2058446,
+    "ast_hash": "b61c4c812bc0958e1f88feffed44ffe1",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/synth.py": {
+    "mtime": 1790356758.2063413,
+    "ast_hash": "dee4dbbcfcad8aac1304f38af2a7b1c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/synth_ext.py": {
+    "mtime": 1790356758.2080472,
+    "ast_hash": "94a395c6a315e41ca2391bbed91cc534",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/synth_lib.py": {
+    "mtime": 1790356758.2084258,
+    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/cap3.py": {
+    "mtime": 1790356758.2236612,
+    "ast_hash": "cbce86d8a7e53d22e5ae469936a00d08",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/stems_check.py": {
+    "mtime": 1790356758.2241662,
+    "ast_hash": "79cd1dad49735b9c0940aff64de5c8d9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/synth.py": {
+    "mtime": 1790356758.2251065,
+    "ast_hash": "dee4dbbcfcad8aac1304f38af2a7b1c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/synth_ext.py": {
+    "mtime": 1790356758.2254455,
+    "ast_hash": "104d7464535bc9c1c599cbd8facc2fb6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/synth_lib.py": {
+    "mtime": 1790356758.2258315,
+    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe/jefe_a.py": {
+    "mtime": 1790356758.244026,
+    "ast_hash": "cbabb5664dff9a54530a2cc5904699b6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe/jefe_b.py": {
+    "mtime": 1790356758.2454998,
+    "ast_hash": "8d8077c2383b1d2244a43edfe220f72c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe/synth.py": {
+    "mtime": 1790356758.2526324,
+    "ast_hash": "dee4dbbcfcad8aac1304f38af2a7b1c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe3/jefe3.py": {
+    "mtime": 1790356758.2725363,
+    "ast_hash": "edb3fac8815669b353adfd1c5a8e0a5e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe3/synth.py": {
+    "mtime": 1790356758.273202,
+    "ast_hash": "9a0926514aafb9fe6f5bd539431140d1",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/menu.py": {
+    "mtime": 1790356758.1669872,
+    "ast_hash": "47b73da877cf3df38d187c42c1408b7e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/synth.py": {
+    "mtime": 1790356758.1704993,
+    "ast_hash": "cc350115d650f91a91106962c02efa79",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/synth_lib.py": {
+    "mtime": 1790356758.1711388,
+    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/music-tracks.ts": {
+    "mtime": 1790363956.0282655,
+    "ast_hash": "ba607e2c9051213bd1ca46498e2f4d44",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/.claude/agents/compositor-musical.md": {
+    "mtime": 1790354173.191122,
+    "ast_hash": "3f8785ffa47daddc5176db474240836b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/.claude/agents/pintor-fondos.md": {
+    "mtime": 1790364002.9192286,
+    "ast_hash": "045e8f49cbcfbd68abac9ad68a480bf5",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/LEEME.md": {
+    "mtime": 1790363956.0298958,
+    "ast_hash": "8a069caa134c52173d17ce0bc448337a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/asentamiento-ogro-movil.webp": {
+    "mtime": 1790364620.4621065,
+    "ast_hash": "8e41c81f82cfbe2f39ea9cbf253b1b5c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/asentamiento-ogro.webp": {
+    "mtime": 1790364588.279248,
+    "ast_hash": "73b7ecbd7af912c80f7e008d85231e97",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/cripta-movil.webp": {
+    "mtime": 1790366797.0785608,
+    "ast_hash": "c119e0dc04c464905bf5c15b4fe49a54",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/cripta.webp": {
+    "mtime": 1790366750.1524625,
+    "ast_hash": "0752717eed9225a9031214811e11e3ed",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/guarida-contrabandistas-movil.webp": {
+    "mtime": 1790365188.8729694,
+    "ast_hash": "e8cc71d23f8a29c0f2613cb5153076ff",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/guarida-contrabandistas.webp": {
+    "mtime": 1790365151.3794034,
+    "ast_hash": "69d20b525c2517719f963bca6896937d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/guarida-dragon-movil.webp": {
+    "mtime": 1790365776.2818346,
+    "ast_hash": "ade26d7151fdc4e80a82eef04ed13118",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/guarida-dragon.webp": {
+    "mtime": 1790365741.1690593,
+    "ast_hash": "1b05567f22e67a1de67200abcd9eb328",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/laberinto-contemplador-movil.webp": {
+    "mtime": 1790365927.0561805,
+    "ast_hash": "4c3353a2435d6258220c4511b3617407",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/laberinto-contemplador.webp": {
+    "mtime": 1790365829.2108004,
+    "ast_hash": "b514e814cf7edff48fb6ea24dff659b4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/templo-oscuro-movil.webp": {
+    "mtime": 1790366907.428396,
+    "ast_hash": "6d6f4f7de1b47d2038c43556cd802263",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/templo-oscuro.webp": {
+    "mtime": 1790366860.2098126,
+    "ast_hash": "0e978040592edca53983bee797974422",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap1.mp3": {
+    "mtime": 1790355775.2654424,
+    "ast_hash": "0ff2429939d2d2fcda6ac2cf040f33da",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2.mp3": {
+    "mtime": 1790356758.1485171,
+    "ast_hash": "722b3535b8b7e552f02a97d278c57b7d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap3.mp3": {
+    "mtime": 1790356133.7706807,
+    "ast_hash": "606dbea7b159466b186292727edc699e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/jefe1.mp3": {
+    "mtime": 1790355775.2715988,
+    "ast_hash": "3e4e2e05f25927a0f225b76e47a26216",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/jefe2.mp3": {
+    "mtime": 1790355775.2758844,
+    "ast_hash": "3c488935d374e04a2d02501a841fc191",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/jefe3.mp3": {
+    "mtime": 1790356405.9172437,
+    "ast_hash": "4b9723e515003f8e5c87399afdd015c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/menu.mp3": {
+    "mtime": 1790355976.3481262,
+    "ast_hash": "921ecd4a19a11440e1cc738ed4a33a10",
     "semantic_hash": ""
   }
 }

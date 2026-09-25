@@ -24,5 +24,5 @@ La música se **pausa** en segundo plano y el botón flotante 🔊/🔇 silencia
 Todas las pistas son MP3 a 160 kbps, 44,1 kHz y estéreo. Los scripts que las generan
 están en `scripts/musica/<pista>/` y solo necesitan Python 3, numpy y ffmpeg: por
 ejemplo, `python3 scripts/musica/acto2/cap2.py` deja `cap2.mp3` junto al script. Para
-publicarla, cópiala aquí y, si cambió su duración, actualiza `loopSamples` en
+publicarla, cópiala aquí (Vite le pone un hash en el nombre, así que la caché del juego la renueva) y, si cambió su duración, actualiza `loopSamples` en
 `src/fx/music-tracks.ts`. El smoke test comprueba que cada tema tiene su fichero.

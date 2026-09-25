@@ -1,12 +1,16 @@
 import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
 
 // Audio engine: sound effects synthesised with the Web Audio API (no files) and the
-// game's original soundtrack from `public/audio/` (see `fx/music-tracks.ts`), looped
+// game's original soundtrack from `src/audio/` (see `fx/music-tracks.ts`), looped
 // sample-exactly with Web Audio. If a track fails to load, a chiptune loop generated
 // on the fly takes over, so the game is never silent. Everything starts after the
 // player's first gesture, as browsers require, and the mute state is remembered.
 
 const CLAVE_SILENCIO = 'mazmorra-audio-silencio';
+
+// Hashed URLs of the soundtrack files: a new version of a track gets a new URL, so
+// the service worker's cache-first copy of the old one is never served again.
+const TRACK_URLS = import.meta.glob('../audio/*.mp3', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 /** Receta de un efecto: capas de tono y/o ruido. */
 interface Capa {
@@ -314,7 +318,8 @@ class MotorAudio {
   private cargarPista(archivo: string): Promise<AudioBuffer> {
     let buf = this.buffers.get(archivo);
     if (!buf) {
-      buf = fetch(`${import.meta.env.BASE_URL}audio/${archivo}`)
+      const url = TRACK_URLS[`../audio/${archivo}`];
+      buf = (url ? fetch(url) : Promise.reject(new Error(`missing track ${archivo}`)))
         .then((r) => { if (!r.ok) throw new Error(r.statusText); return r.arrayBuffer(); })
         .then((datos) => new Promise<AudioBuffer>((ok, ko) => this.ctx!.decodeAudioData(datos, ok, ko)));
       buf.catch(() => this.buffers.delete(archivo));

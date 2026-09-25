@@ -602,6 +602,22 @@ body.arrastre-activo { cursor: grabbing; }
 
 .int-dormido { color: #b9c4ff; font-size: 1.35rem; }
 
-/* con WebGL el cielo, la luna y las siluetas los pinta el shader de fondo */
-.escenario.fondo-webgl .cielo,
-.escenario.fondo-webgl .silueta-fondo { display: none; }
+/* painted scenario background (public/fondos/); the CSS sky is only the fallback */
+.fondo-escena { position: absolute; inset: 0; pointer-events: none; }
+.fondo-escena img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.escenario.fondo-pintado .fondo-escena img { opacity: 1; }
+.escenario.fondo-pintado .cielo,
+.escenario.fondo-pintado .silueta-fondo { display: none; }
+.combate-jefe .fondo-escena::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(179, 38, 30, 0.22), transparent 70%);
+}

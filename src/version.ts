@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.10.0';
+export const VERSION = '3.11.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.11.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '🖼️ Fondos pintados con mucho detalle para cada escenario: el campamento ogro, el sótano de los contrabandistas, la cripta, el templo profanado, la guarida del dragón y el laberinto del Contemplador.',
+      '🌙 En cada fondo, la luz de la luna, la lava o el orbe arcano cae detrás del héroe y recorta su silueta.',
+      '🎵 La música y los fondos nuevos sustituyen a los antiguos aunque tuvieras el juego guardado para jugar sin conexión.',
+    ],
+  },
   {
     version: '3.10.0',
     fecha: '2026-09-25',

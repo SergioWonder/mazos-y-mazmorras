@@ -25,7 +25,7 @@ import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-
 import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
 import { hasFullArt } from '../src/ui/card-looks.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
-import { backgroundTheme } from '../src/fx/background.ts';
+import { sceneBackground } from '../src/fx/background.ts';
 import { MUSIC_TRACKS, loopWindow, MP3_DELAY_SAMPLES } from '../src/fx/music-tracks.ts';
 import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
@@ -2034,14 +2034,19 @@ console.log('\n🎨 Ilustraciones SVG de las cartas');
   check(pickSvg(tabla, 'zarpazo', false) === null, 'sin SVG todavía, sigue con la ilustración anterior');
 }
 
-// ── Fondo del combate y partículas de las cartas en WebGL ────────────────────
-console.log('\n🌙 Fondo y partículas de cartas en la GPU');
+// ── Painted combat backgrounds and card particles ────────────────────────────
+console.log('\n🌙 Fondos pintados y partículas de cartas');
 {
-  const hex = /^#[0-9a-f]{6}$/i;
-  const temas = [0, 1, 2].map((c) => backgroundTheme(c));
-  check(temas.every((t) => [t.skyTop, t.skyBottom, t.horizon, t.moon, t.silhouette, t.ground].every((c) => hex.test(c))), 'cada acto tiene cielo, luna, horizonte y suelo');
-  check(new Set(temas.map((t) => t.shape)).size === 3, 'cada acto tiene su silueta de fondo (empalizada, cripta, guarida)');
-  check(backgroundTheme(7).shape === temas[0].shape, 'un capítulo desconocido usa el primer acto');
+  const fs = await import('node:fs');
+  const fondos = [0, 1, 2].flatMap((c) => [0, 1].map((e) => sceneBackground(c, e)));
+  check(new Set(fondos.map((f) => f.id)).size === 6, 'cada uno de los seis escenarios tiene su propio fondo');
+  const existe = (f: string) => fs.existsSync(new URL(`../src/arte/fondos/${f}`, import.meta.url));
+  check(fondos.every((f) => existe(f.wide) && existe(f.tall)), 'cada fondo tiene su imagen apaisada y la vertical para móvil');
+  check(fondos.every((f) => f.wide.endsWith('.webp') && f.tall.endsWith('-movil.webp')), 'los fondos son WebP');
+  const peso = (f: string) => fs.statSync(new URL(`../src/arte/fondos/${f}`, import.meta.url)).size;
+  check(fondos.every((f) => peso(f.wide) < 450_000 && peso(f.tall) < 350_000), 'los fondos pesan poco para cargar rápido en el móvil');
+  check(sceneBackground(1, 0).id === 'cripta' && sceneBackground(0, 0).id === 'asentamiento-ogro', 'el Asentamiento Ogro y la Cripta tienen su fondo temático');
+  check(sceneBackground(7, 3).id === sceneBackground(0, 0).id, 'un escenario desconocido usa el primero');
   const motas: Particle[] = [];
   spawnEffect(motas, 'mota', 10, 10, 1, Math.random, '#a8e070');
   check(motas.length === 1 && motas[0].colour === '#a8e070' && motas[0].vy < 0, 'las motas de las cartas full art suben con el color de su clase');
@@ -2053,7 +2058,7 @@ console.log('\n🎵 Banda sonora');
   const fs = await import('node:fs');
   const temas = ['menu', 'cap1', 'cap1-jefe', 'cap2', 'cap2-jefe', 'cap3', 'cap3-jefe'];
   check(temas.every((t) => MUSIC_TRACKS[t]), 'hay pista para el menú y para cada acto y su jefe');
-  check(temas.every((t) => fs.existsSync(new URL(`../public/audio/${MUSIC_TRACKS[t].file}`, import.meta.url))), 'todas las pistas existen en public/audio');
+  check(temas.every((t) => fs.existsSync(new URL(`../src/audio/${MUSIC_TRACKS[t].file}`, import.meta.url))), 'todas las pistas existen en src/audio');
   check(temas.every((t) => MUSIC_TRACKS[t].file.endsWith('.mp3') && MUSIC_TRACKS[t].loopSamples > 44100 * 30), 'las pistas son MP3 (suenan en Safari) con la longitud exacta del bucle');
   check(new Set(['cap1', 'cap2', 'cap3', 'menu'].map((t) => MUSIC_TRACKS[t].file)).size === 4, 'cada acto y el menú tienen su propia música');
   check(MUSIC_TRACKS['cap1-jefe'].file !== MUSIC_TRACKS['cap2-jefe'].file && MUSIC_TRACKS['cap2-jefe'].file !== MUSIC_TRACKS['cap3-jefe'].file, 'cada acto tiene su música de jefe');

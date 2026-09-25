@@ -45,17 +45,27 @@ export default defineConfig({
       workbox: {
         // background check for major versions + notification clicks
         importScripts: ['sw-avisos.js'],
-        // El audio NO se precachea (varios MB): se cachea al vuelo la primera
-        // vez que suena cada pista, así la primera carga sigue siendo ligera.
+        // Music and backgrounds are NOT precached (several MB): each file is cached the
+        // first time it is used, so the first load stays light. Their names carry a
+        // content hash, so a new version never collides with the cached one.
         globPatterns: ['**/*.{js,css,html,png,svg}'],
         runtimeCaching: [
           {
-            urlPattern: /\/audio\/.*\.(?:mp3|ogg)$/i,
+            urlPattern: /\.(?:mp3|ogg)$/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'musica',
               expiration: { maxEntries: 16, maxAgeSeconds: 60 * 60 * 24 * 365 },
               rangeRequests: true,
+            },
+          },
+          {
+            // painted combat backgrounds (hashed names): cached the first time they show
+            urlPattern: /\.webp$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'fondos',
+              expiration: { maxEntries: 24, maxAgeSeconds: 60 * 60 * 24 * 365 },
             },
           },
           {

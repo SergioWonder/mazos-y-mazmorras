@@ -9,7 +9,6 @@ import type { BoneId, EffectGeometry, Effects, Matrix, Pose, PuppetRig } from '.
 import {
   BONE_COUNT, BONE_INDEX, FLAG, PIECE_TEXELS, lighten, multiply, packRig, parseColour, spriteMatrix,
 } from '../fx/puppet-gpu.ts';
-import type { BackdropTheme } from '../fx/background.ts';
 
 const PIECE_VS = `#version 300 es
 precision highp float;
@@ -194,81 +193,6 @@ void main() {
   outColour = vec4(col * a, a);
 }`;
 
-// Combat backdrop: one full-screen triangle, everything computed per pixel.
-const BG_VS = `#version 300 es
-void main() {
-  vec2 p = vec2((gl_VertexID << 1) & 2, gl_VertexID & 2);
-  gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
-}`;
-
-const BG_FS = `#version 300 es
-precision highp float;
-uniform vec2 uRes;
-uniform float uDpr, uTime;
-uniform int uShape;
-uniform vec3 uSkyTop, uSkyBottom, uHorizon, uMoon, uMoonLight, uMoonShadow, uHalo, uSil, uGround, uFire;
-out vec4 outColour;
-float hash(float n) { return fract(sin(n * 127.1) * 43758.5453); }
-float hash2(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
-void main() {
-  vec2 css = vec2(gl_FragCoord.x, uRes.y - gl_FragCoord.y) / uDpr;
-  vec2 size = uRes / uDpr;
-  float y = css.y / size.y, x = css.x / size.x;
-  vec3 col = mix(uSkyTop, uSkyBottom, smoothstep(0.0, 1.0, y));
-  // horizon glow and mist band
-  vec2 hp = vec2((x - 0.24) / 0.55, (y - 0.80) / 0.38);
-  col += uHorizon * 0.38 * (1.0 - smoothstep(0.0, 1.0, length(hp)));
-  col += uHorizon * 0.07 * exp(-pow((y - 0.62) / 0.14, 2.0));
-  // moon with a slowly pulsing halo
-  float R = clamp(size.x * 0.0375, 27.0, 52.0);
-  vec2 mc = vec2(size.x * 0.13 + R, size.y * 0.12 + R);
-  float d = length(css - mc), pulse = 0.5 + 0.5 * sin(uTime * 0.7);
-  col += uHalo * (0.34 + 0.08 * pulse) * exp(-max(d - R, 0.0) / (16.0 + 5.0 * pulse));
-  col += uHalo * 0.12 * exp(-max(d - R, 0.0) / (70.0 + 12.0 * pulse));
-  if (d < R + 1.5) {
-    vec2 q = (css - mc) / R;
-    float l = length(q - vec2(-0.24, -0.32));
-    vec3 m = mix(uMoonLight, uMoon, smoothstep(0.0, 0.6, l));
-    m = mix(m, uMoonShadow, smoothstep(0.6, 1.05, l));
-    m *= 1.0 - 0.1 * (1.0 - smoothstep(0.08, 0.1, length(q - vec2(0.24, 0.16))));
-    m *= 1.0 - 0.08 * (1.0 - smoothstep(0.05, 0.07, length(q - vec2(-0.32, 0.28))));
-    m *= 1.0 - 0.07 * (1.0 - smoothstep(0.06, 0.08, length(q - vec2(-0.04, -0.4))));
-    col = mix(col, m, 1.0 - smoothstep(R - 1.0, R + 1.0, d));
-  }
-  // distant fires / lava / spectral torches
-  float flick = 0.85 + 0.15 * sin(uTime * 7.0 + sin(uTime * 3.1) * 2.0);
-  vec2 f1 = vec2((x - 0.18) / 0.12, (y - 0.78) / 0.08), f2 = vec2((x - 0.78) / 0.10, (y - 0.75) / 0.07);
-  col += uFire * 0.5 * flick * (1.0 - smoothstep(0.0, 1.0, length(f1)));
-  col += uFire * 0.4 * flick * (1.0 - smoothstep(0.0, 1.0, length(f2)));
-  // the act's silhouettes, fading in towards the ground
-  float sil = 0.0;
-  if (uShape == 0) {
-    float i = floor(css.x / 60.0), fx = mod(css.x, 60.0);
-    float top = size.y * (0.53 + 0.05 * hash(i));
-    if (fx > 38.0 && fx < 52.0) { float tip = abs(fx - 45.0) * 1.7; sil = step(top + tip - 12.0, css.y); }
-    sil *= smoothstep(0.30, 0.55, y);
-  } else if (uShape == 1) {
-    float fx = mod(css.x, 200.0);
-    float top = size.y * 0.36;
-    if (fx > 90.0 && fx < 116.0) sil = step(top, css.y);
-    if (fx > 84.0 && fx < 122.0 && css.y > top - 8.0 && css.y < top + 4.0) sil = 1.0;
-    sil *= 0.95 * smoothstep(0.25, 0.5, y);
-  } else {
-    float i = floor(css.x / 90.0), fx = mod(css.x, 90.0);
-    float len = size.y * (0.12 + 0.16 * hash(i + 3.0));
-    float hw = 11.0 * (1.0 - css.y / len);
-    if (abs(fx - 45.0) < hw) sil = 0.95;
-    float j = floor(css.x / 130.0 + 7.0), gx = mod(css.x, 130.0);
-    float rock = size.y * (0.84 - 0.05 * hash(j));
-    if (css.y > rock + abs(gx - 65.0) * 0.18) sil = max(sil, smoothstep(0.55, 0.8, y));
-  }
-  col = mix(col, uSil, sil * 0.88);
-  // ground and paper grain
-  col = mix(col, uGround, smoothstep(0.60, 0.80, y) * 0.9);
-  col += (hash2(floor(css) + floor(uTime * 12.0)) - 0.5) * 0.035;
-  outColour = vec4(col, 1.0);
-}`;
-
 function compile(gl: WebGL2RenderingContext, vs: string, fs: string): WebGLProgram {
   const make = (type: number, src: string) => {
     const s = gl.createShader(type)!;
@@ -321,9 +245,6 @@ export class PuppetStage {
   private readonly views = new Set<GpuView>();
   private readonly bonesBuf = new Float32Array(BONE_COUNT * 8);
   private dpr = 1;
-  private backdrop: BackdropTheme | null = null;
-  private bg: WebGLProgram | null = null;
-  private readonly bu: Record<string, WebGLUniformLocation | null> = {};
   private readonly t0 = performance.now();
 
   /** Creates a stage on `host`, or returns null when WebGL2 is unavailable. */
@@ -367,40 +288,6 @@ export class PuppetStage {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   }
 
-  /** Returns false (and draws nothing) if the backdrop shader cannot be built,
-   *  so the caller keeps its CSS background. */
-  setBackdrop(theme: BackdropTheme | null): boolean {
-    if (theme && !this.bg) {
-      try {
-        this.bg = compile(this.gl, BG_VS, BG_FS);
-      } catch (e) {
-        console.warn('WebGL backdrop unavailable, keeping CSS background', e);
-        return false;
-      }
-      for (const n of ['uRes', 'uDpr', 'uTime', 'uShape', 'uSkyTop', 'uSkyBottom', 'uHorizon', 'uMoon', 'uMoonLight', 'uMoonShadow', 'uHalo', 'uSil', 'uGround', 'uFire']) {
-        this.bu[n] = this.gl.getUniformLocation(this.bg, n);
-      }
-    }
-    this.backdrop = theme;
-    return true;
-  }
-
-  private drawBackdrop(w: number, h: number) {
-    const gl = this.gl, t = this.backdrop!, u = this.bu;
-    gl.useProgram(this.bg);
-    gl.uniform2f(u.uRes, w, h);
-    gl.uniform1f(u.uDpr, this.dpr);
-    gl.uniform1f(u.uTime, (performance.now() - this.t0) / 1000);
-    gl.uniform1i(u.uShape, t.shape === 'stakes' ? 0 : t.shape === 'columns' ? 1 : 2);
-    const set = (name: string, hex: string) => { const c = parseColour(hex); gl.uniform3f(u[name], c[0], c[1], c[2]); };
-    set('uSkyTop', t.skyTop); set('uSkyBottom', t.skyBottom); set('uHorizon', t.horizon); set('uMoon', t.moon);
-    set('uMoonLight', t.moonLight); set('uMoonShadow', t.moonShadow); set('uHalo', t.halo); set('uSil', t.silhouette);
-    set('uGround', t.ground); set('uFire', t.fire);
-    gl.disable(gl.BLEND);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-    gl.enable(gl.BLEND);
-  }
-
   add(view: GpuView) { this.views.add(view); }
   remove(view: GpuView) { this.views.delete(view); }
 
@@ -438,7 +325,6 @@ export class PuppetStage {
     gl.viewport(0, 0, w, h);
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    if (this.backdrop && this.bg) this.drawBackdrop(w, h);
     const origin = this.canvas.getBoundingClientRect();
     gl.bindVertexArray(this.quad);
     for (const v of this.views) {

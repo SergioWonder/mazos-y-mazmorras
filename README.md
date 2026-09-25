@@ -153,7 +153,7 @@ descuelga de las demás en su mismo nivel.
   amigable) y uno de jefe (épico y tenso), unidos por un leitmotiv. Suenan en bucle
   exacto con Web Audio, con loop chiptune de respaldo. Se pausa al pasar a
   segundo plano y se cachea al vuelo para jugar sin conexión. Créditos y licencias
-  en `public/audio/LEEME.md`. Botón flotante 🔊/🔇 para silenciar (se recuerda). La
+  en `src/audio/LEEME.md`. Botón flotante 🔊/🔇 para silenciar (se recuerda). La
   intención de ataque enemiga muestra el daño ya modificado (verde si lo reduces con
   Débil/Raíces, rojo si te amplifican con Vulnerable).
 
@@ -229,9 +229,13 @@ Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en m�
 - **Partículas** (`fx/particle-gl.ts`): un único dibujo instanciado por fotograma, con el
   brillo calculado en el shader en lugar de `shadowBlur`. La simulación está en
   `fx/particle-sim.ts`.
-- **Fondo del combate** (`fx/background.ts` + shader en `ui/puppet-stage.ts`): cielo, luna
-  con halo que late, horizonte, siluetas de cada acto (empalizada, columnas de la cripta,
-  estalactitas), hogueras que parpadean, suelo y grano, todo en un único pase de la GPU.
+- **Fondos pintados** (`fx/background.ts`, `src/arte/fondos/`): cada uno de los seis
+  escenarios tiene su ilustración WebP de 1920×1080 (y una vertical de 1080×1440 si la
+  escena es más alta que ancha): campamento ogro, sótano de contrabandistas, cripta,
+  templo profanado, guarida del dragón y laberinto del Contemplador. Es una imagen
+  estática debajo del lienzo WebGL, sin coste por fotograma, con la luz detrás del héroe
+  para justificar su contraluz. Los pinta el agente `pintor-fondos` (`.claude/agents/`)
+  por código; los scripts están en `scripts/fondos/<id>/`.
 - **Cartas:** las ilustraciones se rasterizan una sola vez a mapa de bits
   (`ui/card-svgs.ts`), el ajuste de texto se memoriza y los efectos animados (brillo de
   raras, marco y respiración de las full art) solo usan `transform` y `opacity`, que compone
@@ -239,5 +243,5 @@ Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en m�
   `mix-blend-mode` ni `backdrop-filter` sobre la escena animada.
 - **Respaldo:** sin WebGL2 se usa automáticamente el renderizado SVG y canvas 2D.
 - **Diagnóstico en el dispositivo:** `?fps` muestra un contador de fotogramas y
-  `?render=svg` fuerza el motor antiguo para comparar. El
-cielo del combate tiene luna y bruma de horizonte con el tono de cada acto.
+  `?render=svg` fuerza el motor antiguo para comparar. Si el fondo pintado no carga,
+queda el cielo CSS con luna y bruma de horizonte con el tono de cada acto.
