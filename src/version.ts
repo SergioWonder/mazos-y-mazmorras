@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.5';
+export const VERSION = '3.9.6';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.6',
+    fecha: '2026-09-25',
+    cambios: [
+      '🕳️ Nuevas ilustraciones dibujadas a mano para todas las cartas del brujo: pactos, maldiciones, tentáculos de Hadar, demonios invocados y patrones colosales.',
+      '👁️ Pacto Final estrena full art: el brujo ante la grieta del vacío y el ojo de su patrón, con almas en espiral.',
+      '🎲 Seducir y Deseo se redibujan: un ogro embelesado en un baile de máscaras, y un deseo que decide entre un cofre de tesoro y la ruina.',
+    ],
+  },
   {
     version: '3.9.5',
     fecha: '2026-09-25',
