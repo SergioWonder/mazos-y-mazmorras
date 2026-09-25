@@ -1,5 +1,8 @@
 import type { CartaDef } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
+import { cardArtUrl } from './card-art-render.ts';
+import { animateCardParticles } from './card-particles.ts';
+import { hasFullArt, CLASS_LOOK } from '../fx/card-art.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
   ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder',
@@ -176,18 +179,36 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const innata = def.innato ? ' · <strong>Innata</strong>' : '';
   const retencion = def.retener ? ' · <strong>Retener</strong>' : '';
 
+  // illustrated art (full-art portrait for the unique class cards); emoji fallback
+  const fullUrl = hasFullArt(def) ? cardArtUrl(def, true) : null;
+  const artUrl = fullUrl ? null : cardArtUrl(def);
+  const arteHtml = fullUrl
+    ? ''
+    : artUrl
+      ? `<div class="carta-arte carta-arte-ilustrada"><img src="${artUrl}" alt="" draggable="false"></div>`
+      : `<div class="carta-arte">${arteDeCarta(def)}</div>`;
   carta.innerHTML = `
     <div class="carta-coste${coste > def.coste ? ' coste-recargado' : ''}">${coste}</div>
     ${conjuro}
     <div class="carta-cabecera">
       <span class="carta-nombre">${def.nombre}</span>
     </div>
-    <div class="carta-arte">${arteDeCarta(def)}</div>
+    ${arteHtml}
     <div class="carta-tipo">${ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
       def.subclase ? ` · <em>${def.subclase}</em>` : ''
     }${unUso}${innata}${retencion}</div>
     <div class="carta-texto">${formatearTexto(def.texto, mods)}</div>
   `;
+  if (fullUrl) {
+    carta.classList.add('carta-full-art');
+    const fondo = el('img', 'full-art-fondo');
+    fondo.src = fullUrl;
+    fondo.alt = '';
+    fondo.draggable = false;
+    const particulas = el('canvas', 'full-art-particulas');
+    carta.prepend(fondo, particulas);
+    animateCardParticles(particulas, CLASS_LOOK[def.clase].glow);
+  }
   ajustarTexto(carta);
   return carta;
 }

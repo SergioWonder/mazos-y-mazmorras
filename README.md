@@ -195,6 +195,19 @@ morir: el aliento de Ignifax, los rayos del Contemplador… Los del acto III son
 cargados, y al enfurecerse (o al volver de la filacteria) emiten el doble. Desde el menú principal, la **Galería de sprites**
 muestra todos los héroes, formas, invocaciones y enemigos animados.
 
+### Arte de las cartas
+
+Cada carta tiene una **ilustración propia** en el mismo estilo que los monstruos
+(`fx/card-art.ts`). Es una escena compuesta con una biblioteca de unos 60 motivos
+ilustrados (armas, llamas, runas, lunas, calaveras, tentáculos…) y criaturas del
+bestiario, descrita con una línea compacta por carta. `ui/card-art-render.ts` la pinta
+una sola vez: un fondo 2D con el color de la clase, un encuadre según el tipo (ataque,
+habilidad o poder), grano de papel y halo, y la escena encima con el renderizador WebGL.
+El resultado se guarda como imagen. Las **cartas únicas de clase** son **full art**: la
+ilustración cubre toda la carta con una composición vertical, respira con una animación
+lenta, el marco late con el color de la clase y tiene partículas vivas
+(`ui/card-particles.ts`). Sin WebGL2 se mantienen los emojis.
+
 ### Actualizaciones y avisos
 
 La PWA busca versión nueva cada minuto y ofrece un botón **Actualizar**. Solo las

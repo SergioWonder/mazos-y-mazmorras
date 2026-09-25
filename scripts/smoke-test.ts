@@ -22,10 +22,12 @@ import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
 import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
+import { cardScene, SCENE_W, SCENE_H, FULL_H } from '../src/fx/card-art.ts';
+import { shapeBBox } from '../src/fx/puppet-gpu.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
-import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
+import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
 
@@ -1979,6 +1981,45 @@ console.log('\n🔔 Actualizaciones mayores');
   check(!shouldNotifyMajor('3.7.0', '4.0.0', '4.0.0'), 'pero solo una vez');
   check(!shouldNotifyMajor('3.7.0', '3.8.0', null), 'y nunca por versiones menores');
   check(!shouldNotifyMajor('4.0.0', '4.0.0', null), 'ni si ya la tienes instalada');
+}
+
+// ── Arte de las cartas: una escena ilustrada por carta ───────────────────────
+console.log('\n🖼️ Arte de las cartas');
+{
+  const mazos: [string, CartaDef[]][] = [
+    ['básicas', BASICAS], ['druida', DRUIDA], ['bárbaro', BARBARO], ['mago', MAGO], ['pícaro', PICARO], ['brujo', BRUJO],
+    ['incoloras', [...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA]],
+  ];
+  const sinEscena: string[] = [], sinColor: string[] = [], fuera: string[] = [], grandes: string[] = [];
+  for (const [nombre, mazo] of mazos) {
+    const firmas = new Map<string, string>();
+    for (const def of mazo) {
+      let sc;
+      try { sc = cardScene(def); } catch (e) { sinEscena.push(`${def.id} (${(e as Error).message})`); continue; }
+      if (sc.rig.shapes.length < 3) sinEscena.push(def.id);
+      for (const sh of sc.rig.shapes) {
+        if (!(sh.k in sc.rig.palette)) sinColor.push(`${def.id}:${sh.k}`);
+        const [x0, y0, x1, y1] = shapeBBox(sh);
+        if (x0 < -20 || y0 < -20 || x1 > SCENE_W + 20 || y1 > SCENE_H + 20) fuera.push(def.id);
+        if (sh.t === 'p' && sh.pts.length > MAX_POLY) grandes.push(def.id);
+      }
+      const firma = JSON.stringify(sc.rig.shapes.map((sh) => [sh.t, sh.k, Math.round(shapeBBox(sh)[0])]));
+      if (firmas.has(firma)) sinEscena.push(`${def.id} repite la escena de ${firmas.get(firma)}`);
+      firmas.set(firma, def.id);
+    }
+    check(true, `${nombre}: ${mazo.length} cartas revisadas`);
+  }
+  check(sinEscena.length === 0, `todas las cartas tienen escena propia ${sinEscena.slice(0, 6).join(', ')}`);
+  check(sinColor.length === 0, `todas las piezas tienen color ${[...new Set(sinColor)].slice(0, 6).join(', ')}`);
+  check(fuera.length === 0, `las escenas caben en el encuadre ${[...new Set(fuera)].slice(0, 6).join(', ')}`);
+  check(grandes.length === 0, `ningún polígono pasa del límite de la GPU ${[...new Set(grandes)].join(', ')}`);
+  // cartas únicas de clase: ilustración vertical a toda carta (full art)
+  for (const clase of CLASES) {
+    const unica = cartaUnicaDeClase(clase);
+    const sc = cardScene(unica, true);
+    const dentro = sc.rig.shapes.every((sh) => { const [x0, y0, x1, y1] = shapeBBox(sh); return x0 > -20 && y0 > -20 && x1 < SCENE_W + 20 && y1 < FULL_H + 20; });
+    check(sc.full && sc.rig.shapes.length >= 12 && dentro, `${unica.nombre}: arte a toda carta`);
+  }
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

@@ -105,6 +105,8 @@ export const ACTION_DURATION: Record<ActionType, number> = { attack: 0.8, spell:
 /** Keys that glow (magic foci, eyes, fire, poison…). */
 export const EMISSIVE = new Set([
   'gem', 'orb', 'flame', 'flameCore', 'eyeGlow', 'moonGlow', 'starGlow', 'magic', 'fire', 'poison', 'lava',
+  // card art glows
+  'bolt', 'slash', 'voidCore', 'soul', 'violetFire', 'violetCore', 'greenFire', 'redMagic', 'sparkle', 'breeze',
 ]);
 export const EYES = new Set(['eye', 'eyeGlow']);
 

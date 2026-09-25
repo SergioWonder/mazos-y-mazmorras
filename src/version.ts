@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.8.0';
+export const VERSION = '3.9.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '🖼️ Todas las cartas tienen ya su propia ilustración, dibujada con el mismo estilo que los monstruos: tinta, sombras y la luz de cada clase.',
+      '✨ Las cartas únicas de clase son ahora «full art»: la ilustración cubre toda la carta, se mueve lentamente, brilla con el color de su clase y desprende partículas.',
+    ],
+  },
   {
     version: '3.8.0',
     fecha: '2026-09-25',

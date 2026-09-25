@@ -287,6 +287,37 @@ export class PuppetStage {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   }
 
+  /** Detached stage for still images (card art); never drawn by the frame loop. */
+  static offscreen(): PuppetStage | null {
+    if (forceSvg()) return null;
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, antialias: false, alpha: true, preserveDrawingBuffer: true });
+    if (!gl) return null;
+    try { return new PuppetStage(canvas, gl); } catch { return null; }
+  }
+
+  /** Draws a rig in its bind pose over a transparent w×h canvas and returns it
+   *  (the caller copies it right away). The rig's GPU data is freed afterwards. */
+  renderStill(rig: PuppetRig, style: GpuView['style'], rim: string, w: number, h: number): HTMLCanvasElement {
+    const gl = this.gl;
+    if (this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
+    gl.viewport(0, 0, w, h);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.bindVertexArray(this.quad);
+    const identity: Matrix = [1, 0, 0, 1, 0, 0];
+    const pose = { rootX: 0, torsoY: 0, torso: 0, head: 0, armF: 0, armB: 0, weapon: 0, offhand: 0, legF: 0, legB: 0, cape: 0, wingB: 0, wingF: 0 };
+    const view: GpuView = {
+      element: document.createElement('div'), rig, style, mirrored: false, rim, aura: null, echoes: false, visible: true,
+      frame: { pose, fx: { opacity: 1 }, bones: Object.fromEntries(BONES.map((b) => [b, identity])) as Record<BoneId, Matrix>, geo: {}, gone: false },
+    };
+    this.dpr = 1;
+    this.drawSprite(view, { x: 0, y: 0, w }, w, h);
+    const tex = this.textures.get(rig);
+    if (tex) { for (const t of Object.values(tex)) if (t) gl.deleteTexture(t.tex); this.textures.delete(rig); }
+    return this.canvas;
+  }
+
   add(view: GpuView) { this.views.add(view); }
   remove(view: GpuView) { this.views.delete(view); }
 

@@ -289,3 +289,85 @@
   from { opacity: 0; transform: translateY(40px) rotate(4deg) scale(0.8); }
   to { opacity: 1; }
 }
+
+/* ── Arte ilustrado ───────────────────────────────────────────────────────── */
+.carta-arte.carta-arte-ilustrada {
+  padding: 0;
+  height: 56px;
+  overflow: hidden;
+  background: #1a1410;
+  border-color: rgba(40, 28, 16, 0.7);
+  filter: none;
+}
+.carta-arte-ilustrada img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.carta.texto-largo .carta-arte-ilustrada { height: 48px; }
+.carta.texto-xl .carta-arte-ilustrada { height: 40px; }
+
+/* ── Full art: cartas únicas de clase ─────────────────────────────────────── */
+.carta.carta-full-art {
+  background: #120c10;
+  animation: full-art-marco 3.2s ease-in-out infinite;
+}
+.full-art-fondo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  transform-origin: 50% 42%;
+  animation: full-art-respira 10s ease-in-out infinite;
+  pointer-events: none;
+}
+.full-art-particulas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.carta-full-art .carta-cabecera,
+.carta-full-art .carta-tipo,
+.carta-full-art .carta-texto { position: relative; z-index: 2; }
+.carta-full-art .carta-coste,
+.carta-full-art .carta-conjuro { z-index: 3; }
+.carta-full-art .carta-nombre {
+  color: #fff4d8;
+  text-shadow: 0 1px 2px #000, 0 0 8px rgba(0, 0, 0, 0.8);
+}
+.carta-full-art .carta-tipo {
+  margin-top: auto;
+  color: #f3e6c6;
+  text-shadow: 0 1px 2px #000;
+}
+.carta-full-art .carta-texto {
+  /* only as tall as its text, sitting at the bottom so the art shows */
+  flex: 0 0 auto;
+  height: auto;
+  max-height: 46%;
+  overflow: hidden;
+  color: #f6ecd2;
+  background: rgba(12, 8, 10, 0.66);
+  border: 1px solid rgba(255, 240, 210, 0.18);
+  border-radius: 6px;
+  padding: 3px 5px;
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+}
+.carta-full-art.carta-druida { --brillo-full: rgba(168, 224, 112, 0.75); }
+.carta-full-art.carta-barbaro { --brillo-full: rgba(255, 154, 80, 0.75); }
+.carta-full-art.carta-mago { --brillo-full: rgba(168, 150, 255, 0.75); }
+.carta-full-art.carta-picaro { --brillo-full: rgba(114, 224, 204, 0.75); }
+.carta-full-art.carta-brujo { --brillo-full: rgba(201, 139, 255, 0.75); }
+@keyframes full-art-respira {
+  0%, 100% { transform: scale(1.04) translateY(0); }
+  50% { transform: scale(1.1) translateY(-2%); }
+}
+@keyframes full-art-marco {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.4), 0 6px 14px rgba(0, 0, 0, 0.55), 0 0 10px var(--brillo-full, transparent); }
+  50% { box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.6), 0 6px 14px rgba(0, 0, 0, 0.55), 0 0 22px var(--brillo-full, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .full-art-fondo, .carta.carta-full-art { animation: none; }
+}
