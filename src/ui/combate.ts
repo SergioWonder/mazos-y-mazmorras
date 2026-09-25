@@ -11,7 +11,7 @@ import {
 import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
 import { HeroSprite } from './hero-sprite.ts';
-import { formFromLabel, type FormId } from '../fx/hero-rig.ts';
+import { currentForm, type FormId } from '../fx/hero-rig.ts';
 
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
@@ -75,13 +75,8 @@ export function pantallaCombate(
     const heroSprite = new HeroSprite(run.clase);
     // druid forms get their own backlit puppet, created on first use
     const formSprites = new Map<FormId, HeroSprite>();
-    const formaActual = (): FormId | null => {
-      for (const e of combate.jugador.efectosTemporales) {
-        const f = formFromLabel(e.etiqueta);
-        if (f) return f;
-      }
-      return null;
-    };
+    const formaActual = (): FormId | null => currentForm(combate.jugador.efectosTemporales);
+    let formaMostrada: FormId | null = null;
     const spriteActual = (): HeroSprite => {
       const f = formaActual();
       if (!f) return heroSprite;
@@ -381,7 +376,13 @@ export function pantallaCombate(
           ${furiaActiva ? `<div class="furia-ficha" data-tip="<strong>🔥 Furia</strong><br>Fuerza/Destreza acumulada. Se rompe si acabas la ronda sin recibir daño (lo bloqueado no cuenta).">🔥 Furia +${j.furiaFuerza}F${j.furiaDestreza ? ` +${j.furiaDestreza}D` : ''}</div>` : ''}
         </div>
         ${renderInvocacionHTML()}`;
-      $('.sprite-silueta')?.appendChild(spriteActual().element);
+      const actual = spriteActual();
+      $('.sprite-silueta')?.appendChild(actual.element);
+      // a new form arrives with a roar and a burst of its colour
+      if (forma !== formaMostrada) {
+        if (forma) actual.play('spell');
+        formaMostrada = forma;
+      }
     }
 
     function textoIntencion(e: EnemigoCombate): string {

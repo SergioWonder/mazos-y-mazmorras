@@ -32,6 +32,8 @@ export interface HeroRig {
   focusBone?: BoneId;
   /** Idle wing/buzz amplitude in degrees (flying forms never stand still). */
   flap?: number;
+  /** Head size relative to the drawing (below 1 = less chibi, more sombre). */
+  headScale?: number;
   /** Inner/outer radius of the melee slash arc. */
   slash?: [number, number];
   palette: Record<string, string>;
@@ -89,11 +91,12 @@ export const HERO_RIGS: Record<ClaseId, HeroRig> = {
     accent: '#7dba4e', style: 'magic', phase: 0.0, focus: [70, 52],
     palette: { hoodD: '#2f4f27', hood: '#4f7d35', leaf: '#8cc152', robe: '#7a5634', robeD: '#5a3d25', boots: '#4a3322', belt: '#c19a52', skin: '#e2b48c', eye: '#1b140f', antler: '#c9a77a', wood: '#7b5530', gem: '#b6ff7a' },
     pivots: { weapon: [68, 97] },
-    rest: { armF: -15, weapon: 15, armB: 10 },
+    headScale: 0.82,
+    rest: { armF: -15, weapon: 15, armB: 10, torso: 2, head: 5 },
     windup: { rootX: -3, torso: -6, head: -4, armF: -60, weapon: 40, armB: 25 },
     strike: { rootX: 6, torso: 8, head: 4, armF: -100, weapon: 55, armB: -20, legF: -8, legB: 5 },
     shapes: [
-      P('cape', 'hoodD', [[49, 73], [62, 73], [60, 100], [52, 120], [38, 122], [44, 100]]),
+      P('cape', 'hoodD', [[49, 73], [62, 73], [62, 100], [59, 124], [55, 118], [51, 127], [46, 118], [40, 125], [37, 111], [42, 96]]),
       L('legB', 'robeD', 54, 100, 52, 121, 8), E('legB', 'boots', 51, 125, 6, 3.8),
       L('legF', 'robeD', 62, 100, 65, 121, 8), E('legF', 'boots', 67, 125, 6.5, 3.8),
       L('armB', 'hood', 52, 78, 49, 95, 8), C('armB', 'skin', 49, 97, 3.8),
@@ -118,10 +121,12 @@ export const HERO_RIGS: Record<ClaseId, HeroRig> = {
     accent: '#d65a3a', style: 'melee', phase: 1.1, focus: [72, 99], slash: [26, 44],
     palette: { hair: '#c4532b', skin: '#c98a5e', fur: '#9b7b55', pants: '#5b3b26', boots: '#3e2a1d', steel: '#c3ced6', wood: '#6e4a2c', paint: '#3f7fc4', eye: '#1b140f', belt: '#8a5a2e', strap: '#6b3f22' },
     pivots: { armF: [68, 78], armB: [50, 78], weapon: [72, 99] },
-    rest: { armF: -25, weapon: 60, armB: 15, torso: 3 },
+    headScale: 0.84,
+    rest: { armF: -25, weapon: 60, armB: 15, torso: 5, head: 6 },
     windup: { rootX: -5, torso: -10, head: -6, armF: 150, weapon: 190, armB: 120, legF: -6, legB: 6 },
     strike: { rootX: 12, torso: 14, head: 6, armF: 290, weapon: 190, armB: -40, legF: -14, legB: 10 },
     shapes: [
+      P('cape', 'fur', [[46, 73], [61, 71], [58, 100], [53, 114], [49, 107], [44, 116], [40, 104], [38, 90]]),
       L('legB', 'pants', 54, 100, 50, 121, 10), E('legB', 'boots', 50, 125, 7, 4.5),
       L('legF', 'pants', 63, 100, 68, 121, 10), E('legF', 'boots', 70, 125, 7.5, 4.5),
       L('armB', 'skin', 50, 78, 45, 97, 10), L('armB', 'strap', 46, 90, 45, 95, 10.8), C('armB', 'skin', 45, 99, 5.5),
@@ -150,13 +155,15 @@ export const HERO_RIGS: Record<ClaseId, HeroRig> = {
     accent: '#8a7ae0', style: 'magic', phase: 2.3, focus: [70, 55],
     palette: { robe: '#5d4bc9', robeD: '#3d3190', hat: '#4a3cae', star: '#ffd166', beard: '#eef0f5', skin: '#f0c49a', eye: '#1b140f', wood: '#8a5a32', orb: '#cbbcff', belt: '#d9a93f', boots: '#4a3450' },
     pivots: { weapon: [68, 97] },
-    rest: { armF: -12, weapon: 12, armB: 5 },
+    headScale: 0.84,
+    rest: { armF: -12, weapon: 12, armB: 5, torso: 3, head: 6 },
     windup: { rootX: -3, torso: -5, head: -5, armF: -150, weapon: 150, armB: 30 },
     strike: { rootX: 5, torso: 10, head: 6, armF: -85, weapon: 55, armB: -30 },
     shapes: [
+      P('cape', 'robeD', [[48, 76], [60, 72], [58, 104], [55, 121], [51, 115], [47, 124], [43, 112], [42, 94]]),
       E('legB', 'boots', 52, 126, 6, 3.5), E('legF', 'boots', 66, 126, 6.5, 3.5),
       L('armB', 'robeD', 52, 78, 48, 94, 9), C('armB', 'skin', 48, 97, 3.8),
-      P('torso', 'robe', [[50, 75], [67, 75], [74, 126], [44, 126]]),
+      P('torso', 'robe', [[50, 75], [67, 75], [74, 122], [71, 127], [67, 123], [63, 128], [58, 123], [53, 128], [49, 123], [44, 126]]),
       P('torso', 'robeD', [[57, 77], [61, 77], [63, 126], [56, 126]]),
       P('torso', 'belt', [[49, 95], [69, 95], [69.7, 99.5], [48.3, 99.5]]),
       C('head', 'skin', 62, 60, 13),
@@ -177,10 +184,12 @@ export const HERO_RIGS: Record<ClaseId, HeroRig> = {
     accent: '#4fb0a0', style: 'melee', phase: 3.4, focus: [71, 95], slash: [20, 32],
     palette: { scarf: '#4fb0a0', hood: '#2f4d49', hoodD: '#1f3431', leather: '#5a4636', leatherD: '#3a2d24', boots: '#2a2320', belt: '#8a6a44', skin: '#d9a882', mask: '#1c2626', eye: '#1b140f', steel: '#cfd8de' },
     pivots: { armF: [64, 78], weapon: [71, 95], offhand: [43, 95] },
-    rest: { torso: 6, head: -3, armF: -35, weapon: 20, armB: 25 },
+    headScale: 0.84,
+    rest: { torso: 8, head: 3, armF: -35, weapon: 20, armB: 25 },
     windup: { rootX: -4, torso: -4, head: -4, armF: 30, weapon: -10, armB: -30 },
     strike: { rootX: 18, torso: 18, head: 8, armF: -95, weapon: 15, armB: 60, legF: -18, legB: 14 },
     shapes: [
+      P('cape', 'hoodD', [[50, 74], [60, 72], [58, 98], [55, 115], [51, 109], [47, 117], [43, 106], [44, 88]]),
       P('cape', 'scarf', [[57, 72], [50, 74], [36, 80], [30, 76], [38, 71], [52, 69]]),
       P('cape', 'scarf', [[52, 76], [40, 86], [34, 84], [46, 74]]),
       L('legB', 'leatherD', 54, 100, 46, 120, 8.5), E('legB', 'boots', 45, 124.5, 6.5, 4),
@@ -206,11 +215,12 @@ export const HERO_RIGS: Record<ClaseId, HeroRig> = {
     accent: '#a15ce0', style: 'magic', phase: 4.6, focus: [73, 86],
     palette: { cloak: '#2e1b48', cloakD: '#1d1130', lining: '#7a2f9a', boots: '#231a2c', skin: '#cdbfd9', hair: '#1c1424', horn: '#5a4a62', eyeGlow: '#f0a0ff', tome: '#6b2130', gold: '#b9924a', flame: '#d68cff', flameCore: '#fff0ff' },
     pivots: { weapon: [69, 97] },
-    rest: { armF: -40, weapon: 40, armB: 10 },
+    headScale: 0.84,
+    rest: { armF: -40, weapon: 40, armB: 10, torso: 2, head: 6 },
     windup: { rootX: -4, torso: -8, head: -6, armF: 10, weapon: -10, armB: 30 },
     strike: { rootX: 6, torso: 10, head: 8, armF: -92, weapon: 92, armB: -10 },
     shapes: [
-      P('cape', 'cloakD', [[46, 74], [66, 74], [70, 124], [38, 126], [42, 100]]),
+      P('cape', 'cloakD', [[46, 74], [66, 74], [70, 120], [66, 126], [62, 120], [57, 127], [52, 120], [46, 127], [42, 119], [38, 126], [40, 104]]),
       P('cape', 'lining', [[45, 80], [49, 78], [45, 122], [39, 124]]),
       E('legB', 'boots', 52, 126, 6, 3.5), E('legF', 'boots', 67, 126, 6.5, 3.5),
       L('armB', 'cloak', 52, 78, 47, 94, 8.5),
@@ -243,6 +253,7 @@ const mul = (m: Matrix, n: Matrix): Matrix => [
   m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5],
 ];
 const translate = (x: number, y: number): Matrix => [1, 0, 0, 1, x, y];
+const scaleAbout = (k: number, px: number, py: number): Matrix => [k, 0, 0, k, px - k * px, py - k * py];
 function rotateAbout(deg: number, px: number, py: number): Matrix {
   const r = (deg * Math.PI) / 180, c = Math.cos(r), s = Math.sin(r);
   return [c, s, -s, c, px - c * px + s * py, py - s * px - c * py];
@@ -261,6 +272,16 @@ const FORM_LABELS: Record<string, FormId> = {
 /** Form silhouette for a temporary-effect label, or null if it is not a form. */
 export function formFromLabel(label: string): FormId | null {
   return FORM_LABELS[label] ?? null;
+}
+
+/** Form to show among the active effects: the most recently cast one wins
+ *  (effects are appended in casting order). */
+export function currentForm(effects: { etiqueta: string }[]): FormId | null {
+  for (let i = effects.length - 1; i >= 0; i--) {
+    const f = formFromLabel(effects[i].etiqueta);
+    if (f) return f;
+  }
+  return null;
 }
 
 // Quadrupeds: armF/armB are the near/far front legs (they follow the body when it
@@ -314,7 +335,7 @@ export const FORM_RIGS: Record<FormId, HeroRig> = {
     accent: '#7dba4e', style: 'melee', phase: 0.4, focus: [96, 78], focusBone: 'head', slash: [18, 32],
     palette: { fur: '#3a3a3a', eye: '#1b140f' },
     pivots: { torso: [42, 100], head: [82, 86], cape: [37, 93], armF: [80, 100], armB: [76, 100], legF: [46, 100], legB: [42, 100] },
-    rest: {},
+    rest: { head: 10, torso: 2 },
     windup: { rootX: -6, torso: -6, head: -10, armF: -15, legF: 10 },
     strike: { rootX: 16, torso: 6, head: 12, armF: -45, armB: -30, legF: 30, legB: 25, cape: -15 },
     shapes: wolfShapes(false),
@@ -323,7 +344,7 @@ export const FORM_RIGS: Record<FormId, HeroRig> = {
     accent: '#7dba4e', style: 'melee', phase: 1.2, focus: [108, 84], focusBone: 'head', slash: [22, 38],
     palette: { fur: '#3a2a20', eye: '#1b140f' },
     pivots: { torso: [40, 104], head: [86, 84], cape: [26, 88], armF: [82, 98], armB: [78, 98], legF: [44, 100], legB: [40, 100] },
-    rest: {},
+    rest: { head: 9 },
     windup: { rootX: -4, torso: -24, head: -14, armF: -100, armB: -70 },
     strike: { rootX: 10, torso: 6, head: 10, armF: -30, armB: -10, legF: 8 },
     shapes: [
@@ -331,6 +352,7 @@ export const FORM_RIGS: Record<FormId, HeroRig> = {
       L('armB', 'fur', 78, 98, 80, 124, 11), E('armB', 'fur', 81, 126.5, 7, 3),
       L('legB', 'fur', 40, 100, 38, 124, 11), E('legB', 'fur', 39, 126.5, 7, 3),
       E('torso', 'fur', 56, 92, 32, 19), E('torso', 'fur', 64, 76, 16, 9), E('torso', 'fur', 34, 92, 12, 15),
+      P('torso', 'fur', [[46, 76], [52, 68], [56, 74], [61, 64], [66, 72], [72, 65], [74, 76]]),
       E('legF', 'fur', 44, 100, 12, 14), L('legF', 'fur', 44, 108, 42, 124, 12), E('legF', 'fur', 44, 126.5, 8, 3.5),
       L('armF', 'fur', 82, 96, 85, 124, 12), E('armF', 'fur', 87, 126.5, 8, 3.5),
       E('head', 'fur', 96, 82, 13, 11), E('head', 'fur', 108, 86, 8, 6),
@@ -350,7 +372,7 @@ export const FORM_RIGS: Record<FormId, HeroRig> = {
       P('cape', 'feather', [[48, 82], [26, 90], [24, 98], [30, 96], [34, 101], [48, 92]]),
       E('torso', 'feather', 58, 85, 17, 10), E('torso', 'feather', 67, 83, 10, 11),
       L('torso', 'feather', 56, 94, 54, 106, 3), L('torso', 'feather', 62, 94, 63, 106, 3),
-      P('torso', 'feather', [[51, 105], [58, 106], [54, 109]]), P('torso', 'feather', [[60, 105], [67, 106], [62, 109]]),
+      P('torso', 'feather', [[50, 105], [59, 106], [53, 111]]), P('torso', 'feather', [[59, 105], [68, 106], [62, 111]]),
       C('head', 'feather', 76, 71, 8), P('head', 'feather', [[82, 67], [93, 70], [85, 77]]),
       P('head', 'feather', [[70, 66], [62, 63], [70, 71]]),
       C('head', 'eye', 79, 69, 1.7),
@@ -370,7 +392,7 @@ export const FORM_RIGS: Record<FormId, HeroRig> = {
     accent: '#b9c8ff', style: 'melee', phase: 3.3, focus: [96, 78], focusBone: 'head', slash: [20, 36],
     palette: { fur: '#2a2c38', eye: '#1b140f', moonGlow: '#e6ecff' },
     pivots: { torso: [42, 100], head: [82, 86], cape: [37, 93], armF: [80, 100], armB: [76, 100], legF: [46, 100], legB: [42, 100] },
-    rest: { head: -6 },
+    rest: { head: 8, torso: 2 },
     windup: { rootX: -6, torso: -10, head: -22, armF: -25, legF: 10 },
     strike: { rootX: 18, torso: 8, head: 14, armF: -50, armB: -35, legF: 32, legB: 26, cape: -18 },
     shapes: wolfShapes(true),
@@ -415,6 +437,8 @@ export function heroBones(cls: RigId, p: Pose): Record<BoneId, Matrix> {
     if (b === 'torso') m = mul(m, translate(0, p.torsoY));
     const angle = b === 'torso' ? p.torso : (p[b as keyof Pose] ?? 0);
     out[b] = mul(m, rotateAbout(angle, px, py));
+    const hs = rigOf(cls).headScale;
+    if (b === 'head' && hs) out[b] = mul(out[b], scaleAbout(hs, px, py));
   }
   return out;
 }
@@ -486,7 +510,7 @@ export function heroPose(cls: RigId, t: number, action: ActionProgress | null): 
     }
   }
   // breathing on top of everything, damped during actions
-  const b = Math.sin((t * 2 * Math.PI) / 1.9 + rig.phase), calm = action ? 0.3 : 1;
+  const b = Math.sin((t * 2 * Math.PI) / 2.5 + rig.phase), calm = action ? 0.3 : 1;
   p.torsoY += b * 0.9 * calm; p.torso += b * 1.2 * calm; p.head -= b * 1.5 * calm;
   p.armF += b * 2.5 * calm; p.armB -= b * 2.5 * calm; p.weapon -= b * 2 * calm;
   // cape/scarf hangs from the shoulders and trails behind forward motion

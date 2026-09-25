@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-09-25)
 
 ## Corpus Check
-- 42 files · ~81,665 words
+- 42 files · ~82,168 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 558 nodes · 1166 edges · 29 communities (26 shown, 3 thin omitted)
+- 560 nodes · 1173 edges · 29 communities (26 shown, 3 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 79 edges (avg confidence: 0.9)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1ab76269`
+- Built from commit: `c970977b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -81,30 +81,30 @@
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.04
-Nodes (48): ACOLITO_VELADO, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, Capitulo, CEREBRO_ANCIANO (+40 more)
+Nodes (53): ACOLITO_VELADO, ACTOS, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, CEREBRO_ANCIANO (+45 more)
 
 ### Community 1 - "Persistencia y partículas"
-Cohesion: 0.06
-Nodes (69): borrarGuardado(), hayGuardado(), avanzarCapitulo(), EstadoRun, Convención: el texto de la carta debe cuadrar con su efecto, formFromLabel(), FormId, AMBIENTES (+61 more)
+Cohesion: 0.08
+Nodes (45): cartaPorId(), borrarGuardado(), cargarRun(), Guardado, guardarRun(), hayGuardado(), rehidratarRun(), serializarRun() (+37 more)
 
 ### Community 2 - "Motor de combate"
-Cohesion: 0.07
-Nodes (31): defDe(), instanciar(), Combate, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), crearEnemigo(), GOBLIN_FAMELICO (+23 more)
+Cohesion: 0.06
+Nodes (35): defDe(), instanciar(), Combate, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), Capitulo, crearEnemigo() (+27 more)
 
 ### Community 3 - "Actos, mapa y guardado"
-Cohesion: 0.06
-Nodes (48): mazoInicial(), poolDeClase(), recompensaCartas(), Presentador, ACTOS, CONTEMPLADOR, GOBLIN_ARQUERO, GOBLIN_CORTADOR (+40 more)
+Cohesion: 0.11
+Nodes (27): mazoInicial(), poolDeClase(), recompensaCartas(), Presentador, generarMapa(), reliquiaInicial(), crearRng(), avanzarCapitulo() (+19 more)
 
 ### Community 4 - "Audio y música"
 Cohesion: 0.10
 Nodes (11): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de OpenGameArt, Efectos de sonido sintetizados (Web Audio API, sin ficheros), audio, Capa, MotorAudio, RECETAS, TemaChip (+3 more)
 
 ### Community 5 - "Combate: turnos e invocaciones"
-Cohesion: 0.17
-Nodes (15): cartaPorId(), cargarRun(), Guardado, guardarRun(), rehidratarRun(), serializarRun(), GUANTE_LADRON, HACHA_ANCESTRO (+7 more)
+Cohesion: 0.10
+Nodes (20): curar(), defNombre(), elegirEvento(), EventoDef, EVENTOS_NEGATIVOS, EVENTOS_POSITIVOS, mejorables(), mejorarAleatorias() (+12 more)
 
 ### Community 6 - "Renderizado de cartas"
-Cohesion: 0.06
+Cohesion: 0.07
 Nodes (50): ClaseId, Action, ACTION_DURATION, ActionProgress, ActionType, activeAction(), applyMatrix(), BONE_ORDER (+42 more)
 
 ### Community 7 - "Dado 3D en WebGL"
@@ -112,8 +112,8 @@ Cohesion: 0.10
 Nodes (14): COLOR_CRITICO, COLOR_NORMAL, COLOR_PIFIA, COLOR_TENUE, escala(), identidad(), Mat4, qHaciaCamara() (+6 more)
 
 ### Community 8 - "Eventos y recompensas"
-Cohesion: 0.22
-Nodes (11): cartaUnicaDeClase(), CONJURO_PRODIGIOSO, danoExplosion(), lanzarExplosion(), NEUTRALES_ESPECIALES, POOLS, resolverDeseo(), resolverSeducir() (+3 more)
+Cohesion: 0.24
+Nodes (9): cartaUnicaDeClase(), NEUTRALES_ESPECIALES, POOLS, resolverDeseo(), resolverSeducir(), ContextoEfecto, Skill /editar-carta (aplica comentarios del Compendio), Cartas de azar incoloras (Seducir / Deseo, d20) (+1 more)
 
 ### Community 9 - "Configuración de TypeScript"
 Cohesion: 0.12
@@ -136,8 +136,8 @@ Cohesion: 0.24
 Nodes (10): Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG, CHANGELOG, EntradaCambios, iniciarActualizaciones(), mostrarAvisoActualizar(), mostrarNovedades(), mostrarNovedadesSiNuevo() (+2 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.20
-Nodes (7): BASICAS, Skill /editar-carta (aplica comentarios del Compendio), Compendio de cartas, Comentarios, GRUPOS, mostrarExportacion(), pantallaCompendio()
+Cohesion: 0.22
+Nodes (6): BASICAS, CartaDef, Comentarios, GRUPOS, mostrarExportacion(), pantallaCompendio()
 
 ### Community 15 - "Community 15"
 Cohesion: 0.17
@@ -148,12 +148,12 @@ Cohesion: 0.29
 Nodes (7): DAGA, INICIALES_DE_CLASE, PICARO, Clase Pícaro (66 PV), Dagas (pícaro), Robo y descarte con sinergias (pícaro), Mazos iniciales (5 Golpe + 4 Defender + 2 de clase)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.33
-Nodes (6): DRUIDA, PV_POR_CLASE, Clase Druida (70 PV), Oscuridad (baja el ataque de todos), Raíces (druida), Transformaciones (druida)
+Cohesion: 0.18
+Nodes (11): BRUJO, DRUIDA, PV_POR_CLASE, Ambientación fantasía medieval D&D, Clase Brujo (64 PV), Clase Druida (70 PV), Oscuridad (baja el ataque de todos), Raíces (druida) (+3 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.40
-Nodes (5): BRUJO, Ambientación fantasía medieval D&D, Clase Brujo (64 PV), Subclases del brujo: Archifata, Celestial, Infernal, Gran Antiguo, Subclases de D&D 2024 como cartas raras
+Cohesion: 0.08
+Nodes (33): Convención: el texto de la carta debe cuadrar con su efecto, currentForm(), formFromLabel(), FormId, Controles de ratón y modo mando por teclado, actualizarTextoCarta(), ajustarTexto(), ARTE_CARTA (+25 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -168,8 +168,8 @@ Cohesion: 0.40
 Nodes (3): Cambiar o ampliar pistas, Música y sonido, Pistas usadas (todas CC0 / dominio público)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.50
-Nodes (4): MAGO, EspacioConjuro, Clase Mago (62 PV), Espacios de conjuro en pirámide (mago)
+Cohesion: 0.33
+Nodes (7): CONJURO_PRODIGIOSO, danoExplosion(), lanzarExplosion(), MAGO, Clase Mago (62 PV), Conjuro Prodigioso (mago), Explosión Sobrenatural (vuelve a lo alto del mazo)
 
 ### Community 29 - "Community 29"
 Cohesion: 0.67
@@ -183,17 +183,17 @@ Nodes (3): JEFE_OGRO, SENOR_CRIPTA, Jefes únicos con rasgo propio
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Combate` connect `Motor de combate` to `Persistencia y partículas`, `Cartas: registro y Explosión`, `Actos, mapa y guardado`?**
+- **Why does `Combate` connect `Motor de combate` to `Community 19`, `Persistencia y partículas`, `Cartas: registro y Explosión`, `Actos, mapa y guardado`?**
   _High betweenness centrality (0.070) - this node is a cross-community bridge._
-- **Why does `Mazo y Mazmorra` connect `Community 15` to `Audio y música`, `Community 13`, `Community 16`, `Community 18`, `Community 19`, `Community 23`?**
+- **Why does `Mazo y Mazmorra` connect `Community 15` to `Audio y música`, `Community 13`, `Community 16`, `Community 18`, `Community 23`?**
   _High betweenness centrality (0.032) - this node is a cross-community bridge._
 - **What connects `version`, `configurations`, `name` to the rest of the system?**
   _174 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bestiario de enemigos` be split into smaller, more focused modules?**
-  _Cohesion score 0.0392156862745098 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03571428571428571 - nodes in this community are weakly interconnected._
 - **Should `Persistencia y partículas` be split into smaller, more focused modules?**
-  _Cohesion score 0.05546218487394958 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08415300546448087 - nodes in this community are weakly interconnected._
 - **Should `Motor de combate` be split into smaller, more focused modules?**
-  _Cohesion score 0.07075873827791987 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.0625694187338023 - nodes in this community are weakly interconnected._
 - **Should `Actos, mapa y guardado` be split into smaller, more focused modules?**
-  _Cohesion score 0.05639097744360902 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11264367816091954 - nodes in this community are weakly interconnected._

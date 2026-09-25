@@ -17,7 +17,7 @@ import {
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
 import { ARTE_CARTA } from '../src/ui/carta.ts';
-import { HERO_RIGS, FORM_RIGS, formFromLabel, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
+import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
@@ -1832,6 +1832,20 @@ console.log('\n🐺 Siluetas de las transformaciones');
     check(!!h.fx.flash && h.p.rootX < 0, `${id} golpeado: destello y retroceso`);
   }
   check(formFromLabel('Furia Primaria') === null, 'un efecto que no es forma no cambia la silueta');
+  // con varias formas activas, se ve la última que se ha lanzado
+  check(currentForm([{ etiqueta: 'Forma de Oso' }, { etiqueta: 'Furia Primaria' }, { etiqueta: 'Forma de Lobo' }]) === 'lobo',
+    'con Oso y luego Lobo activas, se ve el Lobo');
+  check(currentForm([{ etiqueta: 'Forma de Lobo' }, { etiqueta: 'Forma Lunar' }, { etiqueta: 'Forma de Lobo' }]) === 'lobo',
+    'relanzar una forma la vuelve a poner delante');
+  check(currentForm([{ etiqueta: 'Furia Primaria' }]) === null, 'sin formas activas se ve el héroe');
+  // tono más sombrío: cabezas más pequeñas (menos cabezones) y fieras con la cabeza gacha
+  for (const c of CLASES) {
+    const h = heroBones(c, heroPose(c, 0, null).p).head;
+    check(Math.hypot(h[0], h[1]) < 0.9, `${c}: cabeza reducida en la silueta`);
+  }
+  for (const f of ['lobo', 'oso', 'lunar'] as const) {
+    check((FORM_RIGS[f].rest.head ?? 0) > 0, `${f}: acecha con la cabeza gacha`);
+  }
   // el águila no se posa: aletea aunque esté en reposo
   const ala1 = heroPose('aguila' as never, 0.0, null).p.armF, ala2 = heroPose('aguila' as never, 0.15, null).p.armF;
   check(Math.abs(ala1 - ala2) > 5, 'el águila aletea en reposo');

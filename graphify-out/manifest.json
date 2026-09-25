@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790338040.8562129,
-    "ast_hash": "6a1765e5ec56eee1616f32fb549af00f",
+    "mtime": 1790339043.382701,
+    "ast_hash": "7213ca9a92a3abbb37304f37f74d813a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790337974.2868755,
-    "ast_hash": "2a9b1d70ca74e188dab153418ecc41af",
+    "mtime": 1790338986.4904752,
+    "ast_hash": "313719b22791a436392966892a2d274b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -80,8 +80,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/hero-rig.ts": {
-    "mtime": 1790338023.7065816,
-    "ast_hash": "3064f765600f2987e9ae7a51d8d117f8",
+    "mtime": 1790339011.3102314,
+    "ast_hash": "88f33c29074ff63d648c04f61cb1176d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790337990.977444,
-    "ast_hash": "0264948010b6cd021af38835bc0cb933",
+    "mtime": 1790338948.6269512,
+    "ast_hash": "6e6b56450ddc3852f3eab55f73d1823e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790338040.8557136,
-    "ast_hash": "f10fdfa83395d5c556523694e08df1ff",
+    "mtime": 1790339043.3825755,
+    "ast_hash": "2db9bbf3fb41568cd8be1daceccfc543",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790338040.8545177,
-    "ast_hash": "5ebf8cf97a1184ace39e7d3373a86373",
+    "mtime": 1790339043.3821397,
+    "ast_hash": "bcb354198c0c1a78acc12486cc1d3d78",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {

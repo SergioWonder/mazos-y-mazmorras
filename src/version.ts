@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.4.1';
+export const VERSION = '3.4.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.4.2',
+    fecha: '2026-09-25',
+    cambios: [
+      '🌒 Héroes y transformaciones con un aire más sombrío: cabezas más pequeñas, capas y túnicas hechas jirones, postura algo encorvada y una respiración más lenta y pesada.',
+      '🐺 Las fieras del druida acechan con la cabeza gacha, y el oso luce un lomo erizado.',
+      '🔄 Si encadenas transformaciones, se ve siempre la última que has lanzado, y cada forma nueva entra con un rugido.',
+    ],
+  },
   {
     version: '3.4.1',
     fecha: '2026-09-25',
