@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.3.0';
+export const VERSION = '3.4.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.4.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '🌘 Los héroes son ahora siluetas a contraluz: figuras anónimas recortadas con la luz de su clase, donde solo brillan los ojos y la magia.',
+      '⚔️ Tu héroe se mueve: respira y parpadea, lanza tajos o proyectiles al jugar un ataque, conjura con el resto de cartas y retrocede con un destello al recibir daño.',
+      '🎯 El daño llega en el instante del golpe, sincronizado con la animación.',
+      '🌕 El cielo del combate tiene luna y bruma de horizonte, con su propio tono en cada acto: brasas en el Asentamiento, luz fría en la Cripta y luna de sangre en la Guarida del Dragón.',
+      '🐺 Las formas del druida también se funden en la silueta a contraluz.',
+    ],
+  },
   {
     version: '3.3.0',
     fecha: '2026-08-27',

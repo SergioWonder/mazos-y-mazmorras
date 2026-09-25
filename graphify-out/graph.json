@@ -83,6 +83,33 @@
   },
   "nodes": [
     {
+      "label": "launch.json",
+      "file_type": "code",
+      "source_file": ".claude/launch.json",
+      "source_location": "L1",
+      "id": "claude_launch",
+      "community": 28,
+      "norm_label": "launch.json"
+    },
+    {
+      "label": "version",
+      "file_type": "code",
+      "source_file": ".claude/launch.json",
+      "source_location": "L2",
+      "id": "claude_launch_version",
+      "community": 28,
+      "norm_label": "version"
+    },
+    {
+      "label": "configurations",
+      "file_type": "code",
+      "source_file": ".claude/launch.json",
+      "source_location": "L3",
+      "id": "claude_launch_configurations",
+      "community": 28,
+      "norm_label": "configurations"
+    },
+    {
       "label": "package.json",
       "file_type": "code",
       "source_file": "package.json",
@@ -212,7 +239,7 @@
       "label": "CLASES",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L22",
+      "source_location": "L23",
       "id": "scripts_smoke_test_clases",
       "community": 3,
       "norm_label": "clases"
@@ -221,7 +248,7 @@
       "label": "check()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L25",
+      "source_location": "L26",
       "id": "scripts_smoke_test_check",
       "community": 3,
       "norm_label": "check()"
@@ -230,16 +257,16 @@
       "label": "uiSilenciosa",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L34",
+      "source_location": "L35",
       "id": "scripts_smoke_test_uisilenciosa",
-      "community": 12,
+      "community": 3,
       "norm_label": "uisilenciosa"
     },
     {
       "label": "sinTildes()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L61",
+      "source_location": "L62",
       "id": "scripts_smoke_test_sintildes",
       "community": 3,
       "norm_label": "sintildes()"
@@ -248,7 +275,7 @@
       "label": "danoEntrante()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L64",
+      "source_location": "L65",
       "id": "scripts_smoke_test_danoentrante",
       "community": 3,
       "norm_label": "danoentrante()"
@@ -257,7 +284,7 @@
       "label": "MITIGA",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L73",
+      "source_location": "L74",
       "id": "scripts_smoke_test_mitiga",
       "community": 3,
       "norm_label": "mitiga"
@@ -266,7 +293,7 @@
       "label": "esEscalado()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L78",
+      "source_location": "L79",
       "id": "scripts_smoke_test_esescalado",
       "community": 3,
       "norm_label": "esescalado()"
@@ -275,7 +302,7 @@
       "label": "puntuarCarta()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L85",
+      "source_location": "L86",
       "id": "scripts_smoke_test_puntuarcarta",
       "community": 3,
       "norm_label": "puntuarcarta()"
@@ -284,16 +311,16 @@
       "label": "mejorObjetivo()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L116",
+      "source_location": "L117",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 3,
+      "community": 5,
       "norm_label": "mejorobjetivo()"
     },
     {
       "label": "OpcionesSim",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L124",
+      "source_location": "L125",
       "id": "scripts_smoke_test_opcionessim",
       "community": 3,
       "norm_label": "opcionessim"
@@ -302,16 +329,16 @@
       "label": "simular()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L126",
+      "source_location": "L127",
       "id": "scripts_smoke_test_simular",
-      "community": 1,
+      "community": 5,
       "norm_label": "simular()"
     },
     {
       "label": "Cap",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L268",
+      "source_location": "L269",
       "id": "scripts_smoke_test_cap",
       "community": 3,
       "norm_label": "cap"
@@ -322,7 +349,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1",
       "id": "core_cartas",
-      "community": 10,
+      "community": 8,
       "norm_label": "cartas.ts"
     },
     {
@@ -349,7 +376,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L24",
       "id": "core_cartas_niveleslibres",
-      "community": 10,
+      "community": 8,
       "norm_label": "niveleslibres()"
     },
     {
@@ -358,7 +385,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L30",
       "id": "core_cartas_basicas",
-      "community": 10,
+      "community": 1,
       "norm_label": "basicas"
     },
     {
@@ -367,7 +394,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L75",
       "id": "core_cartas_druida",
-      "community": 10,
+      "community": 15,
       "norm_label": "druida"
     },
     {
@@ -376,7 +403,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L725",
       "id": "core_cartas_barbaro",
-      "community": 10,
+      "community": 15,
       "norm_label": "barbaro"
     },
     {
@@ -385,7 +412,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1332",
       "id": "core_cartas_conjuro_prodigioso",
-      "community": 10,
+      "community": 8,
       "norm_label": "conjuro_prodigioso"
     },
     {
@@ -394,7 +421,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1367",
       "id": "core_cartas_daga",
-      "community": 10,
+      "community": 8,
       "norm_label": "daga"
     },
     {
@@ -403,7 +430,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1387",
       "id": "core_cartas_mago",
-      "community": 10,
+      "community": 8,
       "norm_label": "mago"
     },
     {
@@ -412,7 +439,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2030",
       "id": "core_cartas_picaro",
-      "community": 10,
+      "community": 15,
       "norm_label": "picaro"
     },
     {
@@ -421,7 +448,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2746",
       "id": "core_cartas_danoexplosion",
-      "community": 10,
+      "community": 8,
       "norm_label": "danoexplosion()"
     },
     {
@@ -430,7 +457,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2753",
       "id": "core_cartas_lanzarexplosion",
-      "community": 10,
+      "community": 8,
       "norm_label": "lanzarexplosion()"
     },
     {
@@ -439,7 +466,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2767",
       "id": "core_cartas_brujo",
-      "community": 10,
+      "community": 15,
       "norm_label": "brujo"
     },
     {
@@ -448,7 +475,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3478",
       "id": "core_cartas_resolverseducir",
-      "community": 10,
+      "community": 8,
       "norm_label": "resolverseducir()"
     },
     {
@@ -457,7 +484,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3509",
       "id": "core_cartas_resolverdeseo",
-      "community": 10,
+      "community": 8,
       "norm_label": "resolverdeseo()"
     },
     {
@@ -466,7 +493,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3546",
       "id": "core_cartas_neutrales_especiales",
-      "community": 10,
+      "community": 8,
       "norm_label": "neutrales_especiales"
     },
     {
@@ -475,7 +502,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3596",
       "id": "core_cartas_iniciales_de_clase",
-      "community": 10,
+      "community": 8,
       "norm_label": "iniciales_de_clase"
     },
     {
@@ -484,7 +511,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3610",
       "id": "core_cartas_pools",
-      "community": 10,
+      "community": 8,
       "norm_label": "pools"
     },
     {
@@ -493,7 +520,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3614",
       "id": "core_cartas_mazoinicial",
-      "community": 10,
+      "community": 5,
       "norm_label": "mazoinicial()"
     },
     {
@@ -502,7 +529,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3625",
       "id": "core_cartas_pooldeclase",
-      "community": 1,
+      "community": 8,
       "norm_label": "pooldeclase()"
     },
     {
@@ -511,7 +538,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3632",
       "id": "core_cartas_cartaunicadeclase",
-      "community": 1,
+      "community": 8,
       "norm_label": "cartaunicadeclase()"
     },
     {
@@ -520,7 +547,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3637",
       "id": "core_cartas_cartaporid",
-      "community": 1,
+      "community": 5,
       "norm_label": "cartaporid()"
     },
     {
@@ -529,7 +556,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3647",
       "id": "core_cartas_recompensacartas",
-      "community": 1,
+      "community": 8,
       "norm_label": "recompensacartas()"
     },
     {
@@ -547,7 +574,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L12",
       "id": "core_combate_presentador",
-      "community": 12,
+      "community": 3,
       "norm_label": "presentador"
     },
     {
@@ -592,7 +619,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L98",
       "id": "core_combate_combate_bloqueodecarta",
-      "community": 2,
+      "community": 15,
       "norm_label": ".bloqueodecarta()"
     },
     {
@@ -718,7 +745,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L611",
       "id": "core_combate_combate_invocar",
-      "community": 14,
+      "community": 15,
       "norm_label": ".invocar()"
     },
     {
@@ -727,7 +754,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L632",
       "id": "core_combate_combate_invocarefimero",
-      "community": 14,
+      "community": 15,
       "norm_label": ".invocarefimero()"
     },
     {
@@ -889,7 +916,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L1",
       "id": "core_conjuros",
-      "community": 5,
+      "community": 2,
       "norm_label": "conjuros.ts"
     },
     {
@@ -898,7 +925,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L19",
       "id": "core_conjuros_orden_niveles",
-      "community": 5,
+      "community": 2,
       "norm_label": "orden_niveles"
     },
     {
@@ -907,7 +934,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L21",
       "id": "core_conjuros_piramideconjuros",
-      "community": 5,
+      "community": 2,
       "norm_label": "piramideconjuros()"
     },
     {
@@ -916,7 +943,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L31",
       "id": "core_conjuros_crearespacios",
-      "community": 5,
+      "community": 2,
       "norm_label": "crearespacios()"
     },
     {
@@ -1015,7 +1042,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L69",
       "id": "core_enemigos_jefe_ogro",
-      "community": 3,
+      "community": 29,
       "norm_label": "jefe_ogro"
     },
     {
@@ -1087,7 +1114,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L174",
       "id": "core_enemigos_senor_cripta",
-      "community": 3,
+      "community": 29,
       "norm_label": "senor_cripta"
     },
     {
@@ -1447,7 +1474,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L625",
       "id": "core_enemigos_capitulo",
-      "community": 15,
+      "community": 10,
       "norm_label": "capitulo"
     },
     {
@@ -1537,7 +1564,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L51",
       "id": "core_eventos_cartaaleatoria",
-      "community": 2,
+      "community": 8,
       "norm_label": "cartaaleatoria()"
     },
     {
@@ -1609,7 +1636,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 1,
+      "community": 5,
       "norm_label": "guardado.ts"
     },
     {
@@ -1618,7 +1645,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L9",
       "id": "core_guardado_guardado",
-      "community": 1,
+      "community": 5,
       "norm_label": "guardado"
     },
     {
@@ -1627,7 +1654,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L28",
       "id": "core_guardado_serializarrun",
-      "community": 1,
+      "community": 5,
       "norm_label": "serializarrun()"
     },
     {
@@ -1636,7 +1663,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L48",
       "id": "core_guardado_rehidratarrun",
-      "community": 1,
+      "community": 5,
       "norm_label": "rehidratarrun()"
     },
     {
@@ -1645,7 +1672,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L86",
       "id": "core_guardado_guardarrun",
-      "community": 1,
+      "community": 5,
       "norm_label": "guardarrun()"
     },
     {
@@ -1654,7 +1681,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L94",
       "id": "core_guardado_cargarrun",
-      "community": 1,
+      "community": 5,
       "norm_label": "cargarrun()"
     },
     {
@@ -1663,7 +1690,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L104",
       "id": "core_guardado_hayguardado",
-      "community": 1,
+      "community": 5,
       "norm_label": "hayguardado()"
     },
     {
@@ -1672,7 +1699,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L112",
       "id": "core_guardado_borrarguardado",
-      "community": 1,
+      "community": 5,
       "norm_label": "borrarguardado()"
     },
     {
@@ -1681,7 +1708,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 1,
+      "community": 5,
       "norm_label": "mapa.ts"
     },
     {
@@ -1690,7 +1717,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L8",
       "id": "core_mapa_generarmapa",
-      "community": 1,
+      "community": 5,
       "norm_label": "generarmapa()"
     },
     {
@@ -1699,7 +1726,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L93",
       "id": "core_mapa_nodosdisponibles",
-      "community": 1,
+      "community": 5,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -1708,7 +1735,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L1",
       "id": "core_reliquias",
-      "community": 1,
+      "community": 5,
       "norm_label": "reliquias.ts"
     },
     {
@@ -1717,7 +1744,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L5",
       "id": "core_reliquias_totem_roble",
-      "community": 1,
+      "community": 5,
       "norm_label": "totem_roble"
     },
     {
@@ -1726,7 +1753,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L11",
       "id": "core_reliquias_hacha_ancestro",
-      "community": 1,
+      "community": 5,
       "norm_label": "hacha_ancestro"
     },
     {
@@ -1735,7 +1762,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L17",
       "id": "core_reliquias_pendulo_ambar",
-      "community": 1,
+      "community": 5,
       "norm_label": "pendulo_ambar"
     },
     {
@@ -1744,7 +1771,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L23",
       "id": "core_reliquias_guante_ladron",
-      "community": 1,
+      "community": 5,
       "norm_label": "guante_ladron"
     },
     {
@@ -1753,7 +1780,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L29",
       "id": "core_reliquias_sello_pacto",
-      "community": 2,
+      "community": 15,
       "norm_label": "sello_pacto"
     },
     {
@@ -1762,7 +1789,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L39",
       "id": "core_reliquias_reliquiainicial",
-      "community": 1,
+      "community": 5,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -1771,7 +1798,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L47",
       "id": "core_reliquias_reliquiaporid",
-      "community": 1,
+      "community": 5,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -1780,7 +1807,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L55",
       "id": "core_reliquias_pool_reliquias",
-      "community": 1,
+      "community": 5,
       "norm_label": "pool_reliquias"
     },
     {
@@ -1789,7 +1816,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L1",
       "id": "core_rng",
-      "community": 1,
+      "community": 5,
       "norm_label": "rng.ts"
     },
     {
@@ -1798,7 +1825,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L2",
       "id": "core_rng_crearrng",
-      "community": 1,
+      "community": 5,
       "norm_label": "crearrng()"
     },
     {
@@ -1807,7 +1834,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L13",
       "id": "core_rng_entre",
-      "community": 1,
+      "community": 5,
       "norm_label": "entre()"
     },
     {
@@ -1816,7 +1843,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 1,
+      "community": 5,
       "norm_label": "elegir()"
     },
     {
@@ -1834,7 +1861,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L1",
       "id": "core_run",
-      "community": 1,
+      "community": 5,
       "norm_label": "run.ts"
     },
     {
@@ -1843,7 +1870,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L7",
       "id": "core_run_pv_por_clase",
-      "community": 10,
+      "community": 15,
       "norm_label": "pv_por_clase"
     },
     {
@@ -1852,7 +1879,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L15",
       "id": "core_run_nuevarun",
-      "community": 1,
+      "community": 5,
       "norm_label": "nuevarun()"
     },
     {
@@ -1861,7 +1888,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L38",
       "id": "core_run_avanzarcapitulo",
-      "community": 1,
+      "community": 5,
       "norm_label": "avanzarcapitulo()"
     },
     {
@@ -1870,7 +1897,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L1",
       "id": "core_types",
-      "community": 1,
+      "community": 5,
       "norm_label": "types.ts"
     },
     {
@@ -1879,7 +1906,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 1,
+      "community": 5,
       "norm_label": "claseid"
     },
     {
@@ -1888,7 +1915,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L4",
       "id": "core_types_tipocarta",
-      "community": 1,
+      "community": 5,
       "norm_label": "tipocarta"
     },
     {
@@ -1906,7 +1933,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_modoobjetivo",
-      "community": 1,
+      "community": 5,
       "norm_label": "modoobjetivo"
     },
     {
@@ -1915,7 +1942,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L9",
       "id": "core_types_estadoid",
-      "community": 2,
+      "community": 15,
       "norm_label": "estadoid"
     },
     {
@@ -1933,7 +1960,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L64",
       "id": "core_types_formainvocacion",
-      "community": 14,
+      "community": 15,
       "norm_label": "formainvocacion"
     },
     {
@@ -1942,7 +1969,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L68",
       "id": "core_types_efectoinvocacion",
-      "community": 2,
+      "community": 5,
       "norm_label": "efectoinvocacion"
     },
     {
@@ -1951,7 +1978,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L73",
       "id": "core_types_invocacion",
-      "community": 14,
+      "community": 15,
       "norm_label": "invocacion"
     },
     {
@@ -1960,7 +1987,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L86",
       "id": "core_types_efectotemporal",
-      "community": 2,
+      "community": 5,
       "norm_label": "efectotemporal"
     },
     {
@@ -1978,7 +2005,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L106",
       "id": "core_types_tipointencion",
-      "community": 1,
+      "community": 5,
       "norm_label": "tipointencion"
     },
     {
@@ -1996,7 +2023,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L125",
       "id": "core_types_enemigodef",
-      "community": 15,
+      "community": 10,
       "norm_label": "enemigodef"
     },
     {
@@ -2014,7 +2041,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L172",
       "id": "core_types_espacioconjuro",
-      "community": 5,
+      "community": 2,
       "norm_label": "espacioconjuro"
     },
     {
@@ -2032,7 +2059,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L202",
       "id": "core_types_cartadef",
-      "community": 10,
+      "community": 1,
       "norm_label": "cartadef"
     },
     {
@@ -2041,7 +2068,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L235",
       "id": "core_types_mejoracarta",
-      "community": 1,
+      "community": 5,
       "norm_label": "mejoracarta"
     },
     {
@@ -2068,7 +2095,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L362",
       "id": "core_types_tiponodo",
-      "community": 1,
+      "community": 5,
       "norm_label": "tiponodo"
     },
     {
@@ -2077,7 +2104,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L364",
       "id": "core_types_nodomapa",
-      "community": 1,
+      "community": 5,
       "norm_label": "nodomapa"
     },
     {
@@ -2086,7 +2113,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L373",
       "id": "core_types_reliquiadef",
-      "community": 1,
+      "community": 5,
       "norm_label": "reliquiadef"
     },
     {
@@ -2095,7 +2122,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L389",
       "id": "core_types_estadorun",
-      "community": 1,
+      "community": 8,
       "norm_label": "estadorun"
     },
     {
@@ -2104,7 +2131,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "id": "fx_audio",
-      "community": 6,
+      "community": 4,
       "norm_label": "audio.ts"
     },
     {
@@ -2113,7 +2140,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L12",
       "id": "fx_audio_capa",
-      "community": 6,
+      "community": 4,
       "norm_label": "capa"
     },
     {
@@ -2122,7 +2149,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L23",
       "id": "fx_audio_recetas",
-      "community": 6,
+      "community": 4,
       "norm_label": "recetas"
     },
     {
@@ -2131,7 +2158,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L85",
       "id": "fx_audio_temachip",
-      "community": 6,
+      "community": 4,
       "norm_label": "temachip"
     },
     {
@@ -2356,7 +2383,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L487",
       "id": "fx_audio_audio",
-      "community": 6,
+      "community": 4,
       "norm_label": "audio"
     },
     {
@@ -2585,6 +2612,348 @@
       "norm_label": "rodardados()"
     },
     {
+      "label": "hero-rig.ts",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L1",
+      "id": "fx_hero_rig",
+      "community": 6,
+      "norm_label": "hero-rig.ts"
+    },
+    {
+      "label": "BoneId",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L8",
+      "id": "fx_hero_rig_boneid",
+      "community": 6,
+      "norm_label": "boneid"
+    },
+    {
+      "label": "Shape",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L12",
+      "id": "fx_hero_rig_shape",
+      "community": 6,
+      "norm_label": "shape"
+    },
+    {
+      "label": "Pose",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L18",
+      "id": "fx_hero_rig_pose",
+      "community": 6,
+      "norm_label": "pose"
+    },
+    {
+      "label": "PartialPose",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L22",
+      "id": "fx_hero_rig_partialpose",
+      "community": 6,
+      "norm_label": "partialpose"
+    },
+    {
+      "label": "HeroRig",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L24",
+      "id": "fx_hero_rig_herorig",
+      "community": 6,
+      "norm_label": "herorig"
+    },
+    {
+      "label": "ActionType",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L42",
+      "id": "fx_hero_rig_actiontype",
+      "community": 6,
+      "norm_label": "actiontype"
+    },
+    {
+      "label": "Action",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L43",
+      "id": "fx_hero_rig_action",
+      "community": 6,
+      "norm_label": "action"
+    },
+    {
+      "label": "ActionProgress",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L44",
+      "id": "fx_hero_rig_actionprogress",
+      "community": 6,
+      "norm_label": "actionprogress"
+    },
+    {
+      "label": "Effects",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L46",
+      "id": "fx_hero_rig_effects",
+      "community": 6,
+      "norm_label": "effects"
+    },
+    {
+      "label": "EffectGeometry",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L54",
+      "id": "fx_hero_rig_effectgeometry",
+      "community": 6,
+      "norm_label": "effectgeometry"
+    },
+    {
+      "label": "ACTION_DURATION",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L61",
+      "id": "fx_hero_rig_action_duration",
+      "community": 6,
+      "norm_label": "action_duration"
+    },
+    {
+      "label": "EMISSIVE",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L64",
+      "id": "fx_hero_rig_emissive",
+      "community": 6,
+      "norm_label": "emissive"
+    },
+    {
+      "label": "EYES",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L65",
+      "id": "fx_hero_rig_eyes",
+      "community": 6,
+      "norm_label": "eyes"
+    },
+    {
+      "label": "C()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L67",
+      "id": "fx_hero_rig_c",
+      "community": 6,
+      "norm_label": "c()"
+    },
+    {
+      "label": "E()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L68",
+      "id": "fx_hero_rig_e",
+      "community": 6,
+      "norm_label": "e()"
+    },
+    {
+      "label": "P()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L69",
+      "id": "fx_hero_rig_p",
+      "community": 6,
+      "norm_label": "p()"
+    },
+    {
+      "label": "L()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L70",
+      "id": "fx_hero_rig_l",
+      "community": 6,
+      "norm_label": "l()"
+    },
+    {
+      "label": "DEFAULT_PIVOTS",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L73",
+      "id": "fx_hero_rig_default_pivots",
+      "community": 6,
+      "norm_label": "default_pivots"
+    },
+    {
+      "label": "PARENT",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L78",
+      "id": "fx_hero_rig_parent",
+      "community": 6,
+      "norm_label": "parent"
+    },
+    {
+      "label": "BONE_ORDER",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L82",
+      "id": "fx_hero_rig_bone_order",
+      "community": 6,
+      "norm_label": "bone_order"
+    },
+    {
+      "label": "HERO_RIGS",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L84",
+      "id": "fx_hero_rig_hero_rigs",
+      "community": 6,
+      "norm_label": "hero_rigs"
+    },
+    {
+      "label": "Matrix",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L236",
+      "id": "fx_hero_rig_matrix",
+      "community": 6,
+      "norm_label": "matrix"
+    },
+    {
+      "label": "mul()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L237",
+      "id": "fx_hero_rig_mul",
+      "community": 6,
+      "norm_label": "mul()"
+    },
+    {
+      "label": "translate()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L242",
+      "id": "fx_hero_rig_translate",
+      "community": 6,
+      "norm_label": "translate()"
+    },
+    {
+      "label": "rotateAbout()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L243",
+      "id": "fx_hero_rig_rotateabout",
+      "community": 6,
+      "norm_label": "rotateabout()"
+    },
+    {
+      "label": "applyMatrix()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L247",
+      "id": "fx_hero_rig_applymatrix",
+      "community": 6,
+      "norm_label": "applymatrix()"
+    },
+    {
+      "label": "pivotOf()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L250",
+      "id": "fx_hero_rig_pivotof",
+      "community": 6,
+      "norm_label": "pivotof()"
+    },
+    {
+      "label": "heroBones()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L253",
+      "id": "fx_hero_rig_herobones",
+      "community": 6,
+      "norm_label": "herobones()"
+    },
+    {
+      "label": "ZERO",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L267",
+      "id": "fx_hero_rig_zero",
+      "community": 6,
+      "norm_label": "zero"
+    },
+    {
+      "label": "smooth()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L268",
+      "id": "fx_hero_rig_smooth",
+      "community": 6,
+      "norm_label": "smooth()"
+    },
+    {
+      "label": "easeOut()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L269",
+      "id": "fx_hero_rig_easeout",
+      "community": 6,
+      "norm_label": "easeout()"
+    },
+    {
+      "label": "Keyframe",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L270",
+      "id": "fx_hero_rig_keyframe",
+      "community": 6,
+      "norm_label": "keyframe"
+    },
+    {
+      "label": "interpolate()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L272",
+      "id": "fx_hero_rig_interpolate",
+      "community": 6,
+      "norm_label": "interpolate()"
+    },
+    {
+      "label": "impactFraction()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L288",
+      "id": "fx_hero_rig_impactfraction",
+      "community": 6,
+      "norm_label": "impactfraction()"
+    },
+    {
+      "label": "heroPose()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L293",
+      "id": "fx_hero_rig_heropose",
+      "community": 6,
+      "norm_label": "heropose()"
+    },
+    {
+      "label": "activeAction()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L343",
+      "id": "fx_hero_rig_activeaction",
+      "community": 6,
+      "norm_label": "activeaction()"
+    },
+    {
+      "label": "heroEffects()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L350",
+      "id": "fx_hero_rig_heroeffects",
+      "community": 6,
+      "norm_label": "heroeffects()"
+    },
+    {
       "label": "particulas.ts",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
@@ -2734,7 +3103,7 @@
       "source_file": "src/main.ts",
       "source_location": "L1",
       "id": "src_main",
-      "community": 1,
+      "community": 5,
       "norm_label": "main.ts"
     },
     {
@@ -2743,7 +3112,7 @@
       "source_file": "src/main.ts",
       "source_location": "L33",
       "id": "src_main_arrancaraudio",
-      "community": 1,
+      "community": 5,
       "norm_label": "arrancaraudio()"
     },
     {
@@ -2752,7 +3121,7 @@
       "source_file": "src/main.ts",
       "source_location": "L40",
       "id": "src_main_juego",
-      "community": 1,
+      "community": 5,
       "norm_label": "juego()"
     },
     {
@@ -2806,7 +3175,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L1",
       "id": "ui_bendicion",
-      "community": 1,
+      "community": 8,
       "norm_label": "bendicion.ts"
     },
     {
@@ -2815,7 +3184,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
       "id": "ui_bendicion_don",
-      "community": 1,
+      "community": 8,
       "norm_label": "don"
     },
     {
@@ -2824,7 +3193,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L15",
       "id": "ui_bendicion_dones",
-      "community": 1,
+      "community": 8,
       "norm_label": "dones"
     },
     {
@@ -2833,7 +3202,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L66",
       "id": "ui_bendicion_don_carta",
-      "community": 1,
+      "community": 8,
       "norm_label": "don_carta"
     },
     {
@@ -2842,7 +3211,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L83",
       "id": "ui_bendicion_pantallabendicion",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallabendicion()"
     },
     {
@@ -2860,7 +3229,7 @@
       "source_file": "src/ui/capitulo.ts",
       "source_location": "L6",
       "id": "ui_capitulo_pantallacapitulo",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallacapitulo()"
     },
     {
@@ -2869,7 +3238,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L1",
       "id": "ui_carta",
-      "community": 6,
+      "community": 1,
       "norm_label": "carta.ts"
     },
     {
@@ -2878,7 +3247,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L4",
       "id": "ui_carta_nombre_tipo",
-      "community": 6,
+      "community": 1,
       "norm_label": "nombre_tipo"
     },
     {
@@ -2887,7 +3256,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L10",
       "id": "ui_carta_norm",
-      "community": 6,
+      "community": 1,
       "norm_label": "norm()"
     },
     {
@@ -2896,7 +3265,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L12",
       "id": "ui_carta_clave",
-      "community": 6,
+      "community": 1,
       "norm_label": "clave"
     },
     {
@@ -2905,7 +3274,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L14",
       "id": "ui_carta_desc_tipo",
-      "community": 6,
+      "community": 1,
       "norm_label": "desc_tipo"
     },
     {
@@ -2914,7 +3283,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L21",
       "id": "ui_carta_estados_clave",
-      "community": 6,
+      "community": 1,
       "norm_label": "estados_clave"
     },
     {
@@ -2923,7 +3292,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L28",
       "id": "ui_carta_claves_extra",
-      "community": 6,
+      "community": 1,
       "norm_label": "claves_extra"
     },
     {
@@ -2932,7 +3301,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L66",
       "id": "ui_carta_palabrasclavede",
-      "community": 6,
+      "community": 1,
       "norm_label": "palabrasclavede()"
     },
     {
@@ -2941,7 +3310,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L83",
       "id": "ui_carta_cuadropalabrasclave",
-      "community": 6,
+      "community": 1,
       "norm_label": "cuadropalabrasclave()"
     },
     {
@@ -2950,7 +3319,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L93",
       "id": "ui_carta_icono_clase",
-      "community": 6,
+      "community": 1,
       "norm_label": "icono_clase"
     },
     {
@@ -2959,7 +3328,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L98",
       "id": "ui_carta_efecto_conjuro",
-      "community": 6,
+      "community": 1,
       "norm_label": "efecto_conjuro"
     },
     {
@@ -2968,7 +3337,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L106",
       "id": "ui_carta_modscarta",
-      "community": 6,
+      "community": 1,
       "norm_label": "modscarta"
     },
     {
@@ -2977,7 +3346,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L120",
       "id": "ui_carta_formateartexto",
-      "community": 6,
+      "community": 1,
       "norm_label": "formateartexto()"
     },
     {
@@ -2986,7 +3355,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L135",
       "id": "ui_carta_valormod",
-      "community": 6,
+      "community": 1,
       "norm_label": "valormod()"
     },
     {
@@ -2995,7 +3364,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L144",
       "id": "ui_carta_ajustartexto",
-      "community": 6,
+      "community": 1,
       "norm_label": "ajustartexto()"
     },
     {
@@ -3004,7 +3373,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L159",
       "id": "ui_carta_rendercarta",
-      "community": 6,
+      "community": 1,
       "norm_label": "rendercarta()"
     },
     {
@@ -3013,7 +3382,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L196",
       "id": "ui_carta_actualizartextocarta",
-      "community": 6,
+      "community": 1,
       "norm_label": "actualizartextocarta()"
     },
     {
@@ -3022,7 +3391,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L203",
       "id": "ui_carta_arte_carta",
-      "community": 6,
+      "community": 1,
       "norm_label": "arte_carta"
     },
     {
@@ -3031,7 +3400,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L267",
       "id": "ui_carta_artedecarta",
-      "community": 6,
+      "community": 1,
       "norm_label": "artedecarta()"
     },
     {
@@ -3040,61 +3409,52 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1",
       "id": "ui_combate",
-      "community": 6,
+      "community": 1,
       "norm_label": "combate.ts"
-    },
-    {
-      "label": "SPRITE_JUGADOR",
-      "file_type": "code",
-      "source_file": "src/ui/combate.ts",
-      "source_location": "L14",
-      "id": "ui_combate_sprite_jugador",
-      "community": 6,
-      "norm_label": "sprite_jugador"
     },
     {
       "label": "NOMBRE_CLASE",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L17",
+      "source_location": "L15",
       "id": "ui_combate_nombre_clase",
-      "community": 6,
+      "community": 1,
       "norm_label": "nombre_clase"
     },
     {
       "label": "SPRITE_FORMA",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L21",
+      "source_location": "L19",
       "id": "ui_combate_sprite_forma",
-      "community": 6,
+      "community": 1,
       "norm_label": "sprite_forma"
     },
     {
       "label": "SPRITE_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L25",
+      "source_location": "L23",
       "id": "ui_combate_sprite_invocacion",
-      "community": 6,
+      "community": 1,
       "norm_label": "sprite_invocacion"
     },
     {
       "label": "PASIVA_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L29",
+      "source_location": "L27",
       "id": "ui_combate_pasiva_invocacion",
-      "community": 6,
+      "community": 1,
       "norm_label": "pasiva_invocacion"
     },
     {
       "label": "pantallaCombate()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L37",
+      "source_location": "L35",
       "id": "ui_combate_pantallacombate",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallacombate()"
     },
     {
@@ -3103,7 +3463,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L1",
       "id": "ui_compendio",
-      "community": 10,
+      "community": 1,
       "norm_label": "compendio.ts"
     },
     {
@@ -3112,7 +3472,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L7",
       "id": "ui_compendio_ampliarengrande",
-      "community": 6,
+      "community": 1,
       "norm_label": "ampliarengrande()"
     },
     {
@@ -3121,7 +3481,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L22",
       "id": "ui_compendio_comentarios",
-      "community": 10,
+      "community": 1,
       "norm_label": "comentarios"
     },
     {
@@ -3130,7 +3490,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L24",
       "id": "ui_compendio_cargar",
-      "community": 10,
+      "community": 1,
       "norm_label": "cargar()"
     },
     {
@@ -3139,7 +3499,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L31",
       "id": "ui_compendio_guardar",
-      "community": 10,
+      "community": 1,
       "norm_label": "guardar()"
     },
     {
@@ -3148,7 +3508,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L37",
       "id": "ui_compendio_grupos",
-      "community": 10,
+      "community": 1,
       "norm_label": "grupos"
     },
     {
@@ -3184,7 +3544,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L7",
       "id": "ui_evento_pantallaevento",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallaevento()"
     },
     {
@@ -3211,8 +3571,143 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L18",
       "id": "ui_fin_pantallafin",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallafin()"
+    },
+    {
+      "label": "hero-sprite.ts",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L1",
+      "id": "ui_hero_sprite",
+      "community": 6,
+      "norm_label": "hero-sprite.ts"
+    },
+    {
+      "label": "svgEl()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L16",
+      "id": "ui_hero_sprite_svgel",
+      "community": 6,
+      "norm_label": "svgel()"
+    },
+    {
+      "label": "lighten()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L22",
+      "id": "ui_hero_sprite_lighten",
+      "community": 6,
+      "norm_label": "lighten()"
+    },
+    {
+      "label": "capsule()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L28",
+      "id": "ui_hero_sprite_capsule",
+      "community": 6,
+      "norm_label": "capsule()"
+    },
+    {
+      "label": "shapeElement()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L36",
+      "id": "ui_hero_sprite_shapeelement",
+      "community": 6,
+      "norm_label": "shapeelement()"
+    },
+    {
+      "label": "arcSector()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L43",
+      "id": "ui_hero_sprite_arcsector",
+      "community": 6,
+      "norm_label": "arcsector()"
+    },
+    {
+      "label": "active",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L52",
+      "id": "ui_hero_sprite_active",
+      "community": 6,
+      "norm_label": "active"
+    },
+    {
+      "label": "loop()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L57",
+      "id": "ui_hero_sprite_loop",
+      "community": 6,
+      "norm_label": "loop()"
+    },
+    {
+      "label": "HeroSprite",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L66",
+      "id": "ui_hero_sprite_herosprite",
+      "community": 6,
+      "norm_label": "herosprite"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L81",
+      "id": "ui_hero_sprite_herosprite_constructor",
+      "community": 6,
+      "norm_label": ".constructor()"
+    },
+    {
+      "label": ".play()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L137",
+      "id": "ui_hero_sprite_herosprite_play",
+      "community": 6,
+      "norm_label": ".play()"
+    },
+    {
+      "label": ".destroy()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L142",
+      "id": "ui_hero_sprite_herosprite_destroy",
+      "community": 6,
+      "norm_label": ".destroy()"
+    },
+    {
+      "label": ".tick()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L147",
+      "id": "ui_hero_sprite_herosprite_tick",
+      "community": 6,
+      "norm_label": ".tick()"
+    },
+    {
+      "label": ".show()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L171",
+      "id": "ui_hero_sprite_herosprite_show",
+      "community": 6,
+      "norm_label": ".show()"
+    },
+    {
+      "label": ".circle()",
+      "file_type": "code",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L175",
+      "id": "ui_hero_sprite_herosprite_circle",
+      "community": 6,
+      "norm_label": ".circle()"
     },
     {
       "label": "instalar.ts",
@@ -3238,7 +3733,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L1",
       "id": "ui_mapa",
-      "community": 1,
+      "community": 5,
       "norm_label": "mapa.ts"
     },
     {
@@ -3247,7 +3742,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L6",
       "id": "ui_mapa_icono_nodo",
-      "community": 1,
+      "community": 5,
       "norm_label": "icono_nodo"
     },
     {
@@ -3256,7 +3751,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L9",
       "id": "ui_mapa_nombre_nodo",
-      "community": 1,
+      "community": 5,
       "norm_label": "nombre_nodo"
     },
     {
@@ -3265,7 +3760,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L14",
       "id": "ui_mapa_pantallamapa",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallamapa()"
     },
     {
@@ -3283,7 +3778,7 @@
       "source_file": "src/ui/mision.ts",
       "source_location": "L13",
       "id": "ui_mision_pantallamision",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallamision()"
     },
     {
@@ -3301,7 +3796,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L9",
       "id": "ui_recompensa_elegircarta",
-      "community": 1,
+      "community": 5,
       "norm_label": "elegircarta()"
     },
     {
@@ -3310,7 +3805,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L71",
       "id": "ui_recompensa_obtenerreliquia",
-      "community": 1,
+      "community": 5,
       "norm_label": "obtenerreliquia()"
     },
     {
@@ -3319,7 +3814,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L118",
       "id": "ui_recompensa_pantalladescanso",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantalladescanso()"
     },
     {
@@ -3346,7 +3841,7 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L10",
       "id": "ui_titulo_pantallatitulo",
-      "community": 1,
+      "community": 5,
       "norm_label": "pantallatitulo()"
     },
     {
@@ -3355,7 +3850,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L1",
       "id": "ui_util",
-      "community": 6,
+      "community": 1,
       "norm_label": "util.ts"
     },
     {
@@ -3373,7 +3868,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L14",
       "id": "ui_util_espera",
-      "community": 6,
+      "community": 1,
       "norm_label": "espera()"
     },
     {
@@ -3382,7 +3877,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L18",
       "id": "ui_util_centrode",
-      "community": 6,
+      "community": 1,
       "norm_label": "centrode()"
     },
     {
@@ -3391,7 +3886,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L25",
       "id": "ui_util_numeroflotante",
-      "community": 6,
+      "community": 1,
       "norm_label": "numeroflotante()"
     },
     {
@@ -3400,7 +3895,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L39",
       "id": "ui_util_sacudir",
-      "community": 6,
+      "community": 1,
       "norm_label": "sacudir()"
     },
     {
@@ -3427,7 +3922,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L91",
       "id": "ui_util_icono_estado",
-      "community": 6,
+      "community": 1,
       "norm_label": "icono_estado"
     },
     {
@@ -3436,7 +3931,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L109",
       "id": "ui_util_nombre_estado",
-      "community": 6,
+      "community": 1,
       "norm_label": "nombre_estado"
     },
     {
@@ -3445,7 +3940,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L135",
       "id": "ui_util_descripcion_estado",
-      "community": 2,
+      "community": 15,
       "norm_label": "descripcion_estado"
     },
     {
@@ -3454,7 +3949,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L192",
       "id": "ui_util_tipestado",
-      "community": 6,
+      "community": 1,
       "norm_label": "tipestado()"
     },
     {
@@ -3496,154 +3991,154 @@
     {
       "label": "tsconfig.json",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L1",
-      "id": "tsconfig",
-      "community": 9,
+      "id": "users_sergio_wonderbits_videogame_tsconfig_json",
+      "community": 12,
       "norm_label": "tsconfig.json"
     },
     {
       "label": "compilerOptions",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L2",
-      "id": "tsconfig_compileroptions",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions",
+      "community": 12,
       "norm_label": "compileroptions"
     },
     {
       "label": "target",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L3",
-      "id": "tsconfig_compileroptions_target",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_target",
+      "community": 12,
       "norm_label": "target"
     },
     {
       "label": "useDefineForClassFields",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L4",
-      "id": "tsconfig_compileroptions_usedefineforclassfields",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_usedefineforclassfields",
+      "community": 12,
       "norm_label": "usedefineforclassfields"
     },
     {
       "label": "module",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L5",
-      "id": "tsconfig_compileroptions_module",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_module",
+      "community": 12,
       "norm_label": "module"
     },
     {
       "label": "lib",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L6",
-      "id": "tsconfig_compileroptions_lib",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_lib",
+      "community": 12,
       "norm_label": "lib"
     },
     {
       "label": "skipLibCheck",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L7",
-      "id": "tsconfig_compileroptions_skiplibcheck",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_skiplibcheck",
+      "community": 12,
       "norm_label": "skiplibcheck"
     },
     {
       "label": "moduleResolution",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L8",
-      "id": "tsconfig_compileroptions_moduleresolution",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_moduleresolution",
+      "community": 12,
       "norm_label": "moduleresolution"
     },
     {
       "label": "allowImportingTsExtensions",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L9",
-      "id": "tsconfig_compileroptions_allowimportingtsextensions",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_allowimportingtsextensions",
+      "community": 12,
       "norm_label": "allowimportingtsextensions"
     },
     {
       "label": "isolatedModules",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L10",
-      "id": "tsconfig_compileroptions_isolatedmodules",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_isolatedmodules",
+      "community": 12,
       "norm_label": "isolatedmodules"
     },
     {
       "label": "moduleDetection",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L11",
-      "id": "tsconfig_compileroptions_moduledetection",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_moduledetection",
+      "community": 12,
       "norm_label": "moduledetection"
     },
     {
       "label": "noEmit",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L12",
-      "id": "tsconfig_compileroptions_noemit",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_noemit",
+      "community": 12,
       "norm_label": "noemit"
     },
     {
       "label": "strict",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L13",
-      "id": "tsconfig_compileroptions_strict",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_strict",
+      "community": 12,
       "norm_label": "strict"
     },
     {
       "label": "noUnusedLocals",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L14",
-      "id": "tsconfig_compileroptions_nounusedlocals",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_nounusedlocals",
+      "community": 12,
       "norm_label": "nounusedlocals"
     },
     {
       "label": "noUnusedParameters",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L15",
-      "id": "tsconfig_compileroptions_nounusedparameters",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_nounusedparameters",
+      "community": 12,
       "norm_label": "nounusedparameters"
     },
     {
       "label": "noFallthroughCasesInSwitch",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L16",
-      "id": "tsconfig_compileroptions_nofallthroughcasesinswitch",
-      "community": 9,
+      "id": "videogame_tsconfig_compileroptions_nofallthroughcasesinswitch",
+      "community": 12,
       "norm_label": "nofallthroughcasesinswitch"
     },
     {
       "label": "include",
       "file_type": "code",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L18",
-      "id": "tsconfig_include",
-      "community": 9,
+      "id": "videogame_tsconfig_include",
+      "community": 12,
       "norm_label": "include"
     },
     {
@@ -3658,16 +4153,16 @@
     {
       "label": "SKILL.md",
       "file_type": "document",
-      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L1",
-      "id": "editar_carta_skill",
+      "id": "users_sergio_wonderbits_videogame_claude_skills_editar_carta_skill_md",
       "community": 20,
       "norm_label": "skill.md"
     },
     {
       "label": "/editar-carta \u2014 aplicar comentarios del Compendio a las cartas",
       "file_type": "document",
-      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L7",
       "id": "editar_carta_skill_editar_carta_aplicar_comentarios_del_compendio_a_las_cartas",
       "community": 20,
@@ -3676,7 +4171,7 @@
     {
       "label": "Entrada",
       "file_type": "document",
-      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L12",
       "id": "editar_carta_skill_entrada",
       "community": 20,
@@ -3685,7 +4180,7 @@
     {
       "label": "Pasos",
       "file_type": "document",
-      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L25",
       "id": "editar_carta_skill_pasos",
       "community": 20,
@@ -3694,7 +4189,7 @@
     {
       "label": "Notas",
       "file_type": "document",
-      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L59",
       "id": "editar_carta_skill_notas",
       "community": 20,
@@ -3703,16 +4198,16 @@
     {
       "label": "SKILL.md",
       "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
       "source_location": "L1",
-      "id": "release_skill",
+      "id": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md",
       "community": 21,
       "norm_label": "skill.md"
     },
     {
       "label": "/release \u2014 publicar versi\u00f3n con ventana de novedades",
       "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
       "source_location": "L7",
       "id": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades",
       "community": 21,
@@ -3721,7 +4216,7 @@
     {
       "label": "Uso",
       "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
       "source_location": "L18",
       "id": "release_skill_uso",
       "community": 21,
@@ -3730,7 +4225,7 @@
     {
       "label": "Pasos (ejec\u00fatalos en orden)",
       "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
       "source_location": "L28",
       "id": "release_skill_pasos_ejec\u00fatalos_en_orden",
       "community": 21,
@@ -3739,7 +4234,7 @@
     {
       "label": "Notas",
       "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
       "source_location": "L88",
       "id": "release_skill_notas",
       "community": 21,
@@ -3751,7 +4246,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme",
-      "community": 10,
+      "community": 15,
       "norm_label": "readme.md"
     },
     {
@@ -3760,7 +4255,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme_mazo_y_mazmorra",
-      "community": 10,
+      "community": 15,
       "norm_label": "mazo y mazmorra"
     },
     {
@@ -3769,7 +4264,7 @@
       "source_file": "README.md",
       "source_location": "L11",
       "id": "readme_ejecutar",
-      "community": 10,
+      "community": 15,
       "norm_label": "ejecutar"
     },
     {
@@ -3778,7 +4273,7 @@
       "source_file": "README.md",
       "source_location": "L19",
       "id": "readme_tests_del_motor_sin_navegador",
-      "community": 10,
+      "community": 15,
       "norm_label": "tests del motor (sin navegador)"
     },
     {
@@ -3787,7 +4282,7 @@
       "source_file": "README.md",
       "source_location": "L37",
       "id": "readme_controles",
-      "community": 10,
+      "community": 15,
       "norm_label": "controles"
     },
     {
@@ -3796,7 +4291,7 @@
       "source_file": "README.md",
       "source_location": "L47",
       "id": "readme_dise\u00f1o",
-      "community": 10,
+      "community": 15,
       "norm_label": "diseno"
     },
     {
@@ -3805,22 +4300,22 @@
       "source_file": "README.md",
       "source_location": "L159",
       "id": "readme_estructura",
-      "community": 10,
+      "community": 15,
       "norm_label": "estructura"
     },
     {
       "label": "LEEME.md",
       "file_type": "document",
-      "source_file": "public/audio/LEEME.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/public/audio/LEEME.md",
       "source_location": "L1",
-      "id": "audio_leeme",
+      "id": "users_sergio_wonderbits_videogame_public_audio_leeme_md",
       "community": 22,
       "norm_label": "leeme.md"
     },
     {
       "label": "M\u00fasica y sonido",
       "file_type": "document",
-      "source_file": "public/audio/LEEME.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/public/audio/LEEME.md",
       "source_location": "L1",
       "id": "audio_leeme_m\u00fasica_y_sonido",
       "community": 22,
@@ -3829,7 +4324,7 @@
     {
       "label": "Pistas usadas (todas CC0 / dominio p\u00fablico)",
       "file_type": "document",
-      "source_file": "public/audio/LEEME.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/public/audio/LEEME.md",
       "source_location": "L11",
       "id": "audio_leeme_pistas_usadas_todas_cc0_dominio_p\u00fablico",
       "community": 22,
@@ -3838,11 +4333,200 @@
     {
       "label": "Cambiar o ampliar pistas",
       "file_type": "document",
-      "source_file": "public/audio/LEEME.md",
+      "source_file": "/Users/sergio/WonderBits/videogame/public/audio/LEEME.md",
       "source_location": "L24",
       "id": "audio_leeme_cambiar_o_ampliar_pistas",
       "community": 22,
       "norm_label": "cambiar o ampliar pistas"
+    },
+    {
+      "label": "SPRITE_JUGADOR",
+      "file_type": "code",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L14",
+      "community": 1,
+      "norm_label": "sprite_jugador",
+      "id": "ui_combate_sprite_jugador"
+    },
+    {
+      "label": "tsconfig.json",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L1",
+      "community": 9,
+      "norm_label": "tsconfig.json",
+      "id": "tsconfig"
+    },
+    {
+      "label": "compilerOptions",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L2",
+      "community": 9,
+      "norm_label": "compileroptions",
+      "id": "tsconfig_compileroptions"
+    },
+    {
+      "label": "target",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L3",
+      "community": 9,
+      "norm_label": "target",
+      "id": "tsconfig_compileroptions_target"
+    },
+    {
+      "label": "useDefineForClassFields",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L4",
+      "community": 9,
+      "norm_label": "usedefineforclassfields",
+      "id": "tsconfig_compileroptions_usedefineforclassfields"
+    },
+    {
+      "label": "module",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L5",
+      "community": 9,
+      "norm_label": "module",
+      "id": "tsconfig_compileroptions_module"
+    },
+    {
+      "label": "lib",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L6",
+      "community": 9,
+      "norm_label": "lib",
+      "id": "tsconfig_compileroptions_lib"
+    },
+    {
+      "label": "skipLibCheck",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L7",
+      "community": 9,
+      "norm_label": "skiplibcheck",
+      "id": "tsconfig_compileroptions_skiplibcheck"
+    },
+    {
+      "label": "moduleResolution",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L8",
+      "community": 9,
+      "norm_label": "moduleresolution",
+      "id": "tsconfig_compileroptions_moduleresolution"
+    },
+    {
+      "label": "allowImportingTsExtensions",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L9",
+      "community": 9,
+      "norm_label": "allowimportingtsextensions",
+      "id": "tsconfig_compileroptions_allowimportingtsextensions"
+    },
+    {
+      "label": "isolatedModules",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L10",
+      "community": 9,
+      "norm_label": "isolatedmodules",
+      "id": "tsconfig_compileroptions_isolatedmodules"
+    },
+    {
+      "label": "moduleDetection",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L11",
+      "community": 9,
+      "norm_label": "moduledetection",
+      "id": "tsconfig_compileroptions_moduledetection"
+    },
+    {
+      "label": "noEmit",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L12",
+      "community": 9,
+      "norm_label": "noemit",
+      "id": "tsconfig_compileroptions_noemit"
+    },
+    {
+      "label": "strict",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L13",
+      "community": 9,
+      "norm_label": "strict",
+      "id": "tsconfig_compileroptions_strict"
+    },
+    {
+      "label": "noUnusedLocals",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L14",
+      "community": 9,
+      "norm_label": "nounusedlocals",
+      "id": "tsconfig_compileroptions_nounusedlocals"
+    },
+    {
+      "label": "noUnusedParameters",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L15",
+      "community": 9,
+      "norm_label": "nounusedparameters",
+      "id": "tsconfig_compileroptions_nounusedparameters"
+    },
+    {
+      "label": "noFallthroughCasesInSwitch",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L16",
+      "community": 9,
+      "norm_label": "nofallthroughcasesinswitch",
+      "id": "tsconfig_compileroptions_nofallthroughcasesinswitch"
+    },
+    {
+      "label": "include",
+      "file_type": "code",
+      "source_file": "tsconfig.json",
+      "source_location": "L18",
+      "community": 9,
+      "norm_label": "include",
+      "id": "tsconfig_include"
+    },
+    {
+      "label": "SKILL.md",
+      "file_type": "document",
+      "source_file": ".claude/skills/editar-carta/SKILL.md",
+      "source_location": "L1",
+      "community": 20,
+      "norm_label": "skill.md",
+      "id": "editar_carta_skill"
+    },
+    {
+      "label": "SKILL.md",
+      "file_type": "document",
+      "source_file": ".claude/skills/release/SKILL.md",
+      "source_location": "L1",
+      "community": 21,
+      "norm_label": "skill.md",
+      "id": "release_skill"
+    },
+    {
+      "label": "LEEME.md",
+      "file_type": "document",
+      "source_file": "public/audio/LEEME.md",
+      "source_location": "L1",
+      "community": 22,
+      "norm_label": "leeme.md",
+      "id": "audio_leeme"
     },
     {
       "label": "Roguelike de construcci\u00f3n de mazos",
@@ -3853,7 +4537,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "roguelike de construccion de mazos",
       "id": "readme_deckbuilder_roguelike"
     },
@@ -3866,7 +4550,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "slay the spire (referencia de diseno)",
       "id": "readme_slay_the_spire"
     },
@@ -3879,7 +4563,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -3905,7 +4589,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "clase druida (70 pv)",
       "id": "readme_clase_druida"
     },
@@ -3918,7 +4602,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "clase barbaro (80 pv)",
       "id": "readme_clase_barbaro"
     },
@@ -3931,7 +4615,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "clase mago (62 pv)",
       "id": "readme_clase_mago"
     },
@@ -3944,7 +4628,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "clase picaro (66 pv)",
       "id": "readme_clase_picaro"
     },
@@ -3957,7 +4641,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "transformaciones (druida)",
       "id": "readme_transformaciones"
     },
@@ -3983,7 +4667,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 15,
       "norm_label": "invocacion del druida",
       "id": "readme_invocacion"
     },
@@ -3996,7 +4680,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "furia (barbaro)",
       "id": "readme_furia"
     },
@@ -4009,7 +4693,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -4022,7 +4706,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 2,
       "norm_label": "espacios de conjuro en piramide (mago)",
       "id": "readme_espacios_conjuro"
     },
@@ -4035,7 +4719,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "conjuro prodigioso (mago)",
       "id": "readme_conjuro_prodigioso"
     },
@@ -4048,7 +4732,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "acrobacias (picaro)",
       "id": "readme_acrobacias"
     },
@@ -4061,7 +4745,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "veneno",
       "id": "readme_veneno"
     },
@@ -4074,7 +4758,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "dagas (picaro)",
       "id": "readme_dagas"
     },
@@ -4113,7 +4797,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "robo y descarte con sinergias (picaro)",
       "id": "readme_descarte_sinergias"
     },
@@ -4126,7 +4810,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -4139,7 +4823,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "mazos iniciales (5 golpe + 4 defender + 2 de clase)",
       "id": "readme_mazos_iniciales"
     },
@@ -4165,7 +4849,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "cartas de azar incoloras (seducir / deseo, d20)",
       "id": "readme_cartas_incoloras"
     },
@@ -4178,7 +4862,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts",
       "id": "readme_sistema_energia"
     },
@@ -4191,7 +4875,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 8,
       "norm_label": "mejora de cartas en campamentos",
       "id": "readme_mejora_cartas"
     },
@@ -4217,7 +4901,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 13,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -4230,7 +4914,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 5,
       "norm_label": "mapa de 10 filas por capitulo",
       "id": "readme_mapa_capitulo"
     },
@@ -4243,7 +4927,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 1,
+      "community": 5,
       "norm_label": "reliquias inspiradas en objetos de d&d",
       "id": "readme_reliquias"
     },
@@ -4256,7 +4940,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 29,
       "norm_label": "jefes unicos con rasgo propio",
       "id": "readme_jefes_unicos"
     },
@@ -4269,7 +4953,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -4282,7 +4966,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -4295,7 +4979,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 1,
       "norm_label": "controles de raton y modo mando por teclado",
       "id": "readme_controles_mando"
     },
@@ -4308,7 +4992,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 3,
       "norm_label": "arquitectura: nucleo sin dom + interfaz presentador",
       "id": "readme_arquitectura_presentador"
     },
@@ -4321,7 +5005,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 5,
       "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
       "id": "readme_estructura_carpetas"
     },
@@ -4334,7 +5018,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 3,
       "norm_label": "smoke test del motor sin navegador",
       "id": "readme_smoke_test_motor"
     },
@@ -4386,7 +5070,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 4,
       "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
       "id": "audio_leeme_sfx_sintetizados"
     },
@@ -4451,7 +5135,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 13,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -4464,7 +5148,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 6,
+      "community": 1,
       "norm_label": "convencion: el texto de la carta debe cuadrar con su efecto",
       "id": "editar_carta_skill_texto_coherente"
     },
@@ -4477,7 +5161,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 12,
+      "community": 5,
       "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
       "id": "index_shell_html"
     },
@@ -4490,7 +5174,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "clase brujo (64 pv)",
       "id": "readme_clase_brujo"
     },
@@ -4503,7 +5187,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 8,
       "norm_label": "explosion sobrenatural (vuelve a lo alto del mazo)",
       "id": "readme_explosion_sobrenatural"
     },
@@ -4516,7 +5200,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 15,
       "norm_label": "condena (ejecuta al igualar los pv actuales)",
       "id": "readme_condena"
     },
@@ -4529,7 +5213,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 14,
+      "community": 15,
       "norm_label": "invocaciones efimeras (brujo)",
       "id": "readme_invocacion_efimera"
     },
@@ -4568,12 +5252,32 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 10,
+      "community": 15,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/launch.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_launch",
+      "target": "claude_launch_configurations"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/launch.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "claude_launch",
+      "target": "claude_launch_version"
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -5274,6 +5978,83 @@
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "core_types_enemigodef"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_action_duration"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_activeaction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_hero_rigs"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_herobones"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_heroeffects"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_heropose"
     },
     {
       "relation": "implements",
@@ -10467,6 +11248,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "core_types"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -10522,6 +11314,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "core_types"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/mapa.ts",
       "source_location": "L1",
       "weight": 1.0,
@@ -10561,6 +11364,50 @@
       "confidence_score": 1.0,
       "source": "ui_titulo",
       "target": "core_types"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "core_types_claseid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "core_types_claseid"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "core_types_claseid"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "core_types_claseid"
     },
     {
       "relation": "imports",
@@ -11477,6 +12324,17 @@
     {
       "relation": "calls",
       "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/fx/audio.ts",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "fx_audio_motoraudio_chiptune",
+      "target": "ui_hero_sprite_herosprite_tick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/audio.ts",
       "source_location": "L416",
@@ -11856,6 +12714,717 @@
       "confidence_score": 1.0,
       "source": "ui_combate",
       "target": "fx_dado_rodardados"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_action"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L61",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_action_duration"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_actionprogress"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_actiontype"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L343",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_activeaction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L247",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_applymatrix"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_bone_order"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_boneid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_c"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_default_pivots"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_e"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L269",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_easeout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_effectgeometry"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_effects"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_emissive"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_eyes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_hero_rigs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L253",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_herobones"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L350",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_heroeffects"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L293",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_heropose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_herorig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L288",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_impactfraction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L272",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_interpolate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L270",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_keyframe"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_l"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L236",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_matrix"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L237",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_mul"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_p"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_parent"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_partialpose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L250",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_pivotof"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_pose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L243",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_rotateabout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_shape"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L268",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_smooth"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L242",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_translate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L267",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_zero"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_boneid"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "fx_hero_rig_boneid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_shape"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_actiontype"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_play",
+      "target": "fx_hero_rig_actiontype"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_action"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "fx_hero_rig_action"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_effectgeometry"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_action_duration"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_emissive"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_eyes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_hero_rigs"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L259",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_herobones",
+      "target": "fx_hero_rig_mul"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L256",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_herobones",
+      "target": "fx_hero_rig_translate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L261",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_herobones",
+      "target": "fx_hero_rig_rotateabout"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L354",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_heroeffects",
+      "target": "fx_hero_rig_applymatrix"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L257",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_herobones",
+      "target": "fx_hero_rig_pivotof"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L354",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_heroeffects",
+      "target": "fx_hero_rig_pivotof"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_herobones"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_tick",
+      "target": "fx_hero_rig_herobones"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L355",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_heroeffects",
+      "target": "fx_hero_rig_easeout"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L304",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fx_hero_rig_heropose",
+      "target": "fx_hero_rig_interpolate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_impactfraction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L139",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_play",
+      "target": "fx_hero_rig_impactfraction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_heropose"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_tick",
+      "target": "fx_hero_rig_heropose"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_activeaction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L148",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_tick",
+      "target": "fx_hero_rig_activeaction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_heroeffects"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L156",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_tick",
+      "target": "fx_hero_rig_heroeffects"
     },
     {
       "relation": "contains",
@@ -13523,6 +15092,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/combate.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_combate",
+      "target": "ui_hero_sprite"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_combate",
+      "target": "ui_hero_sprite_herosprite"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
       "source_location": "L8",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13857,6 +15448,234 @@
       "confidence_score": 1.0,
       "source": "ui_fin",
       "target": "ui_util_el"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_active"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_arcsector"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_capsule"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L66",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_herosprite"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_lighten"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L57",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_loop"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_shapeelement"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "ui_hero_sprite_svgel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "ui_hero_sprite_svgel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_shapeelement",
+      "target": "ui_hero_sprite_svgel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L100",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "ui_hero_sprite_lighten"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_shapeelement",
+      "target": "ui_hero_sprite_capsule"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "ui_hero_sprite_shapeelement"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L61",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_loop",
+      "target": "ui_hero_sprite_herosprite_tick"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_circle"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_constructor"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L142",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_destroy"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_play"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_show"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "ui_hero_sprite_herosprite_tick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L133",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "ui_hero_sprite_herosprite_tick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L157",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_hero_sprite_herosprite_tick",
+      "target": "ui_hero_sprite_herosprite_show"
     },
     {
       "relation": "implements",
@@ -14351,162 +16170,172 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L2",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig",
-      "target": "tsconfig_compileroptions"
+      "source": "users_sergio_wonderbits_videogame_tsconfig_json",
+      "target": "videogame_tsconfig_compileroptions"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L18",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig",
-      "target": "tsconfig_include"
+      "source": "users_sergio_wonderbits_videogame_tsconfig_json",
+      "target": "videogame_tsconfig_include"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L9",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_allowimportingtsextensions"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_allowimportingtsextensions"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_isolatedmodules"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_isolatedmodules"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L6",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_lib"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_lib"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_module"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_module"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L11",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_moduledetection"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_moduledetection"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L8",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_moduleresolution"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_moduleresolution"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L12",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_noemit"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_noemit"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L16",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_nofallthroughcasesinswitch"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_nofallthroughcasesinswitch"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L14",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_nounusedlocals"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_nounusedlocals"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_nounusedparameters"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_nounusedparameters"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L7",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_skiplibcheck"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_skiplibcheck"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L13",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_strict"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_strict"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L3",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_target"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_target"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tsconfig.json",
+      "source_file": "/Users/sergio/WonderBits/videogame/tsconfig.json",
       "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "tsconfig_compileroptions",
-      "target": "tsconfig_compileroptions_usedefineforclassfields"
+      "source": "videogame_tsconfig_compileroptions",
+      "target": "videogame_tsconfig_compileroptions_usedefineforclassfields"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "users_sergio_wonderbits_videogame_claude_skills_editar_carta_skill_md",
+      "target": "editar_carta_skill_editar_carta_aplicar_comentarios_del_compendio_a_las_cartas"
     },
     {
       "relation": "contains",
@@ -14547,6 +16376,16 @@
       "confidence_score": 1.0,
       "source": "editar_carta_skill_editar_carta_aplicar_comentarios_del_compendio_a_las_cartas",
       "target": "editar_carta_skill_pasos"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md",
+      "target": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades"
     },
     {
       "relation": "contains",
@@ -14741,6 +16580,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "/Users/sergio/WonderBits/videogame/public/audio/LEEME.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "users_sergio_wonderbits_videogame_public_audio_leeme_md",
+      "target": "audio_leeme_m\u00fasica_y_sonido"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "public/audio/LEEME.md",
       "source_location": "L1",
       "weight": 1.0,
@@ -14767,6 +16616,166 @@
       "confidence_score": 1.0,
       "source": "audio_leeme_m\u00fasica_y_sonido",
       "target": "audio_leeme_pistas_usadas_todas_cc0_dominio_p\u00fablico"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig",
+      "target": "tsconfig_compileroptions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig",
+      "target": "tsconfig_include"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_allowimportingtsextensions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_isolatedmodules"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_lib"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_module"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_moduledetection"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_moduleresolution"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_noemit"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_nofallthroughcasesinswitch"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_nounusedlocals"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_nounusedparameters"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_skiplibcheck"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_strict"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_target"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tsconfig.json",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tsconfig_compileroptions",
+      "target": "tsconfig_compileroptions_usedefineforclassfields"
     },
     {
       "relation": "conceptually_related_to",
@@ -15267,5 +17276,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "7a025b12a3eb9aa5ddf0190d83ce2ac8d93b8a68"
+  "built_at_commit": "ec14b729975642e723751441fe48fb9572aabb7d"
 }

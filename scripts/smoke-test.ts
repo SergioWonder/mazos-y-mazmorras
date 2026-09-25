@@ -17,6 +17,7 @@ import {
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
 import { ARTE_CARTA } from '../src/ui/carta.ts';
+import { HERO_RIGS, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
@@ -1773,6 +1774,41 @@ console.log('— Druida: transformaciones reforzadas —');
     await carta('zarpa-doble').jugar(comb.contexto(e));
     check(200 - e.pv === 15, 'con +2 de Fuerza: (3+2) tres veces = 15');
   }
+}
+
+// ── Sprites de los héroes: esqueleto y animaciones (sin DOM) ─────────────────
+console.log('\n🎭 Sprites de los héroes');
+{
+  for (const c of CLASES) {
+    const rig = HERO_RIGS[c];
+    check(!!rig && rig.shapes.length >= 15, `${c}: tiene esqueleto con piezas (${rig?.shapes.length ?? 0})`);
+  }
+  // en reposo: sin efectos de ataque ni de golpe
+  const idle = heroPose('barbaro', 1.3, null);
+  check(idle.fx.slash === undefined && idle.fx.projectile === undefined && !idle.fx.flash,
+    'reposo: sin tajo, proyectil ni destello');
+  // cuerpo a cuerpo: a mitad de ataque aparece el tajo
+  const slashPose = heroPose('barbaro', 0, { type: 'attack', p: 0.42 });
+  check(slashPose.fx.slash !== undefined, 'bárbaro atacando: dibuja el tajo');
+  const bones = heroBones('barbaro', slashPose.p);
+  const geo = heroEffects('barbaro', bones, slashPose.fx);
+  check(!!geo.slash && Number.isFinite(geo.slash.cx) && geo.slash.r1 > geo.slash.r0, 'el tajo tiene geometría válida');
+  // magia: lanza un proyectil desde el foco (gema, orbe, llama)
+  for (const c of ['druida', 'mago', 'brujo'] as ClaseId[]) {
+    const m = heroPose(c, 0, { type: 'attack', p: 0.6 });
+    const g = heroEffects(c, heroBones(c, m.p), m.fx);
+    check(!!g.orb && Number.isFinite(g.orb.cx) && !geo.orb, `${c} atacando: lanza un proyectil`);
+  }
+  // hechizo (habilidades y poderes): estallido en el foco, sin proyectil
+  const spell = heroPose('mago', 0, { type: 'spell', p: 0.55 });
+  check(spell.fx.burst !== undefined && spell.fx.projectile === undefined, 'hechizo: estallido sin proyectil');
+  // recibir golpe: destello blanco al principio y retroceso
+  const hit = heroPose('picaro', 0, { type: 'hit', p: 0.05 });
+  check(!!hit.fx.flash && hit.p.rootX < 0, 'golpe: destello y retroceso');
+  // las acciones caducan y el héroe vuelve al reposo
+  const acc = { type: 'attack' as const, t0: 10 };
+  check(activeAction(acc, 10 + ACTION_DURATION.attack * 0.5)?.type === 'attack', 'la acción está activa a mitad');
+  check(activeAction(acc, 10 + ACTION_DURATION.attack + 0.01) === null, 'y termina al cumplir su duración');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

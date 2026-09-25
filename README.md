@@ -162,7 +162,8 @@ descuelga de las demás en su mismo nivel.
 src/
   core/        Lógica pura (sin DOM): cartas, enemigos, combate, mapa, reliquias, rng
   ui/          Pantallas DOM: título, mapa, combate, recompensas, fin
-  fx/          Partículas en <canvas> (chispas, hojas, luna, furia…) y audio
+  fx/          Partículas en <canvas> (chispas, hojas, luna, furia…), audio y
+               esqueletos animados de los héroes (hero-rig.ts, sin DOM)
   estilos/     CSS: base, cartas, combate, pantallas
 scripts/       smoke-test del motor
 ```
@@ -170,3 +171,10 @@ scripts/       smoke-test del motor
 El motor de combate (`core/combate.ts`) comunica con la UI mediante la interfaz
 `Presentador` (eventos visuales asíncronos), de modo que la lógica es testeable
 sin navegador y la capa visual es reemplazable.
+
+Los héroes son **siluetas a contraluz**: una marioneta SVG de ~25 piezas repartidas
+en 10 huesos (`fx/hero-rig.ts`), pintada en negro con luz de borde del color de la
+clase (`ui/hero-sprite.ts`). Respira y parpadea en reposo, ataca (tajo cuerpo a
+cuerpo o proyectil mágico) al jugar un ataque, conjura con el resto de cartas y
+retrocede con un destello al recibir daño. El daño espera al momento del golpe. El
+cielo del combate tiene luna y bruma de horizonte con el tono de cada acto.

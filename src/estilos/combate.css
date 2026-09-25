@@ -113,6 +113,61 @@
 }
 .sprite-enemigo { animation: respirar 2.7s ease-in-out infinite reverse; }
 
+/* Héroe a contraluz: marioneta SVG animada por hero-sprite.ts (respira sola) */
+.heroe { isolation: isolate; }
+.heroe::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 1.4rem;
+  width: 13rem;
+  height: 12rem;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse 50% 55% at 50% 62%, var(--halo-heroe), transparent 72%);
+  z-index: -1;
+  pointer-events: none;
+}
+.sprite-silueta {
+  font-size: 0;
+  line-height: 0;
+  animation: none;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
+}
+.sprite-heroe { display: block; width: 8.6rem; height: auto; overflow: visible; }
+/* formas del druida: el emoji se ennegrece en la misma silueta con luz de borde */
+.heroe .sprite.sprite-forma {
+  filter: brightness(0) drop-shadow(2px -2px 0 var(--acento-heroe)) drop-shadow(0 0 10px var(--acento-heroe));
+}
+
+/* Cielo del combate: bruma de horizonte y luna que recortan al héroe */
+.cielo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 38% at 24% 80%, var(--cielo-horizonte), transparent 72%),
+    linear-gradient(180deg, transparent 20%, var(--cielo-bruma) 62%, transparent 92%);
+}
+.luna {
+  position: absolute;
+  left: 13%;
+  top: 12%;
+  width: clamp(54px, 7.5vw, 104px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 62% 58%, rgba(0, 0, 0, 0.1) 0 9%, transparent 10%),
+    radial-gradient(circle at 34% 64%, rgba(0, 0, 0, 0.08) 0 6%, transparent 7%),
+    radial-gradient(circle at 48% 30%, rgba(0, 0, 0, 0.07) 0 7%, transparent 8%),
+    radial-gradient(circle at 38% 34%, var(--luna-luz), var(--luna) 58%, var(--luna-sombra));
+  box-shadow: 0 0 36px 8px var(--luna-halo), 0 0 140px 50px var(--luna-halo-lejos);
+  animation: luna-latido 9s ease-in-out infinite;
+}
+@keyframes luna-latido {
+  0%, 100% { box-shadow: 0 0 36px 8px var(--luna-halo), 0 0 140px 50px var(--luna-halo-lejos); }
+  50% { box-shadow: 0 0 44px 12px var(--luna-halo), 0 0 170px 60px var(--luna-halo-lejos); }
+}
+
 @keyframes respirar {
   0%, 100% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-5px) scale(1.015); }

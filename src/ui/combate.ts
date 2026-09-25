@@ -10,10 +10,8 @@ import {
 } from './util.ts';
 import { renderCarta, actualizarTextoCarta, cuadroPalabrasClave, EFECTO_CONJURO, type ModsCarta } from './carta.ts';
 import { defDe } from '../core/cartas.ts';
+import { HeroSprite } from './hero-sprite.ts';
 
-const SPRITE_JUGADOR: Record<string, string> = {
-  druida: '🧝‍♂️', barbaro: '🧔‍♂️', mago: '🧙‍♂️', picaro: '🥷', brujo: '🧛‍♂️',
-};
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
   brujo: '🕳️ Brujo',
@@ -53,6 +51,7 @@ export function pantallaCombate(
     const raiz = el('div', 'combate');
     raiz.innerHTML = `
       <div class="escenario">
+        <div class="cielo"><div class="luna"></div></div>
         <div class="silueta-fondo"></div>
         <div class="barra-superior"></div>
         <div class="campo">
@@ -74,6 +73,9 @@ export function pantallaCombate(
     app.appendChild(raiz);
 
     const $ = (s: string) => raiz.querySelector(s) as HTMLElement;
+
+    // Persistent hero puppet: re-attached on every render so it keeps animating
+    const heroSprite = new HeroSprite(run.clase);
 
     // ── Estado de entrada ────────────────────────────────────────────────────
     let seleccion = 0;               // índice de carta seleccionada (teclado)
@@ -99,6 +101,7 @@ export function pantallaCombate(
         fx.emitir(efecto, x, y);
         audio.sfx(dano > 0 ? efecto : 'bloqueo');
         if (dano > 0) {
+          if (obj === combate.jugador) heroSprite.play('hit');
           numeroFlotante(elem, `${dano}`, 'dano');
           elem?.classList.add('golpeado');
           setTimeout(() => elem?.classList.remove('golpeado'), 350);
@@ -336,7 +339,10 @@ export function pantallaCombate(
     function renderJugador() {
       const j = combate.jugador;
       const forma = j.efectosTemporales.find((e) => SPRITE_FORMA[e.etiqueta]);
-      const sprite = forma ? SPRITE_FORMA[forma.etiqueta] : SPRITE_JUGADOR[run.clase];
+      // druid forms stay as emoji, blacked out into the same backlit silhouette
+      const sprite = forma
+        ? `<div class="sprite sprite-jugador sprite-forma">${SPRITE_FORMA[forma.etiqueta]}</div>`
+        : '<div class="sprite sprite-jugador sprite-silueta"></div>';
       const furiaActiva = j.furiaFuerza + j.furiaDestreza > 0;
       const temporales = j.efectosTemporales
         .map(
@@ -355,16 +361,17 @@ export function pantallaCombate(
       $('.lado-jugador').innerHTML = `
         <div class="heroe ${furiaActiva ? 'con-furia' : ''} ${forma ? 'transformado' : ''} ${
           (j.estados.espejismo ?? 0) > 0 ? 'con-espejismo' : ''
-        }" data-luchador="jugador">
+        }" data-luchador="jugador" style="--acento-heroe:${heroSprite.accent}">
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
           ${conjuro}
-          <div class="sprite sprite-jugador">${sprite}</div>
+          ${sprite}
           ${barraVida(j)}
           ${fichasEstados(j)}
           <div class="temporales">${temporales}</div>
           ${furiaActiva ? `<div class="furia-ficha" data-tip="<strong>🔥 Furia</strong><br>Fuerza/Destreza acumulada. Se rompe si acabas la ronda sin recibir daño (lo bloqueado no cuenta).">🔥 Furia +${j.furiaFuerza}F${j.furiaDestreza ? ` +${j.furiaDestreza}D` : ''}</div>` : ''}
         </div>
         ${renderInvocacionHTML()}`;
+      $('.sprite-silueta')?.appendChild(heroSprite.element);
     }
 
     function textoIntencion(e: EnemigoCombate): string {
@@ -538,7 +545,13 @@ export function pantallaCombate(
       const elem = raiz.querySelector(
         `.carta[data-mano="${combate.jugador.mano.indexOf(inst)}"]`,
       ) as HTMLElement | null;
+      // the hero swings (or casts) while the card flies; damage waits for the blow
+      const inicio = performance.now();
+      const transformado = combate.jugador.efectosTemporales.some((e) => SPRITE_FORMA[e.etiqueta]);
+      const impacto = transformado ? 0 : heroSprite.play(defDe(inst).tipo === 'ataque' ? 'attack' : 'spell');
       await animarLanzamiento(inst, elem);
+      const restante = impacto - (performance.now() - inicio);
+      if (restante > 0) await espera(restante);
       await combate.jugarCarta(inst, objetivo);
     }
 
@@ -742,6 +755,7 @@ export function pantallaCombate(
         if (combate.terminado === 'victoria') {
           for (const r of run.reliquias) r.finCombate?.(run);
         }
+        heroSprite.destroy();
         resolver(combate.terminado!);
       }, 700);
     }
