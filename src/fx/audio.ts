@@ -1,10 +1,10 @@
-// Motor de audio: efectos de sonido sintetizados con la Web Audio API
-// (cero ficheros, cero licencias) + música lo-fi de mazmorreo.
-//
-// La música prefiere una pista CC0 real en `public/audio/lofi-mazmorra.{mp3,ogg}`
-// (ver README); si no existe, cae en un loop lo-fi generado al vuelo, así que
-// nunca queda en silencio. Todo arranca tras el primer gesto del jugador,
-// como exigen los navegadores, y el estado de silencio se recuerda.
+import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
+
+// Audio engine: sound effects synthesised with the Web Audio API (no files) and the
+// game's original soundtrack from `public/audio/` (see `fx/music-tracks.ts`), looped
+// sample-exactly with Web Audio. If a track fails to load, a chiptune loop generated
+// on the fly takes over, so the game is never silent. Everything starts after the
+// player's first gesture, as browsers require, and the mute state is remembered.
 
 const CLAVE_SILENCIO = 'mazmorra-audio-silencio';
 
@@ -88,55 +88,46 @@ interface TemaChip {
   melodia: number[];  // patrón de melodía/arpegio (0 = silencio)
   bateria?: boolean;  // bombo + charles
   epico?: boolean;    // duplica la melodía en quintas y sube el volumen (jefes)
-  archivo?: string;   // fichero CC0 opcional en public/audio/ que sustituye al loop
 }
 
 // 0 = silencio. Menú + (normal / jefe) único por acto. Los jefes son rápidos y épicos.
-// `archivo` apunta a una pista CC0 real (OpenGameArt); el chiptune queda de respaldo
-// si el fichero no carga. Créditos y licencias en public/audio/LEEME.md.
+// These loops are only the fallback when a soundtrack file (MUSIC_TRACKS) fails to load.
 const TEMAS: Record<string, TemaChip> = {
   // Menú principal: misterioso, tempo medio (La menor)
   'menu': {
-    archivo: 'menu.ogg',
     bpm: 104,
     bajo:    [45, 0, 45, 0, 41, 0, 43, 0, 45, 0, 45, 0, 40, 0, 43, 0],
     melodia: [69, 72, 76, 72, 65, 69, 72, 69, 67, 71, 74, 71, 64, 67, 71, 0],
   },
   // Cap. I — El Asentamiento Ogro (La menor): marcha decidida
   'cap1': {
-    archivo: 'cap1.ogg',
     bpm: 128, bateria: true,
     bajo:    [45, 45, 0, 45, 41, 41, 0, 43, 45, 45, 0, 45, 43, 0, 41, 0],
     melodia: [69, 76, 72, 69, 65, 72, 69, 65, 67, 74, 71, 67, 64, 71, 67, 64],
   },
   'cap1-jefe': {
-    archivo: 'jefe.ogg',
     bpm: 152, bateria: true, epico: true,
     bajo:    [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40],
     melodia: [81, 76, 72, 76, 77, 72, 69, 72, 79, 74, 71, 74, 76, 72, 69, 67],
   },
   // Cap. II — La Cripta (Re menor): oscuro, reptante
   'cap2': {
-    archivo: 'cap2.mp3',
     bpm: 116, bateria: true,
     bajo:    [38, 0, 38, 41, 36, 0, 36, 38, 34, 0, 34, 38, 33, 0, 36, 0],
     melodia: [62, 65, 69, 65, 60, 65, 62, 60, 58, 62, 65, 62, 57, 60, 62, 0],
   },
   'cap2-jefe': {
-    archivo: 'jefe.ogg',
     bpm: 146, bateria: true, epico: true,
     bajo:    [38, 38, 45, 38, 36, 36, 43, 36, 34, 34, 41, 34, 33, 33, 40, 33],
     melodia: [74, 69, 65, 69, 70, 65, 62, 65, 72, 67, 65, 67, 69, 65, 62, 60],
   },
   // Cap. III — La Guarida del Dragón (Mi menor): tenso, amenazante
   'cap3': {
-    archivo: 'cap3.mp3',
     bpm: 132, bateria: true,
     bajo:    [40, 40, 0, 40, 43, 0, 38, 0, 45, 0, 43, 0, 40, 0, 35, 0],
     melodia: [64, 71, 67, 64, 67, 74, 71, 67, 69, 76, 72, 69, 71, 67, 64, 62],
   },
   'cap3-jefe': {
-    archivo: 'jefe.ogg',
     bpm: 164, bateria: true, epico: true,
     bajo:    [40, 40, 47, 40, 35, 35, 42, 35, 43, 43, 50, 43, 38, 38, 45, 38],
     melodia: [76, 71, 67, 71, 72, 67, 64, 67, 79, 74, 71, 74, 71, 67, 64, 71],
@@ -150,7 +141,10 @@ class MotorAudio {
   private busMusica!: GainNode; // bus de música
   silenciado = localStorage.getItem(CLAVE_SILENCIO) === '1';
 
-  private pista: HTMLAudioElement | null = null; // pista CC0 real, si existe
+  private fuente: AudioBufferSourceNode | null = null; // current soundtrack track
+  private volPista: GainNode | null = null;
+  private buffers = new Map<string, Promise<AudioBuffer>>();
+  private generacion = 0; // discards loads for a theme that is no longer playing
   private temporizadorMusica: number | null = null;
   private temaActual: string | null = null;
   private sonando = false;
@@ -267,7 +261,7 @@ class MotorAudio {
     this.detenerMusica();
     if (this.silenciado || this.pausada || !this.temaActual) return;
     if (this.ctx.state !== 'running') return;
-    this.arrancarTema(TEMAS[this.temaActual] ?? TEMAS.menu);
+    this.arrancarTema(this.temaActual);
   }
 
   private detenerMusica() {
@@ -275,26 +269,58 @@ class MotorAudio {
       clearInterval(this.temporizadorMusica);
       this.temporizadorMusica = null;
     }
-    if (this.pista) { this.pista.pause(); this.pista = null; }
+    this.generacion++;
+    if (this.fuente && this.volPista && this.ctx) {
+      // short fade so the wave is not cut abruptly
+      const t = this.ctx.currentTime;
+      this.volPista.gain.setTargetAtTime(0, t, 0.08);
+      this.fuente.stop(t + 0.4);
+    }
+    this.fuente = null;
+    this.volPista = null;
     this.sonando = false;
   }
 
-  private arrancarTema(tema: TemaChip) {
+  private arrancarTema(id: string) {
     const ctx = this.ctx;
     if (!ctx) return;
     this.sonando = true;
+    const tema = TEMAS[id] ?? TEMAS.menu;
+    const pista = MUSIC_TRACKS[id];
+    if (!pista) { this.chiptune(tema); return; }
+    const gen = this.generacion;
+    this.cargarPista(pista.file).then((buf) => {
+      if (gen !== this.generacion || !this.ctx) return;
+      const { start, end } = loopWindow(buf.duration, pista.loopSamples);
+      const fuente = this.ctx.createBufferSource();
+      fuente.buffer = buf;
+      fuente.loop = true;
+      fuente.loopStart = start;
+      fuente.loopEnd = end;
+      const vol = this.ctx.createGain();
+      const t = this.ctx.currentTime;
+      vol.gain.setValueAtTime(0, t);
+      vol.gain.linearRampToValueAtTime(1.2, t + 0.6);
+      fuente.connect(vol).connect(this.busMusica);
+      fuente.start(t, start);
+      this.fuente = fuente;
+      this.volPista = vol;
+    }).catch(() => {
+      if (gen === this.generacion) this.chiptune(tema);
+    });
+  }
 
-    // Pista CC0 real opcional (public/audio/<archivo>); si falla, sigue el chiptune
-    if (tema.archivo) {
-      const pista = new Audio(`${import.meta.env.BASE_URL}audio/${tema.archivo}`);
-      pista.loop = true;
-      pista.volume = 0.6;
-      pista.addEventListener('error', () => this.chiptune(tema), { once: true });
-      this.pista = pista;
-      void pista.play().catch(() => this.chiptune(tema));
-      return;
+  /** Downloads and decodes a track once (the service worker caches the file). */
+  private cargarPista(archivo: string): Promise<AudioBuffer> {
+    let buf = this.buffers.get(archivo);
+    if (!buf) {
+      buf = fetch(`${import.meta.env.BASE_URL}audio/${archivo}`)
+        .then((r) => { if (!r.ok) throw new Error(r.statusText); return r.arrayBuffer(); })
+        .then((datos) => new Promise<AudioBuffer>((ok, ko) => this.ctx!.decodeAudioData(datos, ok, ko)));
+      buf.catch(() => this.buffers.delete(archivo));
+      this.buffers.set(archivo, buf);
     }
-    this.chiptune(tema);
+    return buf;
   }
 
   /** Secuenciador 8-bit: bajo (triángulo) + melodía (cuadrada) + batería. */

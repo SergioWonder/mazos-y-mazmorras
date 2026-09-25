@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.7';
+export const VERSION = '3.10.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.10.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '🎵 Banda sonora original: tema principal nuevo y música propia para cada acto, con un leitmotiv del héroe que suena a lo largo de la aventura.',
+      '🍺 Acto I con aire de aventura amigable, Acto II con una marcha de esqueletos traviesa y Acto III heroico entre lava y cristales.',
+      '⚔️ Cada acto tiene su propio tema de jefe, épico y tenso, y el del combate final es el más grande de todos.',
+      '🔁 La música se repite sin cortes al llegar al final.',
+      '🪓 Bárbaro redibujado en Furia Creciente y Furia Indómita.',
+    ],
+  },
   {
     version: '3.9.7',
     fecha: '2026-09-25',

@@ -1,7 +1,7 @@
 {
   "name": "mazo-y-mazmorra",
   "private": true,
-  "version": "3.9.7",
+  "version": "3.10.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

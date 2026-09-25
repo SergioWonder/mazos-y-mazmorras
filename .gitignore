@@ -11,3 +11,8 @@ graphify-out/cost.json
 
 # graphify: copias de seguridad del grafo curado
 graphify-out/[0-9]*/
+
+# rendered soundtrack output (the copies in public/audio are the ones shipped)
+scripts/musica/**/*.mp3
+scripts/musica/**/*.wav
+scripts/musica/**/__pycache__/

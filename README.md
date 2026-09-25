@@ -148,9 +148,10 @@ descuelga de las demás en su mismo nivel.
   Débil/Vulnerable con ataques especiales. El **Aliento de Dragón** de Ignifax
   (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas te cuesta 3 PV.
 - **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
-  con floritura especial al jugar cartas raras, y música 8-bit con **pistas CC0
-  reales** (OpenGameArt): tema de menú y, por acto, un tema normal y un tema de jefe
-  rápido y épico, con loop chiptune procedural de respaldo. Se pausa al pasar a
+  con floritura especial al jugar cartas raras, y una **banda sonora original**
+  sintetizada por código: tema principal y, por acto, un tema de combate (aventura
+  amigable) y uno de jefe (épico y tenso), unidos por un leitmotiv. Suenan en bucle
+  exacto con Web Audio, con loop chiptune de respaldo. Se pausa al pasar a
   segundo plano y se cachea al vuelo para jugar sin conexión. Créditos y licencias
   en `public/audio/LEEME.md`. Botón flotante 🔊/🔇 para silenciar (se recuerda). La
   intención de ataque enemiga muestra el daño ya modificado (verde si lo reduces con
