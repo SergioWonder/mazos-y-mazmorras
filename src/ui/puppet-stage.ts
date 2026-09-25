@@ -248,11 +248,11 @@ export class PuppetStage {
   private readonly t0 = performance.now();
 
   /** Creates a stage on `host`, or returns null when WebGL2 is unavailable. */
-  static create(host: HTMLElement, opts: { fixed?: boolean; before?: Node | null } = {}): PuppetStage | null {
+  static create(host: HTMLElement, opts: { fixed?: boolean; before?: Node | null; style?: string } = {}): PuppetStage | null {
     if (forceSvg()) return null;
     const canvas = document.createElement('canvas');
     canvas.className = 'puppet-canvas';
-    canvas.style.cssText = `position:${opts.fixed ? 'fixed' : 'absolute'};inset:0;width:100%;height:100%;pointer-events:none;`;
+    canvas.style.cssText = `position:${opts.fixed ? 'fixed' : 'absolute'};inset:0;width:100%;height:100%;pointer-events:none;${opts.style ?? ''}`;
     const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, antialias: false, alpha: true });
     if (!gl) return null;
     try {

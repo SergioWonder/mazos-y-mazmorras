@@ -78,7 +78,16 @@ export function pantallaCombate(
     // Persistent hero puppet: re-attached on every render so it keeps animating
     // WebGL stage between the sky and the UI (null: SVG fallback without WebGL2)
     const escenarioEl = $('.escenario');
-    const stage = PuppetStage.create(escenarioEl, { before: escenarioEl.querySelector('.barra-superior') });
+    // The stage covers the scene plus a margin over the hand strip, so spell effects and
+    // lunges near the bottom are not cut off (on portrait phones the scene is short).
+    const stage = PuppetStage.create(raiz, {
+      before: raiz.querySelector('.zona-mano'),
+      style: 'z-index:16;height:calc(var(--alto-escenario, 60%) + 170px);',
+    });
+    const altoEscenario = () => raiz.style.setProperty('--alto-escenario', `${escenarioEl.offsetHeight}px`);
+    altoEscenario();
+    const medirEscenario = new ResizeObserver(altoEscenario);
+    medirEscenario.observe(escenarioEl);
     montarFondo(escenarioEl, run.capitulo, run.escenario);
     const heroSprite = new HeroSprite(run.clase, stage);
     // druid forms get their own backlit puppet, created on first use
@@ -327,6 +336,7 @@ export function pantallaCombate(
       renderEnergia();
       $('.pila-robo').innerHTML = `🂠<span>${combate.jugador.mazo.length}</span>`;
       $('.pila-descarte').innerHTML = `🗑<span>${combate.jugador.descarte.length}</span>`;
+      altoEscenario(); // the scene grows with its fighters (portrait phones)
       comprobarFinal();
     }
 
@@ -842,6 +852,7 @@ export function pantallaCombate(
         for (const s of spritesEnemigo.values()) s.destroy();
         for (const s of spritesInvocacion.values()) s.destroy();
         stage?.destroy();
+        medirEscenario.disconnect();
         resolver(combate.terminado!);
       }, 700);
     }

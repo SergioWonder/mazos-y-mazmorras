@@ -4,6 +4,17 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  position: relative;
+}
+
+/* The WebGL stage (z-index 16) spills over the hand strip (15) so enemy effects show on
+   top of it. Fighter HUD and the top bar stay above the stage, and so does the hand
+   while the player is aiming a card. */
+.combate .campo, .combate .barra-superior { z-index: 17; }
+body.arrastre-activo .zona-mano,
+.zona-mano:has(.carta.pendiente) { z-index: 18; }
+@media (hover: hover) {
+  .zona-mano:has(.carta:hover) { z-index: 18; }
 }
 
 .escenario {

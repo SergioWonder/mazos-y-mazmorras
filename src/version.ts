@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.11.0';
+export const VERSION = '3.11.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.11.1',
+    fecha: '2026-09-25',
+    cambios: [
+      '📱 En el móvil, los ataques y hechizos de los enemigos ya no se cortan en la franja de abajo: se ven por encima.',
+    ],
+  },
   {
     version: '3.11.0',
     fecha: '2026-09-25',

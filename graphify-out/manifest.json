@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790367106.9031856,
-    "ast_hash": "df77a434caca0fc57f4cb549c0b95e00",
+    "mtime": 1790368104.2697713,
+    "ast_hash": "817b232ce13aa538764ad7d02a85d454",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790367059.5879345,
-    "ast_hash": "76efc16c6423141707310efdf8e71423",
+    "mtime": 1790368062.8311594,
+    "ast_hash": "7552e0ddc125cacd266e288c1308b329",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790367106.9028192,
-    "ast_hash": "1a4976162cd66bd982acd9b2cad449d2",
+    "mtime": 1790368104.2665904,
+    "ast_hash": "4929bee8fcb90a53f6393609a2009b82",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-stage.ts": {
-    "mtime": 1790363893.9961534,
-    "ast_hash": "157f427d75e98c8b1fc14353820784c5",
+    "mtime": 1790367976.0327961,
+    "ast_hash": "538d181530ae65eafdd3cb45b297634d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/sw-avisos.js": {
