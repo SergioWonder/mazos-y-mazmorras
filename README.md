@@ -195,6 +195,16 @@ morir: el aliento de Ignifax, los rayos del Contemplador… Los del acto III son
 cargados, y al enfurecerse (o al volver de la filacteria) emiten el doble. Desde el menú principal, la **Galería de sprites**
 muestra todos los héroes, formas, invocaciones y enemigos animados.
 
+### Actualizaciones y avisos
+
+La PWA busca versión nueva cada minuto y ofrece un botón **Actualizar**. Solo las
+**versiones mayores** (3.x → 4.0) muestran la ventana de novedades, con todo lo que trae
+esa versión mayor. Desde el menú principal, el jugador puede activar los **avisos de
+versiones mayores**. No hay servidor de push: cada build publica `version.json`, el juego
+lo consulta al abrirse y cada minuto, y en Chrome para Android con la PWA instalada el
+service worker también lo consulta en segundo plano (`public/sw-avisos.js`). Cuando hay
+una versión mayor nueva, lanza una notificación del sistema, una sola vez por versión.
+
 ### Motor gráfico (WebGL2)
 
 Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en móvil:

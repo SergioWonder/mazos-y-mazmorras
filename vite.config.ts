@@ -1,10 +1,28 @@
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import type { Plugin } from 'vite';
+import { VERSION, CHANGELOG } from './src/version.ts';
+
+/** Publishes dist/version.json ({ version, headline }) so installed copies can
+ *  detect a new MAJOR version and notify the player. Never precached. */
+function versionJson(): Plugin {
+  return {
+    name: 'version-json',
+    generateBundle() {
+      const entry = CHANGELOG.find((e) => e.version === VERSION);
+      // first bullet without its leading emoji, as the notification text
+      const text = (entry?.cambios[0] ?? '').replace(/^\P{L}+/u, '');
+      const headline = text.length > 150 ? `${text.slice(0, text.lastIndexOf(' ', 150))}…` : text;
+      this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ version: VERSION, headline }) });
+    },
+  };
+}
 
 export default defineConfig({
   // Ruta base del repositorio en GitHub Pages
   base: '/mazos-y-mazmorras/',
   plugins: [
+    versionJson(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['icono.svg', 'apple-touch-icon.png'],
@@ -25,6 +43,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // background check for major versions + notification clicks
+        importScripts: ['sw-avisos.js'],
         // El audio NO se precachea (varios MB): se cachea al vuelo la primera
         // vez que suena cada pista, así la primera carga sigue siendo ligera.
         globPatterns: ['**/*.{js,css,html,png,svg}'],

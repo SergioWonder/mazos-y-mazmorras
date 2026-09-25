@@ -227,6 +227,51 @@
       "norm_label": "vite-plugin-pwa"
     },
     {
+      "label": "sw-avisos.js",
+      "file_type": "code",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L1",
+      "id": "public_sw_avisos",
+      "community": 40,
+      "norm_label": "sw-avisos.js"
+    },
+    {
+      "label": "majorOf()",
+      "file_type": "code",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L8",
+      "id": "public_sw_avisos_majorof",
+      "community": 40,
+      "norm_label": "majorof()"
+    },
+    {
+      "label": "readMeta()",
+      "file_type": "code",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L10",
+      "id": "public_sw_avisos_readmeta",
+      "community": 40,
+      "norm_label": "readmeta()"
+    },
+    {
+      "label": "writeMeta()",
+      "file_type": "code",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L16",
+      "id": "public_sw_avisos_writemeta",
+      "community": 40,
+      "norm_label": "writemeta()"
+    },
+    {
+      "label": "checkMajorVersion()",
+      "file_type": "code",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L21",
+      "id": "public_sw_avisos_checkmajorversion",
+      "community": 40,
+      "norm_label": "checkmajorversion()"
+    },
+    {
       "label": "smoke-test.ts",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
@@ -239,7 +284,7 @@
       "label": "CLASES",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L29",
+      "source_location": "L30",
       "id": "scripts_smoke_test_clases",
       "community": 3,
       "norm_label": "clases"
@@ -248,7 +293,7 @@
       "label": "check()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L32",
+      "source_location": "L33",
       "id": "scripts_smoke_test_check",
       "community": 3,
       "norm_label": "check()"
@@ -257,7 +302,7 @@
       "label": "uiSilenciosa",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L41",
+      "source_location": "L42",
       "id": "scripts_smoke_test_uisilenciosa",
       "community": 33,
       "norm_label": "uisilenciosa"
@@ -266,7 +311,7 @@
       "label": "sinTildes()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L68",
+      "source_location": "L69",
       "id": "scripts_smoke_test_sintildes",
       "community": 3,
       "norm_label": "sintildes()"
@@ -275,7 +320,7 @@
       "label": "danoEntrante()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L71",
+      "source_location": "L72",
       "id": "scripts_smoke_test_danoentrante",
       "community": 3,
       "norm_label": "danoentrante()"
@@ -284,7 +329,7 @@
       "label": "MITIGA",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L80",
+      "source_location": "L81",
       "id": "scripts_smoke_test_mitiga",
       "community": 3,
       "norm_label": "mitiga"
@@ -293,7 +338,7 @@
       "label": "esEscalado()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L85",
+      "source_location": "L86",
       "id": "scripts_smoke_test_esescalado",
       "community": 3,
       "norm_label": "esescalado()"
@@ -302,7 +347,7 @@
       "label": "puntuarCarta()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L92",
+      "source_location": "L93",
       "id": "scripts_smoke_test_puntuarcarta",
       "community": 3,
       "norm_label": "puntuarcarta()"
@@ -311,16 +356,16 @@
       "label": "mejorObjetivo()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L123",
+      "source_location": "L124",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 3,
+      "community": 32,
       "norm_label": "mejorobjetivo()"
     },
     {
       "label": "OpcionesSim",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L131",
+      "source_location": "L132",
       "id": "scripts_smoke_test_opcionessim",
       "community": 3,
       "norm_label": "opcionessim"
@@ -329,16 +374,16 @@
       "label": "simular()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L133",
+      "source_location": "L134",
       "id": "scripts_smoke_test_simular",
-      "community": 3,
+      "community": 32,
       "norm_label": "simular()"
     },
     {
       "label": "Cap",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L275",
+      "source_location": "L276",
       "id": "scripts_smoke_test_cap",
       "community": 3,
       "norm_label": "cap"
@@ -358,7 +403,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L4",
       "id": "core_cartas_instanciar",
-      "community": 15,
+      "community": 36,
       "norm_label": "instanciar()"
     },
     {
@@ -385,7 +430,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L30",
       "id": "core_cartas_basicas",
-      "community": 19,
+      "community": 35,
       "norm_label": "basicas"
     },
     {
@@ -394,7 +439,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L75",
       "id": "core_cartas_druida",
-      "community": 27,
+      "community": 41,
       "norm_label": "druida"
     },
     {
@@ -403,7 +448,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L725",
       "id": "core_cartas_barbaro",
-      "community": 27,
+      "community": 23,
       "norm_label": "barbaro"
     },
     {
@@ -412,7 +457,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1332",
       "id": "core_cartas_conjuro_prodigioso",
-      "community": 8,
+      "community": 27,
       "norm_label": "conjuro_prodigioso"
     },
     {
@@ -430,7 +475,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1387",
       "id": "core_cartas_mago",
-      "community": 8,
+      "community": 27,
       "norm_label": "mago"
     },
     {
@@ -439,7 +484,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2030",
       "id": "core_cartas_picaro",
-      "community": 27,
+      "community": 23,
       "norm_label": "picaro"
     },
     {
@@ -448,7 +493,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2746",
       "id": "core_cartas_danoexplosion",
-      "community": 8,
+      "community": 27,
       "norm_label": "danoexplosion()"
     },
     {
@@ -457,7 +502,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2753",
       "id": "core_cartas_lanzarexplosion",
-      "community": 8,
+      "community": 27,
       "norm_label": "lanzarexplosion()"
     },
     {
@@ -520,7 +565,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3614",
       "id": "core_cartas_mazoinicial",
-      "community": 32,
+      "community": 8,
       "norm_label": "mazoinicial()"
     },
     {
@@ -529,7 +574,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3625",
       "id": "core_cartas_pooldeclase",
-      "community": 3,
+      "community": 5,
       "norm_label": "pooldeclase()"
     },
     {
@@ -538,7 +583,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3632",
       "id": "core_cartas_cartaunicadeclase",
-      "community": 5,
+      "community": 8,
       "norm_label": "cartaunicadeclase()"
     },
     {
@@ -556,7 +601,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3647",
       "id": "core_cartas_recompensacartas",
-      "community": 3,
+      "community": 8,
       "norm_label": "recompensacartas()"
     },
     {
@@ -619,7 +664,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L98",
       "id": "core_combate_combate_bloqueodecarta",
-      "community": 27,
+      "community": 23,
       "norm_label": ".bloqueodecarta()"
     },
     {
@@ -1033,7 +1078,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L64",
       "id": "core_enemigos_goblin_famelico",
-      "community": 14,
+      "community": 23,
       "norm_label": "goblin_famelico"
     },
     {
@@ -1474,7 +1519,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L625",
       "id": "core_enemigos_capitulo",
-      "community": 34,
+      "community": 14,
       "norm_label": "capitulo"
     },
     {
@@ -1726,7 +1771,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L93",
       "id": "core_mapa_nodosdisponibles",
-      "community": 32,
+      "community": 1,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -1780,7 +1825,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L29",
       "id": "core_reliquias_sello_pacto",
-      "community": 27,
+      "community": 23,
       "norm_label": "sello_pacto"
     },
     {
@@ -1789,7 +1834,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L39",
       "id": "core_reliquias_reliquiainicial",
-      "community": 32,
+      "community": 31,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -1870,7 +1915,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L7",
       "id": "core_run_pv_por_clase",
-      "community": 27,
+      "community": 41,
       "norm_label": "pv_por_clase"
     },
     {
@@ -1888,7 +1933,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L38",
       "id": "core_run_avanzarcapitulo",
-      "community": 1,
+      "community": 32,
       "norm_label": "avanzarcapitulo()"
     },
     {
@@ -1897,7 +1942,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L1",
       "id": "core_types",
-      "community": 23,
+      "community": 31,
       "norm_label": "types.ts"
     },
     {
@@ -1906,7 +1951,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 14,
+      "community": 15,
       "norm_label": "claseid"
     },
     {
@@ -1915,7 +1960,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L4",
       "id": "core_types_tipocarta",
-      "community": 23,
+      "community": 31,
       "norm_label": "tipocarta"
     },
     {
@@ -1933,7 +1978,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_modoobjetivo",
-      "community": 23,
+      "community": 31,
       "norm_label": "modoobjetivo"
     },
     {
@@ -1942,7 +1987,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L9",
       "id": "core_types_estadoid",
-      "community": 27,
+      "community": 23,
       "norm_label": "estadoid"
     },
     {
@@ -1969,7 +2014,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L68",
       "id": "core_types_efectoinvocacion",
-      "community": 23,
+      "community": 31,
       "norm_label": "efectoinvocacion"
     },
     {
@@ -1987,7 +2032,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L86",
       "id": "core_types_efectotemporal",
-      "community": 23,
+      "community": 31,
       "norm_label": "efectotemporal"
     },
     {
@@ -2005,7 +2050,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L106",
       "id": "core_types_tipointencion",
-      "community": 23,
+      "community": 31,
       "norm_label": "tipointencion"
     },
     {
@@ -2023,7 +2068,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L125",
       "id": "core_types_enemigodef",
-      "community": 34,
+      "community": 14,
       "norm_label": "enemigodef"
     },
     {
@@ -2041,7 +2086,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L172",
       "id": "core_types_espacioconjuro",
-      "community": 23,
+      "community": 27,
       "norm_label": "espacioconjuro"
     },
     {
@@ -2059,7 +2104,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L202",
       "id": "core_types_cartadef",
-      "community": 23,
+      "community": 8,
       "norm_label": "cartadef"
     },
     {
@@ -2068,7 +2113,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L235",
       "id": "core_types_mejoracarta",
-      "community": 23,
+      "community": 31,
       "norm_label": "mejoracarta"
     },
     {
@@ -2095,7 +2140,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L362",
       "id": "core_types_tiponodo",
-      "community": 32,
+      "community": 31,
       "norm_label": "tiponodo"
     },
     {
@@ -2122,8 +2167,62 @@
       "source_file": "src/core/types.ts",
       "source_location": "L389",
       "id": "core_types_estadorun",
-      "community": 5,
+      "community": 36,
       "norm_label": "estadorun"
+    },
+    {
+      "label": "versions.ts",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L1",
+      "id": "core_versions",
+      "community": 3,
+      "norm_label": "versions.ts"
+    },
+    {
+      "label": "ChangelogEntry",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L4",
+      "id": "core_versions_changelogentry",
+      "community": 3,
+      "norm_label": "changelogentry"
+    },
+    {
+      "label": "majorOf()",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L6",
+      "id": "core_versions_majorof",
+      "community": 3,
+      "norm_label": "majorof()"
+    },
+    {
+      "label": "isMajorUpgrade()",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L10",
+      "id": "core_versions_ismajorupgrade",
+      "community": 3,
+      "norm_label": "ismajorupgrade()"
+    },
+    {
+      "label": "majorChangelog()",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L15",
+      "id": "core_versions_majorchangelog",
+      "community": 3,
+      "norm_label": "majorchangelog()"
+    },
+    {
+      "label": "shouldNotifyMajor()",
+      "file_type": "code",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L21",
+      "id": "core_versions_shouldnotifymajor",
+      "community": 3,
+      "norm_label": "shouldnotifymajor()"
     },
     {
       "label": "audio.ts",
@@ -2131,7 +2230,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "id": "fx_audio",
-      "community": 4,
+      "community": 39,
       "norm_label": "audio.ts"
     },
     {
@@ -2140,7 +2239,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L12",
       "id": "fx_audio_capa",
-      "community": 4,
+      "community": 39,
       "norm_label": "capa"
     },
     {
@@ -2149,7 +2248,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L23",
       "id": "fx_audio_recetas",
-      "community": 4,
+      "community": 39,
       "norm_label": "recetas"
     },
     {
@@ -2158,7 +2257,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L85",
       "id": "fx_audio_temachip",
-      "community": 4,
+      "community": 39,
       "norm_label": "temachip"
     },
     {
@@ -2167,7 +2266,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L97",
       "id": "fx_audio_temas",
-      "community": 4,
+      "community": 27,
       "norm_label": "temas"
     },
     {
@@ -2383,7 +2482,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L487",
       "id": "fx_audio_audio",
-      "community": 4,
+      "community": 39,
       "norm_label": "audio"
     },
     {
@@ -2950,7 +3049,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L981",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 14,
+      "community": 37,
       "norm_label": "enemy_rigs"
     },
     {
@@ -2959,7 +3058,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1039",
       "id": "fx_enemy_rigs_invocation_rigs",
-      "community": 14,
+      "community": 37,
       "norm_label": "invocation_rigs"
     },
     {
@@ -2995,7 +3094,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L177",
       "id": "fx_hero_rig_formid",
-      "community": 6,
+      "community": 14,
       "norm_label": "formid"
     },
     {
@@ -3022,7 +3121,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L185",
       "id": "fx_hero_rig_formfromlabel",
-      "community": 6,
+      "community": 34,
       "norm_label": "formfromlabel()"
     },
     {
@@ -3031,7 +3130,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L191",
       "id": "fx_hero_rig_currentform",
-      "community": 6,
+      "community": 34,
       "norm_label": "currentform()"
     },
     {
@@ -3157,7 +3256,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L129",
       "id": "fx_particle_gl_particlerenderergl_colour",
-      "community": 17,
+      "community": 2,
       "norm_label": ".colour()"
     },
     {
@@ -3517,7 +3616,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L100",
       "id": "fx_puppet_gpu_spritematrix",
-      "community": 2,
+      "community": 30,
       "norm_label": "spritematrix()"
     },
     {
@@ -3625,7 +3724,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L82",
       "id": "fx_puppet_actionprogress",
-      "community": 10,
+      "community": 6,
       "norm_label": "actionprogress"
     },
     {
@@ -3652,7 +3751,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L103",
       "id": "fx_puppet_action_duration",
-      "community": 10,
+      "community": 6,
       "norm_label": "action_duration"
     },
     {
@@ -3661,7 +3760,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L106",
       "id": "fx_puppet_emissive",
-      "community": 2,
+      "community": 10,
       "norm_label": "emissive"
     },
     {
@@ -3670,7 +3769,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L109",
       "id": "fx_puppet_eyes",
-      "community": 2,
+      "community": 10,
       "norm_label": "eyes"
     },
     {
@@ -3931,43 +4030,97 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L1",
       "id": "ui_actualizacion",
-      "community": 19,
+      "community": 26,
       "norm_label": "actualizacion.ts"
     },
     {
       "label": "iniciarActualizaciones()",
       "file_type": "code",
       "source_file": "src/ui/actualizacion.ts",
-      "source_location": "L15",
+      "source_location": "L22",
       "id": "ui_actualizacion_iniciaractualizaciones",
-      "community": 19,
+      "community": 26,
       "norm_label": "iniciaractualizaciones()"
     },
     {
       "label": "mostrarNovedadesSiNuevo()",
       "file_type": "code",
       "source_file": "src/ui/actualizacion.ts",
-      "source_location": "L37",
+      "source_location": "L50",
       "id": "ui_actualizacion_mostrarnovedadessinuevo",
-      "community": 19,
+      "community": 26,
       "norm_label": "mostrarnovedadessinuevo()"
+    },
+    {
+      "label": "guardarMeta()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L64",
+      "id": "ui_actualizacion_guardarmeta",
+      "community": 26,
+      "norm_label": "guardarmeta()"
+    },
+    {
+      "label": "leerMeta()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L67",
+      "id": "ui_actualizacion_leermeta",
+      "community": 26,
+      "norm_label": "leermeta()"
+    },
+    {
+      "label": "avisosDisponibles()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L72",
+      "id": "ui_actualizacion_avisosdisponibles",
+      "community": 26,
+      "norm_label": "avisosdisponibles()"
+    },
+    {
+      "label": "avisosActivados()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L74",
+      "id": "ui_actualizacion_avisosactivados",
+      "community": 26,
+      "norm_label": "avisosactivados()"
+    },
+    {
+      "label": "cambiarAvisos()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L79",
+      "id": "ui_actualizacion_cambiaravisos",
+      "community": 26,
+      "norm_label": "cambiaravisos()"
+    },
+    {
+      "label": "comprobarVersionMayor()",
+      "file_type": "code",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L96",
+      "id": "ui_actualizacion_comprobarversionmayor",
+      "community": 26,
+      "norm_label": "comprobarversionmayor()"
     },
     {
       "label": "mostrarAvisoActualizar()",
       "file_type": "code",
       "source_file": "src/ui/actualizacion.ts",
-      "source_location": "L50",
+      "source_location": "L114",
       "id": "ui_actualizacion_mostraravisoactualizar",
-      "community": 19,
+      "community": 35,
       "norm_label": "mostraravisoactualizar()"
     },
     {
       "label": "mostrarNovedades()",
       "file_type": "code",
       "source_file": "src/ui/actualizacion.ts",
-      "source_location": "L85",
+      "source_location": "L149",
       "id": "ui_actualizacion_mostrarnovedades",
-      "community": 19,
+      "community": 26,
       "norm_label": "mostrarnovedades()"
     },
     {
@@ -3976,7 +4129,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L1",
       "id": "ui_bendicion",
-      "community": 5,
+      "community": 36,
       "norm_label": "bendicion.ts"
     },
     {
@@ -3985,7 +4138,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
       "id": "ui_bendicion_don",
-      "community": 5,
+      "community": 36,
       "norm_label": "don"
     },
     {
@@ -3994,7 +4147,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L15",
       "id": "ui_bendicion_dones",
-      "community": 5,
+      "community": 36,
       "norm_label": "dones"
     },
     {
@@ -4003,7 +4156,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L66",
       "id": "ui_bendicion_don_carta",
-      "community": 5,
+      "community": 36,
       "norm_label": "don_carta"
     },
     {
@@ -4012,7 +4165,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L83",
       "id": "ui_bendicion_pantallabendicion",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallabendicion()"
     },
     {
@@ -4111,7 +4264,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L83",
       "id": "ui_carta_cuadropalabrasclave",
-      "community": 19,
+      "community": 35,
       "norm_label": "cuadropalabrasclave()"
     },
     {
@@ -4210,7 +4363,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1",
       "id": "ui_combate",
-      "community": 19,
+      "community": 34,
       "norm_label": "combate.ts"
     },
     {
@@ -4219,7 +4372,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L19",
       "id": "ui_combate_nombre_clase",
-      "community": 19,
+      "community": 34,
       "norm_label": "nombre_clase"
     },
     {
@@ -4228,7 +4381,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L23",
       "id": "ui_combate_sprite_invocacion",
-      "community": 19,
+      "community": 34,
       "norm_label": "sprite_invocacion"
     },
     {
@@ -4237,7 +4390,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L27",
       "id": "ui_combate_pasiva_invocacion",
-      "community": 19,
+      "community": 34,
       "norm_label": "pasiva_invocacion"
     },
     {
@@ -4255,7 +4408,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L1",
       "id": "ui_compendio",
-      "community": 19,
+      "community": 35,
       "norm_label": "compendio.ts"
     },
     {
@@ -4264,7 +4417,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L7",
       "id": "ui_compendio_ampliarengrande",
-      "community": 19,
+      "community": 35,
       "norm_label": "ampliarengrande()"
     },
     {
@@ -4273,7 +4426,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L22",
       "id": "ui_compendio_comentarios",
-      "community": 19,
+      "community": 35,
       "norm_label": "comentarios"
     },
     {
@@ -4282,7 +4435,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L24",
       "id": "ui_compendio_cargar",
-      "community": 19,
+      "community": 35,
       "norm_label": "cargar()"
     },
     {
@@ -4291,7 +4444,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L31",
       "id": "ui_compendio_guardar",
-      "community": 19,
+      "community": 35,
       "norm_label": "guardar()"
     },
     {
@@ -4300,7 +4453,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L37",
       "id": "ui_compendio_grupos",
-      "community": 19,
+      "community": 35,
       "norm_label": "grupos"
     },
     {
@@ -4309,7 +4462,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L48",
       "id": "ui_compendio_pantallacompendio",
-      "community": 19,
+      "community": 26,
       "norm_label": "pantallacompendio()"
     },
     {
@@ -4318,7 +4471,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L133",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 19,
+      "community": 35,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -4336,7 +4489,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L7",
       "id": "ui_evento_pantallaevento",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallaevento()"
     },
     {
@@ -4381,7 +4534,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L9",
       "id": "ui_gallery_catalogue_gallerycard",
-      "community": 14,
+      "community": 37,
       "norm_label": "gallerycard"
     },
     {
@@ -4444,7 +4597,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L1",
       "id": "ui_gallery",
-      "community": 14,
+      "community": 37,
       "norm_label": "gallery.ts"
     },
     {
@@ -4453,7 +4606,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L12",
       "id": "ui_gallery_mode",
-      "community": 14,
+      "community": 37,
       "norm_label": "mode"
     },
     {
@@ -4462,7 +4615,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L13",
       "id": "ui_gallery_modes",
-      "community": 14,
+      "community": 37,
       "norm_label": "modes"
     },
     {
@@ -4471,7 +4624,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L15",
       "id": "ui_gallery_scripts",
-      "community": 14,
+      "community": 37,
       "norm_label": "scripts"
     },
     {
@@ -4480,7 +4633,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L22",
       "id": "ui_gallery_entry",
-      "community": 14,
+      "community": 37,
       "norm_label": "entry"
     },
     {
@@ -4498,7 +4651,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L31",
       "id": "ui_gallery_showgallery",
-      "community": 19,
+      "community": 26,
       "norm_label": "showgallery()"
     },
     {
@@ -4534,7 +4687,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L1",
       "id": "ui_instalar",
-      "community": 19,
+      "community": 35,
       "norm_label": "instalar.ts"
     },
     {
@@ -4543,7 +4696,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L10",
       "id": "ui_instalar_avisoinstalacion",
-      "community": 19,
+      "community": 35,
       "norm_label": "avisoinstalacion()"
     },
     {
@@ -4552,7 +4705,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L1",
       "id": "ui_mapa",
-      "community": 32,
+      "community": 1,
       "norm_label": "mapa.ts"
     },
     {
@@ -4561,7 +4714,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L6",
       "id": "ui_mapa_icono_nodo",
-      "community": 32,
+      "community": 1,
       "norm_label": "icono_nodo"
     },
     {
@@ -4570,7 +4723,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L9",
       "id": "ui_mapa_nombre_nodo",
-      "community": 32,
+      "community": 1,
       "norm_label": "nombre_nodo"
     },
     {
@@ -4579,7 +4732,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L14",
       "id": "ui_mapa_pantallamapa",
-      "community": 32,
+      "community": 1,
       "norm_label": "pantallamapa()"
     },
     {
@@ -4588,7 +4741,7 @@
       "source_file": "src/ui/mision.ts",
       "source_location": "L1",
       "id": "ui_mision",
-      "community": 1,
+      "community": 36,
       "norm_label": "mision.ts"
     },
     {
@@ -4615,7 +4768,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L26",
       "id": "ui_puppet_sprite_luz_luna",
-      "community": 19,
+      "community": 37,
       "norm_label": "luz_luna"
     },
     {
@@ -4831,7 +4984,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L1",
       "id": "ui_puppet_stage",
-      "community": 13,
+      "community": 2,
       "norm_label": "puppet-stage.ts"
     },
     {
@@ -4858,7 +5011,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L222",
       "id": "ui_puppet_stage_gpuview",
-      "community": 29,
+      "community": 16,
       "norm_label": "gpuview"
     },
     {
@@ -4867,7 +5020,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L234",
       "id": "ui_puppet_stage_bones",
-      "community": 13,
+      "community": 2,
       "norm_label": "bones"
     },
     {
@@ -4930,7 +5083,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L300",
       "id": "ui_puppet_stage_puppetstage_texturefor",
-      "community": 2,
+      "community": 30,
       "norm_label": ".texturefor()"
     },
     {
@@ -4948,7 +5101,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L337",
       "id": "ui_puppet_stage_puppetstage_drawsprite",
-      "community": 2,
+      "community": 30,
       "norm_label": ".drawsprite()"
     },
     {
@@ -4957,7 +5110,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L425",
       "id": "ui_puppet_stage_puppetstage_draweffect",
-      "community": 13,
+      "community": 30,
       "norm_label": ".draweffect()"
     },
     {
@@ -4975,7 +5128,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L447",
       "id": "ui_puppet_stage_stages",
-      "community": 13,
+      "community": 2,
       "norm_label": "stages"
     },
     {
@@ -4984,7 +5137,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L1",
       "id": "ui_recompensa",
-      "community": 1,
+      "community": 36,
       "norm_label": "recompensa.ts"
     },
     {
@@ -4993,7 +5146,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L9",
       "id": "ui_recompensa_elegircarta",
-      "community": 1,
+      "community": 36,
       "norm_label": "elegircarta()"
     },
     {
@@ -5020,23 +5173,23 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L1",
       "id": "ui_titulo",
-      "community": 19,
+      "community": 26,
       "norm_label": "titulo.ts"
     },
     {
       "label": "EleccionTitulo",
       "file_type": "code",
       "source_file": "src/ui/titulo.ts",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "ui_titulo_elecciontitulo",
-      "community": 19,
+      "community": 26,
       "norm_label": "elecciontitulo"
     },
     {
       "label": "pantallaTitulo()",
       "file_type": "code",
       "source_file": "src/ui/titulo.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "ui_titulo_pantallatitulo",
       "community": 1,
       "norm_label": "pantallatitulo()"
@@ -5047,7 +5200,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L1",
       "id": "ui_util",
-      "community": 19,
+      "community": 34,
       "norm_label": "util.ts"
     },
     {
@@ -5056,7 +5209,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L3",
       "id": "ui_util_el",
-      "community": 19,
+      "community": 35,
       "norm_label": "el()"
     },
     {
@@ -5065,7 +5218,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L14",
       "id": "ui_util_espera",
-      "community": 19,
+      "community": 34,
       "norm_label": "espera()"
     },
     {
@@ -5074,7 +5227,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L18",
       "id": "ui_util_centrode",
-      "community": 19,
+      "community": 34,
       "norm_label": "centrode()"
     },
     {
@@ -5083,7 +5236,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L25",
       "id": "ui_util_numeroflotante",
-      "community": 19,
+      "community": 34,
       "norm_label": "numeroflotante()"
     },
     {
@@ -5092,7 +5245,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L39",
       "id": "ui_util_sacudir",
-      "community": 19,
+      "community": 34,
       "norm_label": "sacudir()"
     },
     {
@@ -5101,7 +5254,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L47",
       "id": "ui_util_anuncio",
-      "community": 19,
+      "community": 36,
       "norm_label": "anuncio()"
     },
     {
@@ -5110,7 +5263,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L58",
       "id": "ui_util_iniciartooltips",
-      "community": 19,
+      "community": 34,
       "norm_label": "iniciartooltips()"
     },
     {
@@ -5119,7 +5272,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L91",
       "id": "ui_util_icono_estado",
-      "community": 19,
+      "community": 34,
       "norm_label": "icono_estado"
     },
     {
@@ -5128,7 +5281,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L109",
       "id": "ui_util_nombre_estado",
-      "community": 19,
+      "community": 34,
       "norm_label": "nombre_estado"
     },
     {
@@ -5137,7 +5290,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L135",
       "id": "ui_util_descripcion_estado",
-      "community": 27,
+      "community": 23,
       "norm_label": "descripcion_estado"
     },
     {
@@ -5146,7 +5299,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L192",
       "id": "ui_util_tipestado",
-      "community": 19,
+      "community": 34,
       "norm_label": "tipestado()"
     },
     {
@@ -5155,7 +5308,7 @@
       "source_file": "src/version.ts",
       "source_location": "L1",
       "id": "src_version",
-      "community": 19,
+      "community": 26,
       "norm_label": "version.ts"
     },
     {
@@ -5164,7 +5317,7 @@
       "source_file": "src/version.ts",
       "source_location": "L6",
       "id": "src_version_entradacambios",
-      "community": 19,
+      "community": 26,
       "norm_label": "entradacambios"
     },
     {
@@ -5173,7 +5326,7 @@
       "source_file": "src/version.ts",
       "source_location": "L12",
       "id": "src_version_changelog",
-      "community": 19,
+      "community": 26,
       "norm_label": "changelog"
     },
     {
@@ -5348,6 +5501,15 @@
       "norm_label": "vite.config.ts"
     },
     {
+      "label": "versionJson()",
+      "file_type": "code",
+      "source_file": "vite.config.ts",
+      "source_location": "L8",
+      "id": "vite_config_versionjson",
+      "community": 26,
+      "norm_label": "versionjson()"
+    },
+    {
       "label": "SKILL.md",
       "file_type": "document",
       "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
@@ -5395,16 +5557,16 @@
     {
       "label": "SKILL.md",
       "file_type": "document",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_file": ".claude/skills/release/SKILL.md",
       "source_location": "L1",
-      "id": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md",
+      "id": "release_skill",
       "community": 21,
       "norm_label": "skill.md"
     },
     {
       "label": "/release \u2014 publicar versi\u00f3n con ventana de novedades",
       "file_type": "document",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_file": ".claude/skills/release/SKILL.md",
       "source_location": "L7",
       "id": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades",
       "community": 21,
@@ -5413,7 +5575,7 @@
     {
       "label": "Uso",
       "file_type": "document",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_file": ".claude/skills/release/SKILL.md",
       "source_location": "L18",
       "id": "release_skill_uso",
       "community": 21,
@@ -5422,7 +5584,7 @@
     {
       "label": "Pasos (ejec\u00fatalos en orden)",
       "file_type": "document",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_file": ".claude/skills/release/SKILL.md",
       "source_location": "L28",
       "id": "release_skill_pasos_ejec\u00fatalos_en_orden",
       "community": 21,
@@ -5431,8 +5593,8 @@
     {
       "label": "Notas",
       "file_type": "document",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
-      "source_location": "L88",
+      "source_file": ".claude/skills/release/SKILL.md",
+      "source_location": "L94",
       "id": "release_skill_notas",
       "community": 21,
       "norm_label": "notas"
@@ -5501,10 +5663,19 @@
       "norm_label": "estructura"
     },
     {
-      "label": "Motor gr\u00e1fico (WebGL2)",
+      "label": "Actualizaciones y avisos",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L198",
+      "id": "readme_actualizaciones_y_avisos",
+      "community": 27,
+      "norm_label": "actualizaciones y avisos"
+    },
+    {
+      "label": "Motor gr\u00e1fico (WebGL2)",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L208",
       "id": "readme_motor_gr\u00e1fico_webgl2",
       "community": 27,
       "norm_label": "motor grafico (webgl2)"
@@ -5544,6 +5715,15 @@
       "id": "audio_leeme_cambiar_o_ampliar_pistas",
       "community": 22,
       "norm_label": "cambiar o ampliar pistas"
+    },
+    {
+      "label": "SKILL.md",
+      "file_type": "document",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_location": "L1",
+      "community": 21,
+      "norm_label": "skill.md",
+      "id": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md"
     },
     {
       "label": "Forma",
@@ -5793,7 +5973,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L74",
-      "community": 6,
+      "community": 18,
       "norm_label": "p()",
       "id": "fx_hero_rig_p"
     },
@@ -5802,7 +5982,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L75",
-      "community": 6,
+      "community": 18,
       "norm_label": "l()",
       "id": "fx_hero_rig_l"
     },
@@ -6063,7 +6243,7 @@
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
       "source_location": "L19",
-      "community": 19,
+      "community": 34,
       "norm_label": "sprite_forma",
       "id": "ui_combate_sprite_forma"
     },
@@ -6072,7 +6252,7 @@
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
       "source_location": "L14",
-      "community": 19,
+      "community": 34,
       "norm_label": "sprite_jugador",
       "id": "ui_combate_sprite_jugador"
     },
@@ -6239,15 +6419,6 @@
       "id": "editar_carta_skill"
     },
     {
-      "label": "SKILL.md",
-      "file_type": "document",
-      "source_file": ".claude/skills/release/SKILL.md",
-      "source_location": "L1",
-      "community": 21,
-      "norm_label": "skill.md",
-      "id": "release_skill"
-    },
-    {
       "label": "LEEME.md",
       "file_type": "document",
       "source_file": "public/audio/LEEME.md",
@@ -6304,7 +6475,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 27,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -6317,7 +6488,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 41,
       "norm_label": "clase druida (70 pv)",
       "id": "readme_clase_druida"
     },
@@ -6330,7 +6501,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "clase barbaro (80 pv)",
       "id": "readme_clase_barbaro"
     },
@@ -6343,7 +6514,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 27,
       "norm_label": "clase mago (62 pv)",
       "id": "readme_clase_mago"
     },
@@ -6356,7 +6527,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "clase picaro (66 pv)",
       "id": "readme_clase_picaro"
     },
@@ -6369,7 +6540,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 41,
       "norm_label": "transformaciones (druida)",
       "id": "readme_transformaciones"
     },
@@ -6382,7 +6553,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "raices (druida)",
       "id": "readme_raices"
     },
@@ -6408,7 +6579,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "furia (barbaro)",
       "id": "readme_furia"
     },
@@ -6421,7 +6592,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -6434,7 +6605,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 27,
       "norm_label": "espacios de conjuro en piramide (mago)",
       "id": "readme_espacios_conjuro"
     },
@@ -6447,7 +6618,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 27,
       "norm_label": "conjuro prodigioso (mago)",
       "id": "readme_conjuro_prodigioso"
     },
@@ -6460,7 +6631,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "acrobacias (picaro)",
       "id": "readme_acrobacias"
     },
@@ -6473,7 +6644,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "veneno",
       "id": "readme_veneno"
     },
@@ -6525,7 +6696,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "robo y descarte con sinergias (picaro)",
       "id": "readme_descarte_sinergias"
     },
@@ -6590,7 +6761,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts",
       "id": "readme_sistema_energia"
     },
@@ -6603,7 +6774,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 3,
+      "community": 8,
       "norm_label": "mejora de cartas en campamentos",
       "id": "readme_mejora_cartas"
     },
@@ -6629,7 +6800,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -6681,7 +6852,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -6694,7 +6865,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -6707,7 +6878,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 34,
       "norm_label": "controles de raton y modo mando por teclado",
       "id": "readme_controles_mando"
     },
@@ -6759,7 +6930,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 35,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -6772,7 +6943,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 27,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -6785,7 +6956,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 27,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -6798,7 +6969,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 4,
+      "community": 39,
       "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
       "id": "audio_leeme_sfx_sintetizados"
     },
@@ -6811,7 +6982,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "despliegue en github pages (push a main)",
       "id": "workflows_deploy_github_pages"
     },
@@ -6824,7 +6995,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "los tests del motor son puerta del despliegue",
       "id": "workflows_deploy_tests_en_ci"
     },
@@ -6837,7 +7008,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "skill /release (version + changelog + push a main)",
       "id": "release_skill_flujo_release"
     },
@@ -6850,7 +7021,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "ventana de novedades alimentada por changelog",
       "id": "release_skill_ventana_novedades"
     },
@@ -6863,7 +7034,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -6876,7 +7047,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 38,
       "norm_label": "convencion: el texto de la carta debe cuadrar con su efecto",
       "id": "editar_carta_skill_texto_coherente"
     },
@@ -6915,7 +7086,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 27,
       "norm_label": "explosion sobrenatural (vuelve a lo alto del mazo)",
       "id": "readme_explosion_sobrenatural"
     },
@@ -6928,7 +7099,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "condena (ejecuta al igualar los pv actuales)",
       "id": "readme_condena"
     },
@@ -6967,7 +7138,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 27,
+      "community": 23,
       "norm_label": "oscuridad (baja el ataque de todos)",
       "id": "readme_oscuridad"
     },
@@ -7125,6 +7296,79 @@
       "confidence_score": 1.0,
       "source": "package_devdependencies",
       "target": "package_devdependencies_vite_plugin_pwa"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "public_sw_avisos",
+      "target": "public_sw_avisos_checkmajorversion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "public_sw_avisos",
+      "target": "public_sw_avisos_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "public_sw_avisos",
+      "target": "public_sw_avisos_readmeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "public_sw_avisos",
+      "target": "public_sw_avisos_writemeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "public_sw_avisos_checkmajorversion",
+      "target": "public_sw_avisos_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "public_sw_avisos_checkmajorversion",
+      "target": "public_sw_avisos_readmeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "public/sw-avisos.js",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "public_sw_avisos_checkmajorversion",
+      "target": "public_sw_avisos_writemeta",
+      "confidence_score": 1.0
     },
     {
       "relation": "references",
@@ -7712,6 +7956,61 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/smoke-test.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_versions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_versions_ismajorupgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_versions_majorchangelog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_versions_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "core_versions_shouldnotifymajor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
       "source_location": "L21",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -7868,9 +8167,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "fx_particle_sim_effects",
-      "confidence_score": 1.0
+      "target": "fx_particle_sim_effects"
     },
     {
       "relation": "imports",
@@ -7945,9 +8244,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "fx_puppet_emitterworld",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitterworld"
     },
     {
       "relation": "imports_from",
@@ -13863,6 +14162,155 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "core_versions",
+      "target": "core_versions_changelogentry",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "core_versions",
+      "target": "core_versions_ismajorupgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "core_versions",
+      "target": "core_versions_majorchangelog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "core_versions",
+      "target": "core_versions_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "core_versions",
+      "target": "core_versions_shouldnotifymajor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "core_versions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "core_versions_ismajorupgrade",
+      "target": "core_versions_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/versions.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "core_versions_shouldnotifymajor",
+      "target": "core_versions_majorof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "core_versions_ismajorupgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "ui_actualizacion_mostrarnovedadessinuevo",
+      "target": "core_versions_ismajorupgrade",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "core_versions_majorchangelog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L150",
+      "weight": 1.0,
+      "source": "ui_actualizacion_mostrarnovedades",
+      "target": "core_versions_majorchangelog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "core_versions_shouldnotifymajor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "ui_actualizacion_comprobarversionmayor",
+      "target": "core_versions_shouldnotifymajor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/fx/audio.ts",
       "source_location": "L487",
       "weight": 1.0,
@@ -14811,9 +15259,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L784",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_beholder",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_beholder"
     },
     {
       "relation": "contains",
@@ -14851,9 +15299,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L767",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_boss",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_boss"
     },
     {
       "relation": "contains",
@@ -14861,9 +15309,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L814",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_bosses",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_bosses"
     },
     {
       "relation": "contains",
@@ -14871,9 +15319,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L756",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_bossextras",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_bossextras"
     },
     {
       "relation": "contains",
@@ -14911,9 +15359,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L780",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_candle",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_candle"
     },
     {
       "relation": "contains",
@@ -14941,9 +15389,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L776",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_card",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_card"
     },
     {
       "relation": "contains",
@@ -15204,9 +15652,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_puppet_burst",
-      "confidence_score": 1.0
+      "target": "fx_puppet_burst"
     },
     {
       "relation": "imports",
@@ -15237,9 +15685,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_puppet_emitter",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitter"
     },
     {
       "relation": "imports",
@@ -15369,9 +15817,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L791",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_beholder",
-      "target": "fx_enemy_rigs_finish",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_finish"
     },
     {
       "relation": "calls",
@@ -16106,9 +16554,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L760",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_bossextras",
-      "target": "fx_puppet_burst",
-      "confidence_score": 1.0
+      "target": "fx_puppet_burst"
     },
     {
       "relation": "references",
@@ -16117,9 +16565,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L759",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_bossextras",
-      "target": "fx_puppet_emitter",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitter"
     },
     {
       "relation": "references",
@@ -16128,9 +16576,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L757",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_bossextras",
-      "target": "fx_puppet_shape",
-      "confidence_score": 1.0
+      "target": "fx_puppet_shape"
     },
     {
       "relation": "calls",
@@ -16139,9 +16587,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L778",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_card",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "calls",
@@ -16150,9 +16598,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L778",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_card",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -16161,9 +16609,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L777",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_card",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -16172,9 +16620,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_candle",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -16183,9 +16631,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_candle",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -16194,9 +16642,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L787",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_beholder",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "calls",
@@ -16205,9 +16653,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L806",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_beholder",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "calls",
@@ -16216,9 +16664,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L787",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_beholder",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -16227,9 +16675,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L803",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_beholder",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "imports",
@@ -18340,9 +18788,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_particulas",
-      "confidence_score": 1.0
+      "target": "fx_particulas"
     },
     {
       "relation": "imports_from",
@@ -18595,9 +19043,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_particulas_fx",
-      "confidence_score": 1.0
+      "target": "fx_particulas_fx"
     },
     {
       "relation": "imports",
@@ -19034,9 +19482,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_puppet_gpu_spritematrix",
-      "confidence_score": 1.0
+      "target": "fx_puppet_gpu_spritematrix"
     },
     {
       "relation": "calls",
@@ -19179,9 +19627,9 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_puppet",
-      "target": "fx_puppet_burst",
-      "confidence_score": 1.0
+      "target": "fx_puppet_burst"
     },
     {
       "relation": "contains",
@@ -19259,9 +19707,9 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_puppet",
-      "target": "fx_puppet_emitter",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitter"
     },
     {
       "relation": "contains",
@@ -19269,9 +19717,9 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L252",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_puppet",
-      "target": "fx_puppet_emitterworld",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitterworld"
     },
     {
       "relation": "contains",
@@ -19555,9 +20003,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L346",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite_emit",
-      "target": "fx_puppet_boneid",
-      "confidence_score": 1.0
+      "target": "fx_puppet_boneid"
     },
     {
       "relation": "references",
@@ -19665,9 +20113,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_puppet_burst",
-      "confidence_score": 1.0
+      "target": "fx_puppet_burst"
     },
     {
       "relation": "references",
@@ -19676,9 +20124,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L263",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite",
-      "target": "fx_puppet_burst",
-      "confidence_score": 1.0
+      "target": "fx_puppet_burst"
     },
     {
       "relation": "imports",
@@ -19962,9 +20410,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L346",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite_emit",
-      "target": "fx_puppet_matrix",
-      "confidence_score": 1.0
+      "target": "fx_puppet_matrix"
     },
     {
       "relation": "references",
@@ -20061,9 +20509,9 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L253",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_puppet_emitterworld",
-      "target": "fx_puppet_applymatrix",
-      "confidence_score": 1.0
+      "target": "fx_puppet_applymatrix"
     },
     {
       "relation": "calls",
@@ -20083,9 +20531,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_puppet_applymatrix",
-      "confidence_score": 1.0
+      "target": "fx_puppet_applymatrix"
     },
     {
       "relation": "calls",
@@ -20204,9 +20652,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
-      "target": "fx_puppet_emitterworld",
-      "confidence_score": 1.0
+      "target": "fx_puppet_emitterworld"
     },
     {
       "relation": "imports",
@@ -20736,11 +21184,71 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_avisosactivados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_avisosdisponibles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_cambiaravisos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_comprobarversionmayor",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_guardarmeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "ui_actualizacion",
       "target": "ui_actualizacion_iniciaractualizaciones"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "ui_actualizacion",
+      "target": "ui_actualizacion_leermeta",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -20795,6 +21303,17 @@
       "target": "ui_util_el"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/titulo.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_titulo",
+      "target": "ui_actualizacion",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -20815,6 +21334,83 @@
       "confidence_score": 1.0,
       "source": "ui_actualizacion_mostrarnovedadessinuevo",
       "target": "ui_actualizacion_mostrarnovedades"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L85",
+      "weight": 1.0,
+      "source": "ui_actualizacion_cambiaravisos",
+      "target": "ui_actualizacion_guardarmeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "ui_actualizacion_comprobarversionmayor",
+      "target": "ui_actualizacion_guardarmeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "ui_actualizacion_comprobarversionmayor",
+      "target": "ui_actualizacion_leermeta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/titulo.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_titulo",
+      "target": "ui_actualizacion_avisosdisponibles",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/actualizacion.ts",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "ui_actualizacion_comprobarversionmayor",
+      "target": "ui_actualizacion_avisosactivados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/titulo.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_titulo",
+      "target": "ui_actualizacion_avisosactivados",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/titulo.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_titulo",
+      "target": "ui_actualizacion_cambiaravisos",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -23165,9 +23761,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L346",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite",
-      "target": "ui_puppet_sprite_puppetsprite_emit",
-      "confidence_score": 1.0
+      "target": "ui_puppet_sprite_puppetsprite_emit"
     },
     {
       "relation": "method",
@@ -23215,9 +23811,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L302",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite",
-      "target": "ui_puppet_sprite_puppetsprite_setintensity",
-      "confidence_score": 1.0
+      "target": "ui_puppet_sprite_puppetsprite_setintensity"
     },
     {
       "relation": "method",
@@ -23290,9 +23886,9 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L342",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_puppet_sprite_puppetsprite_tick",
-      "target": "ui_puppet_sprite_puppetsprite_emit",
-      "confidence_score": 1.0
+      "target": "ui_puppet_sprite_puppetsprite_emit"
     },
     {
       "relation": "calls",
@@ -23853,6 +24449,17 @@
       "target": "src_version_entradacambios"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "vite.config.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "vite_config",
+      "target": "src_version",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
@@ -23861,6 +24468,17 @@
       "weight": 1.0,
       "source": "release_skill_flujo_release",
       "target": "src_version_changelog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "vite.config.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "vite_config",
+      "target": "src_version_changelog",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -24025,6 +24643,16 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "vite.config.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "vite_config",
+      "target": "vite_config_versionjson",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/editar-carta/SKILL.md",
       "source_location": "L7",
       "weight": 1.0,
@@ -24075,16 +24703,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md",
-      "target": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": ".claude/skills/release/SKILL.md",
       "source_location": "L7",
       "weight": 1.0,
@@ -24121,6 +24739,16 @@
       "confidence_score": 1.0,
       "source": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades",
       "target": "release_skill_uso"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/Users/sergio/WonderBits/videogame/.claude/skills/release/SKILL.md",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "users_sergio_wonderbits_videogame_claude_skills_release_skill_md",
+      "target": "release_skill_release_publicar_versi\u00f3n_con_ventana_de_novedades"
     },
     {
       "relation": "contains",
@@ -24271,6 +24899,16 @@
       "weight": 1.0,
       "source": "release_skill_flujo_release",
       "target": "readme_mazo_y_mazmorra"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L198",
+      "weight": 1.0,
+      "source": "readme_estructura",
+      "target": "readme_actualizaciones_y_avisos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -25091,5 +25729,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "e21a29b2e7cf3b057da0da3a55960215a0747238"
+  "built_at_commit": "ac920a87c16052181abce30997855e8ea9759e1c"
 }

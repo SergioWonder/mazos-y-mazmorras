@@ -5,6 +5,7 @@ import { el } from './util.ts';
 import { VERSION } from '../version.ts';
 import { pantallaCompendio } from './compendio.ts';
 import { showGallery } from './gallery.ts';
+import { avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
 
@@ -69,6 +70,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
         }
         <button class="btn-tomar btn-compendio">📖 Compendio de cartas</button>
         <button class="btn-tomar btn-galeria">🎭 Galería de sprites</button>
+        ${avisosDisponibles() ? '<button class="btn-tomar btn-avisos"></button>' : ''}
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
         <p class="titulo-version">v${VERSION}</p>
       </div>
@@ -108,6 +110,22 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       window.removeEventListener('keydown', teclado);
       await pantallaCompendio();
       window.addEventListener('keydown', teclado);
+    });
+
+    // Major-version notifications: the browser asks for permission on this click
+    const btnAvisos = raiz.querySelector<HTMLButtonElement>('.btn-avisos');
+    const pintarAvisos = () => {
+      if (!btnAvisos) return;
+      const bloqueados = Notification.permission === 'denied';
+      btnAvisos.disabled = bloqueados;
+      btnAvisos.textContent = bloqueados
+        ? '🔕 Avisos bloqueados en el navegador'
+        : avisosActivados() ? '🔔 Avisos de versiones mayores: activados' : '🔕 Avisarme de versiones mayores';
+    };
+    pintarAvisos();
+    btnAvisos?.addEventListener('click', async () => {
+      await cambiarAvisos(!avisosActivados());
+      pintarAvisos();
     });
 
     // Sprite gallery: heroes, druid forms, invocations and enemies, animated

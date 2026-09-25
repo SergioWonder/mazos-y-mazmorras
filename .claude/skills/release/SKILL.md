@@ -43,9 +43,15 @@ recargar la PWA.
 
 3. **Decide la versión nueva (semver).**
    - Si el usuario pasó `patch`/`minor`/`major`, úsalo.
-   - Si no, propón el salto según los cambios (correcciones → patch; cartas/funciones
-     nuevas → minor; cambios que rompen guardados o el flujo → major) y **confírmalo
-     con el usuario** con AskUserQuestion antes de continuar.
+   - Si no, elige entre **patch** (correcciones) y **minor** (cartas o funciones nuevas).
+   - **Nunca subas la versión mayor por tu cuenta**: solo cuando el usuario diga
+     expresamente que es una actualización mayor. Las mayores son las únicas que
+     muestran la ventana de novedades a los jugadores y lanzan la notificación del
+     sistema a quien activó los avisos (ver `src/core/versions.ts`, `version.json` y
+     `public/sw-avisos.js`). Las menores y los parches actualizan en silencio.
+   - En una **mayor** (X.0.0), redacta sus viñetas como **resumen de todo lo que trae
+     la versión mayor**, porque es lo que verán los jugadores. La primera viñeta se usa
+     como texto de la notificación: que sea la más llamativa y se entienda sola.
 
 4. **Obtén la fecha de hoy** (campo `currentDate` del contexto, o `date +%F`) en
    formato `AAAA-MM-DD` para la entrada del changelog.
@@ -92,3 +98,5 @@ recargar la PWA.
 - `dist/` está en `.gitignore`; lo construye el workflow, no lo commitees.
 - El banner de "Nueva versión disponible" solo aparece a partir del **siguiente**
   despliegue respecto al que introdujo el modo `prompt` de la PWA.
+- La ventana de novedades solo sale al cambiar de versión mayor, y muestra todas las
+  entradas del `CHANGELOG` de esa versión mayor (la X.0.0 primero).

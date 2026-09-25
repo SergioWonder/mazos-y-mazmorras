@@ -21,6 +21,7 @@ import * as ENEMIGOS from '../src/core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
+import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
@@ -1960,6 +1961,24 @@ console.log('\n🖥️ Motor WebGL (partes puras)');
   check(ps[0].vy > vy0, 'la gravedad tira de las chispas hacia abajo');
   stepParticles(ps, 1);
   check(ps.length === 0, 'y desaparecen al acabar su vida');
+}
+
+// ── Actualizaciones mayores: novedades y avisos solo al cambiar de versión mayor ─
+console.log('\n🔔 Actualizaciones mayores');
+{
+  check(majorOf('3.7.0') === 3 && majorOf('10.2.1') === 10, 'lee la versión mayor');
+  check(isMajorUpgrade('3.7.0', '4.0.0'), '3.7.0 → 4.0.0 es una actualización mayor');
+  check(!isMajorUpgrade('3.6.0', '3.7.0') && !isMajorUpgrade('4.0.0', '4.0.1'), 'las menores y los parches no lo son');
+  check(!isMajorUpgrade(null, '4.0.0'), 'en la primera partida no se molesta con novedades');
+  const log = [
+    { version: '4.1.0', fecha: '', cambios: ['b'] }, { version: '4.0.0', fecha: '', cambios: ['a'] },
+    { version: '3.7.0', fecha: '', cambios: ['z'] },
+  ];
+  check(majorChangelog(log, '4.1.0').map((e) => e.version).join() === '4.1.0,4.0.0', 'las novedades muestran toda la versión mayor actual');
+  check(shouldNotifyMajor('3.7.0', '4.0.0', null), 'avisa de una versión mayor nueva');
+  check(!shouldNotifyMajor('3.7.0', '4.0.0', '4.0.0'), 'pero solo una vez');
+  check(!shouldNotifyMajor('3.7.0', '3.8.0', null), 'y nunca por versiones menores');
+  check(!shouldNotifyMajor('4.0.0', '4.0.0', null), 'ni si ya la tienes instalada');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
