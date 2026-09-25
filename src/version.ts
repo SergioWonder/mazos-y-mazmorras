@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.3';
+export const VERSION = '3.9.4';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.4',
+    fecha: '2026-09-25',
+    cambios: [
+      '📱 Mucho más fluido en móvil con cartas en pantalla: el fondo del combate y las partículas de las cartas se dibujan con la tarjeta gráfica, y las ilustraciones y los brillos de las cartas ya no se repintan en cada fotograma.',
+    ],
+  },
   {
     version: '3.9.3',
     fecha: '2026-09-25',

@@ -1,8 +1,8 @@
 import type { CartaDef } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardArtUrl } from './card-art-render.ts';
-import { cardSvgUrl } from './card-svgs.ts';
-import { animateCardParticles } from './card-particles.ts';
+import { cardSvgUrl, cardArtBitmap } from './card-svgs.ts';
+import { fx } from '../fx/particulas.ts';
 import { hasFullArt, lookOf } from '../fx/card-art.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
@@ -145,17 +145,30 @@ function valorMod(base: number, real: number): string {
  * Reduce la fuente del texto hasta que quepa en su recuadro.
  * Se autoprograma para cuando la carta ya esté en el DOM con tamaño real.
  */
+// Fitted font size per card text and layout: the hand is rebuilt on every
+// render, so each distinct text is measured once instead of forcing reflows.
+const tamAjustado = new Map<string, number | null>();
+
 function ajustarTexto(carta: HTMLElement) {
+  const texto = carta.querySelector('.carta-texto') as HTMLElement | null;
+  if (!texto) return;
+  const clave = `${carta.className}|${texto.innerHTML}`;
+  const previo = tamAjustado.get(clave);
+  if (previo !== undefined) {
+    if (previo !== null) { texto.style.fontSize = `${previo}px`; texto.style.lineHeight = '1.12'; }
+    return;
+  }
   requestAnimationFrame(() => {
-    const texto = carta.querySelector('.carta-texto') as HTMLElement | null;
-    if (!texto || !texto.clientHeight) return; // aún sin layout: nada que medir
+    if (!texto.clientHeight) return; // aún sin layout: nada que medir
     let tam = parseFloat(getComputedStyle(texto).fontSize);
-    let intentos = 14;
+    let intentos = 14, cambiado = false;
     while (texto.scrollHeight > texto.clientHeight + 1 && tam > 6 && intentos-- > 0) {
       tam -= 0.5;
+      cambiado = true;
       texto.style.fontSize = `${tam}px`;
       texto.style.lineHeight = '1.12';
     }
+    tamAjustado.set(clave, cambiado ? tam : null);
   });
 }
 
@@ -187,7 +200,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const arteHtml = fullUrl
     ? ''
     : artUrl
-      ? `<div class="carta-arte carta-arte-ilustrada"><img src="${artUrl}" alt="" draggable="false"></div>`
+      ? `<div class="carta-arte carta-arte-ilustrada"><img src="${cardArtBitmap(artUrl)}" data-arte="${artUrl}" alt="" draggable="false"></div>`
       : `<div class="carta-arte">${arteDeCarta(def)}</div>`;
   carta.innerHTML = `
     <div class="carta-coste${coste > def.coste ? ' coste-recargado' : ''}">${coste}</div>
@@ -204,14 +217,17 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   if (fullUrl) {
     carta.classList.add('carta-full-art');
     const fondo = el('img', 'full-art-fondo');
-    fondo.src = fullUrl;
+    fondo.src = cardArtBitmap(fullUrl);
+    fondo.dataset.arte = fullUrl;
     fondo.alt = '';
     fondo.draggable = false;
-    const particulas = el('canvas', 'full-art-particulas');
-    carta.prepend(fondo, particulas);
+    const capa = el('div', 'full-art-capa');
+    capa.append(fondo);
+    carta.prepend(capa);
     const glow = lookOf(def).glow;
     carta.style.setProperty('--brillo-full', `${glow}bf`);
-    animateCardParticles(particulas, glow);
+    // particles go through the global WebGL particle pass, not a canvas per card
+    fx.fuenteCarta(carta, glow);
   }
   ajustarTexto(carta);
   return carta;

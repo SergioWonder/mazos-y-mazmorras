@@ -129,8 +129,7 @@
   place-items: center;
   align-content: center;
   gap: 1.2rem;
-  background: rgba(5, 8, 5, 0.82);
-  backdrop-filter: blur(3px);
+  background: rgba(5, 8, 5, 0.88);
   animation: aparecer 0.15s ease-out;
 }
 .zoom-fila {

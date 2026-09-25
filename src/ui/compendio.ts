@@ -63,6 +63,10 @@ export function pantallaCompendio(): Promise<void> {
         <div class="compendio-cuerpo"></div>
       </div>`;
     document.body.appendChild(fondo);
+    // full-art particles are drawn by the global WebGL layer: lift it over the compendium
+    const capaParticulas = document.getElementById('fx-canvas');
+    const zPrevio = capaParticulas?.style.zIndex ?? '';
+    if (capaParticulas) capaParticulas.style.zIndex = '90';
     const cuerpo = fondo.querySelector('.compendio-cuerpo') as HTMLElement;
 
     function pintar() {
@@ -116,6 +120,7 @@ export function pantallaCompendio(): Promise<void> {
     });
 
     const cerrar = () => {
+      if (capaParticulas) capaParticulas.style.zIndex = zPrevio;
       fondo.remove();
       window.removeEventListener('keydown', alPulsar);
       resolver();

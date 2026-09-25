@@ -55,18 +55,8 @@ body {
   cursor: default;
 }
 
-/* grano sutil sobre todo */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  opacity: 0.05;
-  background-image: repeating-conic-gradient(#fff 0% 0.0001%, transparent 0.0002% 0.05%);
-  background-size: 7px 7px;
-  mix-blend-mode: overlay;
-}
+/* (el grano de pantalla completa con mix-blend-mode se retiró: forzaba a remezclar
+   toda la pantalla en cada fotograma; en combate lo pinta el shader de fondo) */
 
 /* viñeta */
 body::before {
@@ -106,7 +96,6 @@ body::before {
   cursor: pointer;
   display: grid;
   place-items: center;
-  backdrop-filter: blur(3px);
   transition: transform 0.12s ease, opacity 0.2s ease;
   opacity: 0.55;
 }
@@ -202,8 +191,7 @@ body::before {
   z-index: 100;
   display: grid;
   place-items: center;
-  background: rgba(5, 8, 5, 0.78);
-  backdrop-filter: blur(3px);
+  background: rgba(5, 8, 5, 0.86);
   animation: novedades-aparece 0.25s ease-out;
 }
 .novedades-fondo.novedades-fuera { opacity: 0; transition: opacity 0.3s; }
@@ -265,8 +253,7 @@ body::before {
   z-index: 60;
   display: grid;
   place-items: center;
-  background: rgba(5, 8, 5, 0.78);
-  backdrop-filter: blur(3px);
+  background: rgba(5, 8, 5, 0.86);
   animation: aparecer 0.25s ease-out;
 }
 

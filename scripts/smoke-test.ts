@@ -26,6 +26,7 @@ import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../s
 import { cardScene, SCENE_W, SCENE_H, FULL_H, hasFullArt } from '../src/fx/card-art.ts';
 import { shapeBBox } from '../src/fx/puppet-gpu.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
+import { backgroundTheme } from '../src/fx/background.ts';
 import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
@@ -2071,6 +2072,19 @@ console.log('\n🎨 Ilustraciones SVG de las cartas');
   check(pickSvg(tabla, 'golpe', false) === '/a/golpe.svg', 'la carta usa su SVG si existe');
   check(pickSvg(tabla, 'deseo', true) === '/a/deseo-full.svg' && pickSvg(tabla, 'deseo', false) === null, 'la full art busca en su carpeta');
   check(pickSvg(tabla, 'zarpazo', false) === null, 'sin SVG todavía, sigue con la ilustración anterior');
+}
+
+// ── Fondo del combate y partículas de las cartas en WebGL ────────────────────
+console.log('\n🌙 Fondo y partículas de cartas en la GPU');
+{
+  const hex = /^#[0-9a-f]{6}$/i;
+  const temas = [0, 1, 2].map((c) => backgroundTheme(c));
+  check(temas.every((t) => [t.skyTop, t.skyBottom, t.horizon, t.moon, t.silhouette, t.ground].every((c) => hex.test(c))), 'cada acto tiene cielo, luna, horizonte y suelo');
+  check(new Set(temas.map((t) => t.shape)).size === 3, 'cada acto tiene su silueta de fondo (empalizada, cripta, guarida)');
+  check(backgroundTheme(7).shape === temas[0].shape, 'un capítulo desconocido usa el primer acto');
+  const motas: Particle[] = [];
+  spawnEffect(motas, 'mota', 10, 10, 1, Math.random, '#a8e070');
+  check(motas.length === 1 && motas[0].colour === '#a8e070' && motas[0].vy < 0, 'las motas de las cartas full art suben con el color de su clase');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

@@ -51,40 +51,32 @@
   color: #0e6b5e;
   text-shadow: 0 0 6px rgba(45, 226, 196, 0.5);
 }
-.rareza-especial.carta-rara-brillo::after {
-  background: linear-gradient(
-    115deg,
-    transparent 28%,
-    rgba(120, 255, 230, 0.45) 44%,
-    rgba(230, 200, 255, 0.7) 50%,
-    rgba(120, 255, 230, 0.45) 56%,
-    transparent 72%
-  );
-  background-size: 280% 100%;
-}
 
-/* brillo animado en cartas raras */
-.carta-rara-brillo::after {
+
+/* brillo en cartas raras: una franja de luz cruza la ilustración (solo transform,
+   la compone la GPU sin repintar la carta) */
+.carta-rara-brillo .carta-arte-ilustrada { position: relative; }
+.carta-rara-brillo .carta-arte-ilustrada::after,
+.carta-full-art .full-art-capa::after {
   content: '';
   position: absolute;
-  inset: -3px;
-  border-radius: 10px;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent, rgba(255, 245, 210, 0.5), transparent);
+  transform: translateX(-120%);
+  animation: brillo-arte 3.2s ease-in-out infinite;
+  will-change: transform;
   pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    transparent 30%,
-    rgba(255, 235, 170, 0.55) 46%,
-    rgba(255, 255, 255, 0.75) 50%,
-    rgba(255, 235, 170, 0.55) 54%,
-    transparent 70%
-  );
-  background-size: 280% 100%;
-  mix-blend-mode: overlay;
-  animation: destello-raro 3.2s ease-in-out infinite;
 }
-@keyframes destello-raro {
-  0%, 55% { background-position: 120% 0; }
-  85%, 100% { background-position: -60% 0; }
+.rareza-especial .carta-arte-ilustrada::after,
+.rareza-especial .full-art-capa::after {
+  background: linear-gradient(105deg, transparent, rgba(150, 255, 235, 0.45), rgba(235, 210, 255, 0.55), transparent);
+}
+@keyframes brillo-arte {
+  0%, 55% { transform: translateX(-120%); }
+  85%, 100% { transform: translateX(260%); }
 }
 
 .carta-coste {
@@ -304,10 +296,19 @@
 .carta.texto-xl .carta-arte-ilustrada { height: 40px; }
 
 /* ── Full art: cartas únicas de clase ─────────────────────────────────────── */
-.carta.carta-full-art {
-  background: #120c10;
-  animation: full-art-marco 3.2s ease-in-out infinite;
+.carta.carta-full-art { background: #120c10; }
+.carta-full-art::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 10px;
+  box-shadow: 0 0 22px var(--brillo-full, transparent);
+  opacity: 0.35;
+  animation: full-art-pulso 3.2s ease-in-out infinite;
+  will-change: opacity;
+  pointer-events: none;
 }
+.full-art-capa { position: absolute; inset: 0; overflow: hidden; border-radius: 7px; }
 .full-art-fondo {
   position: absolute;
   inset: 0;
@@ -317,15 +318,8 @@
   border-radius: 7px;
   transform-origin: 50% 42%;
   animation: full-art-respira 10s ease-in-out infinite;
+  will-change: transform;
   pointer-events: none;
-}
-.full-art-particulas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
 }
 .carta-full-art .carta-cabecera,
 .carta-full-art .carta-tipo,
@@ -348,12 +342,10 @@
   max-height: 46%;
   overflow: hidden;
   color: #f6ecd2;
-  background: rgba(12, 8, 10, 0.66);
+  background: rgba(12, 8, 10, 0.74);
   border: 1px solid rgba(255, 240, 210, 0.18);
   border-radius: 6px;
   padding: 3px 5px;
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
 }
 .carta-full-art.carta-druida { --brillo-full: rgba(168, 224, 112, 0.75); }
 .carta-full-art.carta-barbaro { --brillo-full: rgba(255, 154, 80, 0.75); }
@@ -364,10 +356,10 @@
   0%, 100% { transform: scale(1.04) translateY(0); }
   50% { transform: scale(1.1) translateY(-2%); }
 }
-@keyframes full-art-marco {
-  0%, 100% { box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.4), 0 6px 14px rgba(0, 0, 0, 0.55), 0 0 10px var(--brillo-full, transparent); }
-  50% { box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.6), 0 6px 14px rgba(0, 0, 0, 0.55), 0 0 22px var(--brillo-full, transparent); }
+@keyframes full-art-pulso {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .full-art-fondo, .carta.carta-full-art { animation: none; }
+  .full-art-fondo, .carta-full-art::before, .carta-rara-brillo .carta-arte-ilustrada::after, .full-art-capa::after { animation: none; }
 }

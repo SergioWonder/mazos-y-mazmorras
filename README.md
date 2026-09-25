@@ -235,6 +235,14 @@ Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en m�
 - **Partículas** (`fx/particle-gl.ts`): un único dibujo instanciado por fotograma, con el
   brillo calculado en el shader en lugar de `shadowBlur`. La simulación está en
   `fx/particle-sim.ts`.
+- **Fondo del combate** (`fx/background.ts` + shader en `ui/puppet-stage.ts`): cielo, luna
+  con halo que late, horizonte, siluetas de cada acto (empalizada, columnas de la cripta,
+  estalactitas), hogueras que parpadean, suelo y grano, todo en un único pase de la GPU.
+- **Cartas:** las ilustraciones se rasterizan una sola vez a mapa de bits
+  (`ui/card-svgs.ts`), el ajuste de texto se memoriza y los efectos animados (brillo de
+  raras, marco y respiración de las full art) solo usan `transform` y `opacity`, que compone
+  la GPU sin repintar. Las partículas de las full art salen por la capa WebGL global. No hay
+  `mix-blend-mode` ni `backdrop-filter` sobre la escena animada.
 - **Respaldo:** sin WebGL2 se usa automáticamente el renderizado SVG y canvas 2D.
 - **Diagnóstico en el dispositivo:** `?fps` muestra un contador de fotogramas y
   `?render=svg` fuerza el motor antiguo para comparar. El

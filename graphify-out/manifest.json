@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790349621.6415987,
-    "ast_hash": "87db8a1328f4b4e45e98f1ccd2492779",
+    "mtime": 1790352985.7544713,
+    "ast_hash": "efc09549e36c57e3c2e4b132e5e7bcde",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790348457.2210808,
-    "ast_hash": "eb437f5c1c56d1c5efe7eb87ccc440fb",
+    "mtime": 1790352635.2198484,
+    "ast_hash": "c9e08d0b9c93e3c39052e5722d84c4fb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
-    "mtime": 1790341846.262097,
-    "ast_hash": "153ab99f3e4c29582aa1fcb6cd9df7e8",
+    "mtime": 1790352799.874262,
+    "ast_hash": "af231065589f4d89c7cdaea379890e93",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
@@ -110,18 +110,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790348477.3898163,
-    "ast_hash": "d586921a63b854bdb3572b75a674b9e9",
+    "mtime": 1790352830.6671612,
+    "ast_hash": "177cbfc8da79c07c4846eb8f46d03a2e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790343746.0995736,
-    "ast_hash": "f44c4dee9f188774c5f50ecb3f3d76b1",
+    "mtime": 1790352958.8554037,
+    "ast_hash": "bf07f35edcab827d0cc63c6279d851dd",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
-    "mtime": 1787779090.9792528,
-    "ast_hash": "f8773a1d257da08a845b834c5c6aedc8",
+    "mtime": 1790352924.356509,
+    "ast_hash": "a861967254ee98ce51396c144bfe5887",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/evento.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790349621.641327,
-    "ast_hash": "2f6e56c0ea0e1c520164a6f959c03ff5",
+    "mtime": 1790352985.7542295,
+    "ast_hash": "8b633f894151a38fa42570f719f98e73",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790349621.642358,
-    "ast_hash": "c019ada4e411126f4af84c44015f7e8a",
+    "mtime": 1790352985.7533472,
+    "ast_hash": "98c823741941921ef5fec2938d77eb0f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-sim.ts": {
-    "mtime": 1790343579.1543207,
-    "ast_hash": "5497cb985765a59bfe6e28ca6f5b7f66",
+    "mtime": 1790352655.7774274,
+    "ast_hash": "41258594cb54c3ba1295c3168abf535c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet-gpu.ts": {
@@ -305,8 +305,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-stage.ts": {
-    "mtime": 1790346321.647334,
-    "ast_hash": "b4596add26e168e1247526c2bebcf211",
+    "mtime": 1790352958.8549483,
+    "ast_hash": "18d0e27ded841799b8fcf3c21783807c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/sw-avisos.js": {
@@ -329,14 +329,9 @@
     "ast_hash": "a3cdf562d54b222bfd9347f09d429384",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/ui/card-particles.ts": {
-    "mtime": 1790346412.7174006,
-    "ast_hash": "929568c0c1e418d31fc0461b303a661a",
-    "semantic_hash": ""
-  },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-svgs.ts": {
-    "mtime": 1790348466.197177,
-    "ast_hash": "c33fad58bb49babf353eee544e1a13b5",
+    "mtime": 1790352816.706674,
+    "ast_hash": "ae27e65a1a84a1239a72c9621f37efa8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/docs/arte-cartas.md": {
@@ -497,6 +492,146 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/zarpazo.svg": {
     "mtime": 1790349540.421381,
     "ast_hash": "8e6c70458da31868f06cc6a1d7a33f67",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/background.ts": {
+    "mtime": 1790352655.7563734,
+    "ast_hash": "74ed3a83acfab5174cbbb3a57a44b5c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/corte-sangrante.svg": {
+    "mtime": 1790351747.5729117,
+    "ast_hash": "9dfe1f768e924e942eff7d95c1d39c9d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/desgarro.svg": {
+    "mtime": 1790351747.5762882,
+    "ast_hash": "9d85e33cbfca971c6cb944afe8323515",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/doble-tajo.svg": {
+    "mtime": 1790351747.574635,
+    "ast_hash": "344a686acd3d360af2568f39ef2e7d42",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/festin-carmesi.svg": {
+    "mtime": 1790351747.5923119,
+    "ast_hash": "cf8f1bef4b06c779151d26f6e79a5440",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/full/furia-indomita.svg": {
+    "mtime": 1790351747.59641,
+    "ast_hash": "23639880ea4505147a6ce0076c7b2718",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-agil.svg": {
+    "mtime": 1790351747.5617113,
+    "ast_hash": "d508ff083d0bdd1088fb4fb379f03e79",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-creciente.svg": {
+    "mtime": 1790351747.5602543,
+    "ast_hash": "13535964d3fd8b93bda944d5e6c0a995",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-indomita.svg": {
+    "mtime": 1790351747.5939615,
+    "ast_hash": "cfdfb6f438a612ae50fcf75a2edda91c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-primaria.svg": {
+    "mtime": 1790351747.543621,
+    "ast_hash": "00c4a53b34ad330ef840e02861ce7b31",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/furia-sanguinaria.svg": {
+    "mtime": 1790351747.579866,
+    "ast_hash": "51d94e27d3d464452992bc6fe5c01077",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/golpe-demoledor.svg": {
+    "mtime": 1790351747.5635717,
+    "ast_hash": "37a232d70d19862f7f8be82ab0c9a11d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/golpe-imprudente.svg": {
+    "mtime": 1790351747.5480301,
+    "ast_hash": "1a5872c1d22f762da9ff7987aee54831",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/golpe-pomo.svg": {
+    "mtime": 1790351747.5587482,
+    "ast_hash": "5857d87cd8b1501b0611d58bb621a0cd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/grito-intimidante.svg": {
+    "mtime": 1790351747.5571098,
+    "ast_hash": "87fdae88ea1f7ed7e54101bfdb63f6cc",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/hacha-carnicera.svg": {
+    "mtime": 1790351747.5779734,
+    "ast_hash": "36f0feea991424c5c8325cf31111eeb0",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/postura-firme.svg": {
+    "mtime": 1790351747.5554538,
+    "ast_hash": "afc6a25f3197faf8f673b151d5fb51d8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/reabrir-heridas.svg": {
+    "mtime": 1790351747.5906866,
+    "ast_hash": "f981ffd72d16188700e8d6047c3aaa64",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/reflejos-acero.svg": {
+    "mtime": 1790351747.5651977,
+    "ast_hash": "38957b98626e7ae7863682546899fb27",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/sangre-caliente.svg": {
+    "mtime": 1790351747.5667982,
+    "ast_hash": "c89a3207979c69be8aefecb4c37b8104",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/sed-de-sangre.svg": {
+    "mtime": 1790351747.5817091,
+    "ast_hash": "026dab78cd7e33c02ff79190aa65fd34",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/senda-arbol-mundo.svg": {
+    "mtime": 1790351747.5870323,
+    "ast_hash": "b9f1a1402b5f6cc1fd9c4c69fdab9b0b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/senda-berserker.svg": {
+    "mtime": 1790351747.5836496,
+    "ast_hash": "5001a442de67a9f322bcfc94b3ce0acb",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/senda-corazon-salvaje.svg": {
+    "mtime": 1790351747.585406,
+    "ast_hash": "dca8a1b5d6d6c0ac007215b5036db7bd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/senda-fanatico.svg": {
+    "mtime": 1790351747.5888145,
+    "ast_hash": "65b700f45a08202fd653878d5947e391",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/tajo-brutal.svg": {
+    "mtime": 1790351747.5518172,
+    "ast_hash": "1d9e95333cbee950006b7b07b33dd6fe",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/torbellino.svg": {
+    "mtime": 1790351747.568249,
+    "ast_hash": "416d32a70f10250d79be52235c106978",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/voto-sangre.svg": {
+    "mtime": 1790351747.569888,
+    "ast_hash": "4c996ab25d650a49e21b8b265a46544f",
     "semantic_hash": ""
   }
 }

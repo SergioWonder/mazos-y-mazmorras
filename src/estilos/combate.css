@@ -601,3 +601,7 @@ body.arrastre-activo { cursor: grabbing; }
 .dado3d-num.sin-gl { font-size: 3.4rem; }
 
 .int-dormido { color: #b9c4ff; font-size: 1.35rem; }
+
+/* con WebGL el cielo, la luna y las siluetas los pinta el shader de fondo */
+.escenario.fondo-webgl .cielo,
+.escenario.fondo-webgl .silueta-fondo { display: none; }

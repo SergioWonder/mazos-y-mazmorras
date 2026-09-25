@@ -51,6 +51,8 @@ class MotorParticulas {
   private ultimoT = 0;
   private ambienteActivo = false;
   private acumulador = 0;
+  /** Full-art cards emitting motes (drawn in this same WebGL pass). */
+  private fuentes = new Set<{ el: Element; colour: string; acc: number; seen: boolean; born: number }>();
 
   iniciar(canvas: HTMLCanvasElement) {
     const svg = new URLSearchParams(location.search).get('render') === 'svg';
@@ -69,6 +71,28 @@ class MotorParticulas {
 
   emitir(nombre: string, x: number, y: number, escala = 1) {
     spawnEffect(this.particulas, nombre, x, y, escala);
+  }
+
+  /** A full-art card sheds motes and twinkles in its colour while it is on screen. */
+  fuenteCarta(el: Element, colour: string) {
+    this.fuentes.add({ el, colour, acc: Math.random(), seen: false, born: performance.now() });
+  }
+
+  private emitirFuentes(dt: number, t: number) {
+    for (const f of this.fuentes) {
+      if (!f.el.isConnected) { if (f.seen || t - f.born > 3000) this.fuentes.delete(f); continue; }
+      f.seen = true;
+      const r = f.el.getBoundingClientRect();
+      if (r.width < 2 || r.bottom < 0 || r.top > window.innerHeight) continue;
+      f.acc += dt * 12;
+      while (f.acc >= 1) {
+        f.acc -= 1;
+        const twinkle = Math.random() < 0.25;
+        spawnEffect(this.particulas, twinkle ? 'destelloCarta' : 'mota',
+          r.left + Math.random() * r.width, twinkle ? r.top + Math.random() * r.height : r.top + r.height * (0.55 + Math.random() * 0.45),
+          1, Math.random, twinkle ? undefined : f.colour);
+      }
+    }
   }
 
   /** Estallido a pantalla completa para cartas raras. */
@@ -109,6 +133,7 @@ class MotorParticulas {
         spawnAmbient(this.particulas, this.estiloAmbiente, w, h);
       }
     }
+    if (this.fuentes.size) this.emitirFuentes(dt, t);
     stepParticles(this.particulas, dt);
     // mobile: the pixel ratio is capped, particles are small and soft anyway
     this.renderer?.render(this.particulas, w, h, Math.min(window.devicePixelRatio || 1, 2));

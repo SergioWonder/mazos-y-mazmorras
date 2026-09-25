@@ -545,7 +545,6 @@ body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
   display: grid;
   place-items: center;
   background: rgba(5, 8, 5, 0.8);
-  backdrop-filter: blur(3px);
 }
 .exportar {
   width: min(92vw, 560px);

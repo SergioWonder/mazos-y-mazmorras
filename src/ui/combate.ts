@@ -13,6 +13,7 @@ import { defDe } from '../core/cartas.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { PuppetSprite, LUZ_LUNA } from './puppet-sprite.ts';
 import { PuppetStage } from './puppet-stage.ts';
+import { backgroundTheme } from '../fx/background.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
 
@@ -78,6 +79,8 @@ export function pantallaCombate(
     // WebGL stage between the sky and the UI (null: SVG fallback without WebGL2)
     const escenarioEl = $('.escenario');
     const stage = PuppetStage.create(escenarioEl, { before: escenarioEl.querySelector('.barra-superior') });
+    // the sky, moon and silhouettes move to the GPU too (the CSS layers stay as fallback)
+    if (stage?.setBackdrop(backgroundTheme(run.capitulo))) escenarioEl.classList.add('fondo-webgl');
     const heroSprite = new HeroSprite(run.clase, stage);
     // druid forms get their own backlit puppet, created on first use
     const formSprites = new Map<FormId, HeroSprite>();
