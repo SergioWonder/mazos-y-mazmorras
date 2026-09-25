@@ -197,21 +197,14 @@ muestra todos los héroes, formas, invocaciones y enemigos animados.
 
 ### Arte de las cartas
 
-**En transición a ilustraciones dibujadas a mano:** las cartas que ya tienen su SVG en
-`src/arte/cartas/<id>.svg` (y `full/<id>.svg` para las full art) lo usan. La guía de
-estilo está en `docs/arte-cartas.md`. Se van completando clase por clase; las que aún
-no lo tienen siguen con la escena generada que se describe a continuación.
-
-Cada carta tiene una **ilustración propia** en el mismo estilo que los monstruos
-(`fx/card-art.ts`). Es una escena compuesta con una biblioteca de unos 60 motivos
-ilustrados (armas, llamas, runas, lunas, calaveras, tentáculos…) y criaturas del
-bestiario, descrita con una línea compacta por carta. `ui/card-art-render.ts` la pinta
-una sola vez: un fondo 2D con el color de la clase, un encuadre según el tipo (ataque,
-habilidad o poder), grano de papel y halo, y la escena encima con el renderizador WebGL.
-El resultado se guarda como imagen. Las **cartas únicas de clase**, junto con *Seducir* y *Deseo*, son **full art**: la
-ilustración cubre toda la carta con una composición vertical, respira con una animación
-lenta, el marco late con el color de la clase y tiene partículas vivas
-(`ui/card-particles.ts`). Sin WebGL2 se mantienen los emojis.
+Cada carta tiene una **ilustración SVG dibujada a mano** en el mismo estilo que los
+monstruos: `src/arte/cartas/<id>.svg` (280×160), con el héroe como silueta a contraluz y
+los monstruos del bestiario como objetivo cuando encaja. La guía de estilo está en
+`docs/arte-cartas.md`. `ui/card-svgs.ts` las carga y las rasteriza una sola vez a imagen
+para que la mano no las vuelva a pintar. Las **cartas únicas de clase**, junto con
+*Seducir* y *Deseo*, son **full art** (`full/<id>.svg`, vertical): la ilustración cubre
+toda la carta, el marco late con su color (`ui/card-looks.ts`) y suelta partículas por
+el sistema WebGL global. Si una carta no tuviera dibujo, se muestra su emoji.
 
 ### Actualizaciones y avisos
 

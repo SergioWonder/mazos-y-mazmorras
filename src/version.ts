@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.6';
+export const VERSION = '3.9.7';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.7',
+    fecha: '2026-09-25',
+    cambios: [
+      '🗡️ Ilustraciones dibujadas a mano para todas las cartas del pícaro, con Danza Mortal a pantalla completa.',
+      '🎨 Ya están dibujadas a mano las 152 cartas del juego.',
+    ],
+  },
   {
     version: '3.9.6',
     fecha: '2026-09-25',

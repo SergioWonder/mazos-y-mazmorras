@@ -1,9 +1,8 @@
 import type { CartaDef } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
-import { cardArtUrl } from './card-art-render.ts';
 import { cardSvgUrl, cardArtBitmap } from './card-svgs.ts';
 import { fx } from '../fx/particulas.ts';
-import { hasFullArt, lookOf } from '../fx/card-art.ts';
+import { hasFullArt, lookOf } from './card-looks.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
   ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder',
@@ -194,9 +193,9 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const retencion = def.retener ? ' · <strong>Retener</strong>' : '';
 
   // illustrated art (full-art portrait for the unique class cards); emoji fallback
-  // hand-drawn SVG first; cards not drawn yet keep the generated illustration
-  const fullUrl = hasFullArt(def) ? cardSvgUrl(def.id, true) ?? cardArtUrl(def, true) : null;
-  const artUrl = fullUrl ? null : cardSvgUrl(def.id) ?? cardArtUrl(def);
+  // hand-drawn SVG illustration (emoji only if a card has no drawing)
+  const fullUrl = hasFullArt(def) ? cardSvgUrl(def.id, true) : null;
+  const artUrl = fullUrl ? null : cardSvgUrl(def.id);
   const arteHtml = fullUrl
     ? ''
     : artUrl
