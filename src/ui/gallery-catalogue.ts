@@ -11,6 +11,7 @@ export interface GalleryCard {
   id: string;
   name: string;
   elite?: boolean;
+  boss?: boolean;
   /** Relative size, as the enemy's `escala` in combat. */
   scale: number;
 }
@@ -54,11 +55,14 @@ export function galleryCatalogue(): GallerySection[] {
     const add = (d: EnemigoDef, elite: boolean) => {
       if (seen.has(d.id) || !ENEMY_RIGS[d.id]) return;
       seen.add(d.id);
-      cards.push({ kind: 'enemy', id: d.id, name: d.nombre, elite, scale: d.escala ?? 1 });
+      // bosses are huge in combat; the gallery shows them a notch smaller
+      cards.push({ kind: 'enemy', id: d.id, name: d.nombre, elite, boss: !!d.esJefe, scale: d.esJefe ? Math.min(1.6, d.escala ?? 1) : d.escala ?? 1 });
     };
     cap.normales.flat().forEach((d) => add(d, false));
     (BOSS_SUMMONS[`${act}-${esc}`] ?? []).forEach((d) => add(d, false));
     cap.elites.flat().forEach((d) => add(d, true));
+    // the boss, and whatever it unleashes on death (Malachar → Abaddon)
+    cap.jefe.forEach((d) => { add(d, false); if (d.invocaAlMorir) add(d.invocaAlMorir, false); });
     sections.push({ title: cap.nombre, subtitle: cap.subtitulo, act, cards });
   }));
   return sections;

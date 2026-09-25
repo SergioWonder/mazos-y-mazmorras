@@ -95,7 +95,8 @@ void main() {
   vec3 col;
   float a;
   if (uMode == 3) {
-    float g = exp(-max(d, 0.0) / uGlow);
+    // fade out completely before the quad edge so no box shows around the glow
+    float g = exp(-max(d, 0.0) / uGlow) * (1.0 - smoothstep(uGlow * 2.4, uGlow * 3.4, d));
     a = (uColour.a < 0.0 ? -uColour.a : uColour.a) * g;
     col = uColour.a < 0.0 ? fill.rgb : uColour.rgb;
   } else if (uMode == 2) {
@@ -375,7 +376,7 @@ export class PuppetStage {
 
     if (v.aura) {
       const c = parseColour(v.aura);
-      pass(3, [c[0], c[1], c[2], 0.75], { glow: 3.5, margin: 12, skip: FLAG.ink });
+      pass(3, [c[0], c[1], c[2], 0.75], { glow: 3.5, margin: 13, skip: FLAG.ink });
     }
     if (v.echoes) {
       const e = [0.61, 0.7, 1, 0.42];
@@ -384,7 +385,7 @@ export class PuppetStage {
     }
     if (v.style === 'silhouette') {
       const rimPx = Math.max(1.1, rect.w / this.dpr / 75) * this.dpr;
-      pass(3, [accent[0], accent[1], accent[2], 0.55], { glow: 3.2, margin: 10 });
+      pass(3, [accent[0], accent[1], accent[2], 0.55], { glow: 3.2, margin: 12 });
       pass(2, [accent[0], accent[1], accent[2], 1], { offset: [rimPx, -rimPx] });
       pass(1, [0, 0, 0, 0]);
       pass(3, [0, 0, 0, -0.6], { only: FLAG.emissive | FLAG.eye, glow: 1.1, margin: 5, additive: true });

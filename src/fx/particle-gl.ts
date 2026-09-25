@@ -148,7 +148,7 @@ export class ParticleRendererGL {
     list.forEach((p, i) => {
       const o = i * FLOATS, c = this.colour(p.colour);
       d[o] = p.x; d[o + 1] = p.y; d[o + 2] = p.size; d[o + 3] = p.angle;
-      d[o + 4] = c[0]; d[o + 5] = c[1]; d[o + 6] = c[2]; d[o + 7] = particleAlpha(p);
+      d[o + 4] = c[0]; d[o + 5] = c[1]; d[o + 6] = c[2]; d[o + 7] = particleAlpha(p) * c[3];
       d[o + 8] = SHAPE_CODE[p.shape]; d[o + 9] = p.glow ? 1 : 0;
     });
     gl.useProgram(this.program);

@@ -10,10 +10,11 @@
 // restarting the animation. All sprites share one requestAnimationFrame loop.
 
 import {
-  EMISSIVE, EYES, puppetPose, puppetBones, puppetEffects, activeAction, puppetImpact, ACTION_DURATION,
-  type Action, type ActionType, type BoneId, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
+  EMISSIVE, EYES, puppetPose, puppetBones, puppetEffects, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
+  type Action, type ActionType, type BoneId, type Burst, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
 } from '../fx/puppet.ts';
-import { lighten, shadowOf } from '../fx/puppet-gpu.ts';
+import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
+import { fx as particles } from '../fx/particulas.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -254,11 +255,19 @@ export class PuppetSprite {
   private readonly stage: PuppetStage | null;
   private action: Action | null = null;
   private gone = false;
+  private readonly mirrored: boolean;
+  // particle emission (bosses)
+  private lastT = -1;
+  private intensity = 1;
+  private readonly emitAcc: number[];
+  private pending: { at: number; burst: Burst }[] = [];
 
   constructor(rig: PuppetRig, opts: PuppetOptions) {
     this.rig = rig;
     this.accent = rig.accent;
     this.stage = opts.stage ?? null;
+    this.mirrored = !!opts.mirrored;
+    this.emitAcc = (rig.emitters ?? []).map(() => Math.random());
     if (this.stage) {
       const el = document.createElement('div');
       el.className = 'sprite-marioneta';
@@ -269,6 +278,7 @@ export class PuppetSprite {
       };
       this.stage.add(this.gpu);
       this.element = el;
+      this.gpu.aura = rig.aura ?? null;
     } else {
       this.svg = new SvgView(rig, opts);
       this.element = this.svg.element;
@@ -282,7 +292,15 @@ export class PuppetSprite {
   play(type: ActionType): number {
     this.gone = false;
     this.action = { type, t0: clock };
-    return type === 'attack' ? ACTION_DURATION.attack * puppetImpact(this.rig) * 1000 : 0;
+    const impact = type === 'attack' ? ACTION_DURATION.attack * puppetImpact(this.rig) : 0;
+    // attack bursts go off with the blow, the rest right away
+    for (const burst of this.rig.bursts?.[type] ?? []) this.pending.push({ at: clock + impact, burst });
+    return impact * 1000;
+  }
+
+  /** Multiplies the particle emitters (boss phases: enraged, revived…). */
+  setIntensity(k: number) {
+    this.intensity = k;
   }
 
   /** Back to idle and visible (e.g. after a death in the gallery). */
@@ -293,7 +311,7 @@ export class PuppetSprite {
 
   /** Coloured glow around the whole figure (Fury, a druid form, ephemeral pacts). */
   setAura(colour: string | null) {
-    if (this.gpu) this.gpu.aura = colour;
+    if (this.gpu) this.gpu.aura = colour ?? this.rig.aura ?? null;
   }
 
   /** Mirror Image: ghostly copies either side of the figure. */
@@ -321,5 +339,37 @@ export class PuppetSprite {
       this.gpu.visible = this.visible;
       this.gpu.frame = { pose: p, fx, bones, geo, gone: this.gone };
     } else this.svg!.render(p, fx, bones, geo, this.gone);
+    this.emit(t, bones);
+  }
+
+  /** Continuous emitters and pending bursts, converted to screen coordinates. */
+  private emit(t: number, bones: Record<BoneId, Matrix>) {
+    const dt = this.lastT < 0 ? 0 : Math.min(0.1, t - this.lastT);
+    this.lastT = t;
+    const emitters = this.rig.emitters ?? [];
+    if (!emitters.length && !this.pending.length) return;
+    const r = this.element.getBoundingClientRect();
+    if (r.width < 2) return;
+    const M = spriteMatrix({ x: r.left, y: r.top, w: r.width }, this.mirrored, this.rig.art ?? 1);
+    const toScreen = (e: { bone: BoneId; at: [number, number] }, spread = 0) => {
+      const [x, y] = emitterWorld(this.rig, bones, e);
+      return applyMatrix(M, x + (Math.random() - 0.5) * spread * 2, y + (Math.random() - 0.5) * spread * 2);
+    };
+    if (!this.gone && this.action?.type !== 'death') {
+      emitters.forEach((e, i) => {
+        this.emitAcc[i] += e.rate * this.intensity * dt;
+        while (this.emitAcc[i] >= 1) {
+          this.emitAcc[i] -= 1;
+          const [sx, sy] = toScreen(e, e.spread);
+          particles.emitir(e.effect, sx, sy);
+        }
+      });
+    }
+    this.pending = this.pending.filter(({ at, burst }) => {
+      if (t < at) return true;
+      const [sx, sy] = toScreen(burst);
+      particles.emitir(burst.effect, sx, sy, burst.scale ?? 1);
+      return false;
+    });
   }
 }

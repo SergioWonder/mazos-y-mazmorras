@@ -51,6 +51,20 @@ export const EFFECTS: Record<string, EffectPreset> = {
   condena: { count: 26, colours: ['#7a3fc7', '#2a1040', '#cfa8ff'], speed: [1, 4], life: [0.5, 1.1], size: [2, 6], shape: 'circulo', gravity: -0.03, glow: true },
   oscuridad: { count: 30, colours: ['#2a1040', '#4a2a6a', '#8d8db5'], speed: [0.5, 3], life: [0.6, 1.3], size: [3, 7], shape: 'circulo', gravity: -0.02 },
   agathys: { count: 24, colours: ['#9fd8ff', '#b46bff', '#e8f6ff'], speed: [2, 7], life: [0.35, 0.8], size: [2, 5], shape: 'chispa', gravity: 0.04, glow: true },
+  // boss emitters: one particle per spawn, fired continuously from a bone
+  ascua: { count: 1, colours: ['#ff8c3b', '#ffb347', '#ffd166', '#ff5a1a'], speed: [0.3, 1.3], life: [0.9, 1.8], size: [1, 2.4], shape: 'circulo', gravity: -0.02, direction: [-2.3, -0.8], glow: true },
+  humo: { count: 1, colours: ['rgba(38,32,30,0.55)', 'rgba(58,50,46,0.5)', 'rgba(74,66,60,0.45)'], speed: [0.2, 0.6], life: [1.3, 2.4], size: [3, 7], shape: 'circulo', gravity: -0.012, direction: [-2.1, -1.0] },
+  alma: { count: 1, colours: ['#9fe8ff', '#7affc8', '#d8fff0'], speed: [0.2, 0.8], life: [1.1, 2.1], size: [1.4, 3], shape: 'circulo', gravity: -0.03, direction: [-2.1, -1.0], glow: true },
+  arcana: { count: 1, colours: ['#c98bff', '#6bd8ff', '#ff6bd8', '#ffffff'], speed: [0.3, 1.5], life: [0.6, 1.3], size: [1, 2.4], shape: 'estrella', gravity: -0.006, glow: true },
+  llama: { count: 1, colours: ['#ff6a1a', '#ffb347', '#fff0a0'], speed: [0.4, 1.5], life: [0.3, 0.7], size: [1.6, 3.6], shape: 'circulo', gravity: -0.09, direction: [-2.1, -1.0], glow: true },
+  gota: { count: 1, colours: ['#ff7a1a', '#ffb347'], speed: [0, 0.3], life: [0.8, 1.3], size: [1.2, 2.2], shape: 'circulo', gravity: 0.12, glow: true },
+  polvo: { count: 1, colours: ['rgba(138,122,100,0.45)', 'rgba(110,96,80,0.45)'], speed: [0.3, 1.2], life: [0.8, 1.5], size: [2, 4.5], shape: 'circulo', gravity: -0.005, direction: [-2.9, -0.2] },
+  escarcha: { count: 1, colours: ['#dff4ff', '#9fd8ff', '#7affc8'], speed: [0.2, 0.8], life: [0.6, 1.2], size: [1, 2], shape: 'estrella', gravity: 0.01, glow: true },
+  ojo: { count: 1, colours: ['#ff5ad8', '#ffd75a', '#ffffff'], speed: [0.2, 0.9], life: [0.4, 0.9], size: [1, 2], shape: 'estrella', gravity: -0.01, glow: true },
+  vacio: { count: 1, colours: ['rgba(42,16,64,0.7)', '#6c2fb5', '#b46bff'], speed: [0.3, 1], life: [0.8, 1.6], size: [1.5, 3.5], shape: 'circulo', gravity: -0.015, direction: [-2.4, -0.7], glow: true },
+  // dragon breath: a directed stream towards the hero (enemies face left)
+  alientoChorro: { count: 90, colours: ['#ff3b00', '#ff7a18', '#ffb347', '#fff3b8'], speed: [5, 13], life: [0.4, 0.9], size: [3, 7], shape: 'chispa', gravity: -0.03, direction: [Math.PI - 0.3, Math.PI + 0.3], glow: true },
+  rayo: { count: 14, colours: ['#ff5ad8', '#ffd75a', '#6bd8ff', '#ffffff'], speed: [3, 9], life: [0.25, 0.5], size: [1.5, 3], shape: 'chispa', gravity: 0, direction: [Math.PI - 0.5, Math.PI + 0.5], glow: true },
 };
 
 /** Ambient atmospheres: particles drifting up behind each scenario. */

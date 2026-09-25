@@ -1,9 +1,10 @@
-// Illustrated puppets for normal/elite enemies and invocations. Rigs are built
+// Illustrated puppets for enemies (normal, elite and bosses) and invocations. Rigs are built
 // from parametric archetypes (biped, quadruped, floating, blob) so the whole
 // bestiary shares proportions, pivots and animations; each enemy only picks its
-// build, head, weapon, clothing and palette. Bosses are not covered yet.
+// build, head, weapon, clothing and palette. Bosses add bespoke pieces,
+// particle emitters and per-action bursts on top.
 
-import { C, E, P, L, type BoneId, type PartialPose, type PuppetRig, type Shape } from './puppet.ts';
+import { C, E, P, L, type BoneId, type Burst, type Emitter, type PartialPose, type PuppetRig, type Shape } from './puppet.ts';
 
 type Pt = [number, number];
 
@@ -751,6 +752,227 @@ function elemental(id: string, kind: 'fire' | 'water' | 'wind', palette: Record<
   });
 }
 
+// ── Bosses ───────────────────────────────────────────────────────────────────
+interface BossExtras {
+  back?: Shape[];
+  front?: Shape[];
+  emitters: Emitter[];
+  bursts: Partial<Record<'attack' | 'spell' | 'hit' | 'death', Burst[]>>;
+  aura?: string;
+  flap?: number;
+  flapBones?: 'arms' | 'wings';
+  hover?: number;
+  art?: number;
+}
+function boss(base: PuppetRig, x: BossExtras): PuppetRig {
+  return {
+    ...base,
+    shapes: [...(x.back ?? []), ...base.shapes, ...(x.front ?? [])],
+    // bosses are meant to be busy: every emitter runs 40% hotter than written
+    emitters: x.emitters.map((e) => ({ ...e, rate: e.rate * 1.4 })), bursts: x.bursts, aura: x.aura,
+    flap: x.flap ?? base.flap, flapBones: x.flapBones ?? base.flapBones, hover: x.hover ?? base.hover, art: x.art ?? base.art,
+  };
+}
+const card = (bone: BoneId, x: number, y: number): Shape[] => [
+  P(bone, 'card', [[x - 3, y - 4.5], [x + 3, y - 4.5], [x + 3, y + 4.5], [x - 3, y + 4.5]]),
+  L(bone, 'ink', x - 2, y - 3.5, x + 2, y - 3.5, 0.4), C(bone, 'magic', x, y, 1.1),
+];
+const candle = (bone: BoneId, x: number, y: number): Shape[] => [
+  L(bone, 'bone', x, y, x, y + 8, 2.4), P(bone, 'fire', [[x - 1.3, y], [x, y - 4.2], [x + 1.3, y]]),
+];
+
+function beholder(id: string, palette: Record<string, string>): PuppetRig {
+  const stalk = (bone: BoneId, [x1, y1]: Pt, [x2, y2]: Pt): Shape[] => {
+    const mx = (x1 + x2) / 2 + (y2 - y1) * 0.15, my = (y1 + y2) / 2 - (x2 - x1) * 0.15;
+    return [L(bone, 'flesh', x1, y1, mx, my, 2.6), L(bone, 'flesh', mx, my, x2, y2, 2.2), C(bone, 'sclera', x2, y2, 3.2), C(bone, 'eyeGlow', x2 + 0.8, y2, 1.4)];
+  };
+  const tips: [BoneId, Pt][] = [['head', [46, 40]], ['head', [60, 36]], ['head', [76, 40]], ['armB', [28, 56]], ['armB', [24, 80]], ['armF', [96, 54]], ['armF', [100, 80]], ['cape', [34, 44]], ['cape', [22, 66]]];
+  const roots: Pt[] = [[54, 64], [60, 62], [66, 64], [44, 74], [42, 84], [78, 72], [80, 82], [48, 66], [44, 70]];
+  return finish(id, {
+    accent: palette.magic, style: 'magic', focus: [70, 80], focusBone: 'torso', hover: 4, art: 1.25, flap: 8, flapBones: 'arms',
+    palette,
+    pivots: { torso: [60, 84], head: [60, 64], armB: [44, 76], armF: [78, 76], cape: [48, 66] },
+    rest: {},
+    windup: { rootX: -5, torso: -12, head: -8 },
+    strike: { rootX: 8, torso: 10, head: 6 },
+    shapes: [
+      ...tips.flatMap(([bone, tip], i) => ['cape', 'armB'].includes(bone) ? stalk(bone, roots[i], tip) : []),
+      C('torso', 'flesh', 60, 84, 22),
+      L('torso', 'ink', 42, 76, 50, 66, 0.7), L('torso', 'ink', 40, 90, 46, 100, 0.7), L('torso', 'ink', 52, 64, 62, 62, 0.6), L('torso', 'ink', 72, 100, 78, 94, 0.6),
+      C('torso', 'ink', 46, 84, 0.9), C('torso', 'ink', 52, 70, 0.8), C('torso', 'ink', 74, 66, 0.8),
+      P('torso', 'socket', [[45, 95], [76, 93], [72, 104], [58, 107], [48, 104]]),
+      ...[48, 54, 60, 66, 72].map((x): Shape => P('torso', 'teeth', [[x, 94.5 - (x - 45) * 0.06], [x + 2, 99], [x + 4, 94.3 - (x - 45) * 0.06]])),
+      ...[51, 57, 63, 69].map((x): Shape => P('torso', 'teeth', [[x, 105], [x + 2, 100.5], [x + 4, 105]])),
+      E('torso', 'sclera', 68, 79, 11, 10),
+      C('torso', 'magic', 70, 79, 5.6), C('torso', 'ink', 71, 79, 2.4),
+      P('torso', 'flesh', [[55, 72], [81, 69], [79, 74], [58, 76]]), L('torso', 'ink', 56, 74.5, 80, 71.5, 0.8),
+      ...tips.flatMap(([bone, tip], i) => ['head', 'armF'].includes(bone) ? stalk(bone, roots[i], tip) : []),
+    ],
+  });
+}
+
+const BOSSES: Record<string, PuppetRig> = {
+  'jefe-ogro': boss(biped('jefe-ogro', {
+    build: 'hulking', head: 'ogre', weapon: 'club', cloak: true, loincloth: true, arms: 'skin', hunch: 4,
+    palette: { skin: '#76784a', body: '#76784a', legs: '#4a3a28', cloth: '#5a3020', cloak: '#4a3a2a', band: '#a02a1a', eyeGlow: '#ff8a3a', bone: '#d8ccaa' },
+  }), {
+    art: 1.4,
+    front: [
+      P('head', 'bone', [[52, 58], [53, 49], [56, 56], [59, 47], [61, 55], [64, 46], [66, 55], [69, 48], [70, 58]]),
+      L('head', 'band', 63, 62.5, 70, 63.2, 1.3), L('head', 'band', 62, 66, 68, 66.6, 1.1),
+      C('torso', 'bone', 53, 101, 2.6), C('torso', 'bone', 60, 102, 2.8), C('torso', 'bone', 67, 101, 2.5),
+      C('torso', 'socket', 53.8, 100.6, 0.8), C('torso', 'socket', 60.9, 101.5, 0.9), C('torso', 'socket', 67.8, 100.6, 0.8),
+      P('weapon', 'metal', [[71, 70], [66, 68], [71, 74]]), P('weapon', 'metal', [[80, 70], [85, 67], [80, 74]]), P('weapon', 'metal', [[74, 65], [75.5, 58], [77, 65]]),
+    ],
+    emitters: [
+      { bone: 'root', at: [58, 127], effect: 'polvo', rate: 3, spread: 14 },
+      { bone: 'head', at: [61, 50], effect: 'ascua', rate: 2.5, spread: 6 },
+      { bone: 'torso', at: [50, 72], effect: 'humo', rate: 1.2, spread: 8 },
+    ],
+    bursts: {
+      attack: [{ bone: 'weapon', at: [75.5, 73], effect: 'impacto', scale: 1.2 }],
+      spell: [{ bone: 'head', at: [61, 60], effect: 'furia' }],
+      death: [{ bone: 'torso', at: [60, 90], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [60, 90], effect: 'impacto' }],
+    },
+  }),
+  'embaucador-arcano': boss(biped('embaucador-arcano', {
+    build: 'thin', head: 'mask', weapon: 'dagger', offhand: 'dagger', cloak: true, belt: true, hunch: 4,
+    palette: { mask: '#2a1e3a', body: '#3a2450', legs: '#2a1e3a', arms: '#3a2450', cloak: '#4a1e5a', band: '#c9a040', skin: '#c8b0a0', eyeGlow: '#e8b8ff', magic: '#c98bff', card: '#e8dcc0' },
+  }), {
+    art: 1.45, flap: 14, flapBones: 'wings', aura: '#9a5ae0',
+    back: [...card('wingB', 40, 60), ...card('wingB', 32, 80)],
+    front: [
+      P('torso', 'band', [[50, 77], [53, 72.5], [56, 77], [59, 71.5], [62, 77], [65, 72.5], [68, 77], [66, 80.5], [52, 80.5]]),
+      ...card('wingF', 84, 58), ...card('wingF', 90, 82),
+    ],
+    emitters: [
+      { bone: 'wingB', at: [40, 60], effect: 'arcana', rate: 2.5 },
+      { bone: 'wingF', at: [84, 58], effect: 'arcana', rate: 2.5 },
+      { bone: 'torso', at: [58, 88], effect: 'arcana', rate: 3, spread: 16 },
+    ],
+    bursts: {
+      attack: [{ bone: 'weapon', at: [68, 88], effect: 'abisal' }],
+      spell: [{ bone: 'torso', at: [58, 86], effect: 'abisal', scale: 1.2 }, { bone: 'torso', at: [58, 86], effect: 'arcana', scale: 25 }],
+      death: [{ bone: 'torso', at: [58, 88], effect: 'abisal', scale: 2 }, { bone: 'torso', at: [58, 88], effect: 'arcana', scale: 40 }],
+    },
+  }),
+  'senor-cripta': boss(biped('senor-cripta', {
+    build: 'normal', head: 'skull', weapon: 'skullStaff', offhand: 'orb', robe: true, cloak: true, arms: 'bone',
+    palette: { bone: '#d8d0b8', robe: '#1e2a2e', cloak: '#141e22', body: '#1e2a2e', eyeGlow: '#7affc8', magic: '#7affc8', band: '#2e4a44', gold: '#b9924a' },
+  }), {
+    art: 1.45, hover: 2.5, aura: '#3ab890',
+    back: [P('cape', 'cloak', [[44, 76], [40, 60], [46, 70], [48, 58], [52, 72]])],
+    front: [
+      P('head', 'gold', [[52, 57], [53, 49], [56, 54], [59, 46], [62, 53], [65, 46], [68, 54], [71, 49], [71, 58]]),
+      C('head', 'magic', 61.5, 51.5, 1.3),
+      L('torso', 'band', 54, 104, 52, 124, 1.2), L('torso', 'band', 64, 104, 67, 124, 1.2),
+    ],
+    emitters: [
+      { bone: 'torso', at: [58, 122], effect: 'alma', rate: 5, spread: 12 },
+      { bone: 'weapon', at: [71, 58], effect: 'alma', rate: 2.5 },
+      { bone: 'offhand', at: [49, 95], effect: 'escarcha', rate: 2 },
+    ],
+    bursts: {
+      attack: [{ bone: 'weapon', at: [71, 58], effect: 'condena', scale: 0.8 }],
+      spell: [{ bone: 'torso', at: [58, 90], effect: 'luna' }, { bone: 'torso', at: [58, 110], effect: 'alma', scale: 30 }],
+      death: [{ bone: 'torso', at: [58, 90], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [58, 100], effect: 'alma', scale: 40 }],
+    },
+  }),
+  'heraldo-culto': boss(biped('heraldo-culto', {
+    build: 'normal', head: 'capirote', weapon: 'dagger', offhand: 'lantern', robe: true, cloak: true,
+    palette: { hood: '#2a0a10', robe: '#3a0e14', body: '#3a0e14', cloak: '#24080c', eyeGlow: '#ff4a3a', magic: '#ff5a3a', gold: '#c9a040', bone: '#e8dcc0', fire: '#ffb347' },
+  }), {
+    art: 1.5, flap: 5, flapBones: 'wings', aura: '#b0201a',
+    back: [...candle('wingB', 38, 64), ...candle('wingB', 30, 84)],
+    front: [
+      P('torso', 'gold', [[57, 78], [61, 78], [62.5, 122], [55.5, 122]]),
+      L('torso', 'ink', 58, 86, 60.5, 86, 0.6), L('torso', 'ink', 58.2, 94, 60.8, 96, 0.6), L('torso', 'ink', 58.5, 104, 61, 102, 0.6), L('torso', 'ink', 58.6, 112, 61.2, 114, 0.6),
+      ...candle('wingF', 84, 60), ...candle('wingF', 92, 82),
+    ],
+    emitters: [
+      { bone: 'offhand', at: [49, 110], effect: 'humo', rate: 2.5 },
+      { bone: 'offhand', at: [49, 108], effect: 'ascua', rate: 2 },
+      { bone: 'wingB', at: [38, 60], effect: 'llama', rate: 2 },
+      { bone: 'wingF', at: [84, 56], effect: 'llama', rate: 2 },
+    ],
+    bursts: {
+      attack: [{ bone: 'weapon', at: [69, 88], effect: 'sangre' }],
+      spell: [{ bone: 'torso', at: [58, 88], effect: 'condena', scale: 1.2 }],
+      death: [{ bone: 'torso', at: [58, 90], effect: 'abisal', scale: 1.5 }, { bone: 'torso', at: [58, 90], effect: 'muerte', scale: 1.5 }],
+    },
+  }),
+  'demonio-mayor': boss(biped('demonio-mayor', {
+    build: 'hulking', head: 'demon', weapon: 'sword', wings: true, tail: true, arms: 'skin', hunch: 4,
+    palette: { skin: '#5a1410', body: '#5a1410', legs: '#3a0c0a', boots: '#1a0605', horn: '#1a1210', wing: '#2a0806', eyeGlow: '#ffb347', fire: '#ff7a1a', lava: '#ff6a1a', metal: '#3a3436' },
+  }), {
+    art: 1.45, aura: '#ff4a1a',
+    back: [P('head', 'horn', [[54, 58], [40, 48], [33, 33], [44, 43], [56, 54]])],
+    front: [
+      P('head', 'horn', [[64, 56], [70, 42], [66, 29], [75, 40], [70, 58]]),
+      L('torso', 'lava', 52, 82, 58, 94, 1.3), L('torso', 'lava', 66, 82, 62, 92, 1.3), L('torso', 'lava', 56, 96, 64, 98, 1),
+      P('armF', 'horn', [[66, 76], [70, 67], [74, 77]]),
+      L('weapon', 'fire', 73.5, 96, 73.5, 62, 1.6), P('weapon', 'fire', [[71, 72], [73.5, 56], [76, 72]]),
+    ],
+    emitters: [
+      { bone: 'torso', at: [60, 90], effect: 'ascua', rate: 7, spread: 16 },
+      { bone: 'weapon', at: [73.5, 72], effect: 'llama', rate: 6, spread: 6 },
+      { bone: 'torso', at: [58, 74], effect: 'humo', rate: 2, spread: 10 },
+      { bone: 'wingF', at: [58, 52], effect: 'ascua', rate: 2 },
+    ],
+    bursts: {
+      attack: [{ bone: 'weapon', at: [73.5, 60], effect: 'aliento', scale: 0.5 }],
+      spell: [{ bone: 'head', at: [61, 60], effect: 'furia', scale: 1.5 }],
+      death: [{ bone: 'torso', at: [60, 90], effect: 'aliento' }, { bone: 'torso', at: [60, 90], effect: 'muerte', scale: 2 }],
+    },
+  }),
+  ignifax: boss(drake('ignifax', { scale: '#8a1e14', scaleD: '#5e120c', belly: '#c89048', wing: '#3a0806', horn: '#e0cfa0', eyeGlow: '#ffd75a', lava: '#ff7a1a', fire: '#ffb347' }, true), {
+    art: 1.3, flap: 18, aura: '#ff5a1a',
+    back: [
+      P('wingB', 'wing', [[56, 86], [40, 50], [30, 22], [26, 44], [15, 39], [18, 62], [7, 64], [24, 86]]),
+      L('wingB', 'scaleD', 56, 86, 30, 24, 1.5), L('wingB', 'scaleD', 56, 86, 16, 41, 1.2), L('wingB', 'scaleD', 56, 86, 8, 64, 1.2),
+    ],
+    front: [
+      E('torso', 'lava', 66, 100, 6.5, 4.5),
+      L('torso', 'lava', 50, 104, 58, 101, 1), L('torso', 'lava', 58, 106, 64, 103, 0.9), L('torso', 'lava', 70, 102, 74, 105, 0.9),
+      P('head', 'horn', [[76, 86], [71, 82], [77, 83]]), P('head', 'horn', [[78, 79], [73, 74], [79, 76]]), P('head', 'horn', [[80, 73], [76, 67], [81, 70]]),
+      P('head', 'horn', [[84, 66], [66, 46], [80, 62]]),
+      P('head', 'fire', [[90, 77.5], [103, 77.5], [98, 80.5]]),
+      P('wingF', 'wing', [[62, 86], [62, 54], [64, 20], [72, 42], [82, 30], [82, 56], [96, 50], [80, 86]]),
+      L('wingF', 'scaleD', 62, 86, 64, 22, 1.6), L('wingF', 'scaleD', 62, 86, 82, 32, 1.3), L('wingF', 'scaleD', 62, 86, 95, 51, 1.3),
+    ],
+    emitters: [
+      { bone: 'torso', at: [60, 96], effect: 'ascua', rate: 14, spread: 20 },
+      { bone: 'head', at: [104, 70], effect: 'humo', rate: 4 },
+      { bone: 'head', at: [97, 79], effect: 'llama', rate: 6, spread: 2 },
+      { bone: 'torso', at: [64, 106], effect: 'gota', rate: 3, spread: 8 },
+      { bone: 'wingF', at: [64, 24], effect: 'ascua', rate: 4, spread: 4 },
+      { bone: 'wingB', at: [30, 26], effect: 'ascua', rate: 3, spread: 4 },
+      { bone: 'torso', at: [66, 100], effect: 'llama', rate: 3, spread: 3 },
+    ],
+    bursts: {
+      attack: [{ bone: 'head', at: [100, 78], effect: 'alientoChorro' }],
+      spell: [{ bone: 'head', at: [96, 72], effect: 'furia', scale: 1.5 }, { bone: 'torso', at: [60, 96], effect: 'aliento', scale: 0.4 }],
+      hit: [{ bone: 'torso', at: [60, 96], effect: 'ascua', scale: 20 }],
+      death: [{ bone: 'torso', at: [60, 96], effect: 'aliento', scale: 1.5 }, { bone: 'torso', at: [60, 96], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [60, 96], effect: 'ascua', scale: 40 }],
+    },
+  }),
+  contemplador: boss(beholder('contemplador', { flesh: '#5a3a52', socket: '#1a0e14', sclera: '#e0d8c8', magic: '#ff5ad8', eyeGlow: '#ffd75a' }), {
+    aura: '#b0309a',
+    emitters: [
+      { bone: 'torso', at: [70, 79], effect: 'arcana', rate: 8, spread: 10 },
+      { bone: 'torso', at: [60, 84], effect: 'arcana', rate: 4, spread: 26 },
+      { bone: 'torso', at: [60, 101], effect: 'vacio', rate: 3, spread: 10 },
+      ...([['head', [46, 40]], ['head', [60, 36]], ['head', [76, 40]], ['armB', [28, 56]], ['armB', [24, 80]], ['armF', [96, 54]], ['armF', [100, 80]], ['cape', [34, 44]], ['cape', [22, 66]]] as [BoneId, Pt][])
+        .map(([bone, at]): Emitter => ({ bone, at, effect: 'ojo', rate: 1.2 })),
+    ],
+    bursts: {
+      attack: [{ bone: 'torso', at: [72, 79], effect: 'rayo', scale: 1.5 }, { bone: 'torso', at: [72, 79], effect: 'abisal' }],
+      spell: [{ bone: 'torso', at: [66, 80], effect: 'abisal', scale: 1.3 }, { bone: 'head', at: [60, 36], effect: 'rayo' }],
+      death: [{ bone: 'torso', at: [60, 84], effect: 'abisal', scale: 2 }, { bone: 'torso', at: [60, 84], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [60, 84], effect: 'arcana', scale: 40 }],
+    },
+  }),
+};
+
 // ── Enemy catalogue ──────────────────────────────────────────────────────────
 const G = { skin: '#6f7d4a', leather: '#56422f', cloth: '#6a3b2a', hair: '#2e2a22', eyeGlow: '#ffd75a', body: '#56422f', legs: '#6f7d4a', boots: '#3e2e20' };
 const BONE = { skin: '#cdc3a6', bone: '#cdc3a6', body: '#cdc3a6', legs: '#cdc3a6', boots: '#cdc3a6', arms: '#cdc3a6', eyeGlow: '#9fe8ff', cloth: '#3e4a52', metal: '#7f858a', rust: '#6b4a34' };
@@ -810,6 +1032,7 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   'azotamentes-anciano': biped('azotamentes-anciano', { build: 'normal', head: 'tentacle', weapon: 'staff', palette: { skin: '#8a5a8a', robe: '#3a1e44', body: '#3a1e44', magic: '#e7a8ff', eyeGlow: '#f2e8ff', gold: '#c9a040' }, robe: true, arms: 'skin', cloak: true }),
   'cerebro-anciano': brain('cerebro-anciano', { flesh: '#b07a8a', magic: '#e7a8ff' }),
   observador: floatingEye('observador', { flesh: '#7a4a5a', magic: '#ff9ad0', eyeGlow: '#ffd75a' }, 2),
+  ...BOSSES,
 };
 
 // ── Invocations (druid spirits and warlock pacts) ────────────────────────────

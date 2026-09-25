@@ -20,6 +20,25 @@ export interface Pose {
 }
 export type PartialPose = Partial<Pose>;
 
+/** Continuous particle source attached to a bone (embers, smoke, souls…). */
+export interface Emitter {
+  bone: BoneId;
+  at: [number, number];
+  /** Particle preset name (particle-sim EFFECTS). */
+  effect: string;
+  /** Particles per second at intensity 1. */
+  rate: number;
+  /** Random scatter around `at`, in viewBox units. */
+  spread?: number;
+}
+/** One-off particle burst fired by an action (at the blow for attacks). */
+export interface Burst {
+  bone: BoneId;
+  at: [number, number];
+  effect: string;
+  scale?: number;
+}
+
 export interface PuppetRig {
   /** Glow colour of eyes, magic and effects (also the silhouette rim). */
   accent: string;
@@ -45,6 +64,11 @@ export interface PuppetRig {
   headScale?: number;
   /** Drawing scale around the feet, so small-bodied designs match the heroes. */
   art?: number;
+  /** Glow around the whole figure, always on (bosses). */
+  aura?: string;
+  /** Bosses: particles emitted all the time, and bursts per action. */
+  emitters?: Emitter[];
+  bursts?: Partial<Record<ActionType, Burst[]>>;
   palette: Record<string, string>;
   pivots: Partial<Record<BoneId, [number, number]>>;
   rest: PartialPose;
@@ -222,6 +246,11 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
   fx.blink = ((t + rig.phase) % 3.7) < 0.13;
   return { p, fx };
+}
+
+/** Point of an emitter or burst in viewBox space, following its bone. */
+export function emitterWorld(rig: PuppetRig, bones: Record<BoneId, Matrix>, e: { bone: BoneId; at: [number, number] }): [number, number] {
+  return applyMatrix(bones[e.bone], ...e.at);
 }
 
 /** Progress of an action at time t, or null once it has finished. */

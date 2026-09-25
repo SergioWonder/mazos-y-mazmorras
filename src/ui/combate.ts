@@ -503,7 +503,11 @@ export function pantallaCombate(
           if (cartaPendiente) jugarSobre(idx);
         });
         const se = spriteEnemigo(e);
-        if (se) div.querySelector('.sprite-ilustrado')?.appendChild(se.element);
+        if (se) {
+          div.querySelector('.sprite-ilustrado')?.appendChild(se.element);
+          // bosses burn brighter once enraged or back from the phylactery
+          se.setIntensity(e.rasgoUsado || e.filacteriaUsada ? 2 : 1);
+        }
         cont.appendChild(div);
       });
     }

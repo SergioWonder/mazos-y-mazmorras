@@ -186,8 +186,13 @@ el mismo motor de marionetas (`fx/puppet.ts`), con contorno exterior grueso y l�
 interiores finas. Cada pieza lleva una sombra recortada hacia el lado contrario a
 la luna y un borde de luz del color de la luna del acto (`ui/puppet-sprite.ts`). Se
 construyen con arquetipos paramétricos (bípedo, cuadrúpedo, flotante, amorfo) en
-`fx/enemy-rigs.ts`. Atacan, reciben golpes y mueren con animación propia. Los jefes
-conservan su emoji por ahora. Desde el menú principal, la **Galería de sprites**
+`fx/enemy-rigs.ts`. Atacan, reciben golpes y mueren con animación propia.
+
+Los **jefes** tienen diseños propios, aura permanente y **emisores de partículas** pegados
+a sus huesos: ascuas, humo, almas, motas arcanas, llamas o gotas de lava que nacen de la
+boca, el bastón, las alas o los ojos. También lanzan **ráfagas** al atacar, conjurar y
+morir: el aliento de Ignifax, los rayos del Contemplador… Los del acto III son los más
+cargados, y al enfurecerse (o al volver de la filacteria) emiten el doble. Desde el menú principal, la **Galería de sprites**
 muestra todos los héroes, formas, invocaciones y enemigos animados.
 
 ### Motor gráfico (WebGL2)

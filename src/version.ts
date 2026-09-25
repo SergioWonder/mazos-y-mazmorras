@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.6.0';
+export const VERSION = '3.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.7.0',
+    fecha: '2026-09-25',
+    cambios: [
+      '👑 Los siete jefes tienen por fin su propio dibujo animado, con aura y partículas que no paran: Gorzug con su corona de huesos, Vexis y sus cartas flotantes, Vol\'guth envuelto en almas, Malachar entre velas y humo de incienso, y Abaddon con su espada en llamas.',
+      '🐉 Ignifax arde de verdad: alas enormes, núcleo de magma, ascuas, humo por las fauces, gotas de lava y un chorro de fuego al atacar. Cuando se enfurece, el doble.',
+      '👁️ El Contemplador flota con sus nueve pedúnculos oculares chispeando, y dispara rayos de colores desde su ojo central.',
+      '💥 Cada jefe estalla en partículas al atacar, al conjurar y al caer derrotado.',
+      '🎭 La Galería de sprites incluye ya a los jefes, marcados en rojo.',
+    ],
+  },
   {
     version: '3.6.0',
     fecha: '2026-09-25',

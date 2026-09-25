@@ -630,3 +630,4 @@ body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
 .gallery-sprite .sprite-marioneta { width: calc(7.4rem * var(--esc, 1)); max-width: 42vw; }
 .gallery-card figcaption { font-family: var(--fuente-titulo); font-size: 0.85rem; letter-spacing: 0.03em; text-align: center; display: flex; gap: 0.35rem; align-items: center; }
 .gallery-elite { font-size: 0.7rem; color: #1a1208; background: var(--oro); border-radius: 4px; padding: 0 0.3rem; }
+.gallery-boss { background: var(--sangre); color: var(--pergamino); }

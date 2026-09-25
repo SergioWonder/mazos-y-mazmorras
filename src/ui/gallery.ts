@@ -40,10 +40,14 @@ export function showGallery(): Promise<void> {
           </div>
           <button class="btn-cerrar-comp" aria-label="Cerrar">✕</button>
         </header>
-        <p class="gallery-help">Pulsa cualquier figura para verla atacar. Los jefes llegarán más adelante.</p>
+        <p class="gallery-help">Pulsa cualquier figura para verla atacar.</p>
         <div class="gallery-body"></div>
       </div>`;
     document.body.appendChild(backdrop);
+    // boss particles must show above the gallery while it is open
+    const particleCanvas = document.getElementById('fx-canvas');
+    const previousZ = particleCanvas?.style.zIndex ?? '';
+    if (particleCanvas) particleCanvas.style.zIndex = '90';
     const body = backdrop.querySelector('.gallery-body') as HTMLElement;
     // fixed WebGL canvas over the stages and under the sticky header
     const stage = PuppetStage.create(backdrop, { fixed: true });
@@ -74,6 +78,7 @@ export function showGallery(): Promise<void> {
         box.appendChild(sprite.element);
         const caption = el('figcaption', '', card.name);
         if (card.elite) caption.appendChild(el('span', 'gallery-elite', 'Élite'));
+        if (card.boss) caption.appendChild(el('span', 'gallery-elite gallery-boss', 'Jefe'));
         fig.append(box, caption);
         const attack = () => sprite.play('attack');
         fig.addEventListener('click', attack);
@@ -125,6 +130,7 @@ export function showGallery(): Promise<void> {
       observer.disconnect();
       for (const e of entries) e.sprite.destroy();
       stage?.destroy();
+      if (particleCanvas) particleCanvas.style.zIndex = previousZ;
       backdrop.remove();
       window.removeEventListener('keydown', onKey);
       resolve();

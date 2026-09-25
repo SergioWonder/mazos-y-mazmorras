@@ -21,8 +21,8 @@ import * as ENEMIGOS from '../src/core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
-import { spawnEffect, stepParticles, type Particle } from '../src/fx/particle-sim.ts';
-import { puppetPose, puppetBones, puppetEffects } from '../src/fx/puppet.ts';
+import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
+import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
@@ -1869,7 +1869,30 @@ console.log('\n👹 Bestiario ilustrado');
     const rig = ENEMY_RIGS[d.id];
     check(!!rig && rig.shapes.length >= 10, `${d.nombre}: tiene marioneta ilustrada`);
   }
-  check(defs.filter((d) => d.esJefe).every((d) => !ENEMY_RIGS[d.id]), 'los jefes se quedan fuera por ahora');
+  // jefes: marioneta propia, emisores de partículas y ráfagas al atacar y morir
+  const jefes = defs.filter((d) => d.esJefe);
+  check(jefes.length === 7, `hay ${jefes.length} jefes`);
+  for (const d of jefes) {
+    const rig = ENEMY_RIGS[d.id];
+    check(!!rig && rig.shapes.length >= 30, `${d.nombre}: marioneta épica (${rig?.shapes.length ?? 0} piezas)`);
+    check((rig?.emitters?.length ?? 0) >= 2, `${d.nombre}: emite partículas continuamente`);
+    check(!!rig?.bursts?.attack?.length && !!rig?.bursts?.death?.length, `${d.nombre}: ráfagas al atacar y al morir`);
+    for (const em of [...(rig?.emitters ?? []), ...Object.values(rig?.bursts ?? {}).flat()]) {
+      check(!!EFFECTS[em.effect], `${d.nombre}: el efecto «${em.effect}» existe`);
+    }
+  }
+  const tasa = (id: string) => (ENEMY_RIGS[id]?.emitters ?? []).reduce((a, e) => a + e.rate, 0);
+  const acto12 = ['jefe-ogro', 'embaucador-arcano', 'senor-cripta', 'heraldo-culto', 'demonio-mayor'];
+  const maxAnterior = Math.max(...acto12.map(tasa));
+  check(tasa('ignifax') > maxAnterior && tasa('contemplador') > maxAnterior, 'Ignifax y el Contemplador son los que más partículas echan');
+  // los emisores se colocan en el mundo siguiendo a sus huesos
+  const ign = ENEMY_RIGS['ignifax'];
+  const posIgn = emitterWorld(ign, puppetBones(ign, puppetPose(ign, 0, null).p), ign.emitters![0]);
+  check(Number.isFinite(posIgn[0]) && Number.isFinite(posIgn[1]), 'los emisores tienen posición en el mundo');
+  // las ascuas suben
+  const asc: Particle[] = [];
+  for (let i = 0; i < 20; i++) spawnEffect(asc, 'ascua', 0, 0);
+  check(asc.reduce((a, p) => a + p.vy, 0) < 0, 'las ascuas de los jefes suben');
   for (const f of ['lobo', 'oso', 'fuego', 'agua', 'aire', 'arbol', 'tierra', 'sabueso', 'demonio']) {
     check(!!INVOCATION_RIGS[f] && INVOCATION_RIGS[f].shapes.length >= 8, `invocación ${f}: tiene marioneta ilustrada`);
   }
@@ -1899,7 +1922,8 @@ console.log('\n🎭 Galería de sprites');
   const ids = de('enemy').map((f) => f.id);
   check(new Set(ids).size === ids.length, 'ningún enemigo sale repetido');
   check(Object.keys(ENEMY_RIGS).every((id) => ids.includes(id)), 'están todos los enemigos ilustrados');
-  check(ids.every((id) => !!ENEMY_RIGS[id]), 'y no aparecen jefes');
+  check(ids.every((id) => !!ENEMY_RIGS[id]), 'todos los que salen tienen marioneta');
+  check(de('enemy').filter((f) => f.boss).length === 7, 'y los 7 jefes aparecen marcados como jefe');
   check(secciones.filter((s) => s.act !== undefined).length === 6, 'una sección por escenario (3 actos × 2)');
 }
 
