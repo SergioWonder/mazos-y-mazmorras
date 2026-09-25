@@ -197,6 +197,11 @@ muestra todos los héroes, formas, invocaciones y enemigos animados.
 
 ### Arte de las cartas
 
+**En transición a ilustraciones dibujadas a mano:** las cartas que ya tienen su SVG en
+`src/arte/cartas/<id>.svg` (y `full/<id>.svg` para las full art) lo usan. La guía de
+estilo está en `docs/arte-cartas.md`. Se van completando clase por clase; las que aún
+no lo tienen siguen con la escena generada que se describe a continuación.
+
 Cada carta tiene una **ilustración propia** en el mismo estilo que los monstruos
 (`fx/card-art.ts`). Es una escena compuesta con una biblioteca de unos 60 motivos
 ilustrados (armas, llamas, runas, lunas, calaveras, tentáculos…) y criaturas del

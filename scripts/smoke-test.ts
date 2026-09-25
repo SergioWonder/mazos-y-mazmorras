@@ -20,6 +20,7 @@ import { ARTE_CARTA } from '../src/ui/carta.ts';
 import * as ENEMIGOS from '../src/core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
+import { pickSvg } from '../src/ui/card-svgs.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
 import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
 import { cardScene, SCENE_W, SCENE_H, FULL_H, hasFullArt } from '../src/fx/card-art.ts';
@@ -2026,6 +2027,50 @@ console.log('\n🖼️ Arte de las cartas');
     check(hasFullArt(def) && sc.rig.shapes.length >= 20, `${def.nombre}: arte a toda carta`);
     check(sc.rig.shapes.some((sh) => sh.k === 'die'), `${def.nombre}: el dibujo muestra el d20 que decide su suerte`);
   }
+}
+
+// ── Ilustraciones SVG dibujadas a mano (src/arte/cartas) ─────────────────────
+console.log('\n🎨 Ilustraciones SVG de las cartas');
+{
+  const fs = await import('node:fs');
+  const dir = new URL('../src/arte/cartas/', import.meta.url);
+  const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA];
+  const ids = new Set(todas.map((c) => c.id));
+  /** Minimal XML well-formedness: every opening tag closes, in order. */
+  const bienFormado = (xml: string) => {
+    const pila: string[] = [];
+    for (const m of xml.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<(\/?)([a-zA-Z][\w:-]*)[^>]*?(\/?)>/g)) {
+      const [, cierre, tag, auto] = m;
+      if (auto) continue;
+      if (cierre) { if (pila.pop() !== tag) return false; } else pila.push(tag);
+    }
+    return pila.length === 0;
+  };
+  const revisar = (sub: string, viewBox: string, maxKb: number) => {
+    const carpeta = new URL(sub, dir);
+    if (!fs.existsSync(carpeta)) return [] as string[];
+    const archivos = fs.readdirSync(carpeta).filter((f: string) => f.endsWith('.svg'));
+    const malos: string[] = [];
+    for (const f of archivos) {
+      const xml = fs.readFileSync(new URL(f, carpeta), 'utf8');
+      const id = f.replace(/\.svg$/, '');
+      if (!ids.has(id)) malos.push(`${f}: no es una carta`);
+      else if (!xml.trimStart().startsWith('<svg') || !xml.includes(`viewBox="${viewBox}"`)) malos.push(`${f}: formato`);
+      else if (/<(text|image|script)\b/.test(xml)) malos.push(`${f}: elemento prohibido`);
+      else if (xml.length > maxKb * 1024) malos.push(`${f}: ${Math.round(xml.length / 1024)} KB`);
+      else if (!bienFormado(xml)) malos.push(`${f}: XML mal formado`);
+    }
+    check(malos.length === 0, `${sub || 'normales'}: ${archivos.length} ilustraciones correctas ${malos.slice(0, 5).join(', ')}`);
+    return archivos;
+  };
+  revisar('', '0 0 280 160', 14);
+  const full = revisar('full/', '0 0 296 423', 28);
+  check(full.every((f: string) => hasFullArt(todas.find((c) => `${c.id}.svg` === f)!)), 'las full art son de cartas con arte a toda carta');
+  check(fs.existsSync(new URL('golpe.svg', dir)) && fs.existsSync(new URL('defender.svg', dir)), 'las básicas tienen su ilustración de referencia');
+  const tabla = { '../arte/cartas/golpe.svg': '/a/golpe.svg', '../arte/cartas/full/deseo.svg': '/a/deseo-full.svg' };
+  check(pickSvg(tabla, 'golpe', false) === '/a/golpe.svg', 'la carta usa su SVG si existe');
+  check(pickSvg(tabla, 'deseo', true) === '/a/deseo-full.svg' && pickSvg(tabla, 'deseo', false) === null, 'la full art busca en su carpeta');
+  check(pickSvg(tabla, 'zarpazo', false) === null, 'sin SVG todavía, sigue con la ilustración anterior');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

@@ -1,6 +1,7 @@
 import type { CartaDef } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardArtUrl } from './card-art-render.ts';
+import { cardSvgUrl } from './card-svgs.ts';
 import { animateCardParticles } from './card-particles.ts';
 import { hasFullArt, lookOf } from '../fx/card-art.ts';
 
@@ -180,8 +181,9 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const retencion = def.retener ? ' · <strong>Retener</strong>' : '';
 
   // illustrated art (full-art portrait for the unique class cards); emoji fallback
-  const fullUrl = hasFullArt(def) ? cardArtUrl(def, true) : null;
-  const artUrl = fullUrl ? null : cardArtUrl(def);
+  // hand-drawn SVG first; cards not drawn yet keep the generated illustration
+  const fullUrl = hasFullArt(def) ? cardSvgUrl(def.id, true) ?? cardArtUrl(def, true) : null;
+  const artUrl = fullUrl ? null : cardSvgUrl(def.id) ?? cardArtUrl(def);
   const arteHtml = fullUrl
     ? ''
     : artUrl
