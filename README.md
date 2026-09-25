@@ -176,5 +176,7 @@ Los héroes son **siluetas a contraluz**: una marioneta SVG de ~25 piezas repart
 en 10 huesos (`fx/hero-rig.ts`), pintada en negro con luz de borde del color de la
 clase (`ui/hero-sprite.ts`). Respira y parpadea en reposo, ataca (tajo cuerpo a
 cuerpo o proyectil mágico) al jugar un ataque, conjura con el resto de cartas y
-retrocede con un destello al recibir daño. El daño espera al momento del golpe. El
+retrocede con un destello al recibir daño. El daño espera al momento del golpe.
+Las transformaciones del druida (Lobo, Oso, Águila, Enjambre, Lunar y Estelar)
+tienen su propia marioneta con el mismo estilo; las invocaciones no. El
 cielo del combate tiene luna y bruma de horizonte con el tono de cada acto.

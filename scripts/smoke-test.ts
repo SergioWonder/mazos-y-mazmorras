@@ -17,7 +17,7 @@ import {
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
 import { ARTE_CARTA } from '../src/ui/carta.ts';
-import { HERO_RIGS, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
+import { HERO_RIGS, FORM_RIGS, formFromLabel, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
@@ -1809,6 +1809,32 @@ console.log('\n🎭 Sprites de los héroes');
   const acc = { type: 'attack' as const, t0: 10 };
   check(activeAction(acc, 10 + ACTION_DURATION.attack * 0.5)?.type === 'attack', 'la acción está activa a mitad');
   check(activeAction(acc, 10 + ACTION_DURATION.attack + 0.01) === null, 'y termina al cumplir su duración');
+}
+
+// ── Transformaciones del druida: misma silueta a contraluz que los héroes ────
+console.log('\n🐺 Siluetas de las transformaciones');
+{
+  const etiquetas: [string, string][] = [
+    ['Forma de Lobo', 'lobo'], ['Forma de Oso', 'oso'], ['Forma de Águila', 'aguila'],
+    ['Forma de Enjambre', 'enjambre'], ['Forma Lunar', 'lunar'], ['Forma Estelar', 'estelar'],
+  ];
+  for (const [etiqueta, id] of etiquetas) {
+    check(formFromLabel(etiqueta) === id, `«${etiqueta}» usa la silueta ${id}`);
+    const rig = FORM_RIGS[id as keyof typeof FORM_RIGS];
+    check(!!rig && rig.shapes.length >= 8, `${id}: tiene esqueleto con piezas`);
+    const conEfecto = [0.45, 0.6].some((q) => {
+      const a = heroPose(id as never, 0, { type: 'attack', p: q });
+      const g = heroEffects(id as never, heroBones(id as never, a.p), a.fx);
+      return !!(g.slash || g.orb || g.ring);
+    });
+    check(conEfecto, `${id} atacando: tiene efecto de ataque`);
+    const h = heroPose(id as never, 0, { type: 'hit', p: 0.05 });
+    check(!!h.fx.flash && h.p.rootX < 0, `${id} golpeado: destello y retroceso`);
+  }
+  check(formFromLabel('Furia Primaria') === null, 'un efecto que no es forma no cambia la silueta');
+  // el águila no se posa: aletea aunque esté en reposo
+  const ala1 = heroPose('aguila' as never, 0.0, null).p.armF, ala2 = heroPose('aguila' as never, 0.15, null).p.armF;
+  check(Math.abs(ala1 - ala2) > 5, 'el águila aletea en reposo');
 }
 
 console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

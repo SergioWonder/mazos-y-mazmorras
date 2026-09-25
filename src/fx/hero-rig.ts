@@ -27,8 +27,11 @@ export interface HeroRig {
   /** 'melee' swings and slashes; 'magic' casts a projectile from its focus. */
   style: 'melee' | 'magic';
   phase: number;
-  /** Point on the weapon bone where spells and projectiles are born. */
+  /** Point where spells and projectiles are born (on focusBone, default 'weapon'). */
   focus: [number, number];
+  focusBone?: BoneId;
+  /** Idle wing/buzz amplitude in degrees (flying forms never stand still). */
+  flap?: number;
   /** Inner/outer radius of the melee slash arc. */
   slash?: [number, number];
   palette: Record<string, string>;
@@ -61,7 +64,7 @@ export interface EffectGeometry {
 export const ACTION_DURATION: Record<ActionType, number> = { attack: 0.8, spell: 0.8, hit: 0.6 };
 
 /** Keys that glow (magic foci, warlock eyes, effects). */
-export const EMISSIVE = new Set(['gem', 'orb', 'flame', 'flameCore', 'eyeGlow']);
+export const EMISSIVE = new Set(['gem', 'orb', 'flame', 'flameCore', 'eyeGlow', 'moonGlow', 'starGlow']);
 export const EYES = new Set(['eye', 'eyeGlow']);
 
 const C = (b: BoneId, k: string, x: number, y: number, r: number): Shape => ({ t: 'c', b, k, x, y, r });
@@ -247,10 +250,163 @@ function rotateAbout(deg: number, px: number, py: number): Matrix {
 export const applyMatrix = (m: Matrix, x: number, y: number): [number, number] =>
   [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
 
-const pivotOf = (cls: ClaseId, b: BoneId) => HERO_RIGS[cls].pivots[b] ?? DEFAULT_PIVOTS[b];
+/** Druid transformations, drawn with the same backlit puppet as the heroes. */
+export type FormId = 'lobo' | 'oso' | 'aguila' | 'enjambre' | 'lunar' | 'estelar';
+export type RigId = ClaseId | FormId;
+
+const FORM_LABELS: Record<string, FormId> = {
+  'Forma de Lobo': 'lobo', 'Forma de Oso': 'oso', 'Forma de Águila': 'aguila',
+  'Forma de Enjambre': 'enjambre', 'Forma Lunar': 'lunar', 'Forma Estelar': 'estelar',
+};
+/** Form silhouette for a temporary-effect label, or null if it is not a form. */
+export function formFromLabel(label: string): FormId | null {
+  return FORM_LABELS[label] ?? null;
+}
+
+// Quadrupeds: armF/armB are the near/far front legs (they follow the body when it
+// rears up), legF/legB the near/far hind legs, cape the tail.
+function wolfShapes(lunar: boolean): Shape[] {
+  const out: Shape[] = [
+    P('cape', 'fur', [[37, 90], [22, 84], [11, 91], [20, 95], [36, 98]]),
+    L('armB', 'fur', 76, 100, 78, 125, 6), E('armB', 'fur', 79, 126.5, 5, 2.5),
+    L('legB', 'fur', 42, 100, 40, 125, 6), E('legB', 'fur', 41, 126.5, 5, 2.5),
+    E('torso', 'fur', 58, 96, 26, 12),
+    P('torso', 'fur', [[70, 86], [84, 84], [88, 98], [78, 108], [68, 104]]),
+    P('torso', 'fur', [[44, 87], [52, 80], [58, 84], [64, 79], [70, 86], [56, 90]]),
+    E('legF', 'fur', 46, 101, 9, 11), L('legF', 'fur', 46, 106, 44, 125, 6.5), E('legF', 'fur', 46, 126.5, 5.5, 2.8),
+    L('armF', 'fur', 80, 100, 83, 125, 6.5), E('armF', 'fur', 85, 126.5, 5.5, 2.8),
+    E('head', 'fur', 90, 78, 11, 9),
+    P('head', 'fur', [[96, 73], [113, 78], [112, 83], [97, 86]]),
+    P('head', 'fur', [[95, 84], [110, 84], [104, 90], [95, 90]]),
+    P('head', 'fur', [[83, 73], [85, 58], [92, 70]]),
+    P('head', 'fur', [[89, 71], [94, 59], [97, 72]]),
+    C('head', 'eye', 96, 76, 1.9),
+  ];
+  if (lunar) {
+    // bigger mane and a glowing crescent on the brow
+    out.splice(6, 0, P('torso', 'fur', [[66, 80], [72, 66], [76, 78], [82, 68], [84, 82], [90, 76], [88, 92], [70, 92]]));
+    out.push(P('head', 'moonGlow', [[88, 66], [92, 62], [97, 63], [93, 64], [90, 68]]));
+  }
+  return out;
+}
+
+function swarmShapes(): Shape[] {
+  // deterministic scatter of insects in drifting clusters
+  const clusters: [BoneId, number, number, number, number][] = [
+    ['cape', 44, 96, 9, 7], ['legB', 52, 108, 8, 6], ['armB', 52, 82, 8, 7], ['torso', 62, 94, 11, 9],
+    ['legF', 68, 106, 8, 6], ['armF', 74, 86, 8, 7], ['head', 84, 78, 7, 6],
+  ];
+  const out: Shape[] = [];
+  let seed = 7;
+  const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+  for (const [bone, cx, cy, rx, ry] of clusters) {
+    for (let i = 0; i < 11; i++) {
+      const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd());
+      out.push(E(bone, 'bug', cx + Math.cos(a) * rx * d, cy + Math.sin(a) * ry * d, 3, 2));
+    }
+    out.push(C(bone, 'eye', cx + (rnd() - 0.5) * rx, cy + (rnd() - 0.5) * ry, 0.9));
+  }
+  return out;
+}
+
+export const FORM_RIGS: Record<FormId, HeroRig> = {
+  lobo: {
+    accent: '#7dba4e', style: 'melee', phase: 0.4, focus: [96, 78], focusBone: 'head', slash: [18, 32],
+    palette: { fur: '#3a3a3a', eye: '#1b140f' },
+    pivots: { torso: [42, 100], head: [82, 86], cape: [37, 93], armF: [80, 100], armB: [76, 100], legF: [46, 100], legB: [42, 100] },
+    rest: {},
+    windup: { rootX: -6, torso: -6, head: -10, armF: -15, legF: 10 },
+    strike: { rootX: 16, torso: 6, head: 12, armF: -45, armB: -30, legF: 30, legB: 25, cape: -15 },
+    shapes: wolfShapes(false),
+  },
+  oso: {
+    accent: '#7dba4e', style: 'melee', phase: 1.2, focus: [108, 84], focusBone: 'head', slash: [22, 38],
+    palette: { fur: '#3a2a20', eye: '#1b140f' },
+    pivots: { torso: [40, 104], head: [86, 84], cape: [26, 88], armF: [82, 98], armB: [78, 98], legF: [44, 100], legB: [40, 100] },
+    rest: {},
+    windup: { rootX: -4, torso: -24, head: -14, armF: -100, armB: -70 },
+    strike: { rootX: 10, torso: 6, head: 10, armF: -30, armB: -10, legF: 8 },
+    shapes: [
+      E('cape', 'fur', 24, 88, 4, 3),
+      L('armB', 'fur', 78, 98, 80, 124, 11), E('armB', 'fur', 81, 126.5, 7, 3),
+      L('legB', 'fur', 40, 100, 38, 124, 11), E('legB', 'fur', 39, 126.5, 7, 3),
+      E('torso', 'fur', 56, 92, 32, 19), E('torso', 'fur', 64, 76, 16, 9), E('torso', 'fur', 34, 92, 12, 15),
+      E('legF', 'fur', 44, 100, 12, 14), L('legF', 'fur', 44, 108, 42, 124, 12), E('legF', 'fur', 44, 126.5, 8, 3.5),
+      L('armF', 'fur', 82, 96, 85, 124, 12), E('armF', 'fur', 87, 126.5, 8, 3.5),
+      E('head', 'fur', 96, 82, 13, 11), E('head', 'fur', 108, 86, 8, 6),
+      C('head', 'fur', 88, 71, 4.5), C('head', 'fur', 97, 70, 4),
+      C('head', 'eye', 102, 79, 1.9),
+    ],
+  },
+  aguila: {
+    accent: '#7dba4e', style: 'melee', phase: 2.0, focus: [60, 104], focusBone: 'torso', slash: [16, 30], flap: 22,
+    palette: { feather: '#4a3a2a', eye: '#1b140f' },
+    pivots: { torso: [60, 82], head: [70, 76], cape: [46, 86], armF: [62, 76], armB: [56, 74] },
+    rest: {},
+    windup: { rootX: -6, torsoY: -8, torso: -15, armF: -30, armB: -30 },
+    strike: { rootX: 18, torsoY: 10, torso: 25, head: 10, armF: 35, armB: 35 },
+    shapes: [
+      P('armB', 'feather', [[56, 74], [48, 52], [42, 34], [52, 42], [54, 34], [60, 46], [64, 40], [64, 56], [64, 76]]),
+      P('cape', 'feather', [[48, 82], [26, 90], [24, 98], [30, 96], [34, 101], [48, 92]]),
+      E('torso', 'feather', 58, 85, 17, 10), E('torso', 'feather', 67, 83, 10, 11),
+      L('torso', 'feather', 56, 94, 54, 106, 3), L('torso', 'feather', 62, 94, 63, 106, 3),
+      P('torso', 'feather', [[51, 105], [58, 106], [54, 109]]), P('torso', 'feather', [[60, 105], [67, 106], [62, 109]]),
+      C('head', 'feather', 76, 71, 8), P('head', 'feather', [[82, 67], [93, 70], [85, 77]]),
+      P('head', 'feather', [[70, 66], [62, 63], [70, 71]]),
+      C('head', 'eye', 79, 69, 1.7),
+      P('armF', 'feather', [[62, 76], [54, 52], [50, 30], [60, 40], [63, 32], [68, 45], [73, 38], [74, 56], [72, 78]]),
+    ],
+  },
+  enjambre: {
+    accent: '#7dba4e', style: 'melee', phase: 2.7, focus: [86, 76], focusBone: 'head', slash: [16, 30], flap: 10,
+    palette: { bug: '#2a2a2a', eye: '#1b140f' },
+    pivots: { torso: [62, 96], head: [80, 84], cape: [52, 96], armF: [70, 90], armB: [56, 88], legF: [64, 104], legB: [54, 104] },
+    rest: {},
+    windup: { rootX: -6, torso: -10, head: -14, armF: -20, armB: -20 },
+    strike: { rootX: 20, torso: 12, head: 16, armF: 25, armB: 20, legF: -15, legB: -10 },
+    shapes: swarmShapes(),
+  },
+  lunar: {
+    accent: '#b9c8ff', style: 'melee', phase: 3.3, focus: [96, 78], focusBone: 'head', slash: [20, 36],
+    palette: { fur: '#2a2c38', eye: '#1b140f', moonGlow: '#e6ecff' },
+    pivots: { torso: [42, 100], head: [82, 86], cape: [37, 93], armF: [80, 100], armB: [76, 100], legF: [46, 100], legB: [42, 100] },
+    rest: { head: -6 },
+    windup: { rootX: -6, torso: -10, head: -22, armF: -25, legF: 10 },
+    strike: { rootX: 18, torso: 8, head: 14, armF: -50, armB: -35, legF: 32, legB: 26, cape: -18 },
+    shapes: wolfShapes(true),
+  },
+  estelar: {
+    accent: '#ffe39a', style: 'magic', phase: 4.1, focus: [86, 36], focusBone: 'head',
+    palette: { hide: '#4a3a2c', eye: '#1b140f', starGlow: '#fff4c8' },
+    pivots: { torso: [44, 96], head: [78, 84], cape: [34, 84], armF: [78, 94], armB: [74, 94], legF: [46, 94], legB: [42, 94] },
+    rest: {},
+    windup: { rootX: -5, torso: -10, head: -16 },
+    strike: { rootX: 8, torso: 4, head: 10, armF: -20, legF: 12 },
+    shapes: [
+      E('cape', 'hide', 33, 83, 4, 3),
+      L('armB', 'hide', 74, 94, 76, 125, 4.5), E('armB', 'hide', 77, 126.5, 3.5, 2),
+      L('legB', 'hide', 42, 94, 40, 125, 4.5), E('legB', 'hide', 41, 126.5, 3.5, 2),
+      E('torso', 'hide', 58, 88, 24, 11), E('torso', 'hide', 74, 86, 9, 10),
+      L('legF', 'hide', 46, 94, 44, 125, 5), E('legF', 'hide', 45, 126.5, 3.8, 2.2),
+      L('armF', 'hide', 78, 94, 81, 125, 5), E('armF', 'hide', 82, 126.5, 3.8, 2.2),
+      P('head', 'hide', [[73, 88], [79, 66], [88, 66], [85, 90]]),
+      P('head', 'hide', [[81, 59], [95, 61], [100, 66], [89, 70], [81, 67]]),
+      P('head', 'hide', [[82, 61], [75, 56], [82, 65]]),
+      L('head', 'hide', 84, 59, 78, 40, 2), L('head', 'hide', 80, 48, 72, 44, 1.8), L('head', 'hide', 79, 42, 82, 30, 1.8),
+      L('head', 'hide', 87, 58, 92, 40, 2), L('head', 'hide', 90, 47, 98, 42, 1.8), L('head', 'hide', 91, 42, 90, 30, 1.8),
+      C('head', 'starGlow', 72, 44, 1.9), C('head', 'starGlow', 82, 30, 1.9), C('head', 'starGlow', 98, 42, 1.9),
+      C('head', 'starGlow', 90, 30, 1.9), C('head', 'starGlow', 78, 40, 1.4),
+      C('head', 'eye', 90, 63, 1.5),
+    ],
+  },
+};
+
+export const rigOf = (id: RigId): HeroRig => (HERO_RIGS as Record<string, HeroRig>)[id] ?? FORM_RIGS[id as FormId];
+
+const pivotOf = (id: RigId, b: BoneId) => rigOf(id).pivots[b] ?? DEFAULT_PIVOTS[b];
 
 /** World matrix of every bone for a pose. */
-export function heroBones(cls: ClaseId, p: Pose): Record<BoneId, Matrix> {
+export function heroBones(cls: RigId, p: Pose): Record<BoneId, Matrix> {
   const out = {} as Record<BoneId, Matrix>;
   for (const b of BONE_ORDER) {
     if (b === 'root') { out.root = translate(p.rootX, 0); continue; }
@@ -285,13 +441,13 @@ function interpolate(kfs: Keyframe[], q: number, base: Pose): Pose {
 }
 
 /** Fraction of an attack at which the blow lands (to sync damage numbers). */
-export function impactFraction(cls: ClaseId): number {
-  return HERO_RIGS[cls].style === 'melee' ? 0.4 : 0.55;
+export function impactFraction(cls: RigId): number {
+  return rigOf(cls).style === 'melee' ? 0.4 : 0.55;
 }
 
 /** Pose and effects of a hero at time t (seconds), optionally mid-action. */
-export function heroPose(cls: ClaseId, t: number, action: ActionProgress | null): { p: Pose; fx: Effects } {
-  const rig = HERO_RIGS[cls];
+export function heroPose(cls: RigId, t: number, action: ActionProgress | null): { p: Pose; fx: Effects } {
+  const rig = rigOf(cls);
   const base: Pose = { ...ZERO, ...rig.rest };
   let p: Pose = { ...base };
   const fx: Effects = {};
@@ -334,6 +490,10 @@ export function heroPose(cls: ClaseId, t: number, action: ActionProgress | null)
   p.torsoY += b * 0.9 * calm; p.torso += b * 1.2 * calm; p.head -= b * 1.5 * calm;
   p.armF += b * 2.5 * calm; p.armB -= b * 2.5 * calm; p.weapon -= b * 2 * calm;
   // cape/scarf hangs from the shoulders and trails behind forward motion
+  if (rig.flap) {
+    const w = Math.sin(t * 2 * Math.PI * 1.6 + rig.phase) * rig.flap * (action ? 0.5 : 1);
+    p.armF += w; p.armB += w * 0.9; p.torsoY -= w * 0.08;
+  }
   p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
   fx.blink = ((t + rig.phase) % 3.7) < 0.13;
   return { p, fx };
@@ -347,15 +507,15 @@ export function activeAction(a: Action | null, t: number): ActionProgress | null
 }
 
 /** World-space geometry of the slash arc, spell ring and projectile. */
-export function heroEffects(cls: ClaseId, bones: Record<BoneId, Matrix>, fx: Effects): EffectGeometry {
-  const rig = HERO_RIGS[cls];
+export function heroEffects(cls: RigId, bones: Record<BoneId, Matrix>, fx: Effects): EffectGeometry {
+  const rig = rigOf(cls);
   const g: EffectGeometry = {};
   if (fx.slash !== undefined && rig.slash) {
     const [cx, cy] = applyMatrix(bones.torso, ...pivotOf(cls, 'armF'));
     const head = -120 + 170 * easeOut(fx.slash), tail = head - 85 * (1 - fx.slash * 0.5);
     g.slash = { cx, cy, r0: rig.slash[0], r1: rig.slash[1], a0: tail, a1: head, alpha: 1 - fx.slash * fx.slash };
   }
-  const [ex, ey] = applyMatrix(bones.weapon, ...rig.focus);
+  const [ex, ey] = applyMatrix(bones[rig.focusBone ?? 'weapon'], ...rig.focus);
   if (fx.burst !== undefined) g.ring = { cx: ex, cy: ey, r: 3 + fx.burst * 15, core: (1 - fx.burst) * 6, alpha: 1 - fx.burst };
   if (fx.projectile !== undefined) {
     g.orb = {

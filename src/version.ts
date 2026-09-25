@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.4.0';
+export const VERSION = '3.4.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.4.1',
+    fecha: '2026-09-25',
+    cambios: [
+      '🐺 Las transformaciones del druida tienen ya su propia silueta a contraluz animada: lobo, oso, águila que no deja de aletear, enjambre zumbante, lobo lunar con su creciente brillante y ciervo estelar con astas de estrellas.',
+      '🐾 Cada forma ataca a su manera: el lobo salta, el oso se alza y zarpea, el águila se lanza en picado y el ciervo estelar dispara luz desde sus astas.',
+    ],
+  },
   {
     version: '3.4.0',
     fecha: '2026-09-25',

@@ -134,10 +134,6 @@
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
 .sprite-heroe { display: block; width: 8.6rem; height: auto; overflow: visible; }
-/* formas del druida: el emoji se ennegrece en la misma silueta con luz de borde */
-.heroe .sprite.sprite-forma {
-  filter: brightness(0) drop-shadow(2px -2px 0 var(--acento-heroe)) drop-shadow(0 0 10px var(--acento-heroe));
-}
 
 /* Cielo del combate: bruma de horizonte y luna que recortan al héroe */
 .cielo {

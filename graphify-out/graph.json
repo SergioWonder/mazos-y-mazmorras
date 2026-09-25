@@ -313,7 +313,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L117",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 5,
+      "community": 3,
       "norm_label": "mejorobjetivo()"
     },
     {
@@ -331,7 +331,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L127",
       "id": "scripts_smoke_test_simular",
-      "community": 5,
+      "community": 3,
       "norm_label": "simular()"
     },
     {
@@ -385,7 +385,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L30",
       "id": "core_cartas_basicas",
-      "community": 1,
+      "community": 14,
       "norm_label": "basicas"
     },
     {
@@ -394,7 +394,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L75",
       "id": "core_cartas_druida",
-      "community": 15,
+      "community": 18,
       "norm_label": "druida"
     },
     {
@@ -421,7 +421,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1367",
       "id": "core_cartas_daga",
-      "community": 8,
+      "community": 16,
       "norm_label": "daga"
     },
     {
@@ -430,7 +430,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1387",
       "id": "core_cartas_mago",
-      "community": 8,
+      "community": 23,
       "norm_label": "mago"
     },
     {
@@ -439,7 +439,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2030",
       "id": "core_cartas_picaro",
-      "community": 15,
+      "community": 16,
       "norm_label": "picaro"
     },
     {
@@ -466,7 +466,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2767",
       "id": "core_cartas_brujo",
-      "community": 15,
+      "community": 19,
       "norm_label": "brujo"
     },
     {
@@ -502,7 +502,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3596",
       "id": "core_cartas_iniciales_de_clase",
-      "community": 8,
+      "community": 16,
       "norm_label": "iniciales_de_clase"
     },
     {
@@ -520,7 +520,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3614",
       "id": "core_cartas_mazoinicial",
-      "community": 5,
+      "community": 3,
       "norm_label": "mazoinicial()"
     },
     {
@@ -529,7 +529,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3625",
       "id": "core_cartas_pooldeclase",
-      "community": 8,
+      "community": 3,
       "norm_label": "pooldeclase()"
     },
     {
@@ -556,7 +556,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3647",
       "id": "core_cartas_recompensacartas",
-      "community": 8,
+      "community": 3,
       "norm_label": "recompensacartas()"
     },
     {
@@ -619,7 +619,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L98",
       "id": "core_combate_combate_bloqueodecarta",
-      "community": 15,
+      "community": 10,
       "norm_label": ".bloqueodecarta()"
     },
     {
@@ -745,7 +745,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L611",
       "id": "core_combate_combate_invocar",
-      "community": 15,
+      "community": 2,
       "norm_label": ".invocar()"
     },
     {
@@ -754,7 +754,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L632",
       "id": "core_combate_combate_invocarefimero",
-      "community": 15,
+      "community": 2,
       "norm_label": ".invocarefimero()"
     },
     {
@@ -1474,7 +1474,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L625",
       "id": "core_enemigos_capitulo",
-      "community": 10,
+      "community": 0,
       "norm_label": "capitulo"
     },
     {
@@ -1501,7 +1501,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L1",
       "id": "core_eventos",
-      "community": 8,
+      "community": 3,
       "norm_label": "eventos.ts"
     },
     {
@@ -1510,7 +1510,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L6",
       "id": "core_eventos_opcionevento",
-      "community": 8,
+      "community": 3,
       "norm_label": "opcionevento"
     },
     {
@@ -1519,7 +1519,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L12",
       "id": "core_eventos_eventodef",
-      "community": 8,
+      "community": 3,
       "norm_label": "eventodef"
     },
     {
@@ -1528,7 +1528,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L23",
       "id": "core_eventos_curar",
-      "community": 8,
+      "community": 3,
       "norm_label": "curar()"
     },
     {
@@ -1537,7 +1537,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L29",
       "id": "core_eventos_perderpv",
-      "community": 8,
+      "community": 3,
       "norm_label": "perderpv()"
     },
     {
@@ -1546,7 +1546,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L35",
       "id": "core_eventos_mejorables",
-      "community": 8,
+      "community": 3,
       "norm_label": "mejorables()"
     },
     {
@@ -1555,7 +1555,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L39",
       "id": "core_eventos_mejoraraleatorias",
-      "community": 8,
+      "community": 3,
       "norm_label": "mejoraraleatorias()"
     },
     {
@@ -1564,7 +1564,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L51",
       "id": "core_eventos_cartaaleatoria",
-      "community": 8,
+      "community": 3,
       "norm_label": "cartaaleatoria()"
     },
     {
@@ -1573,7 +1573,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L59",
       "id": "core_eventos_quitarcartabasica",
-      "community": 8,
+      "community": 3,
       "norm_label": "quitarcartabasica()"
     },
     {
@@ -1582,7 +1582,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L69",
       "id": "core_eventos_quitarcartaaleatoria",
-      "community": 8,
+      "community": 3,
       "norm_label": "quitarcartaaleatoria()"
     },
     {
@@ -1591,7 +1591,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L79",
       "id": "core_eventos_defnombre",
-      "community": 8,
+      "community": 3,
       "norm_label": "defnombre()"
     },
     {
@@ -1600,7 +1600,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L83",
       "id": "core_eventos_reliquiaaleatoria",
-      "community": 8,
+      "community": 3,
       "norm_label": "reliquiaaleatoria()"
     },
     {
@@ -1609,7 +1609,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L100",
       "id": "core_eventos_eventos_positivos",
-      "community": 8,
+      "community": 3,
       "norm_label": "eventos_positivos"
     },
     {
@@ -1618,7 +1618,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L297",
       "id": "core_eventos_eventos_negativos",
-      "community": 8,
+      "community": 3,
       "norm_label": "eventos_negativos"
     },
     {
@@ -1627,7 +1627,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L370",
       "id": "core_eventos_elegirevento",
-      "community": 8,
+      "community": 3,
       "norm_label": "elegirevento()"
     },
     {
@@ -1690,7 +1690,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L104",
       "id": "core_guardado_hayguardado",
-      "community": 5,
+      "community": 1,
       "norm_label": "hayguardado()"
     },
     {
@@ -1699,7 +1699,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L112",
       "id": "core_guardado_borrarguardado",
-      "community": 5,
+      "community": 1,
       "norm_label": "borrarguardado()"
     },
     {
@@ -1708,7 +1708,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 5,
+      "community": 3,
       "norm_label": "mapa.ts"
     },
     {
@@ -1717,7 +1717,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L8",
       "id": "core_mapa_generarmapa",
-      "community": 5,
+      "community": 3,
       "norm_label": "generarmapa()"
     },
     {
@@ -1726,7 +1726,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L93",
       "id": "core_mapa_nodosdisponibles",
-      "community": 5,
+      "community": 3,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -1780,7 +1780,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L29",
       "id": "core_reliquias_sello_pacto",
-      "community": 15,
+      "community": 10,
       "norm_label": "sello_pacto"
     },
     {
@@ -1789,7 +1789,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L39",
       "id": "core_reliquias_reliquiainicial",
-      "community": 5,
+      "community": 3,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -1816,7 +1816,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L1",
       "id": "core_rng",
-      "community": 5,
+      "community": 3,
       "norm_label": "rng.ts"
     },
     {
@@ -1825,7 +1825,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L2",
       "id": "core_rng_crearrng",
-      "community": 5,
+      "community": 3,
       "norm_label": "crearrng()"
     },
     {
@@ -1834,7 +1834,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L13",
       "id": "core_rng_entre",
-      "community": 5,
+      "community": 3,
       "norm_label": "entre()"
     },
     {
@@ -1843,7 +1843,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 5,
+      "community": 3,
       "norm_label": "elegir()"
     },
     {
@@ -1861,7 +1861,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L1",
       "id": "core_run",
-      "community": 5,
+      "community": 3,
       "norm_label": "run.ts"
     },
     {
@@ -1870,7 +1870,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L7",
       "id": "core_run_pv_por_clase",
-      "community": 15,
+      "community": 18,
       "norm_label": "pv_por_clase"
     },
     {
@@ -1879,7 +1879,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L15",
       "id": "core_run_nuevarun",
-      "community": 5,
+      "community": 3,
       "norm_label": "nuevarun()"
     },
     {
@@ -1888,7 +1888,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L38",
       "id": "core_run_avanzarcapitulo",
-      "community": 5,
+      "community": 1,
       "norm_label": "avanzarcapitulo()"
     },
     {
@@ -1897,7 +1897,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L1",
       "id": "core_types",
-      "community": 5,
+      "community": 2,
       "norm_label": "types.ts"
     },
     {
@@ -1906,7 +1906,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 5,
+      "community": 6,
       "norm_label": "claseid"
     },
     {
@@ -1915,7 +1915,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L4",
       "id": "core_types_tipocarta",
-      "community": 5,
+      "community": 2,
       "norm_label": "tipocarta"
     },
     {
@@ -1924,7 +1924,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L5",
       "id": "core_types_rareza",
-      "community": 8,
+      "community": 3,
       "norm_label": "rareza"
     },
     {
@@ -1933,7 +1933,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_modoobjetivo",
-      "community": 5,
+      "community": 2,
       "norm_label": "modoobjetivo"
     },
     {
@@ -1942,7 +1942,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L9",
       "id": "core_types_estadoid",
-      "community": 15,
+      "community": 10,
       "norm_label": "estadoid"
     },
     {
@@ -1960,7 +1960,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L64",
       "id": "core_types_formainvocacion",
-      "community": 15,
+      "community": 2,
       "norm_label": "formainvocacion"
     },
     {
@@ -1969,7 +1969,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L68",
       "id": "core_types_efectoinvocacion",
-      "community": 5,
+      "community": 2,
       "norm_label": "efectoinvocacion"
     },
     {
@@ -1978,7 +1978,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L73",
       "id": "core_types_invocacion",
-      "community": 15,
+      "community": 2,
       "norm_label": "invocacion"
     },
     {
@@ -1987,7 +1987,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L86",
       "id": "core_types_efectotemporal",
-      "community": 5,
+      "community": 2,
       "norm_label": "efectotemporal"
     },
     {
@@ -2005,7 +2005,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L106",
       "id": "core_types_tipointencion",
-      "community": 5,
+      "community": 2,
       "norm_label": "tipointencion"
     },
     {
@@ -2023,7 +2023,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L125",
       "id": "core_types_enemigodef",
-      "community": 10,
+      "community": 2,
       "norm_label": "enemigodef"
     },
     {
@@ -2041,7 +2041,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L172",
       "id": "core_types_espacioconjuro",
-      "community": 2,
+      "community": 23,
       "norm_label": "espacioconjuro"
     },
     {
@@ -2059,7 +2059,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L202",
       "id": "core_types_cartadef",
-      "community": 1,
+      "community": 2,
       "norm_label": "cartadef"
     },
     {
@@ -2068,7 +2068,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L235",
       "id": "core_types_mejoracarta",
-      "community": 5,
+      "community": 2,
       "norm_label": "mejoracarta"
     },
     {
@@ -2095,7 +2095,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L362",
       "id": "core_types_tiponodo",
-      "community": 5,
+      "community": 3,
       "norm_label": "tiponodo"
     },
     {
@@ -2122,7 +2122,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L389",
       "id": "core_types_estadorun",
-      "community": 8,
+      "community": 1,
       "norm_label": "estadorun"
     },
     {
@@ -2669,7 +2669,7 @@
       "label": "ActionType",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L42",
+      "source_location": "L45",
       "id": "fx_hero_rig_actiontype",
       "community": 6,
       "norm_label": "actiontype"
@@ -2678,7 +2678,7 @@
       "label": "Action",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L43",
+      "source_location": "L46",
       "id": "fx_hero_rig_action",
       "community": 6,
       "norm_label": "action"
@@ -2687,7 +2687,7 @@
       "label": "ActionProgress",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L44",
+      "source_location": "L47",
       "id": "fx_hero_rig_actionprogress",
       "community": 6,
       "norm_label": "actionprogress"
@@ -2696,7 +2696,7 @@
       "label": "Effects",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L46",
+      "source_location": "L49",
       "id": "fx_hero_rig_effects",
       "community": 6,
       "norm_label": "effects"
@@ -2705,7 +2705,7 @@
       "label": "EffectGeometry",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L54",
+      "source_location": "L57",
       "id": "fx_hero_rig_effectgeometry",
       "community": 6,
       "norm_label": "effectgeometry"
@@ -2714,7 +2714,7 @@
       "label": "ACTION_DURATION",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L61",
+      "source_location": "L64",
       "id": "fx_hero_rig_action_duration",
       "community": 6,
       "norm_label": "action_duration"
@@ -2723,7 +2723,7 @@
       "label": "EMISSIVE",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L64",
+      "source_location": "L67",
       "id": "fx_hero_rig_emissive",
       "community": 6,
       "norm_label": "emissive"
@@ -2732,7 +2732,7 @@
       "label": "EYES",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L65",
+      "source_location": "L68",
       "id": "fx_hero_rig_eyes",
       "community": 6,
       "norm_label": "eyes"
@@ -2741,7 +2741,7 @@
       "label": "C()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L67",
+      "source_location": "L70",
       "id": "fx_hero_rig_c",
       "community": 6,
       "norm_label": "c()"
@@ -2750,7 +2750,7 @@
       "label": "E()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L68",
+      "source_location": "L71",
       "id": "fx_hero_rig_e",
       "community": 6,
       "norm_label": "e()"
@@ -2759,7 +2759,7 @@
       "label": "P()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L69",
+      "source_location": "L72",
       "id": "fx_hero_rig_p",
       "community": 6,
       "norm_label": "p()"
@@ -2768,7 +2768,7 @@
       "label": "L()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L70",
+      "source_location": "L73",
       "id": "fx_hero_rig_l",
       "community": 6,
       "norm_label": "l()"
@@ -2777,7 +2777,7 @@
       "label": "DEFAULT_PIVOTS",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L73",
+      "source_location": "L76",
       "id": "fx_hero_rig_default_pivots",
       "community": 6,
       "norm_label": "default_pivots"
@@ -2786,7 +2786,7 @@
       "label": "PARENT",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L78",
+      "source_location": "L81",
       "id": "fx_hero_rig_parent",
       "community": 6,
       "norm_label": "parent"
@@ -2795,7 +2795,7 @@
       "label": "BONE_ORDER",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L82",
+      "source_location": "L85",
       "id": "fx_hero_rig_bone_order",
       "community": 6,
       "norm_label": "bone_order"
@@ -2804,7 +2804,7 @@
       "label": "HERO_RIGS",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L84",
+      "source_location": "L87",
       "id": "fx_hero_rig_hero_rigs",
       "community": 6,
       "norm_label": "hero_rigs"
@@ -2813,7 +2813,7 @@
       "label": "Matrix",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L236",
+      "source_location": "L239",
       "id": "fx_hero_rig_matrix",
       "community": 6,
       "norm_label": "matrix"
@@ -2822,7 +2822,7 @@
       "label": "mul()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L237",
+      "source_location": "L240",
       "id": "fx_hero_rig_mul",
       "community": 6,
       "norm_label": "mul()"
@@ -2831,7 +2831,7 @@
       "label": "translate()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L242",
+      "source_location": "L245",
       "id": "fx_hero_rig_translate",
       "community": 6,
       "norm_label": "translate()"
@@ -2840,7 +2840,7 @@
       "label": "rotateAbout()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L243",
+      "source_location": "L246",
       "id": "fx_hero_rig_rotateabout",
       "community": 6,
       "norm_label": "rotateabout()"
@@ -2849,16 +2849,88 @@
       "label": "applyMatrix()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L247",
+      "source_location": "L250",
       "id": "fx_hero_rig_applymatrix",
       "community": 6,
       "norm_label": "applymatrix()"
     },
     {
+      "label": "FormId",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L254",
+      "id": "fx_hero_rig_formid",
+      "community": 1,
+      "norm_label": "formid"
+    },
+    {
+      "label": "RigId",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L255",
+      "id": "fx_hero_rig_rigid",
+      "community": 6,
+      "norm_label": "rigid"
+    },
+    {
+      "label": "FORM_LABELS",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L257",
+      "id": "fx_hero_rig_form_labels",
+      "community": 6,
+      "norm_label": "form_labels"
+    },
+    {
+      "label": "formFromLabel()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L262",
+      "id": "fx_hero_rig_formfromlabel",
+      "community": 1,
+      "norm_label": "formfromlabel()"
+    },
+    {
+      "label": "wolfShapes()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L268",
+      "id": "fx_hero_rig_wolfshapes",
+      "community": 6,
+      "norm_label": "wolfshapes()"
+    },
+    {
+      "label": "swarmShapes()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L293",
+      "id": "fx_hero_rig_swarmshapes",
+      "community": 6,
+      "norm_label": "swarmshapes()"
+    },
+    {
+      "label": "FORM_RIGS",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L312",
+      "id": "fx_hero_rig_form_rigs",
+      "community": 6,
+      "norm_label": "form_rigs"
+    },
+    {
+      "label": "rigOf()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L404",
+      "id": "fx_hero_rig_rigof",
+      "community": 6,
+      "norm_label": "rigof()"
+    },
+    {
       "label": "pivotOf()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L250",
+      "source_location": "L406",
       "id": "fx_hero_rig_pivotof",
       "community": 6,
       "norm_label": "pivotof()"
@@ -2867,7 +2939,7 @@
       "label": "heroBones()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L253",
+      "source_location": "L409",
       "id": "fx_hero_rig_herobones",
       "community": 6,
       "norm_label": "herobones()"
@@ -2876,7 +2948,7 @@
       "label": "ZERO",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L267",
+      "source_location": "L423",
       "id": "fx_hero_rig_zero",
       "community": 6,
       "norm_label": "zero"
@@ -2885,7 +2957,7 @@
       "label": "smooth()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L268",
+      "source_location": "L424",
       "id": "fx_hero_rig_smooth",
       "community": 6,
       "norm_label": "smooth()"
@@ -2894,7 +2966,7 @@
       "label": "easeOut()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L269",
+      "source_location": "L425",
       "id": "fx_hero_rig_easeout",
       "community": 6,
       "norm_label": "easeout()"
@@ -2903,7 +2975,7 @@
       "label": "Keyframe",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L270",
+      "source_location": "L426",
       "id": "fx_hero_rig_keyframe",
       "community": 6,
       "norm_label": "keyframe"
@@ -2912,7 +2984,7 @@
       "label": "interpolate()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L272",
+      "source_location": "L428",
       "id": "fx_hero_rig_interpolate",
       "community": 6,
       "norm_label": "interpolate()"
@@ -2921,7 +2993,7 @@
       "label": "impactFraction()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L288",
+      "source_location": "L444",
       "id": "fx_hero_rig_impactfraction",
       "community": 6,
       "norm_label": "impactfraction()"
@@ -2930,7 +3002,7 @@
       "label": "heroPose()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L293",
+      "source_location": "L449",
       "id": "fx_hero_rig_heropose",
       "community": 6,
       "norm_label": "heropose()"
@@ -2939,7 +3011,7 @@
       "label": "activeAction()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L343",
+      "source_location": "L503",
       "id": "fx_hero_rig_activeaction",
       "community": 6,
       "norm_label": "activeaction()"
@@ -2948,7 +3020,7 @@
       "label": "heroEffects()",
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
-      "source_location": "L350",
+      "source_location": "L510",
       "id": "fx_hero_rig_heroeffects",
       "community": 6,
       "norm_label": "heroeffects()"
@@ -3103,7 +3175,7 @@
       "source_file": "src/main.ts",
       "source_location": "L1",
       "id": "src_main",
-      "community": 5,
+      "community": 1,
       "norm_label": "main.ts"
     },
     {
@@ -3112,7 +3184,7 @@
       "source_file": "src/main.ts",
       "source_location": "L33",
       "id": "src_main_arrancaraudio",
-      "community": 5,
+      "community": 1,
       "norm_label": "arrancaraudio()"
     },
     {
@@ -3121,7 +3193,7 @@
       "source_file": "src/main.ts",
       "source_location": "L40",
       "id": "src_main_juego",
-      "community": 5,
+      "community": 1,
       "norm_label": "juego()"
     },
     {
@@ -3175,7 +3247,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L1",
       "id": "ui_bendicion",
-      "community": 8,
+      "community": 1,
       "norm_label": "bendicion.ts"
     },
     {
@@ -3184,7 +3256,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
       "id": "ui_bendicion_don",
-      "community": 8,
+      "community": 1,
       "norm_label": "don"
     },
     {
@@ -3193,7 +3265,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L15",
       "id": "ui_bendicion_dones",
-      "community": 8,
+      "community": 1,
       "norm_label": "dones"
     },
     {
@@ -3202,7 +3274,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L66",
       "id": "ui_bendicion_don_carta",
-      "community": 8,
+      "community": 1,
       "norm_label": "don_carta"
     },
     {
@@ -3211,7 +3283,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L83",
       "id": "ui_bendicion_pantallabendicion",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallabendicion()"
     },
     {
@@ -3229,7 +3301,7 @@
       "source_file": "src/ui/capitulo.ts",
       "source_location": "L6",
       "id": "ui_capitulo_pantallacapitulo",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallacapitulo()"
     },
     {
@@ -3416,25 +3488,16 @@
       "label": "NOMBRE_CLASE",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L15",
+      "source_location": "L16",
       "id": "ui_combate_nombre_clase",
       "community": 1,
       "norm_label": "nombre_clase"
     },
     {
-      "label": "SPRITE_FORMA",
-      "file_type": "code",
-      "source_file": "src/ui/combate.ts",
-      "source_location": "L19",
-      "id": "ui_combate_sprite_forma",
-      "community": 1,
-      "norm_label": "sprite_forma"
-    },
-    {
       "label": "SPRITE_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L23",
+      "source_location": "L20",
       "id": "ui_combate_sprite_invocacion",
       "community": 1,
       "norm_label": "sprite_invocacion"
@@ -3443,7 +3506,7 @@
       "label": "PASIVA_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L27",
+      "source_location": "L24",
       "id": "ui_combate_pasiva_invocacion",
       "community": 1,
       "norm_label": "pasiva_invocacion"
@@ -3452,9 +3515,9 @@
       "label": "pantallaCombate()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L35",
+      "source_location": "L32",
       "id": "ui_combate_pantallacombate",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallacombate()"
     },
     {
@@ -3463,7 +3526,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L1",
       "id": "ui_compendio",
-      "community": 1,
+      "community": 14,
       "norm_label": "compendio.ts"
     },
     {
@@ -3481,7 +3544,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L22",
       "id": "ui_compendio_comentarios",
-      "community": 1,
+      "community": 14,
       "norm_label": "comentarios"
     },
     {
@@ -3490,7 +3553,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L24",
       "id": "ui_compendio_cargar",
-      "community": 1,
+      "community": 14,
       "norm_label": "cargar()"
     },
     {
@@ -3499,7 +3562,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L31",
       "id": "ui_compendio_guardar",
-      "community": 1,
+      "community": 14,
       "norm_label": "guardar()"
     },
     {
@@ -3508,7 +3571,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L37",
       "id": "ui_compendio_grupos",
-      "community": 1,
+      "community": 14,
       "norm_label": "grupos"
     },
     {
@@ -3517,7 +3580,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L48",
       "id": "ui_compendio_pantallacompendio",
-      "community": 1,
+      "community": 14,
       "norm_label": "pantallacompendio()"
     },
     {
@@ -3526,7 +3589,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L133",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 1,
+      "community": 14,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -3535,7 +3598,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L1",
       "id": "ui_evento",
-      "community": 8,
+      "community": 1,
       "norm_label": "evento.ts"
     },
     {
@@ -3544,7 +3607,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L7",
       "id": "ui_evento_pantallaevento",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallaevento()"
     },
     {
@@ -3571,7 +3634,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L18",
       "id": "ui_fin_pantallafin",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallafin()"
     },
     {
@@ -3587,7 +3650,7 @@
       "label": "svgEl()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L16",
+      "source_location": "L15",
       "id": "ui_hero_sprite_svgel",
       "community": 6,
       "norm_label": "svgel()"
@@ -3596,7 +3659,7 @@
       "label": "lighten()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L22",
+      "source_location": "L21",
       "id": "ui_hero_sprite_lighten",
       "community": 6,
       "norm_label": "lighten()"
@@ -3605,7 +3668,7 @@
       "label": "capsule()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L28",
+      "source_location": "L27",
       "id": "ui_hero_sprite_capsule",
       "community": 6,
       "norm_label": "capsule()"
@@ -3614,7 +3677,7 @@
       "label": "shapeElement()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L36",
+      "source_location": "L35",
       "id": "ui_hero_sprite_shapeelement",
       "community": 6,
       "norm_label": "shapeelement()"
@@ -3623,7 +3686,7 @@
       "label": "arcSector()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L43",
+      "source_location": "L42",
       "id": "ui_hero_sprite_arcsector",
       "community": 6,
       "norm_label": "arcsector()"
@@ -3632,7 +3695,7 @@
       "label": "active",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L52",
+      "source_location": "L51",
       "id": "ui_hero_sprite_active",
       "community": 6,
       "norm_label": "active"
@@ -3641,7 +3704,7 @@
       "label": "loop()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L57",
+      "source_location": "L56",
       "id": "ui_hero_sprite_loop",
       "community": 6,
       "norm_label": "loop()"
@@ -3650,7 +3713,7 @@
       "label": "HeroSprite",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L66",
+      "source_location": "L65",
       "id": "ui_hero_sprite_herosprite",
       "community": 6,
       "norm_label": "herosprite"
@@ -3659,7 +3722,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L81",
+      "source_location": "L80",
       "id": "ui_hero_sprite_herosprite_constructor",
       "community": 6,
       "norm_label": ".constructor()"
@@ -3668,7 +3731,7 @@
       "label": ".play()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L137",
+      "source_location": "L136",
       "id": "ui_hero_sprite_herosprite_play",
       "community": 6,
       "norm_label": ".play()"
@@ -3677,7 +3740,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L142",
+      "source_location": "L141",
       "id": "ui_hero_sprite_herosprite_destroy",
       "community": 6,
       "norm_label": ".destroy()"
@@ -3686,7 +3749,7 @@
       "label": ".tick()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L147",
+      "source_location": "L146",
       "id": "ui_hero_sprite_herosprite_tick",
       "community": 6,
       "norm_label": ".tick()"
@@ -3695,7 +3758,7 @@
       "label": ".show()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L171",
+      "source_location": "L170",
       "id": "ui_hero_sprite_herosprite_show",
       "community": 6,
       "norm_label": ".show()"
@@ -3704,7 +3767,7 @@
       "label": ".circle()",
       "file_type": "code",
       "source_file": "src/ui/hero-sprite.ts",
-      "source_location": "L175",
+      "source_location": "L174",
       "id": "ui_hero_sprite_herosprite_circle",
       "community": 6,
       "norm_label": ".circle()"
@@ -3733,7 +3796,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L1",
       "id": "ui_mapa",
-      "community": 5,
+      "community": 1,
       "norm_label": "mapa.ts"
     },
     {
@@ -3742,7 +3805,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L6",
       "id": "ui_mapa_icono_nodo",
-      "community": 5,
+      "community": 1,
       "norm_label": "icono_nodo"
     },
     {
@@ -3751,7 +3814,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L9",
       "id": "ui_mapa_nombre_nodo",
-      "community": 5,
+      "community": 1,
       "norm_label": "nombre_nodo"
     },
     {
@@ -3760,7 +3823,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L14",
       "id": "ui_mapa_pantallamapa",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallamapa()"
     },
     {
@@ -3778,7 +3841,7 @@
       "source_file": "src/ui/mision.ts",
       "source_location": "L13",
       "id": "ui_mision_pantallamision",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallamision()"
     },
     {
@@ -3796,7 +3859,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L9",
       "id": "ui_recompensa_elegircarta",
-      "community": 5,
+      "community": 1,
       "norm_label": "elegircarta()"
     },
     {
@@ -3805,7 +3868,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L71",
       "id": "ui_recompensa_obtenerreliquia",
-      "community": 5,
+      "community": 1,
       "norm_label": "obtenerreliquia()"
     },
     {
@@ -3814,7 +3877,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L118",
       "id": "ui_recompensa_pantalladescanso",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantalladescanso()"
     },
     {
@@ -3841,7 +3904,7 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L10",
       "id": "ui_titulo_pantallatitulo",
-      "community": 5,
+      "community": 1,
       "norm_label": "pantallatitulo()"
     },
     {
@@ -3940,7 +4003,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L135",
       "id": "ui_util_descripcion_estado",
-      "community": 15,
+      "community": 10,
       "norm_label": "descripcion_estado"
     },
     {
@@ -4340,6 +4403,15 @@
       "norm_label": "cambiar o ampliar pistas"
     },
     {
+      "label": "SPRITE_FORMA",
+      "file_type": "code",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L19",
+      "community": 1,
+      "norm_label": "sprite_forma",
+      "id": "ui_combate_sprite_forma"
+    },
+    {
       "label": "SPRITE_JUGADOR",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
@@ -4563,7 +4635,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 19,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -4589,7 +4661,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 18,
       "norm_label": "clase druida (70 pv)",
       "id": "readme_clase_druida"
     },
@@ -4615,7 +4687,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 23,
       "norm_label": "clase mago (62 pv)",
       "id": "readme_clase_mago"
     },
@@ -4628,7 +4700,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "clase picaro (66 pv)",
       "id": "readme_clase_picaro"
     },
@@ -4641,7 +4713,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 18,
       "norm_label": "transformaciones (druida)",
       "id": "readme_transformaciones"
     },
@@ -4654,7 +4726,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 18,
       "norm_label": "raices (druida)",
       "id": "readme_raices"
     },
@@ -4667,7 +4739,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 2,
       "norm_label": "invocacion del druida",
       "id": "readme_invocacion"
     },
@@ -4693,7 +4765,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -4706,7 +4778,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 23,
       "norm_label": "espacios de conjuro en piramide (mago)",
       "id": "readme_espacios_conjuro"
     },
@@ -4732,7 +4804,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "acrobacias (picaro)",
       "id": "readme_acrobacias"
     },
@@ -4745,7 +4817,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "veneno",
       "id": "readme_veneno"
     },
@@ -4758,7 +4830,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 16,
       "norm_label": "dagas (picaro)",
       "id": "readme_dagas"
     },
@@ -4797,7 +4869,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 16,
       "norm_label": "robo y descarte con sinergias (picaro)",
       "id": "readme_descarte_sinergias"
     },
@@ -4810,7 +4882,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 19,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -4823,7 +4895,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 16,
       "norm_label": "mazos iniciales (5 golpe + 4 defender + 2 de clase)",
       "id": "readme_mazos_iniciales"
     },
@@ -4862,7 +4934,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts",
       "id": "readme_sistema_energia"
     },
@@ -4875,7 +4947,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 3,
       "norm_label": "mejora de cartas en campamentos",
       "id": "readme_mejora_cartas"
     },
@@ -4888,7 +4960,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 8,
+      "community": 3,
       "norm_label": "eventos narrativos",
       "id": "readme_eventos_narrativos"
     },
@@ -4901,7 +4973,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 13,
+      "community": 14,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -4914,7 +4986,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 3,
       "norm_label": "mapa de 10 filas por capitulo",
       "id": "readme_mapa_capitulo"
     },
@@ -4953,7 +5025,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -4966,7 +5038,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -5005,7 +5077,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 3,
       "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
       "id": "readme_estructura_carpetas"
     },
@@ -5135,7 +5207,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 13,
+      "community": 14,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -5161,7 +5233,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 5,
+      "community": 3,
       "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
       "id": "index_shell_html"
     },
@@ -5174,7 +5246,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 19,
       "norm_label": "clase brujo (64 pv)",
       "id": "readme_clase_brujo"
     },
@@ -5200,7 +5272,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 10,
       "norm_label": "condena (ejecuta al igualar los pv actuales)",
       "id": "readme_condena"
     },
@@ -5213,7 +5285,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 2,
       "norm_label": "invocaciones efimeras (brujo)",
       "id": "readme_invocacion_efimera"
     },
@@ -5239,7 +5311,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 2,
+      "community": 18,
       "norm_label": "oscuridad (baja el ataque de todos)",
       "id": "readme_oscuridad"
     },
@@ -5252,7 +5324,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 15,
+      "community": 19,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -6011,6 +6083,28 @@
       "confidence_score": 1.0,
       "source": "scripts_smoke_test",
       "target": "fx_hero_rig_activeaction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_form_rigs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "fx_hero_rig_formfromlabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -12879,6 +12973,46 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_form_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_form_rigs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L262",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_formfromlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_formid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
       "source_location": "L84",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13039,6 +13173,26 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_rigid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L404",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
       "source_location": "L243",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13069,6 +13223,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L293",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_swarmshapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
       "source_location": "L242",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -13079,11 +13243,32 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L268",
+      "weight": 1.0,
+      "source": "fx_hero_rig",
+      "target": "fx_hero_rig_wolfshapes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
       "source_location": "L267",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "fx_hero_rig",
       "target": "fx_hero_rig_zero"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_rig",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -13218,6 +13403,72 @@
       "target": "fx_hero_rig_eyes"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "fx_hero_rig_swarmshapes",
+      "target": "fx_hero_rig_c",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L283",
+      "weight": 1.0,
+      "source": "fx_hero_rig_wolfshapes",
+      "target": "fx_hero_rig_c",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L305",
+      "weight": 1.0,
+      "source": "fx_hero_rig_swarmshapes",
+      "target": "fx_hero_rig_e",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L271",
+      "weight": 1.0,
+      "source": "fx_hero_rig_wolfshapes",
+      "target": "fx_hero_rig_e",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L270",
+      "weight": 1.0,
+      "source": "fx_hero_rig_wolfshapes",
+      "target": "fx_hero_rig_p",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L271",
+      "weight": 1.0,
+      "source": "fx_hero_rig_wolfshapes",
+      "target": "fx_hero_rig_l",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -13271,6 +13522,127 @@
       "confidence_score": 1.0,
       "source": "fx_hero_rig_heroeffects",
       "target": "fx_hero_rig_applymatrix"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_rig_formid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_rigid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite",
+      "target": "fx_hero_rig_rigid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "fx_hero_rig_rigid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_rig_formfromlabel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L511",
+      "weight": 1.0,
+      "source": "fx_hero_rig_heroeffects",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L450",
+      "weight": 1.0,
+      "source": "fx_hero_rig_heropose",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L445",
+      "weight": 1.0,
+      "source": "fx_hero_rig_impactfraction",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-rig.ts",
+      "source_location": "L406",
+      "weight": 1.0,
+      "source": "fx_hero_rig_pivotof",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_hero_sprite",
+      "target": "fx_hero_rig_rigof",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/hero-sprite.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "ui_hero_sprite_herosprite_constructor",
+      "target": "fx_hero_rig_rigof"
     },
     {
       "relation": "calls",
@@ -17276,5 +17648,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "ec14b729975642e723751441fe48fb9572aabb7d"
+  "built_at_commit": "1ab76269f6788177c27dd04569decc8e56f8c3fd"
 }

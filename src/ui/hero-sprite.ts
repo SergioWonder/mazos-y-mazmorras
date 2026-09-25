@@ -3,10 +3,9 @@
 // node is persistent so combat re-renders can re-attach it without restarting
 // the animation.
 
-import type { ClaseId } from '../core/types.ts';
 import {
-  HERO_RIGS, EMISSIVE, EYES, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION, impactFraction,
-  type Action, type ActionType, type BoneId, type EffectGeometry, type Shape,
+  rigOf, EMISSIVE, EYES, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION, impactFraction,
+  type Action, type ActionType, type BoneId, type EffectGeometry, type RigId, type Shape,
 } from '../fx/hero-rig.ts';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -66,7 +65,7 @@ function loop(now: number) {
 export class HeroSprite {
   readonly element: SVGSVGElement;
   readonly accent: string;
-  private readonly cls: ClaseId;
+  private readonly cls: RigId;
   private readonly groups: { g: SVGElement; bone: BoneId }[] = [];
   private readonly eyes: SVGElement[] = [];
   private readonly shadow: SVGElement;
@@ -78,9 +77,9 @@ export class HeroSprite {
   private rim = 1.8;
   private frames = 0;
 
-  constructor(cls: ClaseId) {
+  constructor(cls: RigId) {
     this.cls = cls;
-    const rig = HERO_RIGS[cls];
+    const rig = rigOf(cls);
     this.accent = rig.accent;
     const glowId = `brillo-heroe-${nextId++}`;
     const svg = svgEl('svg', { viewBox: '0 0 140 135', class: 'sprite-heroe', 'aria-hidden': 'true' }) as SVGSVGElement;
