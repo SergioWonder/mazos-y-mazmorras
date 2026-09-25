@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.9.2';
+export const VERSION = '3.9.3';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.9.3',
+    fecha: '2026-09-25',
+    cambios: [
+      '🪓 Nuevas ilustraciones dibujadas a mano para todas las cartas del bárbaro: tajos, gritos, torbellinos y juramentos de sangre, con el bárbaro a contraluz y sus enemigos saliendo despedidos.',
+      '🔥 Furia Indómita estrena full art: el bárbaro envuelto en llamas sobre un montón de enemigos caídos.',
+    ],
+  },
   {
     version: '3.9.2',
     fecha: '2026-09-25',
