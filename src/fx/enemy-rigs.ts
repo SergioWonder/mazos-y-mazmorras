@@ -981,6 +981,103 @@ const BOSSES: Record<string, PuppetRig> = {
   }),
 };
 
+// ── The Dungeon Master (final joke scene) ────────────────────────────────────
+// An illustrated DM screen with a backlit hooded figure behind it: only the hood
+// and two steepled hands at the chin show. The fingers hang from the wing-finger
+// bones (the DM has no wings), whose chains copy the arm rotations every frame,
+// so they follow the hands and can drum on their own.
+function dungeonMaster(id: string): PuppetRig {
+  const cx = 62;
+  const mx = (x: number) => 2 * cx - x; // mirror around the centre line
+  // left hand (armB, viewer's left): knuckles and fingertips; the right one mirrors it
+  const knuckles: Pt[] = [[59.4, 57.6], [60, 59.6], [60.4, 61.6]];
+  const tips: Pt[] = [[62.4, 50.6], [62.7, 53.2], [62.8, 56]];
+  const fingerB = ['wingBF1', 'wingBF2', 'wingBF3'] as const;
+  const fingerF = ['wingFF1', 'wingFF2', 'wingFF3'] as const;
+  const pivots: Partial<Record<BoneId, Pt>> = {
+    root: [cx, 128], torso: [cx, 96], head: [cx, 60], cape: [cx, 58],
+    armB: [44, 82], armF: [mx(44), 82], wingB: [44, 82], wingF: [mx(44), 82], wingBArm: [44, 82], wingFArm: [mx(44), 82],
+  };
+  knuckles.forEach((k, i) => { pivots[fingerB[i]] = k; pivots[fingerF[i]] = [mx(k[0]), k[1]]; });
+  // steepled fingertips part and meet again, one after another, hand after hand
+  const tap = (t: number, i: number, hand: number) => {
+    const c = (t * 1.25 + i * 0.09 + hand * 0.5) % 1;
+    return c < 0.16 ? Math.sin((c / 0.16) * Math.PI) : 0;
+  };
+  const board = (pts: Pt[]) => P('root', 'board', pts);
+  const parch = (pts: Pt[]) => P('root', 'parch', pts);
+  const hinge = (x: number, y: number): Shape[] => [P('root', 'hinge', [[x - 1.7, y - 3], [x + 1.7, y - 3], [x + 1.7, y + 3], [x - 1.7, y + 3]]), C('root', 'ink', x, y, 0.5)];
+  const lines = (x0: number, x1: number, y0: number, n: number, dy: number, tilt: number): Shape[] =>
+    Array.from({ length: n }, (_, i) => L('root', 'ink', x0, y0 + i * dy, x1 - (i % 3 === 2 ? 5 : 0), y0 + i * dy + tilt, 0.55));
+  return finish(id, {
+    accent: '#ffb45a', style: 'magic', focus: [66, 60], focusBone: 'armF', art: 1.12,
+    palette: {
+      robe: '#0b0910', hand: '#1f1828', eyeGlow: '#ff4a3a',
+      board: '#6a2a22', parch: '#dccb9e', trim: '#c9a04a', hinge: '#a4a9ae', emblem: '#9a2a22',
+      die: '#b3202e', dieLight: '#e2485a', bone: '#e6dcc0', fire: '#ffc46a',
+    },
+    backlit: ['robe', 'hand'],
+    pivots,
+    rest: {},
+    // the hands part, then one is flung at the hero while the other rises
+    windup: { torso: -3, head: -6, armB: -38, armF: 38, wingBF1: -18, wingBF3: 14, wingFF1: 18, wingFF3: -14 },
+    strike: { torso: 4, head: 5, armB: -55, armF: 88, wingBF1: -30, wingBF2: -8, wingBF3: 20, wingFF1: 34, wingFF2: 10, wingFF3: -22 },
+    animate: (p, t, action) => {
+      // the finger chains copy the arms, so the fingers stay on the hands
+      p.wingB = p.armB; p.wingF = p.armF; p.wingBArm = 0; p.wingFArm = 0;
+      const k = action ? 0.2 : 1;
+      fingerB.forEach((b, i) => { p[b] -= 24 * k * tap(t, i, 0); });
+      fingerF.forEach((b, i) => { p[b] += 24 * k * tap(t, i, 1); });
+      // slow, heavy breathing under the hood
+      const breath = Math.sin((t * 2 * Math.PI) / 3.4);
+      p.torsoY += breath * 0.9; p.head -= breath * 1.2;
+    },
+    bursts: {
+      attack: [{ bone: 'armF', at: [66, 60], effect: 'divino', scale: 0.8 }, { bone: 'armB', at: [58, 60], effect: 'arcana', scale: 12 }],
+      spell: [{ bone: 'armF', at: [66, 60], effect: 'arcana', scale: 14 }, { bone: 'armB', at: [58, 60], effect: 'arcana', scale: 14 }],
+      hit: [{ bone: 'root', at: [cx, 96], effect: 'bloqueo', scale: 1.2 }],
+    },
+    shapes: [
+      // — the hooded figure behind the screen (backlit) —
+      P('torso', 'robe', [[34, 64], [48, 55], [76, 55], [90, 64], [100, 80], [104, 100], [20, 100], [24, 80]]),
+      P('head', 'robe', [[cx, 15], [70, 18.5], [77, 26], [81.5, 37], [82.5, 49], [79, 59], [45, 59], [41.5, 49], [42.5, 37], [47, 26], [54, 18.5]]),
+      P('head', 'robe', [[cx, 15], [66, 11], [64, 17]]), // the hood's drooping tip
+      E('head', 'eyeGlow', 56.4, 42, 2.5, 1.3), E('head', 'eyeGlow', 67.6, 42, 2.5, 1.3),
+      // sleeves, forearms and palms
+      L('armB', 'robe', 41, 90, 51, 71, 11), L('armF', 'robe', mx(41), 90, mx(51), 71, 11),
+      L('armB', 'hand', 51, 71, 56.5, 63.5, 5.4), L('armF', 'hand', mx(51), 71, mx(56.5), 63.5, 5.4),
+      E('armB', 'hand', 58, 60.6, 3.4, 4.6), E('armF', 'hand', mx(58), 60.6, 3.4, 4.6),
+      L('armB', 'hand', 57.6, 64.4, 61.2, 62, 2.2), L('armF', 'hand', mx(57.6), 64.4, mx(61.2), 62, 2.2),
+      ...knuckles.flatMap(([x, y], i): Shape[] => [
+        L(fingerB[i], 'hand', x, y, tips[i][0], tips[i][1], 2.1),
+        L(fingerF[i], 'hand', mx(x), y, mx(tips[i][0]), tips[i][1], 2.1),
+      ]),
+      // — the DM screen (illustrated): three panels, hinges, notes and a d20 —
+      board([[6, 85], [38, 78], [38, 128], [8, 126]]),
+      board([[38, 78], [86, 78], [86, 128], [38, 128]]),
+      board([[86, 78], [118, 85], [116, 126], [86, 128]]),
+      parch([[11, 89.5], [34.5, 84], [34.5, 122], [12, 120.5]]),
+      parch([[42, 83], [82, 83], [82, 123], [42, 123]]),
+      parch([[89.5, 84], [113, 89.5], [112, 120.5], [89.5, 122]]),
+      ...lines(14, 32, 94, 7, 3.6, -1.2), ...lines(92, 110, 92.5, 7, 3.6, 1.2),
+      P('root', 'emblem', [[92, 113], [98, 113], [98, 118], [92, 118]]), L('root', 'ink', 92, 115.5, 98, 115.5, 0.5),
+      C('root', 'emblem', cx, 100, 12), C('root', 'trim', cx, 100, 9.2),
+      P('root', 'emblem', [[cx, 91.5], [cx + 7.4, 104.5], [cx - 7.4, 104.5]]),
+      L('root', 'ink', cx, 91.5, cx, 104.5, 0.6), L('root', 'ink', cx - 7.4, 104.5, cx, 99.5, 0.6), L('root', 'ink', cx + 7.4, 104.5, cx, 99.5, 0.6),
+      L('root', 'trim', 50, 117.5, 74, 117.5, 1.4), L('root', 'trim', 50, 88, 74, 88, 1.4),
+      L('root', 'trim', 6, 85, 38, 78, 1.8), L('root', 'trim', 38, 78, 86, 78, 1.8), L('root', 'trim', 86, 78, 118, 85, 1.8),
+      ...[[6, 85], [38, 78], [86, 78], [118, 85]].map(([x, y]): Shape => C('root', 'trim', x, y, 1.6)),
+      ...hinge(38, 86), ...hinge(38, 119), ...hinge(86, 86), ...hinge(86, 119),
+      ...candle('root', 20, 73),
+      // the d20 resting on the right panel
+      P('root', 'die', [[101, 67], [107.5, 70.8], [107.5, 78.2], [101, 82], [94.5, 78.2], [94.5, 70.8]]),
+      P('root', 'dieLight', [[101, 69.6], [105.4, 77.2], [96.6, 77.2]]),
+      L('root', 'ink', 101, 69.6, 101, 67, 0.5), L('root', 'ink', 96.6, 77.2, 94.5, 78.2, 0.5), L('root', 'ink', 105.4, 77.2, 107.5, 78.2, 0.5),
+      L('root', 'ink', 96.6, 77.2, 101, 82, 0.5), L('root', 'ink', 105.4, 77.2, 101, 82, 0.5),
+    ],
+  });
+}
+
 // ── Enemy catalogue ──────────────────────────────────────────────────────────
 const G = { skin: '#6f7d4a', leather: '#56422f', cloth: '#6a3b2a', hair: '#2e2a22', eyeGlow: '#ffd75a', body: '#56422f', legs: '#6f7d4a', boots: '#3e2e20' };
 const BONE = { skin: '#cdc3a6', bone: '#cdc3a6', body: '#cdc3a6', legs: '#cdc3a6', boots: '#cdc3a6', arms: '#cdc3a6', eyeGlow: '#9fe8ff', cloth: '#3e4a52', metal: '#7f858a', rust: '#6b4a34' };
@@ -1041,6 +1138,8 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   'cerebro-anciano': brain('cerebro-anciano', { flesh: '#b07a8a', magic: '#e7a8ff' }),
   observador: floatingEye('observador', { flesh: '#7a4a5a', magic: '#ff9ad0', eyeGlow: '#ffd75a' }, 2),
   ...BOSSES,
+  // final scene
+  'dungeon-master': dungeonMaster('dungeon-master'),
 };
 
 // ── Invocations (druid spirits and warlock pacts) ────────────────────────────

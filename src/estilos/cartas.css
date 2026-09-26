@@ -221,7 +221,8 @@
   outline: 2px dashed var(--brasa-viva);
   outline-offset: 3px;
 }
-.mano .carta.en-curso { opacity: 0.3; }
+/* the card being played is flying as a clone: its slot stays empty until it leaves the hand */
+.mano .carta.en-curso { opacity: 0; }
 .orden-cola {
   position: absolute;
   top: -11px;
@@ -249,17 +250,42 @@
   pointer-events: none;
 }
 
-/* carta volando al jugarse */
-.carta-volando {
+/* flying cards (ui/card-fly.ts): fixed clones animated with WAAPI, transform and opacity only */
+.carta-clon,
+.carta-vuelo,
+.carta-dorso-suelta {
   position: fixed;
   z-index: 70;
+  margin: 0;
   pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.5, -0.3, 0.3, 1);
+  transition: none;
+  will-change: transform, opacity;
 }
-.carta-volando-fin {
-  transform: translate(0, -180px) scale(0.45) rotate(8deg);
-  opacity: 0;
+.carta-vuelo { transform-style: preserve-3d; }
+.carta-vuelo > .carta {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  transition: none;
+  backface-visibility: hidden;
 }
+.carta-dorso {
+  border-radius: 10px;
+  border: 3px solid #8a7350;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 209, 102, 0.35) 0 18%, transparent 19%),
+    repeating-linear-gradient(45deg, #3a2a1a 0 8px, #2c1f13 8px 16px);
+  box-shadow: inset 0 0 0 2px rgba(255, 220, 150, 0.25);
+}
+.carta-vuelo > .carta-dorso {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+.carta-dorso-suelta { width: 120px; height: 170px; }
+/* a drawn card waits hidden in its slot until its flying copy lands */
+.mano .carta.carta-llegando { opacity: 0; }
 
 /* ── Showcase de carta rara al jugarse ──────────────────────────────────── */
 .carta-showcase {
@@ -391,3 +417,57 @@
 @media (prefers-reduced-motion: reduce) {
   .full-art-fondo, .carta-full-art::before, .carta-rara-brillo .carta-arte-ilustrada::after, .full-art-capa::after { animation: none; }
 }
+
+/* ── Maldiciones: marco negro violáceo, borde agrietado, nombre en rojo apagado ── */
+.carta.carta-maldicion {
+  --marco: #2a1733;
+  color: #d9ccd6;
+  background:
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(140, 80, 150, 0.28), transparent 55%),
+    radial-gradient(ellipse 80% 50% at 50% 115%, rgba(120, 20, 30, 0.35), transparent 60%),
+    linear-gradient(165deg, #231a29 0%, #1a1220 55%, #110b15 100%);
+  border-color: #1b0e22;
+  box-shadow:
+    inset 0 0 0 1px rgba(150, 90, 170, 0.35),
+    inset 0 0 14px rgba(0, 0, 0, 0.8),
+    0 6px 14px rgba(0, 0, 0, 0.65),
+    0 0 10px rgba(110, 40, 120, 0.45);
+}
+/* cracks running in from the frame (drawn over the border, never catch the pointer) */
+.carta.carta-maldicion::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 148 208' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='%23b58ac4' stroke-width='0.9' stroke-linecap='round' stroke-linejoin='round' opacity='0.55'%3E%3Cpath d='M0 38 L9 42 L14 39 L22 47 M9 42 L11 51'/%3E%3Cpath d='M148 22 L139 27 L141 34 L132 38'/%3E%3Cpath d='M148 128 L138 124 L134 131 L125 128 M138 124 L136 116'/%3E%3Cpath d='M0 170 L8 166 L12 174 L20 171'/%3E%3Cpath d='M52 0 L55 8 L50 14 L54 21'/%3E%3Cpath d='M104 208 L101 199 L107 193 L103 186 M101 199 L94 197'/%3E%3Cpath d='M0 96 L6 99 L5 106'/%3E%3C/g%3E%3Cg fill='none' stroke='%23050207' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M0 37 L9 41 L14 38 L22 46 M9 41 L11 50'/%3E%3Cpath d='M148 21 L139 26 L141 33 L132 37'/%3E%3Cpath d='M148 127 L138 123 L134 130 L125 127 M138 123 L136 115'/%3E%3Cpath d='M0 169 L8 165 L12 173 L20 170'/%3E%3Cpath d='M51 0 L54 8 L49 14 L53 21'/%3E%3Cpath d='M103 208 L100 199 L106 193 L102 186 M100 199 L93 197'/%3E%3Cpath d='M0 95 L6 98 L5 105'/%3E%3C/g%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.carta-maldicion .carta-nombre {
+  color: #a3474a;
+  text-shadow: 0 1px 0 #000, 0 0 6px rgba(120, 20, 30, 0.6);
+  letter-spacing: 0.02em;
+}
+.carta-maldicion .carta-tipo {
+  color: #b98a9a;
+  opacity: 0.9;
+  letter-spacing: 0.14em;
+}
+.carta-maldicion .carta-tipo strong { color: #c98bb0; }
+.carta-maldicion .carta-texto { color: #e2d6de; }
+.carta-maldicion .carta-arte {
+  border-color: rgba(10, 4, 14, 0.9);
+  background: #0c0710;
+  filter: saturate(0.85) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
+}
+/* the payable curse (Blood Debt) shows its payoff as a blood-red gem */
+.carta-maldicion .carta-coste.coste-saldar {
+  z-index: 2;
+  color: #ffe6e6;
+  background: radial-gradient(circle at 32% 28%, #d06a6a, #7a1d24 60%, #3a0a10);
+  border-color: #220508;
+  box-shadow: 0 0 8px rgba(160, 30, 40, 0.7);
+}
+/* an unplayable curse in hand: dimmed, but still readable (not the grey of "no energy") */
+.mano .carta.carta-maldicion.sin-energia { filter: brightness(0.85) saturate(0.9); }
+.carta-maldicion.carta-mejorada .carta-nombre { color: #a3474a; }

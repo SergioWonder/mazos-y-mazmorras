@@ -393,10 +393,17 @@ export class PuppetStage {
     } else {
       const rimPx = Math.max(0.8, rect.w / this.dpr / 130) * this.dpr;
       const rim = parseColour(v.rim);
-      const skip = FLAG.ink | FLAG.emissive;
+      // backlit pieces (the hooded DM) go first, as a silhouette behind the rest
+      if (v.rig.backlit?.length) {
+        const sil = Math.max(1.1, rect.w / this.dpr / 75) * this.dpr;
+        pass(3, [accent[0], accent[1], accent[2], 0.55], { glow: 3.2, margin: 12, only: FLAG.backlit });
+        pass(2, [accent[0], accent[1], accent[2], 1], { offset: [sil, -sil], only: FLAG.backlit });
+        pass(1, [0, 0, 0, 0], { only: FLAG.backlit });
+      }
+      const skip = FLAG.ink | FLAG.emissive | FLAG.backlit;
       pass(2, rim, { expand: 1.3, offset: [-rimPx, -rimPx], skip });
       pass(2, [0.078, 0.051, 0.039, 1], { expand: 1.3, skip });
-      pass(0, [0, 0, 0, 0]);
+      pass(0, [0, 0, 0, 0], { skip: FLAG.backlit });
       pass(3, [0, 0, 0, -0.5], { only: FLAG.emissive, glow: 0.9, margin: 5, additive: true });
     }
 

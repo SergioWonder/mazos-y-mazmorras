@@ -5,7 +5,8 @@ import type {
 import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
-import { defDe, cartaPorId, instanciar, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
+import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
+import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
 import type { EfectoConjuro, EfectoInvocacion, FormaInvocacion } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
@@ -35,7 +36,15 @@ export interface Presentador {
   fxInvocacionCura(n: number): Promise<void>;
   /** Deja al jugador elegir una carta de una lista (o cancelar). */
   elegirCarta(cartas: CartaInstancia[], titulo: string): Promise<CartaInstancia | null>;
+  /** (optional) An enemy speaks: speech bubble over it (the Dungeon Master). */
+  fxDialogo?(e: EnemigoCombate, txt: string): Promise<void>;
+  /** (optional) The hero falls for good (the Dungeon Master's ray). */
+  fxMuerteHeroe?(): Promise<void>;
 }
+
+/** The Dungeon Master of the final scene (his screen absorbs everything). */
+export const esDungeonMaster = (l: Luchador): boolean =>
+  (l as EnemigoCombate).def?.dungeonMaster === true;
 
 export class Combate {
   jugador: JugadorCombate;
@@ -46,12 +55,16 @@ export class Combate {
   danoBloqueadoEsteTurno = 0; // daño absorbido por el bloqueo en la ronda
   descartadasEsteTurno = 0; // cartas descartadas por efectos este turno (pícaro)
   terminado: 'victoria' | 'derrota' | null = null;
+  /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
+  finalVerdadero = false;
   enResolucion = false;
   /** Cards played this turn / this combat (relic rhythm hooks). */
   jugadasTurno = 0;
   jugadasCombate = 0;
   /** Discard reshuffles not yet announced to the relics (robarCartas is sync). */
   private barajadosPendientes = 0;
+  /** Drawn cards with an on-draw effect (curses) not fired yet (robarCartas is sync). */
+  private robadasPendientes: CartaInstancia[] = [];
   /** Per-combat relic counters (see ContextoEfecto.marca). */
   private marcas: Record<string, number> = {};
   /** Guards the alAplicarEstado hook against relics re-triggering themselves. */
@@ -116,6 +129,8 @@ export class Combate {
   /** Coste real de una carta este turno: el Don del Patrón deja la Explosión
    *  Sobrenatural a 0 y el Rayo Carmesí del Contemplador encarece todo. */
   costeEfectivo(def: CartaDef): number {
+    // Curses cost nothing to hold; the payable ones (Blood Debt) cost their payoff.
+    if (def.tipo === 'maldicion') return def.purgar ?? 0;
     const gratis =
       def.id === 'explosion-sobrenatural' && (this.jugador.estados.explosionGratis ?? 0) > 0;
     const base = gratis ? 0 : def.coste;
@@ -151,7 +166,8 @@ export class Combate {
   /** Condena (brujo): la Condena acumulada alcanza los PV actuales del enemigo,
    *  así que al final de su turno morirá. */
   condenaLetal(e: EnemigoCombate): boolean {
-    return e.vivo && (e.estados.condena ?? 0) >= e.pv;
+    if (esDungeonMaster(e)) return false; // Doom does not work like that on the DM
+    return e.vivo &&(e.estados.condena ?? 0) >= e.pv;
   }
 
   /** Oportunista (pícaro): daño extra por golpe contra quien no pretende atacar. */
@@ -189,6 +205,61 @@ export class Combate {
       await this.ganchos((r, c) => r.alBarajar?.(c));
     }
     this.barajadosPendientes = 0;
+  }
+
+  // ── Maldiciones ────────────────────────────────────────────────────────────
+
+  /** Fires the on-draw effects (curses) of the cards robarCartas() has drawn. */
+  private async dispararAlRobar() {
+    while (this.robadasPendientes.length > 0 && !this.terminado) {
+      const carta = this.robadasPendientes.shift()!;
+      // it may have left the hand already (another curse discarded it)
+      if (!this.jugador.mano.includes(carta)) continue;
+      await carta.def.alRobar?.(this.contexto(), carta);
+      this.ui.render();
+    }
+    this.robadasPendientes = [];
+  }
+
+  /** End of the player's turn: every curse still in the hand does its harm. */
+  private async efectosMaldicionesEnMano() {
+    for (const carta of [...this.jugador.mano]) {
+      if (this.terminado) return;
+      if (!carta.def.finTurnoEnMano || !this.jugador.mano.includes(carta)) continue;
+      await carta.def.finTurnoEnMano(this.contexto());
+      this.ui.render();
+    }
+  }
+
+  /** Pays a curse off (Blood Debt): spends its energy and removes it from the
+   *  run deck for good. It is not a played card for the relics. */
+  private async saldarMaldicion(carta: CartaInstancia) {
+    this.enResolucion = true;
+    const idx = this.jugador.mano.indexOf(carta);
+    if (idx >= 0) this.jugador.mano.splice(idx, 1);
+    this.jugador.energia -= this.costeEfectivo(carta.def);
+    const enRun = this.run.mazo.findIndex((c) => c.uid === carta.uid);
+    if (enRun >= 0) this.run.mazo.splice(enRun, 1);
+    this.jugador.agotadas.push(carta);
+    await this.ui.fxMensaje(`✨ Saldas la «${carta.def.nombre}»: sale de tu mazo para siempre`);
+    this.enResolucion = false;
+    this.ui.render();
+  }
+
+  /** An enemy slips a curse into the player's piles for this combat only. */
+  async meterMaldicion(id: string, destino: 'mazo' | 'descarte', origen?: EnemigoCombate) {
+    const carta = nuevaMaldicion(id);
+    if (destino === 'mazo') {
+      const pos = Math.floor(this.rng() * (this.jugador.mazo.length + 1));
+      this.jugador.mazo.splice(pos, 0, carta);
+    } else {
+      this.jugador.descarte.push(carta);
+    }
+    const quien = origen ? `${origen.nombre} te maldice: ` : '';
+    await this.ui.fxMensaje(
+      `☠️ ${quien}«${carta.def.nombre}» entra en tu ${destino === 'mazo' ? 'mazo' : 'descarte'}`,
+    );
+    this.ui.render();
   }
 
   // ── Contexto que se pasa a las cartas y reliquias ─────────────────────────
@@ -306,6 +377,7 @@ export class Combate {
         self.ui.render();
         await self.ui.espera(150);
         await self.dispararBarajados();
+        await self.dispararAlRobar();
       },
       ganarEnergia(n) {
         self.jugador.energia += n;
@@ -395,6 +467,7 @@ export class Combate {
       ataqueAnulado: (e) => self.ataqueAnulado(e),
       estaTransformado: () => self.estaTransformadoPublico(),
       mensaje: (txt) => self.ui.fxMensaje(txt),
+      seducirDM: (e, tirada) => self.seducirDM(e, tirada),
       async tirarDado(caras) {
         const n = 1 + Math.floor(self.rng() * caras);
         await self.ui.fxDado(n, caras);
@@ -455,6 +528,13 @@ export class Combate {
         return hechos;
       },
       descartadasEsteTurno: () => self.descartadasEsteTurno,
+      async descartarAlAzar(excepto) {
+        const candidatas = self.jugador.mano.filter((c) => c !== excepto);
+        if (candidatas.length === 0) return null;
+        const carta = candidatas[Math.floor(self.rng() * candidatas.length)];
+        await self.descartarCarta(carta);
+        return carta;
+      },
       crearDagas: (n) => self.crearDagas(n),
       async traerALaMano(id) {
         const j = self.jugador;
@@ -492,6 +572,7 @@ export class Combate {
       },
       async intercambiarIntencion(e) {
         if (!e.vivo || self.terminado) return;
+        if (esDungeonMaster(e)) { await self.dialogoDM(e, FRASES_DM.bloqueo); return; }
         const aliados = self.enemigos.filter((x) => x.vivo && x !== e);
         // Busca entre sus próximos movimientos uno que NO sea de ataque.
         let pacifica: Movimiento | undefined;
@@ -514,6 +595,8 @@ export class Combate {
       },
       async matar(e) {
         if (!e.vivo) return;
+        // instant kills (Vorpal Talisman, Wish, Charm…) do not work like that on the DM
+        if (esDungeonMaster(e)) { await self.pantallaDM(e); return; }
         e.pv = 0;
         e.vivo = false;
         await self.ui.fxMuerte(e);
@@ -543,12 +626,74 @@ export class Combate {
     };
   }
 
+  // ── Final scene: the Dungeon Master ────────────────────────────────────────
+
+  /** Hits the screen has soaked up (every other one gets the DM's retort). */
+  private golpesPantallaDM = 0;
+
+  /** A blow (or an instant kill) against the DM: the screen blocks it all. */
+  private async pantallaDM(e: EnemigoCombate, fx?: string) {
+    this.golpesPantallaDM++;
+    await this.ui.fxGolpe(e, 0, fx);
+    if (this.golpesPantallaDM % 2 === 1) await this.ui.fxMensaje('🛡️ ¡La pantalla del DM lo bloquea todo!');
+    else await this.dialogoDM(e, FRASES_DM.bloqueo);
+  }
+
+  /** The DM speaks: a speech bubble when the UI has them, a banner otherwise. */
+  private async dialogoDM(e: EnemigoCombate, txt: string) {
+    if (this.ui.fxDialogo) await this.ui.fxDialogo(e, txt);
+    else await this.ui.fxMensaje(`🎲 «${txt}»`);
+  }
+
+  /** Seduce against the DM: a natural 20 wins him over (true ending); anything
+   *  else bounces off the screen, with a wink on a 19. */
+  async seducirDM(e: EnemigoCombate, tirada: number) {
+    if (!e.vivo || this.terminado) return;
+    if (tirada < 20) {
+      this.golpesPantallaDM++;
+      await this.ui.fxGolpe(e, 0, 'corazones');
+      await this.dialogoDM(e, tirada === 19 ? FRASES_DM.casi : FRASES_DM.bloqueo);
+      return;
+    }
+    await this.ui.fxParticulas(e, 'corazones');
+    await this.ui.fxMensaje('💘 ¡20 natural! La pantalla del DM cae…');
+    await this.dialogoDM(e, FRASES_DM.seducido);
+    this.finalVerdadero = true;
+    e.vivo = false; // he leaves the table smiling: no ray, no death animation
+    this.ui.render();
+    await this.comprobarFin();
+  }
+
+  /** The Dungeon Master's ray: the hero dies outright. It skips infligir on
+   *  purpose, so block, Mirror Image, invulnerability, summons and relic hooks
+   *  never get a say. */
+  private async rayoDelDM(e: EnemigoCombate) {
+    const j = this.jugador;
+    const pv = j.pv;
+    j.bloqueo = 0;
+    delete j.estados.espejismo;
+    delete j.estados.invulnerable;
+    j.invocacion = undefined;
+    j.pv = 0;
+    j.vivo = false;
+    await this.ui.fxGolpe(j, pv, e.intencion.fx ?? 'divino'); // the UI draws it as the rayoDM spell
+    await this.ui.fxMuerteHeroe?.();
+    await this.dialogoDM(e, FRASES_DM.rayo);
+    await this.comprobarFin();
+    this.ui.render();
+  }
+
   /** Aplica daño real a un luchador (atraviesa bloqueo primero).
    *  Si `perforante`, ignora el bloqueo; además lo destruye (lo pone a 0) salvo
    *  que se pida `conservarBloqueo` (el Veneno lo ignora, pero no lo rompe). */
   async infligir(
     obj: Luchador, dano: number, fx?: string, perforante = false, conservarBloqueo = false,
   ): Promise<number> {
+    // The DM's screen soaks up everything (piercing, poison, relics, Doom…)
+    if (obj !== this.jugador && esDungeonMaster(obj)) {
+      await this.pantallaDM(obj as EnemigoCombate, fx);
+      return 0;
+    }
     // Invulnerable: no recibe daño alguno
     if ((obj.estados.invulnerable ?? 0) > 0) {
       await this.ui.fxGolpe(obj, 0, fx);
@@ -786,7 +931,9 @@ export class Combate {
         this.barajadosPendientes++; // announced to the relics by dispararBarajados()
       }
       if (this.jugador.mano.length >= 10) return; // mano llena
-      this.jugador.mano.push(this.jugador.mazo.pop()!);
+      const carta = this.jugador.mazo.pop()!;
+      this.jugador.mano.push(carta);
+      if (carta.def.alRobar) this.robadasPendientes.push(carta);
     }
   }
 
@@ -805,7 +952,15 @@ export class Combate {
       await this.ui.fxBloqueo(this.jugador, prep);
     }
     await this.ganchos((r, c) => r.alDescartar?.(c, carta));
+    // Mid-card discards are checked once the card finishes (jugarCarta)
+    if (!this.enResolucion) await this.avisarManoVacia();
     this.ui.render();
+  }
+
+  /** Tells the relics when the player's hand has just been emptied. */
+  private async avisarManoVacia() {
+    if (this.terminado || this.jugador.mano.length > 0) return;
+    await this.ganchos((r, c) => r.alVaciarMano?.(c));
   }
 
   /** Añade N Dagas a la mano (pícaro), si hay hueco. */
@@ -828,6 +983,12 @@ export class Combate {
   }
 
   async iniciar() {
+    // Final scene: if Seduce is in the deck, it goes on top so the hero gets a
+    // real shot at the secret natural 20 against the Dungeon Master
+    if (this.enemigos.some((e) => esDungeonMaster(e))) {
+      const i = this.jugador.mazo.findIndex((c) => c.def.id === CARTA_SECRETA_DM);
+      if (i >= 0) this.jugador.mazo.push(...this.jugador.mazo.splice(i, 1)); // pop() draws from the end
+    }
     // Efectos permanentes (cartas de 1 uso, bendiciones)
     if (this.run.permanentes.fuerza > 0) {
       this.jugador.estados.fuerza =
@@ -987,6 +1148,7 @@ export class Combate {
     this.robarCartas(aRobar);
     this.ui.render();
     await this.dispararBarajados();
+    await this.dispararAlRobar();
     // Relics that care about the rhythm of the fight (first turn, every N turns…)
     if (!this.terminado) await this.ganchos((r, c) => r.inicioTurno?.(c, this.turno));
     this.ui.render();
@@ -995,6 +1157,8 @@ export class Combate {
   puedeJugar(carta: CartaInstancia): boolean {
     if (this.enResolucion || this.terminado) return false;
     const def = defDe(carta);
+    // Curses are unplayable, except the ones that can be paid off
+    if (def.tipo === 'maldicion' && def.purgar === undefined) return false;
     if (this.jugador.energia < this.costeEfectivo(def)) return false;
     if (def.requiereConjuro) {
       const libres = this.jugador.conjuros.filter(
@@ -1007,11 +1171,14 @@ export class Combate {
 
   async jugarCarta(carta: CartaInstancia, objetivo?: EnemigoCombate) {
     if (!this.puedeJugar(carta)) return;
+    if (carta.def.tipo === 'maldicion') {
+      await this.saldarMaldicion(carta);
+      return;
+    }
     this.enResolucion = true;
     const def = defDe(carta);
     const idx = this.jugador.mano.indexOf(carta);
     if (idx >= 0) this.jugador.mano.splice(idx, 1);
-    const energiaAntes = this.jugador.energia;
     this.jugador.energia -= this.costeEfectivo(def);
     this.jugadasTurno++;
     this.jugadasCombate++;
@@ -1053,16 +1220,14 @@ export class Combate {
       delete this.jugador.estados.roboAcelerado;
       await this.ui.fxMensaje('💨 El impulso de Acelerar se disipa');
     }
-    // Relic hooks: the card just played, and running out of energy with it
+    // Relic hooks: the card just played, and the hand left empty by it
     if (!this.terminado) {
       const jugada = {
         carta, objetivo, jugadasTurno: this.jugadasTurno, jugadasCombate: this.jugadasCombate,
       };
       await this.ganchos((r, c) => r.alJugarCarta?.(c, jugada));
     }
-    if (!this.terminado && energiaAntes > 0 && this.jugador.energia <= 0) {
-      await this.ganchos((r, c) => r.alQuedarseSinEnergia?.(c));
-    }
+    await this.avisarManoVacia();
     this.enResolucion = false;
     this.ui.render();
   }
@@ -1123,6 +1288,10 @@ export class Combate {
     }
 
     this.decrementarEstados(j);
+
+    // Curses held in the hand hurt now, before the discard (after the status
+    // countdown, so a Weak or Vulnerable they give lasts into the next round).
+    await this.efectosMaldicionesEnMano();
 
     // Descartar mano (salvo las cartas con Retener, que se quedan). Con el Rayo
     // Espectral del Contemplador, lo que no jugaste se agota en vez de descartarse.
@@ -1252,6 +1421,13 @@ export class Combate {
   }
 
   async ejecutarMovimiento(e: EnemigoCombate) {
+    // The Dungeon Master's ray: nothing makes him skip it, nothing stops it
+    if (e.intencion.mataAlInstante) {
+      e.saltaAccion = false;
+      await this.ui.fxEnemigoActua(e);
+      await this.rayoDelDM(e);
+      return;
+    }
     // Seducción/Deseo: el enemigo se salta esta acción
     if (e.saltaAccion) {
       e.saltaAccion = false;
@@ -1260,6 +1436,7 @@ export class Combate {
     }
     const m = e.intencion;
     await this.ui.fxEnemigoActua(e);
+    if (m.dialogo) await this.dialogoDM(e, m.dialogo);
 
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
@@ -1335,6 +1512,7 @@ export class Combate {
         this.ui.render();
       }
     }
+    if (m.maldicion && !this.terminado) await this.meterMaldicion(m.maldicion.id, m.maldicion.destino, e);
     if (m.devorar) {
       const presa = this.enemigos
         .filter((x) => x.vivo && x !== e)

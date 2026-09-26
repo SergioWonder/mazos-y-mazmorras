@@ -90,6 +90,11 @@ export interface PuppetRig {
   emitters?: Emitter[];
   bursts?: Partial<Record<ActionType, Burst[]>>;
   palette: Record<string, string>;
+  /** Palette keys painted as a backlit silhouette (black with a rim light in the
+   *  accent colour) inside an illustrated sprite: the Dungeon Master behind his screen. */
+  backlit?: string[];
+  /** Extra per-frame motion on top of the generic one (drumming fingers…). */
+  animate?: (p: Pose, t: number, action: ActionProgress | null) => void;
   pivots: Partial<Record<BoneId, [number, number]>>;
   rest: PartialPose;
   windup: PartialPose;
@@ -280,6 +285,7 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   // cape/scarf/tail hangs from its pivot and trails behind forward motion
   p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
   fx.blink = ((t + rig.phase) % 3.7) < 0.13;
+  rig.animate?.(p, t, action);
   return { p, fx };
 }
 

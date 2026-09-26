@@ -2,7 +2,7 @@
 // smoke test can check that every illustrated enemy is listed exactly once.
 
 import type { ClaseId, EnemigoDef } from '../core/types.ts';
-import { ACTOS, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR } from '../core/enemigos.ts';
+import { ACTOS, DUNGEON_MASTER, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR } from '../core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import type { FormId } from '../fx/hero-rig.ts';
 
@@ -65,5 +65,10 @@ export function galleryCatalogue(): GallerySection[] {
     cap.jefe.forEach((d) => { add(d, false); if (d.invocaAlMorir) add(d.invocaAlMorir, false); });
     sections.push({ title: cap.nombre, subtitle: cap.subtitulo, act, cards });
   }));
+  // the final joke: the Dungeon Master waits behind his screen after Act III
+  sections.push({
+    title: DUNGEON_MASTER.nombre, subtitle: 'Escena final',
+    cards: [{ kind: 'enemy', id: DUNGEON_MASTER.id, name: DUNGEON_MASTER.nombre, scale: 1.6 }],
+  });
   return sections;
 }

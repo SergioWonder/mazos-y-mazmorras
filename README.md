@@ -124,17 +124,56 @@ descuelga de las demás en su mismo nivel.
 - **Bendiciones de la Vidente**: al empezar la partida y entre actos, Síbila ofrece
   bendiciones que son reliquias propias (ver [Bendiciones](#bendiciones)).
 - **Cartas de azar (incoloras)**: la Vidente puede dar «Seducir» (entrando al Acto II)
-  o «Deseo» (entrando al Acto III). Tiran un d20 con animación 3D y el resultado va
+  o «Deseo» (entrando al Acto III), como bendiciones-reliquia que meten la carta en el mazo. Tiran un d20 con animación 3D y el resultado va
   de la catástrofe al milagro (un 20 puede matar a un no-jefe / fulminar a un jefe).
 - Sistema de energía (3/turno), bloqueo, Vulnerable/Débil/Frágil idéntico a StS para
   facilitar el equilibrado inicial.
 - **Mejora de cartas**: todas las cartas tienen versión «+». En los campamentos se
-  elige entre descansar (cura 30 %) o afilar (mejorar 1 carta).
+  elige entre descansar (cura 30 %) o afilar (mejorar 1 carta) y, si llevas
+  maldiciones, **purificar** una (la eliminas del mazo en vez de curarte).
+- **Tipos de carta**: ataque, habilidad, poder y **maldición**.
+- **Maldiciones** (`MALDICIONES` en `core/cartas.ts`): cartas que estorban, **no se
+  pueden jugar** y ocupan sitio en la mano y en el mazo (cuentan para el robo). Tienen
+  marco negro violáceo agrietado y nombre en rojo apagado. Nunca salen en las
+  recompensas ni en el pool de clase; se eliminan purificándolas en un campamento.
+  Los efectos de fin de turno se disparan **antes del descarte** y solo si están en la
+  mano; ninguna mata (la pérdida de PV deja al menos 1).
+
+  | Maldición | Efecto |
+  |---|---|
+  | 🤢 Herida Infectada | Al final del turno, en la mano: pierdes 2 PV |
+  | ❔ Duda | Al final del turno, en la mano: 1 de Débil |
+  | 😱 Pesadilla | Al robarla, descartas una carta al azar de tu mano |
+  | 🧾 Deuda de Sangre | Al final del turno, en la mano: pierdes 3 PV. **Se puede saldar pagando 2 de energía** (sale del mazo para siempre) |
+  | 🏴 Marca del Condenado | Al final del turno, en la mano: 1 de Vulnerable |
+  | 🧻 Maldición de la Momia | Innata. Al final del turno, en la mano: 1 de Frágil |
+  | 💔 Remordimiento | Al final del turno, en la mano: pierdes 1 PV por carta en la mano |
+  | 🧊 Parálisis | Al robarla, pierdes 1 de energía |
+  | 🪙 Codicia | No se descarta: ocupa un hueco de tu mano todo el combate |
+  | 🔗 Grilletes | Peso muerto |
+
+  Las dan algunos eventos (Saquear el altar del Santuario, Pagar con sangre al
+  Buhonero, el mímico del Cofre Extraño, Cruzar despacio la Niebla, Ofrecer tu esencia
+  al Espíritu), el Pacto de la Codicia, la Calavera de la Baraja de las Maravillas
+  (solo ese combate) y, durante el combate, la Momia Real, el Acólito Velado y
+  Malachar (solo ese combate).
 - **Eventos narrativos** (nodos ❓): escenas con elecciones y contrapartidas,
   ~70 % positivos / ~30 % negativos, sin repetirse dentro de una run.
-- **Compendio de cartas** (desde el menú): todas las cartas por clase, con opción de
+- **Compendio de cartas** (desde el menú): todas las cartas por clase (y las maldiciones), con opción de
   verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
-- Mapa de 10 filas por capítulo con ≥2 eventos, cofres, élites y descansos.
+- **Mapa** de 10 filas por capítulo (`core/mapa.ts`) con ≥2 eventos, élites, descansos
+  y tabernas. Localizaciones: ⚔️ combate, 💀 élite, ❓ evento, 🏕️ campamento,
+  🧰 cofre, 🍺 taberna y 👹 jefe. Los **cofres** van todos en una sola fila, la
+  central (fila 4), que es entera de cofres: no hay cofres en ninguna otra fila.
+- **Tabernas** (nodos 🍺, `core/taberna.ts` y `ui/taberna.ts`): 1–2 por capítulo,
+  en las filas 1–5 (nunca en la primera ni junto al jefe). Dentro, dos parroquianos
+  (tabernero, bardo, tabernera…) te cuentan un rumor cada uno (8 textos, según el
+  tipo de lugar) y eliges uno, o pides una jarra que cura un 12 % de los PV. El
+  rumor marca una **misión** en un nodo alcanzable a 2–4 filas (combate, élite,
+  evento o cofre), que se ve en el mapa con un pergamino 📜 y un brillo. Al
+  completarlo ganas **una reliquia** además de su recompensa normal. Si tomas otro
+  camino y el nodo queda fuera de tu alcance, la misión se pierde con un aviso.
+  La misión se guarda con la partida y se descarta al cambiar de capítulo.
 - **Reliquias** inspiradas en objetos clásicos de D&D: más de 50, con rareza (común,
   rara, de jefe) y reliquias únicas de cada clase (ver [Reliquias](#reliquias)).
 - **Dos escenarios por acto** (elegidos al azar): cada uno con sus enemigos, su
@@ -144,6 +183,34 @@ descuelga de las demás en su mismo nivel.
   libera al Demonio Mayor), Ignifax el Dragón Rojo y el Contemplador, cuyos rayos
   de colores tuercen tu siguiente turno (cartas que se agotan, sobrecarga de
   energía, cartas etéreas…) mientras sus Observadores no dejan de mirar.
+- **Escena final: el Dungeon Master** (`core/escena-final.ts`, `DUNGEON_MASTER` en
+  `core/enemigos.ts`): tras vencer a Ignifax o al Contemplador, antes de la victoria,
+  te enfrentas al **Dungeon Master**: una figura encapuchada a contraluz, con los ojos
+  encendidos y las manos juntas bajo la barbilla, asomando tras su **pantalla de DM**
+  ilustrada (bisagras, notas, emblema y un d20 encima). Es un chiste final:
+  - Su **Pantalla del DM** (🛡️∞) absorbe **todo**: golpes, veneno, hemorragia, daño
+    perforante, reliquias de daño, Agathys… y le dan igual las muertes instantáneas
+    (Talismán Vorpal, Deseo, Seducir normal) y la Condena letal. Su vida no baja
+    («🛡️ ¡La pantalla del DM lo bloquea todo!», «Eso no funciona así.»).
+  - Te deja un turno de cortesía («📜 ??? · “Mmm… interesante…”») y al final del
+    segundo lanza el **Rayo del Dungeon Master** («⚡ ??? · “Tira iniciativa…”»): un
+    rayo en zigzag enorme desde sus manos (efecto `rayoDM`, con destello a pantalla
+    completa) que **mata al instante** ignorando bloqueo, espejismo, invulnerabilidad,
+    invocaciones y reliquias. «Tu personaje muere. ¿Echamos otra partida?»
+  - **No es una derrota**: el guardado se borra y sale la pantalla de victoria con un
+    epílogo extra («…el Dungeon Master siempre tiene la última palabra»).
+  - **Final verdadero (secreto)**: jugar **Seducir** contra él y sacar un **20 natural**
+    (Seducir+ vale si el mejor dado es 20) hace caer la pantalla. Cualquier otra
+    tirada rebota («Eso no funciona así»; con un 19, «Casi… pero no»). Si llevas
+    Seducir en el mazo, la escena la pone arriba para que empiece en tu mano. El 20
+    abre `ui/final-verdadero.ts`: el DM y los cinco héroes en silueta se sientan a la
+    mesa para **cuadrar una fecha para la próxima partida** — cada uno pone su excusa
+    («el martes tengo tribu», «los jueves no puedo»…) mientras la agenda del DM se
+    llena de tachones, hasta que por fin: «¡El sábado a las 17:00, y trae dados!»
+    (confeti y «Final verdadero: ¡Hay fecha!»). Cuenta como victoria y queda guardado
+    en `localStorage`: el menú principal muestra «🎲 Final verdadero desbloqueado»
+    junto a la versión.
+  - Suena la música de jefe del Acto III; el rayo usa el sonido divino.
 - **Estado de Veneno**: al inicio de su turno, quien lo sufre pierde PV ignorando el
   bloqueo (no lo destruye) y su Veneno baja 1. Algunos enemigos te envenenan; el pícaro
   lo reparte y puede detonarlo al instante con Nube Nauseabunda.
@@ -158,7 +225,7 @@ descuelga de las demás en su mismo nivel.
   amigable) y uno de jefe (épico y tenso), unidos por un leitmotiv. Suenan en bucle
   exacto con Web Audio, con loop chiptune de respaldo. Se pausa al pasar a
   segundo plano y se cachea al vuelo para jugar sin conexión. Créditos y licencias
-  en `src/audio/LEEME.md`. Botón flotante 🔊/🔇 para silenciar (se recuerda). La
+  en `src/audio/LEEME.md`. Botón flotante 🎵 que apaga o enciende solo la música (los efectos siguen sonando; se recuerda). La
   intención de ataque enemiga muestra el daño ya modificado (verde si lo reduces con
   Débil/Raíces, rojo si te amplifican con Vulnerable).
 
@@ -184,7 +251,7 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | 🧥 Capa de Desplazamiento | común | Primer turno: bloqueo igual al daño anunciado (máx. 15) |
 | 📯 Cuerno de Valhalla | común | Turno 3: 6 de daño y 1 de Débil a todos |
 | 🥁 Tambor de Guerra Enano | común | Cada 3 cartas jugadas, 3 de daño a un enemigo al azar |
-| 🏺 Cáliz Vacío | común | La primera vez por turno que te quedas sin energía, robas 1 |
+| 🏺 Cáliz Vacío | común | La primera vez por turno que te quedas sin cartas en la mano (al jugar o descartar la última), robas 2 |
 | 🥊 Guanteletes de Poder de Ogro | común | Cada enemigo que cae te da 1 de Fuerza (combate) |
 | 🚩 Estandarte del Terror | común | Cuando cae un enemigo, los demás: 1 de Débil y 1 de Vulnerable |
 | 🧪 Veneno de Drow | común | Aplicar Débil aplica también 2 de Veneno |
@@ -197,7 +264,7 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | 🗺️ Mapa del Tesoro | común | Los cofres dan también una carta |
 | 📔 Diario del Aventurero | común | Cada evento mejora 1 carta al azar |
 | 👝 Bolsa de Contención | rara | Al barajar el descarte, +1 de energía |
-| 🃏 Baraja de las Maravillas | rara | 1d20 al empezar cada combate: de perder 5 PV a Débil y Vulnerable 3 a todos |
+| 🃏 Baraja de las Maravillas | rara | 1d20 al empezar cada combate: de una Duda en la mano a Débil y Vulnerable 3 a todos |
 | 🧿 Amuleto de Salud | rara | La primera vez que un golpe te deja por debajo de la mitad, te curas 10 |
 | 🗡️ Talismán Vorpal | rara | Decapita al Vulnerable (no jefe) que dejas a ≤ 15 % de PV |
 | 🦠 Frasco de la Plaga | rara | El Veneno de un enemigo muerto salta a otro |
@@ -245,12 +312,15 @@ Las bendiciones se eligen dos veces por partida (`core/bendiciones.ts`, `ui/bend
   repetir, sacadas al azar de un conjunto amplio para que cambien de partida a partida:
   **una de tu clase, una general, un pacto** (riesgo y recompensa) y un comodín (general
   o del camino).
-- **Entre actos** (Síbila, la Vidente del Manantial): te cura por completo y ofrece 3 opciones. Las **cartas únicas** siguen
-  igual («Seducir» entrando al Acto II; tu carta única de clase y «Deseo» entrando al
-  Acto III) y el resto de huecos son bendiciones-reliquia que aún no tienes.
+- **Entre actos** (Síbila, la Vidente del Manantial): te cura por completo y ofrece 3 opciones.
+  Las **cartas únicas** llegan como bendiciones-reliquia de tipo `unica` (la de «Seducir»
+  entrando al Acto II; la de tu carta única de clase y la de «Deseo» entrando al Acto III)
+  y el resto de huecos son otras bendiciones-reliquia que aún no tienes.
 
-Cada bendición elegida (salvo las cartas únicas) es una **reliquia** con su ilustración
-dorada que se ve en la barra superior y se guarda con la partida.
+Cada bendición elegida es una **reliquia** con su ilustración dorada que se ve en la barra
+superior y se guarda con la partida. Las de carta única meten su carta en el mazo al
+obtenerse (`alObtener`, que no se repite al cargar la partida) y dan un pequeño extra al
+jugarla; nunca salen en los huecos normales ni en el sorteo de reliquias.
 
 | Bendición | Tipo | Efecto |
 | --- | --- | --- |
@@ -262,7 +332,7 @@ dorada que se ve en la barra superior y se guarda con la partida.
 | 🩸 Pacto de Sangre | pacto | +1 de energía por turno; al barajar el descarte pierdes 4 PV |
 | 💠 Corazón de Cristal | pacto | +3 de daño por golpe; empiezas cada combate con 2 de Vulnerable |
 | 🌘 Pacto del Insomne | pacto | Robas 2 más por turno; la primera carta de cada turno cuesta 3 PV |
-| 💰 Pacto de la Codicia | pacto | Al sellarlo, 2 reliquias al azar a cambio de 12 PV máximos |
+| 💰 Pacto de la Codicia | pacto | Al sellarlo, 2 reliquias al azar a cambio de la maldición Codicia |
 | 🏮 Farol del Peregrino | del camino | Al llegar a un campamento te cura 10 PV |
 | 🧭 Brújula de Síbila | del camino | Tras cada evento eliges también una carta |
 | 🏆 Trofeo del Cazador | del camino | Cada élite o jefe vencido mejora 1 carta al azar |
@@ -277,10 +347,17 @@ dorada que se ve en la barra superior y se guarda con la partida.
 | 🌫️ Sombra Veloz | pícaro | Cada carta descartada aplica 2 de Veneno a un enemigo al azar |
 | 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno inflige además 3 a todos |
 | 👹 Diablillo Guardián | brujo | Empiezas cada combate con un diablillo efímero (8 de vida, golpea por 6 y 2 de Condena) |
+| 💘 Dado del Encanto | carta única | Añade «Seducir»; la primera Seducir de cada combate te devuelve su energía |
+| 🌠 Dado de los Deseos | carta única | Añade «Deseo»; al jugarla robas 1 |
+| 🌩️ Asta de la Tormenta | carta única (druida) | Añade «Tormenta de Venganza»; al jugarla te curas 6 |
+| 🪓 Gran Hacha Indómita | carta única (bárbaro) | Añade «Furia Indómita»; al jugarla ganas Furia (+1 de Fuerza) |
+| 🌕 Orbe de la Maestría | carta única (mago) | Añade «Maestría de Conjuros»; al jugarla ganas 1 espacio de conjuro |
+| 💃 Dagas de la Danza Mortal | carta única (pícaro) | Añade «Danza Mortal»; al jugarla creas 2 Dagas |
+| 👁️ Ojo del Pacto Final | carta única (brujo) | Añade «Pacto Final»; al jugarla ganas 6 de bloqueo |
 
 Los efectos se enganchan al motor con ganchos genéricos de `ReliquiaDef`
 (`core/types.ts`): de combate (`inicioTurno`, `alJugarCarta`, `alBarajar`,
-`alQuedarseSinEnergia`, `alMatar`, `alAtacar`, `bonoAtaque`, `alSerGolpeado`,
+`alVaciarMano`, `alMatar`, `alAtacar`, `bonoAtaque`, `alSerGolpeado`,
 `alAplicarEstado`, `alDescartar`, `alTransformarse`, `alTerminarTransformacion`,
 `alGanarFuria`, `salvarFuria`, `alPerderFuria`, `alAplastarRaices`,
 `alDesvanecerseInvocacion`, `alVencerCombate`, `conservaBloqueo`, `retieneCartas`…) y
@@ -325,7 +402,15 @@ a sus huesos: ascuas, humo, almas, motas arcanas, llamas o gotas de lava que nac
 boca, el bastón, las alas o los ojos. También lanzan **ráfagas** al atacar, conjurar y
 morir: el aliento de Ignifax, los rayos del Contemplador… Los del acto III son los más
 cargados, y al enfurecerse (o al volver de la filacteria) emiten el doble. Desde el menú principal, la **Galería de sprites**
-muestra todos los héroes, formas, invocaciones y enemigos animados.
+muestra todos los héroes, formas, invocaciones y enemigos animados (el Dungeon Master
+incluido, en su propia sección).
+
+El **Dungeon Master** mezcla los dos estilos en una sola marioneta: la pantalla es
+ilustrada y el encapuchado va a contraluz (`backlit` en la marioneta: esas piezas se
+pintan como silueta con luz de borde, detrás de las ilustradas). Sus dedos cuelgan de
+los huesos de dedo de ala, que copian el giro de los brazos, así que pueden
+**tamborilear** en reposo (`animate` en la marioneta); la capucha respira, los ojos
+parpadean y, al atacar o conjurar, las manos se separan y una se lanza hacia el héroe.
 
 ### Arte de las cartas
 

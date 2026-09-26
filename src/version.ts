@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.0.0';
+export const VERSION = '5.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,19 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.1.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🎲 Tras el Acto III te espera el Dungeon Master… y dicen que existe un final verdadero.',
+      '☠️ Nuevas cartas de maldición, que no se pueden jugar y castigan si las tienes en la mano. Algunos eventos, pactos y enemigos te las meten en el mazo, y en el campamento puedes purificarlas.',
+      '🍺 Nueva localización, la Taberna: un rumor marca otro lugar del mapa y, si llegas, te llevas una reliquia.',
+      '🃏 Las cartas vuelan de la pila a tu mano al robarlas y hacia su objetivo al jugarlas.',
+      '🎁 Los cofres de cada mapa están todos juntos, en la fila central.',
+      '💎 Las bendiciones de carta única también son reliquias, y el Cáliz Vacío roba al quedarte sin cartas.',
+      '🎵 El botón flotante apaga o enciende solo la música.',
+    ],
+  },
   {
     version: '5.0.0',
     fecha: '2026-09-26',

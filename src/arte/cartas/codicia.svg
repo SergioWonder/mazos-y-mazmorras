@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1a2e"/>
+      <stop offset="1" stop-color="#0e0810"/>
+    </linearGradient>
+    <radialGradient id="oro" cx="0.5" cy="0.86" r="0.5">
+      <stop offset="0" stop-color="#ffcf5a" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#ffcf5a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.56" cy="0.44" r="0.35">
+      <stop offset="0" stop-color="#c98bff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#c98bff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="moneda" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#b8862a"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- cueva del tesoro -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 0 L20 0 L16 22 L12 0 Z M40 0 L52 0 L46 30 Z M98 0 L110 0 L104 18 Z M170 0 L186 0 L178 26 Z M226 0 L240 0 L232 34 Z M258 0 L272 0 L266 20 Z" fill="#160c18"/>
+  <rect width="280" height="160" fill="url(#oro)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+
+  <!-- montaña de monedas -->
+  <path d="M0 160 L0 128 Q40 104 90 110 Q140 92 190 106 Q240 98 280 118 L280 160 Z" fill="#b8862a" stroke="#140d0a" stroke-width="2"/>
+  <path d="M0 160 L0 140 Q60 124 120 132 Q200 120 280 136 L280 160 Z" fill="#8a6220"/>
+  <g stroke="#140d0a" stroke-width="1.2" fill="url(#moneda)">
+    <ellipse cx="30" cy="124" rx="7" ry="3"/>
+    <ellipse cx="58" cy="116" rx="7" ry="3"/>
+    <ellipse cx="46" cy="130" rx="7" ry="3"/>
+    <ellipse cx="206" cy="112" rx="7" ry="3"/>
+    <ellipse cx="236" cy="118" rx="7" ry="3"/>
+    <ellipse cx="258" cy="126" rx="7" ry="3"/>
+    <ellipse cx="220" cy="130" rx="7" ry="3"/>
+    <ellipse cx="84" cy="124" rx="7" ry="3"/>
+    <ellipse cx="180" cy="124" rx="7" ry="3"/>
+  </g>
+  <g stroke="#140d0a" stroke-width="1.2" fill="url(#moneda)">
+    <ellipse cx="18" cy="144" rx="6" ry="6"/>
+    <ellipse cx="266" cy="146" rx="6" ry="6"/>
+  </g>
+  <path d="M18 140 L18 148 M264 144 L268 144" stroke="#8a6220" stroke-width="1.2"/>
+  <!-- cáliz volcado -->
+  <path d="M236 90 L254 86 L250 102 Q246 108 240 106 Z" fill="#d8a840" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M244 106 L248 116 L240 118" fill="none" stroke="#140d0a" stroke-width="2.6"/>
+  <path d="M244 106 L248 116 L240 118" fill="none" stroke="#d8a840" stroke-width="1.4"/>
+  <circle cx="245" cy="95" r="2" fill="#a83a4a" stroke="#140d0a" stroke-width="0.8"/>
+  <!-- cofre abierto -->
+  <path d="M26 110 L26 90 L64 88 L66 108 Z" fill="#5a3a22" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M26 90 Q44 74 64 88 L62 80 Q44 66 28 82 Z" fill="#4a2e1a" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M44 88 L44 108" stroke="#c9a050" stroke-width="2"/>
+  <ellipse cx="45" cy="88" rx="16" ry="3" fill="#ffcf5a" opacity="0.7" filter="url(#brillo)"/>
+
+  <!-- el puño que no suelta el oro, a contraluz -->
+  <g transform="translate(1.4 -1.4)" fill="#ffcf5a" opacity="0.85">
+    <path d="M160 160 Q156 130 150 110 L176 104 Q182 130 186 160 Z"/>
+    <path d="M140 90 Q140 74 154 70 Q172 66 182 76 Q188 90 184 104 Q170 112 152 110 Q140 104 140 90 Z"/>
+  </g>
+  <g fill="#0b0910">
+    <path d="M160 160 Q156 130 150 110 L176 104 Q182 130 186 160 Z"/>
+    <path d="M140 90 Q140 74 154 70 Q172 66 182 76 Q188 90 184 104 Q170 112 152 110 Q140 104 140 90 Z"/>
+  </g>
+  <path d="M146 80 Q156 76 166 78 M144 90 Q156 86 170 88 M146 100 Q158 96 172 98" fill="none" stroke="#2a1e2a" stroke-width="1.2"/>
+  <!-- monedas que asoman entre los dedos -->
+  <g stroke="#140d0a" stroke-width="1.2" fill="url(#moneda)">
+    <ellipse cx="140" cy="84" rx="4" ry="5.4"/>
+    <ellipse cx="139" cy="96" rx="3.6" ry="5"/>
+  </g>
+  <path d="M136 80 L130 70 M134 100 L126 108" stroke="#ffe08a" stroke-width="1.4" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- serpiente de sombra enroscada en la muñeca -->
+  <path d="M146 128 Q170 118 186 126 Q196 132 184 138 Q164 146 150 138 Q140 132 150 126 Q168 118 190 112 Q206 108 212 98 Q216 88 206 84" fill="none" stroke="#c98bff" stroke-width="10" stroke-linecap="round" opacity="0.4" filter="url(#brillo)"/>
+  <path d="M146 128 Q170 118 186 126 Q196 132 184 138 Q164 146 150 138 Q140 132 150 126 Q168 118 190 112 Q206 108 212 98 Q216 88 206 84" fill="none" stroke="#140d0a" stroke-width="8" stroke-linecap="round"/>
+  <path d="M146 128 Q170 118 186 126 Q196 132 184 138 Q164 146 150 138 Q140 132 150 126 Q168 118 190 112 Q206 108 212 98 Q216 88 206 84" fill="none" stroke="#3a1e4a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M156 126 L160 124 M168 122 L172 121 M178 124 L182 126 M194 110 L198 108 M206 100 L208 96" stroke="#6a3a8a" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- cabeza -->
+  <path d="M206 84 Q200 72 210 68 Q222 66 222 76 Q220 84 210 86 Z" fill="#3a1e4a" stroke="#140d0a" stroke-width="2"/>
+  <circle cx="213" cy="73" r="3" fill="#e6b8ff" opacity="0.8" filter="url(#brillo)"/>
+  <circle cx="213" cy="73" r="1.3" fill="#fff0ff"/>
+  <path d="M222 78 L230 80 M230 80 L234 77 M230 80 L234 83" stroke="#a83a4a" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- destellos malditos -->
+  <path d="M120 60 L122 54 L124 60 L130 62 L124 64 L122 70 L120 64 L114 62 Z M226 52 L227.4 48 L228.8 52 L232.8 53.4 L228.8 54.8 L227.4 58.8 L226 54.8 L222 53.4 Z" fill="#e6c8ff"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

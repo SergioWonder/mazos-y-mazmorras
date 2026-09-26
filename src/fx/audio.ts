@@ -9,7 +9,10 @@ import { groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-ba
 // is never silent. Everything starts after the player's first gesture, as browsers
 // require, and the mute state is remembered.
 
-const CLAVE_SILENCIO = 'mazmorra-audio-silencio';
+// The floating button only switches the music; sound effects always play.
+// The old key muted everything: honour it as "music off" once for returning players.
+const CLAVE_MUSICA = 'mazmorra-musica-apagada';
+const CLAVE_SILENCIO_ANTIGUA = 'mazmorra-audio-silencio';
 
 // Hashed URLs of the soundtrack files: a new version of a track gets a new URL, so
 // the service worker's cache-first copy of the old one is never served again.
@@ -153,7 +156,7 @@ class MotorAudio {
   private maestro!: GainNode;   // ganancia global (silencio)
   private busSfx!: GainNode;    // bus de efectos
   private busMusica!: GainNode; // bus de música
-  silenciado = localStorage.getItem(CLAVE_SILENCIO) === '1';
+  musicaApagada = leerMusicaApagada();
 
   private fuente: AudioBufferSourceNode | null = null; // current soundtrack track
   private volPista: GainNode | null = null;
@@ -176,7 +179,7 @@ class MotorAudio {
       if (!AC) return;
       this.ctx = new AC();
       this.maestro = this.ctx.createGain();
-      this.maestro.gain.value = this.silenciado ? 0 : 1;
+      this.maestro.gain.value = 1;
       this.maestro.connect(this.ctx.destination);
       this.busSfx = this.ctx.createGain();
       this.busSfx.gain.value = 0.9;
@@ -225,7 +228,7 @@ class MotorAudio {
   /** Dispara un efecto de sonido por nombre (admite los mismos nombres que las partículas). */
   sfx(nombre: string) {
     this.desbloquear();
-    if (!this.ctx || this.silenciado) return;
+    if (!this.ctx) return;
     if (this.reproducirArchivo(resolveSfx(nombre))) return;
     // fallback while the files load (or if they fail): the synthesised recipe
     const receta = RECETAS[nombre] ?? RECETAS.carta;
@@ -312,7 +315,7 @@ class MotorAudio {
   private refrescarMusica() {
     if (!this.ctx) return;
     this.detenerMusica();
-    if (this.silenciado || this.pausada || !this.temaActual) return;
+    if (this.musicaApagada || this.pausada || !this.temaActual) return;
     if (this.ctx.state !== 'running') return;
     this.arrancarTema(this.temaActual);
   }
@@ -473,7 +476,7 @@ class MotorAudio {
 
   private reanudarDeFondo() {
     this.pausada = false;
-    if (!this.ctx || this.silenciado) return;
+    if (!this.ctx) return;
     void this.ctx.resume().then(() => this.refrescarMusica());
   }
 
@@ -482,7 +485,7 @@ class MotorAudio {
   /** Floritura sonora al jugar una carta rara: capa base + arpegio temático. */
   sfxRara(fx: string) {
     this.desbloquear();
-    if (!this.ctx || this.silenciado) return;
+    if (!this.ctx) return;
     this.sfx(fx); // golpe base existente
     if (this.reproducirArchivo('rara')) return; // recorded flourish on top of the card sound
     const ARPEGIOS: Record<string, { notas: number[]; onda: OscillatorType; filtro: number }> = {
@@ -532,25 +535,24 @@ class MotorAudio {
 
   // ── Silencio / interfaz ─────────────────────────────────────────────────────
 
-  toggleSilencio() {
-    this.silenciado = !this.silenciado;
-    localStorage.setItem(CLAVE_SILENCIO, this.silenciado ? '1' : '0');
-    if (this.ctx) this.maestro.gain.value = this.silenciado ? 0 : 1;
-    if (this.silenciado) this.detenerMusica();
+  toggleMusica() {
+    this.musicaApagada = !this.musicaApagada;
+    try { localStorage.setItem(CLAVE_MUSICA, this.musicaApagada ? '1' : '0'); } catch { /* private mode */ }
+    if (this.musicaApagada) this.detenerMusica();
     else this.refrescarMusica();
     this.actualizarBoton();
-    if (!this.silenciado) this.sfx('ui');
+    this.sfx('ui');
   }
 
-  /** Inserta un botón flotante de silencio (widget autónomo). */
+  /** Floating music button (self-contained widget). */
   crearBoton() {
     if (this.boton) return;
     const b = document.createElement('button');
     b.className = 'boton-audio';
-    b.setAttribute('aria-label', 'Silenciar / activar sonido');
+    b.setAttribute('aria-label', 'Apagar / encender la música');
     b.addEventListener('click', () => {
       this.desbloquear();
-      this.toggleSilencio();
+      this.toggleMusica();
     });
     document.body.appendChild(b);
     this.boton = b;
@@ -559,9 +561,19 @@ class MotorAudio {
 
   private actualizarBoton() {
     if (this.boton) {
-      this.boton.textContent = this.silenciado ? '🔇' : '🔊';
-      this.boton.classList.toggle('silenciado', this.silenciado);
+      this.boton.textContent = '🎵';
+      this.boton.title = this.musicaApagada ? 'Música apagada' : 'Música encendida';
+      this.boton.classList.toggle('silenciado', this.musicaApagada);
     }
+  }
+}
+
+function leerMusicaApagada(): boolean {
+  try {
+    const guardado = localStorage.getItem(CLAVE_MUSICA);
+    return guardado !== null ? guardado === '1' : localStorage.getItem(CLAVE_SILENCIO_ANTIGUA) === '1';
+  } catch {
+    return false;
   }
 }
 

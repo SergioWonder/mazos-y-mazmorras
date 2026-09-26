@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2c22"/>
+      <stop offset="1" stop-color="#140e0a"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.62" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#8ae070" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#8ae070" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="venda" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d0c09a"/>
+      <stop offset="1" stop-color="#9a8a66"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="niebla" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+
+  <!-- cámara funeraria -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <!-- sillares -->
+  <path d="M0 30 L280 30 M0 60 L280 60 M0 90 L280 90 M40 0 L40 30 M120 0 L120 30 M200 0 L200 30 M80 30 L80 60 M160 30 L160 60 M240 30 L240 60 M30 60 L30 90 M250 60 L250 90" stroke="#231a13" stroke-width="1.6"/>
+  <!-- columnas con relieves -->
+  <path d="M14 0 L42 0 L42 122 L14 122 Z" fill="#4a3a2a" stroke="#140d0a" stroke-width="2"/>
+  <path d="M34 0 L42 0 L42 122 L34 122 Z" fill="#3a2c20"/>
+  <path d="M20 20 L36 20 M20 50 L36 50 M20 80 L36 80" stroke="#2a2016" stroke-width="1.2"/>
+  <circle cx="28" cy="35" r="4" fill="none" stroke="#2a2016" stroke-width="1.2"/>
+  <path d="M22 62 L28 70 L34 62 M28 70 L28 76" fill="none" stroke="#2a2016" stroke-width="1.2"/>
+  <path d="M24 90 Q28 86 32 90 Q28 102 24 90 Z" fill="none" stroke="#2a2016" stroke-width="1.2"/>
+  <!-- ojo pintado en el muro -->
+  <path d="M60 44 Q74 34 88 44 Q74 52 60 44 Z" fill="none" stroke="#6a3a2a" stroke-width="1.6"/>
+  <circle cx="74" cy="44" r="3" fill="#6a3a2a"/>
+  <path d="M74 48 L72 58 Q70 60 66 58" fill="none" stroke="#6a3a2a" stroke-width="1.4"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 120 L280 116 L280 160 L0 160 Z" fill="#1e1610"/>
+  <path d="M0 120 L280 116" stroke="#140d0a" stroke-width="1.6"/>
+
+  <!-- sarcófago con la tapa desplazada -->
+  <path d="M120 128 L130 70 L262 64 L270 124 Z" fill="#6a5438" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M240 66 L262 64 L270 124 L250 126 Z" fill="#4e3e2a"/>
+  <path d="M132 78 L258 72 M126 114 L264 108" stroke="#3e3020" stroke-width="1.2"/>
+  <path d="M130 70 L262 64 L256 58 L136 64 Z" fill="#2a1e14" stroke="#140d0a" stroke-width="1.6"/>
+  <!-- la tapa, caída en diagonal -->
+  <path d="M150 58 L272 30 L280 44 L158 74 Z" fill="#8a6e48" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M158 74 L280 44 L280 50 L160 80 Z" fill="#5a4630" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M178 58 Q188 48 198 54 Q192 62 178 58 Z M212 50 L222 40 L230 48 Z" fill="#c9a050" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="246" cy="42" r="3" fill="#c9a050" stroke="#140d0a" stroke-width="1"/>
+
+  <!-- la niebla de la maldición sale del sarcófago -->
+  <path d="M140 72 Q110 60 90 76 Q70 94 50 86 M160 70 Q140 90 110 96 Q86 100 70 116" fill="none" stroke="#6ad050" stroke-width="12" stroke-linecap="round" opacity="0.35" filter="url(#niebla)"/>
+  <path d="M140 72 Q110 60 90 76 Q70 94 50 86 M160 70 Q140 90 110 96" fill="none" stroke="#b8ff9a" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- brazo vendado que sale a tientas -->
+  <path d="M174 70 Q150 64 128 72 Q112 78 100 76 L98 88 Q116 90 132 84 Q152 78 174 82 Z" fill="url(#venda)" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M174 78 Q152 74 132 80 Q116 86 100 84 L98 88 Q116 90 132 84 Q152 78 174 82 Z" fill="#8a7a56"/>
+  <!-- tiras de venda -->
+  <path d="M162 68 L158 82 M148 67 L144 81 M134 70 L132 84 M120 75 L118 88 M110 76 L110 88" stroke="#6a5a3e" stroke-width="1.1"/>
+  <path d="M140 84 Q136 96 142 106 Q146 112 140 120" fill="none" stroke="#140d0a" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M140 84 Q136 96 142 106 Q146 112 140 120" fill="none" stroke="#c0b08a" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- mano huesuda -->
+  <path d="M100 76 Q90 70 84 72 L82 84 Q90 90 98 88 Z" fill="#b0a07a" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M86 73 Q76 64 70 62 M84 77 Q72 72 64 72 M84 81 Q72 82 66 86 M86 85 Q80 92 80 98" fill="none" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M86 73 Q76 64 70 62 M84 77 Q72 72 64 72 M84 81 Q72 82 66 86 M86 85 Q80 92 80 98" fill="none" stroke="#b0a07a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M70 62 L66 60 M64 72 L60 72 M66 86 L62 88" stroke="#2a2016" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- ojos verdes en la oscuridad del sarcófago -->
+  <circle cx="200" cy="66" r="3.4" fill="#8ae070" opacity="0.8" filter="url(#brillo)"/>
+  <circle cx="212" cy="65" r="3.4" fill="#8ae070" opacity="0.8" filter="url(#brillo)"/>
+  <circle cx="200" cy="66" r="1.4" fill="#e0ffc8"/>
+  <circle cx="212" cy="65" r="1.4" fill="#e0ffc8"/>
+
+  <!-- escarabajos -->
+  <g stroke="#140d0a" stroke-width="1">
+    <ellipse cx="72" cy="136" rx="5" ry="3.4" fill="#1e3a36"/>
+    <ellipse cx="96" cy="146" rx="4" ry="2.8" fill="#1e3a36"/>
+    <ellipse cx="228" cy="140" rx="4.6" ry="3" fill="#1e3a36"/>
+  </g>
+  <path d="M70 134 Q72 132 74 134 M94 144 Q96 142 98 144 M226 138 Q228 136 230 138" stroke="#6ac0b0" stroke-width="0.9" fill="none"/>
+  <path d="M67 133 L64 131 M67 139 L64 141 M77 133 L80 131 M77 139 L80 141 M92 144 L90 142 M100 144 L102 142 M224 138 L221 136 M232 138 L235 136" stroke="#140d0a" stroke-width="0.9"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

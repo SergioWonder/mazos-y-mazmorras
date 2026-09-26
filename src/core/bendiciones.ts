@@ -1,46 +1,34 @@
-import type { CartaDef, EstadoRun, ReliquiaDef, TipoBendicion } from './types.ts';
+import type { EstadoRun, ReliquiaDef, TipoBendicion } from './types.ts';
 import { BENDICIONES, otorgarReliquia } from './reliquias.ts';
-import { instanciar, NEUTRALES_ESPECIALES, cartaUnicaDeClase } from './cartas.ts';
 import { barajar } from './rng.ts';
 
 // Síbila's blessings: what each blessing screen offers and how a choice applies.
-// Unique cards keep their old behaviour; everything else is a blessing relic.
+// Every option is a blessing relic; the unique-card ones put their card in the deck.
 
 /** One option of a blessing screen. */
-export type OfertaBendicion =
-  | { tipo: 'carta'; icono: string; nombre: string; detalle: string; carta: CartaDef }
-  | { tipo: 'reliquia'; reliquia: ReliquiaDef };
+export type OfertaBendicion = { tipo: 'reliquia'; reliquia: ReliquiaDef };
 
-const especial = (id: string): CartaDef => NEUTRALES_ESPECIALES.find((c) => c.id === id)!;
+/** Ids of the unique-card relics offered when starting each act (index = current act). */
+const DONES_POR_ACTO: string[][] = [
+  ['don-seducir'],
+  // Class card first: only the one of the class being played survives the filter
+  ['don-tormenta-venganza', 'don-furia-indomita', 'don-maestria-conjuros', 'don-danza-mortal', 'don-pacto-final', 'don-deseo'],
+];
 
-/** Unique colourless cards offered by the Seer depending on the act you are about to start. */
-function cartasUnicas(run: EstadoRun): OfertaBendicion[] {
-  if (run.capitulo === 0) {
-    return [{
-      tipo: 'carta', icono: '💘', nombre: 'Carta única: Seducir',
-      detalle: 'Añade «Seducir» a tu mazo (incolora, tira 1d20)', carta: especial('seducir'),
-    }];
-  }
-  if (run.capitulo === 1) {
-    const unica = cartaUnicaDeClase(run.clase);
-    return [
-      {
-        tipo: 'carta', icono: '🌟', nombre: `Carta única: ${unica.nombre}`,
-        detalle: `Añade «${unica.nombre}» a tu mazo (única de clase)`, carta: unica,
-      },
-      {
-        tipo: 'carta', icono: '🌠', nombre: 'Carta única: Deseo',
-        detalle: 'Añade «Deseo» a tu mazo (incolora, tira 1d20)', carta: especial('deseo'),
-      },
-    ];
-  }
-  return [];
+/** Unique-card relics offered by the Seer depending on the act you are about to start. */
+function donesDeCartaUnica(run: EstadoRun): ReliquiaDef[] {
+  const propias = new Set(run.reliquias.map((r) => r.id));
+  return (DONES_POR_ACTO[run.capitulo] ?? [])
+    .map((id) => BENDICIONES.find((r) => r.id === id)!)
+    .filter((r) => !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase));
 }
 
-/** Blessing relics this run can still receive: not owned and general or of its class. */
+/** Blessing relics this run can still receive in a regular slot: not owned, general or
+ *  of its class, and never a unique-card one (those only come at their act change). */
 export function bendicionesDisponibles(run: EstadoRun): ReliquiaDef[] {
   const propias = new Set(run.reliquias.map((r) => r.id));
-  return BENDICIONES.filter((r) => !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase));
+  return BENDICIONES.filter((r) => r.tipoBendicion !== 'unica'
+    && !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase));
 }
 
 /**
@@ -69,16 +57,15 @@ export function ofrecerBendicionInicial(run: EstadoRun, rng: () => number): Ofer
   return elegirPorHuecos(run, rng, ['clase', 'general', 'pacto', ['general', 'mapa']]).map(comoOferta);
 }
 
-/** Between acts: the unique cards as before, plus blessing relics up to 3 options. */
+/** Between acts: the unique-card relics of this act, plus blessing relics up to 3 options. */
 export function ofrecerBendicionEntreActos(run: EstadoRun, rng: () => number): OfertaBendicion[] {
-  const cartas = cartasUnicas(run);
+  const dones = donesDeCartaUnica(run);
   const huecos: Array<TipoBendicion[] | null> = [['clase', 'general'], ['pacto', 'mapa'], null];
-  const n = Math.max(1, 3 - cartas.length);
-  return [...cartas, ...elegirPorHuecos(run, rng, huecos.slice(0, n)).map(comoOferta)];
+  const n = Math.max(1, 3 - dones.length);
+  return [...dones, ...elegirPorHuecos(run, rng, huecos.slice(0, n))].map(comoOferta);
 }
 
-/** Applies the chosen option: the card goes to the deck, the relic to the relic bar. */
+/** Applies the chosen option: the relic goes to the relic bar (and runs its alObtener). */
 export function aplicarBendicion(run: EstadoRun, oferta: OfertaBendicion, rng: () => number) {
-  if (oferta.tipo === 'carta') run.mazo.push(instanciar(oferta.carta));
-  else otorgarReliquia(run, oferta.reliquia, rng);
+  otorgarReliquia(run, oferta.reliquia, rng);
 }

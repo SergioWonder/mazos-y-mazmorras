@@ -52,6 +52,7 @@ Referencias de estilo: `src/arte/cartas/golpe.svg` y `src/arte/cartas/defender.s
 | Pícaro | `#1f3c3a` → `#0b1918` | `#72e0cc` |
 | Brujo | `#381c50` → `#11071c` | `#c98bff` |
 | Neutral / básicas | `#4c4436` → `#1c1812` | `#ffe0a0` |
+| Maldiciones | tonos apagados y oscuros (`#2c1a34` → `#0e0812`, o rojo sangre / verde enfermizo según la escena) | el de la maldición (pus verde, marca roja, niebla violeta…) |
 
 ## Personajes y monstruos
 

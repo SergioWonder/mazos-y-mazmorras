@@ -1,7 +1,7 @@
 import type { CartaInstancia, EstadoRun, Rareza } from './types.ts';
 import { poolDeClase } from './cartas.ts';
 import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
-import { anadirCarta } from './run.ts';
+import { anadirCarta, anadirMaldicion } from './run.ts';
 
 /** Una opción de un evento. Devuelve el texto del desenlace. */
 export interface OpcionEvento {
@@ -68,9 +68,11 @@ function quitarCartaBasica(run: EstadoRun, rng: () => number, id?: string): stri
 }
 
 function quitarCartaAleatoria(run: EstadoRun, rng: () => number): string {
-  // prioriza cartas no básicas (perderlas duele más narrativamente)
-  const noBasicas = run.mazo.filter((c) => c.def.rareza !== 'inicial');
-  const lista = noBasicas.length ? noBasicas : run.mazo;
+  // prioriza cartas no básicas (perderlas duele más narrativamente); una
+  // maldición nunca se pierde así: librarse de ella sería un premio
+  const candidatas = run.mazo.filter((c) => c.def.tipo !== 'maldicion');
+  const noBasicas = candidatas.filter((c) => c.def.rareza !== 'inicial');
+  const lista = noBasicas.length ? noBasicas : candidatas;
   if (lista.length === 0) return 'ninguna carta';
   const carta = lista[Math.floor(rng() * lista.length)];
   run.mazo.splice(run.mazo.indexOf(carta), 1);
@@ -163,11 +165,11 @@ export const EVENTOS_POSITIVOS: EventoDef[] = [
       },
       {
         etiqueta: 'Pagar con sangre',
-        detalle: 'Pierde 6 PV · gana una carta infrecuente',
+        detalle: 'Una Deuda de Sangre entra en tu mazo · gana una carta infrecuente',
         aplicar: (run, rng) => {
-          perderPV(run, 6);
+          const deuda = anadirMaldicion(run, 'deuda-sangre');
           const nueva = cartaAleatoria(run, rng, ['infrecuente']);
-          return `El frasco se llena de rojo (-6 PV). A cambio: ${nueva}.`;
+          return `Firmas con tu sangre un pagaré sin fecha: la ${deuda} entra en tu mazo. A cambio: ${nueva}.`;
         },
       },
       {
@@ -209,11 +211,11 @@ export const EVENTOS_POSITIVOS: EventoDef[] = [
       },
       {
         etiqueta: 'Saquear el altar',
-        detalle: 'Gana una reliquia · pierde 8 PV',
+        detalle: 'Gana una reliquia · la Marca del Condenado entra en tu mazo',
         aplicar: (run, rng) => {
           const r = reliquiaAleatoria(run, rng);
-          perderPV(run, 8);
-          return `Arrancas ${r} del altar. Una fuerza invisible te castiga (-8 PV).`;
+          const marca = anadirMaldicion(run, 'marca-condenado');
+          return `Arrancas ${r} del altar. Los muros callan… y sientes arder en la nuca la ${marca}.`;
         },
       },
       {
@@ -273,11 +275,11 @@ export const EVENTOS_POSITIVOS: EventoDef[] = [
     opciones: [
       {
         etiqueta: 'Abrirlo',
-        detalle: '70 %: reliquia · 30 %: ¡es un mímico! (pierde 10 PV)',
+        detalle: '70 %: reliquia · 30 %: ¡es un mímico! (una Herida Infectada entra en tu mazo)',
         aplicar: (run, rng) => {
           if (rng() < 0.7) return `Dentro brilla: ${reliquiaAleatoria(run, rng)}.`;
-          perderPV(run, 10);
-          return '¡El cofre tiene dientes! Te zafas a duras penas (-10 PV).';
+          const herida = anadirMaldicion(run, 'herida-infectada');
+          return `¡El cofre tiene dientes! Te zafas a duras penas, pero el mordisco se enconará: ${herida}.`;
         },
       },
       {
@@ -320,10 +322,10 @@ export const EVENTOS_NEGATIVOS: EventoDef[] = [
     opciones: [
       {
         etiqueta: 'Cruzar despacio',
-        detalle: 'Pierde 8 PV',
+        detalle: 'Una Pesadilla entra en tu mazo',
         aplicar: (run) => {
-          perderPV(run, 8);
-          return 'La niebla muerde cada palmo de piel expuesta (-8 PV).';
+          const pesadilla = anadirMaldicion(run, 'pesadilla');
+          return `Sales sin un rasguño, pero los susurros te siguen hasta el sueño: una ${pesadilla} entra en tu mazo.`;
         },
       },
       {
@@ -344,11 +346,10 @@ export const EVENTOS_NEGATIVOS: EventoDef[] = [
     opciones: [
       {
         etiqueta: 'Ofrecerle tu esencia',
-        detalle: '-4 PV máximos',
+        detalle: 'Un Remordimiento entra en tu mazo',
         aplicar: (run) => {
-          run.pvMax = Math.max(20, run.pvMax - 4);
-          run.pv = Math.min(run.pv, run.pvMax);
-          return 'El espíritu bebe algo que no volverá (-4 PV máximos) y se disuelve en paz.';
+          const rem = anadirMaldicion(run, 'remordimiento');
+          return `El espíritu bebe algo que no volverá y se disuelve en paz. Te deja su culpa: un ${rem} entra en tu mazo.`;
         },
       },
       {

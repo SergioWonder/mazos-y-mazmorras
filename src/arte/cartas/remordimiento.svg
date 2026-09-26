@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2a3c"/>
+      <stop offset="1" stop-color="#0c0c14"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.6" cy="0.42" r="0.4">
+      <stop offset="0" stop-color="#b8d0ff" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#b8d0ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="fantasma" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dfe8ff" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#dfe8ff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.7"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- cementerio bajo la lluvia -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 92 Q40 84 80 90 Q130 80 180 88 Q230 80 280 90 L280 112 L0 112 Z" fill="#16161f"/>
+  <!-- cruces y lápidas lejanas -->
+  <path d="M22 96 L22 76 M16 82 L28 82 M232 92 L232 70 M225 77 L239 77" stroke="#101018" stroke-width="3"/>
+  <path d="M50 98 L50 84 Q56 78 62 84 L62 98 Z M196 96 L196 80 Q203 73 210 80 L210 96 Z M256 100 L256 88 Q262 82 268 88 L268 100 Z" fill="#12121a"/>
+  <!-- sauce -->
+  <path d="M270 110 Q266 70 250 40 M252 44 Q236 60 234 90 M258 56 Q244 78 246 104 M262 50 Q274 72 272 100" fill="none" stroke="#0e0e16" stroke-width="2.4" stroke-linecap="round"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 110 Q140 102 280 112 L280 160 L0 160 Z" fill="#12121a"/>
+
+  <!-- espíritu del que se perdió, tras la lápida -->
+  <path d="M162 116 Q156 76 166 50 Q176 30 190 36 Q202 44 200 66 Q206 92 214 116 Z" fill="url(#fantasma)" opacity="0.6"/>
+  <circle cx="182" cy="46" r="11" fill="#dfe8ff" opacity="0.45"/>
+  <path d="M172 60 Q160 72 152 90 M198 62 Q206 70 210 82" fill="none" stroke="#dfe8ff" stroke-width="4" stroke-linecap="round" opacity="0.35"/>
+  <circle cx="182" cy="46" r="14" fill="#b8d0ff" opacity="0.35" filter="url(#brillo)"/>
+  <path d="M176 47 L180 45 M185 45 L189 47" stroke="#4a5a7a" stroke-width="1.4" stroke-linecap="round"/><path d="M178 49.5 L178 50.5 M187 49.5 L187 50.5" stroke="#4a5a7a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M178 54 Q182 52 186 54" fill="none" stroke="#4a5a7a" stroke-width="1"/>
+
+  <!-- lápida agrietada -->
+  <path d="M150 128 L152 78 Q170 62 188 78 L190 128 Z" fill="#5a5a66" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M178 70 Q188 76 188 88 L190 128 L180 128 Z" fill="#44444e"/>
+  <path d="M168 76 L164 92 L172 100 L166 116" fill="none" stroke="#2a2a32" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M158 88 L176 88 M158 94 L172 94" stroke="#44444e" stroke-width="1.4"/>
+  <path d="M146 128 L194 128 L196 134 L144 134 Z" fill="#3a3a44" stroke="#140d0a" stroke-width="1.6"/>
+  <!-- flor marchita -->
+  <path d="M146 134 Q144 118 136 112 Q130 110 128 114" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M146 134 Q144 118 136 112 Q130 110 128 114" fill="none" stroke="#4a5a32" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M128 114 Q122 112 122 118 Q124 124 130 120 Q134 116 128 114 Z" fill="#6a1e2a" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M120 128 Q116 126 118 130 Q122 132 120 128 Z M110 134 Q106 133 108 137 Q112 138 110 134 Z" fill="#6a1e2a" stroke="#140d0a" stroke-width="0.8"/>
+
+  <!-- el héroe de rodillas, a contraluz -->
+  <g transform="translate(1.3 -1.3)" fill="#b8d0ff" opacity="0.8">
+    <circle cx="92" cy="92" r="8"/>
+    <path d="M80 100 Q94 96 106 104 L110 124 L78 124 Z"/>
+    <path d="M76 122 L112 122 L118 134 L70 134 Z"/>
+  </g>
+  <g fill="#0b0910">
+    <circle cx="92" cy="92" r="8"/>
+    <path d="M82 84 Q92 78 100 86 L100 92 Q92 86 84 90 Z"/>
+    <path d="M80 100 Q94 96 106 104 L110 124 L78 124 Z"/>
+    <path d="M76 122 L112 122 L118 134 L70 134 Z"/>
+    <path d="M104 106 Q116 110 122 118 L118 122 Q110 116 102 114 Z"/>
+    <path d="M60 130 Q66 126 74 128 L72 134 L58 134 Z"/>
+  </g>
+  <!-- mano tendida hacia la lápida -->
+  <path d="M120 118 L128 120" stroke="#0b0910" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- lluvia -->
+  <path d="M12 6 L6 20 M40 20 L34 34 M70 4 L64 18 M100 30 L94 44 M128 10 L122 24 M156 26 L150 40 M210 8 L204 22 M240 28 L234 42 M268 6 L262 20 M26 50 L20 64 M60 60 L54 74 M226 52 L220 66 M122 60 L116 74 M254 70 L248 84 M20 90 L14 104 M40 108 L34 122 M236 104 L230 118 M264 120 L258 134" stroke="#9aa8c8" stroke-width="0.9" stroke-linecap="round" opacity="0.55"/>
+  <!-- charcos -->
+  <ellipse cx="60" cy="146" rx="18" ry="2.4" fill="#2a2a3a"/>
+  <ellipse cx="214" cy="142" rx="22" ry="2.6" fill="#2a2a3a"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

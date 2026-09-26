@@ -181,6 +181,32 @@
 .nodo-elite { border-color: rgba(214, 90, 58, 0.5); }
 .nodo-cofre { border-color: rgba(217, 169, 63, 0.45); }
 .nodo-evento { border-color: rgba(138, 122, 224, 0.5); }
+.nodo-taberna { border-color: rgba(201, 132, 62, 0.6); background: radial-gradient(circle at 35% 30%, #4a3320, #1e140b); }
+
+/* tavern quest target: scroll badge and a soft golden glow until completed */
+.nodo-mision {
+  opacity: 0.95;
+  border-color: rgba(255, 209, 102, 0.85);
+  animation: brillo-mision 2.4s ease-in-out infinite;
+}
+.nodo-mision.nodo-disponible { animation: pulso-nodo 1.6s ease-in-out infinite, brillo-mision 2.4s ease-in-out infinite; }
+.mision-insignia {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  font-size: 1.05rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+  animation: mecer-insignia 2.2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes mecer-insignia {
+  0%, 100% { transform: translateY(0) rotate(-8deg); }
+  50% { transform: translateY(-4px) rotate(8deg); }
+}
+@keyframes brillo-mision {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.35)); }
+  50% { filter: drop-shadow(0 0 14px rgba(255, 209, 102, 0.85)); }
+}
 
 .nodo-disponible {
   opacity: 1;
@@ -382,6 +408,19 @@
 .op-etiqueta { font-family: var(--fuente-display); font-size: 1.1rem; }
 .op-detalle { font-size: 0.82rem; opacity: 0.65; font-style: italic; }
 
+/* ── Taberna ─────────────────────────────────────────────────────────── */
+.panel-taberna { border-color: rgba(201, 132, 62, 0.55); }
+.panel-taberna .evento-tono { color: #e0a060; }
+.taberna-arte { filter: drop-shadow(0 0 26px rgba(255, 170, 70, 0.55)); }
+.rumor-destino {
+  display: block;
+  margin-top: 0.3rem;
+  font-style: normal;
+  color: var(--brasa-viva);
+  opacity: 0.9;
+}
+.panel-mision .evento-tono { color: var(--brasa-viva); }
+
 .evento-resultado {
   max-width: 440px;
   margin: 0 auto 1.4rem;
@@ -462,6 +501,7 @@
 .bendicion-tipo-pacto { color: #ff8a7a; }
 .bendicion-tipo-clase { color: #b8ffd9; }
 .bendicion-tipo-mapa { color: #a8d8ff; }
+.bendicion-tipo-unica { color: #ffc2ea; }
 .bendicion-inicial .bendicion-opciones { width: min(520px, 92vw); max-width: 520px; }
 /* long offers never get clipped: compact header and scroll instead of overflowing */
 .pantalla-bendicion .fin { overflow-y: auto; justify-content: safe center; gap: 1rem; }

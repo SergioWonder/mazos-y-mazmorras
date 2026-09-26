@@ -1,0 +1,141 @@
+/* ── True ending: the whole table agrees on a date ──────────────────────── */
+.pantalla-final-verdadero {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% 78%, rgba(255, 170, 80, 0.32), transparent 55%),
+    radial-gradient(ellipse at 50% 20%, #2a1d33, #0d0a10 70%);
+  overflow: hidden;
+}
+.fv {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.6rem, 2.5vh, 1.6rem);
+  padding: 1rem 16px 1.5rem;
+  text-align: center;
+}
+.fv-titulo {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.8rem, 6vw, 3.8rem);
+  color: var(--brasa-viva);
+  text-shadow: 0 0 30px rgba(255, 209, 102, 0.6);
+  opacity: 0;
+  transform: translateY(-10px) scale(0.96);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fv-hay-fecha .fv-titulo { opacity: 1; transform: none; }
+
+/* the table, with the DM behind it and the heroes around it */
+.fv-mesa-escena {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.2rem, 1.5vw, 1.4rem);
+  width: min(100%, 1000px);
+}
+.fv-asientos { display: flex; align-items: flex-end; gap: clamp(0rem, 1vw, 0.8rem); }
+.fv-heroe .sprite-marioneta { width: clamp(4.4rem, 13vw, 9rem); }
+.fv-centro { position: relative; display: flex; flex-direction: column; align-items: center; }
+.fv-dm .sprite-marioneta { width: clamp(8rem, 21vw, 15rem); }
+.fv-mesa {
+  position: relative;
+  width: clamp(9rem, 26vw, 19rem);
+  height: clamp(1.6rem, 4vw, 2.6rem);
+  margin-top: -0.6rem;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 35%, #7a5230, #3e2716 70%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6), 0 0 40px rgba(255, 170, 80, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  font-size: clamp(0.9rem, 2.4vw, 1.4rem);
+}
+.fv-mesa-vela { filter: drop-shadow(0 0 8px rgba(255, 200, 110, 0.9)); }
+
+/* the DM's diary: excuses cross days out until one is left */
+.fv-agenda {
+  margin-bottom: 0.3rem;
+  padding: 0.35rem 0.6rem 0.45rem;
+  border-radius: 8px;
+  background: var(--pergamino);
+  color: #2a1a10;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5), 0 0 0 2px #6a2a22;
+  white-space: nowrap;
+}
+.fv-agenda-titulo { font-family: var(--fuente-titulo); font-size: 0.85rem; }
+.fv-dias { display: flex; gap: 0.3rem; margin-top: 0.2rem; }
+.fv-dia {
+  position: relative;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-titulo);
+  font-size: 0.9rem;
+  border-radius: 4px;
+  background: rgba(106, 42, 34, 0.12);
+  transition: opacity 0.3s ease;
+}
+.fv-dia.fv-tachado { opacity: 0.45; }
+.fv-dia.fv-tachado::after {
+  content: '';
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 50%;
+  height: 2px;
+  background: #b3261e;
+  transform: rotate(-35deg);
+}
+.fv-dia.fv-elegido {
+  background: #ffd166;
+  box-shadow: 0 0 0 2px #b3261e, 0 0 14px rgba(255, 209, 102, 0.9);
+  animation: fv-latido 1s ease-in-out infinite;
+}
+@keyframes fv-latido { 50% { transform: scale(1.18); } }
+
+.fv-bocadillo { font-size: 0.95rem; }
+.fv-bocadillo-dm { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55), 0 0 0 2px var(--oro); }
+
+/* closing text and button, revealed once there is a date */
+.fv-final {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease 0.4s;
+}
+.fv-hay-fecha .fv-final { opacity: 1; pointer-events: auto; }
+.fv-texto { max-width: 560px; line-height: 1.5; opacity: 0.9; }
+.fv-saltar {
+  position: absolute;
+  right: 16px;
+  bottom: 12px;
+  font-size: 0.85rem;
+  color: var(--pergamino);
+  opacity: 0.6;
+  background: none;
+  border: 1px solid rgba(232, 217, 176, 0.3);
+  border-radius: 6px;
+  padding: 0.25rem 0.7rem;
+}
+.fv-saltar:hover { opacity: 1; }
+
+/* main menu: discreet mark once the true ending was seen */
+.titulo-final-verdadero { color: var(--brasa-viva); }
+
+/* landscape phones: a tighter table */
+@media (max-height: 480px) {
+  .fv { gap: 0.4rem; padding-top: 0.4rem; }
+  .fv-titulo { font-size: 1.6rem; }
+  .fv-heroe .sprite-marioneta { width: 4rem; }
+  .fv-dm .sprite-marioneta { width: 7.6rem; }
+  .fv-texto { font-size: 0.85rem; }
+  .fv-agenda-titulo { font-size: 0.75rem; }
+  .fv-dia { width: 1.2rem; height: 1.2rem; font-size: 0.75rem; }
+}

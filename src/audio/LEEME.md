@@ -9,7 +9,7 @@ comparten un **leitmotiv** del héroe (re mayor: D A | B A F# | G F# E | D). Cad
 es un **bucle exacto**. `src/fx/music-tracks.ts` guarda cuántas muestras dura cada bucle,
 y el juego lo reproduce con Web Audio sin cortes, saltándose el relleno del MP3 si el
 navegador no lo quita. Si un fichero no carga, suena un **loop chiptune** de respaldo.
-La música se **pausa** en segundo plano y el botón flotante 🔊/🔇 silencia todo.
+La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o enciende solo la música (los efectos siguen sonando).
 
 | Fichero     | Tema | Carácter |
 |-------------|------|----------|

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a1a24"/>
+      <stop offset="1" stop-color="#12060a"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.62" r="0.4">
+      <stop offset="0" stop-color="#ff5a3a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ff5a3a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- plaza del patíbulo bajo un cielo de sangre -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <!-- horca y torres -->
+  <path d="M26 110 L26 30 L78 30 M26 44 L40 30" fill="none" stroke="#1a080c" stroke-width="5" stroke-linecap="square"/>
+  <path d="M70 30 L70 44" stroke="#1a080c" stroke-width="1.6"/>
+  <path d="M64 44 Q70 40 76 44 Q76 52 70 54 Q64 52 64 44 Z" fill="none" stroke="#1a080c" stroke-width="1.6"/>
+  <path d="M206 110 L206 40 L216 30 L226 40 L226 110 Z M236 110 L236 56 L250 44 L264 56 L264 110 Z" fill="#1c090e"/>
+  <rect x="213" y="52" width="6" height="9" fill="#ff7a4a" opacity="0.6"/>
+  <rect x="246" y="66" width="7" height="9" fill="#ff7a4a" opacity="0.5"/>
+  <!-- cadenas colgando -->
+  <path d="M110 0 L110 38 M170 0 L170 30" stroke="#140d0a" stroke-width="3" stroke-dasharray="4 2"/>
+  <path d="M110 0 L110 38 M170 0 L170 30" stroke="#5a4a4a" stroke-width="1.4" stroke-dasharray="4 2"/>
+  <!-- la muchedumbre que señala -->
+  <path d="M0 112 Q8 100 16 104 Q22 96 30 102 Q38 94 46 102 Q54 96 60 104 L60 124 L0 124 Z M216 106 Q224 96 232 102 Q240 94 250 102 Q258 96 266 104 Q274 98 280 104 L280 124 L216 124 Z" fill="#1a080c"/>
+  <path d="M44 100 L58 84 M232 100 L222 84" stroke="#1a080c" stroke-width="3" stroke-linecap="round"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 122 Q140 116 280 124 L280 160 L0 160 Z" fill="#14070a"/>
+
+  <!-- el héroe de espaldas: luz de borde roja, silueta negra -->
+  <g transform="translate(1.4 -1.4)" fill="#ff7a4a" opacity="0.85">
+    <path d="M72 160 Q74 124 102 112 Q120 106 128 96 L152 96 Q160 106 178 112 Q206 124 208 160 Z"/>
+    <path d="M122 98 Q118 70 140 64 Q162 70 158 98 Z"/>
+  </g>
+  <g fill="#0b0910">
+    <path d="M72 160 Q74 124 102 112 Q120 106 128 96 L152 96 Q160 106 178 112 Q206 124 208 160 Z"/>
+    <path d="M122 98 Q118 70 140 64 Q162 70 158 98 Z"/>
+    <path d="M124 76 Q126 62 140 60 Q154 62 156 76 Q148 68 140 70 Q132 68 124 76 Z"/>
+  </g>
+  <!-- camisa rasgada en la espalda -->
+  <path d="M104 118 Q112 132 108 150 M176 118 Q168 132 172 150" stroke="#1c1418" stroke-width="1.2" fill="none"/>
+  <path d="M116 110 L124 118 L130 110 L140 120 L150 110 L156 118 L164 110" fill="none" stroke="#2a1e24" stroke-width="1.4" stroke-linejoin="round"/>
+
+  <!-- la marca al rojo vivo en la nuca -->
+  <circle cx="140" cy="124" r="22" fill="#ff4a2a" opacity="0.45" filter="url(#fuerte)"/>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#ff6a3a" stroke-width="5" opacity="0.8" filter="url(#brillo)">
+      <circle cx="140" cy="124" r="13"/>
+      <path d="M140 111 L148 132 L128 118 L152 118 L132 132 Z"/>
+    </g>
+    <g stroke="#ffd0a0" stroke-width="1.6">
+      <circle cx="140" cy="124" r="13"/>
+      <path d="M140 111 L148 132 L128 118 L152 118 L132 132 Z"/>
+    </g>
+  </g>
+  <!-- humo de la carne quemada -->
+  <path d="M136 104 Q130 94 138 86 Q146 78 140 68 M148 106 Q156 96 150 88" fill="none" stroke="#6a4a50" stroke-width="3" stroke-linecap="round" opacity="0.5" filter="url(#brillo)"/>
+  <path d="M136 104 Q130 94 138 86 Q146 78 140 68" fill="none" stroke="#9a8088" stroke-width="0.8" stroke-linecap="round" opacity="0.6"/>
+  <!-- ascuas que suben -->
+  <g fill="#ffb070">
+    <circle cx="120" cy="100" r="1.1"/><circle cx="164" cy="94" r="1.1"/><circle cx="154" cy="80" r="0.9"/><circle cx="126" cy="86" r="0.9"/>
+  </g>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

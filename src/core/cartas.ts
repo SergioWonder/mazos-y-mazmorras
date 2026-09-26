@@ -3477,6 +3477,8 @@ export const BRUJO: CartaDef[] = [
 /** Resuelve el efecto de Seducir según la tirada de 1d20. */
 async function resolverSeducir(c: ContextoEfecto, r: number) {
   const e = c.objetivo!;
+  // The Dungeon Master: only a natural 20 gets past his screen (secret true ending)
+  if (e.def.dungeonMaster && c.seducirDM) { await c.seducirDM(e, r); return; }
   if (r === 1) {
     await c.mensaje('💢 ¡Se revuelve furioso!');
     await c.forzarAccion(e);
@@ -3590,6 +3592,114 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
   },
 ];
 
+// ── Maldiciones ──────────────────────────────────────────────────────────────
+// Unplayable dead weight: they take a slot in the hand and in the deck. Some hurt
+// at the end of the turn while held, some on being drawn. They never show up in
+// card rewards (they are not in any class pool) and are removed by purifying them
+// at a campfire. Only the Blood Debt can be paid off in combat.
+
+/** Common shape of a curse; the engine never calls `jugar` on one. */
+function maldicion(d: Omit<CartaDef, 'clase' | 'tipo' | 'rareza' | 'coste' | 'objetivo' | 'jugar'>): CartaDef {
+  return {
+    clase: 'neutral', tipo: 'maldicion', rareza: 'especial', coste: 0, objetivo: 'ninguno',
+    jugar: async () => {},
+    ...d,
+  };
+}
+
+export const MALDICIONES: CartaDef[] = [
+  maldicion({
+    id: 'herida-infectada',
+    nombre: 'Herida Infectada',
+    texto: 'Injugable.\nAl final del turno, si está en tu mano, pierdes 2 PV.',
+    finTurnoEnMano: async (c) => {
+      await c.mensaje('🩸 La Herida Infectada supura (-2 PV)');
+      await c.perderPV(2);
+    },
+  }),
+  maldicion({
+    id: 'duda',
+    nombre: 'Duda',
+    texto: 'Injugable.\nAl final del turno, si está en tu mano, recibes 1 de Débil.',
+    finTurnoEnMano: async (c) => {
+      await c.aplicarEstado(c.jugador, 'debil', 1);
+    },
+  }),
+  maldicion({
+    id: 'pesadilla',
+    nombre: 'Pesadilla',
+    texto: 'Injugable.\nAl robarla, descartas una carta al azar de tu mano.',
+    alRobar: async (c, carta) => {
+      await c.descartarAlAzar(carta);
+    },
+  }),
+  maldicion({
+    id: 'deuda-sangre',
+    nombre: 'Deuda de Sangre',
+    purgar: 2,
+    texto: 'Al final del turno, si está en tu mano, pierdes 3 PV.\nPaga 2 de energía para saldarla: sale de tu mazo para siempre.',
+    finTurnoEnMano: async (c) => {
+      await c.mensaje('🩸 La Deuda de Sangre se cobra su interés (-3 PV)');
+      await c.perderPV(3);
+    },
+  }),
+  maldicion({
+    id: 'marca-condenado',
+    nombre: 'Marca del Condenado',
+    texto: 'Injugable.\nAl final del turno, si está en tu mano, recibes 1 de Vulnerable.',
+    finTurnoEnMano: async (c) => {
+      await c.aplicarEstado(c.jugador, 'vulnerable', 1);
+    },
+  }),
+  maldicion({
+    id: 'maldicion-momia',
+    nombre: 'Maldición de la Momia',
+    innato: true,
+    texto: 'Injugable.\nAl final del turno, si está en tu mano, recibes 1 de Frágil.',
+    finTurnoEnMano: async (c) => {
+      await c.aplicarEstado(c.jugador, 'fragil', 1);
+    },
+  }),
+  maldicion({
+    id: 'remordimiento',
+    nombre: 'Remordimiento',
+    texto: 'Injugable.\nAl final del turno, si está en tu mano, pierdes 1 PV por cada carta en tu mano.',
+    finTurnoEnMano: async (c) => {
+      const n = c.jugador.mano.length;
+      await c.mensaje(`🥀 El Remordimiento pesa (-${n} PV)`);
+      await c.perderPV(n);
+    },
+  }),
+  maldicion({
+    id: 'paralisis',
+    nombre: 'Parálisis',
+    texto: 'Injugable.\nAl robarla, pierdes 1 de energía.',
+    alRobar: async (c) => {
+      if (c.jugador.energia <= 0) return;
+      c.ganarEnergia(-1);
+      await c.mensaje('🧊 La Parálisis te agarrota (-1 de energía)');
+    },
+  }),
+  maldicion({
+    id: 'codicia',
+    nombre: 'Codicia',
+    retener: true,
+    texto: 'Injugable.\nNo se descarta: ocupa un hueco de tu mano todo el combate.',
+  }),
+  maldicion({
+    id: 'grilletes',
+    nombre: 'Grilletes',
+    texto: 'Injugable.\nPeso muerto: no hace nada… salvo estorbar.',
+  }),
+];
+
+/** A new copy of a curse by id (events, relics and enemies hand them out). */
+export function nuevaMaldicion(id: string): CartaInstancia {
+  const def = MALDICIONES.find((c) => c.id === id);
+  if (!def) throw new Error(`Unknown curse: ${id}`);
+  return instanciar(def);
+}
+
 // ── Mazos iniciales y recompensas ────────────────────────────────────────────
 
 /** Las 2 cartas de clase con las que arranca cada mazo. */
@@ -3637,7 +3747,7 @@ export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
 export function cartaPorId(id: string): CartaDef | undefined {
   return [
     ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
-    CONJURO_PRODIGIOSO, DAGA,
+    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA,
   ].find(
     (c) => c.id === id,
   );

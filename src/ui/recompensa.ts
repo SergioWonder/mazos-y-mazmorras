@@ -1,7 +1,7 @@
 import type { CartaDef, EstadoRun, OrigenReliquia } from '../core/types.ts';
 import { recompensaCartas } from '../core/cartas.ts';
 import { sortearReliquia, otorgarReliquia, NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
-import { afilarCarta, anadirCarta, curaDeDescanso, descansar, pesoRaroEfectivo } from '../core/run.ts';
+import { afilarCarta, anadirCarta, curaDeDescanso, descansar, maldicionesDe, pesoRaroEfectivo, purificar } from '../core/run.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { relicIcon } from './relic-art.ts';
@@ -114,7 +114,8 @@ export function obtenerReliquia(
   });
 }
 
-/** Pantalla de campamento: descansar (curar) o afilar (mejorar 1 carta). */
+/** Pantalla de campamento: descansar (curar), afilar (mejorar 1 carta) o, si
+ *  llevas maldiciones, purificar una en vez de curarte. */
 export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random): Promise<void> {
   return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
@@ -131,6 +132,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
       const mejorables = run.mazo.filter((c) => !c.mejorada && c.def.mejora);
+      const malditas = maldicionesDe(run);
       const panel = el('div', 'panel-recompensa panel-descanso');
       panel.innerHTML = `
         <h2>🏕️ Campamento</h2>
@@ -140,6 +142,9 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
           <button class="btn-tomar btn-descansar">😴 Descansar<small>Cura ${cura} PV</small></button>
           <button class="btn-tomar btn-afilar" ${mejorables.length === 0 ? 'disabled' : ''}>
             ⚒️ Afilar<small>Mejora 1 carta del mazo</small></button>
+          ${malditas.length > 0
+            ? `<button class="btn-tomar btn-purificar">🕯️ Purificar<small>Elimina 1 maldición del mazo (en vez de curarte)</small></button>`
+            : ''}
         </div>
         <p class="titulo-ayuda">←→ y Enter, o haz clic</p>
       `;
@@ -174,6 +179,66 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
         window.removeEventListener('keydown', teclado);
         vistaMejora();
       });
+      panel.querySelector('.btn-purificar')?.addEventListener('click', () => {
+        window.removeEventListener('keydown', teclado);
+        vistaPurificar();
+      });
+    }
+
+    /** Purify: pick one curse of the deck and burn it in the campfire. */
+    function vistaPurificar() {
+      overlay.innerHTML = '';
+      overlay.className = 'overlay-activo';
+      const malditas = maldicionesDe(run);
+      const panel = el('div', 'panel-recompensa panel-mejora panel-purificar');
+      panel.innerHTML = `
+        <h2>🕯️ Purificar</h2>
+        <p>Elige la maldición que arrojas a la hoguera</p>
+        <div class="mejora-rejilla"></div>
+        <button class="btn-saltar">Volver <span class="atajo">[Esc]</span></button>
+      `;
+      overlay.appendChild(panel);
+
+      const rejilla = panel.querySelector('.mejora-rejilla') as HTMLElement;
+      const cartas: HTMLElement[] = malditas.map((inst, i) => {
+        const c = renderCarta(inst.def);
+        c.classList.add('carta-recompensa');
+        c.style.setProperty('--retraso', `${Math.min(i * 0.04, 0.5)}s`);
+        c.addEventListener('click', () => quemar(i));
+        rejilla.appendChild(c);
+        return c;
+      });
+
+      let idx = 0;
+      const marcar = () => cartas.forEach((c, i) => c.classList.toggle('seleccionada', i === idx));
+      marcar();
+
+      function quemar(i: number) {
+        const inst = malditas[i];
+        if (!purificar(run, inst)) return;
+        anuncio(`🕯️ «${inst.def.nombre}» arde en la hoguera`, 'anuncio-botin');
+        cerrar(teclado);
+      }
+
+      const teclado = (ev: KeyboardEvent) => {
+        if (ev.code === 'ArrowLeft' || ev.code === 'ArrowRight') {
+          ev.preventDefault();
+          const dir = ev.code === 'ArrowRight' ? 1 : -1;
+          idx = (idx + dir + cartas.length) % cartas.length;
+          marcar();
+        } else if (ev.code === 'Enter' || ev.code === 'Space') {
+          ev.preventDefault();
+          quemar(idx);
+        } else if (ev.code === 'Escape') {
+          salir();
+        }
+      };
+      const salir = () => {
+        window.removeEventListener('keydown', teclado);
+        vistaPrincipal();
+      };
+      window.addEventListener('keydown', teclado);
+      panel.querySelector('.btn-saltar')!.addEventListener('click', salir);
     }
 
     function vistaMejora() {

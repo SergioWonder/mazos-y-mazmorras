@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="31" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- dance trail: infinity loop -->
+  <path d="M32 32 C24 20 10 22 10 32 C10 42 24 44 32 32 C40 20 54 22 54 32 C54 42 40 44 32 32 Z" fill="none" stroke="#72e0cc" stroke-width="5" opacity="0.7" filter="url(#g)"/>
+  <path d="M32 32 C24 20 10 22 10 32 C10 42 24 44 32 32 C40 20 54 22 54 32 C54 42 40 44 32 32 Z" fill="none" stroke="#140d0a" stroke-width="3.6"/>
+  <path d="M32 32 C24 20 10 22 10 32 C10 42 24 44 32 32 C40 20 54 22 54 32 C54 42 40 44 32 32 Z" fill="none" stroke="#9af5e2" stroke-width="1.6"/>
+  <!-- dagger 1 (blade up-left) -->
+  <g transform="rotate(-40 32 32)">
+    <path d="M32 6 L35.6 14 L35 34 L29 34 L28.4 14 Z" fill="#dfe6ea" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M32 9 L32 33" stroke="#9aa6ae" stroke-width="1.1"/>
+    <path d="M24 34 H40" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M24 34 H40" stroke="#c9a040" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M32 36 V48" stroke="#140d0a" stroke-width="5.6" stroke-linecap="round"/>
+    <path d="M32 36 V48" stroke="#4a2e22" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="51" r="2.6" fill="#c9a040" stroke="#140d0a" stroke-width="1.6"/>
+  </g>
+  <!-- dagger 2 (blade up-right) -->
+  <g transform="rotate(40 32 32)">
+    <path d="M32 6 L35.6 14 L35 34 L29 34 L28.4 14 Z" fill="#dfe6ea" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M32 9 L32 33" stroke="#9aa6ae" stroke-width="1.1"/>
+    <path d="M24 34 H40" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M24 34 H40" stroke="#c9a040" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M32 36 V48" stroke="#140d0a" stroke-width="5.6" stroke-linecap="round"/>
+    <path d="M32 36 V48" stroke="#4a2e22" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="32" cy="51" r="2.6" fill="#c9a040" stroke="#140d0a" stroke-width="1.6"/>
+  </g>
+  <!-- glints -->
+  <path d="M12 14 Q12.6 16.4 15 17 Q12.6 17.6 12 20 Q11.4 17.6 9 17 Q11.4 16.4 12 14 Z" fill="#ffffff"/>
+  <path d="M52 14 Q52.6 16.4 55 17 Q52.6 17.6 52 20 Q51.4 17.6 49 17 Q51.4 16.4 52 14 Z" fill="#ffffff"/>
+</svg>

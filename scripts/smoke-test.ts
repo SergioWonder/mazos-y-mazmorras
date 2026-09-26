@@ -12,7 +12,7 @@ import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
-  poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA,
+  poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA, MALDICIONES,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
@@ -252,7 +252,7 @@ console.log('— Arte de las cartas —');
 {
   const TODAS = [
     ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
-    ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA,
+    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA,
   ];
   const sinArte = TODAS.filter((c) => !ARTE_CARTA[c.id]);
   check(sinArte.length === 0, `todas las cartas tienen emoji propio (faltan: ${sinArte.map((c) => c.id).join(', ')})`);
@@ -1994,7 +1994,7 @@ console.log('\n🎨 Ilustraciones SVG de las cartas');
 {
   const fs = await import('node:fs');
   const dir = new URL('../src/arte/cartas/', import.meta.url);
-  const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA];
+  const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA];
   const ids = new Set(todas.map((c) => c.id));
   /** Minimal XML well-formedness: every opening tag closes, in order. */
   const bienFormado = (xml: string) => {
@@ -2499,11 +2499,22 @@ console.log('\n💍 Reliquias ampliadas');
   }
   {
     const { comb } = await montar('druida', ['caliz-vacio']);
-    const mano = comb.jugador.mano.length;
+    // Still cards in hand: nothing happens, even with no energy left
     await jugarCon(comb, 'golpe', 1);
-    check(comb.jugador.mano.length === mano + 1, 'Cáliz Vacío: al quedarte sin energía robas 1 carta');
-    await jugarCon(comb, 'golpe', 1);
-    check(comb.jugador.mano.length === mano + 1, 'Cáliz Vacío: solo una vez por turno');
+    check(comb.jugador.mano.length === 5, 'Cáliz Vacío: si aún te quedan cartas en la mano, no roba (aunque te quedes sin energía)');
+    // Playing the last card of the hand draws 2
+    comb.jugador.mano = [];
+    await jugarCon(comb, 'golpe', 3);
+    check(comb.jugador.mano.length === 2, 'Cáliz Vacío: al jugar la última carta de la mano robas 2');
+    // Once per turn: emptying the hand again does nothing (no loops with 0-cost cards)
+    comb.jugador.mano = [];
+    await jugarCon(comb, 'golpe', 3);
+    check(comb.jugador.mano.length === 0, 'Cáliz Vacío: solo una vez por turno');
+    // Next turn it works again, also when discarding the last card
+    await comb.terminarTurno();
+    comb.jugador.mano = comb.jugador.mano.slice(0, 1);
+    await comb.descartarCarta(comb.jugador.mano[0]);
+    check(comb.jugador.mano.length === 2, 'Cáliz Vacío: al descartar la última carta de la mano también robas 2 (cada turno)');
   }
   {
     const { comb, ctx } = await montar('druida', ['estandarte-terror'], [muneco(10), muneco()]);
@@ -2517,7 +2528,8 @@ console.log('\n💍 Reliquias ampliadas');
     const e = alta.comb.enemigos[0];
     check(e.estados.vulnerable === 3 && e.estados.debil === 3, 'Baraja de las Maravillas: un 20 debilita y expone a todos');
     const baja = await montar('druida', ['baraja-maravillas'], [muneco()], { rng: () => 0 });
-    check(baja.comb.jugador.pv === baja.comb.jugador.pvMax - 5, 'Baraja de las Maravillas: un 1 te cuesta 5 PV');
+    check(baja.comb.jugador.pv === baja.comb.jugador.pvMax && baja.comb.jugador.mano.some((c) => c.def.id === 'duda'),
+      'Baraja de las Maravillas: un 1 mete una Duda en tu mano');
   }
   // — Generales: riesgo y recompensa —
   {
@@ -3157,13 +3169,14 @@ console.log('\n🙏 Bendiciones');
     const nombres = new Set([...RQ.POOL_RELIQUIAS, ...todas].map((r) => r.nombre));
     check(nombres.size === RQ.POOL_RELIQUIAS.length + todas.length, 'sin nombres repetidos entre reliquias y bendiciones');
     check(todas.every((r) => r.icono.length > 0 && !r.texto.includes('"')), 'todas tienen icono y su texto cabe en un data-tip');
-    check(todas.every((r) => (r.tipoBendicion === 'clase') === !!r.soloClase), 'las de clase (y solo ellas) van ligadas a una clase');
+    check(todas.every((r) => (r.tipoBendicion === 'clase' ? !!r.soloClase : r.tipoBendicion === 'unica' || !r.soloClase)),
+      'las de clase van ligadas a una clase (y, fuera de ellas, solo las de carta única de clase)');
     for (const t of ['general', 'pacto', 'mapa'] as const) {
       const n = todas.filter((r) => r.tipoBendicion === t).length;
       check(n >= 4, `al menos 4 bendiciones de tipo ${t} (${n})`);
     }
     for (const clase of CLASES) {
-      const n = todas.filter((r) => r.soloClase === clase).length;
+      const n = todas.filter((r) => r.soloClase === clase && r.tipoBendicion === 'clase').length;
       check(n >= 2, `${clase}: al menos 2 bendiciones de clase (${n})`);
     }
     for (const r of todas) check(RQ.reliquiaPorId(r.id) === r, `«${r.nombre}» se encuentra por id`);
@@ -3197,50 +3210,94 @@ console.log('\n🙏 Bendiciones');
         const tipos = rel.map((r) => r.tipoBendicion);
         if (of.length !== 4 || rel.length !== 4 || new Set(ids).size !== 4
           || !rel.some((r) => r.soloClase === clase) || rel.some((r) => r.soloClase && r.soloClase !== clase)
-          || !tipos.includes('general') || !tipos.includes('pacto')) {
+          || !tipos.includes('general') || !tipos.includes('pacto') || tipos.includes('unica')) {
           ok = false;
           console.error(`    ${clase}/${s}: ${ids.join(', ')}`);
         }
         firmas.add(`${clase}:${[...ids].sort().join(',')}`);
       }
     }
-    check(ok, 'la bendición inicial ofrece 4 reliquias sin repetir: una de clase, una general y un pacto (y nunca de otra clase)');
+    check(ok, 'la bendición inicial ofrece 4 reliquias sin repetir: una de clase, una general y un pacto (nunca de otra clase ni de carta única)');
     check(firmas.size >= 100, `la bendición inicial cambia de partida a partida (${firmas.size} combinaciones en 150 semillas)`);
   }
-  // — Between acts: unique cards stay the same, the rest are relics —
+  // — Between acts: the unique cards come as blessing relics too —
   {
+    const unicas = todas.filter((r) => r.tipoBendicion === 'unica');
+    const cartaDe: Record<string, string> = {
+      'don-seducir': 'seducir', 'don-deseo': 'deseo',
+      'don-tormenta-venganza': 'tormenta-venganza', 'don-furia-indomita': 'furia-indomita',
+      'don-maestria-conjuros': 'maestria-conjuros', 'don-danza-mortal': 'danza-mortal', 'don-pacto-final': 'pacto-final',
+    };
+    check(unicas.length === 7 && unicas.every((r) => cartaDe[r.id] !== undefined),
+      `una bendición-reliquia por carta única: Seducir, Deseo y la de cada clase (${unicas.map((r) => r.id).join(', ')})`);
+    for (const clase of CLASES) {
+      const r = unicas.find((x) => x.soloClase === clase);
+      check(!!r && cartaDe[r.id] === cartaUnicaDeClase(clase).id, `${clase}: su carta única tiene su bendición-reliquia`);
+    }
+    check(unicas.every((r) => !!r.alObtener && /^Añade «[^»]+» a tu mazo/.test(r.texto)),
+      'las reliquias de carta única meten la carta al obtenerse y lo dicen en su texto');
+
     const run = nuevaRun('druida', 21);
     const of = BD.ofrecerBendicionEntreActos(run, crearRng(21));
-    const cartas = of.filter((o) => o.tipo === 'carta');
-    check(of.length === 3 && cartas.length === 1, 'entre el Acto I y el II: 3 opciones, una de ellas carta única');
-    const sed = cartas[0];
-    check(sed?.tipo === 'carta' && sed.icono === '💘' && sed.nombre === 'Carta única: Seducir'
-      && sed.detalle === 'Añade «Seducir» a tu mazo (incolora, tira 1d20)', 'Seducir conserva icono y textos');
-    check(of.every((o) => o.tipo === 'carta' || o.reliquia.rareza === 'bendicion'), 'el resto de opciones son bendiciones-reliquia');
+    const sed = of.find((o) => o.reliquia.tipoBendicion === 'unica');
+    check(of.length === 3 && of.every((o) => o.tipo === 'reliquia' && o.reliquia.rareza === 'bendicion')
+      && of.filter((o) => o.reliquia.tipoBendicion === 'unica').length === 1 && sed?.reliquia.id === 'don-seducir',
+    'entre el Acto I y el II: 3 bendiciones-reliquia, una de ellas la de Seducir');
     const mazo = run.mazo.length;
     const nRel = run.reliquias.length;
     if (sed) BD.aplicarBendicion(run, sed, crearRng(1));
-    check(run.mazo.length === mazo + 1 && run.mazo[run.mazo.length - 1].def.id === 'seducir' && run.reliquias.length === nRel,
-      'elegir Seducir añade la carta al mazo (y ninguna reliquia)');
-    const rel = of.find((o) => o.tipo === 'reliquia');
+    check(run.mazo.length === mazo + 1 && run.mazo[run.mazo.length - 1].def.id === 'seducir'
+      && run.reliquias.length === nRel + 1 && run.reliquias.some((r) => r.id === 'don-seducir'),
+    'elegir la de Seducir te da la reliquia (barra superior) y mete «Seducir» en el mazo');
+    // Rehydrating does not add the card again
+    const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))));
+    check(!!rest && rest.mazo.length === run.mazo.length
+      && rest.mazo.filter((c) => c.def.id === 'seducir').length === 1 && rest.reliquias.some((r) => r.id === 'don-seducir'),
+    'al cargar la partida se conserva la reliquia de Seducir sin duplicar la carta');
+    const rel = of.find((o) => o.reliquia.tipoBendicion !== 'unica');
     if (rel) BD.aplicarBendicion(run, rel, crearRng(1));
-    check(rel?.tipo === 'reliquia' && run.reliquias.length === nRel + 1 && run.reliquias.includes(rel.reliquia),
+    check(!!rel && run.reliquias.length === nRel + 2 && run.reliquias.includes(rel.reliquia),
       'elegir una bendición-reliquia la añade a tus reliquias (barra superior)');
+    // Already owned: not offered again
+    const otra = BD.ofrecerBendicionEntreActos(run, crearRng(21));
+    check(otra.every((o) => o.reliquia.id !== 'don-seducir'), 'la de Seducir no se ofrece si ya la tienes');
 
-    const run2 = nuevaRun('brujo', 22);
-    run2.capitulo = 1;
-    const of2 = BD.ofrecerBendicionEntreActos(run2, crearRng(22));
-    const unica = cartaUnicaDeClase('brujo');
-    const c2 = of2.filter((o) => o.tipo === 'carta');
-    check(of2.length === 3 && c2.length === 2
-      && c2.some((o) => o.tipo === 'carta' && o.icono === '🌟' && o.nombre === `Carta única: ${unica.nombre}`
-        && o.detalle === `Añade «${unica.nombre}» a tu mazo (única de clase)`)
-      && c2.some((o) => o.tipo === 'carta' && o.icono === '🌠' && o.nombre === 'Carta única: Deseo'
-        && o.detalle === 'Añade «Deseo» a tu mazo (incolora, tira 1d20)'),
-    'entre el Acto II y el III: la carta única de clase y Deseo, iguales que antes, y una bendición-reliquia');
-    const u = c2.find((o) => o.tipo === 'carta' && o.nombre.includes(unica.nombre));
-    if (u) BD.aplicarBendicion(run2, u, crearRng(2));
-    check(run2.mazo[run2.mazo.length - 1].def.id === unica.id, 'elegir la carta única de clase la añade al mazo');
+    for (const clase of CLASES) {
+      const run2 = nuevaRun(clase, 22);
+      run2.capitulo = 1;
+      const of2 = BD.ofrecerBendicionEntreActos(run2, crearRng(22));
+      const unica = cartaUnicaDeClase(clase);
+      const u2 = of2.filter((o) => o.reliquia.tipoBendicion === 'unica');
+      check(of2.length === 3 && u2.length === 2
+        && u2.some((o) => o.reliquia.soloClase === clase && cartaDe[o.reliquia.id] === unica.id)
+        && u2.some((o) => o.reliquia.id === 'don-deseo'),
+      `${clase}: entre el Acto II y el III, la reliquia de su carta única, la de Deseo y otra bendición`);
+      const u = u2.find((o) => o.reliquia.soloClase === clase);
+      const n = run2.mazo.length;
+      if (u) BD.aplicarBendicion(run2, u, crearRng(2));
+      check(run2.mazo.length === n + 1 && run2.mazo[run2.mazo.length - 1].def.id === unica.id
+        && run2.reliquias.includes(u!.reliquia), `${clase}: elegirla te da la reliquia y «${unica.nombre}» en el mazo`);
+      const rest2 = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run2))));
+      check(!!rest2 && rest2.mazo.filter((c) => c.def.id === unica.id).length === 1,
+        `${clase}: al cargar la partida no se duplica «${unica.nombre}»`);
+    }
+    const run4 = nuevaRun('picaro', 24);
+    run4.capitulo = 1;
+    const d = BD.ofrecerBendicionEntreActos(run4, crearRng(24)).find((o) => o.reliquia.id === 'don-deseo');
+    if (d) BD.aplicarBendicion(run4, d, crearRng(3));
+    check(run4.mazo[run4.mazo.length - 1]?.def.id === 'deseo' && run4.reliquias.some((r) => r.id === 'don-deseo'),
+      'elegir la de Deseo te da la reliquia y mete «Deseo» en el mazo');
+    // Never outside their act
+    let fuera = false;
+    for (const clase of CLASES) {
+      for (let s = 0; s < 20; s++) {
+        const r5 = nuevaRun(clase, s);
+        r5.capitulo = 2;
+        if (BD.ofrecerBendicionEntreActos(r5, crearRng(s)).some((o) => o.reliquia.tipoBendicion === 'unica')) fuera = true;
+        if (BD.bendicionesDisponibles(r5).some((r) => r.tipoBendicion === 'unica')) fuera = true;
+      }
+    }
+    check(!fuera, 'las de carta única solo salen en su momento (nunca en los huecos de bendición normales)');
 
     // Owned blessings are never offered again
     const run3 = nuevaRun('mago', 23);
@@ -3262,8 +3319,8 @@ console.log('\n🙏 Bendiciones');
       ...BD.ofrecerBendicionInicial(nuevaRun('picaro', 3), crearRng(3)),
       ...BD.ofrecerBendicionEntreActos(nuevaRun('picaro', 4), crearRng(4)),
     ];
-    check(ofertas.every((o) => o.tipo === 'reliquia' || o.nombre.startsWith('Carta única')),
-      'toda bendición es una carta única o una reliquia (ya no hay «+N PV máximos» sueltos)');
+    check(ofertas.every((o) => o.tipo === 'reliquia' && o.reliquia.rareza === 'bendicion'),
+      'toda bendición es una reliquia, también las de carta única (ya no hay «+N PV máximos» sueltos)');
     const src = fs.readFileSync(new URL('../src/ui/bendicion.ts', import.meta.url), 'utf8');
     check(/relicIcon\(/.test(src) && !/permanentes\./.test(src), 'la pantalla de bendición pinta las reliquias con su ilustración y no toca estadísticas');
   }
@@ -3336,8 +3393,8 @@ console.log('\n🙏 Bendiciones');
     RQ.otorgarReliquia(run, B('pacto-codicia'), crearRng(30));
     const nuevas = run.reliquias.slice(n);
     check(nuevas.length === 3 && nuevas[0].id === 'pacto-codicia' && nuevas.slice(1).every((r) => r.rareza === 'comun' || r.rareza === 'rara')
-      && run.pvMax === max - 12 && run.pv === run.pvMax,
-    'Pacto de la Codicia: al sellarlo, 2 reliquias al azar a cambio de 12 PV máximos');
+      && run.pvMax === max && run.mazo.some((c) => c.def.id === 'codicia'),
+    'Pacto de la Codicia: al sellarlo, 2 reliquias al azar a cambio de la maldición Codicia');
   }
   // — Effects: map —
   {
@@ -3446,6 +3503,61 @@ console.log('\n🙏 Bendiciones');
     check(comb.enemigos[0].pv === 194 && comb.enemigos[0].estados.condena === 2,
       'Diablillo Guardián: si aguanta la ronda golpea por 6 y aplica 2 de Condena');
   }
+  // — Effects: unique-card relics (small themed bonus when you play their card) —
+  {
+    const CT = await import('../src/core/cartas.ts');
+    const defUnica = (id: string) => CT.cartaPorId(id) ?? CT.NEUTRALES_ESPECIALES.find((c) => c.id === id)!;
+    const alJugar = async (comb: Combate, relicId: string, cardId: string) => {
+      const carta = instanciar(defUnica(cardId));
+      await B(relicId).alJugarCarta?.(comb.contexto(), { carta, objetivo: comb.enemigos[0], jugadasTurno: 1, jugadasCombate: 1 });
+    };
+    {
+      const { comb } = await montar('druida', ['don-seducir']);
+      comb.jugador.energia = 0;
+      await alJugar(comb, 'don-seducir', 'golpe');
+      check(comb.jugador.energia === 0, 'Dado del Encanto: otras cartas no devuelven energía');
+      await alJugar(comb, 'don-seducir', 'seducir');
+      check(comb.jugador.energia === 1, 'Dado del Encanto: la primera Seducir del combate te devuelve su energía');
+      await alJugar(comb, 'don-seducir', 'seducir');
+      check(comb.jugador.energia === 1, 'Dado del Encanto: solo la primera de cada combate');
+    }
+    {
+      const { comb } = await montar('druida', ['don-deseo']);
+      const n = comb.jugador.mano.length;
+      await alJugar(comb, 'don-deseo', 'deseo');
+      check(comb.jugador.mano.length === n + 1, 'Dado de los Deseos: al jugar Deseo robas 1 carta');
+    }
+    {
+      const { comb } = await montar('druida', ['don-tormenta-venganza']);
+      comb.jugador.pv = 30;
+      await alJugar(comb, 'don-tormenta-venganza', 'tormenta-venganza');
+      check(comb.jugador.pv === 36, 'Tormenta de Venganza (reliquia): al jugar la carta te curas 6 PV');
+    }
+    {
+      const { comb } = await montar('barbaro', ['don-furia-indomita']);
+      const f = comb.jugador.estados.fuerza ?? 0;
+      await alJugar(comb, 'don-furia-indomita', 'furia-indomita');
+      check((comb.jugador.estados.fuerza ?? 0) === f + 1, 'Furia Indómita (reliquia): al jugar la carta ganas Furia (+1 de Fuerza)');
+    }
+    {
+      const { comb } = await montar('mago', ['don-maestria-conjuros']);
+      const n = comb.jugador.conjuros.length;
+      await alJugar(comb, 'don-maestria-conjuros', 'maestria-conjuros');
+      check(comb.jugador.conjuros.length === n + 1, 'Maestría de Conjuros (reliquia): al jugar la carta ganas 1 espacio de conjuro');
+    }
+    {
+      const { comb } = await montar('picaro', ['don-danza-mortal']);
+      const n = comb.jugador.mano.filter((c) => c.def.id === 'daga').length;
+      await alJugar(comb, 'don-danza-mortal', 'danza-mortal');
+      check(comb.jugador.mano.filter((c) => c.def.id === 'daga').length === n + 2, 'Danza Mortal (reliquia): al jugar la carta creas 2 Dagas');
+    }
+    {
+      const { comb } = await montar('brujo', ['don-pacto-final']);
+      const b = comb.jugador.bloqueo;
+      await alJugar(comb, 'don-pacto-final', 'pacto-final');
+      check(comb.jugador.bloqueo === b + 6, 'Pacto Final (reliquia): al jugar la carta ganas 6 de bloqueo');
+    }
+  }
   // — Saving —
   {
     for (const clase of CLASES) {
@@ -3463,6 +3575,777 @@ console.log('\n🙏 Bendiciones');
     check(!!rest && rest.pvMax === max && rest.reliquias.length === run.reliquias.length,
       'rehidratar no vuelve a aplicar el pacto de la Codicia');
   }
+}
+
+console.log('— Fila de cofres —');
+{
+  // Every chapter has exactly one row of chests: the central one, all chests
+  let malas = 0;
+  for (let i = 0; i < 80; i++) {
+    const mapa = generarMapa(crearRng(i * 17 + 3));
+    const numFilas = Math.max(...mapa.map((n) => n.fila)) + 1;
+    const central = Math.floor((numFilas - 1) / 2);
+    const filasCofre = new Set(mapa.filter((n) => n.tipo === 'cofre').map((n) => n.fila));
+    if (filasCofre.size !== 1) malas++;
+    else if (!filasCofre.has(central)) malas++;
+    if (!mapa.filter((n) => n.fila === central).every((n) => n.tipo === 'cofre')) malas++;
+  }
+  check(malas === 0, `80 mapas: una sola fila de cofres, la central, entera de cofres (${malas} fallos)`);
+}
+
+console.log('— Taberna y misiones —');
+{
+  const TB = await import('../src/core/taberna.ts').catch(() => null);
+  check(!!TB, 'existe el módulo de la taberna (core/taberna.ts)');
+  if (TB) {
+    // Map: 1–2 taverns per chapter, never on the first row nor next to the boss
+    let malas = 0;
+    let sinMision = 0;
+    let rumoresMalos = 0;
+    let conDos = 0;
+    for (let i = 0; i < 80; i++) {
+      const mapa = generarMapa(crearRng(i * 13 + 5));
+      const tabernas = mapa.filter((n) => n.tipo === 'taberna');
+      if (tabernas.length >= 2) conDos++;
+      if (tabernas.length < 1 || tabernas.length > 2) malas++;
+      if (tabernas.some((t) => t.fila === 0 || t.fila >= 8)) malas++;
+      // existing guarantees still hold
+      if (!mapa.some((n) => n.tipo === 'elite') || !mapa.some((n) => n.tipo === 'cofre')) malas++;
+      if (mapa.filter((n) => n.tipo === 'evento').length < 2) malas++;
+      if (mapa.filter((n) => n.tipo === 'descanso' && n.fila < 8).length < 2) malas++;
+      for (const t of tabernas) {
+        const cands = TB.candidatosMision(mapa, t.id);
+        if (cands.length === 0) sinMision++;
+        const run = nuevaRun('druida', i + 1);
+        run.mapa = mapa;
+        run.nodoActual = t.id;
+        const rumores = TB.rumoresTaberna(run, t, crearRng(i));
+        if (rumores.length < 1 || rumores.length > 2) rumoresMalos++;
+        if (new Set(rumores.map((r) => r.nodo)).size !== rumores.length) rumoresMalos++;
+        for (const r of rumores) {
+          const obj = mapa.find((n) => n.id === r.nodo)!;
+          const d = obj.fila - t.fila;
+          if (!TB.esAlcanzable(mapa, t.id, obj.id)) rumoresMalos++;
+          if (d < 2 || d > 4) rumoresMalos++;
+          if (!['combate', 'elite', 'evento', 'cofre'].includes(obj.tipo)) rumoresMalos++;
+          if (!r.texto || !r.narrador) rumoresMalos++;
+        }
+      }
+    }
+    check(malas === 0, `80 mapas: 1–2 tabernas fuera de la fila 0 y del tramo del jefe, sin romper garantías (${malas} fallos)`);
+    check(conDos > 0 && conDos < 80, 'unos capítulos tienen 1 taberna y otros 2');
+    check(sinMision === 0, `toda taberna tiene un destino de misión a 2–4 filas (${sinMision} sin destino)`);
+    check(rumoresMalos === 0, `los rumores marcan nodos alcanzables a 2–4 filas de tipo válido (${rumoresMalos} fallos)`);
+
+    // Rumour variety: 6–8 texts, and the text reflects the marked node's type
+    check(TB.RUMORES.length >= 6 && TB.RUMORES.length <= 8, `hay de 6 a 8 rumores (${TB.RUMORES.length})`);
+    for (const tipo of ['combate', 'elite', 'evento', 'cofre'] as const) {
+      check(TB.RUMORES.some((r) => r.tipo === tipo), `hay rumores que apuntan a nodos de tipo ${tipo}`);
+    }
+
+    // Helper: a run standing on a tavern with an accepted rumour
+    const conMision = (semilla: number) => {
+      const run = nuevaRun('barbaro', semilla);
+      const t = run.mapa.find((n) => n.tipo === 'taberna')!;
+      run.nodoActual = t.id;
+      t.visitado = true;
+      const [rumor] = TB.rumoresTaberna(run, t, crearRng(semilla));
+      TB.aceptarRumor(run, rumor);
+      return { run, t, rumor };
+    };
+
+    // Completing the marked node grants one relic, only once
+    {
+      const { run, rumor } = conMision(77);
+      check(run.mision?.nodo === rumor.nodo, 'aceptar un rumor marca la misión en la run');
+      const otro = run.mapa.find((n) => n.id !== rumor.nodo && n.tipo === 'combate')!;
+      const antes = run.reliquias.length;
+      check(TB.completarMision(run, otro, crearRng(1)) === undefined && run.reliquias.length === antes,
+        'completar otro nodo no da la reliquia de la misión');
+      const objetivo = run.mapa.find((n) => n.id === rumor.nodo)!;
+      const r = TB.completarMision(run, objetivo, crearRng(2));
+      check(!!r && run.reliquias.length === antes + 1 && run.reliquias.includes(r!),
+        'completar el nodo marcado otorga una reliquia');
+      check(!run.mision, 'la misión queda cumplida y se borra');
+      check(TB.completarMision(run, objetivo, crearRng(3)) === undefined && run.reliquias.length === antes + 1,
+        'la reliquia de la misión solo se da una vez');
+    }
+
+    // The mission is lost once the marked node is no longer reachable
+    {
+      const { run, rumor } = conMision(91);
+      const objetivo = run.mapa.find((n) => n.id === rumor.nodo)!;
+      check(TB.revisarMision(run) === false && !!run.mision, 'la misión sigue viva mientras el nodo es alcanzable');
+      // stand on a node of the target's row that is not the target
+      const lejano = run.mapa.find((n) => n.fila === objetivo.fila && n.id !== objetivo.id)
+        ?? run.mapa.find((n) => n.fila > objetivo.fila)!;
+      run.nodoActual = lejano.id;
+      check(TB.revisarMision(run) === true && !run.mision, 'la misión se pierde si el nodo deja de ser alcanzable');
+      check(TB.revisarMision(run) === false, 'sin misión no hay nada que perder');
+    }
+    {
+      // standing on the target itself does not lose it (it is resolved after the room)
+      const { run, rumor } = conMision(92);
+      run.nodoActual = rumor.nodo;
+      check(TB.revisarMision(run) === false && !!run.mision, 'estar en el nodo marcado no pierde la misión');
+    }
+
+    // Save / load keeps the mission
+    {
+      const { run, rumor } = conMision(55);
+      const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))))!;
+      check(rest.mision?.nodo === rumor.nodo && rest.mision?.texto === rumor.texto, 'el guardado conserva la misión');
+      const sin = nuevaRun('mago', 3);
+      const rest2 = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(sin))))!;
+      check(!rest2.mision, 'un guardado sin misión se rehidrata sin misión');
+    }
+
+    // A new chapter drops the old mission (new map)
+    {
+      const { run } = conMision(66);
+      avanzarCapitulo(run, crearRng(4));
+      check(!run.mision, 'al cambiar de capítulo la misión antigua se descarta');
+    }
+
+    // Optional tankard: small heal instead of a rumour, capped at max PV
+    {
+      const run = nuevaRun('picaro', 8);
+      run.pv = run.pvMax - 3;
+      check(TB.beberJarra(run) === 3 && run.pv === run.pvMax, 'la jarra cura sin pasar del máximo');
+      run.pv = 10;
+      const curado = TB.beberJarra(run);
+      check(curado > 0 && run.pv === 10 + curado, 'la jarra cura unos PV');
+    }
+  }
+}
+
+// ── Movimiento de cartas (src/ui/card-motion.ts) ─────────────────────────────
+{
+  console.log('\n— Movimiento de cartas —');
+  const CM = await import('../src/ui/card-motion.ts');
+  const hero = { x: 100, y: 200, w: 80, h: 120 };
+  const ogre = { x: 600, y: 180, w: 100, h: 140 };
+  const goblin = { x: 800, y: 220, w: 60, h: 100 };
+  const base = { enemies: [ogre, goblin], hero, from: { x: 500, y: 700 }, viewport: { w: 1000, h: 800 } };
+  const d1 = CM.playDestination({ ...base, mode: 'enemigo', kind: 'ataque', target: ogre });
+  check(d1.aim === 'enemy' && d1.point.x === 650 && d1.point.y === 250,
+    'una carta con objetivo vuela al centro del enemigo elegido');
+  const d2 = CM.playDestination({ ...base, mode: 'ninguno', kind: 'habilidad' });
+  check(d2.aim === 'hero' && d2.point.x === 140 && d2.point.y === 260,
+    'una habilidad o defensa sin objetivo vuela hacia el héroe');
+  check(CM.playDestination({ ...base, mode: 'propio', kind: 'ataque' }).aim === 'hero',
+    'una carta sobre uno mismo vuela hacia el héroe');
+  const d3 = CM.playDestination({ ...base, mode: 'todos', kind: 'ataque' });
+  check(d3.aim === 'enemies' && d3.point.x === (650 + 830) / 2,
+    'una carta de área vuela hacia el centro de los enemigos');
+  check(CM.playDestination({ ...base, mode: 'ninguno', kind: 'ataque' }).aim === 'enemies',
+    'un ataque sin objetivo concreto vuela hacia los enemigos');
+  check(CM.playDestination({ ...base, mode: 'ninguno', kind: 'ataque', selfFx: true }).aim === 'hero',
+    'un ataque cuyo efecto brilla en el héroe vuela hacia el héroe');
+  const d4 = CM.playDestination({ ...base, enemies: [], mode: 'todos', kind: 'ataque' });
+  check(d4.aim === 'up' && d4.point.x === 500 && d4.point.y < 700 && d4.point.y >= 40,
+    'sin nadie a quien apuntar, la carta sube');
+  check(CM.playDestination({ ...base, mode: 'enemigo', kind: 'ataque', target: null }).aim === 'enemies',
+    'una carta de objetivo sin enemigo conocido vuela hacia los enemigos');
+
+  const delays = CM.drawDelays(5);
+  const steps = delays.slice(1).map((d, i) => d - delays[i]);
+  check(delays.length === 5 && delays[0] === 0 && steps.every((s) => s >= 60 && s <= 90),
+    'al robar varias cartas salen escalonadas entre 60 y 90 ms');
+  check(CM.drawDelays(3, { after: 200 })[0] === 200, 'el robo espera a que acabe el barajado');
+  check(CM.drawDelays(4, { reduced: true, after: 200 }).every((d) => d === 0),
+    'con movimiento reducido las cartas robadas no se escalonan');
+  check(CM.drawDelays(0).length === 0, 'sin cartas robadas no hay retrasos');
+
+  const durs = [0, 200, 600, 2000].map((d) => CM.playDuration(d));
+  check(durs.every((d) => d >= CM.PLAY_MIN_MS && d <= CM.PLAY_MAX_MS) && durs[0] <= durs[3],
+    'la duración del vuelo está en rango y crece con la distancia');
+  check(CM.playDuration(100, { impactMs: 420 }) >= 420, 'la carta no llega antes que el golpe del héroe');
+  check(CM.playDuration(100, { impactMs: 5000 }) === CM.PLAY_MAX_MS, 'un golpe muy lento no alarga el vuelo sin límite');
+  check(CM.playDuration(900, { reduced: true }) <= 150, 'con movimiento reducido el vuelo es un fundido breve');
+  check(CM.DRAW_MS >= 250 && CM.DRAW_MS <= 500 && CM.DISCARD_MS <= 400, 'robar y descartar duran poco');
+
+  const from = { x: 500, y: 700 };
+  const to = { x: 650, y: 250 };
+  const soloCompositor = (fs: { [k: string]: unknown }[]) =>
+    fs.every((f) => Object.keys(f).every((k) => ['transform', 'opacity', 'offset', 'easing'].includes(k)));
+  const play = CM.playFrames(from, to);
+  check(soloCompositor(play), 'las animaciones de cartas solo usan transform y opacidad');
+  check(play[0].opacity === 1 && play[play.length - 1].opacity === 0
+    && play[play.length - 1].transform.includes('translate(150px, -450px)')
+    && /scale\(0\.[0-3]/.test(play[play.length - 1].transform),
+  'la carta jugada llega al objetivo encogida y se desvanece al llegar');
+  check(/rotate\(-?1\d/.test(play[play.length - 1].transform), 'la carta jugada gira mientras vuela');
+  check(CM.playFrames(from, to, { prefix: 'translate(-50%, -50%)', startScale: 1.7 }).every((f) => f.transform.startsWith('translate(-50%, -50%)')),
+    'el escaparate de las raras conserva su centrado al volar al objetivo');
+  const reducedPlay = CM.playFrames(from, to, { reduced: true });
+  check(reducedPlay.every((f) => f.transform.includes('translate(0px, 0px)') && !f.transform.includes('rotate')),
+    'con movimiento reducido la carta jugada solo se desvanece en su sitio');
+
+  const draw = CM.drawFrames({ x: 40, y: 760 }, { x: 400, y: 700 }, 6);
+  const last = draw[draw.length - 1];
+  check(soloCompositor(draw) && draw[0].transform.includes('translate(-360px, 60px)')
+    && draw[0].transform.includes('rotateY(180deg)') && last.transform.includes('translate(0px, 0px)')
+    && last.transform.includes('rotateY(0deg)') && last.transform.includes('rotate(6deg)') && last.opacity === 1,
+  'la carta robada sale boca abajo de la pila y llega boca arriba a su hueco de la mano');
+  check(CM.drawFrames({ x: 40, y: 760 }, { x: 400, y: 700 }, 6, { reduced: true }).every((f) => !f.transform.includes('rotateY')),
+    'con movimiento reducido la carta robada aparece sin volar');
+  const disc = CM.discardFrames({ x: 400, y: 700 }, { x: 960, y: 760 });
+  check(soloCompositor(disc) && disc[disc.length - 1].transform.includes('translate(560px, 60px)'),
+    'al descartar la mano cada carta vuela a la pila de descarte');
+  check(CM.shuffleCount(30) === CM.SHUFFLE_MAX_CARDS && CM.shuffleCount(2) === 2 && CM.shuffleCount(30, true) === 0,
+    'el barajado muestra pocas cartas y ninguna con movimiento reducido');
+  const sh = CM.shuffleFrames({ x: 960, y: 760 }, { x: 40, y: 760 }, 0);
+  check(soloCompositor(sh) && sh[sh.length - 1].transform.includes('translate(-920px, 0px)'),
+    'al barajar, las cartas van del descarte a la pila de robo');
+}
+
+console.log('— Maldiciones —');
+{
+  const fs = await import('node:fs');
+  // Dynamic imports: the section reports failures instead of crashing if something is missing.
+  const CT: any = await import('../src/core/cartas.ts');
+  const RUNM: any = await import('../src/core/run.ts');
+  const RQM: any = await import('../src/core/reliquias.ts');
+  const { checkCardAction: checkCurse } = await import('../src/ui/action-queue.ts');
+  const MALD: CartaDef[] = CT.MALDICIONES ?? [];
+  const M = (id: string): CartaDef | undefined => MALD.find((c) => c.id === id);
+  const ESPERADAS = [
+    'herida-infectada', 'duda', 'pesadilla', 'deuda-sangre', 'marca-condenado',
+    'maldicion-momia', 'remordimiento', 'paralisis', 'codicia', 'grilletes',
+  ];
+  check(MALD.length >= 8 && MALD.length <= 10, `hay entre 8 y 10 maldiciones (${MALD.length})`);
+  check(ESPERADAS.every((id) => !!M(id)), `existen todas las maldiciones previstas (faltan: ${ESPERADAS.filter((id) => !M(id)).join(', ')})`);
+  check(MALD.every((c) => c.tipo === 'maldicion' && c.clase === 'neutral'), 'todas son de tipo «maldicion»');
+  check(MALD.every((c) => !c.mejora), 'las maldiciones no se pueden mejorar en los campamentos');
+  check(MALD.every((c) => CT.cartaPorId(c.id) === c), 'el registro por id conoce todas las maldiciones');
+
+  const quieto: EnemigoDef = {
+    id: 'muneco-maldito', nombre: 'Muñeco', arte: '🎯', pv: [300, 300],
+    ia: () => ({ nombre: 'Esperar', intencion: 'desconocido' }),
+  };
+  /** Combat against a harmless dummy with a controlled hand (the dealt hand goes to the discard). */
+  async function montarM(mano: string[] = [], mazoRun: string[] = [], enemigo: EnemigoDef = quieto) {
+    const run = nuevaRun('druida', 4242);
+    run.reliquias = [];
+    for (const id of mazoRun) run.mazo.push(instanciar(CT.cartaPorId(id)));
+    const comb = new Combate(run, [enemigo], crearRng(4242), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.descarte.push(...comb.jugador.mano);
+    comb.jugador.mano = [];
+    const insts = mano.map((id) => {
+      const inst = instanciar(CT.cartaPorId(id));
+      comb.jugador.mano.push(inst);
+      return inst;
+    });
+    return { run, comb, insts, ctx: comb.contexto() };
+  }
+  const idsEn = (pila: CartaInstancia[]) => pila.map((c) => c.def.id);
+
+  if (MALD.length === 0) {
+    check(false, 'sin maldiciones no se puede probar el resto');
+  } else {
+    try {
+      // — They cannot be played (only the Blood Debt can be paid off) —
+      {
+        const injugables = MALD.filter((c) => !c.purgar);
+        const { comb, insts } = await montarM(injugables.map((c) => c.id));
+        comb.jugador.energia = 3;
+        check(insts.every((i) => !comb.puedeJugar(i)), 'ninguna maldición se puede jugar aunque sobre energía');
+        await comb.jugarCarta(insts[0]);
+        check(comb.jugador.mano.includes(insts[0]) && comb.jugador.energia === 3,
+          'intentar jugar una maldición no hace nada (sigue en la mano, no gasta energía)');
+        const bloqueadas = insts.filter((i) => !checkCurse({ card: i }, {
+          inHand: (c) => comb.jugador.mano.includes(c),
+          canPlay: (c) => comb.puedeJugar(c),
+          reason: () => 'Las maldiciones no se pueden jugar',
+          needsTarget: () => false,
+          isAlive: () => true,
+          livingTargets: () => [],
+        }).ok);
+        check(bloqueadas.length === insts.length, 'la cola de acciones rechaza las maldiciones');
+      }
+      {
+        const deuda = M('deuda-sangre')!;
+        check(deuda.purgar === 2, 'la Deuda de Sangre se puede saldar pagando 2 de energía');
+        const { run, comb } = await montarM([], ['deuda-sangre']);
+        const inst = [...comb.jugador.mazo, ...comb.jugador.descarte].find((c) => c.def.id === 'deuda-sangre')!;
+        for (const pila of [comb.jugador.mazo, comb.jugador.descarte]) {
+          const i = pila.indexOf(inst);
+          if (i >= 0) pila.splice(i, 1);
+        }
+        comb.jugador.mano.push(inst);
+        comb.jugador.energia = 1;
+        check(!comb.puedeJugar(inst), 'sin 2 de energía no se puede saldar la Deuda');
+        comb.jugador.energia = 3;
+        const jugadas = comb.jugadasTurno;
+        await comb.jugarCarta(inst);
+        check(comb.jugador.energia === 1 && !comb.jugador.mano.includes(inst) && comb.jugadasTurno === jugadas,
+          'saldar la Deuda cuesta 2 de energía y no cuenta como carta jugada');
+        check(!run.mazo.some((c) => c.def.id === 'deuda-sangre'), 'la Deuda saldada desaparece del mazo para siempre');
+      }
+
+      // — End-of-turn effects: only while in hand —
+      const finDeTurno = async (id: string, enMano: boolean, extra: string[] = []) => {
+        const m = await montarM(enMano ? [id, ...extra] : extra);
+        if (!enMano) m.comb.jugador.descarte.push(instanciar(CT.cartaPorId(id)));
+        const pv = m.comb.jugador.pv;
+        await m.comb.terminarTurno();
+        return { ...m, perdido: pv - m.comb.jugador.pv };
+      };
+      {
+        const a = await finDeTurno('herida-infectada', true);
+        const b = await finDeTurno('herida-infectada', false);
+        check(a.perdido === 2 && b.perdido === 0, 'Herida Infectada: pierdes 2 PV solo si está en tu mano');
+      }
+      {
+        const a = await finDeTurno('duda', true);
+        const b = await finDeTurno('duda', false);
+        check(a.comb.jugador.estados.debil === 1 && !b.comb.jugador.estados.debil, 'Duda: 1 de Débil solo si está en tu mano');
+      }
+      {
+        const a = await finDeTurno('marca-condenado', true);
+        const b = await finDeTurno('marca-condenado', false);
+        check(a.comb.jugador.estados.vulnerable === 1 && !b.comb.jugador.estados.vulnerable,
+          'Marca del Condenado: 1 de Vulnerable solo si está en tu mano');
+      }
+      {
+        const a = await finDeTurno('maldicion-momia', true);
+        const b = await finDeTurno('maldicion-momia', false);
+        check(a.comb.jugador.estados.fragil === 1 && !b.comb.jugador.estados.fragil,
+          'Maldición de la Momia: 1 de Frágil solo si está en tu mano');
+      }
+      {
+        const a = await finDeTurno('deuda-sangre', true);
+        const b = await finDeTurno('deuda-sangre', false);
+        check(a.perdido === 3 && b.perdido === 0, 'Deuda de Sangre: pierdes 3 PV solo si está en tu mano');
+      }
+      {
+        const a = await finDeTurno('remordimiento', true, ['golpe', 'golpe']);
+        const b = await finDeTurno('remordimiento', false, ['golpe', 'golpe']);
+        check(a.perdido === 3 && b.perdido === 0, 'Remordimiento: pierdes 1 PV por carta en la mano, solo si está en ella');
+      }
+      {
+        const a = await finDeTurno('grilletes', true);
+        check(a.perdido === 0 && Object.keys(a.comb.jugador.estados).length === 0, 'Grilletes: solo peso muerto');
+      }
+      {
+        const a = await finDeTurno('codicia', true);
+        check(a.comb.jugador.mano.includes(a.insts[0]), 'Codicia: no se descarta, se queda ocupando la mano');
+      }
+      {
+        // effects fire before the discard: the curse is still counted in the hand
+        const { comb } = await montarM(['duda']);
+        await comb.terminarTurno();
+        check(comb.jugador.descarte.some((c) => c.def.id === 'duda'), 'tras su efecto, la maldición se descarta con el resto de la mano');
+      }
+      // — On-draw effects —
+      {
+        const { comb, ctx } = await montarM(['golpe', 'golpe']);
+        const desc = comb.jugador.descarte.length;
+        comb.jugador.mazo.push(instanciar(M('pesadilla')!));
+        await ctx.robar(1);
+        check(idsEn(comb.jugador.mano).includes('pesadilla') && comb.jugador.mano.length === 2 && comb.jugador.descarte.length === desc + 1,
+          'Pesadilla: al robarla descartas una carta al azar de tu mano');
+      }
+      {
+        const { comb, ctx } = await montarM([]);
+        comb.jugador.energia = 3;
+        comb.jugador.mazo.push(instanciar(M('paralisis')!));
+        await ctx.robar(1);
+        check(comb.jugador.energia === 2, 'Parálisis: al robarla pierdes 1 de energía');
+        comb.jugador.mazo.push(instanciar(M('paralisis')!));
+        await comb.terminarTurno();
+        check(comb.jugador.energia === comb.jugador.energiaMax - 1, 'Parálisis: robada al empezar el turno, empiezas con 1 de energía menos');
+        comb.jugador.energia = 0;
+        comb.jugador.mazo.push(instanciar(M('paralisis')!));
+        await ctx.robar(1);
+        check(comb.jugador.energia === 0, 'Parálisis nunca deja la energía en negativo');
+      }
+      {
+        const { comb } = await (async () => {
+          const run = nuevaRun('druida', 99);
+          run.reliquias = [];
+          run.mazo.push(instanciar(M('maldicion-momia')!));
+          const comb = new Combate(run, [quieto], crearRng(99), uiSilenciosa);
+          await comb.iniciar();
+          return { comb };
+        })();
+        check(idsEn(comb.jugador.mano).includes('maldicion-momia') && comb.jugador.mano.length === 5,
+          'Maldición de la Momia: es innata (empieza en la mano y cuenta para el robo)');
+      }
+      // — They never break a combat —
+      {
+        const run = nuevaRun('barbaro', 7);
+        run.reliquias = [];
+        for (const c of MALD) run.mazo.push(instanciar(c), instanciar(c));
+        run.pv = 3;
+        const comb = new Combate(run, [quieto], crearRng(7), uiSilenciosa);
+        let error = '';
+        try {
+          await comb.iniciar();
+          for (let t = 0; t < 15 && !comb.terminado; t++) {
+            for (const c of [...comb.jugador.mano]) if (comb.puedeJugar(c)) await comb.jugarCarta(c, comb.enemigos[0]);
+            await comb.terminarTurno();
+          }
+        } catch (e) {
+          error = String(e);
+        }
+        check(!error && comb.jugador.vivo && comb.jugador.pv >= 1 && !comb.terminado,
+          `un mazo lleno de maldiciones aguanta 15 turnos sin romper el combate ni matarte ${error}`);
+        check(comb.jugador.mano.length <= 10, 'la mano nunca supera 10 cartas con maldiciones');
+      }
+
+      // — Never in card rewards nor in the class pools —
+      {
+        let fugas = 0;
+        for (const clase of CLASES) {
+          if (poolDeClase(clase).some((c) => c.tipo === 'maldicion')) fugas++;
+          if (cartaUnicaDeClase(clase).tipo === 'maldicion') fugas++;
+          const rng = crearRng(clase.length * 97);
+          for (let i = 0; i < 300; i++) if (recompensaCartas(clase, rng, 50).some((c) => c.tipo === 'maldicion')) fugas++;
+        }
+        check(fugas === 0, 'las maldiciones nunca salen en las recompensas ni en el pool de clase');
+      }
+
+      // — They can be removed (campfire: purify) —
+      {
+        const run = nuevaRun('mago', 12);
+        const maldita = instanciar(M('herida-infectada')!);
+        run.mazo.push(maldita);
+        check(typeof RUNM.maldicionesDe === 'function' && RUNM.maldicionesDe(run).length === 1, 'se listan las maldiciones del mazo');
+        const golpe = run.mazo.find((c) => c.def.id === 'golpe')!;
+        check(RUNM.purificar(run, golpe) === false && run.mazo.includes(golpe), 'purificar no quita cartas que no son maldiciones');
+        check(RUNM.purificar(run, maldita) === true && !run.mazo.includes(maldita), 'purificar elimina la maldición del mazo');
+        check(RUNM.maldicionesDe(run).length === 0, 'tras purificar ya no quedan maldiciones');
+      }
+
+      // — Events that now curse instead of costing PV —
+      {
+        const evento = (id: string) => [...EVENTOS_POSITIVOS, ...EVENTOS_NEGATIVOS].find((e) => e.id === id)!;
+        const casos: Array<[string, string, string, () => number]> = [
+          ['santuario', 'Saquear el altar', 'marca-condenado', () => 0.5],
+          ['buhonero', 'Pagar con sangre', 'deuda-sangre', () => 0.5],
+          ['niebla', 'Cruzar despacio', 'pesadilla', () => 0.5],
+          ['espiritu', 'Ofrecerle tu esencia', 'remordimiento', () => 0.5],
+          ['cofre-extrano', 'Abrirlo', 'herida-infectada', () => 0.9],
+        ];
+        for (const [ev, etiqueta, maldicion, rng] of casos) {
+          const op = evento(ev)?.opciones.find((o) => o.etiqueta === etiqueta);
+          if (!op) { check(false, `existe ${ev}/${etiqueta}`); continue; }
+          const run = nuevaRun('picaro', 21);
+          run.pv = run.pvMax - 20;
+          const pv = run.pv;
+          const max = run.pvMax;
+          const texto = op.aplicar(run, rng);
+          check(run.mazo.some((c) => c.def.id === maldicion) && run.pv >= pv && run.pvMax >= max
+            && op.detalle.includes(M(maldicion)!.nombre) && texto.includes(M(maldicion)!.nombre),
+          `${ev}/${etiqueta}: «${M(maldicion)!.nombre}» entra en tu mazo en vez de perder PV`);
+        }
+        const foso = evento('foso').opciones.find((o) => o.etiqueta === 'Soltar peso')!;
+        let quitadas = 0;
+        for (let s = 0; s < 30; s++) {
+          const run = nuevaRun('druida', s);
+          run.mazo.push(instanciar(M('grilletes')!));
+          foso.aplicar(run, crearRng(s));
+          if (!run.mazo.some((c) => c.def.id === 'grilletes')) quitadas++;
+        }
+        check(quitadas === 0, 'perder una carta al azar en un evento nunca te libra de una maldición');
+      }
+
+      // — Relics with a drawback that now curse —
+      {
+        const run = nuevaRun('barbaro', 30);
+        const max = run.pvMax;
+        RQM.otorgarReliquia(run, RQM.reliquiaPorId('pacto-codicia'), crearRng(30));
+        check(run.mazo.some((c) => c.def.id === 'codicia') && run.pvMax >= max,
+          'Pacto de la Codicia: la Codicia entra en tu mazo en vez de perder 12 PV máximos');
+        check(/Codicia/.test(RQM.reliquiaPorId('pacto-codicia').texto) && !/PV máximos/.test(RQM.reliquiaPorId('pacto-codicia').texto),
+          'el texto del Pacto de la Codicia anuncia la maldición');
+      }
+      {
+        const run = nuevaRun('druida', 777);
+        run.reliquias = [RQM.reliquiaPorId('baraja-maravillas')];
+        const comb = new Combate(run, [quieto], () => 0, uiSilenciosa);
+        await comb.iniciar();
+        check(idsEn(comb.jugador.mano).includes('duda') && comb.jugador.pv === comb.jugador.pvMax
+          && !run.mazo.some((c) => c.def.id === 'duda'),
+        'Baraja de las Maravillas: la Calavera mete una Duda en tu mano (solo este combate) en vez de quitar PV');
+      }
+
+      // — Enemies that curse you —
+      {
+        const casos: Array<[EnemigoDef, number, string]> = [
+          [ENEMIGOS.MOMIA_REAL, 0, 'maldicion-momia'],
+          [ENEMIGOS.ACOLITO_VELADO, 1, 'duda'],
+          [ENEMIGOS.HERALDO_CULTO, 1, 'marca-condenado'],
+        ];
+        for (const [def, turno, maldicion] of casos) {
+          const mov: any = def.ia(turno, () => 0, {} as EnemigoCombate, []);
+          check(mov.maldicion?.id === maldicion, `${def.nombre}: «${mov.nombre}» te mete «${M(maldicion)!.nombre}»`);
+          const { run, comb, ctx } = await montarM([], [], def);
+          const e = comb.enemigos[0];
+          e.intencion = mov;
+          const antes = [...comb.jugador.mazo, ...comb.jugador.descarte, ...comb.jugador.mano].length;
+          await ctx.forzarAccion(e);
+          const todas = [...comb.jugador.mazo, ...comb.jugador.descarte, ...comb.jugador.mano];
+          check(todas.length === antes + 1 && todas.some((c) => c.def.id === maldicion) && !run.mazo.some((c) => c.def.id === maldicion),
+            `${def.nombre}: la maldición entra en tus pilas solo durante este combate`);
+        }
+      }
+
+      // — Saving —
+      {
+        const run = nuevaRun('brujo', 5);
+        for (const c of MALD) run.mazo.push(instanciar(c));
+        const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))));
+        check(!!rest && rest.mazo.length === run.mazo.length
+          && rest.mazo.filter((c) => c.def.tipo === 'maldicion').map((c) => c.def.id).join() === MALD.map((c) => c.id).join()
+          && rest.mazo.every((c) => typeof c.def.jugar === 'function'),
+        'las maldiciones del mazo se guardan y se rehidratan');
+      }
+
+      // — Hand-drawn art —
+      {
+        const malas = MALD.filter((c) => {
+          const f = new URL(`../src/arte/cartas/${c.id}.svg`, import.meta.url);
+          if (!fs.existsSync(f)) return true;
+          const xml = fs.readFileSync(f, 'utf8');
+          return !xml.trimStart().startsWith('<svg') || !xml.includes('viewBox="0 0 280 160"');
+        }).map((c) => c.id);
+        check(malas.length === 0, `cada maldición tiene su ilustración SVG 280×160 ${malas.join(', ')}`);
+      }
+    } catch (e) {
+      check(false, `las pruebas de maldiciones revientan: ${(e as Error).stack ?? e}`);
+    }
+  }
+}
+
+// ── Escena final: el Dungeon Master ──────────────────────────────────────────
+console.log('\n🎲 Escena final: el Dungeon Master');
+{
+  try {
+    const DM = (ENEMIGOS as unknown as Record<string, EnemigoDef | undefined>).DUNGEON_MASTER;
+    check(!!DM && DM.dungeonMaster === true, 'existe el Dungeon Master con su rasgo propio');
+    const { desenlaceCampana, FRASES_DM } = await import('../src/core/escena-final.ts');
+    const { reliquiaPorId } = await import('../src/core/reliquias.ts');
+    const pz = await import('../src/fx/puppet.ts');
+    const { SPELLS, spellFrame, MAX_SPELL_SPRITES } = await import('../src/fx/spell-fx.ts');
+    const pgpu = await import('../src/fx/puppet-gpu.ts');
+
+    /** A fresh DM scene with a mid-run hero (some relics and a decent deck). */
+    const escena = async (clase: ClaseId, semilla: number, reliquias: string[] = []) => {
+      const run = nuevaRun(clase, semilla);
+      for (const id of reliquias) run.reliquias.push(reliquiaPorId(id)!);
+      const c = new Combate(run, [DM!], crearRng(semilla), uiSilenciosa, true);
+      await c.iniciar();
+      return { run, c, dm: c.enemigos[0] };
+    };
+
+    // — The screen blocks everything —
+    {
+      const { c, dm } = await escena('barbaro', 501);
+      const pv0 = dm.pv;
+      const ctx = c.contexto(dm);
+      await ctx.atacar(dm, 60, 4);
+      await ctx.atacarTodos(80);
+      await ctx.danar(dm, 999);
+      await ctx.danarPerforante(dm, 999);
+      dm.estados.veneno = 40;
+      await c.tickVeneno(dm);
+      dm.estados.vulnerable = 5;
+      await ctx.atacar(dm, 100);
+      check(dm.pv === pv0 && dm.vivo, `ningún golpe baja su vida (${dm.pv}/${pv0})`);
+      await ctx.matar(dm);
+      check(dm.vivo && dm.pv === pv0, 'las muertes instantáneas (Talismán Vorpal, Deseo, Seducir) no le afectan');
+      check(!c.terminado, 'el combate sigue: no se le puede ganar');
+      // relics that deal direct damage
+      await reliquiaPorId('tambor-guerra')!.alJugarCarta!(c.contexto(), { carta: c.jugador.mano[0], jugadasTurno: 3, jugadasCombate: 3 } as never);
+      await reliquiaPorId('cuerno-valhalla')!.inicioTurno!(c.contexto(), 3);
+      check(dm.pv === pv0 && dm.vivo, 'las reliquias de daño tampoco le hacen nada');
+      // lethal Doom is ignored; he gives one harmless turn, then his ray fires
+      dm.estados.condena = 99999;
+      check(!c.condenaLetal(dm), 'la Condena nunca es letal contra él');
+      await c.terminarTurno();
+      check(dm.vivo && dm.pv === pv0, 'la Condena letal no lo consume al acabar su turno');
+      check(!c.terminado && c.jugador.vivo, 'su primer turno es inofensivo: consulta sus notas');
+      check(dm.intencion.mataAlInstante === true, 'y entonces anuncia el rayo');
+      await c.terminarTurno();
+      check(c.terminado === 'derrota' && !c.jugador.vivo && c.jugador.pv === 0, 'su rayo fulmina al héroe al final del segundo turno');
+    }
+
+    // — His intent is announced (with a joke) from the start —
+    {
+      const { c, dm } = await escena('mago', 502);
+      check(!dm.intencion.mataAlInstante && dm.intencion.dano === undefined && !!dm.intencion.cita, 'abre consultando sus notas, con su chiste en la intención');
+      await c.terminarTurno();
+      check(dm.intencion.mataAlInstante === true, 'su segunda intención es el Rayo del Dungeon Master (muerte instantánea)');
+      check(/Rayo del Dungeon Master/.test(dm.intencion.nombre) && /iniciativa/.test(dm.intencion.cita ?? ''), `la intención se llama «${dm.intencion.nombre}» · ${dm.intencion.cita}`);
+    }
+
+    // — The ray ignores block, mirror images, invulnerability, summons and saving relics —
+    {
+      const { c, dm } = await escena('druida', 503, ['manto-espectral', 'anillo-proteccion']);
+      c.jugador.bloqueo = 9999;
+      c.jugador.estados.espejismo = 9;
+      c.jugador.estados.invulnerable = 5;
+      c.jugador.estados.espinas = 50;
+      await c.invocar('oso', 500);
+      await c.terminarTurno();
+      c.jugador.bloqueo = 9999;
+      c.jugador.estados.invulnerable = 5;
+      dm.saltaAccion = true; // Seduce / Wish cannot make him skip it
+      dm.estados.raices = 999;
+      dm.estados.oscuridad = 999;
+      dm.estados.debil = 9;
+      await c.terminarTurno();
+      check(c.jugador.pv === 0 && !c.jugador.vivo, 'el rayo mata aunque tengas bloqueo, espejismo, invulnerabilidad e invocación');
+      check(c.terminado === 'derrota' && c.turno === 2, 'llega al terminar tu segundo turno');
+      check(dm.vivo, 'y el Dungeon Master sigue tan tranquilo');
+    }
+    for (const clase of CLASES) {
+      const { c } = await escena(clase, 510 + CLASES.indexOf(clase), ['manto-espectral']);
+      await c.terminarTurno();
+      await c.terminarTurno();
+      check(c.terminado === 'derrota', `${clase}: el rayo lo fulmina`);
+    }
+
+    // — Afterwards the run counts as a victory —
+    {
+      const tras = desenlaceCampana(true, 'derrota');
+      check(tras.victoria && tras.epilogoDM && tras.borrarGuardado, 'tras el rayo del DM la partida es una victoria con epílogo');
+      check(!tras.finalVerdadero, 'el rayo no abre el final verdadero');
+      const seducido = desenlaceCampana(true, 'victoria');
+      check(seducido.victoria && seducido.finalVerdadero && !seducido.epilogoDM && seducido.borrarGuardado, 'vencer al DM (solo seduciéndolo) es victoria con final verdadero');
+      const muerto = desenlaceCampana(false, null);
+      check(!muerto.victoria && !muerto.epilogoDM && muerto.borrarGuardado, 'morir antes sigue siendo una derrota sin epílogo del DM');
+      check(!!FRASES_DM.inicio && !!FRASES_DM.bloqueo && !!FRASES_DM.rayo, 'el DM tiene frases para empezar, bloquear y lanzar el rayo');
+    }
+
+    // — The secret: a natural 20 on Seduce gets past the screen (true ending) —
+    {
+      const ef = await import('../src/core/escena-final.ts');
+      const fs = await import('node:fs');
+      const seducir = NEUTRALES_ESPECIALES.find((d) => d.id === 'seducir')!;
+      const deseo = NEUTRALES_ESPECIALES.find((d) => d.id === 'deseo')!;
+      /** Plays `def` on the DM with the d20 forced to land on `tirada`. */
+      const lanzar = async (def: CartaDef, tirada: number, mejorada = false, semilla = 520) => {
+        const { c, dm } = await escena('picaro', semilla);
+        const inst = instanciar(def);
+        inst.mejorada = mejorada;
+        c.jugador.mano.push(inst);
+        c.jugador.energia = 5;
+        c.rng = () => (tirada - 1 + 0.5) / 20;
+        await c.jugarCarta(inst, dm);
+        return { c, dm };
+      };
+      {
+        const { c, dm } = await lanzar(seducir, 20);
+        check(c.terminado === 'victoria' && c.finalVerdadero && c.jugador.vivo, 'un 20 natural en Seducir derrota al DM y abre el final verdadero');
+        check(!dm.vivo, 'el DM queda seducido (sale del combate sin lanzar el rayo)');
+      }
+      {
+        const { c } = await lanzar(seducir, 20, true);
+        check(c.terminado === 'victoria' && c.finalVerdadero, 'Seducir+ (con ventaja) también vale si sale el 20');
+      }
+      for (const t of [1, 5, 11, 15, 19]) {
+        const { c, dm } = await lanzar(seducir, t, false, 530 + t);
+        check(!c.terminado && dm.vivo && dm.pv === dm.pvMax && !c.finalVerdadero, `con un ${t} en Seducir la pantalla lo bloquea`);
+        await c.terminarTurno();
+        await c.terminarTurno();
+        check(c.terminado === 'derrota' && !c.finalVerdadero, `con un ${t}, el rayo llega igual`);
+      }
+      {
+        const { c, dm } = await lanzar(deseo, 20);
+        check(!c.terminado && dm.vivo && !c.finalVerdadero, 'un 20 en Deseo no sirve: solo la seducción funciona');
+      }
+      // if Seduce is in the deck, the scene makes sure it is in the opening hand
+      for (const clase of CLASES) {
+        for (let s = 0; s < 4; s++) {
+          const run = nuevaRun(clase, 600 + s);
+          run.mazo.unshift(instanciar(seducir)); // bottom of the deck
+          for (let i = 0; i < 8; i++) run.mazo.unshift(instanciar(BASICAS[0]));
+          const c = new Combate(run, [DM!], crearRng(600 + s), uiSilenciosa, true);
+          await c.iniciar();
+          check(c.jugador.mano.some((x) => x.def.id === 'seducir'), `${clase} (semilla ${600 + s}): Seducir llega a la mano contra el DM`);
+        }
+      }
+      // the unlock is remembered (and a broken storage never throws)
+      const datos: Record<string, string> = {};
+      const almacen = { getItem: (k: string) => datos[k] ?? null, setItem: (k: string, v: string) => { datos[k] = v; } };
+      check(!ef.finalVerdaderoDesbloqueado(almacen), 'al principio el final verdadero está bloqueado');
+      ef.marcarFinalVerdadero(almacen);
+      check(ef.finalVerdaderoDesbloqueado(almacen), 'tras verlo, queda guardado como desbloqueado');
+      const roto = { getItem: () => { throw new Error('bloqueado'); }, setItem: () => { throw new Error('bloqueado'); } };
+      let lanza = false;
+      try { ef.marcarFinalVerdadero(roto); lanza = ef.finalVerdaderoDesbloqueado(roto); } catch { lanza = true; }
+      check(!lanza, 'sin almacenamiento disponible no revienta');
+      check(ef.finalVerdaderoDesbloqueado(null) === false, 'ni aunque no haya localStorage');
+      // the scheduling scene: every hero has an excuse, and in the end there is a date
+      const quienes = new Set(ef.GUION_AGENDA.map((l) => l.quien));
+      check(CLASES.every((k) => quienes.has(k)) && quienes.has('dm'), 'en el final verdadero hablan el DM y los 5 héroes');
+      check(/sábado a las 17:00/i.test(ef.GUION_AGENDA[ef.GUION_AGENDA.length - 1].texto), 'y acaban cuadrando una fecha');
+      const titulo = fs.readFileSync(new URL('../src/ui/titulo.ts', import.meta.url), 'utf8');
+      check(titulo.includes('finalVerdaderoDesbloqueado'), 'el menú principal muestra si el final verdadero está desbloqueado');
+      const fv = fs.readFileSync(new URL('../src/ui/final-verdadero.ts', import.meta.url), 'utf8');
+      check(fv.includes('HeroSprite') && fv.includes('marcarFinalVerdadero'), 'la escena del final verdadero reúne a los héroes y guarda el desbloqueo');
+    }
+
+    // — Puppet: DM screen (illustrated) with a backlit hooded figure behind —
+    {
+      const rig = ENEMY_RIGS['dungeon-master'];
+      check(!!rig && rig.shapes.length >= 30, `el Dungeon Master tiene marioneta propia (${rig?.shapes.length ?? 0} piezas)`);
+      check(!!rig?.backlit?.length && rig.shapes.some((s) => rig.backlit!.includes(s.k)), 'el encapuchado se pinta a contraluz');
+      check(rig.shapes.some((s) => s.k === 'eyeGlow'), 'y le brillan los ojos');
+      const pk = pgpu.packRig(rig, 'illustrated');
+      const iRobe = rig.shapes.findIndex((s) => rig.backlit!.includes(s.k));
+      check((pk.data[(iRobe * pgpu.PIECE_TEXELS) * 4 + 2] & pgpu.FLAG.backlit) !== 0, 'las piezas a contraluz van marcadas para la GPU');
+      const reposo = (t: number) => pz.puppetPose(rig, t, null).p;
+      check(Math.abs(reposo(0).wingFF1 - reposo(0.12).wingFF1) + Math.abs(reposo(0).wingBF2 - reposo(0.12).wingBF2) > 1, 'en reposo los dedos tamborilean');
+      check(Math.abs(reposo(0).torsoY - reposo(1.2).torsoY) > 0.3, 'y la capucha respira');
+      check([...Array(60)].some((_, i) => pz.puppetPose(rig, i * 0.07, null).fx.blink), 'y los ojos parpadean');
+      const manos = (a: Parameters<typeof pz.puppetPose>[2]) => {
+        const b = pz.puppetBones(rig, pz.puppetPose(rig, 0, a).p);
+        const f = pz.applyMatrix(b.armF, 72, 60), k = pz.applyMatrix(b.armB, 56, 60);
+        return Math.hypot(f[0] - k[0], f[1] - k[1]);
+      };
+      check(manos({ type: 'attack', p: 0.6 }) > manos(null) + 15, 'al atacar las manos se separan');
+      check(manos({ type: 'spell', p: 0.55 }) > manos(null) + 15, 'y al lanzar un hechizo también');
+      const ids = galleryCatalogue().flatMap((s) => s.cards).filter((f) => f.kind === 'enemy').map((f) => f.id);
+      check(ids.includes('dungeon-master'), 'el Dungeon Master sale en la galería');
+    }
+
+    // — His own ray effect —
+    {
+      const d = SPELLS.rayoDM;
+      check(!!d && d.duration >= 0.4 && d.duration <= 1.4, 'el Rayo del Dungeon Master tiene su propio efecto');
+      check(!!d && d.build !== SPELLS.rayoOcular.build, 'distinto del rayo del Contemplador');
+      const ctx = { box: { x: 100, y: 200, w: 120, h: 160 }, from: { x: 700, y: 180 }, facing: 1 as const, seed: 3 };
+      let maximo = 0, rotos = 0;
+      for (let t = 0; d && t <= d.duration; t += 1 / 30) {
+        const fr = spellFrame('rayoDM', ctx, t);
+        maximo = Math.max(maximo, fr.length);
+        for (const s of fr) if (![s.x, s.y, s.size, s.alpha ?? 1].every(Number.isFinite) || s.size <= 0) rotos++;
+      }
+      check(maximo > 0 && maximo <= MAX_SPELL_SPRITES && rotos === 0, `el rayo se dibuja bien (${maximo} elementos, ${rotos} rotos)`);
+      const mitad = spellFrame('rayoDM', ctx, (d?.duration ?? 1) * 0.5);
+      check(mitad.some((s) => s.x > 500) && mitad.some((s) => s.x < 250), 'cruza la pantalla desde las manos del DM hasta el héroe');
+    }
+  } catch (e) {
+    check(false, `las pruebas del Dungeon Master revientan: ${(e as Error).stack ?? e}`);
+  }
+}
+
+// ── Floating button: music only ──────────────────────────────────────────────
+console.log('\n🎵 Botón de música');
+{
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
+  const toggle = /toggleMusica\(\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
+  check(toggle.length > 0 && !/maestro/.test(toggle), 'el botón solo apaga o enciende la música (no el volumen general)');
+  const sfx = /\n  sfx\(nombre: string\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
+  check(sfx.length > 0 && !/musicaApagada|silenciado/.test(sfx), 'los efectos de sonido siguen sonando con la música apagada');
+  check(/🎵/.test(src) && !/🔇|🔊/.test(src), 'el botón lleva un icono de música');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

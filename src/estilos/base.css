@@ -101,6 +101,17 @@ body::before {
 }
 .boton-audio:hover { opacity: 1; transform: scale(1.08); }
 .boton-audio.silenciado { opacity: 0.4; border-color: var(--tinta-3); }
+/* music off: the note is crossed out */
+.boton-audio { position: fixed; overflow: hidden; }
+.boton-audio.silenciado::after {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 2px;
+  background: var(--pergamino);
+  transform: rotate(-45deg);
+  border-radius: 2px;
+}
 
 /* Aviso de nueva versión (service worker) */
 .aviso-actualizar {

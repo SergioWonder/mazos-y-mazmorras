@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c1a34"/>
+      <stop offset="1" stop-color="#0e0812"/>
+    </linearGradient>
+    <radialGradient id="farol" cx="0.86" cy="0.2" r="0.35">
+      <stop offset="0" stop-color="#ffb060" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffb060" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.36" cy="0.6" r="0.4">
+      <stop offset="0" stop-color="#9be070" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#9be070" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+  </defs>
+
+  <!-- tienda de campaña de los heridos, de noche -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <rect width="280" height="160" fill="url(#farol)"/>
+  <path d="M-4 118 L60 30 L126 118 Z" fill="#1d1224"/>
+  <path d="M60 30 L60 118 M60 30 L30 118 M60 30 L92 118" stroke="#140b1a" stroke-width="1.2"/>
+  <path d="M150 118 L214 24 L286 118 Z" fill="#221529"/>
+  <path d="M214 24 L200 118 M214 24 L234 118" stroke="#140b1a" stroke-width="1.2"/>
+  <!-- farol colgado -->
+  <path d="M238 14 L238 26" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M232 26 L244 26 L242 40 L234 40 Z" fill="#3a2a1a" stroke="#140d0a" stroke-width="1.6"/>
+  <ellipse cx="238" cy="33" rx="6" ry="7" fill="#ffc070" opacity="0.8" filter="url(#brillo)"/>
+  <ellipse cx="238" cy="33" rx="2.4" ry="3.4" fill="#fff0c0"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 122 Q140 114 280 124 L280 160 L0 160 Z" fill="#120b16"/>
+  <!-- camastro y cubo -->
+  <path d="M196 128 L270 124 L272 134 L198 138 Z" fill="#2a1e22" stroke="#0a0508" stroke-width="1.4"/>
+  <path d="M222 112 L240 112 L238 130 L224 130 Z" fill="#3a3228" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M224 118 L238 118" stroke="#140d0a" stroke-width="0.9"/>
+
+  <!-- brazo del héroe a contraluz: luz de borde verde enfermiza -->
+  <g transform="translate(1.4 -1.4)" fill="#9be070" opacity="0.85">
+    <path d="M-10 114 Q70 90 156 66 L166 88 Q80 112 -10 152 Z"/>
+    <ellipse cx="176" cy="76" rx="17" ry="14" transform="rotate(-20 176 76)"/>
+  </g>
+  <g transform="translate(1.4 -1.4)" fill="none" stroke="#9be070" stroke-width="7" stroke-linecap="round" opacity="0.85">
+    <path d="M182 64 Q192 48 198 40 M188 68 Q202 56 212 50 M190 76 Q206 70 218 68 M186 86 Q200 88 210 92 M166 86 Q164 98 172 106"/>
+  </g>
+  <g fill="#0b0910">
+    <path d="M-10 114 Q70 90 156 66 L166 88 Q80 112 -10 152 Z"/>
+    <ellipse cx="176" cy="76" rx="17" ry="14" transform="rotate(-20 176 76)"/>
+  </g>
+  <g fill="none" stroke="#0b0910" stroke-width="7" stroke-linecap="round">
+    <path d="M182 64 Q192 48 198 40 M188 68 Q202 56 212 50 M190 76 Q206 70 218 68 M186 86 Q200 88 210 92 M166 86 Q164 98 172 106"/>
+  </g>
+  <!-- los dedos tiemblan -->
+  <path d="M204 36 L208 32 M218 46 L223 44 M224 64 L229 64" stroke="#9be070" stroke-width="1" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- venas que se ennegrecen y brillan desde la herida -->
+  <path d="M104 92 Q118 84 128 84 Q136 82 142 76 M100 98 Q120 96 138 88 M80 100 Q66 104 52 106 Q42 108 34 116 M84 96 Q70 94 58 98" fill="none" stroke="#9be070" stroke-width="4" stroke-linecap="round" opacity="0.6" filter="url(#brillo)"/>
+  <path d="M104 92 Q118 84 128 84 Q136 82 142 76 M100 98 Q120 96 138 88 M80 100 Q66 104 52 106 Q42 108 34 116 M84 96 Q70 94 58 98" fill="none" stroke="#c8ff9a" stroke-width="0.9" stroke-linecap="round"/>
+
+  <!-- la herida supurante -->
+  <ellipse cx="92" cy="97" rx="18" ry="9" transform="rotate(-16 92 97)" fill="#8ad060" opacity="0.7" filter="url(#brillo)"/>
+  <ellipse cx="92" cy="97" rx="14" ry="6.5" transform="rotate(-16 92 97)" fill="#5a1e24" stroke="#140d0a" stroke-width="1.8"/>
+  <ellipse cx="91" cy="97" rx="9" ry="3.6" transform="rotate(-16 91 97)" fill="#8a2e30"/>
+  <path d="M84 98 Q92 94 100 94" stroke="#c9e070" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M83 100 Q90 99 96 97" stroke="#2a0a0e" stroke-width="1" stroke-linecap="round"/>
+  <!-- gotas de pus -->
+  <path d="M90 104 Q88 112 90 116 Q93 112 90 104 Z M98 102 Q97 108 99 110 Q101 107 98 102 Z" fill="#b8e060" stroke="#140d0a" stroke-width="0.9"/>
+  <circle cx="90" cy="122" r="1.6" fill="#b8e060"/>
+
+  <!-- venda deshecha y manchada -->
+  <path d="M136 72 L150 67 L160 90 L146 96 Z" fill="#b8ab8c" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M140 74 L152 70 M143 81 L155 77 M146 88 L157 84" stroke="#7a6e56" stroke-width="0.9"/>
+  <path d="M147 83 Q151 80 154 84 Q151 88 147 83 Z" fill="#7a3a2a" opacity="0.8"/>
+  <path d="M146 96 Q138 110 144 122 Q150 132 140 142 L134 139 Q142 130 137 121 Q131 108 140 94 Z" fill="#b8ab8c" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M141 104 Q138 112 141 120" stroke="#7a6e56" stroke-width="0.8" fill="none"/>
+  <path d="M138 122 Q140 128 137 132" stroke="#6a8a3a" stroke-width="2" fill="none" opacity="0.8"/>
+
+  <!-- moscas -->
+  <g fill="#050306">
+    <circle cx="112" cy="70" r="1.6"/>
+    <circle cx="76" cy="78" r="1.4"/>
+    <circle cx="120" cy="104" r="1.5"/>
+  </g>
+  <path d="M110 68 l-2 -2.4 M114 68 l2 -2.4 M74 76 l-2 -2 M78 76 l2 -2 M118 102 l-2 -2.2 M122 102 l2 -2.2" stroke="#a8a0b0" stroke-width="0.9" stroke-linecap="round" opacity="0.8"/>
+  <path d="M104 66 Q108 62 112 66 M70 82 Q72 86 76 84" fill="none" stroke="#a8a0b0" stroke-width="0.5" opacity="0.5"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

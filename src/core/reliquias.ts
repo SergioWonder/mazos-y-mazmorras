@@ -2,6 +2,7 @@ import type {
   ClaseId, ContextoEfecto, EnemigoCombate, EstadoRun, OrigenReliquia, RarezaReliquia, ReliquiaDef,
 } from './types.ts';
 import { BENDICIONES } from './reliquias-bendicion.ts';
+import { nuevaMaldicion } from './cartas.ts';
 
 export { BENDICIONES };
 
@@ -125,11 +126,13 @@ const GENERALES: ReliquiaDef[] = [
   },
   {
     id: 'caliz-vacio', nombre: 'Cáliz Vacío', icono: '🏺', rareza: 'comun',
-    texto: 'La primera vez en cada turno que te quedas sin energía, robas 1 carta.',
-    alQuedarseSinEnergia: async (ctx) => {
+    texto: 'La primera vez en cada turno que te quedas sin cartas en la mano (al jugar o descartar la última), robas 2.',
+    alVaciarMano: async (ctx) => {
+      // Once per turn, so 0-cost cards cannot loop it
       if (ctx.marca('caliz-vacio') === ctx.turnoActual()) return;
       ctx.marca('caliz-vacio', ctx.turnoActual());
-      await ctx.robar(1);
+      await ctx.mensaje('🏺 El Cáliz Vacío se llena: robas 2');
+      await ctx.robar(2);
     },
   },
   {
@@ -151,12 +154,13 @@ const GENERALES: ReliquiaDef[] = [
   // — Riesgo y recompensa —
   {
     id: 'baraja-maravillas', nombre: 'Baraja de las Maravillas', icono: '🃏', rareza: 'rara',
-    texto: 'Al empezar cada combate sacas una carta de la Baraja (1d20): 1-3 pierdes 5 PV · 4-9 ganas 6 de bloqueo · 10-15 ganas 2 de Fuerza · 16-19 robas 3 cartas · 20 todos los enemigos reciben 3 de Débil y 3 de Vulnerable.',
+    texto: 'Al empezar cada combate sacas una carta de la Baraja (1d20): 1-3 una Duda entra en tu mano (solo este combate) · 4-9 ganas 6 de bloqueo · 10-15 ganas 2 de Fuerza · 16-19 robas 3 cartas · 20 todos los enemigos reciben 3 de Débil y 3 de Vulnerable.',
     inicioCombate: async (ctx) => {
       const n = await ctx.tirarDado(20);
       if (n <= 3) {
-        await ctx.mensaje('🃏 La Calavera: pierdes 5 PV');
-        await ctx.perderPV(5);
+        await ctx.mensaje('🃏 La Calavera: una Duda se aferra a tu mano');
+        // combat only: the curse goes to the hand, never to the run deck
+        if (ctx.jugador.mano.length < 10) ctx.jugador.mano.push(nuevaMaldicion('duda'));
       } else if (n <= 9) {
         await ctx.mensaje('🃏 El Escudo');
         await ctx.ganarBloqueo(6);

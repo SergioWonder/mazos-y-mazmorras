@@ -1,4 +1,4 @@
-import type { ClaseId, EstadoRun, NodoMapa } from './types.ts';
+import type { ClaseId, EstadoRun, MisionTaberna, NodoMapa } from './types.ts';
 import { cartaPorId, instanciar } from './cartas.ts';
 import { reliquiaPorId } from './reliquias.ts';
 
@@ -23,6 +23,8 @@ export interface Guardado {
   mazo: Array<{ id: string; mejorada: boolean }>;
   reliquias: string[];
   mapa: NodoMapa[];
+  /** Active tavern quest (older saves lack it). */
+  mision?: MisionTaberna | null;
 }
 
 export function serializarRun(run: EstadoRun): Guardado {
@@ -42,6 +44,7 @@ export function serializarRun(run: EstadoRun): Guardado {
     mazo: run.mazo.map((c) => ({ id: c.def.id, mejorada: c.mejorada })),
     reliquias: run.reliquias.map((r) => r.id),
     mapa: structuredClone(run.mapa),
+    mision: run.mision ? { ...run.mision } : null,
   };
 }
 
@@ -80,6 +83,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
       ...g.permanentes,
     },
     eventosVistos: [...g.eventosVistos],
+    mision: g.mision ? { ...g.mision } : null,
   };
 }
 

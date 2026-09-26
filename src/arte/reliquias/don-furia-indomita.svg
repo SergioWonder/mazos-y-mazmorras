@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="31" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- rage flames -->
+  <path d="M20 44 Q12 30 22 16 Q22 26 28 24 Q26 12 36 6 Q34 18 42 18 Q42 10 48 8 Q52 26 42 40 Z" fill="#ff7a20" opacity="0.85" filter="url(#g)"/>
+  <path d="M22 40 Q16 30 24 20 Q25 27 30 26 Q29 16 37 11 Q36 21 43 21 Q46 30 40 38 Z" fill="#ff9a30" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M27 36 Q24 30 28 26 Q30 30 33 29 Q33 23 38 20 Q40 30 36 36 Z" fill="#ffe06a"/>
+  <!-- haft -->
+  <path d="M16 58 L40 20" stroke="#140d0a" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M16 58 L40 20" stroke="#7a4a26" stroke-width="3.6" stroke-linecap="round"/>
+  <path d="M22 48.5 L25 43.8 M26 42 L29 37.3" stroke="#140d0a" stroke-width="1.4"/>
+  <!-- double-bitted head -->
+  <path d="M30 16 Q24 22 26 32 L34 26 Z" fill="#c9d2d8" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M36 26 Q46 30 52 24 Q50 14 42 12 Z" fill="#c9d2d8" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M39 24 Q45 26 49 23" stroke="#ffffff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <path d="M28.4 20 Q27 24 27.6 28" stroke="#ffffff" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <circle cx="36" cy="22" r="3" fill="#8e2a34" stroke="#140d0a" stroke-width="1.6"/>
+  <!-- embers -->
+  <circle cx="14" cy="22" r="1.4" fill="#ffd060"/>
+  <circle cx="52" cy="40" r="1.4" fill="#ffd060"/>
+  <circle cx="48" cy="48" r="1" fill="#ff9a30"/>
+</svg>

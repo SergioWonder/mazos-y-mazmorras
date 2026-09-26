@@ -1,4 +1,5 @@
-import { Combate, type Presentador } from '../core/combate.ts';
+import { Combate, esDungeonMaster, type Presentador } from '../core/combate.ts';
+import { FRASES_DM } from '../core/escena-final.ts';
 import type {
   CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
 } from '../core/types.ts';
@@ -19,6 +20,8 @@ import { currentForm, type FormId } from '../fx/hero-rig.ts';
 import { layoutSlots } from './enemy-slots.ts';
 import { relicIcon } from './relic-art.ts';
 import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
+import { playDestination, drawDelays, type Point } from './card-motion.ts';
+import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
 
 /** Player actions go through a FIFO queue: one resolves at a time, the rest wait. */
 type AccionJugador =
@@ -139,6 +142,17 @@ export function pantallaCombate(
     let cartaPendiente: CartaInstancia | null = null;
     let arrastrando: HTMLElement | null = null;
 
+    // ── Card flights: what the hand looked like at the last render ──────────
+    /** Element of each hand card at the last render (the source of discard flights). */
+    let elemPorCarta = new Map<CartaInstancia, HTMLElement>();
+    let descartePrevio = new Set<CartaInstancia>();
+    /** Drawn cards whose flying copy has not landed yet (hidden in their slot). */
+    const llegando = new Set<CartaInstancia>();
+    /** Played cards: they already fly on their own, not to the discard pile. */
+    const lanzadas = new Set<CartaInstancia>();
+    /** Where a dragged card was dropped, so its flight leaves from there. */
+    let soltada: { inst: CartaInstancia; center: Point; scale: number; at: number } | null = null;
+
     // ── Presentador: efectos visuales que pide el motor ──────────────────────
     const elemDe = (obj: Luchador): HTMLElement | null => {
       if (obj === combate.jugador) return raiz.querySelector('.heroe');
@@ -197,8 +211,39 @@ export function pantallaCombate(
       else if (h.modo === 'enemigo' && h.objetivo) lanzarHechizo(h.clave, h.objetivo);
       else for (const e of combate.enemigos.filter((x) => x.vivo)) lanzarHechizo(h.clave, e);
     };
+    /** Brief white flash over the whole screen (the Dungeon Master's ray). */
+    const destelloPantalla = () => {
+      const capa = el('div', 'destello-dm');
+      capa.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(capa);
+      setTimeout(() => capa.remove(), 1600);
+    };
+    /** Speech bubble over an enemy (the Dungeon Master's lines). */
+    const bocadillo = (e: EnemigoCombate, txt: string) => {
+      const r = cajaDe(elemDe(e));
+      const b = el('div', 'bocadillo-dm', txt);
+      b.setAttribute('role', 'status');
+      document.body.appendChild(b);
+      // above the hood, kept inside the viewport on phones
+      const w = Math.min(260, window.innerWidth - 24);
+      b.style.maxWidth = `${w}px`;
+      const left = Math.max(12, Math.min(window.innerWidth - w - 12, r.x + r.w / 2 - w / 2));
+      b.style.left = `${left}px`;
+      // above the intent chip, not over it
+      const arriba = elemDe(e)?.getBoundingClientRect().top ?? r.y;
+      // translateY(-100%) lifts it by its own height: keep it inside the top edge
+      b.style.top = `${Math.max(b.offsetHeight + 8, Math.min(arriba, r.y) - 6)}px`;
+      setTimeout(() => b.classList.add('saliendo'), 2300);
+      setTimeout(() => b.remove(), 2700);
+    };
     /** Hit effect: its own spell when there is one. Returns false to fall back to particles. */
     const hechizoGolpe = (obj: Luchador, efecto: string): boolean => {
+      if (actor && obj === combate.jugador && actor.e.intencion.mataAlInstante) {
+        // the Dungeon Master's ray leaves his flung hands, with a full-screen flash
+        const r = cajaDe(elemDe(actor.e));
+        destelloPantalla();
+        return lanzarHechizo('rayoDM', obj, { x: r.x + r.w * 0.45, y: r.y + r.h * 0.4 });
+      }
       if (efecto === 'aliento' && actor && obj === combate.jugador) {
         // Ignifax's breath pours from the mouth; the Beholder's rays leave its eye
         const r = elemDe(actor.e)?.getBoundingClientRect();
@@ -229,6 +274,10 @@ export function pantallaCombate(
           elem?.classList.add('golpeado');
           setTimeout(() => elem?.classList.remove('golpeado'), 350);
           sacudir(dano >= 12 ? 3 : dano >= 7 ? 2 : 1);
+        } else if (esDungeonMaster(obj)) {
+          // the screen takes the blow and shakes; the DM does not even blink
+          spriteEnemigo(obj as EnemigoCombate)?.play('hit');
+          numeroFlotante(elem, '🛡️ ∞', 'bloqueo');
         } else {
           numeroFlotante(elem, 'Bloqueado', 'bloqueo');
         }
@@ -289,12 +338,24 @@ export function pantallaCombate(
         anuncio(txt);
         await espera(350);
       },
+      async fxDialogo(e, txt) {
+        bocadillo(e, txt);
+        await espera(900);
+      },
+      async fxMuerteHeroe() {
+        // wait for the bolt to land, then the hero collapses and fades for good
+        await espera(380);
+        audio.sfx('muerte');
+        sacudir(3);
+        spriteActual().play('death');
+        await espera(1100);
+      },
       async fxEnemigoActua(e) {
         actor = { e, movimiento: e.intencion.nombre ?? '' };
         const s = spriteEnemigo(e);
         if (s) {
           // the damage waits for the blow (or the spell) to land
-          const impacto = s.play(e.intencion.dano !== undefined ? 'attack' : 'spell');
+          const impacto = s.play(e.intencion.dano !== undefined || e.intencion.mataAlInstante ? 'attack' : 'spell');
           await espera(impacto || 350);
           return;
         }
@@ -436,7 +497,12 @@ export function pantallaCombate(
         return { ok: true };
       },
       execute: async (a) => {
-        if (a.kind === 'start') await combate.iniciar();
+        if (a.kind === 'start') {
+          await combate.iniciar();
+          // final scene: the Dungeon Master opens with his classic line
+          const dm = combate.enemigos.find((e) => esDungeonMaster(e));
+          if (dm && !combate.terminado) await ui.fxDialogo!(dm, FRASES_DM.inicio);
+        }
         else if (a.kind === 'endTurn') await combate.terminarTurno();
         else await jugar(a.card, a.target);
       },
@@ -459,6 +525,7 @@ export function pantallaCombate(
       if (combate.terminado || cola.isClosed) return 'El combate ha terminado';
       if (cola.indexOf(finTurnoEnCola) >= 0) return 'Fin de turno pendiente (tócalo para cancelarlo)';
       const def = defDe(inst);
+      if (def.tipo === 'maldicion' && def.purgar === undefined) return '☠️ Las maldiciones no se pueden jugar';
       const porPagar = cartasPorPagar();
       const energia = forecastEnergy(combate.jugador.energia, porPagar, (a) => combate.costeEfectivo(defDe(a.card)));
       if (energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
@@ -648,8 +715,10 @@ export function pantallaCombate(
     }
 
     function textoIntencion(e: EnemigoCombate): string {
-      if (e.saltaAccion) return '<span class="int-dormido">💤</span>'; // saltará su acción
       const m = e.intencion;
+      // the Dungeon Master's ray: nobody knows what is coming… or everybody does
+      if (m.cita) return `<span class="int-ataque int-dm">${m.mataAlInstante ? '⚡' : '📜'} ??? <small>· ${m.cita}</small></span>`;
+      if (e.saltaAccion) return '<span class="int-dormido">💤</span>'; // saltará su acción
       if (m.dano !== undefined) {
         const d = combate.danoIntencion(e);
         // daño "natural" del enemigo (su Fuerza propia) sin Débil/Raíces ni Vulnerable
@@ -690,8 +759,10 @@ export function pantallaCombate(
         div.innerHTML = `
           <div class="intencion" data-tip="<strong>${e.intencion.nombre}</strong><br>${
             tipInt[e.intencion.intencion]
-          }.">${textoIntencion(e)}</div>
-          ${e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
+          }.${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}">${textoIntencion(e)}</div>
+          ${esDungeonMaster(e)
+            ? '<div class="bloqueo-ficha bloqueo-dm" data-tip="<strong>🛡️ Pantalla del DM</strong><br>Bloqueo infinito: nada de lo que hagas le llega.">🛡️∞ <small>Pantalla del DM</small></div>'
+            : e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
           ${spriteEnemigo(e)
             ? `<div class="sprite sprite-enemigo sprite-ilustrado" style="--esc:${escala}"></div>`
             : `<div class="sprite sprite-enemigo" style="font-size:${escala * 4.2}rem">${e.def.arte}</div>`}
@@ -809,8 +880,29 @@ export function pantallaCombate(
       // rebuilding the hand under a finger (or mouse) would drop the gesture: repaint on release
       if (gestoMano) return;
       const mano = $('.mano');
+      const jugador = combate.jugador;
+      const cartas = jugador.mano;
+      // cards gone from the hand to the discard pile (end of turn, discard effects) fly there
+      const enMano = new Set(cartas);
+      let nDescartes = 0;
+      for (const [inst, viejo] of elemPorCarta) {
+        if (enMano.has(inst)) continue;
+        llegando.delete(inst);
+        if (lanzadas.delete(inst)) continue;
+        if (jugador.descarte.includes(inst)) flyDiscard(viejo, $('.pila-descarte'), nDescartes++);
+      }
+      // reshuffle: cards of the last discard pile are back in the draw pile
+      const mazoAhora = new Set(jugador.mazo);
+      let barajados = 0;
+      for (const c of descartePrevio) if (mazoAhora.has(c)) barajados++;
+      const tiempoBarajado = barajados > 0 ? flyShuffle($('.pila-descarte'), $('.pila-robo'), barajados) : 0;
+      const nuevas = cartas.filter((c) => !elemPorCarta.has(c));
+      const retrasos = drawDelays(nuevas.length, { reduced: reducedMotion(), after: tiempoBarajado * 0.6 });
+      const origenes = nuevas.map((c) => (descartePrevio.has(c) && barajados === 0 ? $('.pila-descarte') : $('.pila-robo')));
+      for (const c of nuevas) llegando.add(c);
+      descartePrevio = new Set(jugador.descarte);
+      elemPorCarta = new Map();
       mano.innerHTML = '';
-      const cartas = combate.jugador.mano;
       if (seleccion >= cartas.length) seleccion = Math.max(0, cartas.length - 1);
       cartas.forEach((inst, i) => {
         // la carta pendiente de objetivo muestra el daño contra el enemigo marcado
@@ -837,14 +929,45 @@ export function pantallaCombate(
         }
         if (i === seleccion && !cartaPendiente) c.classList.add('seleccionada');
         if (cartaPendiente === inst) c.classList.add('pendiente');
+        if (llegando.has(inst)) c.classList.add('carta-llegando');
         enlazarArrastre(c, inst);
+        elemPorCarta.set(inst, c);
         mano.appendChild(c);
+      });
+      // new cards fly in from their pile, one after another
+      nuevas.forEach((inst, k) => {
+        const c = elemPorCarta.get(inst);
+        if (!c) return;
+        flyDraw(c, origenes[k], retrasos[k], () => {
+          llegando.delete(inst);
+          elemPorCarta.get(inst)?.classList.remove('carta-llegando');
+        });
       });
     }
 
     // ── Jugar cartas ─────────────────────────────────────────────────────────
-    async function animarLanzamiento(inst: CartaInstancia, desde: HTMLElement | null) {
+    /** Where a played card flies: its enemy, the hero, the enemies' middle or straight up. */
+    function destinoLanzamiento(def: CartaDef, objetivo: EnemigoCombate | undefined, desde: Point): Point {
+      const caja = (elem: HTMLElement | null) => (elem ? cajaDe(elem) : null);
+      return playDestination({
+        mode: def.objetivo,
+        kind: def.tipo === 'maldicion' ? 'habilidad' : def.tipo, // a paid-off curse flies like a skill
+        selfFx: !!def.fx && fx.anclaHechizo(def.fx) === 'self',
+        target: objetivo ? caja(elemDe(objetivo)) : null,
+        hero: caja(elemDe(combate.jugador)),
+        enemies: combate.enemigos.filter((e) => e.vivo).map((e) => caja(elemDe(e))).filter((b) => b !== null),
+        from: desde,
+        viewport: { w: window.innerWidth, h: window.innerHeight },
+      }).point;
+    }
+
+    /** The card flies to its target and vanishes on arrival, when its effect goes off. */
+    async function animarLanzamiento(
+      inst: CartaInstancia, desde: HTMLElement | null, objetivo: EnemigoCombate | undefined, impactoMs: number,
+    ) {
       const def = inst.def;
+      const suelta = soltada?.inst === inst && performance.now() - soltada.at < 1500 ? soltada : null;
+      soltada = null;
       // Animación especial de cartas raras: carta gigante + estallido de partículas
       if (def.animRara) {
         const grande = renderCarta(def);
@@ -853,19 +976,15 @@ export function pantallaCombate(
         fx.estallido(def.fx ?? 'impacto');
         audio.sfxRara(def.fx ?? 'divino');
         anuncio(def.subclase ? `✦ ${def.subclase} ✦` : def.nombre, 'anuncio-rara');
-        await espera(850);
-        grande.remove();
+        // the showcase holds the stage, then dives onto the target like any other card
+        await espera(600);
+        const r = grande.getBoundingClientRect();
+        await flyShowcase(grande, destinoLanzamiento(def, objetivo, { x: r.left + r.width / 2, y: r.top + r.height / 2 }));
       } else if (desde) {
-        const r = desde.getBoundingClientRect();
-        const clon = desde.cloneNode(true) as HTMLElement;
-        clon.classList.add('carta-volando');
-        clon.style.left = `${r.left}px`;
-        clon.style.top = `${r.top}px`;
-        document.body.appendChild(clon);
-        requestAnimationFrame(() => clon.classList.add('carta-volando-fin'));
-        setTimeout(() => clon.remove(), 420);
         audio.sfx('carta');
-        await espera(160);
+        const r = desde.getBoundingClientRect();
+        const origen = suelta?.center ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        await flyPlay(desde, destinoLanzamiento(def, objetivo, origen), { from: suelta, impactMs: impactoMs });
       }
     }
 
@@ -882,7 +1001,8 @@ export function pantallaCombate(
       // the hero swings (or casts) while the card flies; damage waits for the blow
       const inicio = performance.now();
       const impacto = spriteActual().play(defDe(inst).tipo === 'ataque' ? 'attack' : 'spell');
-      await animarLanzamiento(inst, elem);
+      lanzadas.add(inst);
+      await animarLanzamiento(inst, elem, objetivo, impacto);
       const restante = impacto - (performance.now() - inicio);
       if (restante > 0) await espera(restante);
       abrirHechizoCarta(defDe(inst), objetivo);
@@ -890,6 +1010,8 @@ export function pantallaCombate(
         await combate.jugarCarta(inst, objetivo);
       } finally {
         cerrarHechizoCarta();
+        // still in hand (the play did not go through): it may be discarded later
+        if (combate.jugador.mano.includes(inst)) lanzadas.delete(inst);
       }
     }
 
@@ -917,6 +1039,7 @@ export function pantallaCombate(
 
     function motivoNoJugable(inst: CartaInstancia): string {
       const def = defDe(inst);
+      if (def.tipo === 'maldicion' && def.purgar === undefined) return '☠️ Las maldiciones no se pueden jugar';
       if (combate.jugador.energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
       if (def.requiereConjuro)
         return `◈ Necesitas un espacio de conjuro de nivel ${def.requiereConjuro}+`;
@@ -1006,6 +1129,16 @@ export function pantallaCombate(
           const sobre = movido
             ? document.elementFromPoint(e.clientX, e.clientY)?.closest('.enemigo')
             : null;
+          if (movido) {
+            // a dropped card flies to its target from where it was let go
+            const r = elemCarta.getBoundingClientRect();
+            soltada = {
+              inst,
+              center: { x: r.left + r.width / 2, y: r.top + r.height / 2 },
+              scale: elemCarta.offsetWidth > 0 ? r.width / elemCarta.offsetWidth : 1,
+              at: performance.now(),
+            };
+          }
           elemCarta.classList.remove('arrastrando');
           elemCarta.style.removeProperty('--dx');
           elemCarta.style.removeProperty('--dy');
@@ -1114,7 +1247,7 @@ export function pantallaCombate(
         stage?.destroy();
         medirEscenario.disconnect();
         resolver(combate.terminado!);
-      }, 700);
+      }, defs.some((d) => d.dungeonMaster) ? 1800 : 700); // time to read the DM's last line
     }
 
     // ¡Empieza el combate!

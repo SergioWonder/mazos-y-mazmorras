@@ -1,7 +1,8 @@
 // ── Tipos centrales del juego ────────────────────────────────────────────────
 
 export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo';
-export type TipoCarta = 'ataque' | 'habilidad' | 'poder';
+/** 'maldicion' = curse: unplayable dead weight that clogs the hand and the deck. */
+export type TipoCarta = 'ataque' | 'habilidad' | 'poder' | 'maldicion';
 export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara' | 'especial';
 export type ModoObjetivo = 'enemigo' | 'todos' | 'propio' | 'ninguno';
 
@@ -120,6 +121,15 @@ export interface Movimiento {
   invocar?: Array<{ def: EnemigoDef; pv: number }>;
   /** devora al aliado vivo con menos PV: lo mata, se cura y gana Fuerza */
   devorar?: { cura: number; fuerza: number };
+  /** Slips a curse into the player's piles for THIS combat only (never the run deck). */
+  maldicion?: { id: string; destino: 'mazo' | 'descarte' };
+  /** Kills the hero outright, ignoring block, Mirror Image, invulnerability,
+   *  summons and relics (the Dungeon Master's ray). */
+  mataAlInstante?: boolean;
+  /** Joke quoted next to the intent icon (the Dungeon Master's moves). */
+  cita?: string;
+  /** Line the enemy says in a speech bubble when it acts (the Dungeon Master). */
+  dialogo?: string;
 }
 
 export interface EnemigoDef {
@@ -138,6 +148,9 @@ export interface EnemigoDef {
   invocaAlMorir?: EnemigoDef;
   /** Marca a los jefes (no muere por efectos «mata si no es jefe»). */
   esJefe?: boolean;
+  /** The Dungeon Master (final joke scene): his screen absorbs every hit, he is
+   *  immune to instant kills and lethal Doom, and nothing makes him skip his ray. */
+  dungeonMaster?: boolean;
   /** Decide el próximo movimiento (recibe a sus aliados vivos). */
   ia: (
     turno: number,
@@ -227,6 +240,14 @@ export interface CartaDef {
   /** Al jugarse vuelve a lo alto del mazo de robo en vez de al descarte
    *  (Explosión Sobrenatural del brujo). Tiene prioridad sobre «se agota». */
   alTopeDelMazo?: boolean;
+  /** (curses) Energy that pays the curse off: it leaves the deck for good. Without
+   *  it the curse can never be played. */
+  purgar?: number;
+  /** (curses) Fires at the end of the player's turn, before the discard, only if
+   *  the card is in the hand. */
+  finTurnoEnMano?: (ctx: ContextoEfecto) => Promise<void>;
+  /** (curses) Fires right after the card is drawn. */
+  alRobar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
   /** Versión mejorada (hogueras): sobreescribe texto/coste/efecto. */
   mejora?: MejoraCarta;
@@ -316,6 +337,9 @@ export interface ContextoEfecto {
   ataqueAnulado(e: EnemigoCombate): boolean;
   estaTransformado(): boolean;
   mensaje(txt: string): Promise<void>;
+  /** Seduce against the Dungeon Master: only a natural 20 gets past his screen
+   *  (secret true ending); any other roll bounces off it. */
+  seducirDM?(e: EnemigoCombate, tirada: number): Promise<void>;
   /** Tira un dado de N caras: anima el lanzamiento y devuelve el resultado (1..N). */
   tirarDado(caras: number): Promise<number>;
   /** Con ventaja: lanza 2 dados de N caras a la vez y devuelve el mejor. */
@@ -335,6 +359,8 @@ export interface ContextoEfecto {
   descartar(n: number): Promise<number>;
   /** Nº de cartas que has descartado en lo que va de turno (para pagos de descarte). */
   descartadasEsteTurno(): number;
+  /** Discards a random card of the hand (never `excepto`). Returns it, or null. */
+  descartarAlAzar(excepto?: CartaInstancia): Promise<CartaInstancia | null>;
   /** Añade N Dagas a la mano (pícaro): ataques de 0 de coste que se agotan. */
   crearDagas(n: number): Promise<void>;
   /** Busca una carta por id en el mazo, el descarte o las agotadas y la pone en
@@ -365,7 +391,14 @@ export interface ContextoEfecto {
   esEliteOJefe(): boolean;
 }
 
-export type TipoNodo = 'combate' | 'elite' | 'descanso' | 'cofre' | 'evento' | 'jefe';
+export type TipoNodo = 'combate' | 'elite' | 'descanso' | 'cofre' | 'evento' | 'jefe' | 'taberna';
+
+/** Quest given by a tavern rumour: completing the marked node grants a relic. */
+export interface MisionTaberna {
+  nodo: number;      // id of the marked map node
+  tipo: TipoNodo;    // type of the marked node when the rumour was told
+  texto: string;     // rumour text (shown in the node's tooltip)
+}
 
 export interface NodoMapa {
   id: number;
@@ -380,8 +413,9 @@ export interface NodoMapa {
  *  only drop from bosses; 'bendicion' relics only come from the Seer's blessings. */
 export type RarezaReliquia = 'inicial' | 'comun' | 'rara' | 'jefe' | 'bendicion';
 
-/** Kind of a blessing relic: it decides which slot of the blessing offer it fills. */
-export type TipoBendicion = 'general' | 'pacto' | 'mapa' | 'clase';
+/** Kind of a blessing relic: it decides which slot of the blessing offer it fills.
+ *  'unica' relics carry a unique card and are only offered at their act change. */
+export type TipoBendicion = 'general' | 'pacto' | 'mapa' | 'clase' | 'unica';
 
 /** Where a relic reward comes from (it decides which rarities can roll). */
 export type OrigenReliquia = 'cofre' | 'elite' | 'evento' | 'jefe';
@@ -445,8 +479,8 @@ export interface ReliquiaDef {
   finTurno?: (ctx: ContextoEfecto) => Promise<void>;
   alGastarConjuro?: (ctx: ContextoEfecto, nivel: number) => Promise<void>;
   alJugarCarta?: (ctx: ContextoEfecto, jugada: CartaJugada) => Promise<void>;
-  /** A played card has just left the player with 0 energy. */
-  alQuedarseSinEnergia?: (ctx: ContextoEfecto) => Promise<void>;
+  /** During the player's turn, playing or discarding the last card has just left the hand empty. */
+  alVaciarMano?: (ctx: ContextoEfecto) => Promise<void>;
   /** The discard pile has just been shuffled into the draw pile. */
   alBarajar?: (ctx: ContextoEfecto) => Promise<void>;
   alDescartar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
@@ -503,4 +537,6 @@ export interface EstadoRun {
   };
   /** Ids de eventos ya vividos (para no repetirlos). */
   eventosVistos: string[];
+  /** Active tavern quest (null/absent when there is none). */
+  mision?: MisionTaberna | null;
 }

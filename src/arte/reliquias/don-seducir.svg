@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="31" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- charm glow -->
+  <path d="M32 12 L50 22.5 L50 43.5 L32 54 L14 43.5 L14 22.5 Z" fill="#ff7ab0" opacity="0.7" filter="url(#g)"/>
+  <!-- pink d20 -->
+  <path d="M32 12 L50 22.5 L50 43.5 L32 54 L14 43.5 L14 22.5 Z" fill="#c2407a"/>
+  <path d="M32 54 L14 43.5 L20 40 Z M32 54 L50 43.5 L44 40 Z M44 40 L50 22.5 L50 43.5 Z" fill="#8a2556"/>
+  <path d="M32 21 L44 40 L20 40 Z" fill="#f58cb8"/>
+  <path d="M32 12 L14 22.5 L32 21 Z" fill="#ffb4d2"/>
+  <path d="M32 21 L32 12 M32 21 L14 22.5 M32 21 L50 22.5 M44 40 L50 22.5 M44 40 L50 43.5 M44 40 L32 54 M20 40 L14 22.5 M20 40 L14 43.5 M20 40 L32 54" stroke="#140d0a" stroke-width="1.4" fill="none"/>
+  <path d="M32 21 L44 40 L20 40 Z" fill="none" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M32 12 L50 22.5 L50 43.5 L32 54 L14 43.5 L14 22.5 Z" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <!-- heart on the top face -->
+  <path d="M32 37.5 C25 32.5 26.5 26.5 32 29.5 C37.5 26.5 39 32.5 32 37.5 Z" fill="#ff2f6e" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M28.6 30.2 Q29.6 29 31 29.9" stroke="#ffd0e0" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+  <!-- floating hearts -->
+  <path d="M52 12 C49 10 49.6 7.4 52 8.8 C54.4 7.4 55 10 52 12 Z" fill="#ff5c93" stroke="#140d0a" stroke-width="1.1"/>
+  <path d="M11 50 C8.5 48.3 9 46.2 11 47.4 C13 46.2 13.5 48.3 11 50 Z" fill="#ff5c93" stroke="#140d0a" stroke-width="1.1"/>
+</svg>

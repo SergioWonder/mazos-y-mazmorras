@@ -1,5 +1,5 @@
 import type { CartaDef } from '../core/types.ts';
-import { BASICAS, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, NEUTRALES_ESPECIALES, defDe } from '../core/cartas.ts';
+import { BASICAS, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, NEUTRALES_ESPECIALES, MALDICIONES, defDe } from '../core/cartas.ts';
 import { renderCarta, cuadroPalabrasClave } from './carta.ts';
 import { el } from './util.ts';
 
@@ -42,6 +42,7 @@ const GRUPOS: { titulo: string; cartas: CartaDef[] }[] = [
   { titulo: '🗡️ Pícaro', cartas: PICARO },
   { titulo: '🕳️ Brujo', cartas: BRUJO },
   { titulo: '✨ Únicas (incoloras)', cartas: NEUTRALES_ESPECIALES },
+  { titulo: '☠️ Maldiciones', cartas: MALDICIONES },
 ];
 
 /** Compendio: todas las cartas por clase, con comentarios exportables a JSON. */

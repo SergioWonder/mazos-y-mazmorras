@@ -1,5 +1,5 @@
 import type { CartaDef, CartaInstancia, ClaseId, EstadoRun, TipoNodo } from './types.ts';
-import { instanciar, mazoInicial } from './cartas.ts';
+import { instanciar, mazoInicial, nuevaMaldicion } from './cartas.ts';
 import { reliquiaInicial } from './reliquias.ts';
 import { generarMapa } from './mapa.ts';
 import { crearRng } from './rng.ts';
@@ -31,6 +31,7 @@ export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
     espaciosConjuro: clase === 'mago' ? 1 : 0,
     permanentes: { fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, energiaInicial: 0, robo: 0 },
     eventosVistos: [],
+    mision: null,
   };
 }
 
@@ -49,6 +50,26 @@ export function descansar(run: EstadoRun): number {
   run.pv += curado;
   for (const r of run.reliquias) r.alDescansar?.(run, curado);
   return curado;
+}
+
+/** Curses currently in the run deck. */
+export function maldicionesDe(run: EstadoRun): CartaInstancia[] {
+  return run.mazo.filter((c) => c.def.tipo === 'maldicion');
+}
+
+/** Campfire «Purificar»: removes a curse from the deck (refuses any other card). */
+export function purificar(run: EstadoRun, carta: CartaInstancia): boolean {
+  const i = run.mazo.indexOf(carta);
+  if (i < 0 || carta.def.tipo !== 'maldicion') return false;
+  run.mazo.splice(i, 1);
+  return true;
+}
+
+/** Adds a curse to the run deck; returns its name for the story text. */
+export function anadirMaldicion(run: EstadoRun, id: string): string {
+  const carta = nuevaMaldicion(id);
+  run.mazo.push(carta);
+  return carta.def.nombre;
 }
 
 /** Upgrades a card at a campfire; returns the extra upgrades made by relics. */
@@ -92,6 +113,7 @@ export function avanzarCapitulo(run: EstadoRun, rng: () => number) {
   run.capitulo++;
   run.escenario = Math.floor(rng() * 2); // uno de los dos escenarios del nuevo acto
   run.mapa = generarMapa(rng);
+  run.mision = null; // the old map's tavern quest cannot be followed any more
   run.nodoActual = -1;
   run.piso = 0;
   run.pv = Math.min(run.pvMax, run.pv + Math.floor(run.pvMax * 0.35));

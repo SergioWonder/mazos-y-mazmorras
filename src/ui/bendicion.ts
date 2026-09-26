@@ -12,14 +12,11 @@ export type MomentoBendicion = 'inicial' | 'entreActos';
 /** Visible label of each kind of blessing relic. */
 const ETIQUETA_TIPO: Record<TipoBendicion, string> = {
   general: 'Bendición', pacto: 'Pacto · riesgo y recompensa', mapa: 'Del camino', clase: 'De tu clase',
+  unica: 'Carta única',
 };
 
-/** HTML of one option button (blessing relic with its art, or unique card). */
+/** HTML of one option button: the blessing relic with its art, kind, name and text. */
 function contenidoOpcion(o: OfertaBendicion): string {
-  if (o.tipo === 'carta') {
-    return `<span class="op-etiqueta">${o.icono} ${o.nombre}</span>
-      <span class="op-detalle">${o.detalle}</span>`;
-  }
   const r = o.reliquia;
   const tipo = r.tipoBendicion ?? 'general';
   return `<span class="bendicion-icono">${relicIcon(r, 48)}</span>
@@ -33,7 +30,7 @@ function contenidoOpcion(o: OfertaBendicion): string {
 /**
  * Blessing screens: the Senescal's task at the start, and Síbila, the Seer of the Spring, between acts.
  * - `inicial`: before setting off, 4 blessing relics (class, general, pact, wildcard).
- * - `entreActos`: full heal plus the unique cards and blessing relics up to 3 options.
+ * - `entreActos`: full heal plus the unique-card relics and other blessing relics up to 3 options.
  */
 export function pantallaBendicion(
   run: EstadoRun, rng: () => number, momento: MomentoBendicion = 'entreActos',
@@ -74,7 +71,7 @@ export function pantallaBendicion(
 
     const cont = raiz.querySelector('.bendicion-opciones') as HTMLElement;
     const botones: HTMLButtonElement[] = ofrecidos.map((o, i) => {
-      const b = el('button', `evento-opcion${o.tipo === 'reliquia' ? ' opcion-bendicion' : ''}`) as HTMLButtonElement;
+      const b = el('button', 'evento-opcion opcion-bendicion') as HTMLButtonElement;
       b.innerHTML = contenidoOpcion(o);
       b.style.setProperty('--retraso', `${0.3 + i * 0.1}s`);
       b.addEventListener('click', () => elegir(o));
@@ -93,7 +90,7 @@ export function pantallaBendicion(
       aplicarBendicion(run, o, rng);
       if (!inicial) run.pv = run.pvMax; // full heal between acts
       fx.estallido('divino');
-      anuncio(o.tipo === 'carta' ? `${o.icono} ${o.nombre}` : `✨ ${o.reliquia.nombre}`, 'anuncio-rara');
+      anuncio(`✨ ${o.reliquia.nombre}`, 'anuncio-rara');
       window.removeEventListener('keydown', teclado);
       setTimeout(resolver, 900);
     }

@@ -1,4 +1,5 @@
 import type { EnemigoDef, EnemigoCombate, Movimiento } from './types.ts';
+import { FRASES_DM, INTENCION_DM } from './escena-final.ts';
 
 const atk = (nombre: string, dano: number, veces = 1, efectos?: Movimiento['efectos']): Movimiento => ({
   nombre, intencion: 'ataque', dano, veces, efectos,
@@ -163,7 +164,8 @@ export const MOMIA_REAL: EnemigoDef = {
     if (turno % 4 === 0)
       return {
         nombre: 'Maldición Faraónica', intencion: 'perjuicio',
-        efectos: [['debil', 3, true], ['fragil', 3, true], ['vulnerable', 1, true]],
+        efectos: [['debil', 2, true], ['fragil', 1, true]],
+        maldicion: { id: 'maldicion-momia', destino: 'descarte' },
       };
     if (rng() < 0.3)
       return { nombre: 'Vendas Reparadoras', intencion: 'defensa', bloqueo: 12, cura: 10 };
@@ -416,7 +418,8 @@ export const ACOLITO_VELADO: EnemigoDef = {
   id: 'acolito-velado', nombre: 'Acólito Velado', arte: '🧎', pv: [20, 24],
   ia: (turno, rng) => {
     if (turno === 0) return { nombre: 'Cántico Impío', intencion: 'mejora', fuerzaAliados: 2 };
-    if (rng() < 0.35) return { nombre: 'Maldición Leve', intencion: 'perjuicio', efectos: [['debil', 2, true]] };
+    if (rng() < 0.35)
+      return { nombre: 'Maldición Leve', intencion: 'perjuicio', maldicion: { id: 'duda', destino: 'descarte' } };
     return atk('Golpe de Báculo', 8);
   },
 };
@@ -507,7 +510,8 @@ export const HERALDO_CULTO: EnemigoDef = {
     if (ciclo === 1)
       return {
         nombre: 'Maldición del Pacto', intencion: 'perjuicio',
-        efectos: [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true]],
+        efectos: [['debil', 2, true], ['fragil', 2, true]],
+        maldicion: { id: 'marca-condenado', destino: 'mazo' },
       };
     if (ciclo === 2) return { nombre: 'Drenar Fe', intencion: 'ataque', dano: 15, cura: 9 };
     if (ciclo === 3) return atk('Cuchillo Ritual', 9, 2, [['veneno', 2, true]]);
@@ -618,6 +622,23 @@ export const CONTEMPLADOR: EnemigoDef = {
     if (ciclo === 0) return { nombre: 'MIRADA ANIQUILADORA', intencion: 'ataque', dano: 30, fx: 'aliento' };
     return RAYOS_CONTEMPLADOR[(turno - 1) % RAYOS_CONTEMPLADOR.length];
   },
+};
+
+// ═══ Escena final: el Dungeon Master ═════════════════════════════════════════
+
+/** Final joke after the Act III boss: his screen blocks everything and his ray
+ *  ends the campaign (resolved as a victory, see core/escena-final.ts). */
+export const DUNGEON_MASTER: EnemigoDef = {
+  id: 'dungeon-master', nombre: 'El Dungeon Master', arte: '🎲', pv: [999, 999], escala: 2.2,
+  dungeonMaster: true,
+  rasgo: {
+    nombre: 'Pantalla del DM',
+    texto: 'Detrás de la pantalla todo es posible. Delante, nada funciona así… o casi nada.',
+  },
+  // one harmless turn to let the hero try everything (and roll that 20), then the ray
+  ia: (turno) => turno === 0
+    ? { nombre: 'Consultar sus notas', intencion: 'desconocido', cita: INTENCION_DM.notas, dialogo: FRASES_DM.notas }
+    : { nombre: 'Rayo del Dungeon Master', intencion: 'ataque', fx: 'divino', mataAlInstante: true, cita: INTENCION_DM.rayo },
 };
 
 // ═══ Capítulos ═══════════════════════════════════════════════════════════════

@@ -15,7 +15,7 @@ export const BONE_INDEX: Record<BoneId, number> = {
 export const BONE_COUNT = 20;
 
 export const SHAPE_CODE = { c: 0, e: 1, l: 2, p: 3 } as const;
-export const FLAG = { emissive: 1, ink: 2, eye: 4 } as const;
+export const FLAG = { emissive: 1, ink: 2, eye: 4, backlit: 8 } as const;
 
 // ── colour ───────────────────────────────────────────────────────────────────
 export const hexRgb = (h: string): [number, number, number] =>
@@ -72,7 +72,8 @@ export function packRig(rig: PuppetRig, style: 'silhouette' | 'illustrated'): { 
   rig.shapes.forEach((s, i) => {
     const o = i * PIECE_TEXELS * 4;
     const emissive = EMISSIVE.has(s.k), ink = s.k === 'ink', eye = EYES.has(s.k);
-    const flags = (emissive ? FLAG.emissive : 0) | (ink ? FLAG.ink : 0) | (eye ? FLAG.eye : 0);
+    const backlit = !emissive && !!rig.backlit?.includes(s.k);
+    const flags = (emissive ? FLAG.emissive : 0) | (ink ? FLAG.ink : 0) | (eye ? FLAG.eye : 0) | (backlit ? FLAG.backlit : 0);
     const nVerts = s.t === 'p' ? Math.min(MAX_POLY, s.pts.length) : 0;
     data.set([SHAPE_CODE[s.t], BONE_INDEX[s.b], flags, nVerts], o);
     if (s.t === 'c') data.set([s.x, s.y, s.r, s.r], o + 4);
@@ -84,6 +85,9 @@ export function packRig(rig: PuppetRig, style: 'silhouette' | 'illustrated'): { 
     if (style === 'silhouette') {
       fill = emissive ? base : s.k === 'eye' ? eyeColour : '#0b0910';
       shade = fill;
+    } else if (backlit) {
+      fill = base; // dark tones picked by the rig, drawn flat
+      shade = base;
     } else {
       fill = ink ? '#140d0a' : base;
       shade = ink || emissive ? fill : shadowOf(base);

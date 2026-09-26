@@ -844,6 +844,70 @@ const rayoOcular: Build = (g, u, c, D) => {
   g.dot(cx, cy, 20 * k, '#ffffff', 0.6 * bell(u, 0.2, 0.4));
 };
 
+/** Jagged path from a to b; the offsets change `fps` times a second. */
+function zigzag(a: Point, b: Point, n: number, amp: number, frame: number, salt: number): Point[] {
+  const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+  const pts: Point[] = [];
+  for (let j = 0; j <= n; j++) {
+    const s = j / n, off = j === 0 || j === n ? 0 : (hash01(frame * 13 + salt, j) - 0.5) * 2 * amp * Math.sin(Math.PI * s);
+    pts.push({ x: lerp(a.x, b.x, s) - (dy / d) * off, y: lerp(a.y, b.y, s) + (dx / d) * off });
+  }
+  return pts;
+}
+
+/** The Dungeon Master's ray: his hands gather light, then a huge zigzag bolt
+ *  crosses the screen and strikes the hero with a blinding flash. */
+const rayoDM: Build = (g, u, c, D) => {
+  const { cx, cy, R, k, H } = geo(c);
+  const src = c.from ?? { x: cx + 3 * H, y: cy - H };
+  const tgt = { x: cx, y: cy };
+  const gold = '#ffd27a', violet = '#b98bff';
+  const dist = Math.hypot(tgt.x - src.x, tgt.y - src.y) || 1;
+  // charge: sparks spiral into the hands, the orb swells
+  const ch = span(u, 0, 0.3) * (1 - span(u, 0.72, 0.85));
+  g.dot(src.x, src.y, (6 + 16 * span(u, 0, 0.3)) * k, violet, 0.55 * ch);
+  g.dot(src.x, src.y, (3 + 8 * span(u, 0, 0.3)) * k, gold, 0.85 * ch);
+  g.dot(src.x, src.y, (2 + 4 * span(u, 0, 0.3)) * k, '#ffffff', ch);
+  for (let i = 0; i < 12; i++) {
+    const q = span(u, g.r(i) * 0.15, 0.3);
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 40) * TAU + q * 2.4, rad = (1 - easeIn(q)) * 70 * k;
+    g.spark(src.x + Math.cos(a) * rad, src.y + Math.sin(a) * rad, 8 * k, a + Math.PI, i % 3 ? gold : violet, q);
+  }
+  // strike: the main bolt, its forks and a soft beam underneath
+  const on = span(u, 0.28, 0.32) * (1 - span(u, 0.68, 0.9));
+  if (on > 0) {
+    const frame = Math.floor(u * D * 22);
+    g.beam(src.x, src.y, tgt.x, tgt.y, 26 * k, violet, 0.28 * on);
+    const main = zigzag(src, tgt, 14, Math.min(46 * k, dist * 0.09), frame, 1);
+    g.strip(main, () => 12 * k, gold, 0.45 * on);
+    g.strip(main, () => 5 * k, '#fff6dc', on);
+    g.strip(main, () => 2 * k, '#ffffff', on, false);
+    for (let f = 0; f < 3; f++) {
+      const from = main[3 + f * 3];
+      const ang = Math.atan2(tgt.y - src.y, tgt.x - src.x) + (hash01(frame + f * 5, 9) - 0.5) * 1.6;
+      const len = dist * (0.12 + 0.1 * hash01(frame, f + 20));
+      const to = { x: from.x + Math.cos(ang) * len, y: from.y + Math.sin(ang) * len };
+      g.strip(zigzag(from, to, 5, 10 * k, frame, 7 + f), () => 2.4 * k, f % 2 ? violet : gold, 0.8 * on);
+    }
+  }
+  // impact: blinding flash over the whole scene, then a ring and embers
+  const flash = bell(u, 0.29, 0.5);
+  g.dot((src.x + tgt.x) / 2, (src.y + tgt.y) / 2, dist * 0.9, '#fff4d8', 0.22 * flash, false);
+  g.dot(tgt.x, tgt.y, 46 * k, '#ffffff', 0.85 * flash);
+  g.dot(tgt.x, tgt.y, 90 * k, gold, 0.35 * flash);
+  for (let i = 0; i < 2; i++) {
+    const s = span(u, 0.34 + i * 0.12, 0.8 + i * 0.1);
+    if (s > 0 && s < 1) g.ring(tgt.x, tgt.y, R * (0.2 + 1.1 * easeOut(s)), R * (0.12 + 0.6 * easeOut(s)), 4 * k, i ? violet : gold, 1 - s);
+  }
+  for (let i = 0; i < 26; i++) {
+    const q = span(u, 0.34 + 0.25 * g.r(i + 60), 0.7 + 0.28 * g.r(i + 60));
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 80) * TAU, dd = easeOut(q) * R * (0.6 + 0.8 * g.r(i + 90));
+    g.spark(tgt.x + Math.cos(a) * dd, tgt.y + Math.sin(a) * dd, 10 * k, a, i % 3 ? gold : '#ffffff', 1 - q);
+  }
+};
+
 export const SPELLS: Record<string, SpellDef> = {
   tajo: { duration: 0.5, phases: [0.2, 0.5], anchor: 'target', build: tajo },
   zarpa: { duration: 0.65, phases: [0.3, 0.6], anchor: 'target', build: zarpa },
@@ -869,6 +933,7 @@ export const SPELLS: Record<string, SpellDef> = {
   // enemy signature moves
   aliento: { duration: 1.3, phases: [0.25, 0.8], anchor: 'target', build: aliento },
   rayoOcular: { duration: 0.8, phases: [0.2, 0.7], anchor: 'target', build: rayoOcular },
+  rayoDM: { duration: 1.35, phases: [0.3, 0.75], anchor: 'target', build: rayoDM },
 };
 
 /** Sprites of spell `key` at `t` seconds after it was cast ([] once it is over). */

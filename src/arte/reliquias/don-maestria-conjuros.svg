@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="31" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- moon orb -->
+  <circle cx="32" cy="32" r="14" fill="#c8b8ff" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="12" fill="#b8a8ff" stroke="#140d0a" stroke-width="2.6"/>
+  <path d="M40 24 A12 12 0 0 1 32 44 A12 12 0 0 0 40 24 Z" fill="#7d6ad8"/>
+  <path d="M26 26 Q29 23 33 23" stroke="#f2edff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <circle cx="35" cy="35" r="1.6" fill="#9c8ae8"/>
+  <circle cx="28" cy="36" r="1.1" fill="#9c8ae8"/>
+  <!-- orbit -->
+  <ellipse cx="32" cy="32" rx="24" ry="9" transform="rotate(-20 32 32)" fill="none" stroke="#140d0a" stroke-width="2.4" stroke-dasharray="3 3"/>
+  <ellipse cx="32" cy="32" rx="24" ry="9" transform="rotate(-20 32 32)" fill="none" stroke="#e0d6ff" stroke-width="1" stroke-dasharray="3 3"/>
+  <!-- three magic missiles with tails -->
+  <g stroke-linecap="round">
+    <path d="M4 42 L10 40" stroke="#d6ccff" stroke-width="3" opacity="0.7"/>
+    <circle cx="11" cy="39.6" r="3.6" fill="#f4f0ff" stroke="#140d0a" stroke-width="1.8"/>
+    <path d="M60 22 L54 24" stroke="#d6ccff" stroke-width="3" opacity="0.7"/>
+    <circle cx="53" cy="24.4" r="3.6" fill="#f4f0ff" stroke="#140d0a" stroke-width="1.8"/>
+    <path d="M36 50 L30 48.6" stroke="#d6ccff" stroke-width="3" opacity="0.7"/>
+    <circle cx="38" cy="49.8" r="3.2" fill="#f4f0ff" stroke="#140d0a" stroke-width="1.8"/>
+  </g>
+  <circle cx="11" cy="39.6" r="1.2" fill="#a896ff"/>
+  <circle cx="53" cy="24.4" r="1.2" fill="#a896ff"/>
+  <circle cx="38" cy="49.8" r="1" fill="#a896ff"/>
+</svg>

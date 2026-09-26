@@ -1,5 +1,6 @@
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import { EPILOGO_DM } from '../core/escena-final.ts';
 
 /** Cierre de campaña por escenario final: el Acto III tiene dos jefes posibles. */
 const EPILOGO: Record<string, string> = {
@@ -19,6 +20,7 @@ export function pantallaFin(
   victoria: boolean,
   clase: string,
   jefeFinal = 'ignifax',
+  epilogoDM = false,
 ): Promise<void> {
   return new Promise((resolver) => {
     const app = document.getElementById('app')!;
@@ -34,6 +36,7 @@ export function pantallaFin(
       ? `
         <h1 class="fin-titulo">🏆 ¡VICTORIA!</h1>
         <p class="fin-texto">${EPILOGO[jefeFinal] ?? EPILOGO.ignifax}</p>
+        ${epilogoDM ? `<p class="fin-epilogo-dm">🎲 ${EPILOGO_DM}</p>` : ''}
         <p class="fin-sub">Campaña completada con el ${nombreClase}</p>
         <button class="btn-tomar">Volver al título <span class="atajo">[Enter]</span></button>`
       : `

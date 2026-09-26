@@ -5,7 +5,7 @@ import { fx } from '../fx/particulas.ts';
 import { hasFullArt, lookOf } from './card-looks.ts';
 
 const NOMBRE_TIPO: Record<string, string> = {
-  ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder',
+  ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder', maldicion: 'Maldición',
 };
 
 // ── Glosario de palabras clave (cuadro de la vista en grande) ────────────────
@@ -18,6 +18,7 @@ const DESC_TIPO: Record<string, string> = {
   ataque: 'Inflige daño. Algunos efectos enemigos reaccionan a recibir ataques.',
   habilidad: 'Efecto sin daño directo: bloqueo, estados o utilidad.',
   poder: 'Efecto que dura todo el combate; la carta se retira de tu mazo al jugarse.',
+  maldicion: 'Carta que estorba: no se puede jugar y ocupa sitio en tu mano y en tu mazo. Algunas hacen daño al final del turno si siguen en tu mano, o al robarlas. Purifícala en un campamento para librarte de ella.',
 };
 
 /** Estados (de util) que se reconocen buscando su nombre en el texto. */
@@ -174,8 +175,10 @@ function ajustarTexto(carta: HTMLElement) {
 /** Crea el elemento DOM de una carta. */
 export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo}`);
+  const esMaldicion = def.tipo === 'maldicion';
   const coste = mods?.coste ? mods.coste(def.coste) : def.coste;
-  if (def.rareza === 'rara' || def.rareza === 'especial') carta.classList.add('carta-rara-brillo');
+  if (esMaldicion) carta.classList.add('carta-maldicion');
+  else if (def.rareza === 'rara' || def.rareza === 'especial') carta.classList.add('carta-rara-brillo');
 
   // Textos largos (frecuentes en el mago): reduce la fuente para que quepan
   const caracteres = def.texto.replaceAll('\n', ' ').length;
@@ -201,14 +204,21 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     : artUrl
       ? `<div class="carta-arte carta-arte-ilustrada"><img src="${cardArtBitmap(artUrl)}" data-arte="${artUrl}" alt="" draggable="false"></div>`
       : `<div class="carta-arte">${arteDeCarta(def)}</div>`;
+  // curses have no cost: only the payable ones show what paying them off takes
+  const costeSaldar = mods?.coste ? mods.coste(def.purgar ?? 0) : def.purgar;
+  const costeHtml = esMaldicion
+    ? def.purgar !== undefined
+      ? `<div class="carta-coste coste-saldar" data-tip="<strong>Saldar</strong><br>Paga ${costeSaldar} de energía para librarte de ella.">${costeSaldar}</div>`
+      : ''
+    : `<div class="carta-coste${coste > def.coste ? ' coste-recargado' : ''}">${coste}</div>`;
   carta.innerHTML = `
-    <div class="carta-coste${coste > def.coste ? ' coste-recargado' : ''}">${coste}</div>
+    ${costeHtml}
     ${conjuro}
     <div class="carta-cabecera">
       <span class="carta-nombre">${def.nombre}</span>
     </div>
     ${arteHtml}
-    <div class="carta-tipo">${ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
+    <div class="carta-tipo">${esMaldicion ? '☠️' : ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
       def.subclase ? ` · <em>${def.subclase}</em>` : ''
     }${unUso}${innata}${retencion}</div>
     <div class="carta-texto">${formatearTexto(def.texto, mods)}</div>
@@ -301,6 +311,10 @@ export const ARTE_CARTA: Record<string, string> = {
   'verbo-aniquilacion': '☠️', 'pacto-final': '🕳️',
   // ── Incoloras ──
   seducir: '💗', deseo: '🪄',
+  // ── Maldiciones ──
+  'herida-infectada': '🤢', duda: '❔', pesadilla: '😱', 'deuda-sangre': '🧾',
+  'marca-condenado': '🏴', 'maldicion-momia': '🧻', remordimiento: '💔',
+  paralisis: '🧊', codicia: '🪙', grilletes: '🔗',
 };
 
 /** Arte procedimental sencillo: glifo grande por carta. */

@@ -1,5 +1,6 @@
-import type { ContextoEfecto, EnemigoCombate, EstadoRun, ReliquiaDef } from './types.ts';
+import type { CartaDef, ClaseId, ContextoEfecto, EnemigoCombate, EstadoRun, ReliquiaDef } from './types.ts';
 import { crearRng } from './rng.ts';
+import { instanciar, nuevaMaldicion, NEUTRALES_ESPECIALES, cartaUnicaDeClase } from './cartas.ts';
 // Circular on purpose: only used inside hooks, never while the module loads.
 import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
 
@@ -97,10 +98,9 @@ const PACTOS: ReliquiaDef[] = [
   },
   {
     id: 'pacto-codicia', nombre: 'Pacto de la Codicia', icono: '💰', rareza: 'bendicion', tipoBendicion: 'pacto',
-    texto: 'Al sellarlo obtienes 2 reliquias al azar, pero pierdes 12 PV máximos para siempre.',
+    texto: 'Al sellarlo obtienes 2 reliquias al azar, pero la Codicia entra en tu mazo: una maldición que, una vez robada, no sale de tu mano.',
     alObtener: (run, rng) => {
-      run.pvMax = Math.max(20, run.pvMax - 12);
-      run.pv = Math.min(run.pv, run.pvMax);
+      run.mazo.push(nuevaMaldicion('codicia'));
       for (let i = 0; i < 2; i++) {
         const r = sortearReliquia(run, rng, 'evento');
         if (r) otorgarReliquia(run, r, rng);
@@ -245,5 +245,63 @@ const DE_CLASE: ReliquiaDef[] = [
   },
 ];
 
+// ── Unique cards: the relic puts its card into the deck when obtained ────────
+
+/**
+ * Builds a unique-card relic: on pickup (never on rehydration) the card goes to the
+ * deck, and each time you play that card `alJugarla` adds a small themed bonus.
+ */
+function donDeCarta(
+  base: Omit<ReliquiaDef, 'rareza' | 'tipoBendicion' | 'alObtener' | 'alJugarCarta'>,
+  carta: string, clase: ClaseId | undefined,
+  alJugarla: (ctx: ContextoEfecto) => Promise<void>,
+): ReliquiaDef {
+  // Resolved lazily: a class's unique card, or a colourless special card
+  const def = (): CartaDef => (clase ? cartaUnicaDeClase(clase) : NEUTRALES_ESPECIALES.find((c) => c.id === carta)!);
+  return {
+    ...base, rareza: 'bendicion', tipoBendicion: 'unica', ...(clase ? { soloClase: clase } : {}),
+    alObtener: (run) => { run.mazo.push(instanciar(def())); },
+    alJugarCarta: async (ctx, { carta: jugada }) => {
+      if (jugada.def.id === carta) await alJugarla(ctx);
+    },
+  };
+}
+
+/** Unique-card relics, only offered between acts (see core/bendiciones.ts). */
+export const DE_CARTA_UNICA: ReliquiaDef[] = [
+  donDeCarta({
+    id: 'don-seducir', nombre: 'Dado del Encanto', icono: '💘',
+    texto: 'Añade «Seducir» a tu mazo (incolora, tira 1d20). La primera Seducir de cada combate te devuelve su energía.',
+  }, 'seducir', undefined, async (ctx) => {
+    if (ctx.marca('don-seducir') > 0) return;
+    ctx.marca('don-seducir', 1);
+    ctx.ganarEnergia(1);
+  }),
+  donDeCarta({
+    id: 'don-deseo', nombre: 'Dado de los Deseos', icono: '🌠',
+    texto: 'Añade «Deseo» a tu mazo (incolora, tira 1d20). Cada vez que juegas Deseo, robas 1 carta.',
+  }, 'deseo', undefined, async (ctx) => { await ctx.robar(1); }),
+  donDeCarta({
+    id: 'don-tormenta-venganza', nombre: 'Asta de la Tormenta', icono: '🌩️',
+    texto: 'Añade «Tormenta de Venganza» a tu mazo (única de clase). Al jugarla, te curas 6 PV.',
+  }, 'tormenta-venganza', 'druida', async (ctx) => { await ctx.curar(6); }),
+  donDeCarta({
+    id: 'don-furia-indomita', nombre: 'Gran Hacha Indómita', icono: '🪓',
+    texto: 'Añade «Furia Indómita» a tu mazo (única de clase). Al jugarla, ganas Furia (+1 de Fuerza).',
+  }, 'furia-indomita', 'barbaro', async (ctx) => { await ctx.ganarFuria(1); }),
+  donDeCarta({
+    id: 'don-maestria-conjuros', nombre: 'Orbe de la Maestría', icono: '🌕',
+    texto: 'Añade «Maestría de Conjuros» a tu mazo (única de clase). Al jugarla, ganas 1 espacio de conjuro.',
+  }, 'maestria-conjuros', 'mago', async (ctx) => { await ctx.ganarConjuro(false); }),
+  donDeCarta({
+    id: 'don-danza-mortal', nombre: 'Dagas de la Danza Mortal', icono: '💃',
+    texto: 'Añade «Danza Mortal» a tu mazo (única de clase). Al jugarla, creas 2 Dagas en tu mano.',
+  }, 'danza-mortal', 'picaro', async (ctx) => { await ctx.crearDagas(2); }),
+  donDeCarta({
+    id: 'don-pacto-final', nombre: 'Ojo del Pacto Final', icono: '👁️',
+    texto: 'Añade «Pacto Final» a tu mazo (única de clase). Al jugarla, ganas 6 de bloqueo.',
+  }, 'pacto-final', 'brujo', async (ctx) => { await ctx.ganarBloqueo(6); }),
+];
+
 /** Every blessing relic (only offered by the blessing screens). */
-export const BENDICIONES: ReliquiaDef[] = [...GENERALES, ...PACTOS, ...DE_MAPA, ...DE_CLASE];
+export const BENDICIONES: ReliquiaDef[] = [...GENERALES, ...PACTOS, ...DE_MAPA, ...DE_CLASE, ...DE_CARTA_UNICA];

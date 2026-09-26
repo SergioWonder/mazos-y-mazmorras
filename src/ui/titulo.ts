@@ -8,6 +8,7 @@ import { showGallery } from './gallery.ts';
 import { avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
 import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
+import { finalVerdaderoDesbloqueado } from '../core/escena-final.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
 
@@ -74,7 +75,11 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
         <button class="btn-tomar btn-galeria">🎭 Galería de sprites</button>
         ${avisosDisponibles() ? '<button class="btn-tomar btn-avisos"></button>' : ''}
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
-        <p class="titulo-version">v${VERSION}</p>
+        <p class="titulo-version">v${VERSION}${
+          finalVerdaderoDesbloqueado()
+            ? ' · <span class="titulo-final-verdadero" title="Has visto el final verdadero">🎲 Final verdadero desbloqueado</span>'
+            : ''
+        }</p>
       </div>
     `;
     app.appendChild(raiz);

@@ -5,11 +5,11 @@ import { el } from './util.ts';
 import { relicIcon } from './relic-art.ts';
 
 const ICONO_NODO: Record<string, string> = {
-  combate: '⚔️', elite: '💀', descanso: '🏕️', cofre: '🧰', evento: '❓', jefe: '👹',
+  combate: '⚔️', elite: '💀', descanso: '🏕️', cofre: '🧰', evento: '❓', jefe: '👹', taberna: '🍺',
 };
 const NOMBRE_NODO: Record<string, string> = {
   combate: 'Combate', elite: 'Élite', descanso: 'Campamento', cofre: 'Cofre',
-  evento: 'Evento', jefe: 'Jefe',
+  evento: 'Evento', jefe: 'Jefe', taberna: 'Taberna',
 };
 
 export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<NodoMapa> {
@@ -81,6 +81,12 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
       b.style.top = `${y}%`;
       b.dataset.tip = `<strong>${ICONO_NODO[n.tipo]} ${NOMBRE_NODO[n.tipo]}</strong>`;
       b.innerHTML = `<span>${ICONO_NODO[n.tipo]}</span>`;
+      if (run.mision?.nodo === n.id) {
+        // tavern quest target: scroll badge, soft glow and the rumour in the tooltip
+        b.classList.add('nodo-mision');
+        b.innerHTML += '<span class="mision-insignia">📜</span>';
+        b.dataset.tip += `<br><em>📜 Misión: ${run.mision.texto}</em><br>Complétalo para ganar una reliquia.`;
+      }
       if (n.visitado) b.classList.add('nodo-visitado');
       if (n.id === run.nodoActual) b.classList.add('nodo-actual');
       const esElegible = disponibles.includes(n);

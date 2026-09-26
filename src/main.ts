@@ -6,7 +6,8 @@ import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
 import { nuevaRun, avanzarCapitulo, entrarEnSala, cartaExtraEnSala } from './core/run.ts';
-import { ACTOS } from './core/enemigos.ts';
+import { ACTOS, DUNGEON_MASTER } from './core/enemigos.ts';
+import { desenlaceCampana } from './core/escena-final.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
 import { audio } from './fx/audio.ts';
@@ -19,7 +20,10 @@ import { avisoInstalacion } from './ui/instalar.ts';
 import { iniciarActualizaciones } from './ui/actualizacion.ts';
 import { elegirCarta, obtenerReliquia, pantallaDescanso } from './ui/recompensa.ts';
 import { pantallaEvento } from './ui/evento.ts';
+import { pantallaTaberna, panelMisionCumplida } from './ui/taberna.ts';
+import { revisarMision, completarMision } from './core/taberna.ts';
 import { pantallaFin } from './ui/fin.ts';
+import { pantallaFinalVerdadero } from './ui/final-verdadero.ts';
 import { iniciarTooltips, anuncio } from './ui/util.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
@@ -63,6 +67,7 @@ async function juego() {
     }
     let vivo = true;
     let campanaCompleta = false;
+    let escenaDM: 'victoria' | 'derrota' | null = null; // result of the Dungeon Master scene
 
     while (vivo && !campanaCompleta) {
       const cap = ACTOS[run.capitulo][run.escenario];
@@ -75,6 +80,8 @@ async function juego() {
       nodo.visitado = true;
       run.nodoActual = nodo.id;
       run.piso++;
+      // A tavern quest whose node is now out of reach is quietly lost
+      if (revisarMision(run)) anuncio('📜 Has dejado atrás el lugar del rumor: misión perdida', 'anuncio-botin');
       // Relics that react to the room you step into (Adventurer's Journal…)
       for (const nota of entrarEnSala(run, nodo.tipo, rng)) anuncio(nota, 'anuncio-botin');
 
@@ -105,6 +112,9 @@ async function juego() {
         case 'evento':
           await pantallaEvento(run, rng);
           break;
+        case 'taberna':
+          await pantallaTaberna(run, nodo, rng);
+          break;
         case 'jefe': {
           const resultado = await pantallaCombate(run, cap.jefe, rng, true, cap.nombre);
           if (resultado === 'derrota') {
@@ -117,10 +127,20 @@ async function juego() {
             avanzarCapitulo(run, rng);
             await pantallaCapitulo(ACTOS[run.capitulo][run.escenario]);
           } else {
+            // Final joke: the Dungeon Master has the last word. The run is already
+            // won, so the save goes now and his ray can only end in victory.
             campanaCompleta = true;
+            borrarGuardado();
+            escenaDM = await pantallaCombate(run, [DUNGEON_MASTER], rng, true, 'Detrás de la pantalla');
           }
           break;
         }
+      }
+
+      // Tavern quest completed: a relic on top of the room's normal reward
+      if (vivo && !campanaCompleta) {
+        const reliquia = completarMision(run, nodo, rng);
+        if (reliquia) await panelMisionCumplida(reliquia);
       }
 
       // Relics that add a card reward to some rooms (Treasure Map on chests)
@@ -130,10 +150,13 @@ async function juego() {
       if (vivo && !campanaCompleta) guardarRun(run);
     }
 
-    borrarGuardado(); // la run terminó: muerte o victoria
+    const desenlace = desenlaceCampana(campanaCompleta, escenaDM);
+    if (desenlace.borrarGuardado) borrarGuardado(); // la run terminó: muerte o victoria
     // el epílogo depende del jefe del escenario final que te haya tocado
     const actoFinal = ACTOS[ACTOS.length - 1][run.escenario];
-    await pantallaFin(campanaCompleta, run.clase, actoFinal.jefe[0].id);
+    // the secret: the DM fell to a natural 20 on Seduce, and the table finds a date
+    if (desenlace.finalVerdadero) await pantallaFinalVerdadero(run.clase);
+    else await pantallaFin(desenlace.victoria, run.clase, actoFinal.jefe[0].id, desenlace.epilogoDM);
   }
 }
 

@@ -66,7 +66,7 @@ export function showGallery(): Promise<void> {
       sec.innerHTML = `<h3 class="gallery-section-title">${section.title}${section.subtitle ? ` <small>${section.subtitle}</small>` : ''}</h3>`;
       const strip = el('div', 'gallery-stage');
       if (section.act !== undefined) strip.dataset.act = String(section.act);
-      else strip.dataset.act = section.cards[0]?.kind === 'invocation' ? '0' : 'heroes';
+      else strip.dataset.act = section.cards[0]?.kind === 'invocation' ? '0' : section.cards[0]?.kind === 'enemy' ? '2' : 'heroes';
       for (const card of section.cards) {
         const sprite = spriteFor(card, section.act ?? 0, stage);
         const fig = el('figure', 'gallery-card');
