@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.12.0';
+export const VERSION = '4.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,21 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '4.0.0',
+    fecha: '2026-09-26',
+    cambios: [
+      '🎨 Mazo y Mazmorra 4.0: un nuevo aspecto de arriba abajo, con héroes animados, monstruos ilustrados, fondos pintados y banda sonora original.',
+      '🌙 Los héroes son siluetas anónimas a contraluz con animaciones de ataque, conjuro y golpe, y las formas del druida también.',
+      '👹 Todo el bestiario, las invocaciones y los jefes están ilustrados y animados; los jefes son épicos, con auras y tormentas de partículas, y los dragones baten alas articuladas.',
+      '🃏 Las 152 cartas tienen una ilustración dibujada a mano, y las únicas de clase, Seducir y Deseo son full art animadas.',
+      '✨ Cada hechizo tiene su propio efecto: raíces que se enroscan en el enemigo, zarpazos, olas, runas que caen, escudos…',
+      '🖼️ Cada escenario tiene su fondo pintado: el campamento ogro, la guarida de los contrabandistas, la cripta, el templo oscuro, la guarida del dragón y el laberinto del Contemplador.',
+      '🎵 Banda sonora original con un leitmotiv del héroe: aventura en cada acto, temas épicos para los jefes y efectos de sonido realistas.',
+      '⚡ Nuevo motor gráfico WebGL, más fluido en el móvil, y la mano de cartas más abajo en el móvil apaisado para que la escena respire.',
+      '🎭 Galería de sprites en el menú principal y avisos opcionales de nuevas versiones mayores.',
+    ],
+  },
   {
     version: '3.12.0',
     fecha: '2026-09-26',

@@ -5,8 +5,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790424711.7508097,
-    "ast_hash": "62d9e67acaa0b1f15c18f03d4c63e300",
+    "mtime": 1790427179.5600958,
+    "ast_hash": "6c45db976b8abb5b5ba1df1206ca701e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790424711.7502525,
-    "ast_hash": "8e4c2d6fb2e07cb6b454d0e7f83ebc54",
+    "mtime": 1790427179.5596735,
+    "ast_hash": "e56be14513c7fc558325d3d1858c8f97",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {

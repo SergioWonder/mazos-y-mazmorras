@@ -176,6 +176,15 @@
 .clave-desc { display: block; font-size: 0.82rem; opacity: 0.85; }
 
 /* en pantallas estrechas, la carta y el cuadro se apilan */
+/* Landscape phones: the hand sits lower (only the card headers peek out) so the scene
+   gets more height and stays centred; tapping or dragging still shows the whole card. */
+@media (orientation: landscape) and (max-height: 540px) {
+  .zona-mano { height: 88px; padding-bottom: 0.2rem; }
+  .mano .carta { transform: rotate(var(--ang, 0deg)) translateY(calc(var(--alza, 0px) + 104px)); }
+  .orbe { width: 48px; height: 48px; font-size: 1.3rem; }
+  .btn-fin-turno { padding: 0.4rem 0.7rem; }
+}
+
 @media (orientation: portrait), (max-width: 640px) {
   .zoom-fila { flex-direction: column; gap: 0.4rem; max-height: 90vh; overflow-y: auto; }
   .zoom-carta .carta { transform: scale(1.2); margin: 26px 0 8px; }
