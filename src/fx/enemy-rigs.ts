@@ -5,6 +5,7 @@
 // particle emitters and per-action bursts on top.
 
 import { C, E, P, L, type BoneId, type Burst, type Emitter, type PartialPose, type PuppetRig, type Shape } from './puppet.ts';
+import { buildWings, type WingSpec } from './wing.ts';
 
 type Pt = [number, number];
 
@@ -380,10 +381,12 @@ function biped(id: string, o: BipedOpts): PuppetRig {
   if (o.cloak) shapes.push(P('cape', 'cloak', [[52, 75], [64, 73], [62, 100], [59, 122], [55, 116], [51, 124], [47, 115], [43, 121], [42, 104], [46, 88]]));
   if (o.quiver) shapes.push(P('cape', 'leather', [[46, 76], [52, 74], [50, 98], [44, 99]]), L('cape', 'wood', 47, 74, 44, 66, 1), L('cape', 'wood', 50, 74, 49, 65, 1), P('cape', 'band', [[42, 64], [46, 66], [44, 69]]));
   if (o.tail) shapes.push(L('cape', 'skin', 52, 100, 38, 112, 2.6), L('cape', 'skin', 38, 112, 30, 106, 2), P('cape', 'skin', [[28, 108], [27, 101], [33, 105]]));
-  if (o.wings) {
-    shapes.push(P('wingB', 'wing', [[56, 84], [44, 66], [36, 56], [36, 68], [28, 66], [32, 78], [26, 80], [40, 90]]));
-    shapes.push(L('wingB', 'skin', 56, 84, 36, 57, 1.2), L('wingB', 'skin', 56, 84, 29, 67, 1));
-  }
+  // bat wings: shoulder, forearm and three fingers with a membrane panel each
+  const wings = o.wings ? buildWings(
+    { side: 'B', shoulder: [56, 84], elbow: [47, 75], wrist: [44.5, 66], tips: [[36, 56], [28, 66], [26, 80]], root: [40, 90], bone: 'skin', width: 1.1 },
+    { side: 'F', shoulder: [62, 84], elbow: [65, 73], wrist: [57.5, 62], tips: [[56, 50], [70, 52], [78, 64]], root: [72, 86], bone: 'skin', width: 1.1 },
+  ) : null;
+  if (wings) shapes.push(...wings.back);
   // back arm + off-hand
   shapes.push(L('armB', armKey, shB[0], shB[1], shB[0] - 3, shB[1] + 11, b.aw), L('armB', armKey, shB[0] - 3, shB[1] + 11, handB[0], handB[1], b.aw * 0.9));
   shapes.push(...offhand(o.offhand ?? 'none', handB));
@@ -421,7 +424,7 @@ function biped(id: string, o: BipedOpts): PuppetRig {
   const w = weapon(o.weapon, handF);
   shapes.push(...w.shapes);
   shapes.push(C('armF', 'skin', handF[0], handF[1], b.aw * 0.62));
-  if (o.wings) shapes.push(P('wingF', 'wing', [[62, 84], [58, 64], [56, 50], [64, 60], [70, 52], [70, 68], [78, 64], [72, 86]]), L('wingF', 'skin', 62, 84, 56.5, 52, 1.2));
+  if (wings) shapes.push(...wings.front);
 
   const grip = GRIP[o.weapon];
   const hunch = o.hunch ?? 0;
@@ -467,7 +470,8 @@ function biped(id: string, o: BipedOpts): PuppetRig {
     slash: grip === 'thrust' ? [16, 30] : [20, 36],
     art: o.art ?? b.art,
     palette: o.palette,
-    pivots: { torso: hip, head: neck, armB: shB, armF: shF, legB: hipB, legF: hipF, weapon: handF, offhand: handB, cape: [56, 76], wingB: [56, 84], wingF: [62, 84] },
+    pivots: { torso: hip, head: neck, armB: shB, armF: shF, legB: hipB, legF: hipF, weapon: handF, offhand: handB, cape: [56, 76], wingB: [56, 84], wingF: [62, 84], ...wings?.pivots },
+    ...(wings ? { wings: wings.joints, flap: o.build === 'small' ? 11 : 7, flapBones: 'wings' as const } : {}),
     rest: { ...pose.rest, torso: (pose.rest.torso ?? 0) + hunch, head: (pose.rest.head ?? 0) + Math.min(6, hunch / 2) },
     windup: pose.windup,
     strike: pose.strike,
@@ -542,20 +546,28 @@ function bear(id: string, palette: Record<string, string>): PuppetRig {
   });
 }
 
-function drake(id: string, palette: Record<string, string>, veteran: boolean): PuppetRig {
+/** Wing landmarks of the drakes (young and veteran); Ignifax brings its own, bigger. */
+const DRAKE_WINGS: [WingSpec, WingSpec] = [
+  { side: 'B', shoulder: [56, 86], elbow: [48, 72], wrist: [48.5, 58], tips: [[42, 44], [30, 54], [24, 71]], root: [36, 86], bone: 'scaleD', width: 1.3 },
+  { side: 'F', shoulder: [62, 86], elbow: [67, 73], wrist: [59, 60], tips: [[58, 42], [73, 49], [82, 61]], root: [75, 83], bone: 'scaleD', width: 1.3 },
+];
+
+function drake(id: string, palette: Record<string, string>, veteran: boolean, wingSpecs: [WingSpec, WingSpec] = DRAKE_WINGS): PuppetRig {
+  const wings = buildWings(...wingSpecs);
   const extra: Shape[] = veteran
     ? [P('head', 'horn', [[80, 72], [66, 64], [76, 70]]), L('torso', 'ink', 50, 92, 58, 100, 0.8), L('torso', 'ink', 62, 90, 66, 99, 0.8), P('torso', 'horn', [[38, 92], [40, 85], [44, 91]])]
     : [];
   return finish(id, {
     accent: palette.eyeGlow ?? '#ffcf5a', style: 'melee', focus: [96, 74], focusBone: 'head', slash: [10, 22], slashAt: ['head', [98, 76]],
     flap: 14, flapBones: 'wings', art: 1.15, palette,
-    pivots: { torso: [44, 100], head: [76, 92], cape: [40, 97], armF: [78, 100], armB: [74, 100], legF: [48, 100], legB: [44, 100], wingB: [56, 86], wingF: [62, 86] },
+    pivots: { torso: [44, 100], head: [76, 92], cape: [40, 97], armF: [78, 100], armB: [74, 100], legF: [48, 100], legB: [44, 100], ...wings.pivots },
+    wings: wings.joints,
     rest: {},
-    windup: { rootX: -6, torso: -10, head: -22, wingF: -20, wingB: -20, armF: -10 },
-    strike: { rootX: 16, torso: 6, head: 18, armF: -35, legF: 20, wingF: 18, wingB: 18 },
+    // wings spread wide in the windup and beat down with the bite (the back wing opens backwards)
+    windup: { rootX: -6, torso: -10, head: -22, wingF: 6, wingB: -10, armF: -10 },
+    strike: { rootX: 16, torso: 6, head: 18, armF: -35, legF: 20, wingF: 16, wingB: -20 },
     shapes: [
-      P('wingB', 'wing', [[56, 86], [48, 62], [42, 44], [38, 58], [30, 54], [32, 70], [24, 71], [36, 86]]),
-      L('wingB', 'scaleD', 56, 86, 42, 46, 1.2), L('wingB', 'scaleD', 56, 86, 31, 56, 1), L('wingB', 'scaleD', 56, 86, 25, 71, 1),
+      ...wings.back,
       P('cape', 'scale', [[41, 94], [27, 96], [14, 104], [6, 112], [10, 114], [20, 108], [32, 104], [42, 102]]),
       P('cape', 'scale', [[7, 111], [1, 105], [3, 117], [12, 116]]),
       P('cape', 'horn', [[25, 96], [27, 91], [30, 96]]), P('cape', 'horn', [[16, 103], [17, 98], [21, 102]]),
@@ -582,8 +594,7 @@ function drake(id: string, palette: Record<string, string>, veteran: boolean): P
       C('head', 'eyeGlow', 94, 69.6, 1.5),
       L('armF', 'scale', 78, 100, 80, 114, 5.5), L('armF', 'scale', 80, 114, 78, 126, 5), E('armF', 'scale', 80, 127, 5.5, 2.4),
       P('armF', 'horn', [[85, 126], [88, 127.5], [85, 129]]),
-      P('wingF', 'wing', [[62, 86], [60, 62], [58, 42], [66, 57], [73, 49], [73, 65], [82, 61], [75, 83]]),
-      L('wingF', 'scaleD', 62, 86, 58.5, 44, 1.3), L('wingF', 'scaleD', 62, 86, 72.5, 51, 1.1), L('wingF', 'scaleD', 62, 86, 81, 62, 1.1),
+      ...wings.front,
     ],
   });
 }
@@ -917,7 +928,7 @@ const BOSSES: Record<string, PuppetRig> = {
       { bone: 'torso', at: [60, 90], effect: 'ascua', rate: 7, spread: 16 },
       { bone: 'weapon', at: [73.5, 72], effect: 'llama', rate: 6, spread: 6 },
       { bone: 'torso', at: [58, 74], effect: 'humo', rate: 2, spread: 10 },
-      { bone: 'wingF', at: [58, 52], effect: 'ascua', rate: 2 },
+      { bone: 'wingFF1', at: [56.5, 52], effect: 'ascua', rate: 2 },
     ],
     bursts: {
       attack: [{ bone: 'weapon', at: [73.5, 60], effect: 'aliento', scale: 0.5 }],
@@ -925,28 +936,25 @@ const BOSSES: Record<string, PuppetRig> = {
       death: [{ bone: 'torso', at: [60, 90], effect: 'aliento' }, { bone: 'torso', at: [60, 90], effect: 'muerte', scale: 2 }],
     },
   }),
-  ignifax: boss(drake('ignifax', { scale: '#8a1e14', scaleD: '#5e120c', belly: '#c89048', wing: '#3a0806', horn: '#e0cfa0', eyeGlow: '#ffd75a', lava: '#ff7a1a', fire: '#ffb347' }, true), {
-    art: 1.3, flap: 18, aura: '#ff5a1a',
-    back: [
-      P('wingB', 'wing', [[56, 86], [40, 50], [30, 22], [26, 44], [15, 39], [18, 62], [7, 64], [24, 86]]),
-      L('wingB', 'scaleD', 56, 86, 30, 24, 1.5), L('wingB', 'scaleD', 56, 86, 16, 41, 1.2), L('wingB', 'scaleD', 56, 86, 8, 64, 1.2),
-    ],
+  ignifax: boss(drake('ignifax', { scale: '#8a1e14', scaleD: '#5e120c', belly: '#c89048', wing: '#3a0806', horn: '#e0cfa0', eyeGlow: '#ffd75a', lava: '#ff7a1a', fire: '#ffb347' }, true, [
+    { side: 'B', shoulder: [56, 86], elbow: [45, 70], wrist: [44, 52], tips: [[30, 22], [15, 39], [7, 64]], root: [24, 86], bone: 'scaleD', width: 1.7, sag: 0.2 },
+    { side: 'F', shoulder: [62, 86], elbow: [70, 68], wrist: [60, 52], tips: [[64, 20], [82, 30], [96, 50]], root: [80, 86], bone: 'scaleD', width: 1.7, sag: 0.2 },
+  ]), {
+    art: 1.3, flap: 15, aura: '#ff5a1a',
     front: [
       E('torso', 'lava', 66, 100, 6.5, 4.5),
       L('torso', 'lava', 50, 104, 58, 101, 1), L('torso', 'lava', 58, 106, 64, 103, 0.9), L('torso', 'lava', 70, 102, 74, 105, 0.9),
       P('head', 'horn', [[76, 86], [71, 82], [77, 83]]), P('head', 'horn', [[78, 79], [73, 74], [79, 76]]), P('head', 'horn', [[80, 73], [76, 67], [81, 70]]),
       P('head', 'horn', [[84, 66], [66, 46], [80, 62]]),
       P('head', 'fire', [[90, 77.5], [103, 77.5], [98, 80.5]]),
-      P('wingF', 'wing', [[62, 86], [62, 54], [64, 20], [72, 42], [82, 30], [82, 56], [96, 50], [80, 86]]),
-      L('wingF', 'scaleD', 62, 86, 64, 22, 1.6), L('wingF', 'scaleD', 62, 86, 82, 32, 1.3), L('wingF', 'scaleD', 62, 86, 95, 51, 1.3),
     ],
     emitters: [
       { bone: 'torso', at: [60, 96], effect: 'ascua', rate: 14, spread: 20 },
       { bone: 'head', at: [104, 70], effect: 'humo', rate: 4 },
       { bone: 'head', at: [97, 79], effect: 'llama', rate: 6, spread: 2 },
       { bone: 'torso', at: [64, 106], effect: 'gota', rate: 3, spread: 8 },
-      { bone: 'wingF', at: [64, 24], effect: 'ascua', rate: 4, spread: 4 },
-      { bone: 'wingB', at: [30, 26], effect: 'ascua', rate: 3, spread: 4 },
+      { bone: 'wingFF1', at: [64, 24], effect: 'ascua', rate: 4, spread: 4 },
+      { bone: 'wingBF1', at: [30, 26], effect: 'ascua', rate: 3, spread: 4 },
       { bone: 'torso', at: [66, 100], effect: 'llama', rate: 3, spread: 3 },
     ],
     bursts: {

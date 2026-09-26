@@ -1,16 +1,26 @@
 import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
+import { groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-bank.ts';
 
-// Audio engine: sound effects synthesised with the Web Audio API (no files) and the
-// game's original soundtrack from `src/audio/` (see `fx/music-tracks.ts`), looped
-// sample-exactly with Web Audio. If a track fails to load, a chiptune loop generated
-// on the fly takes over, so the game is never silent. Everything starts after the
-// player's first gesture, as browsers require, and the mute state is remembered.
+// Audio engine: recorded-style sound effects from `src/audio/sfx/` (synthesised offline
+// by `scripts/sfx/make_sfx.py`, see `fx/sfx-bank.ts`) and the game's original
+// soundtrack from `src/audio/` (see `fx/music-tracks.ts`), looped sample-exactly with
+// Web Audio. If an effect file has not loaded yet, a Web Audio recipe plays instead; if
+// a track fails to load, a chiptune loop generated on the fly takes over, so the game
+// is never silent. Everything starts after the player's first gesture, as browsers
+// require, and the mute state is remembered.
 
 const CLAVE_SILENCIO = 'mazmorra-audio-silencio';
 
 // Hashed URLs of the soundtrack files: a new version of a track gets a new URL, so
 // the service worker's cache-first copy of the old one is never served again.
 const TRACK_URLS = import.meta.glob('../audio/*.mp3', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+
+// Sound-effect files grouped by name (`tajo-1.mp3`, `tajo-2.mp3`… are variations).
+const SFX_FILES = groupSfxFiles(
+  import.meta.glob('../audio/sfx/*.mp3', { eager: true, query: '?url', import: 'default' }) as Record<string, string>,
+);
+// The files are mastered close to full scale; this brings them to the effects bus level.
+const SFX_FILE_GAIN = 0.5;
 
 /** Receta de un efecto: capas de tono y/o ruido. */
 interface Capa {
@@ -155,6 +165,9 @@ class MotorAudio {
   private pausada = false; // pausada por estar en segundo plano
   private visibilidadEnganchada = false;
   private boton: HTMLButtonElement | null = null;
+  private sfxBuffers = new Map<string, AudioBuffer[]>(); // decoded effect variations
+  private sfxCargando = false;
+  private ultimaVariante = new Map<string, number>();
 
   /** Crea el contexto en el primer gesto y lo reanuda (lo exige el navegador). */
   desbloquear() {
@@ -171,14 +184,50 @@ class MotorAudio {
       this.busMusica = this.ctx.createGain();
       this.busMusica.gain.value = 0.5;
       this.busMusica.connect(this.maestro);
+      this.cargarSfx();
     }
     if (this.ctx.state === 'suspended') void this.ctx.resume();
+  }
+
+  /** Downloads and decodes every effect file once; each sound becomes playable as soon as it is ready. */
+  private cargarSfx() {
+    if (this.sfxCargando || !this.ctx) return;
+    this.sfxCargando = true;
+    for (const [nombre, urls] of SFX_FILES) {
+      Promise.all(urls.map((url) => fetch(url)
+        .then((r) => { if (!r.ok) throw new Error(r.statusText); return r.arrayBuffer(); })
+        .then((datos) => new Promise<AudioBuffer>((ok, ko) => this.ctx!.decodeAudioData(datos, ok, ko)))
+        .catch(() => null)))
+        .then((bufs) => {
+          const listos = bufs.filter((b): b is AudioBuffer => b !== null);
+          if (listos.length) this.sfxBuffers.set(nombre, listos);
+        });
+    }
+  }
+
+  /** Plays one variation of a decoded effect with a slight random change of pitch and volume. */
+  private reproducirArchivo(nombre: string): boolean {
+    const bufs = this.sfxBuffers.get(nombre);
+    if (!bufs?.length || !this.ctx) return false;
+    const i = pickVariant(bufs.length, this.ultimaVariante.get(nombre) ?? -1, Math.random);
+    this.ultimaVariante.set(nombre, i);
+    const { rate, gain } = playbackJitter(Math.random);
+    const fuente = this.ctx.createBufferSource();
+    fuente.buffer = bufs[i];
+    fuente.playbackRate.value = rate;
+    const vol = this.ctx.createGain();
+    vol.gain.value = gain * SFX_FILE_GAIN;
+    fuente.connect(vol).connect(this.busSfx);
+    fuente.start();
+    return true;
   }
 
   /** Dispara un efecto de sonido por nombre (admite los mismos nombres que las partículas). */
   sfx(nombre: string) {
     this.desbloquear();
     if (!this.ctx || this.silenciado) return;
+    if (this.reproducirArchivo(resolveSfx(nombre))) return;
+    // fallback while the files load (or if they fail): the synthesised recipe
     const receta = RECETAS[nombre] ?? RECETAS.carta;
     const t0 = this.ctx.currentTime;
     for (const capa of receta) this.reproducirCapa(capa, t0 + (capa.retardo ?? 0));
@@ -435,6 +484,7 @@ class MotorAudio {
     this.desbloquear();
     if (!this.ctx || this.silenciado) return;
     this.sfx(fx); // golpe base existente
+    if (this.reproducirArchivo('rara')) return; // recorded flourish on top of the card sound
     const ARPEGIOS: Record<string, { notas: number[]; onda: OscillatorType; filtro: number }> = {
       luna:      { notas: [69, 72, 76, 81, 84], onda: 'sine',     filtro: 5000 },
       divino:    { notas: [72, 76, 79, 84, 88], onda: 'triangle', filtro: 6000 },

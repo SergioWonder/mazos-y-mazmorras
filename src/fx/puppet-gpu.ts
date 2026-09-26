@@ -10,8 +10,9 @@ export const MAX_POLY = 16;
 /** Bone slot order in the bones uniform array. */
 export const BONE_INDEX: Record<BoneId, number> = {
   root: 0, torso: 1, cape: 2, head: 3, armB: 4, offhand: 5, armF: 6, weapon: 7, legB: 8, legF: 9, wingB: 10, wingF: 11,
+  wingBArm: 12, wingBF1: 13, wingBF2: 14, wingBF3: 15, wingFArm: 16, wingFF1: 17, wingFF2: 18, wingFF3: 19,
 };
-export const BONE_COUNT = 12;
+export const BONE_COUNT = 20;
 
 export const SHAPE_CODE = { c: 0, e: 1, l: 2, p: 3 } as const;
 export const FLAG = { emissive: 1, ink: 2, eye: 4 } as const;

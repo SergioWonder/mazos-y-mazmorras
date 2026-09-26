@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '3.11.1';
+export const VERSION = '3.12.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '3.12.0',
+    fecha: '2026-09-26',
+    cambios: [
+      '✨ Cada hechizo tiene su efecto propio: las raíces se enroscan en el enemigo, la zarpa deja tres surcos, la ola rompe, la runa de condena cae del cielo…',
+      '🔊 Efectos de sonido nuevos y realistas: acero, golpes, fuego, agua, magia y rugidos.',
+      '🐉 Las alas de los dragones y los demonios se pliegan y se despliegan de forma articulada.',
+      '🧙 El héroe se ve más grande, y en la pantalla de inicio cada clase aparece con su silueta animada.',
+      '📱 En el móvil apaisado, la vida y los estados de los jefes ya no se cortan.',
+    ],
+  },
   {
     version: '3.11.1',
     fecha: '2026-09-25',

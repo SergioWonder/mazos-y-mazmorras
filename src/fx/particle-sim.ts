@@ -1,14 +1,29 @@
 // Particle simulation (no DOM): effect presets, spawning and stepping. The
 // renderers (WebGL, or canvas 2D as fallback) only draw the resulting list.
 
-export type ParticleShape = 'circulo' | 'chispa' | 'hoja' | 'estrella' | 'corazon';
+export type ParticleShape = 'circulo' | 'chispa' | 'hoja' | 'estrella' | 'corazon'
+  // spell shapes (spell-fx.ts): stretched along x by `stretch`, tuned by `param`
+  | 'capsula' | 'colmillo' | 'anillo' | 'arco' | 'media-luna' | 'runa' | 'escudo' | 'gota' | 'burbuja' | 'haz' | 'calavera' | 'disco';
 
-export interface Particle {
-  x: number; y: number; vx: number; vy: number;
-  life: number; maxLife: number;
+/** Anything the fx canvas draws: simulated particles and spell sprites. */
+export interface Sprite {
+  x: number; y: number;
   size: number; colour: string; shape: ParticleShape;
-  gravity: number; spin: number; angle: number;
+  angle: number;
   glow?: boolean;
+  /** Explicit opacity (spell sprites); particles fade with their life instead. */
+  alpha?: number;
+  /** Half-length / half-thickness ratio for the stretched spell shapes. */
+  stretch?: number;
+  /** Shape parameter (taper, ring thickness, arc span, crescent bite…). */
+  param?: number;
+  life?: number; maxLife?: number;
+}
+
+export interface Particle extends Sprite {
+  vx: number; vy: number;
+  life: number; maxLife: number;
+  gravity: number; spin: number;
 }
 
 interface EffectPreset {
@@ -127,4 +142,5 @@ export function stepParticles(list: Particle[], dt: number) {
 }
 
 /** Fade-out alpha of a particle over the second half of its life. */
-export const particleAlpha = (p: Particle) => Math.min(1, p.life / (p.maxLife * 0.5));
+export const particleAlpha = (p: Sprite) =>
+  p.alpha ?? (p.life !== undefined && p.maxLife ? Math.min(1, p.life / (p.maxLife * 0.5)) : 1);

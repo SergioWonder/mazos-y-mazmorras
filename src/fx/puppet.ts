@@ -3,9 +3,13 @@
 // shapes attached to a dozen bones; a pose is a set of bone angles and the
 // renderers (ui/puppet-sprite.ts) only paint the shapes with each bone's matrix.
 
+import { articulateWings, WING_HZ } from './wing.ts';
+
 export type BoneId =
   | 'root' | 'torso' | 'cape' | 'head' | 'armB' | 'offhand' | 'armF' | 'weapon' | 'legB' | 'legF'
-  | 'wingB' | 'wingF';
+  | 'wingB' | 'wingF'
+  // articulated wings: forearm and fingers hang from each shoulder (fx/wing.ts)
+  | 'wingBArm' | 'wingBF1' | 'wingBF2' | 'wingBF3' | 'wingFArm' | 'wingFF1' | 'wingFF2' | 'wingFF3';
 
 /** Shape in bind-pose coordinates (viewBox 140×135, facing right, feet at y≈128). */
 export type Shape =
@@ -17,6 +21,8 @@ export type Shape =
 export interface Pose {
   rootX: number; torsoY: number; torso: number; head: number; armF: number; armB: number;
   weapon: number; offhand: number; legF: number; legB: number; cape: number; wingB: number; wingF: number;
+  wingBArm: number; wingBF1: number; wingBF2: number; wingBF3: number;
+  wingFArm: number; wingFF1: number; wingFF2: number; wingFF3: number;
 }
 export type PartialPose = Partial<Pose>;
 
@@ -39,6 +45,18 @@ export interface Burst {
   scale?: number;
 }
 
+export type WingSide = 'B' | 'F';
+/** Joint data of an articulated wing (built by fx/wing.ts). */
+export interface WingJoints {
+  /** +1 when positive rotations lower the wing (tips in front of the shoulder), -1 otherwise. */
+  stroke: 1 | -1;
+  shoulder: [number, number];
+  /** Rotation of each joint when the wing is fully folded (degrees). */
+  fold: Partial<Record<BoneId, number>>;
+  /** Finger tips, in their bone's bind coordinates. */
+  tips: { bone: BoneId; at: [number, number] }[];
+}
+
 export interface PuppetRig {
   /** Glow colour of eyes, magic and effects (also the silhouette rim). */
   accent: string;
@@ -58,6 +76,8 @@ export interface PuppetRig {
   flap?: number;
   /** Which bones flap: the arms (birds) or the wings (drakes, imps). */
   flapBones?: 'arms' | 'wings';
+  /** Articulated wings (shoulder, forearm, fingers and membrane panels). */
+  wings?: Partial<Record<WingSide, WingJoints>>;
   /** Floating creatures bob up and down instead of breathing in place. */
   hover?: number;
   /** Head size relative to the drawing (below 1 = less chibi, more sombre). */
@@ -120,12 +140,21 @@ const DEFAULT_PIVOTS: Record<BoneId, [number, number]> = {
   root: [58, 100], torso: [58, 100], cape: [56, 74], head: [60, 74],
   armB: [52, 78], armF: [65, 78], legB: [54, 100], legF: [63, 100],
   weapon: [68, 97], offhand: [49, 96], wingB: [56, 84], wingF: [62, 84],
+  wingBArm: [50, 70], wingBF1: [44, 58], wingBF2: [44, 58], wingBF3: [44, 58],
+  wingFArm: [60, 70], wingFF1: [60, 58], wingFF2: [60, 58], wingFF3: [60, 58],
 };
 const PARENT: Record<BoneId, BoneId | null> = {
   root: null, torso: 'root', cape: 'torso', head: 'torso', armB: 'torso', offhand: 'armB',
   armF: 'torso', weapon: 'armF', legB: 'root', legF: 'root', wingB: 'torso', wingF: 'torso',
+  wingBArm: 'wingB', wingBF1: 'wingBArm', wingBF2: 'wingBArm', wingBF3: 'wingBArm',
+  wingFArm: 'wingF', wingFF1: 'wingFArm', wingFF2: 'wingFArm', wingFF3: 'wingFArm',
 };
-const BONE_ORDER: BoneId[] = ['root', 'torso', 'cape', 'head', 'armB', 'offhand', 'armF', 'weapon', 'legB', 'legF', 'wingB', 'wingF'];
+const BONE_ORDER: BoneId[] = [
+  'root', 'torso', 'cape', 'head', 'armB', 'offhand', 'armF', 'weapon', 'legB', 'legF', 'wingB', 'wingF',
+  'wingBArm', 'wingBF1', 'wingBF2', 'wingBF3', 'wingFArm', 'wingFF1', 'wingFF2', 'wingFF3',
+];
+/** Parent of a bone in the skeleton (null for the root). */
+export const boneParent = (b: BoneId): BoneId | null => PARENT[b];
 
 // ── 2D affine matrices [a b c d e f] (SVG convention) ────────────────────────
 export type Matrix = [number, number, number, number, number, number];
@@ -162,6 +191,7 @@ export function puppetBones(rig: PuppetRig, p: Pose): Record<BoneId, Matrix> {
 // ── Animation ────────────────────────────────────────────────────────────────
 const ZERO: Pose = {
   rootX: 0, torsoY: 0, torso: 0, head: 0, armF: 0, armB: 0, weapon: 0, offhand: 0, legF: 0, legB: 0, cape: 0, wingB: 0, wingF: 0,
+  wingBArm: 0, wingBF1: 0, wingBF2: 0, wingBF3: 0, wingFArm: 0, wingFF1: 0, wingFF2: 0, wingFF3: 0,
 };
 const smooth = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
@@ -226,7 +256,9 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
       // death: recoil, collapse backwards, grey out and fade away for good
       const fallen: PartialPose = {
         rootX: -6, torsoY: 9, torso: base.torso - 26, head: base.head - 34, armF: base.armF + 45,
-        armB: base.armB + 35, legF: -18, legB: 14, wingF: 45, wingB: 40, cape: 20,
+        armB: base.armB + 35, legF: -18, legB: 14, cape: 20,
+        // wings drop: positive is downwards unless the wing opens backwards
+        wingF: 45 * (rig.wings?.F?.stroke ?? 1), wingB: 40 * (rig.wings?.B?.stroke ?? 1),
       };
       p = interpolate([[0, {}], [0.1, { rootX: -8, torso: base.torso - 14, head: base.head - 12 }, easeOut], [0.5, fallen], [1, fallen]], q, base);
       fx.flash = q < 0.1;
@@ -240,8 +272,9 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   p.torsoY += b * 0.9 * calm; p.torso += b * 1.2 * calm; p.head -= b * 1.5 * calm;
   p.armF += b * 2.5 * calm; p.armB -= b * 2.5 * calm; p.weapon -= b * 2 * calm;
   if (rig.hover) p.torsoY += Math.sin(t * 2 * Math.PI * 0.55 + rig.phase) * rig.hover;
-  if (rig.flap) {
-    const w = Math.sin(t * 2 * Math.PI * (rig.flapBones === 'wings' ? 1.1 : 1.6) + rig.phase) * rig.flap * (action ? 0.5 : 1);
+  if (rig.wings) articulateWings(rig, p, t, action);
+  else if (rig.flap) {
+    const w = Math.sin(t * 2 * Math.PI * (rig.flapBones === 'wings' ? WING_HZ : 1.6) + rig.phase) * rig.flap * (action ? 0.5 : 1);
     if (rig.flapBones === 'wings') { p.wingF += w; p.wingB += w * 0.9; } else { p.armF += w; p.armB += w * 0.9; p.torsoY -= w * 0.08; }
   }
   // cape/scarf/tail hangs from its pivot and trails behind forward motion

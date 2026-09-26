@@ -23,6 +23,8 @@ body.arrastre-activo .zona-mano,
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  /* lets the fighters size themselves against the scene height (cqh) */
+  container-type: size;
 }
 
 /* empalizada del asentamiento: siluetas con gradientes */
@@ -145,7 +147,13 @@ body.arrastre-activo .zona-mano,
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
 .sprite-marioneta { display: block; height: auto; aspect-ratio: 140 / 135; overflow: visible; }
-.sprite-silueta .sprite-marioneta { width: 8.6rem; }
+/* Short scenes (landscape phones): a big boss would push its health bar and statuses
+   below the scene edge. The sprite gives way, leaving room for the top bar, intent,
+   name, trait, health bar and statuses (~180px). */
+.escenario .sprite-marioneta { max-width: max(3.4rem, calc((100cqh - 180px) * 140 / 135)); }
+/* the hero (and druid forms) only carry the health bar and statuses underneath */
+.escenario .sprite-silueta .sprite-marioneta { max-width: max(4.4rem, calc((100cqh - 125px) * 140 / 135)); }
+.sprite-silueta .sprite-marioneta { width: 11.4rem; }
 /* enemigos e invocaciones ilustrados: la marioneta ya respira y ataca sola */
 .sprite.sprite-ilustrado { font-size: 0; line-height: 0; animation: none; filter: none; }
 .sprite-enemigo.sprite-ilustrado .sprite-marioneta { width: calc(7.6rem * var(--esc, 1)); }

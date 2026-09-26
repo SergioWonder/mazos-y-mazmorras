@@ -136,13 +136,80 @@ export function pantallaCombate(
     };
     const elemInvocacion = (): HTMLElement | null => raiz.querySelector('.invocacion');
 
+    // ── Spell VFX: each card fx key has its own composition (fx/spell-fx.ts) ─
+    /** Effect of the card being played and who has already shown it. */
+    let hechizoCarta: { clave: string; modo: string; objetivo?: EnemigoCombate; hecho: Set<Luchador> } | null = null;
+    /** Enemy acting right now (source of breaths and eye rays) and its move. */
+    let actor: { e: EnemigoCombate; movimiento: string } | null = null;
+    const ESTADO_HECHIZO: Partial<Record<EstadoId, string>> = { veneno: 'veneno', raices: 'raices', condena: 'condena' };
+    const TINTE_RAYO: [RegExp, string][] = [
+      [/carmes/i, '#ff3b3b'], [/áureo|aureo/i, '#ffd75a'], [/espectral/i, '#6bd8ff'],
+      [/pútrido|putrido/i, '#7cff5a'], [/necr/i, '#b46bff'],
+    ];
+    const cajaDe = (elem: HTMLElement | null) => {
+      if (!elem) return { x: window.innerWidth / 2 - 60, y: window.innerHeight / 2 - 80, w: 120, h: 160 };
+      // the figure itself, not its name plate and health bar
+      const r = (elem.querySelector('.sprite') ?? elem).getBoundingClientRect();
+      return { x: r.left, y: r.top, w: r.width, h: r.height };
+    };
+    /** Casts spell `clave` on a fighter (from the hero when the receiver is an enemy). */
+    const lanzarHechizo = (clave: string, obj: Luchador, desde?: { x: number; y: number }, tinte?: string) => {
+      const heroe = obj === combate.jugador;
+      return fx.hechizo(clave, cajaDe(elemDe(obj)), {
+        desde: desde ?? (heroe ? undefined : centroDe(elemDe(combate.jugador))), mirando: heroe ? 1 : -1, tinte,
+      });
+    };
+    const hechizoAlHeroe = (h: NonNullable<typeof hechizoCarta>) =>
+      fx.anclaHechizo(h.clave) === 'self' || h.modo === 'ninguno' || h.modo === 'propio';
+    /** Shows the card's effect on `obj` if it is one of its receivers and has not shown it yet. */
+    const hechizoPara = (obj: Luchador): boolean => {
+      const h = hechizoCarta;
+      if (!h || h.hecho.has(obj) || !fx.tieneHechizo(h.clave)) return false;
+      if (h.hecho.size > 0 && (obj === combate.jugador || h.hecho.has(combate.jugador))) return false;
+      if (h.modo === 'enemigo' && obj !== combate.jugador && h.objetivo && obj !== h.objetivo) return false;
+      h.hecho.add(obj);
+      lanzarHechizo(h.clave, obj);
+      return true;
+    };
+    /** Card starts resolving: defences and buffs light up on the hero at once. */
+    const abrirHechizoCarta = (def: CartaDef, objetivo?: EnemigoCombate) => {
+      actor = null;
+      hechizoCarta = def.fx ? { clave: def.fx, modo: def.objetivo, objetivo, hecho: new Set() } : null;
+      if (hechizoCarta && fx.anclaHechizo(hechizoCarta.clave) === 'self') hechizoPara(combate.jugador);
+    };
+    /** Card resolved: if nothing showed its effect yet, show it on its natural receivers. */
+    const cerrarHechizoCarta = () => {
+      const h = hechizoCarta;
+      hechizoCarta = null;
+      if (!h || h.hecho.size > 0 || !fx.tieneHechizo(h.clave)) return;
+      if (hechizoAlHeroe(h)) lanzarHechizo(h.clave, combate.jugador);
+      else if (h.modo === 'enemigo' && h.objetivo) lanzarHechizo(h.clave, h.objetivo);
+      else for (const e of combate.enemigos.filter((x) => x.vivo)) lanzarHechizo(h.clave, e);
+    };
+    /** Hit effect: its own spell when there is one. Returns false to fall back to particles. */
+    const hechizoGolpe = (obj: Luchador, efecto: string): boolean => {
+      if (efecto === 'aliento' && actor && obj === combate.jugador) {
+        // Ignifax's breath pours from the mouth; the Beholder's rays leave its eye
+        const r = elemDe(actor.e)?.getBoundingClientRect();
+        const rayo = /^(rayo|mirada)/i.test(actor.movimiento);
+        const desde = r ? { x: r.left + r.width * (rayo ? 0.4 : 0.22), y: r.top + r.height * (rayo ? 0.3 : 0.32) } : undefined;
+        const tinte = rayo ? TINTE_RAYO.find(([re]) => re.test(actor!.movimiento))?.[1] ?? '#ff5ad8' : undefined;
+        return lanzarHechizo(rayo ? 'rayoOcular' : 'aliento', obj, desde, tinte);
+      }
+      // thorns also deal 'raices' damage: only real roots (the card, or roots crushing) coil
+      if (efecto === 'raices' && hechizoCarta?.clave !== 'raices' && !(actor && obj === actor.e)) return false;
+      if (!fx.tieneHechizo(efecto)) return false;
+      if (hechizoCarta && efecto === hechizoCarta.clave) hechizoCarta.hecho.add(obj);
+      return lanzarHechizo(efecto, obj, obj === combate.jugador && actor ? centroDe(elemDe(actor.e)) : undefined);
+    };
+
     const ui: Presentador = {
       render,
       espera,
       async fxGolpe(obj, dano, efecto = 'tajo') {
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
-        fx.emitir(efecto, x, y);
+        if (!hechizoGolpe(obj, efecto)) fx.emitir(efecto, x, y);
         audio.sfx(dano > 0 ? efecto : 'bloqueo');
         if (dano > 0) {
           if (obj === combate.jugador) spriteActual().play('hit');
@@ -159,8 +226,9 @@ export function pantallaCombate(
       },
       async fxBloqueo(obj, n) {
         const elem = elemDe(obj);
-        const { x, y } = centroDe(elem);
-        fx.emitir('bloqueo', x, y);
+        // the card's own effect (a shield, bark, moonlight…) stands for the block it grants
+        const yaMostrado = obj === combate.jugador && !!hechizoCarta?.hecho.has(obj);
+        if (!yaMostrado && !hechizoPara(obj)) lanzarHechizo('bloqueo', obj);
         audio.sfx('bloqueo');
         numeroFlotante(elem, `+${n} 🛡`, 'bloqueo');
         render();
@@ -169,6 +237,11 @@ export function pantallaCombate(
       async fxEstado(obj, estado, n) {
         const elem = elemDe(obj);
         const signo = n > 0 ? '+' : '';
+        if (!hechizoPara(obj)) {
+          // poison, roots and doom from other sources (relics, powers, enemies) show theirs too
+          const clave = n > 0 ? ESTADO_HECHIZO[estado] : undefined;
+          if (clave && !(hechizoCarta?.clave === clave && hechizoCarta.hecho.has(obj))) lanzarHechizo(clave, obj);
+        }
         audio.sfx('estado');
         numeroFlotante(elem, `${ICONO_ESTADO[estado]} ${signo}${n} ${NOMBRE_ESTADO[estado]}`, 'estado');
         render();
@@ -177,6 +250,7 @@ export function pantallaCombate(
       async fxCura(obj, n) {
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
+        hechizoPara(obj);
         fx.emitir('cura', x, y);
         audio.sfx('cura');
         numeroFlotante(elem, `+${n}`, 'cura');
@@ -205,6 +279,7 @@ export function pantallaCombate(
         await espera(350);
       },
       async fxEnemigoActua(e) {
+        actor = { e, movimiento: e.intencion.nombre ?? '' };
         const s = spriteEnemigo(e);
         if (s) {
           // the damage waits for the blow (or the spell) to land
@@ -225,7 +300,7 @@ export function pantallaCombate(
       },
       async fxParticulas(obj, efecto) {
         const { x, y } = centroDe(elemDe(obj));
-        fx.emitir(efecto, x, y);
+        if (!hechizoGolpe(obj, efecto)) fx.emitir(efecto, x, y);
         render();
         await espera(220);
       },
@@ -644,7 +719,12 @@ export function pantallaCombate(
       await animarLanzamiento(inst, elem);
       const restante = impacto - (performance.now() - inicio);
       if (restante > 0) await espera(restante);
-      await combate.jugarCarta(inst, objetivo);
+      abrirHechizoCarta(defDe(inst), objetivo);
+      try {
+        await combate.jugarCarta(inst, objetivo);
+      } finally {
+        cerrarHechizoCarta();
+      }
     }
 
     /** Vista ampliada de una carta (toque en móvil: leer, no jugar). */

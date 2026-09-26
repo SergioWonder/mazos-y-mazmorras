@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790368104.2697713,
-    "ast_hash": "817b232ce13aa538764ad7d02a85d454",
+    "mtime": 1790424711.7508097,
+    "ast_hash": "62d9e67acaa0b1f15c18f03d4c63e300",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790363956.0290225,
-    "ast_hash": "9a3747a03e288b031c93985a13394652",
+    "mtime": 1790424006.5558388,
+    "ast_hash": "5779f311e0ea3978d65e64b075f577ec",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -70,8 +70,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
-    "mtime": 1790363956.0255897,
-    "ast_hash": "209621fd705b11f4d371fc32e970cb59",
+    "mtime": 1790422651.4601593,
+    "ast_hash": "2a9edcf766285cf09bdc3f8e451dcaf4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/dado.ts": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
-    "mtime": 1790352799.874262,
-    "ast_hash": "af231065589f4d89c7cdaea379890e93",
+    "mtime": 1790423494.5534987,
+    "ast_hash": "80f846fb58f4a991144c6667c953b13b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790368062.8311594,
-    "ast_hash": "7552e0ddc125cacd266e288c1308b329",
+    "mtime": 1790423961.9174488,
+    "ast_hash": "2ee1b437a582ccc4e1fcc241b41cd99f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -160,8 +160,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/titulo.ts": {
-    "mtime": 1790345576.630437,
-    "ast_hash": "1d4d415c9f5ce2380d5284d999f33372",
+    "mtime": 1790424020.9863987,
+    "ast_hash": "0ccf71741e3a2e8171c4044a4ba296b3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
@@ -170,8 +170,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790368104.2665904,
-    "ast_hash": "4929bee8fcb90a53f6393609a2009b82",
+    "mtime": 1790424711.7502525,
+    "ast_hash": "8e4c2d6fb2e07cb6b454d0e7f83ebc54",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790367106.9022605,
-    "ast_hash": "b7dd5c23cb4f59c672dc399eef2aa1e6",
+    "mtime": 1790424711.7494595,
+    "ast_hash": "2567abc6319afd331af37785718c5f84",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -235,13 +235,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/enemy-rigs.ts": {
-    "mtime": 1790343964.3091564,
-    "ast_hash": "7563b668c15974976c7d35da208ea5e4",
+    "mtime": 1790423199.342868,
+    "ast_hash": "d9233b6fcb4187261d4450ac31441796",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet.ts": {
-    "mtime": 1790346602.288213,
-    "ast_hash": "88ff0a240ca906dc171f3ce849f8e0be",
+    "mtime": 1790422388.1217802,
+    "ast_hash": "871c9a295ba18060c946a3a1ccd3369a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
@@ -260,18 +260,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-gl.ts": {
-    "mtime": 1790343579.1546388,
-    "ast_hash": "9df2a1322b75605b3af2e09bde9cb9d8",
+    "mtime": 1790423302.907837,
+    "ast_hash": "324ebdddd975032ac58acead7d169fa9",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-sim.ts": {
-    "mtime": 1790352655.7774274,
-    "ast_hash": "41258594cb54c3ba1295c3168abf535c",
+    "mtime": 1790423243.5888398,
+    "ast_hash": "cc3e93b0ace13ea43f20c9236cfa7d61",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet-gpu.ts": {
-    "mtime": 1790341389.8742228,
-    "ast_hash": "51ae4c133a3f6d6700cb3b1f633da0fa",
+    "mtime": 1790422394.0810113,
+    "ast_hash": "c2356c54a1a5ff43193c00e9c445ce4e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-stage.ts": {
@@ -1275,8 +1275,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/audio/LEEME.md": {
-    "mtime": 1790363956.0298958,
-    "ast_hash": "8a069caa134c52173d17ce0bc448337a",
+    "mtime": 1790422699.3331008,
+    "ast_hash": "91c153ea9752281333faaed227fee5b0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/asentamiento-ogro-movil.webp": {
@@ -1372,6 +1372,236 @@
   "/Users/sergio/WonderBits/personal/videogame/src/audio/menu.mp3": {
     "mtime": 1790355976.3481262,
     "ast_hash": "921ecd4a19a11440e1cc738ed4a33a10",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/make_sfx.py": {
+    "mtime": 1790422584.7386506,
+    "ast_hash": "6816cf23009441a5f1a0c79ceaca9431",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/sfxlib.py": {
+    "mtime": 1790422525.194095,
+    "ast_hash": "3e6e3f1e6d37c05687d69be4b313c295",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/sfx-bank.ts": {
+    "mtime": 1790422108.8257492,
+    "ast_hash": "dfecab9a3c098bc74e464a27e18e881d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/wing.ts": {
+    "mtime": 1790423199.3375988,
+    "ast_hash": "9859c50d4fd28758da86e539d3462405",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/.claude/agents/artista-particulas.md": {
+    "mtime": 1790421952.2314389,
+    "ast_hash": "2a6e2a9d3c65b07836d7b5c08b53b2e9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/.claude/agents/disenador-sfx.md": {
+    "mtime": 1790421936.736193,
+    "ast_hash": "e20fa2d0a6d05fd5fdb3270fc1611c3c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/abisal.mp3": {
+    "mtime": 1790422607.2586665,
+    "ast_hash": "464ccae93171e4366f3ab08d6cd51c46",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/aliento.mp3": {
+    "mtime": 1790422621.3597698,
+    "ast_hash": "a0ae186f718e506d73c8440564b43c1e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/aullido.mp3": {
+    "mtime": 1790422618.941492,
+    "ast_hash": "516c371f475403598433f0e10a248ad9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/bloqueo-1.mp3": {
+    "mtime": 1790422590.8216622,
+    "ast_hash": "6ae0183cc24e13d7ae5308f3c3698e57",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/bloqueo-2.mp3": {
+    "mtime": 1790422592.0318244,
+    "ast_hash": "ea8b0d8211bc3a1b6cd2b0b66d7e24ff",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/bloqueo-3.mp3": {
+    "mtime": 1790422593.2248225,
+    "ast_hash": "b5a2853263890912d5a5d6702300fa51",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/carta-1.mp3": {
+    "mtime": 1790422593.4351907,
+    "ast_hash": "a9d22a4afc7155201471485954b85879",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/carta-2.mp3": {
+    "mtime": 1790422593.54183,
+    "ast_hash": "b06be1d4bb29b62c0bc2af809c85b72c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/carta-3.mp3": {
+    "mtime": 1790422593.6418202,
+    "ast_hash": "debdc6252d34e059ff75da13af501a64",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/condena.mp3": {
+    "mtime": 1790422610.0647163,
+    "ast_hash": "68693a1d0181f3c8efc06e90072917e7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/corazones.mp3": {
+    "mtime": 1790422620.2851849,
+    "ast_hash": "ef3fa34d93f0c60073e21d6e3a8c79f9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cura.mp3": {
+    "mtime": 1790422594.8737488,
+    "ast_hash": "db0bafe90a0ae0258f95f363a45dfea8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/divino.mp3": {
+    "mtime": 1790422599.3722286,
+    "ast_hash": "95fcccd19c8a4f508e1a30a3f6f9a8cd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/estado.mp3": {
+    "mtime": 1790422602.8206363,
+    "ast_hash": "49a4d0af84e73cc068a62cb3f60ece62",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/estrellas.mp3": {
+    "mtime": 1790422604.9357958,
+    "ast_hash": "3e7c7d6f768b32e86f25f576d6fc23b4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/furia.mp3": {
+    "mtime": 1790422597.4962754,
+    "ast_hash": "8b4863ae3ebfa6beeda3f122916e31c6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/furiaPerdida.mp3": {
+    "mtime": 1790422603.9536257,
+    "ast_hash": "02705c4ac4bff713e252c3e16b747e65",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/golpeEnemigo-1.mp3": {
+    "mtime": 1790422588.696536,
+    "ast_hash": "182a61f8c7d71b6ca1e0114baf760a2f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/golpeEnemigo-2.mp3": {
+    "mtime": 1790422589.1749973,
+    "ast_hash": "e0aaa52da8a79a189a353e3056bb79c8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/golpeEnemigo-3.mp3": {
+    "mtime": 1790422589.7323,
+    "ast_hash": "e2c2672deaabd3eb4fe60047692efaaa",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/hojas.mp3": {
+    "mtime": 1790422617.4573505,
+    "ast_hash": "68777a70965721a39d03548eb77a5526",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/impacto-1.mp3": {
+    "mtime": 1790422586.8662074,
+    "ast_hash": "038dab7b758bedcb0bfd0f972cf119fb",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/impacto-2.mp3": {
+    "mtime": 1790422587.337814,
+    "ast_hash": "7991347360bfe6315a2c3c3152537ce0",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/impacto-3.mp3": {
+    "mtime": 1790422588.0365613,
+    "ast_hash": "574efb55cdf3901c761feb07b25357cf",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/luna.mp3": {
+    "mtime": 1790422608.573591,
+    "ast_hash": "cd7606bad713037c2bf3b9371ab86173",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/muerte.mp3": {
+    "mtime": 1790422596.292445,
+    "ast_hash": "8478e1315fc6d54384d915620a00bc59",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/ola.mp3": {
+    "mtime": 1790422614.2808237,
+    "ast_hash": "4c14b3f6b2d7f6ec6ad75ba71d8e2e7d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/oscuridad.mp3": {
+    "mtime": 1790422616.1031907,
+    "ast_hash": "96d1e8fdf81c81cd7719394576bf206f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/raices.mp3": {
+    "mtime": 1790422601.947286,
+    "ast_hash": "323c49cde0ae787a32906baeb8269afe",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/rara.mp3": {
+    "mtime": 1790422622.6482308,
+    "ast_hash": "33e94390d5953e3b68fdcf0d3d625943",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/sangre.mp3": {
+    "mtime": 1790422605.837057,
+    "ast_hash": "8a5676f6f4550a2a3224c158dc727c97",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/tajo-1.mp3": {
+    "mtime": 1790422585.2368066,
+    "ast_hash": "4620ed4f132c5e468d506d2ebfa78155",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/tajo-2.mp3": {
+    "mtime": 1790422585.8746002,
+    "ast_hash": "221906b536c3b604c6f4ebd95dc77c06",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/tajo-3.mp3": {
+    "mtime": 1790422586.3364573,
+    "ast_hash": "88368a953b5de70f5a99c23fc8b67a63",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/tierra.mp3": {
+    "mtime": 1790422600.7088675,
+    "ast_hash": "197511a394038882c2ea95d1dd6b9121",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/transformacion.mp3": {
+    "mtime": 1790422612.7006392,
+    "ast_hash": "c363b6e1846ef5a4d65dd9557e4b5adf",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/ui.mp3": {
+    "mtime": 1790422604.1891456,
+    "ast_hash": "c6461f92f18242738ff8b130225e3630",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/veneno.mp3": {
+    "mtime": 1790422611.1867297,
+    "ast_hash": "746c31efb042c247c90509f7444af710",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/zarpa.mp3": {
+    "mtime": 1790422614.8937106,
+    "ast_hash": "0f4f58444af64cddad1b6e43eef48a89",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/spell-fx.ts": {
+    "mtime": 1790423965.701408,
+    "ast_hash": "97346c2195c274c74d8117df5af90f1d",
     "semantic_hash": ""
   }
 }

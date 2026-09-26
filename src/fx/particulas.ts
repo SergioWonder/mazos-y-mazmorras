@@ -3,9 +3,10 @@
 // WebGL2 (particle-gl.ts) and falls back to canvas 2D without it.
 
 import {
-  spawnAmbient, spawnEffect, stepParticles, particleAlpha, AMBIENTS, type AmbientStyle, type Particle,
+  spawnAmbient, spawnEffect, stepParticles, particleAlpha, AMBIENTS, type AmbientStyle, type Particle, type Sprite,
 } from './particle-sim.ts';
 import { ParticleRendererGL } from './particle-gl.ts';
+import { SpellSystem, SPELLS, MAX_LIVE_SPRITES, type Box, type Point } from './spell-fx.ts';
 
 /** Atmósferas ambientales: partículas que ascienden de fondo en cada escenario. */
 export type EstiloAmbiente = AmbientStyle;
@@ -18,7 +19,7 @@ class ParticleRenderer2D {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d')!;
   }
-  render(list: Particle[], width: number, height: number, dpr: number) {
+  render(list: Sprite[], width: number, height: number, dpr: number) {
     const ctx = this.ctx;
     const w = Math.round(width * dpr), h = Math.round(height * dpr);
     if (this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
@@ -37,7 +38,24 @@ class ParticleRenderer2D {
           ctx.fillRect(-p.size * 2, -p.size * 0.25, p.size * 4, p.size * 0.5);
           ctx.fillRect(-p.size * 0.25, -p.size * 2, p.size * 0.5, p.size * 4);
           break;
-        default: ctx.beginPath(); ctx.arc(0, 0, p.size, 0, Math.PI * 2); ctx.fill();
+        case 'capsula': case 'colmillo': case 'haz': {
+          const L = p.size * (p.stretch ?? 1);
+          ctx.beginPath(); ctx.moveTo(-L, 0); ctx.lineTo(L, 0);
+          ctx.strokeStyle = p.colour; ctx.lineCap = 'round'; ctx.lineWidth = p.size * (p.shape === 'haz' ? 1.4 : 2); ctx.stroke();
+          break;
+        }
+        case 'anillo': case 'escudo':
+          ctx.beginPath(); ctx.ellipse(0, 0, p.size * (p.stretch ?? 1), p.size, 0, 0, Math.PI * 2);
+          ctx.strokeStyle = p.colour; ctx.lineWidth = Math.max(1, p.size * 2 * (p.shape === 'anillo' ? p.param ?? 0.1 : 0.06)); ctx.stroke();
+          if (p.shape === 'escudo') { ctx.globalAlpha *= 0.3; ctx.fill(); }
+          break;
+        case 'arco': case 'runa': case 'media-luna':
+          ctx.beginPath();
+          if (p.shape === 'arco') ctx.arc(0, 0, p.size, -(p.param ?? 1), p.param ?? 1);
+          else ctx.arc(0, 0, p.size * 0.9, 0, Math.PI * 2);
+          ctx.strokeStyle = p.colour; ctx.lineWidth = Math.max(1.5, p.size * 0.12); ctx.stroke();
+          break;
+        default: ctx.beginPath(); ctx.arc(0, 0, p.size * (p.shape === 'gota' ? 0.7 : 1), 0, Math.PI * 2); ctx.fill();
       }
       ctx.restore();
     }
@@ -48,6 +66,8 @@ class ParticleRenderer2D {
 class MotorParticulas {
   private renderer: ParticleRendererGL | ParticleRenderer2D | null = null;
   private particulas: Particle[] = [];
+  /** Hand-authored spell compositions (spell-fx.ts), drawn with the particles. */
+  private readonly hechizos = new SpellSystem();
   private ultimoT = 0;
   private ambienteActivo = false;
   private acumulador = 0;
@@ -71,6 +91,22 @@ class MotorParticulas {
 
   emitir(nombre: string, x: number, y: number, escala = 1) {
     spawnEffect(this.particulas, nombre, x, y, escala);
+  }
+
+  /** ¿Hay un efecto de hechizo propio para esta clave? */
+  tieneHechizo(nombre: string): boolean {
+    return nombre in SPELLS;
+  }
+
+  /** Receptor por defecto del hechizo: 'self' (el héroe) o 'target' (su objetivo). */
+  anclaHechizo(nombre: string): 'self' | 'target' | undefined {
+    return SPELLS[nombre]?.anchor;
+  }
+
+  /** Lanza el efecto de hechizo `nombre` sobre la caja de pantalla `caja`
+   *  (origen opcional para alientos, rayos, aullidos…). */
+  hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
+    return this.hechizos.add(nombre, { box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte }, performance.now() / 1000);
   }
 
   /** A full-art card sheds motes and twinkles in its colour while it is on screen. */
@@ -135,8 +171,10 @@ class MotorParticulas {
     }
     if (this.fuentes.size) this.emitirFuentes(dt, t);
     stepParticles(this.particulas, dt);
+    const spells = this.hechizos.active ? this.hechizos.frame(t / 1000, Math.max(0, MAX_LIVE_SPRITES - this.particulas.length)) : [];
+    const lista: Sprite[] = spells.length ? [...this.particulas, ...spells] : this.particulas;
     // mobile: the pixel ratio is capped, particles are small and soft anyway
-    this.renderer?.render(this.particulas, w, h, Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer?.render(lista, w, h, Math.min(window.devicePixelRatio || 1, 2));
     requestAnimationFrame((tt) => this.bucle(tt));
   }
 }

@@ -147,8 +147,10 @@ descuelga de las demás en su mismo nivel.
 - **Élites y jefes exigentes**: los élites pegan fuerte y los jefes combinan
   Débil/Vulnerable con ataques especiales. El **Aliento de Dragón** de Ignifax
   (320 PV) aplica **Quemadura**: durante 2 turnos, cada carta que juegas te cuesta 3 PV.
-- **Audio**: efectos de sonido sintetizados con la Web Audio API (sin ficheros),
-  con floritura especial al jugar cartas raras, y una **banda sonora original**
+- **Audio**: efectos de sonido realistas (metal, golpes, fuego, magia, criaturas…)
+  sintetizados por código por el agente `disenador-sfx` (`src/audio/sfx/`,
+  `fx/sfx-bank.ts`, scripts en `scripts/sfx/`), con variaciones para los más
+  frecuentes y floritura especial al jugar cartas raras, y una **banda sonora original**
   sintetizada por código: tema principal y, por acto, un tema de combate (aventura
   amigable) y uno de jefe (épico y tenso), unidos por un leitmotiv. Suenan en bucle
   exacto con Web Audio, con loop chiptune de respaldo. Se pausa al pasar a
@@ -229,6 +231,13 @@ Las marionetas y las partículas se dibujan con **WebGL2** para ir fluidas en m�
 - **Partículas** (`fx/particle-gl.ts`): un único dibujo instanciado por fotograma, con el
   brillo calculado en el shader en lugar de `shadowBlur`. La simulación está en
   `fx/particle-sim.ts`.
+- **Efectos de hechizos** (`fx/spell-fx.ts`): cada clave `fx` de las cartas tiene su
+  efecto propio (raíces que se enroscan en el objetivo, tres surcos de zarpa, ola que
+  rompe, runa de condena que cae, escudo hexagonal…), dibujado con formas SDF en el
+  mismo lienzo WebGL de las partículas. Lo diseña el agente `artista-particulas`.
+- **Alas articuladas** (`fx/wing.ts`): hombro, antebrazo y tres dedos con paneles de
+  membrana que se pliegan al subir y se extienden al bajar, con la ola de fase del
+  hombro a la punta.
 - **Fondos pintados** (`fx/background.ts`, `src/arte/fondos/`): cada uno de los seis
   escenarios tiene su ilustración WebP de 1920×1080 (y una vertical de 1080×1440 si la
   escena es más alta que ancha): campamento ogro, sótano de contrabandistas, cripta,

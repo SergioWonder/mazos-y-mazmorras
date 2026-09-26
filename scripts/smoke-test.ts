@@ -27,7 +27,8 @@ import { hasFullArt } from '../src/ui/card-looks.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { sceneBackground } from '../src/fx/background.ts';
 import { MUSIC_TRACKS, loopWindow, MP3_DELAY_SAMPLES } from '../src/fx/music-tracks.ts';
-import { puppetPose, puppetBones, puppetEffects, emitterWorld } from '../src/fx/puppet.ts';
+import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent } from '../src/fx/puppet.ts';
+import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
@@ -2071,5 +2072,242 @@ console.log('\n🎵 Banda sonora');
   check(corto.start === 0 && corto.end === 59, 'una pista más corta de lo esperado se repite entera');
 }
 
-console.log(fallos === 0 ? '\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
+// ── Combat layout: fighters fit the scene height (landscape phones) ─────────
+console.log('\n📐 Luchadores dentro del escenario');
+{
+  const fs = await import('node:fs');
+  const css = fs.readFileSync(new URL('../src/estilos/combate.css', import.meta.url), 'utf8');
+  const movil = fs.readFileSync(new URL('../src/estilos/movil.css', import.meta.url), 'utf8');
+  check(/\.escenario\s*\{[^}]*container-type:\s*size/.test(css), 'el escenario mide su alto para que los sprites se adapten');
+  check(/\.escenario \.sprite-marioneta\s*\{[^}]*max-width:[^;]*cqh/.test(css), 'los sprites no pasan del alto disponible, así la vida y los estados de los jefes no se cortan');
+  check(/orientation: portrait[\s\S]*\.escenario\s*\{[^}]*container-type:\s*normal/.test(movil), 'en vertical el escenario crece con su contenido');
+  const remHeroe = (texto: string) => Number(/\.sprite-silueta \.sprite-marioneta \{ width: ([\d.]+)rem/.exec(texto)?.[1] ?? 0);
+  check(remHeroe(css) >= 11 && remHeroe(movil) >= 8, 'el héroe se ve grande (más que los enemigos normales)');
+  check(/\.escenario \.sprite-silueta \.sprite-marioneta\s*\{[^}]*max-width:[^;]*cqh/.test(css), 'el héroe también se adapta al alto disponible, con menos margen porque no tiene intención ni rasgo');
+}
+
+// ── Recorded-style sound effects (MP3 bank) ──────────────────────────────────
+console.log('\n🔊 Efectos de sonido');
+{
+  const fs = await import('node:fs');
+  let bank: typeof import('../src/fx/sfx-bank.ts') | null = null;
+  try { bank = await import('../src/fx/sfx-bank.ts'); } catch { bank = null; }
+  check(bank !== null, 'existe el banco de efectos de sonido (src/fx/sfx-bank.ts)');
+  if (bank) {
+    const { SFX_NAMES, FREQUENT_SFX, SFX_FALLBACK, groupSfxFiles, resolveSfx, pickVariant, playbackJitter } = bank;
+    const carpeta = new URL('../src/audio/sfx/', import.meta.url);
+    const mp3 = fs.existsSync(carpeta) ? fs.readdirSync(carpeta).filter((f: string) => f.endsWith('.mp3')) : [];
+    const grupos = groupSfxFiles(Object.fromEntries(mp3.map((f: string) => [`../audio/sfx/${f}`, `/a/${f}`])));
+    // Names the engine already uses plus every `fx` key of cards and enemies
+    const fuentes = ['cartas.ts', 'enemigos.ts', 'combate.ts']
+      .map((f) => fs.readFileSync(new URL(`../src/core/${f}`, import.meta.url), 'utf8')).join('\n');
+    const clavesFx = new Set([...fuentes.matchAll(/fx: *'([a-zA-Z]+)'/g)].map((m) => m[1]));
+    for (const m of fuentes.matchAll(/fxGolpe\([^)]*'([a-zA-Z]+)'\)/g)) clavesFx.add(m[1]);
+    const delJuego = ['tajo', 'impacto', 'golpeEnemigo', 'bloqueo', 'cura', 'muerte', 'furia', 'divino', 'tierra',
+      'raices', 'carta', 'estado', 'furiaPerdida', 'ui'];
+    const deCartas = ['estrellas', 'sangre', 'abisal', 'luna', 'condena', 'veneno', 'transformacion', 'ola', 'zarpa',
+      'oscuridad', 'hojas', 'aullido', 'corazones'];
+    const faltanTabla = [...delJuego, ...deCartas, ...clavesFx].filter((n) => !SFX_NAMES.includes(n));
+    check(faltanTabla.length === 0, `la tabla de nombres incluye todos los sonidos del juego y las claves fx ${faltanTabla.join(', ')}`);
+    check(clavesFx.size >= 20 && deCartas.every((n) => clavesFx.has(n)), `se detectan las claves fx de cartas y enemigos (${clavesFx.size})`);
+    const sinMp3 = SFX_NAMES.filter((n) => !(grupos.get(n)?.length));
+    check(sinMp3.length === 0, `cada sonido tiene al menos un MP3 en src/audio/sfx ${sinMp3.join(', ')}`);
+    const huerfanos = [...grupos.keys()].filter((n) => !SFX_NAMES.includes(n));
+    check(huerfanos.length === 0, `no hay MP3 sin nombre en la tabla ${huerfanos.join(', ')}`);
+    check(FREQUENT_SFX.every((n) => (grupos.get(n)?.length ?? 0) >= 2), 'los sonidos frecuentes tienen variaciones');
+    const peso = (f: string) => fs.statSync(new URL(f, carpeta)).size;
+    const pesados = mp3.filter((f: string) => peso(f) > 32_000);
+    const total = mp3.reduce((s: number, f: string) => s + peso(f), 0);
+    check(mp3.length > 0 && pesados.length === 0 && total < 700_000, `los MP3 pesan poco (${Math.round(total / 1024)} KB en total) ${pesados.join(', ')}`);
+    check(resolveSfx('tajo') === 'tajo' && resolveSfx('noExiste') === SFX_FALLBACK && SFX_NAMES.includes(SFX_FALLBACK),
+      'un nombre desconocido suena con el efecto de respaldo');
+    check(pickVariant(3, 1, () => 0.4) !== 1 && pickVariant(1, 0, Math.random) === 0, 'las variaciones no repiten la anterior');
+    const extremos = [playbackJitter(() => 0), playbackJitter(() => 0.999)];
+    check(extremos.every((j) => j.rate > 0.9 && j.rate < 1.1 && j.gain > 0.8 && j.gain <= 1), 'la variación de tono y volumen es pequeña');
+    check(grupos.get('tajo')?.every((u: string) => u.startsWith('/a/tajo')) === true, 'las variaciones se agrupan por nombre de archivo');
+  }
+}
+
+// ── Articulated wings: shoulder, forearm and fingers with a travelling wave ──
+console.log('\n🐉 Alas articuladas');
+{
+  const alados = ['ignifax', 'draco-joven', 'draco-veterano', 'diablillo', 'demonio-menor', 'demonio-mayor'];
+  const rigs = [...alados.map((id) => [id, ENEMY_RIGS[id]] as const), ['invocación demonio', INVOCATION_RIGS['demonio']] as const];
+  check(rigs.every(([, r]) => !!r?.wings?.B && !!r?.wings?.F), 'Ignifax, los dracos y los demonios alados tienen alas articuladas por los dos lados');
+  // world-space points of a shape (enough to bound it)
+  const puntos = (s: (typeof rigs)[number][1]['shapes'][number]): [number, number][] =>
+    s.t === 'p' ? s.pts : s.t === 'l' ? [[s.x1, s.y1], [s.x2, s.y2]] : s.t === 'c' ? [[s.x - s.r, s.y - s.r], [s.x + s.r, s.y + s.r]] : [[s.x - s.rx, s.y - s.ry], [s.x + s.rx, s.y + s.ry]];
+  const angulo = (m: number[]) => (Math.atan2(m[1], m[0]) * 180) / Math.PI;
+  for (const [nombre, rig] of rigs) {
+    if (!rig?.wings) continue;
+    for (const lado of ['B', 'F'] as const) {
+      const [hombro, brazo, ...dedos] = WING_BONES[lado];
+      const cadena = boneParent(dedos[0]) === brazo && boneParent(brazo) === hombro;
+      const conPiezas = [hombro, brazo, ...dedos].filter((b) => rig.shapes.some((s) => s.b === b)).length;
+      check(cadena && conPiezas >= 4, `${nombre} (${lado}): hombro → antebrazo → dedos encadenados, con piezas en ${conPiezas} huesos`);
+      const paneles = dedos.filter((b) => rig.shapes.some((s) => s.b === b && s.t === 'p' && s.k === 'wing'));
+      check(paneles.length >= 2, `${nombre} (${lado}): la membrana está dividida en paneles unidos a los dedos`);
+    }
+    // travelling wave: the tip reaches its peak after the shoulder
+    const T = 1 / 1.1, N = 240;
+    let tHombro = 0, tPunta = 0, maxH = -Infinity, maxP = -Infinity;
+    for (let i = 0; i < N; i++) {
+      const t = (i / N) * T;
+      const p = puppetPose(rig, t, null).p;
+      const h = p.wingF, punta = p.wingF + p.wingFArm + p.wingFF1;
+      if (h > maxH) { maxH = h; tHombro = t; }
+      if (punta > maxP) { maxP = punta; tPunta = t; }
+    }
+    const retraso = (((tPunta - tHombro) % T) + T) % T;
+    check(retraso > 0.03 * T && retraso < 0.5 * T, `${nombre}: la punta va retrasada respecto al hombro (${Math.round((retraso / T) * 360)}°)`);
+    // downstroke spreads the wing, upstroke folds it
+    let bajada = 0, nb = 0, subida = 0, ns = 0;
+    for (let i = 0; i < N; i++) {
+      const t = (i / N) * T;
+      const a = puppetPose(rig, t, null).p, b = puppetPose(rig, t + 0.004, null).p;
+      const span = wingSpan(rig, puppetBones(rig, a), 'F');
+      if (b.wingF > a.wingF) { bajada += span; nb++; } else { subida += span; ns++; }
+    }
+    bajada /= nb; subida /= ns;
+    check(bajada > subida * 1.08, `${nombre}: el ala se extiende al bajar y se pliega al subir (${bajada.toFixed(1)} vs ${subida.toFixed(1)})`);
+    // actions: open wide to attack, shrink when hit
+    const reposo = wingSpan(rig, puppetBones(rig, puppetPose(rig, 0, null).p), 'F');
+    const ataque = wingSpan(rig, puppetBones(rig, puppetPose(rig, 0, { type: 'attack', p: 0.5 }).p), 'F');
+    const golpe = wingSpan(rig, puppetBones(rig, puppetPose(rig, 0, { type: 'hit', p: 0.2 }).p), 'F');
+    check(ataque > golpe * 1.1, `${nombre}: abre las alas al atacar y las encoge al recibir un golpe`);
+    // the wing stays inside the puppet box (140×135 viewBox, overflow allowed up to a quarter)
+    const art = rig.art ?? 1, alas = new Set<string>([...WING_BONES.B, ...WING_BONES.F]);
+    let fuera = 0;
+    const momentos: [number, Parameters<typeof puppetPose>[2]][] = [
+      ...Array.from({ length: 24 }, (_, i) => [(i / 24) * T, null] as [number, null]),
+      ...(['attack', 'spell', 'hit', 'death'] as const).flatMap((type) => [0.2, 0.4, 0.6, 0.8].map((q) => [0, { type, p: q }] as [number, { type: typeof type; p: number }])),
+    ];
+    for (const [t, accion] of momentos) {
+      const huesos = puppetBones(rig, puppetPose(rig, t, accion).p);
+      for (const s of rig.shapes) {
+        if (!alas.has(s.b)) continue;
+        for (const [x, y] of puntos(s)) {
+          const m = huesos[s.b];
+          const wx = 58 + art * (m[0] * x + m[2] * y + m[4] - 58), wy = 129 + art * (m[1] * x + m[3] * y + m[5] - 129);
+          if (wx < -35 || wx > 175 || wy < -34 || wy > 135) fuera++;
+        }
+      }
+    }
+    check(fuera === 0, `${nombre}: las alas caben en la caja de la marioneta (${fuera} puntos fuera)`);
+  }
+  // heroes and druid forms keep their wing bones still
+  const aguila = heroPose('aguila' as never, 0.3, null).p;
+  check(aguila.wingFArm === 0 && aguila.wingBF1 === 0, 'las formas del druida no usan los huesos nuevos del ala');
+  const packed = packRig(ENEMY_RIGS['ignifax'], 'illustrated');
+  check(packed.count === ENEMY_RIGS['ignifax'].shapes.length && packed.data.every(Number.isFinite), 'Ignifax se empaqueta para la GPU con sus huesos nuevos');
+}
+
+// ── Spell VFX: one distinct composition per card fx key (pure part) ─────────
+console.log('\n✨ Efectos de hechizos');
+{
+  const sf = await import('../src/fx/spell-fx.ts');
+  const { SPELLS, spellFrame, vinePath, SpellSystem, spellSignature, MAX_SPELL_SPRITES, MAX_LIVE_SPRITES } = sf;
+  const todas: CartaDef[] = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA];
+  const claves = new Set<string>(todas.map((d) => d.fx).filter((k): k is string => !!k));
+  for (const k of ['estrellas', 'tajo', 'bloqueo', 'furia', 'impacto', 'sangre', 'abisal', 'luna', 'condena', 'tierra', 'veneno',
+    'transformacion', 'ola', 'muerte', 'zarpa', 'oscuridad', 'hojas', 'aullido', 'raices', 'divino', 'corazones']) claves.add(k);
+  const lista = [...claves];
+  check(lista.length >= 21, `hay al menos 21 claves fx en las cartas (${lista.length})`);
+  for (const k of lista) check(!!SPELLS[k], `la clave fx «${k}» tiene un efecto propio`);
+  // enemy signature moves get their own effect too
+  for (const k of ['aliento', 'rayoOcular']) check(!!SPELLS[k], `la acción enemiga «${k}» tiene un efecto propio`);
+  const todasClaves = [...lista, 'aliento', 'rayoOcular'].filter((k) => SPELLS[k]);
+  check(new Set(todasClaves.map((k) => SPELLS[k].build)).size === todasClaves.length, 'cada efecto se compone con su propia función (nada de variantes de un mismo estallido)');
+  const firmas = new Map<string, string>();
+  for (const k of todasClaves) {
+    const f = spellSignature(k);
+    const igual = [...firmas].find(([, v]) => v === f);
+    check(!igual, `«${k}» se ve distinto de ${igual ? `«${igual[0]}»` : 'los demás'}`);
+    firmas.set(k, f);
+  }
+  const box = { x: 600, y: 200, w: 160, h: 200 };
+  const ctx = { box, from: { x: 200, y: 300 }, facing: -1 as const, seed: 7 };
+  for (const k of todasClaves) {
+    const d = SPELLS[k];
+    check(d.duration >= 0.4 && d.duration <= 1.4, `«${k}» dura entre 0,4 y 1,4 s (${d.duration})`);
+    check(d.phases[0] > 0 && d.phases[0] < d.phases[1] && d.phases[1] < 1, `«${k}»: anticipación < impacto < disipación`);
+    let maximo = 0, roto = 0, enImpacto = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) {
+      const fr = spellFrame(k, ctx, t);
+      maximo = Math.max(maximo, fr.length);
+      if (t >= d.phases[0] * d.duration && t <= d.phases[1] * d.duration) enImpacto = Math.max(enImpacto, fr.length);
+      for (const s of fr) {
+        const a = s.alpha ?? 1;
+        if (![s.x, s.y, s.size, s.angle, a, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || a < 0 || a > 1 || s.size <= 0) roto++;
+      }
+    }
+    check(roto === 0, `«${k}»: todos los elementos tienen posición, tamaño y alfa válidos (${roto} rotos)`);
+    check(maximo <= MAX_SPELL_SPRITES, `«${k}» no pasa del tope de ${MAX_SPELL_SPRITES} elementos (${maximo})`);
+    check(enImpacto > 0, `«${k}» se ve en su fase de impacto`);
+    check(spellFrame(k, ctx, d.duration + 0.01).length === 0, `«${k}» desaparece al terminar`);
+  }
+  // who receives each effect
+  for (const k of ['bloqueo', 'transformacion', 'furia']) check(SPELLS[k].anchor === 'self', `«${k}» se lanza sobre el héroe`);
+  for (const k of ['tajo', 'zarpa', 'raices', 'condena', 'veneno', 'luna', 'impacto', 'sangre', 'abisal', 'muerte', 'oscuridad', 'corazones'])
+    check(SPELLS[k].anchor === 'target', `«${k}» se lanza sobre el objetivo`);
+  // roots: sprout from the ground and end up coiled around the target box
+  const xs: number[] = [];
+  for (let i = 0; i < 4; i++) {
+    const p = vinePath(box, i, 4, 1, 1);
+    const base = p[0], punta = p[p.length - 1];
+    xs.push(...p.map((q) => q.x));
+    check(base.y >= box.y + box.h * 0.95, `raíz ${i}: brota del suelo`);
+    check(punta.x >= box.x && punta.x <= box.x + box.w && punta.y >= box.y && punta.y <= box.y + box.h * 0.25, `raíz ${i}: la punta acaba arriba, dentro del objetivo`);
+    let cruces = 0;
+    for (let j = 1; j < p.length; j++) if ((p[j - 1].x - (box.x + box.w / 2)) * (p[j].x - (box.x + box.w / 2)) < 0) cruces++;
+    check(cruces >= 2, `raíz ${i}: se enrosca alrededor del objetivo (${cruces} vueltas)`);
+    const media = vinePath(box, i, 4, 0.5, 1);
+    check(media[media.length - 1].y > punta.y + box.h * 0.2, `raíz ${i}: crece desde abajo`);
+    const apretada = vinePath(box, i, 4, 1, 0.8);
+    const ancho = (q: { x: number }[]) => Math.max(...q.map((v) => v.x)) - Math.min(...q.map((v) => v.x));
+    check(ancho(apretada) < ancho(p), `raíz ${i}: aprieta al objetivo`);
+  }
+  check(Math.max(...xs) - Math.min(...xs) >= box.w * 0.85, 'las raíces envuelven todo el ancho del objetivo');
+  const dRaiz = SPELLS.raices;
+  const enRaiz = spellFrame('raices', ctx, dRaiz.duration * (dRaiz.phases[0] + dRaiz.phases[1]) / 2).filter((s) => s.shape === 'capsula');
+  check(enRaiz.length > 20 && enRaiz.every((s) => s.x >= box.x - box.w * 0.15 && s.x <= box.x + box.w * 1.15 && s.y >= box.y - box.h * 0.1 && s.y <= box.y + box.h * 1.12),
+    'las lianas se quedan pegadas a la caja del objetivo');
+  // shield in front of the hero, beam from above, rune falling, wave travelling from the caster
+  const heroe = { box: { x: 100, y: 250, w: 120, h: 180 }, facing: 1 as const, seed: 3 };
+  const escudo = spellFrame('bloqueo', heroe, SPELLS.bloqueo.duration * 0.5).filter((s) => s.shape === 'escudo');
+  check(escudo.length > 0 && escudo.every((s) => s.x > heroe.box.x + heroe.box.w / 2), 'el escudo se materializa delante del héroe');
+  check(spellFrame('divino', ctx, SPELLS.divino.duration * 0.4).some((s) => s.shape === 'haz' && s.y - s.size * (s.stretch ?? 1) < box.y), 'el haz divino baja desde arriba');
+  const runa = (t: number) => spellFrame('condena', ctx, t).filter((s) => s.shape === 'runa').sort((a, b) => b.size - a.size)[0];
+  check(!!runa(0.05) && runa(0.05).y < box.y, 'la runa de condena empieza por encima del objetivo');
+  const tImp = SPELLS.condena.duration * SPELLS.condena.phases[0] + 0.02;
+  check(!!runa(tImp) && Math.abs(runa(tImp).y - (box.y + box.h / 2)) < box.h * 0.3, 'la runa de condena cae sobre el objetivo');
+  const cresta = (t: number) => { const f = spellFrame('ola', ctx, t).filter((s) => s.shape === 'capsula'); return f.reduce((m, s) => m + s.x, 0) / Math.max(1, f.length); };
+  check(cresta(0.45) > cresta(0.15), 'la ola avanza desde el lanzador hacia el objetivo');
+  check(spellFrame('zarpa', ctx, SPELLS.zarpa.duration * 0.4).filter((s) => s.shape === 'capsula' && (s.param ?? 0) > 0.5 && (s.stretch ?? 1) > 4).length >= 3, 'la zarpa deja tres surcos');
+  check(spellFrame('luna', ctx, SPELLS.luna.duration * 0.4).some((s) => s.shape === 'media-luna'), 'la luna corta con una media luna');
+  check(spellFrame('aullido', ctx, SPELLS.aullido.duration * 0.5).filter((s) => s.shape === 'arco' || s.shape === 'anillo').length >= 3, 'el aullido expande ondas');
+  check(spellFrame('veneno', ctx, SPELLS.veneno.duration * 0.5).some((s) => s.shape === 'burbuja') && spellFrame('veneno', ctx, SPELLS.veneno.duration * 0.5).some((s) => s.shape === 'gota'), 'el veneno burbujea y gotea');
+  const aliento = spellFrame('aliento', { box: heroe.box, from: { x: 700, y: 260 }, seed: 1 }, 0.15);
+  check(aliento.some((s) => s.x > 500), 'el aliento de fuego sale de la boca del dragón');
+  // live budget across simultaneous spells
+  const sys = new SpellSystem();
+  for (let i = 0; i < 12; i++) sys.add(todasClaves[i % todasClaves.length], { ...ctx, seed: i }, 0);
+  let pico = 0;
+  for (let t = 0; t < 1.5; t += 0.05) pico = Math.max(pico, sys.frame(t, MAX_LIVE_SPRITES - 100).length);
+  check(pico <= MAX_LIVE_SPRITES - 100, `varios hechizos a la vez respetan el tope de elementos vivos (${pico})`);
+  sys.frame(2, MAX_LIVE_SPRITES);
+  check(sys.active === 0, 'los hechizos terminados se retiran');
+}
+
+// ── Title screen: class choice shows the animated heroes ────────────────────
+console.log('\n🎬 Selección de héroe');
+{
+  const fs = await import('node:fs');
+  const titulo = fs.readFileSync(new URL('../src/ui/titulo.ts', import.meta.url), 'utf8');
+  check(/new HeroSprite\(/.test(titulo) && /PuppetStage\.create\(/.test(titulo), 'la pantalla de inicio muestra el sprite animado de cada clase');
+  check(!/clase-icono">[^<]/.test(titulo), 'ya no quedan emojis en la elección de clase');
+  check(/destroy\(\)/.test(titulo), 'los sprites de la portada se liberan al elegir');
+}
+
+console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);
