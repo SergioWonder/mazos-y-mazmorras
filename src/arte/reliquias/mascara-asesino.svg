@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter>
+    <path id="m" d="M4 24 Q18 16 32 22 Q46 16 60 24 Q58 38 46 40 Q38 40 32 34 Q26 40 18 40 Q6 38 4 24 Z"/>
+    <clipPath id="c"><use href="#m"/></clipPath>
+  </defs>
+  <!-- ties -->
+  <path d="M5 26 Q0 36 4 46 M59 26 Q64 36 60 46" stroke="#140d0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M5 26 Q0 36 4 46 M59 26 Q64 36 60 46" stroke="#3a3e3c" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <!-- black half mask -->
+  <use href="#m" fill="#2a2e2d"/>
+  <g clip-path="url(#c)">
+    <path d="M0 34 Q32 30 64 30 V64 H0 Z" fill="#171a19"/>
+    <path d="M6 24 Q18 18 30 23 L30 26 Q18 22 7 28 Z" fill="#4a504e"/>
+  </g>
+  <use href="#m" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- teal eye slits -->
+  <path d="M12 28 Q18 25 26 29 Q20 33 12 28 Z M52 28 Q46 25 38 29 Q44 33 52 28 Z" fill="#72e0cc" filter="url(#g)"/>
+  <path d="M13 28.5 Q18 26 25 29 Q19 31.5 13 28.5 Z M51 28.5 Q46 26 39 29 Q45 31.5 51 28.5 Z" fill="#c8fff4" stroke="#140d0a" stroke-width="1.2"/>
+  <!-- stitched scar -->
+  <path d="M40 18 L46 38" stroke="#6a1e22" stroke-width="1.6"/>
+  <path d="M41 22 L44 21 M42 27 L45 26 M44 32 L47 31" stroke="#140d0a" stroke-width="1"/>
+</svg>

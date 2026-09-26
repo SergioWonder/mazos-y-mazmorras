@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="h" d="M14 30 Q14 14 32 14 Q50 14 50 30 Q50 44 44 50 Q38 58 32 58 Q26 58 20 50 Q14 44 14 30 Z"/>
+    <clipPath id="c"><use href="#h"/></clipPath>
+  </defs>
+  <!-- ears -->
+  <circle cx="17" cy="16" r="7" fill="#5a3a22" stroke="#140d0a" stroke-width="2.8"/>
+  <circle cx="47" cy="16" r="7" fill="#3e2816" stroke="#140d0a" stroke-width="2.8"/>
+  <circle cx="17" cy="16" r="3" fill="#2a1a10"/>
+  <circle cx="47" cy="16" r="3" fill="#2a1a10"/>
+  <!-- carved bear head -->
+  <use href="#h" fill="#6e4a2c"/>
+  <g clip-path="url(#c)">
+    <path d="M36 10 Q54 28 40 64 H64 V10 Z" fill="#4a3018"/>
+    <path d="M16 28 Q18 18 26 16 Q20 22 20 32 Z" fill="#8e6a44"/>
+  </g>
+  <use href="#h" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- orange war paint -->
+  <path d="M19 26 L27 30 M45 26 L37 30" stroke="#ff9a50" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="25" cy="33" r="2.2" fill="#140d0a"/>
+  <circle cx="39" cy="33" r="2.2" fill="#140d0a"/>
+  <!-- muzzle -->
+  <path d="M24 44 Q24 38 32 38 Q40 38 40 44 Q40 52 32 52 Q24 52 24 44 Z" fill="#b08a5e" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M28 41 Q32 39 36 41 Q35 45 32 45 Q29 45 28 41 Z" fill="#140d0a"/>
+  <path d="M32 45 V48 M28 49 Q32 51 36 49" stroke="#140d0a" stroke-width="1.4" fill="none"/>
+  <path d="M26 20 L32 24 L38 20" stroke="#ff9a50" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+</svg>

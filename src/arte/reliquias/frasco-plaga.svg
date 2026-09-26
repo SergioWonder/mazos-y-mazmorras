@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <path id="f" d="M27 14 L37 14 L37 26 Q52 32 52 44 Q52 58 32 58 Q12 58 12 44 Q12 32 27 26 Z"/>
+    <clipPath id="c"><use href="#f"/></clipPath>
+  </defs>
+  <!-- toxic fumes -->
+  <path d="M30 10 Q24 4 30 0 M36 9 Q42 5 38 0" stroke="#b8ff50" stroke-width="3" fill="none" opacity="0.7" filter="url(#g)"/>
+  <!-- round flask of green murk -->
+  <use href="#f" fill="#3a4a40"/>
+  <g clip-path="url(#c)">
+    <path d="M0 36 Q32 30 64 36 V64 H0 Z" fill="#b8ff50" opacity="0.6" filter="url(#g)"/>
+    <path d="M0 38 Q32 33 64 38 V64 H0 Z" fill="#6a8a24"/>
+    <path d="M36 34 Q52 44 40 64 H64 V34 Z" fill="#445c14"/>
+    <path d="M15 40 Q16 32 26 29 L27 32 Q19 35 19 42 Z" fill="#d0dcd4" opacity="0.6"/>
+  </g>
+  <circle cx="26" cy="46" r="3" fill="#a8d040" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="36" cy="50" r="2" fill="#a8d040" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="33" cy="42" r="1.4" fill="#d8ff90"/>
+  <use href="#f" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- neck rim and rag stopper -->
+  <path d="M25 13 H39 V17 H25 Z" fill="#6a6e70" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M28 13 Q26 6 31 5 Q37 4 36 13 Z" fill="#8a7a58" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <!-- back half of the orbit -->
+  <path d="M8 34 Q10 24 32 24 Q54 24 56 34" stroke="#140d0a" stroke-width="3.6" fill="none"/>
+  <path d="M8 34 Q10 24 32 24 Q54 24 56 34" stroke="#c9a86a" stroke-width="1.6" fill="none" stroke-dasharray="3 3"/>
+  <!-- floating spindle stone -->
+  <path d="M32 6 L45 30 L32 54 L19 30 Z" fill="#7ec8f0" opacity="0.7" filter="url(#g)"/>
+  <path d="M32 6 L19 30 L32 30 Z" fill="#c8ecff"/>
+  <path d="M32 6 L45 30 L32 30 Z" fill="#7ec8f0"/>
+  <path d="M19 30 L32 54 L32 30 Z" fill="#5aa4d8"/>
+  <path d="M45 30 L32 54 L32 30 Z" fill="#2e6aa0"/>
+  <path d="M32 6 L45 30 L32 54 L19 30 Z" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M19 30 H45 M32 6 V54" stroke="#140d0a" stroke-width="1.1"/>
+  <path d="M26 20 L29 14" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- front half of the orbit -->
+  <path d="M8 34 Q10 44 32 44 Q54 44 56 34" stroke="#140d0a" stroke-width="3.6" fill="none"/>
+  <path d="M8 34 Q10 44 32 44 Q54 44 56 34" stroke="#e8c888" stroke-width="1.6" fill="none"/>
+  <circle cx="52" cy="40" r="2.4" fill="#fff4d0" stroke="#140d0a" stroke-width="1.2"/>
+</svg>

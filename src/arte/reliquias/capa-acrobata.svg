@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="k" d="M14 12 Q30 8 40 12 Q52 24 60 22 Q56 34 60 44 Q48 42 42 52 Q36 44 24 50 Q22 36 10 30 Q16 22 14 12 Z"/>
+    <clipPath id="c"><use href="#k"/></clipPath>
+  </defs>
+  <!-- short fluttering cape -->
+  <use href="#k" fill="#4a5048"/>
+  <g clip-path="url(#c)">
+    <path d="M24 36 Q42 36 64 26 V64 H20 Z" fill="#2c5a52"/>
+    <path d="M24 32 Q42 32 64 22 L64 30 Q44 40 26 40 Z" fill="#72e0cc"/>
+    <path d="M14 12 Q24 12 30 16 Q20 18 16 26 Z" fill="#6a7068"/>
+  </g>
+  <path d="M30 16 Q38 24 46 30 M22 22 Q30 32 34 44" stroke="#140d0a" stroke-width="1.2" fill="none"/>
+  <use href="#k" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- clasp -->
+  <circle cx="14" cy="13" r="4.4" fill="#8a929a" stroke="#140d0a" stroke-width="2.2"/>
+  <circle cx="14" cy="13" r="1.8" fill="#72e0cc"/>
+  <!-- motion lines -->
+  <path d="M4 40 Q10 42 16 40 M6 48 Q12 50 20 48" stroke="#72e0cc" stroke-width="1.8" fill="none" stroke-linecap="round" opacity="0.8"/>
+</svg>

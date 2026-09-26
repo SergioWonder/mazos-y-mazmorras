@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="r" d="M12 22 L50 22 Q58 22 58 36 Q58 50 50 50 L12 50 Z"/>
+    <clipPath id="c"><use href="#r"/></clipPath>
+  </defs>
+  <!-- rolled elven blanket -->
+  <use href="#r" fill="#4e6e4a"/>
+  <g clip-path="url(#c)">
+    <path d="M0 40 H64 V64 H0 Z" fill="#344e32"/>
+    <path d="M0 24 H64 V28 H0 Z" fill="#6e906a"/>
+  </g>
+  <use href="#r" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- spiral end -->
+  <ellipse cx="12" cy="36" rx="7" ry="14" fill="#5e7e5a" stroke="#140d0a" stroke-width="3"/>
+  <path d="M12 26 Q18 30 17 38 Q15 46 11 44 Q7 40 10 34 Q12 31 14 35" stroke="#140d0a" stroke-width="1.6" fill="none"/>
+  <path d="M8 26 Q6 36 9 46" stroke="#84a880" stroke-width="1.4" fill="none"/>
+  <!-- leather straps with buckles -->
+  <path d="M24 20 V52 M42 20 V52" stroke="#140d0a" stroke-width="6.4"/>
+  <path d="M24 20 V52 M42 20 V52" stroke="#7a5634" stroke-width="3.6"/>
+  <rect x="21" y="32" width="6" height="6" fill="none" stroke="#c9a040" stroke-width="1.8"/>
+  <rect x="39" y="32" width="6" height="6" fill="none" stroke="#c9a040" stroke-width="1.8"/>
+  <!-- leaf clasp -->
+  <path d="M50 12 Q58 12 58 20 Q50 22 48 16 Z" fill="#8ab860" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M42 20 Q44 14 50 14" stroke="#140d0a" stroke-width="1.8" fill="none"/>
+</svg>

@@ -149,10 +149,11 @@ body.arrastre-activo .zona-mano,
 .sprite-marioneta { display: block; height: auto; aspect-ratio: 140 / 135; overflow: visible; }
 /* Short scenes (landscape phones): a big boss would push its health bar and statuses
    below the scene edge. The sprite gives way, leaving room for the top bar, intent,
-   name, trait, health bar and statuses (~180px). */
-.escenario .sprite-marioneta { max-width: max(3.4rem, calc((100cqh - 180px) * 140 / 135)); }
+   name, trait, health bar and statuses (~180px with one row of statuses).
+   Extra status rows (--alto-estados, measured after each render) come out of it too. */
+.escenario .sprite-marioneta { max-width: max(3.4rem, calc((100cqh - 158px - var(--alto-estados, 22px)) * 140 / 135)); }
 /* the hero (and druid forms) only carry the health bar and statuses underneath */
-.escenario .sprite-silueta .sprite-marioneta { max-width: max(4.4rem, calc((100cqh - 125px) * 140 / 135)); }
+.escenario .sprite-silueta .sprite-marioneta { max-width: max(4.4rem, calc((100cqh - 103px - var(--alto-estados, 22px)) * 140 / 135)); }
 .sprite-silueta .sprite-marioneta { width: 11.4rem; }
 /* enemigos e invocaciones ilustrados: la marioneta ya respira y ataca sola */
 .sprite.sprite-ilustrado { font-size: 0; line-height: 0; animation: none; filter: none; }
@@ -235,6 +236,10 @@ body.arrastre-activo .zona-mano,
 @keyframes morir {
   to { opacity: 0; transform: translateY(24px) rotate(12deg) scale(0.7); filter: grayscale(1); }
 }
+
+/* a dead enemy leaves an invisible gap of its own size: the rest keep their place */
+.enemigo-hueco { visibility: hidden; pointer-events: none; }
+.enemigo-hueco * { animation: none !important; }
 
 .enemigo.targeteable { cursor: crosshair; }
 .enemigo.targeteable .sprite { filter: drop-shadow(0 10px 12px rgba(0,0,0,0.65)) brightness(1.12); }
@@ -360,7 +365,17 @@ body.arrastre-activo .zona-mano,
   50% { box-shadow: 0 0 16px rgba(201, 163, 255, 0.85); }
 }
 
-.estados { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; min-height: 22px; }
+/* Many statuses wrap into rows within the fighter's width instead of widening it
+   (inline-size containment keeps them out of the fighter's intrinsic width). */
+.estados {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-self: stretch;
+  contain: inline-size;
+  min-height: 22px;
+}
 .estado {
   font-size: 0.78rem;
   background: rgba(10, 13, 9, 0.75);
@@ -621,22 +636,40 @@ body.arrastre-activo { cursor: grabbing; }
 
 .int-dormido { color: #b9c4ff; font-size: 1.35rem; }
 
-/* painted scenario background (public/fondos/); the CSS sky is only the fallback */
-.fondo-escena { position: absolute; inset: 0; pointer-events: none; }
+/* painted scenario background (public/fondos/); the CSS sky is only the fallback.
+   It covers the whole combat screen: the image fills the scene box as before and a
+   mirrored copy continues its ground under the hand, fading into the page colour. */
+.fondo-escena { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .fondo-escena img {
+  display: block;
   width: 100%;
-  height: 100%;
+  height: var(--alto-escenario, 60%);
   object-fit: cover;
-  object-position: 50% 100%;
+  /* 3px lower: the paintings' last rows carry encoding noise that the mirror would double */
+  object-position: 50% calc(100% + 3px);
   opacity: 0;
   transition: opacity 0.5s ease-out;
 }
-.escenario.fondo-pintado .fondo-escena img { opacity: 1; }
-.escenario.fondo-pintado .cielo,
-.escenario.fondo-pintado .silueta-fondo { display: none; }
+.fondo-escena .fondo-reflejo {
+  position: absolute;
+  left: 0;
+  top: var(--alto-escenario, 60%);
+  transform: scaleY(-1);
+  /* only the ground right under the scene shows; further down it sinks into shadow
+     (on portrait phones the area below the scene is tall and the mirror would show) */
+  -webkit-mask-image: linear-gradient(0deg, #000 0, rgba(0, 0, 0, 0.6) 60px, transparent 130px);
+  mask-image: linear-gradient(0deg, #000 0, rgba(0, 0, 0, 0.6) 60px, transparent 130px);
+}
+.combate.fondo-pintado .fondo-escena img { opacity: 1; }
+.combate.fondo-pintado .cielo,
+.combate.fondo-pintado .silueta-fondo { display: none; }
 .combate-jefe .fondo-escena::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 80%, rgba(179, 38, 30, 0.22), transparent 70%);
+  /* sized and placed against the scene, but free to fade out under the hand */
+  background: radial-gradient(
+    ellipse 70% calc(var(--alto-escenario, 60vh) * 0.6) at 50% calc(var(--alto-escenario, 60vh) * 0.8),
+    rgba(179, 38, 30, 0.22), transparent 70%
+  );
 }

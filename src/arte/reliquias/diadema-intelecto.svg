@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.6"/></filter>
+  </defs>
+  <!-- silver circlet -->
+  <path d="M5 40 Q32 22 59 40 L58 47 Q32 30 6 47 Z" fill="#a8b0b8" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M32 34 Q48 36 58 47 L59 42 Q46 32 32 31 Z" fill="#6a727a"/>
+  <path d="M8 41 Q20 32 30 31" stroke="#dde2e6" stroke-width="1.6" fill="none"/>
+  <!-- side gems -->
+  <circle cx="16" cy="37" r="2.6" fill="#a896ff" stroke="#140d0a" stroke-width="1.4"/>
+  <circle cx="48" cy="37" r="2.6" fill="#a896ff" stroke="#140d0a" stroke-width="1.4"/>
+  <!-- crest -->
+  <path d="M22 34 L32 9 L42 34 Q32 38 22 34 Z" fill="#a8b0b8" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M32 9 L42 34 Q37 36 32 36 Z" fill="#6a727a"/>
+  <path d="M22 34 L32 9 L42 34 Q32 38 22 34 Z" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <!-- glowing mind gem -->
+  <ellipse cx="32" cy="26" rx="8" ry="10" fill="#a896ff" filter="url(#g)"/>
+  <ellipse cx="32" cy="26" rx="4.6" ry="6.4" fill="#8a76f0" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M30 23 Q31 21 33 21" stroke="#e4ddff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>

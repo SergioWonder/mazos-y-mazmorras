@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <path id="b" d="M24 12 L40 12 L40 38 Q42 44 51 46 Q59 48 59 54 L59 56 L22 56 L22 40 Q24 28 24 12 Z"/>
+    <clipPath id="c"><use href="#b"/></clipPath>
+  </defs>
+  <!-- wing with a faint sky glow -->
+  <path d="M26 22 Q12 10 3 14 Q7 19 5 23 Q11 25 7 30 Q15 32 11 37 Q20 37 26 32 Z" fill="#cfe8ff" opacity="0.6" filter="url(#g)"/>
+  <path d="M26 22 Q12 10 3 14 Q7 19 5 23 Q11 25 7 30 Q15 32 11 37 Q20 37 26 32 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M24 26 Q14 21 7 23 M24 30 Q16 28 9 31" stroke="#a8987a" stroke-width="1.2" fill="none"/>
+  <path d="M22 33 Q16 36 11 37 Q20 37 26 32 Z" fill="#b8a888"/>
+  <!-- boot -->
+  <use href="#b" fill="#7a4f2e"/>
+  <g clip-path="url(#c)">
+    <path d="M34 12 H64 V40 Q46 44 40 38 Z M22 48 H64 V64 H22 Z" fill="#54341c"/>
+    <path d="M24 12 H28 V44 H23 Z" fill="#9a6c44"/>
+  </g>
+  <path d="M40 38 Q36 44 38 50" stroke="#140d0a" stroke-width="1.2" fill="none"/>
+  <use href="#b" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M22 51 L59 51 L59 57 L22 57 Z" fill="#2a1c14" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <!-- folded cuff -->
+  <path d="M22 8 L42 8 L41 18 L23 18 Z" fill="#8e6038" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M33 8 L41 8 L40.5 18 L33 18 Z" fill="#6a4426"/>
+  <path d="M22 8 L42 8 L41 18 L23 18 Z" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+</svg>

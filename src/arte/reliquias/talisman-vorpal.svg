@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+    <path id="b" d="M27 25 L37 25 L36 48 L32 58 L28 48 Z"/>
+    <clipPath id="c"><use href="#b"/></clipPath>
+  </defs>
+  <g transform="rotate(38 32 32) translate(32 33) scale(1.12) translate(-32 -32)">
+    <!-- hanging ring -->
+    <circle cx="32" cy="6" r="4" fill="none" stroke="#140d0a" stroke-width="4.2"/>
+    <circle cx="32" cy="6" r="4" fill="none" stroke="#c9a040" stroke-width="1.8"/>
+    <!-- blade -->
+    <use href="#b" fill="#b0b8c0"/>
+    <g clip-path="url(#c)">
+      <path d="M32 20 H40 V64 H32 Z" fill="#6c747c"/>
+    </g>
+    <path d="M32 28 L32 50" stroke="#ff5a4a" stroke-width="3.4" filter="url(#g)"/>
+    <path d="M32 28 L32 50" stroke="#ffb0a0" stroke-width="1.2" stroke-linecap="round"/>
+    <use href="#b" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+    <!-- grip, guard and pommel gem -->
+    <rect x="29.5" y="12" width="5" height="11" rx="1.5" fill="#5a2626" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M29.5 16 L34.5 15 M29.5 20 L34.5 19" stroke="#140d0a" stroke-width="1.1"/>
+    <path d="M20 23 Q32 20 44 23 L43 27 Q32 25 21 27 Z" fill="#7a5a2a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+    <circle cx="32" cy="11" r="3.4" fill="#ff5a4a" filter="url(#g)"/>
+    <circle cx="32" cy="11" r="2.4" fill="#d8303a" stroke="#140d0a" stroke-width="1.4"/>
+  </g>
+</svg>

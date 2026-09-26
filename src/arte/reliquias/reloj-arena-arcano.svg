@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <path id="h" d="M20 10 L44 10 Q44 24 34 32 Q44 40 44 54 L20 54 Q20 40 30 32 Q20 24 20 10 Z"/>
+    <clipPath id="c"><use href="#h"/></clipPath>
+  </defs>
+  <!-- glass -->
+  <use href="#h" fill="#2c2a48" opacity="0.85"/>
+  <g clip-path="url(#c)">
+    <path d="M22 20 L42 20 Q40 26 32 31 Q24 26 22 20 Z" fill="#a896ff" filter="url(#g)"/>
+    <path d="M24 20 L40 20 Q38 25 32 30 Q26 25 24 20 Z" fill="#b8aaff"/>
+    <path d="M18 54 Q24 42 32 42 Q40 42 46 54 Z" fill="#a896ff" filter="url(#g)"/>
+    <path d="M20 54 Q25 44 32 44 Q39 44 44 54 Z" fill="#8a76f0"/>
+    <path d="M22 12 L26 12 Q26 22 30 28 L28 28 Q22 22 22 12 Z" fill="#c8c4e8" opacity="0.5"/>
+  </g>
+  <path d="M32 31 V44" stroke="#d8d0ff" stroke-width="1.4" stroke-dasharray="1.6 1.6"/>
+  <use href="#h" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <!-- dark wood frame -->
+  <rect x="12" y="4" width="40" height="7" rx="2" fill="#5a3e28" stroke="#140d0a" stroke-width="2.6"/>
+  <rect x="12" y="53" width="40" height="7" rx="2" fill="#3e2a1a" stroke="#140d0a" stroke-width="2.6"/>
+  <path d="M16 11 V53 M48 11 V53" stroke="#140d0a" stroke-width="5"/>
+  <path d="M16 11 V53 M48 11 V53" stroke="#7a5634" stroke-width="2.2"/>
+  <circle cx="32" cy="7.5" r="2" fill="#a896ff" stroke="#140d0a" stroke-width="1.2"/>
+</svg>

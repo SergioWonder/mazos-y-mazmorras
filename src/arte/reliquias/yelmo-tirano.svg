@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <path id="h" d="M12 34 Q12 12 32 10 Q52 12 52 34 L52 50 L42 58 L22 58 L12 50 Z"/>
+    <clipPath id="c"><use href="#h"/></clipPath>
+  </defs>
+  <!-- crown spikes -->
+  <path d="M18 18 L14 3 L25 13 Z M32 12 L32 0 L37 12 Z M46 18 L50 3 L39 13 Z" fill="#3a3440" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <!-- dark iron helm -->
+  <use href="#h" fill="#4a4452"/>
+  <g clip-path="url(#c)">
+    <path d="M36 8 Q54 26 44 64 L64 64 L64 0 Z" fill="#2c2832"/>
+    <path d="M14 30 Q16 16 28 12 Q20 20 19 32 Z" fill="#6e6878"/>
+  </g>
+  <path d="M32 10 V26" stroke="#140d0a" stroke-width="1.4"/>
+  <!-- visor slit -->
+  <path d="M16 40 L28 38 L32 42 L36 38 L48 40 L46 44 L18 44 Z" fill="#0b0910" stroke="#140d0a" stroke-width="2"/>
+  <path d="M32 44 V56" stroke="#140d0a" stroke-width="1.4"/>
+  <use href="#h" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- tyrant eye -->
+  <ellipse cx="32" cy="29" rx="8" ry="6" fill="#ff7a3a" filter="url(#g)"/>
+  <path d="M24 29 Q32 21 40 29 Q32 37 24 29 Z" fill="#f0d8a0" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="32" cy="29" r="3.2" fill="#d8501e" stroke="#140d0a" stroke-width="1.2"/>
+  <ellipse cx="32" cy="29" rx="1" ry="2.4" fill="#140d0a"/>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <path id="e" d="M6 32 Q32 6 58 32 Q32 58 6 32 Z"/>
+    <clipPath id="c"><use href="#e"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="22" fill="#c98bff" opacity="0.45" filter="url(#g)"/>
+  <!-- tendril lashes -->
+  <path d="M14 22 Q8 12 12 6 M24 16 Q22 6 28 2 M40 16 Q42 6 36 2 M50 22 Q56 12 52 6 M16 44 Q10 52 14 58 M48 44 Q54 52 50 58" stroke="#140d0a" stroke-width="4.6" fill="none" stroke-linecap="round"/>
+  <path d="M14 22 Q8 12 12 6 M24 16 Q22 6 28 2 M40 16 Q42 6 36 2 M50 22 Q56 12 52 6 M16 44 Q10 52 14 58 M48 44 Q54 52 50 58" stroke="#5a3a70" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <!-- eye white -->
+  <use href="#e" fill="#e0d4c0"/>
+  <g clip-path="url(#c)">
+    <path d="M0 36 Q32 50 64 36 V64 H0 Z" fill="#a898a0"/>
+    <path d="M12 28 Q20 26 26 30 M44 40 Q48 36 54 36" stroke="#a8323a" stroke-width="1" fill="none"/>
+  </g>
+  <use href="#e" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- violet iris and slit pupil -->
+  <circle cx="32" cy="32" r="11" fill="#c98bff" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="9" fill="#8a4ad0" stroke="#140d0a" stroke-width="2"/>
+  <path d="M40 32 A8 8 0 0 1 26 38 A9 9 0 0 0 40 32 Z" fill="#5a2a90"/>
+  <ellipse cx="32" cy="32" rx="2.2" ry="7" fill="#0b0910"/>
+  <circle cx="28.5" cy="28" r="1.8" fill="#f4e8ff"/>
+</svg>

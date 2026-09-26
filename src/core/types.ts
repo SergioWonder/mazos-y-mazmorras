@@ -357,6 +357,12 @@ export interface ContextoEfecto {
   manaCero(): void;
   /** Lanza un efecto de partículas sobre un luchador (sin daño ni texto). */
   efectoEn(obj: Luchador, efecto: string): Promise<void>;
+  /** Per-combat counter for relics: returns its value and, with `valor`, sets it first. */
+  marca(clave: string, valor?: number): number;
+  /** Current player turn (1 on the first turn). */
+  turnoActual(): number;
+  /** true in elite and boss fights. */
+  esEliteOJefe(): boolean;
 }
 
 export type TipoNodo = 'combate' | 'elite' | 'descanso' | 'cofre' | 'evento' | 'jefe';
@@ -370,20 +376,100 @@ export interface NodoMapa {
   visitado: boolean;
 }
 
+/** Relic rarity: 'inicial' = class starting relic (never rolled); 'jefe' relics
+ *  only drop from bosses. */
+export type RarezaReliquia = 'inicial' | 'comun' | 'rara' | 'jefe';
+
+/** Where a relic reward comes from (it decides which rarities can roll). */
+export type OrigenReliquia = 'cofre' | 'elite' | 'evento' | 'jefe';
+
+/** Card just played, as seen by the `alJugarCarta` relic hook. */
+export interface CartaJugada {
+  carta: CartaInstancia;
+  objetivo?: EnemigoCombate;
+  /** Cards played this turn, this one included. */
+  jugadasTurno: number;
+  /** Cards played this combat, this one included. */
+  jugadasCombate: number;
+}
+
+/** One enemy hit against the player, as seen by the `alSerGolpeado` hook. */
+export interface GolpeRecibido {
+  /** Damage of the hit after modifiers, before block. */
+  dano: number;
+  /** Part of it that the block absorbed. */
+  bloqueado: number;
+  /** Part of it that reached the player's PV. */
+  real: number;
+}
+
 export interface ReliquiaDef {
   id: string;
   nombre: string;
   icono: string;
   texto: string;
+  rareza: RarezaReliquia;
   /** Solo puede aparecer para esta clase. */
   soloClase?: ClaseId;
-  /** hooks */
+
+  // ── Run hooks (pure, no combat) ─────────────────────────────────────────────
   alObtener?: (run: EstadoRun) => void;
-  inicioCombate?: (ctx: ContextoEfecto) => Promise<void>;
   finCombate?: (run: EstadoRun) => void;
+  /** Fired by the engine once when a combat is won (before the rewards). */
+  alVencerCombate?: (run: EstadoRun, info: { eliteOJefe: boolean }) => void;
+  /** Rewrites how many PV resting at a campfire heals. */
+  curaDescanso?: (run: EstadoRun, cura: number) => number;
+  /** After resting: `curado` is what was actually healed. */
+  alDescansar?: (run: EstadoRun, curado: number) => void;
+  /** After upgrading a card at a campfire; returns the extra upgrades it made. */
+  alAfilar?: (run: EstadoRun, rng: () => number) => string[];
+  /** A card has just been added to the deck. */
+  alAnadirCarta?: (run: EstadoRun, carta: CartaInstancia) => void;
+  /** On entering a map room; returns a short line to announce, if any. */
+  alEntrarEnSala?: (run: EstadoRun, tipo: TipoNodo, rng: () => number) => string | void;
+  /** Rooms where it grants an extra card reward. */
+  recompensaCartaEn?: TipoNodo[];
+  /** Multiplies the chance of a rare card in card rewards. */
+  pesoRaroMult?: number;
+
+  // ── Combat hooks ────────────────────────────────────────────────────────────
+  inicioCombate?: (ctx: ContextoEfecto) => Promise<void>;
+  /** Start of each player turn (after drawing). `turno` starts at 1. */
+  inicioTurno?: (ctx: ContextoEfecto, turno: number) => Promise<void>;
   finTurno?: (ctx: ContextoEfecto) => Promise<void>;
-  alGastarConjuro?: (ctx: ContextoEfecto) => Promise<void>;
+  alGastarConjuro?: (ctx: ContextoEfecto, nivel: number) => Promise<void>;
+  alJugarCarta?: (ctx: ContextoEfecto, jugada: CartaJugada) => Promise<void>;
+  /** A played card has just left the player with 0 energy. */
+  alQuedarseSinEnergia?: (ctx: ContextoEfecto) => Promise<void>;
+  /** The discard pile has just been shuffled into the draw pile. */
+  alBarajar?: (ctx: ContextoEfecto) => Promise<void>;
+  alDescartar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
+  /** An enemy has just died (by any means but being devoured). */
+  alMatar?: (ctx: ContextoEfecto, enemigo: EnemigoCombate) => Promise<void>;
+  /** The player has applied a status through the effect API. */
+  alAplicarEstado?: (ctx: ContextoEfecto, obj: Luchador, estado: EstadoId, n: number) => Promise<void>;
+  /** After each player attack on an enemy (`total` = unblocked damage dealt). */
+  alAtacar?: (ctx: ContextoEfecto, obj: EnemigoCombate, total: number) => Promise<void>;
+  /** Extra base damage per hit of the player's attacks against `obj`. */
+  bonoAtaque?: (ctx: ContextoEfecto, obj: EnemigoCombate) => number;
+  /** After each enemy hit against the player. */
+  alSerGolpeado?: (ctx: ContextoEfecto, atacante: EnemigoCombate, golpe: GolpeRecibido) => Promise<void>;
+  /** The druid has just transformed: `efecto` is the live entry (mutable). */
+  alTransformarse?: (ctx: ContextoEfecto, efecto: EfectoTemporal) => Promise<void>;
+  alTerminarTransformacion?: (ctx: ContextoEfecto, efecto: EfectoTemporal) => Promise<void>;
+  alGanarFuria?: (ctx: ContextoEfecto, fuerza: number, destreza: number) => Promise<void>;
+  /** The Rage is about to break: return true to keep it this time. */
+  salvarFuria?: (ctx: ContextoEfecto) => boolean;
+  alPerderFuria?: (ctx: ContextoEfecto) => Promise<void>;
+  /** Roots have just crushed an enemy that could not attack. */
+  alAplastarRaices?: (ctx: ContextoEfecto, enemigo: EnemigoCombate, dolor: number) => Promise<void>;
+  /** A warlock's ephemeral summon survived the round and is about to vanish. */
+  alDesvanecerseInvocacion?: (ctx: ContextoEfecto, inv: Invocacion) => Promise<void>;
   robaExtraPorTurno?: number;
+  /** Block kept between turns (up to this much). */
+  conservaBloqueo?: number;
+  /** Unplayed cards kept in hand at end of turn (the most expensive first). */
+  retieneCartas?: number;
 }
 
 export interface EstadoRun {

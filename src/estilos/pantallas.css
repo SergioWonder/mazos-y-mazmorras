@@ -252,6 +252,14 @@
 }
 .btn-saltar { opacity: 0.7; border-color: rgba(232, 217, 176, 0.25); }
 
+.reliquia-rareza {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--oro, #d9a93f);
+  opacity: 0.85;
+}
 .panel-reliquia .reliquia-grande {
   font-size: 4.6rem;
   margin: 0.8rem 0;

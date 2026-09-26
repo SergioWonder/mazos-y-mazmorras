@@ -1,6 +1,6 @@
 import type {
   CartaDef, CartaInstancia, ContextoEfecto, EfectoTemporal, EnemigoCombate, EnemigoDef,
-  EstadoId, EstadoRun, JugadorCombate, Luchador, Movimiento,
+  EstadoId, EstadoRun, JugadorCombate, Luchador, Movimiento, ReliquiaDef,
 } from './types.ts';
 import { barajar } from './rng.ts';
 import { crearEnemigo } from './enemigos.ts';
@@ -47,6 +47,17 @@ export class Combate {
   descartadasEsteTurno = 0; // cartas descartadas por efectos este turno (pícaro)
   terminado: 'victoria' | 'derrota' | null = null;
   enResolucion = false;
+  /** Cards played this turn / this combat (relic rhythm hooks). */
+  jugadasTurno = 0;
+  jugadasCombate = 0;
+  /** Discard reshuffles not yet announced to the relics (robarCartas is sync). */
+  private barajadosPendientes = 0;
+  /** Per-combat relic counters (see ContextoEfecto.marca). */
+  private marcas: Record<string, number> = {};
+  /** Guards the alAplicarEstado hook against relics re-triggering themselves. */
+  private enGanchoEstado = false;
+  private victoriaNotificada = false;
+  eliteOJefe: boolean;
   run: EstadoRun;
   rng: () => number;
   ui: Presentador;
@@ -61,6 +72,7 @@ export class Combate {
     this.run = run;
     this.rng = rng;
     this.ui = ui;
+    this.eliteOJefe = eliteOJefe;
     const nombres = {
       druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo',
     };
@@ -158,6 +170,27 @@ export class Combate {
     if ((e.estados.veneno ?? 0) <= 0) delete e.estados.veneno;
   }
 
+  /** Runs one combat hook on every relic the player carries, in order. */
+  async ganchos(fn: (r: ReliquiaDef, ctx: ContextoEfecto) => Promise<void> | void) {
+    for (const r of this.run.reliquias) await fn(r, this.contexto());
+  }
+
+  /** Extra base damage per hit that the relics add to an attack against `obj`. */
+  private bonoAtaqueReliquias(obj: EnemigoCombate): number {
+    let bono = 0;
+    for (const r of this.run.reliquias) if (r.bonoAtaque) bono += r.bonoAtaque(this.contexto(), obj);
+    return bono;
+  }
+
+  /** Tells the relics about the reshuffles that robarCartas() has done. */
+  private async dispararBarajados() {
+    while (this.barajadosPendientes > 0 && !this.terminado) {
+      this.barajadosPendientes--;
+      await this.ganchos((r, c) => r.alBarajar?.(c));
+    }
+    this.barajadosPendientes = 0;
+  }
+
   // ── Contexto que se pasa a las cartas y reliquias ─────────────────────────
 
   contexto(objetivo?: EnemigoCombate): ContextoEfecto {
@@ -170,7 +203,7 @@ export class Combate {
       async atacar(obj, base, veces = 1, fx) {
         let total = 0;
         // Oportunista (pícaro): más daño por golpe si el objetivo no pretende atacar
-        const furtivo = self.ventajaFurtivaContra(obj);
+        const furtivo = self.ventajaFurtivaContra(obj) + self.bonoAtaqueReliquias(obj);
         for (let i = 0; i < veces; i++) {
           if (!obj.vivo) break;
           const dano = self.danoRecibido(obj, self.danoDeAtaque(self.jugador, base + furtivo));
@@ -192,6 +225,7 @@ export class Combate {
           obj.estados.condena = (obj.estados.condena ?? 0) + cond;
           await self.ui.fxEstado(obj, 'condena', cond);
         }
+        if (!self.terminado) await self.ganchos((r, c) => r.alAtacar?.(c, obj, total));
         return total;
       },
       async atacarTodos(base, fx) {
@@ -200,10 +234,13 @@ export class Combate {
         const filo = self.jugador.estados.filoVenenoso ?? 0;
         const cond = self.jugador.estados.condenaPorAtaque ?? 0;
         for (const e of self.enemigos.filter((x) => x.vivo)) {
-          const extra = self.ventajaFurtivaContra(e);
+          const extra = self.ventajaFurtivaContra(e) + self.bonoAtaqueReliquias(e);
           const dano = self.danoRecibido(e, self.danoDeAtaque(self.jugador, base + extra));
-          await self.infligir(e, dano, fx);
-          if (!e.vivo) continue;
+          const real = await self.infligir(e, dano, fx);
+          if (!e.vivo) {
+            if (!self.terminado) await self.ganchos((r, c) => r.alAtacar?.(c, e, real));
+            continue;
+          }
           if (filo > 0) {
             e.estados.veneno = (e.estados.veneno ?? 0) + filo;
             await self.ui.fxEstado(e, 'veneno', filo);
@@ -212,6 +249,7 @@ export class Combate {
             e.estados.condena = (e.estados.condena ?? 0) + cond;
             await self.ui.fxEstado(e, 'condena', cond);
           }
+          if (!self.terminado) await self.ganchos((r, c) => r.alAtacar?.(c, e, real));
         }
       },
       async ganarBloqueo(base) {
@@ -232,6 +270,15 @@ export class Combate {
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
         await self.ui.fxEstado(obj, estado, n);
+        // Relics react to the statuses you apply (not to the ones they apply).
+        if (!self.enGanchoEstado && n > 0) {
+          self.enGanchoEstado = true;
+          try {
+            await self.ganchos((r, c) => r.alAplicarEstado?.(c, obj, estado, n));
+          } finally {
+            self.enGanchoEstado = false;
+          }
+        }
       },
       async aplicarRaices(e, cantidad, turnos) {
         // Cada carta de Raíces es una instancia con su propia duración. Raíces
@@ -258,6 +305,7 @@ export class Combate {
         self.robarCartas(n);
         self.ui.render();
         await self.ui.espera(150);
+        await self.dispararBarajados();
       },
       ganarEnergia(n) {
         self.jugador.energia += n;
@@ -270,11 +318,14 @@ export class Combate {
         const bono = self.jugador.estados.formaPotenciada ?? 0;
         const fuerza = e.fuerza + (e.fuerza > 0 ? bono : 0);
         const destreza = e.destreza + (e.destreza > 0 ? bono : 0);
-        self.jugador.efectosTemporales.push({ ...e, turnos, fuerza, destreza });
+        const vivo: EfectoTemporal = { ...e, turnos, fuerza, destreza };
+        self.jugador.efectosTemporales.push(vivo);
         if (fuerza) self.jugador.estados.fuerza = (self.jugador.estados.fuerza ?? 0) + fuerza;
         if (destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + destreza;
+        // Relics may stretch the live entry before it is announced.
+        await self.ganchos((r, c) => r.alTransformarse?.(c, vivo));
         await self.ui.fxMensaje(
-          e.permanente ? `✦ ${e.etiqueta} (permanente)` : `✦ ${e.etiqueta} (${turnos} turnos)`,
+          e.permanente ? `✦ ${e.etiqueta} (permanente)` : `✦ ${e.etiqueta} (${vivo.turnos} turnos)`,
         );
       },
       async ganarFuria(fuerza, destreza = 0) {
@@ -283,6 +334,7 @@ export class Combate {
         if (fuerza) self.jugador.estados.fuerza = (self.jugador.estados.fuerza ?? 0) + fuerza;
         if (destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + destreza;
         await self.ui.fxMensaje(`🔥 ¡Furia! +${fuerza} Fuerza${destreza ? ` +${destreza} Destreza` : ''}`);
+        await self.ganchos((r, c) => r.alGanarFuria?.(c, fuerza, destreza));
       },
       async gastarConjuro(nivelMin) {
         // Por defecto se gasta el espacio de mayor nivel disponible
@@ -292,10 +344,9 @@ export class Combate {
         if (libres.length === 0) return 0;
         libres[0].gastado = true;
         await self.ui.fxMensaje(`◈ Conjuro de nivel ${libres[0].nivel} gastado`);
-        for (const r of self.run.reliquias) {
-          if (r.alGastarConjuro) await r.alGastarConjuro(self.contexto());
-        }
-        return libres[0].nivel;
+        const nivel = libres[0].nivel;
+        await self.ganchos((r, c) => r.alGastarConjuro?.(c, nivel));
+        return nivel;
       },
       async ganarConjuro(permanente = false) {
         if (permanente) self.run.espaciosConjuro++;
@@ -466,6 +517,7 @@ export class Combate {
         e.pv = 0;
         e.vivo = false;
         await self.ui.fxMuerte(e);
+        await self.ganchos((r, c) => r.alMatar?.(c, e));
         await self.comprobarFin();
       },
       async sanar(obj, n) {
@@ -482,6 +534,12 @@ export class Combate {
         self.ui.render();
       },
       efectoEn: (obj, efecto) => self.ui.fxParticulas(obj, efecto),
+      marca(clave, valor) {
+        if (valor !== undefined) self.marcas[clave] = valor;
+        return self.marcas[clave] ?? 0;
+      },
+      turnoActual: () => self.turno,
+      esEliteOJefe: () => self.eliteOJefe,
     };
   }
 
@@ -552,6 +610,8 @@ export class Combate {
           await this.ui.fxMensaje(`¡De las entrañas de ${e.nombre} se alza ${liberado.nombre}!`);
           this.ui.render();
         }
+        // Relics that feed on kills
+        if (obj !== this.jugador && this.jugador.vivo) await this.ganchos((r, c) => r.alMatar?.(c, e));
       }
     }
     // Armadura de Agathys (brujo): lo que tu bloqueo absorbe se devuelve a TODOS
@@ -583,6 +643,10 @@ export class Combate {
     if (this.terminado) return;
     if (!this.jugador.vivo || this.jugador.pv <= 0) this.terminado = 'derrota';
     else if (this.enemigos.every((e) => !e.vivo)) this.terminado = 'victoria';
+    if (this.terminado === 'victoria' && !this.victoriaNotificada) {
+      this.victoriaNotificada = true;
+      for (const r of this.run.reliquias) r.alVencerCombate?.(this.run, { eliteOJefe: this.eliteOJefe });
+    }
   }
 
   /** Escribe en el Conjuro Prodigioso: suma daño, añade efecto (sin apilar) y
@@ -649,6 +713,9 @@ export class Combate {
     const inv = this.jugador.invocacion;
     if (!inv?.efimera) return;
     if (inv.vida > 0 && !this.terminado) await this.atacarInvocacion();
+    if (inv.vida > 0 && !this.terminado) {
+      await this.ganchos((r, c) => r.alDesvanecerseInvocacion?.(c, inv));
+    }
     this.jugador.invocacion = undefined;
     await this.ui.fxInvocacionMuerte();
     await this.ui.fxMensaje('👁️ La invocación se desvanece');
@@ -716,6 +783,7 @@ export class Combate {
         if (this.jugador.descarte.length === 0) return;
         this.jugador.mazo = barajar(this.rng, this.jugador.descarte);
         this.jugador.descarte = [];
+        this.barajadosPendientes++; // announced to the relics by dispararBarajados()
       }
       if (this.jugador.mano.length >= 10) return; // mano llena
       this.jugador.mano.push(this.jugador.mazo.pop()!);
@@ -736,6 +804,7 @@ export class Combate {
       this.jugador.bloqueo += prep;
       await this.ui.fxBloqueo(this.jugador, prep);
     }
+    await this.ganchos((r, c) => r.alDescartar?.(c, carta));
     this.ui.render();
   }
 
@@ -790,9 +859,12 @@ export class Combate {
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
     this.descartadasEsteTurno = 0;
+    this.jugadasTurno = 0;
     for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
     if (!primero) {
-      this.jugador.bloqueo = 0;
+      // Block fades, except what relics such as the Ring of Protection keep
+      const conserva = this.run.reliquias.reduce((s, r) => s + (r.conservaBloqueo ?? 0), 0);
+      this.jugador.bloqueo = Math.min(this.jugador.bloqueo, conserva);
       // Piruetas (pícaro): reaplica el bloqueo aplazado de la carta jugada antes.
       const pendientes = this.jugador.bloqueoAplazado;
       this.jugador.bloqueoAplazado = [];
@@ -914,6 +986,10 @@ export class Combate {
     }
     this.robarCartas(aRobar);
     this.ui.render();
+    await this.dispararBarajados();
+    // Relics that care about the rhythm of the fight (first turn, every N turns…)
+    if (!this.terminado) await this.ganchos((r, c) => r.inicioTurno?.(c, this.turno));
+    this.ui.render();
   }
 
   puedeJugar(carta: CartaInstancia): boolean {
@@ -935,7 +1011,10 @@ export class Combate {
     const def = defDe(carta);
     const idx = this.jugador.mano.indexOf(carta);
     if (idx >= 0) this.jugador.mano.splice(idx, 1);
+    const energiaAntes = this.jugador.energia;
     this.jugador.energia -= this.costeEfectivo(def);
+    this.jugadasTurno++;
+    this.jugadasCombate++;
     this.ui.render();
     await def.jugar(this.contexto(objetivo));
     // Guardia de Cuchillas (pícaro): cada Daga que juegas te da bloqueo
@@ -973,6 +1052,16 @@ export class Combate {
     if ((this.jugador.estados.roboAcelerado ?? 0) > 0 && this.jugador.mano.length === 0) {
       delete this.jugador.estados.roboAcelerado;
       await this.ui.fxMensaje('💨 El impulso de Acelerar se disipa');
+    }
+    // Relic hooks: the card just played, and running out of energy with it
+    if (!this.terminado) {
+      const jugada = {
+        carta, objetivo, jugadasTurno: this.jugadasTurno, jugadasCombate: this.jugadasCombate,
+      };
+      await this.ganchos((r, c) => r.alJugarCarta?.(c, jugada));
+    }
+    if (!this.terminado && energiaAntes > 0 && this.jugador.energia <= 0) {
+      await this.ganchos((r, c) => r.alQuedarseSinEnergia?.(c));
     }
     this.enResolucion = false;
     this.ui.render();
@@ -1013,6 +1102,7 @@ export class Combate {
         j.estados.destreza = (j.estados.destreza ?? 0) - e.destreza;
         j.efectosTemporales.splice(j.efectosTemporales.indexOf(e), 1);
         await this.ui.fxMensaje(`${e.etiqueta} termina`);
+        await this.ganchos((r, c) => r.alTerminarTransformacion?.(c, e));
       }
     }
 
@@ -1037,7 +1127,16 @@ export class Combate {
     // Descartar mano (salvo las cartas con Retener, que se quedan). Con el Rayo
     // Espectral del Contemplador, lo que no jugaste se agota en vez de descartarse.
     const retenidas = j.mano.filter((c) => defDe(c).retener);
-    const sobrantes = j.mano.filter((c) => !defDe(c).retener);
+    let sobrantes = j.mano.filter((c) => !defDe(c).retener);
+    // Relics such as the Ioun Stone keep the most expensive unplayed cards
+    const guardar = this.run.reliquias.reduce((s, r) => s + (r.retieneCartas ?? 0), 0);
+    if (guardar > 0 && sobrantes.length > 0) {
+      const elegidas = [...sobrantes]
+        .sort((a, b) => this.costeEfectivo(defDe(b)) - this.costeEfectivo(defDe(a)))
+        .slice(0, guardar);
+      retenidas.push(...elegidas);
+      sobrantes = sobrantes.filter((c) => !elegidas.includes(c));
+    }
     if ((j.estados.cartasEtereas ?? 0) > 0) j.agotadas.push(...sobrantes);
     else j.descarte.push(...sobrantes);
     j.mano = retenidas;
@@ -1116,12 +1215,23 @@ export class Combate {
       (j.estados.furiaIndomita ?? 0) > 0 &&
       this.danoBloqueadoEsteTurno > 0 &&
       j.bloqueo < 10;
-    if (
+    // Relics can hold the Rage once (never against a deliberate Frenzy)
+    const rompeFuria =
       !this.terminado &&
       (this.danoRecibidoEsteTurno === 0 || frenesi) &&
       !indomitaSalva &&
-      j.furiaFuerza + j.furiaDestreza > 0
-    ) {
+      j.furiaFuerza + j.furiaDestreza > 0;
+    let reliquiaSalva = false;
+    if (rompeFuria && !frenesi) {
+      for (const r of this.run.reliquias) {
+        if (r.salvarFuria?.(this.contexto())) {
+          reliquiaSalva = true;
+          await this.ui.fxMensaje(`${r.icono} ${r.nombre}: ¡la Furia aguanta!`);
+          break;
+        }
+      }
+    }
+    if (rompeFuria && !reliquiaSalva) {
       j.estados.fuerza = (j.estados.fuerza ?? 0) - j.furiaFuerza;
       j.estados.destreza = (j.estados.destreza ?? 0) - j.furiaDestreza;
       j.furiaFuerza = 0;
@@ -1134,6 +1244,7 @@ export class Combate {
         j.estados.destreza = (j.estados.destreza ?? 0) + cs;
         await this.ui.fxMensaje(`🐾 Corazón Salvaje: +${cs} Fuerza y +${cs} Destreza`);
       }
+      await this.ganchos((r, c) => r.alPerderFuria?.(c));
     }
     delete j.estados.frenesi; // el Frenesí solo dura este turno
 
@@ -1163,6 +1274,7 @@ export class Combate {
         const dolor = -efectivo; // solo el exceso de raíces sobre el ataque
         await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
         if (dolor > 0) await this.infligir(e, dolor, 'raices');
+        if (!this.terminado) await this.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));
         return;
       }
       const veces = m.veces ?? 1;
@@ -1184,7 +1296,12 @@ export class Combate {
           await this.ui.fxMensaje('🪞 Las imágenes se desvanecen…');
         }
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
-        await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo');
+        const bloqueoAntes = this.jugador.bloqueo;
+        const real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo');
+        if (!this.terminado) {
+          const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
+          await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
+        }
         // Espinas: devuelve daño al atacante
         const espinas = this.jugador.estados.espinas ?? 0;
         if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="m" d="M12 18 L44 18 L42 58 L14 58 Z"/>
+    <clipPath id="c"><use href="#m"/></clipPath>
+  </defs>
+  <!-- handle -->
+  <path d="M42 24 Q58 24 56 38 Q54 50 42 48" stroke="#140d0a" stroke-width="9" fill="none"/>
+  <path d="M42 24 Q58 24 56 38 Q54 50 42 48" stroke="#6a4428" stroke-width="4.6" fill="none"/>
+  <!-- wooden tankard -->
+  <use href="#m" fill="#8a5a32"/>
+  <g clip-path="url(#c)">
+    <path d="M32 0 H64 V64 H30 Z" fill="#5e3a1c"/>
+    <path d="M12 18 H18 V58 H12 Z" fill="#aa7a4a"/>
+  </g>
+  <path d="M21 20 V56 M28 20 V56 M35 20 V56" stroke="#140d0a" stroke-width="1"/>
+  <path d="M12 26 H44 M13 50 H43" stroke="#140d0a" stroke-width="5"/>
+  <path d="M12 26 H44 M13 50 H43" stroke="#8a929a" stroke-width="2.6"/>
+  <use href="#m" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- foamy mead -->
+  <path d="M9 20 Q8 12 14 12 Q16 6 24 8 Q30 3 36 8 Q44 6 46 12 Q50 16 46 21 Q40 24 34 21 Q28 25 22 21 Q14 25 9 20 Z" fill="#f2e6c4" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M38 12 Q44 12 46 16 Q42 20 36 18 Z" fill="#d0c09a"/>
+  <path d="M44 22 Q46 28 44 32" stroke="#f2e6c4" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M16 36 Q20 32 24 36" stroke="#ff9a50" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

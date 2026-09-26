@@ -133,7 +133,8 @@ descuelga de las demás en su mismo nivel.
 - **Compendio de cartas** (desde el menú): todas las cartas por clase, con opción de
   verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
 - Mapa de 10 filas por capítulo con ≥2 eventos, cofres, élites y descansos.
-- Reliquias inspiradas en objetos clásicos de D&D.
+- **Reliquias** inspiradas en objetos clásicos de D&D: más de 50, con rareza (común,
+  rara, de jefe) y reliquias únicas de cada clase (ver [Reliquias](#reliquias)).
 - **Dos escenarios por acto** (elegidos al azar): cada uno con sus enemigos, su
   atmósfera y su jefe final propios, equilibrados a la dificultad del acto.
 - **Jefes únicos**: Gorzug (jefe ogro), Vexis el Embaucador Arcano (cuchillos,
@@ -158,6 +159,88 @@ descuelga de las demás en su mismo nivel.
   en `src/audio/LEEME.md`. Botón flotante 🔊/🔇 para silenciar (se recuerda). La
   intención de ataque enemiga muestra el daño ya modificado (verde si lo reduces con
   Débil/Raíces, rojo si te amplifican con Vulnerable).
+
+## Reliquias
+
+Cada clase empieza con su reliquia inicial (Tótem de Roble, Hacha del Ancestro, Péndulo
+de Ámbar, Guante del Ladrón, Sello del Pacto). Las demás salen en cofres, élites,
+eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
+
+- **Rareza**: cofres y eventos dan 65 % comunes / 35 % raras; los élites, 45 / 55;
+  los jefes sueltan reliquias **de jefe** (potentes y con contrapartida), que no salen
+  en ningún otro sitio. Nunca se repite una reliquia que ya tienes.
+- **Reliquias de clase** (`soloClase`): solo se sortean para su clase (nunca para otra)
+  y pesan el doble dentro de su rareza.
+
+**Generales**
+
+| Reliquia | Rareza | Efecto |
+| --- | --- | --- |
+| 🥾 Botas Aladas | común | Primer turno: +1 de energía y robas 2 |
+| 🧥 Capa de Desplazamiento | común | Primer turno: bloqueo igual al daño anunciado (máx. 15) |
+| 📯 Cuerno de Valhalla | común | Turno 3: 6 de daño y 1 de Débil a todos |
+| 🥁 Tambor de Guerra Enano | común | Cada 3 cartas jugadas, 3 de daño a un enemigo al azar |
+| 🏺 Cáliz Vacío | común | La primera vez por turno que te quedas sin energía, robas 1 |
+| 🥊 Guanteletes de Poder de Ogro | común | Cada enemigo que cae te da 1 de Fuerza (combate) |
+| 🚩 Estandarte del Terror | común | Cuando cae un enemigo, los demás: 1 de Débil y 1 de Vulnerable |
+| 🧪 Veneno de Drow | común | Aplicar Débil aplica también 2 de Veneno |
+| 💍 Anillo de Protección | común | Conservas hasta 5 de bloqueo entre turnos |
+| 🦾 Brazales de Defensa | común | Turno sin ataques: 6 de bloqueo al acabarlo |
+| 👘 Manto Espectral | común | Empiezas con 2 cargas de Espejismo |
+| 🍀 Piedra de la Buena Suerte | común | Doble probabilidad de carta rara en las recompensas |
+| 🛌 Saco de Dormir Élfico | común | Descansar cura un 15 % más; ileso, +5 PV máximos |
+| 🪨 Piedra de Afilar Enana | común | Afilar mejora además otra carta al azar |
+| 🗺️ Mapa del Tesoro | común | Los cofres dan también una carta |
+| 📔 Diario del Aventurero | común | Cada evento mejora 1 carta al azar |
+| 👝 Bolsa de Contención | rara | Al barajar el descarte, +1 de energía |
+| 🃏 Baraja de las Maravillas | rara | 1d20 al empezar cada combate: de perder 5 PV a Débil y Vulnerable 3 a todos |
+| 🧿 Amuleto de Salud | rara | La primera vez que un golpe te deja por debajo de la mitad, te curas 10 |
+| 🗡️ Talismán Vorpal | rara | Decapita al Vulnerable (no jefe) que dejas a ≤ 15 % de PV |
+| 🦠 Frasco de la Plaga | rara | El Veneno de un enemigo muerto salta a otro |
+| 🛡️ Escudo Centinela | rara | Un golpe detenido del todo devuelve 4 de daño |
+| 📕 Manual del Ejercicio Provechoso | rara | Cada élite o jefe vencido: +1 de Fuerza permanente |
+| 🎺 Cuerno de Caza | rara | Contra élites y jefes: 2 de Vulnerable a todos y robas 2 |
+| 🔨 Yunque de Moradin | rara | Los ataques que añades al mazo llegan mejorados |
+| ⛑️ Yelmo del Tirano | jefe | +1 de energía por turno; pierdes 4 PV al empezar cada combate |
+| 🔪 Hoja Sedienta | jefe | +1 de daño por cada 10 PV que te falten; descansar cura la mitad |
+| 💎 Piedra Ioun | jefe | Robas 1 más y conservas la carta más cara sin jugar |
+
+**De clase**
+
+| Clase | Reliquia | Rareza | Efecto |
+| --- | --- | --- | --- |
+| Druida | 🌰 Semilla del Roble Madre | común | Al transformarte, 3 de Raíces a todos (1 turno) |
+| Druida | 🌿 Muérdago Sagrado | común | Las Raíces que aplastan te curan 3 PV |
+| Druida | 🦷 Colmillo del Cambiaformas | rara | La primera forma del combate dura 3 turnos más y robas 2 |
+| Druida | 🌙 Luna en un Frasco | rara | Al terminar una forma, Invoca 6 |
+| Bárbaro | 🎗️ Cinturón del Gigante | común | Ganar Furia da 4 de bloqueo |
+| Bárbaro | 🦴 Collar de Colmillos | común | El primer golpe que te hiere en cada ronda da Furia (+1 Fuerza) |
+| Bárbaro | 🍺 Jarra de Hidromiel | común | Perder la Furia te cura 5 PV |
+| Bárbaro | 🐻 Tótem del Oso | rara | La primera vez que la Furia se iba a romper, aguanta |
+| Bárbaro | 🪝 Garfio del Carnicero | rara | Cada enemigo que cae en Furia da 1 de energía |
+| Mago | 🪶 Pluma de Escriba | común | Cada espacio gastado Escribe 3 en el Conjuro Prodigioso |
+| Mago | ⏳ Reloj de Arena Arcano | común | Cada 3 turnos recuperas el espacio gastado de mayor nivel |
+| Mago | 👑 Diadema de Intelecto | rara | Al gastar el último espacio libre: +1 de energía y robas 2 |
+| Mago | 🪄 Báculo del Archimago | rara | El primer espacio de nivel 3 recupera el gastado de menor nivel |
+| Mago | 📘 Grimorio de Contingencia | rara | Turno sin gastar espacios: +1 espacio para el combate |
+| Pícaro | 🐍 Vaina Ponzoñosa | común | Las Dagas aplican 2 de Veneno |
+| Pícaro | 🤸 Capa del Acróbata | común | Descartar da 2 de bloqueo aplazado (Acrobacias) |
+| Pícaro | 🎒 Bandolera de Cuchillos | común | Empiezas con 2 Dagas; al barajar, otra |
+| Pícaro | 🎭 Máscara del Asesino | rara | Atacar a quien no pretende atacar aplica 3 de Veneno |
+| Brujo | 👁️ Ojo del Patrón | común | La Explosión Sobrenatural aplica 2 de Condena |
+| Brujo | ⛓️ Cadena del Condenado | común | Muere un enemigo con Condena: +1 de energía el próximo turno |
+| Brujo | 😈 Corazón de Diablillo | rara | La invocación efímera que aguanta estalla (mitad de su vida a todos) |
+| Brujo | ❄️ Colgante de Escarcha | rara | El daño que bloqueas se vuelve Condena del atacante |
+
+Los efectos se enganchan al motor con ganchos genéricos de `ReliquiaDef`
+(`core/types.ts`): de combate (`inicioTurno`, `alJugarCarta`, `alBarajar`,
+`alQuedarseSinEnergia`, `alMatar`, `alAtacar`, `bonoAtaque`, `alSerGolpeado`,
+`alAplicarEstado`, `alDescartar`, `alTransformarse`, `alTerminarTransformacion`,
+`alGanarFuria`, `salvarFuria`, `alPerderFuria`, `alAplastarRaices`,
+`alDesvanecerseInvocacion`, `alVencerCombate`, `conservaBloqueo`, `retieneCartas`…) y
+de partida (`curaDescanso`, `alDescansar`, `alAfilar`, `alAnadirCarta`,
+`alEntrarEnSala`, `recompensaCartaEn`, `pesoRaroMult`), con sus ayudantes en
+`core/run.ts`. Las reliquias guardan su estado de combate con `ctx.marca()`.
 
 ## Estructura
 

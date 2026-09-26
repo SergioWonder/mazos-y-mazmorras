@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '4.0.0';
+export const VERSION = '4.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '4.1.0',
+    fecha: '2026-09-26',
+    cambios: [
+      '💎 50 reliquias con efectos mucho más variados, y reliquias únicas de cada clase que solo te salen a ti y potencian su mecánica principal.',
+      '🖌️ Cada reliquia tiene su ilustración dibujada a mano.',
+      '🎵 El Acto III suena mucho más oscuro y serio.',
+      '📱 En el móvil, el fondo se extiende por detrás de la mano, que flota algo más arriba.',
+      '🧍 Los enemigos no se recolocan cuando cae uno, y los estados se apilan en varias filas si no caben.',
+    ],
+  },
   {
     version: '4.0.0',
     fecha: '2026-09-26',

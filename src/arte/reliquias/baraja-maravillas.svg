@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <rect id="k" x="22" y="10" width="20" height="30" rx="2.5"/>
+  </defs>
+  <!-- fanned cards -->
+  <use href="#k" transform="rotate(-30 32 56)" fill="#2e3a6a" stroke="#140d0a" stroke-width="2.6"/>
+  <use href="#k" transform="rotate(-30 32 56)" fill="none" stroke="#c9a040" stroke-width="1" stroke-dasharray="2 2"/>
+  <use href="#k" transform="rotate(30 32 56)" fill="#6a2e44" stroke="#140d0a" stroke-width="2.6"/>
+  <use href="#k" transform="rotate(30 32 56)" fill="none" stroke="#c9a040" stroke-width="1" stroke-dasharray="2 2"/>
+  <use href="#k" transform="rotate(-10 32 56)" fill="#2e5a4a" stroke="#140d0a" stroke-width="2.6"/>
+  <!-- front card with star -->
+  <use href="#k" transform="rotate(10 32 56)" fill="#e6d8b0" stroke="#140d0a" stroke-width="2.8"/>
+  <g transform="rotate(10 32 56)">
+    <path d="M36 10 H42 V40 H36 Z" fill="#c2b28a"/>
+    <rect x="22" y="10" width="20" height="30" rx="2.5" fill="none" stroke="#140d0a" stroke-width="2.8"/>
+    <rect x="25" y="13" width="14" height="24" rx="1.2" fill="none" stroke="#b8923a" stroke-width="1.4"/>
+    <circle cx="32" cy="25" r="7" fill="#ffd66a" filter="url(#g)"/>
+    <path d="M32 17 L34 23 L40 25 L34 27 L32 33 L30 27 L24 25 L30 23 Z" fill="#ffe7a0" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  </g>
+</svg>

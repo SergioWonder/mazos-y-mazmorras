@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <path id="v" d="M26 14 L38 14 L38 22 Q44 26 44 34 L44 52 Q44 59 32 59 Q20 59 20 52 L20 34 Q20 26 26 22 Z"/>
+    <clipPath id="c"><use href="#v"/></clipPath>
+  </defs>
+  <!-- glass vial with dark venom -->
+  <use href="#v" fill="#3a4450" opacity="0.9"/>
+  <g clip-path="url(#c)">
+    <path d="M10 34 Q32 30 54 34 V64 H10 Z" fill="#e060c0" opacity="0.7" filter="url(#g)"/>
+    <path d="M10 36 Q32 32 54 36 V64 H10 Z" fill="#4a1a52"/>
+    <path d="M36 30 H48 V64 H36 Z" fill="#2a0c30" opacity="0.8"/>
+    <path d="M22 28 L26 28 L26 54 L22 54 Z" fill="#c8d4e0" opacity="0.5"/>
+  </g>
+  <circle cx="30" cy="44" r="1.6" fill="#ff9ae8"/>
+  <circle cx="35" cy="49" r="1.1" fill="#ff9ae8"/>
+  <use href="#v" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- spider seal on the neck -->
+  <path d="M24 20 L40 20" stroke="#140d0a" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M24 20 L40 20" stroke="#8a7a9a" stroke-width="2" stroke-linecap="round"/>
+  <!-- cork -->
+  <path d="M27 5 L37 5 L36 14 L28 14 Z" fill="#7a5634" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M33 5 L37 5 L36 14 L33 14 Z" fill="#553a22"/>
+  <path d="M27 5 L37 5 L36 14 L28 14 Z" fill="none" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+</svg>

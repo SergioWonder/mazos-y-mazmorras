@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="d" d="M10 22 L10 46 Q32 58 54 46 L54 22 Z"/>
+    <clipPath id="c"><use href="#d"/></clipPath>
+  </defs>
+  <!-- drumsticks behind -->
+  <path d="M40 4 L22 26 M24 4 L42 26" stroke="#140d0a" stroke-width="5.4" stroke-linecap="round"/>
+  <path d="M40 4 L22 26 M24 4 L42 26" stroke="#9a7348" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="40" cy="4.5" r="3.2" fill="#d8c8a0" stroke="#140d0a" stroke-width="2"/>
+  <circle cx="24" cy="4.5" r="3.2" fill="#d8c8a0" stroke="#140d0a" stroke-width="2"/>
+  <!-- wooden shell -->
+  <use href="#d" fill="#8a4a2a"/>
+  <g clip-path="url(#c)">
+    <path d="M38 0 H64 V64 H30 Q42 40 38 0 Z" fill="#5e2e18"/>
+    <path d="M10 22 H16 V52 H10 Z" fill="#aa6a40"/>
+  </g>
+  <!-- rope lacing -->
+  <path d="M12 26 L20 48 L28 27 L36 50 L44 27 L52 47" stroke="#140d0a" stroke-width="3.6" fill="none" stroke-linejoin="round"/>
+  <path d="M12 26 L20 48 L28 27 L36 50 L44 27 L52 47" stroke="#d8c08a" stroke-width="1.6" fill="none" stroke-linejoin="round"/>
+  <use href="#d" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M10 44 Q32 56 54 44" stroke="#b8923a" stroke-width="2.4" fill="none"/>
+  <!-- hide head -->
+  <ellipse cx="32" cy="22" rx="22" ry="7" fill="#d8c8a0" stroke="#140d0a" stroke-width="3"/>
+  <path d="M40 17 Q52 19 52 23 Q44 27 32 28 Q48 24 40 17 Z" fill="#b0a07a"/>
+  <ellipse cx="32" cy="22" rx="22" ry="7" fill="none" stroke="#b8923a" stroke-width="1.4"/>
+</svg>

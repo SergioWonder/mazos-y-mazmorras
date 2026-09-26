@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="f" d="M12 30 Q12 19 21 19 L45 19 Q53 19 53 28 L53 43 Q53 50 46 50 L21 50 Q12 50 12 42 Z"/>
+    <clipPath id="c"><use href="#f"/></clipPath>
+  </defs>
+  <!-- flared bronze-trimmed cuff -->
+  <path d="M17 47 L47 47 L52 62 L12 62 Z" fill="#474c51" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M15 55 L49 55" stroke="#a07a3a" stroke-width="3"/>
+  <path d="M15 55 L49 55" stroke="#140d0a" stroke-width="1" stroke-dasharray="1 5"/>
+  <!-- massive iron fist -->
+  <use href="#f" fill="#6e7479"/>
+  <g clip-path="url(#c)">
+    <path d="M0 40 Q30 44 64 32 L64 64 L0 64 Z" fill="#474c51"/>
+    <path d="M12 22 Q20 20 28 21 L28 26 Q18 26 12 30 Z" fill="#9aa1a6"/>
+  </g>
+  <use href="#f" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M24 20 V34 M34 20 V34 M44 20 V34" stroke="#140d0a" stroke-width="1.4"/>
+  <!-- knuckle spikes -->
+  <path d="M16 20 L19 9 L23 20 Z M26 20 L29 7 L33 20 Z M36 20 L39 7 L43 20 Z M46 21 L49 10 L52 23 Z" fill="#a07a3a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M19 11 L19.5 18 M29 9 L29.5 18 M39 9 L39.5 18" stroke="#d8b068" stroke-width="1.2"/>
+  <!-- thumb plate -->
+  <path d="M13 36 Q26 32 40 36 Q43 40 39 43 Q26 43 13 43 Z" fill="#81878c" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <circle cx="20" cy="39" r="1.4" fill="#140d0a"/>
+  <circle cx="33" cy="39" r="1.4" fill="#140d0a"/>
+</svg>

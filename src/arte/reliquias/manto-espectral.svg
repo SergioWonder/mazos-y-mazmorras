@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="e" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <path id="m" d="M32 5 Q46 5 49 22 Q52 38 58 50 Q52 48 50 56 Q45 50 41 59 Q37 52 32 60 Q27 52 23 59 Q19 50 14 56 Q12 48 6 50 Q12 38 15 22 Q18 5 32 5 Z"/>
+    <clipPath id="c"><use href="#m"/></clipPath>
+  </defs>
+  <use href="#m" fill="#bff0e0" opacity="0.5" filter="url(#g)"/>
+  <!-- pale ghostly shroud -->
+  <use href="#m" fill="#b8c8c4"/>
+  <g clip-path="url(#c)">
+    <path d="M38 6 Q50 20 46 64 L64 64 L64 0 Z" fill="#7e928e"/>
+    <path d="M18 18 Q22 8 30 6 Q22 14 21 30 Q18 44 12 52 L8 50 Q16 36 18 18 Z" fill="#e2eeea"/>
+  </g>
+  <path d="M26 36 Q24 48 23 58 M38 36 Q40 48 41 58" stroke="#5e706c" stroke-width="1.2" fill="none"/>
+  <use href="#m" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <!-- empty hood with glowing eyes -->
+  <path d="M32 13 Q42 14 42 26 Q40 34 32 35 Q24 34 22 26 Q22 14 32 13 Z" fill="#0b0910" stroke="#140d0a" stroke-width="2"/>
+  <ellipse cx="28" cy="25" rx="3" ry="2" fill="#9ffff0" filter="url(#e)"/>
+  <ellipse cx="36" cy="25" rx="3" ry="2" fill="#9ffff0" filter="url(#e)"/>
+  <ellipse cx="28" cy="25" rx="1.6" ry="1.1" fill="#f0fffc"/>
+  <ellipse cx="36" cy="25" rx="1.6" ry="1.1" fill="#f0fffc"/>
+</svg>

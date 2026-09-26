@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.8"/></filter>
+    <path id="t" d="M21 58 L21 19 Q21 9 32 8 Q43 9 43 19 L43 58 Z"/>
+    <clipPath id="c"><use href="#t"/></clipPath>
+  </defs>
+  <!-- oak leaves sprouting from the crown -->
+  <path d="M29 13 Q16 1 7 7 Q13 17 29 15 Z" fill="#5e8a3a" stroke="#140d0a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M35 13 Q48 0 57 6 Q51 17 35 15 Z" fill="#6f9a44" stroke="#140d0a" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M14 8 Q20 11 27 13 M50 6 Q44 10 37 13" stroke="#3a5a24" stroke-width="1.2" fill="none"/>
+  <!-- carved trunk -->
+  <use href="#t" fill="#7a5634"/>
+  <g clip-path="url(#c)">
+    <path d="M34 0 H64 V64 H34 Z" fill="#553a22"/>
+    <path d="M21 0 H26 V64 H21 Z" fill="#9a7348"/>
+  </g>
+  <path d="M21 36 H43 M21 48 H43" stroke="#140d0a" stroke-width="2"/>
+  <path d="M24 19 L30 23 M40 19 L34 23" stroke="#140d0a" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="27" cy="26.5" r="4" fill="#a8e070" filter="url(#g)"/>
+  <circle cx="37" cy="26.5" r="4" fill="#a8e070" filter="url(#g)"/>
+  <circle cx="27" cy="26.5" r="2.2" fill="#dcffb0" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="37" cy="26.5" r="2.2" fill="#dcffb0" stroke="#140d0a" stroke-width="1"/>
+  <path d="M25 31.5 Q32 35 39 31.5" stroke="#140d0a" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M24 44 L28 40 L32 44 L36 40 L40 44" stroke="#140d0a" stroke-width="1.6" fill="none" stroke-linejoin="round"/>
+  <path d="M26 53 Q32 51 38 53" stroke="#3a2614" stroke-width="1.2" fill="none"/>
+  <use href="#t" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- small leaf on the side -->
+  <path d="M43 42 Q52 36 57 40 Q52 47 43 45 Z" fill="#5e8a3a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+</svg>

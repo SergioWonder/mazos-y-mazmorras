@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <path id="b" d="M24 20 Q10 30 10 44 Q10 58 32 58 Q54 58 54 44 Q54 30 40 20 Z"/>
+    <clipPath id="c"><use href="#b"/></clipPath>
+  </defs>
+  <!-- leather pouch -->
+  <use href="#b" fill="#8a6a44"/>
+  <g clip-path="url(#c)">
+    <path d="M40 18 Q50 40 30 60 L64 64 L64 18 Z" fill="#5e452a"/>
+    <path d="M22 24 Q14 34 15 46 L19 46 Q18 34 26 24 Z" fill="#aa8a5e"/>
+  </g>
+  <path d="M22 50 Q32 54 44 49" stroke="#140d0a" stroke-width="1.2" fill="none"/>
+  <use href="#b" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- ruffled mouth spilling void light -->
+  <ellipse cx="32" cy="15" rx="12" ry="6" fill="#8a7cff" opacity="0.8" filter="url(#g)"/>
+  <path d="M20 12 Q24 6 28 11 Q32 5 36 11 Q40 6 44 12 L40 20 L24 20 Z" fill="#9a7a50" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <ellipse cx="32" cy="12.5" rx="7" ry="2.4" fill="#1a1030"/>
+  <circle cx="30" cy="12.5" r="0.9" fill="#d8d0ff"/>
+  <circle cx="34.5" cy="12" r="0.7" fill="#d8d0ff"/>
+  <!-- drawstring -->
+  <path d="M22 20 Q32 24 42 20" stroke="#140d0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M22 20 Q32 24 42 20" stroke="#c9a040" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M42 20 Q48 26 46 32" stroke="#140d0a" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+  <path d="M42 20 Q48 26 46 32" stroke="#c9a040" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+</svg>

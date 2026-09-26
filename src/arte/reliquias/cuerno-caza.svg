@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="bell" d="M40 30 Q48 22 58 20 Q60 32 56 44 Q46 40 40 36 Z"/>
+  </defs>
+  <!-- green baldric cord -->
+  <path d="M10 18 Q6 6 20 6 Q32 6 34 14" stroke="#140d0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M10 18 Q6 6 20 6 Q32 6 34 14" stroke="#4e7a3a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <!-- coiled brass tube -->
+  <circle cx="26" cy="36" r="16" fill="none" stroke="#140d0a" stroke-width="9.4"/>
+  <circle cx="26" cy="36" r="16" fill="none" stroke="#b8923a" stroke-width="5"/>
+  <path d="M12 30 A16 16 0 0 1 32 21" stroke="#f0d27a" stroke-width="1.8" fill="none"/>
+  <path d="M40 42 A16 16 0 0 1 20 51" stroke="#7e5e1e" stroke-width="2" fill="none"/>
+  <circle cx="26" cy="36" r="9" fill="none" stroke="#140d0a" stroke-width="7"/>
+  <circle cx="26" cy="36" r="9" fill="none" stroke="#a07a2a" stroke-width="3"/>
+  <!-- mouthpiece -->
+  <path d="M26 27 L20 22" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M26 27 L20 22" stroke="#d8b060" stroke-width="2" stroke-linecap="round"/>
+  <!-- flared bell -->
+  <use href="#bell" fill="#c9a040" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M48 36 Q54 38 56 44 Q46 40 40 36 Z" fill="#8a6a24"/>
+  <ellipse cx="57" cy="32" rx="3" ry="12" transform="rotate(8 57 32)" fill="#3a2a14" stroke="#140d0a" stroke-width="2.4"/>
+</svg>

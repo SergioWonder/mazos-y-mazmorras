@@ -2084,6 +2084,51 @@ console.log('\n📐 Luchadores dentro del escenario');
   const remHeroe = (texto: string) => Number(/\.sprite-silueta \.sprite-marioneta \{ width: ([\d.]+)rem/.exec(texto)?.[1] ?? 0);
   check(remHeroe(css) >= 11 && remHeroe(movil) >= 8, 'el héroe se ve grande (más que los enemigos normales)');
   check(/\.escenario \.sprite-silueta \.sprite-marioneta\s*\{[^}]*max-width:[^;]*cqh/.test(css), 'el héroe también se adapta al alto disponible, con menos margen porque no tiene intención ni rasgo');
+
+  // Painted background runs under the hand: no strip cutting it on phones
+  const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  const apaisado = movil.slice(movil.indexOf('@media (orientation: landscape) and (max-height: 540px)'));
+  const regla = (texto: string, sel: string) => new RegExp(`(?:^|[\\s,}])${sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`).exec(texto)?.[1] ?? '';
+  check(/montarFondo\(raiz\b/.test(ui), 'el fondo pintado cubre todo el combate, no solo el escenario');
+  check(/\.fondo-reflejo\s*\{[^}]*scaleY\(-1\)/.test(css) && /\.fondo-escena img\s*\{[^}]*height:\s*var\(--alto-escenario/.test(css),
+    'el escenario se ve igual que antes y el suelo se prolonga por detrás de la mano');
+  const alfas = (texto: string) => [...texto.matchAll(/rgba\([^)]*,\s*([\d.]+)\)/g)].map((m) => Number(m[1]));
+  const fondoMano = regla(apaisado, '.zona-mano');
+  check(/background:/.test(fondoMano) && alfas(fondoMano).every((a) => a <= 0.4), 'en el móvil apaisado la mano no tiene franja opaca, solo una sombra suave');
+  const fondoManoVertical = regla(movil.slice(movil.indexOf('@media (orientation: portrait) and (max-width: 700px)')), '.zona-mano');
+  check(alfas(fondoManoVertical).length > 0 && Math.min(...alfas(fondoManoVertical)) <= 0.2, 'en vertical el fondo también asoma por detrás del HUD');
+  const asomo = Number(/translateY\(calc\(var\(--alza, 0px\) \+ (\d+)px\)\)/.exec(regla(apaisado, '.mano .carta'))?.[1] ?? 999);
+  check(asomo < 104 && asomo >= 70, `en el móvil apaisado la mano flota más arriba (${asomo}px ocultos, antes 104)`);
+  check(['.orbe', '.btn-fin-turno', '.pila'].every((s) => /shadow/.test(regla(apaisado, s))), 'energía, fin de turno y pilas llevan sombra para leerse sobre el fondo');
+
+  // Enemies keep their slot when others die or a boss summons more
+  const slotsMod = await import('../src/ui/enemy-slots.ts').catch(() => null);
+  check(slotsMod !== null, 'existe el reparto de huecos de enemigos (src/ui/enemy-slots.ts)');
+  if (slotsMod) {
+    const { layoutSlots } = slotsMod;
+    type E = { id: string; vivo: boolean };
+    const vivo = (e: E) => e.vivo;
+    const [a, b, c] = ['a', 'b', 'c'].map((id) => ({ id, vivo: true }));
+    let huecos = layoutSlots([], [a, b, c], vivo);
+    check(huecos.map((e) => e.id).join() === 'a,b,c', 'al empezar, cada enemigo ocupa su hueco en orden');
+    b.vivo = false;
+    huecos = layoutSlots(huecos, [a, b, c], vivo);
+    check(huecos.map((e) => e.id).join() === 'a,b,c', 'si muere el del medio, su hueco se queda y los demás no se mueven');
+    const d = { id: 'd', vivo: true };
+    huecos = layoutSlots(huecos, [a, b, c, d], vivo);
+    check(huecos.map((e) => e.id).join() === 'a,d,c', 'una invocación ocupa el hueco libre del muerto');
+    const [e1, e2] = ['e', 'f'].map((id) => ({ id, vivo: true }));
+    huecos = layoutSlots(huecos, [a, b, c, d, e1, e2], vivo);
+    check(huecos.slice(-3).map((e) => e.id).join() === 'a,d,c' && huecos.length === 5,
+      'sin huecos libres, las invocaciones se añaden por la izquierda sin desplazar a los demás');
+  }
+  check(!/function renderEnemigos\(\)[\s\S]{0,400}if \(!e\.vivo\) return;/.test(ui) && /\.enemigo-hueco\s*\{[^}]*visibility:\s*hidden/.test(css),
+    'los enemigos muertos dejan un hueco invisible del mismo tamaño');
+
+  // Many statuses wrap into rows without widening the fighter
+  check(/\.estados\s*\{[^}]*contain:\s*inline-size/.test(css), 'los estados se reparten en varias filas sin ensanchar al luchador');
+  check(/\.escenario \.sprite-marioneta\s*\{[^}]*var\(--alto-estados/.test(css) && /--alto-estados/.test(ui),
+    'los sprites ceden alto cuando los estados ocupan varias filas');
 }
 
 // ── Recorded-style sound effects (MP3 bank) ──────────────────────────────────
@@ -2307,6 +2352,548 @@ console.log('\n🎬 Selección de héroe');
   check(/new HeroSprite\(/.test(titulo) && /PuppetStage\.create\(/.test(titulo), 'la pantalla de inicio muestra el sprite animado de cada clase');
   check(!/clase-icono">[^<]/.test(titulo), 'ya no quedan emojis en la elección de clase');
   check(/destroy\(\)/.test(titulo), 'los sprites de la portada se liberan al elegir');
+}
+
+// ── Hand-drawn relic illustrations (src/arte/reliquias) ──────────────────────
+console.log('\n💎 Arte de las reliquias');
+{
+  const fs = await import('node:fs');
+  const relicModule: Record<string, unknown> = await import('../src/core/reliquias.ts');
+  const { pickRelicSvg, relicIcon } = await import('../src/ui/relic-art.ts');
+  type RelicLike = { id: string; nombre: string; icono: string; texto: string };
+  const isRelic = (x: unknown): x is RelicLike =>
+    !!x && typeof x === 'object' && typeof (x as RelicLike).id === 'string'
+    && typeof (x as RelicLike).icono === 'string' && typeof (x as RelicLike).texto === 'string';
+  // Every relic exported by reliquias.ts, alone or inside an exported array/record.
+  const relics = new Map<string, RelicLike>();
+  for (const value of Object.values(relicModule)) {
+    const items = Array.isArray(value) ? value : isRelic(value) ? [value] : value && typeof value === 'object' ? Object.values(value) : [];
+    for (const item of items) if (isRelic(item)) relics.set(item.id, item);
+  }
+  const dir = new URL('../src/arte/reliquias/', import.meta.url);
+  const files: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.svg')) : [];
+  const wellFormed = (xml: string) => {
+    const stack: string[] = [];
+    for (const m of xml.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<(\/?)([a-zA-Z][\w:-]*)[^>]*?(\/?)>/g)) {
+      const [, closing, tag, selfClosing] = m;
+      if (selfClosing) continue;
+      if (closing) { if (stack.pop() !== tag) return false; } else stack.push(tag);
+    }
+    return stack.length === 0;
+  };
+  const missing = [...relics.keys()].filter((id) => !files.includes(`${id}.svg`));
+  check(relics.size > 0 && missing.length === 0, `las ${relics.size} reliquias tienen su ilustración ${missing.slice(0, 8).join(', ')}`);
+  const orphans = files.filter((f) => !relics.has(f.replace(/\.svg$/, '')));
+  check(orphans.length === 0, `no sobran SVG sin reliquia ${orphans.slice(0, 5).join(', ')}`);
+  const bad: string[] = [];
+  for (const f of files) {
+    const xml = fs.readFileSync(new URL(f, dir), 'utf8');
+    if (!xml.trimStart().startsWith('<svg') || !xml.includes('viewBox="0 0 64 64"')) bad.push(`${f}: formato`);
+    else if (/<(text|image|script)\b/.test(xml)) bad.push(`${f}: elemento prohibido`);
+    else if (xml.length > 6 * 1024) bad.push(`${f}: ${Math.round(xml.length / 1024)} KB`);
+    else if (!wellFormed(xml)) bad.push(`${f}: XML mal formado`);
+  }
+  check(bad.length === 0, `${files.length} SVG de reliquias con viewBox 64, sin elementos prohibidos, ≤ 6 KB y bien formados ${bad.slice(0, 5).join(', ')}`);
+  const table = { '../arte/reliquias/amuleto-salud.svg': '/a/amuleto.svg' };
+  check(pickRelicSvg(table, 'amuleto-salud') === '/a/amuleto.svg' && pickRelicSvg(table, 'piedra-ioun') === null, 'la reliquia busca su SVG por id');
+  const withArt = relicIcon({ id: 'amuleto-salud', nombre: 'Amuleto de Salud', icono: '🧿' }, 28, table);
+  check(/^<img /.test(withArt) && withArt.includes("src='/a/amuleto.svg'") && withArt.includes("alt='Amuleto de Salud'")
+    && withArt.includes("width='28'") && !withArt.includes('"'), 'con SVG pinta un <img> con alt y tamaño (sin comillas dobles, apto para data-tip)');
+  check(relicIcon({ id: 'piedra-ioun', nombre: 'Piedra Ioun', icono: '💎' }, 24, table) === '💎', 'sin SVG, vuelve al emoji');
+  // Vite inlines small SVGs as data URIs quoted with ' — they must not break the attribute.
+  const inlined = relicIcon({ id: 'amuleto-salud', nombre: 'Amuleto', icono: '🧿' }, 24,
+    { '../arte/reliquias/amuleto-salud.svg': "data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%3e" });
+  check((inlined.match(/'/g) ?? []).length === 12 && inlined.includes('xmlns=%27http'), 'las SVG incrustadas por Vite (data URI con comillas simples) no rompen el <img>');
+  const ui = ['mapa.ts', 'combate.ts', 'recompensa.ts'].map((f) => fs.readFileSync(new URL(`../src/ui/${f}`, import.meta.url), 'utf8'));
+  check(ui.every((src) => /relicIcon\(/.test(src) && !/\$\{(r|x|reliquia)\.icono\}/.test(src)), 'la interfaz pinta las reliquias con su ilustración');
+}
+
+// ── Expanded relics: effects, class-only rolls and saving ───────────────────
+console.log('\n💍 Reliquias ampliadas');
+{
+  const RQ = await import('../src/core/reliquias.ts');
+  const RUN = await import('../src/core/run.ts');
+  const { cartaPorId } = await import('../src/core/cartas.ts');
+  const { crearEspacios } = await import('../src/core/conjuros.ts');
+  type Mov = ReturnType<EnemigoDef['ia']>;
+  type Reliquia = NonNullable<ReturnType<typeof RQ.reliquiaPorId>>;
+
+  const R = (id: string): Reliquia => {
+    const r = RQ.reliquiaPorId(id);
+    if (!r) check(false, `existe la reliquia «${id}»`);
+    return r ?? ({ id, nombre: id, icono: '?', texto: '', rareza: 'comun' } as unknown as Reliquia);
+  };
+  const esperar: Mov = { nombre: 'Esperar', intencion: 'desconocido' };
+  /** Training dummy: lots of PV and a fixed move every turn. */
+  const muneco = (pv = 200, mov: Mov = esperar, jefe = false): EnemigoDef => ({
+    id: 'muneco-pruebas', nombre: 'Muñeco', arte: '🎯', pv: [pv, pv], esJefe: jefe,
+    ia: () => ({ ...mov }),
+  });
+  const atacante = (dano: number, veces = 1) =>
+    muneco(200, { nombre: 'Golpe', intencion: 'ataque', dano, veces });
+  async function montar(
+    clase: ClaseId, ids: string[], defs: EnemigoDef[] = [muneco()],
+    op: { elite?: boolean; rng?: () => number } = {},
+  ) {
+    const run = nuevaRun(clase, 777);
+    run.reliquias = ids.map(R);
+    const comb = new Combate(run, defs, op.rng ?? crearRng(777), uiSilenciosa, op.elite ?? false);
+    await comb.iniciar();
+    return { run, comb, ctx: comb.contexto() };
+  }
+  const enMano = (comb: Combate, id: string) => {
+    const inst = instanciar(id === 'daga' ? DAGA : cartaPorId(id)!);
+    comb.jugador.mano.push(inst);
+    return inst;
+  };
+  const jugarCon = async (comb: Combate, id: string, energia = 3, obj = comb.enemigos.find((e) => e.vivo)) => {
+    comb.jugador.energia = energia;
+    await comb.jugarCarta(enMano(comb, id), obj);
+  };
+  const dagas = (comb: Combate) => comb.jugador.mano.filter((c) => c.def.id === 'daga').length;
+
+  // — Generales: ritmo del combate —
+  {
+    const { comb, ctx } = await montar('druida', ['guanteletes-ogro'], [muneco(10), muneco()]);
+    await ctx.danar(comb.enemigos[0], 50);
+    check((comb.jugador.estados.fuerza ?? 0) === 1, 'Guanteletes de Ogro: cada enemigo que matas te da 1 de Fuerza');
+  }
+  {
+    const { comb } = await montar('druida', ['botas-aladas']);
+    check(comb.jugador.energia === comb.jugador.energiaMax + 1 && comb.jugador.mano.length === 7,
+      'Botas Aladas: el primer turno empiezas con 1 de energía y 2 cartas más');
+    await comb.terminarTurno();
+    check(comb.jugador.energia === comb.jugador.energiaMax && comb.jugador.mano.length === 5,
+      'Botas Aladas: solo en el primer turno');
+  }
+  {
+    const { comb } = await montar('druida', ['capa-desplazamiento'], [atacante(9)]);
+    check(comb.jugador.bloqueo === 9, 'Capa de Desplazamiento: el primer turno ganas bloqueo igual al daño anunciado');
+    const b = await montar('druida', ['capa-desplazamiento'], [atacante(12, 2)]);
+    check(b.comb.jugador.bloqueo === 15, 'Capa de Desplazamiento: como mucho 15 de bloqueo');
+  }
+  {
+    const { comb } = await montar('druida', ['cuerno-valhalla'], [muneco(), muneco()]);
+    await comb.terminarTurno();
+    check(comb.enemigos.every((e) => e.pv === 200), 'Cuerno de Valhalla: aún no suena en el turno 2');
+    await comb.terminarTurno();
+    check(comb.enemigos.every((e) => e.pv === 194 && (e.estados.debil ?? 0) === 1),
+      'Cuerno de Valhalla: en el turno 3, 6 de daño y 1 de Débil a todos');
+  }
+  {
+    const { comb } = await montar('druida', ['tambor-guerra']);
+    comb.jugador.energia = 3;
+    for (let i = 0; i < 3; i++) await comb.jugarCarta(enMano(comb, 'golpe'), comb.enemigos[0]);
+    check(comb.enemigos[0].pv === 200 - 18 - 3, 'Tambor de Guerra Enano: cada 3 cartas, 3 de daño a un enemigo');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['bolsa-contencion']);
+    comb.jugador.descarte.push(...comb.jugador.mazo);
+    comb.jugador.mazo = [];
+    const en = comb.jugador.energia;
+    await ctx.robar(1);
+    check(comb.jugador.energia === en + 1, 'Bolsa de Contención: al barajar el descarte ganas 1 de energía');
+  }
+  {
+    const { comb } = await montar('druida', ['caliz-vacio']);
+    const mano = comb.jugador.mano.length;
+    await jugarCon(comb, 'golpe', 1);
+    check(comb.jugador.mano.length === mano + 1, 'Cáliz Vacío: al quedarte sin energía robas 1 carta');
+    await jugarCon(comb, 'golpe', 1);
+    check(comb.jugador.mano.length === mano + 1, 'Cáliz Vacío: solo una vez por turno');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['estandarte-terror'], [muneco(10), muneco()]);
+    await ctx.danar(comb.enemigos[0], 50);
+    const o = comb.enemigos[1];
+    check(o.estados.debil === 1 && o.estados.vulnerable === 1,
+      'Estandarte del Terror: al morir un enemigo, los demás quedan Débiles y Vulnerables');
+  }
+  {
+    const alta = await montar('druida', ['baraja-maravillas'], [muneco()], { rng: () => 0.999 });
+    const e = alta.comb.enemigos[0];
+    check(e.estados.vulnerable === 3 && e.estados.debil === 3, 'Baraja de las Maravillas: un 20 debilita y expone a todos');
+    const baja = await montar('druida', ['baraja-maravillas'], [muneco()], { rng: () => 0 });
+    check(baja.comb.jugador.pv === baja.comb.jugador.pvMax - 5, 'Baraja de las Maravillas: un 1 te cuesta 5 PV');
+  }
+  // — Generales: riesgo y recompensa —
+  {
+    const { comb } = await montar('druida', ['yelmo-tirano']);
+    check(comb.jugador.energiaMax === 4 && comb.jugador.energia === 4 && comb.jugador.pv === comb.jugador.pvMax - 4,
+      'Yelmo del Tirano: +1 de energía por turno a cambio de 4 PV por combate');
+  }
+  {
+    const { comb, run } = await montar('druida', ['hoja-sedienta']);
+    comb.jugador.pv = comb.jugador.pvMax - 30;
+    await jugarCon(comb, 'golpe');
+    check(comb.enemigos[0].pv === 200 - 9, 'Hoja Sedienta: +1 de daño por cada 10 PV que te faltan');
+    check(RUN.curaDeDescanso(run) === Math.floor(Math.floor(run.pvMax * 0.3) / 2), 'Hoja Sedienta: descansar cura la mitad');
+  }
+  {
+    const { comb } = await montar('druida', ['amuleto-salud'], [atacante(20)]);
+    const inicio = Math.floor(comb.jugador.pvMax / 2) + 5;
+    comb.jugador.pv = inicio;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === inicio - 10, 'Amuleto de Salud: al caer por debajo de la mitad te curas 10');
+    const tras = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === tras - 20, 'Amuleto de Salud: solo una vez por combate');
+  }
+  {
+    const { comb } = await montar('druida', ['piedra-ioun']);
+    check(comb.cartasPorTurno() === 6 && comb.jugador.mano.length === 6, 'Piedra Ioun: robas 1 carta más cada turno');
+    const cara = [...comb.jugador.mano].sort((a, b) => comb.costeEfectivo(defDe(b)) - comb.costeEfectivo(defDe(a)))[0];
+    await comb.terminarTurno();
+    check(comb.jugador.mano.includes(cara) && comb.jugador.mano.length === 7,
+      'Piedra Ioun: conservas en la mano la carta más cara que no jugaste');
+  }
+  // — Generales: estados —
+  {
+    const { comb } = await montar('druida', ['talisman-vorpal'], [muneco(100)]);
+    const e = comb.enemigos[0];
+    e.pv = 20;
+    e.estados.vulnerable = 2;
+    await jugarCon(comb, 'golpe', 3, e);
+    check(!e.vivo, 'Talismán Vorpal: decapita al Vulnerable que dejas a un 15 % de PV o menos');
+    const j = await montar('druida', ['talisman-vorpal'], [muneco(100, esperar, true)]);
+    const je = j.comb.enemigos[0];
+    je.pv = 20;
+    je.estados.vulnerable = 2;
+    await jugarCon(j.comb, 'golpe', 3, je);
+    check(je.vivo && je.pv === 11, 'Talismán Vorpal: los jefes no pierden la cabeza');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['vial-drow']);
+    await ctx.aplicarEstado(comb.enemigos[0], 'debil', 1);
+    check(comb.enemigos[0].estados.veneno === 2, 'Veneno de Drow: al aplicar Débil también aplicas 2 de Veneno');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['frasco-plaga'], [muneco(10), muneco()]);
+    comb.enemigos[0].estados.veneno = 5;
+    await ctx.danar(comb.enemigos[0], 50);
+    check(comb.enemigos[1].estados.veneno === 5, 'Frasco de la Plaga: el Veneno de un enemigo muerto salta a otro');
+  }
+  // — Generales: bloqueo —
+  {
+    const { comb } = await montar('druida', ['anillo-proteccion']);
+    comb.jugador.bloqueo = 12;
+    await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 5, 'Anillo de Protección: conservas hasta 5 de bloqueo entre turnos');
+    comb.jugador.bloqueo = 3;
+    await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 3, 'Anillo de Protección: si te queda menos, lo conservas entero');
+  }
+  {
+    const { comb } = await montar('druida', ['brazales-defensa'], [atacante(6)]);
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv, 'Brazales de Defensa: si no atacas en el turno, ganas 6 de bloqueo');
+    await jugarCon(comb, 'golpe');
+    const pv2 = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv2 - 6, 'Brazales de Defensa: si atacaste, no protegen');
+  }
+  {
+    const { comb } = await montar('druida', ['escudo-centinela'], [atacante(5)]);
+    comb.jugador.bloqueo = 10;
+    await comb.terminarTurno();
+    check(comb.enemigos[0].pv === 196, 'Escudo Centinela: un golpe detenido del todo devuelve 4 de daño');
+    comb.jugador.bloqueo = 3;
+    await comb.terminarTurno();
+    check(comb.enemigos[0].pv === 196, 'Escudo Centinela: un golpe que te atraviesa no devuelve nada');
+  }
+  {
+    const { comb } = await montar('druida', ['manto-espectral']);
+    check(comb.jugador.estados.espejismo === 2, 'Manto Espectral: el primer turno tienes 2 cargas de Espejismo');
+  }
+  // — Generales: mapa, élites y economía —
+  {
+    const { run, ctx, comb } = await montar('druida', ['manual-ejercicio'], [muneco(10)], { elite: true });
+    await ctx.danar(comb.enemigos[0], 50);
+    check(comb.terminado === 'victoria' && run.permanentes.fuerza === 1, 'Manual del Ejercicio: vencer a un élite da +1 de Fuerza permanente');
+    const n = await montar('druida', ['manual-ejercicio'], [muneco(10)]);
+    await n.ctx.danar(n.comb.enemigos[0], 50);
+    check(n.run.permanentes.fuerza === 0, 'Manual del Ejercicio: un combate corriente no cuenta');
+  }
+  {
+    const { comb } = await montar('druida', ['cuerno-caza'], [muneco()], { elite: true });
+    check(comb.enemigos[0].estados.vulnerable === 2 && comb.jugador.mano.length === 7,
+      'Cuerno de Caza: contra élites, 2 de Vulnerable a todos y robas 2');
+    const n = await montar('druida', ['cuerno-caza']);
+    check(!n.comb.enemigos[0].estados.vulnerable && n.comb.jugador.mano.length === 5, 'Cuerno de Caza: en combates corrientes calla');
+  }
+  {
+    const run = nuevaRun('druida', 1);
+    check(RUN.pesoRaroEfectivo(run, 4) === 4, 'sin Piedra de la Buena Suerte, la probabilidad de rara no cambia');
+    run.reliquias.push(R('piedra-suerte'));
+    check(RUN.pesoRaroEfectivo(run, 4) === 8, 'Piedra de la Buena Suerte: el doble de probabilidad de carta rara');
+  }
+  {
+    const run = nuevaRun('druida', 2);
+    check(RUN.curaDeDescanso(run) === Math.floor(run.pvMax * 0.3), 'descansar cura el 30 % sin reliquias');
+    run.reliquias.push(R('saco-dormir'));
+    const cura45 = () => Math.floor(run.pvMax * 0.3) + Math.floor(run.pvMax * 0.15);
+    check(RUN.curaDeDescanso(run) === cura45(), 'Saco de Dormir Élfico: descansar cura un 15 % más (45 %)');
+    const max = run.pvMax;
+    RUN.descansar(run);
+    check(run.pvMax === max + 5 && run.pv === run.pvMax, 'Saco de Dormir Élfico: si ya estabas a tope, +5 PV máximos');
+    run.pv = 10;
+    RUN.descansar(run);
+    check(run.pv === 10 + cura45() && run.pvMax === max + 5, 'Saco de Dormir Élfico: herido, solo cura');
+  }
+  {
+    const run = nuevaRun('druida', 3);
+    RUN.afilarCarta(run, run.mazo[0], crearRng(3));
+    check(run.mazo.filter((c) => c.mejorada).length === 1, 'afilar mejora 1 carta sin reliquias');
+    const run2 = nuevaRun('druida', 3);
+    run2.reliquias.push(R('piedra-afilar'));
+    RUN.afilarCarta(run2, run2.mazo[0], crearRng(3));
+    check(run2.mazo[0].mejorada && run2.mazo.filter((c) => c.mejorada).length === 2,
+      'Piedra de Afilar Enana: al afilar se mejora otra carta al azar');
+  }
+  {
+    const run = nuevaRun('druida', 4);
+    run.reliquias.push(R('yunque-moradin'));
+    const a = RUN.anadirCarta(run, cartaPorId('zarpa-doble')!);
+    const h = RUN.anadirCarta(run, cartaPorId('aullido')!);
+    check(a.mejorada && !h.mejorada && run.mazo.includes(a) && run.mazo.includes(h),
+      'Yunque de Moradin: los ataques que añades al mazo llegan mejorados');
+  }
+  {
+    const run = nuevaRun('druida', 5);
+    check(!RUN.cartaExtraEnSala(run, 'cofre'), 'sin Mapa del Tesoro, los cofres no dan carta');
+    run.reliquias.push(R('mapa-tesoro'));
+    check(RUN.cartaExtraEnSala(run, 'cofre') && !RUN.cartaExtraEnSala(run, 'evento'), 'Mapa del Tesoro: los cofres dan también una carta');
+  }
+  {
+    const run = nuevaRun('druida', 6);
+    run.reliquias.push(R('diario-aventurero'));
+    RUN.entrarEnSala(run, 'combate', crearRng(6));
+    check(run.mazo.every((c) => !c.mejorada), 'Diario del Aventurero: un combate no cuenta');
+    const notas = RUN.entrarEnSala(run, 'evento', crearRng(6));
+    check(run.mazo.filter((c) => c.mejorada).length === 1 && notas.length === 1,
+      'Diario del Aventurero: cada evento mejora 1 carta al azar (y lo anuncia)');
+  }
+
+  // — Druida —
+  {
+    const { comb } = await montar('druida', ['semilla-roble'], [muneco(), muneco()]);
+    await jugarCon(comb, 'forma-lobo');
+    check(comb.enemigos.every((e) => (e.estados.raices ?? 0) === 3), 'Semilla del Roble Madre: al transformarte, 3 de Raíces a todos');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['muerdago-sagrado'], [atacante(5)]);
+    comb.jugador.pv = 30;
+    await ctx.aplicarRaices(comb.enemigos[0], 10, 1);
+    await comb.terminarTurno();
+    check(comb.jugador.pv === 33, 'Muérdago Sagrado: las raíces que aplastan te curan 3 PV');
+  }
+  {
+    const { comb } = await montar('druida', ['colmillo-cambiaformas']);
+    const mano = comb.jugador.mano.length;
+    await jugarCon(comb, 'forma-lobo');
+    check(comb.jugador.efectosTemporales[0]?.turnos === 7 && comb.jugador.mano.length === mano + 2,
+      'Colmillo del Cambiaformas: la primera forma dura 3 turnos más y robas 2');
+    await jugarCon(comb, 'forma-lobo');
+    check(comb.jugador.efectosTemporales[1]?.turnos === 4, 'Colmillo del Cambiaformas: solo la primera de cada combate');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['luna-frasco']);
+    await ctx.efectoTemporal({ etiqueta: 'Forma de Prueba', turnos: 1, fuerza: 1, destreza: 0 });
+    await comb.terminarTurno();
+    check(comb.jugador.invocacion?.vida === 6, 'Luna en un Frasco: al terminar una forma, su espíritu te acompaña (invoca 6)');
+  }
+  // — Bárbaro —
+  {
+    const { comb, ctx } = await montar('barbaro', ['totem-oso']);
+    await ctx.ganarFuria(2);
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 2, 'Tótem del Oso: la primera vez, la Furia aguanta sin recibir daño');
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 0, 'Tótem del Oso: la segunda vez se rompe');
+  }
+  {
+    const { comb, ctx } = await montar('barbaro', ['cinturon-gigante']);
+    await ctx.ganarFuria(1);
+    check(comb.jugador.bloqueo === 4, 'Cinturón del Gigante: ganar Furia da 4 de bloqueo');
+  }
+  {
+    const { comb } = await montar('barbaro', ['collar-colmillos'], [atacante(3, 2)]);
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 1 && (comb.jugador.estados.fuerza ?? 0) === 1,
+      'Collar de Colmillos: el primer golpe que te hiere en cada ronda te da Furia (+1 de Fuerza)');
+  }
+  {
+    const { comb, ctx } = await montar('barbaro', ['jarra-hidromiel']);
+    comb.jugador.pv = 40;
+    await ctx.ganarFuria(1);
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 0 && comb.jugador.pv === 45, 'Jarra de Hidromiel: al perder la Furia te curas 5 PV');
+  }
+  {
+    const { comb, ctx } = await montar('barbaro', ['garfio-carnicero'], [muneco(10), muneco(10), muneco()]);
+    const en = comb.jugador.energia;
+    await ctx.danar(comb.enemigos[0], 50);
+    check(comb.jugador.energia === en, 'Garfio del Carnicero: sin Furia, matar no da energía');
+    await ctx.ganarFuria(1);
+    await ctx.danar(comb.enemigos[1], 50);
+    check(comb.jugador.energia === en + 1, 'Garfio del Carnicero: en Furia, cada muerte da 1 de energía');
+  }
+  // — Mago —
+  {
+    const { comb, ctx } = await montar('mago', ['diadema-intelecto']);
+    comb.jugador.conjuros = crearEspacios(2);
+    const en = comb.jugador.energia;
+    const mano = comb.jugador.mano.length;
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.energia === en && comb.jugador.mano.length === mano, 'Diadema de Intelecto: gastar un espacio que no es el último no hace nada');
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.energia === en + 1 && comb.jugador.mano.length === mano + 2,
+      'Diadema de Intelecto: al gastar el último espacio, +1 de energía y robas 2');
+  }
+  {
+    const { comb, ctx } = await montar('mago', ['baculo-archimago']);
+    comb.jugador.conjuros = crearEspacios(6);
+    await ctx.gastarConjuro(3);
+    check(ctx.conjurosLibres(3) === 1 && ctx.conjurosLibres() === 6, 'Báculo del Archimago: el primer nivel 3 recupera un espacio');
+    await ctx.gastarConjuro(3);
+    check(ctx.conjurosLibres(3) === 0, 'Báculo del Archimago: solo el primero de cada combate');
+  }
+  {
+    const { comb, ctx } = await montar('mago', ['pluma-escriba']);
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.conjuroEscrito === 3, 'Pluma de Escriba: cada espacio gastado Escribe 3 en el Conjuro Prodigioso');
+  }
+  {
+    const { comb, ctx } = await montar('mago', ['reloj-arena-arcano']);
+    comb.jugador.conjuros = crearEspacios(3);
+    await ctx.gastarConjuro(1);
+    await comb.terminarTurno();
+    check(ctx.conjurosLibres() === 2, 'Reloj de Arena Arcano: en el turno 2 aún no gira');
+    await comb.terminarTurno();
+    check(ctx.conjurosLibres() === 3, 'Reloj de Arena Arcano: cada 3 turnos recuperas un espacio');
+  }
+  {
+    const { comb, ctx } = await montar('mago', ['grimorio-contingencia']);
+    const n = comb.jugador.conjuros.length;
+    await comb.terminarTurno();
+    check(comb.jugador.conjuros.length === n + 1, 'Grimorio de Contingencia: un turno sin gastar espacios te da uno más');
+    await ctx.gastarConjuro(1);
+    await comb.terminarTurno();
+    check(comb.jugador.conjuros.length === n + 1, 'Grimorio de Contingencia: si gastaste, no');
+  }
+  // — Pícaro —
+  {
+    const { comb } = await montar('picaro', ['vaina-ponzona']);
+    await jugarCon(comb, 'daga', 0);
+    check(comb.enemigos[0].estados.veneno === 2, 'Vaina Ponzoñosa: tus Dagas aplican 2 de Veneno');
+  }
+  {
+    const { comb } = await montar('picaro', ['capa-acrobata']);
+    await comb.descartarCarta(comb.jugador.mano[0]);
+    check(comb.jugador.bloqueo === 2 && comb.jugador.bloqueoAplazado.length === 1,
+      'Capa del Acróbata: al descartar ganas 2 de bloqueo aplazado (Acrobacias)');
+  }
+  {
+    const { comb } = await montar('picaro', ['mascara-asesino']);
+    await jugarCon(comb, 'golpe');
+    check(comb.enemigos[0].estados.veneno === 3, 'Máscara del Asesino: el ataque furtivo aplica 3 de Veneno');
+    const a = await montar('picaro', ['mascara-asesino'], [atacante(5)]);
+    await jugarCon(a.comb, 'golpe');
+    check(!a.comb.enemigos[0].estados.veneno, 'Máscara del Asesino: contra quien va a atacar, nada');
+  }
+  {
+    const { comb, ctx } = await montar('picaro', ['bandolera-cuchillos']);
+    check(dagas(comb) === 2 && comb.jugador.mano.length === 7, 'Bandolera de Cuchillos: empiezas con 2 Dagas');
+    comb.jugador.descarte.push(...comb.jugador.mazo);
+    comb.jugador.mazo = [];
+    await ctx.robar(1);
+    check(dagas(comb) === 3, 'Bandolera de Cuchillos: al barajar, 1 Daga más');
+  }
+  {
+    const run = nuevaRun('picaro', 778);
+    const comb = new Combate(run, [muneco()], crearRng(778), uiSilenciosa);
+    await comb.iniciar();
+    check(run.reliquias[0].id === 'guante-ladron' && comb.jugador.estados.destreza === 1 && dagas(comb) === 1,
+      'Guante del Ladrón: 1 de Destreza y una Daga en la mano al empezar');
+  }
+  // — Brujo —
+  {
+    const { comb } = await montar('brujo', ['ojo-patron']);
+    await jugarCon(comb, 'explosion-sobrenatural');
+    check(comb.enemigos[0].estados.condena === 2, 'Ojo del Patrón: la Explosión Sobrenatural aplica 2 de Condena');
+  }
+  {
+    const { comb, ctx } = await montar('brujo', ['corazon-diablillo'], [muneco(), muneco()]);
+    await ctx.invocarEfimero('sabueso', 10, 0);
+    await comb.terminarTurno();
+    check(comb.enemigos.every((e) => e.pv === 195), 'Corazón de Diablillo: la invocación que aguanta estalla (la mitad de su vida a todos)');
+  }
+  {
+    const { comb } = await montar('brujo', ['cadena-condenado'], [muneco(10), muneco()]);
+    comb.enemigos[0].estados.condena = 20;
+    await comb.terminarTurno();
+    check(!comb.enemigos[0].vivo && comb.jugador.energia === comb.jugador.energiaMax + 1,
+      'Cadena del Condenado: si muere un enemigo con Condena, tu próximo turno tiene 1 de energía más');
+  }
+  {
+    const { comb } = await montar('brujo', ['colgante-escarcha'], [atacante(6)]);
+    comb.jugador.bloqueo = 10;
+    await comb.terminarTurno();
+    check(comb.enemigos[0].estados.condena === 6, 'Colgante de Escarcha: el daño que bloqueas se vuelve Condena del atacante');
+  }
+
+  // — Reparto por clase y rarezas —
+  {
+    const pool = RQ.POOL_RELIQUIAS;
+    const generales = pool.filter((r) => !r.soloClase);
+    check(generales.length >= 24, `al menos 24 reliquias generales (${generales.length})`);
+    check(pool.every((r) => ['comun', 'rara', 'jefe'].includes(r.rareza)), 'toda reliquia del pool es común, rara o de jefe');
+    check(new Set(pool.map((r) => r.nombre)).size === pool.length, 'sin nombres de reliquia repetidos');
+    check(pool.every((r) => r.icono.length > 0 && !r.texto.includes('"')), 'todas tienen icono y su texto cabe en un data-tip');
+    for (const clase of CLASES) {
+      const propias = pool.filter((r) => r.soloClase === clase);
+      check(propias.length >= 4, `${clase}: al menos 4 reliquias únicas de clase (${propias.length})`);
+      const disponibles = RQ.reliquiasDisponibles(nuevaRun(clase, 1));
+      check(disponibles.every((r) => !r.soloClase || r.soloClase === clase), `${clase}: nunca se le ofrecen reliquias de otra clase`);
+      const rng = crearRng(4242);
+      let ajena = 0;
+      let jefeFuera = 0;
+      const vistas = new Set<string>();
+      for (let i = 0; i < 400; i++) {
+        const run = nuevaRun(clase, i);
+        const origen = (['cofre', 'elite', 'evento', 'jefe'] as const)[i % 4];
+        const r = RQ.sortearReliquia(run, rng, origen);
+        if (!r) continue;
+        if (r.soloClase && r.soloClase !== clase) ajena++;
+        if (r.rareza === 'jefe' && origen !== 'jefe') jefeFuera++;
+        if (r.soloClase === clase) vistas.add(r.id);
+      }
+      check(ajena === 0 && jefeFuera === 0 && vistas.size >= 4,
+        `${clase}: 400 sorteos sin reliquias ajenas ni de jefe fuera de los jefes, y salen sus ${vistas.size} de clase`);
+    }
+    const run = nuevaRun('mago', 9);
+    run.reliquias.push(...RQ.reliquiasDisponibles(run));
+    check(RQ.sortearReliquia(run, crearRng(9), 'cofre') === undefined, 'con todas las reliquias, el sorteo no repite');
+    const jefeRun = nuevaRun('mago', 10);
+    check(RQ.sortearReliquia(jefeRun, crearRng(10), 'jefe')?.rareza === 'jefe', 'los jefes sueltan reliquias de jefe');
+    // No relic left that only adds a flat stat ("+1 de Fuerza", "+8 PV máximos"…)
+    const soloEstadistica = /^(al obtenerlo:?\s*)?(\+?\d+ de \w+ permanente al inicio de cada combate|(empiezas cada combate con\s*)?\+?\d+ (de )?(fuerza|destreza|pv máximos|bloqueo)( al obtenerlo| permanente)?)\.?$/i;
+    const todas = [...pool, ...CLASES.map((c) => RQ.reliquiaInicial(c))];
+    const planas = todas.filter((r) => soloEstadistica.test(r.texto.trim()));
+    check(planas.length === 0, `no quedan reliquias de solo «+N estadística» (${planas.map((r) => r.id).join(', ')})`);
+  }
+  // — Guardado —
+  {
+    for (const clase of CLASES) {
+      const run = nuevaRun(clase, 31);
+      run.reliquias.push(...RQ.reliquiasDisponibles(run));
+      const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))));
+      check(!!rest && rest.reliquias.length === run.reliquias.length
+        && rest.reliquias.every((r, i) => r.id === run.reliquias[i].id && r === RQ.reliquiaPorId(r.id)),
+      `${clase}: las ${run.reliquias.length} reliquias se guardan y rehidratan con sus efectos`);
+    }
+  }
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

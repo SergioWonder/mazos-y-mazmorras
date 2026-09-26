@@ -1,6 +1,7 @@
 import type { CartaInstancia, EstadoRun, Rareza } from './types.ts';
-import { instanciar, poolDeClase } from './cartas.ts';
-import { POOL_RELIQUIAS } from './reliquias.ts';
+import { poolDeClase } from './cartas.ts';
+import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
+import { anadirCarta } from './run.ts';
 
 /** Una opción de un evento. Devuelve el texto del desenlace. */
 export interface OpcionEvento {
@@ -52,8 +53,8 @@ function cartaAleatoria(run: EstadoRun, rng: () => number, rarezas: Rareza[]): s
   const pool = poolDeClase(run.clase).filter((c) => rarezas.includes(c.rareza));
   if (pool.length === 0) return 'nada';
   const def = pool[Math.floor(rng() * pool.length)];
-  run.mazo.push(instanciar(def));
-  return def.nombre;
+  const inst = anadirCarta(run, def);
+  return inst.mejorada ? `${def.nombre}+` : def.nombre;
 }
 
 function quitarCartaBasica(run: EstadoRun, rng: () => number, id?: string): string {
@@ -81,18 +82,14 @@ function defNombre(c: CartaInstancia): string {
 }
 
 export function reliquiaAleatoria(run: EstadoRun, rng: () => number): string {
-  const propias = new Set(run.reliquias.map((r) => r.id));
-  const pool = POOL_RELIQUIAS.filter(
-    (r) => !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase),
-  );
-  if (pool.length === 0) {
+  const r = sortearReliquia(run, rng, 'evento');
+  if (!r) {
     curar(run, 8);
     return 'unas vendas viejas (+8 PV)';
   }
-  const r = pool[Math.floor(rng() * pool.length)];
-  run.reliquias.push(r);
-  r.alObtener?.(run);
-  return `${r.icono} ${r.nombre}`;
+  otorgarReliquia(run, r);
+  // name only: the relic's illustration shows up in the top bar (event text is plain)
+  return r.nombre;
 }
 
 // ── Eventos positivos (~70 %) ────────────────────────────────────────────────

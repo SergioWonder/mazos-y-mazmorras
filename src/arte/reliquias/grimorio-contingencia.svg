@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <rect id="b" x="14" y="8" width="38" height="50" rx="3"/>
+    <clipPath id="c"><use href="#b"/></clipPath>
+  </defs>
+  <!-- page edges -->
+  <path d="M50 10 L55 12 L55 58 L50 58 Z" fill="#d8ccaa" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <!-- deep blue cover -->
+  <use href="#b" fill="#2a3a6a"/>
+  <g clip-path="url(#c)">
+    <path d="M40 0 H64 V64 H30 Q46 40 40 0 Z" fill="#1a2648"/>
+    <path d="M14 8 H21 V58 H14 Z" fill="#141c38"/>
+  </g>
+  <use href="#b" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M21 8 V58" stroke="#140d0a" stroke-width="1.6"/>
+  <!-- silver corners and clasp -->
+  <path d="M46 8 L52 8 L52 14 Z M46 58 L52 58 L52 52 Z" fill="#a8b0b8" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M48 28 H58 V38 H48" fill="#a8b0b8" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <!-- glowing contingency rune (circle with hourglass) -->
+  <circle cx="35" cy="33" r="10" fill="none" stroke="#a896ff" stroke-width="4" filter="url(#g)"/>
+  <circle cx="35" cy="33" r="9" fill="none" stroke="#d4ccff" stroke-width="1.8"/>
+  <path d="M30 27 L40 27 L30 39 L40 39 Z" fill="none" stroke="#d4ccff" stroke-width="1.8" stroke-linejoin="round"/>
+</svg>

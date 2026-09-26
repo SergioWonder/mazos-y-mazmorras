@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <path id="j" d="M24 12 L40 12 L40 18 Q52 22 52 38 Q52 58 32 58 Q12 58 12 38 Q12 22 24 18 Z"/>
+    <clipPath id="c"><use href="#j"/></clipPath>
+  </defs>
+  <!-- night-blue jar -->
+  <use href="#j" fill="#1e2a4a"/>
+  <g clip-path="url(#c)">
+    <path d="M38 16 Q52 34 36 64 H64 V16 Z" fill="#121a32"/>
+    <path d="M16 30 Q18 22 26 20 L26 24 Q20 26 19 34 Z" fill="#8aa0c8" opacity="0.6"/>
+  </g>
+  <!-- trapped moon -->
+  <circle cx="32" cy="38" r="11" fill="#f0f4ff" opacity="0.7" filter="url(#g)"/>
+  <path d="M34 28 A10 10 0 1 0 34 48 A12.5 12.5 0 0 1 34 28 Z" fill="#f0f0e0" stroke="#140d0a" stroke-width="1.6"/>
+  <circle cx="42" cy="30" r="1" fill="#f0f4ff"/>
+  <circle cx="40" cy="46" r="0.8" fill="#f0f4ff"/>
+  <use href="#j" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- cork with druid twine -->
+  <path d="M25 4 L39 4 L38 13 L26 13 Z" fill="#7a5634" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M22 16 Q32 20 42 16" stroke="#140d0a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M22 16 Q32 20 42 16" stroke="#a8e070" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <path d="M42 16 L47 24" stroke="#a8e070" stroke-width="1.8" stroke-linecap="round"/>
+</svg>

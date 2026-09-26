@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+    <path id="b" d="M2 22 Q32 30 62 22 L62 42 Q32 50 2 42 Z"/>
+    <clipPath id="c"><use href="#b"/></clipPath>
+  </defs>
+  <!-- wide belt -->
+  <use href="#b" fill="#7a4a2a"/>
+  <g clip-path="url(#c)">
+    <path d="M0 36 Q32 44 64 36 V64 H0 Z" fill="#54301a"/>
+    <path d="M0 23 Q32 31 64 23 V26 Q32 34 0 26 Z" fill="#9a6a44"/>
+  </g>
+  <path d="M4 26 Q32 34 60 26 M4 39 Q32 47 60 39" stroke="#140d0a" stroke-width="1" stroke-dasharray="2 2" fill="none"/>
+  <use href="#b" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- huge bronze buckle -->
+  <path d="M18 18 L46 18 L48 46 L16 46 Z" fill="#a07a3a" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M34 18 L46 18 L48 46 L34 46 Z" fill="#74561e"/>
+  <path d="M18 18 L46 18 L48 46 L16 46 Z" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M20 21 L26 21 L24 43 L19 43 Z" fill="#d0a860"/>
+  <!-- ember gem -->
+  <circle cx="32" cy="32" r="7" fill="#ff9a50" filter="url(#g)"/>
+  <path d="M32 25 L38 32 L32 39 L26 32 Z" fill="#e86a2a" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M32 25 L26 32 L32 32 Z" fill="#ffc080"/>
+</svg>

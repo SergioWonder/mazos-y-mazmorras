@@ -16,6 +16,8 @@ import { PuppetStage } from './puppet-stage.ts';
 import { sceneBackground } from '../fx/background.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
+import { layoutSlots } from './enemy-slots.ts';
+import { relicIcon } from './relic-art.ts';
 
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
@@ -88,7 +90,7 @@ export function pantallaCombate(
     altoEscenario();
     const medirEscenario = new ResizeObserver(altoEscenario);
     medirEscenario.observe(escenarioEl);
-    montarFondo(escenarioEl, run.capitulo, run.escenario);
+    montarFondo(raiz, escenarioEl, run.capitulo, run.escenario);
     const heroSprite = new HeroSprite(run.clase, stage);
     // druid forms get their own backlit puppet, created on first use
     const formSprites = new Map<FormId, HeroSprite>();
@@ -125,6 +127,7 @@ export function pantallaCombate(
     let seleccion = 0;               // índice de carta seleccionada (teclado)
     let modoObjetivo = false;        // eligiendo objetivo con teclado/clic
     let objetivoIdx = 0;
+    let huecosEnemigos: EnemigoCombate[] = []; // fixed enemy slots, left to right
     let cartaPendiente: CartaInstancia | null = null;
     let arrastrando: HTMLElement | null = null;
 
@@ -411,13 +414,26 @@ export function pantallaCombate(
       renderEnergia();
       $('.pila-robo').innerHTML = `🂠<span>${combate.jugador.mazo.length}</span>`;
       $('.pila-descarte').innerHTML = `🗑<span>${combate.jugador.descarte.length}</span>`;
+      ajustarEstados();
       altoEscenario(); // the scene grows with its fighters (portrait phones)
       comprobarFinal();
     }
 
+    /** Status rows take height from the sprite (CSS budget), so fighters stay inside the scene. */
+    function ajustarEstados() {
+      const luchadores = raiz.querySelectorAll<HTMLElement>('.heroe, .enemigo:not(.enemigo-hueco)');
+      // twice: a smaller sprite narrows the fighter, which may wrap the statuses once more
+      for (let pasada = 0; pasada < 2; pasada++) {
+        luchadores.forEach((l) => {
+          const estados = l.querySelector<HTMLElement>(':scope > .estados');
+          if (estados) l.style.setProperty('--alto-estados', `${Math.max(22, estados.offsetHeight)}px`);
+        });
+      }
+    }
+
     function renderBarra() {
       const r = run.reliquias
-        .map((x) => `<span class="reliquia" data-tip="<strong>${x.icono} ${x.nombre}</strong><br>${x.texto}">${x.icono}</span>`)
+        .map((x) => `<span class="reliquia" data-tip="<strong>${relicIcon(x, 20)} ${x.nombre}</strong><br>${x.texto}">${relicIcon(x)}</span>`)
         .join('');
       $('.barra-superior').innerHTML = `
         <span class="bs-clase">${NOMBRE_CLASE[run.clase]}</span>
@@ -557,8 +573,13 @@ export function pantallaCombate(
     function renderEnemigos() {
       const cont = $('.lado-enemigos');
       cont.innerHTML = '';
-      combate.enemigos.forEach((e, idx) => {
-        if (!e.vivo) return;
+      huecosEnemigos = layoutSlots(huecosEnemigos, combate.enemigos, (e) => e.vivo);
+      for (const e of huecosEnemigos) {
+        const idx = combate.enemigos.indexOf(e);
+        if (!e.vivo) {
+          cont.appendChild(huecoEnemigo(e));
+          continue;
+        }
         const div = el('div', 'enemigo');
         div.dataset.idx = String(idx);
         const escala = e.def.escala ?? 1;
@@ -596,7 +617,24 @@ export function pantallaCombate(
           se.setIntensity(e.rasgoUsado || e.filacteriaUsada ? 2 : 1);
         }
         cont.appendChild(div);
-      });
+      }
+    }
+
+    /** Invisible stand-in with the dead enemy's footprint, so the others keep their place. */
+    function huecoEnemigo(e: EnemigoCombate): HTMLElement {
+      const div = el('div', 'enemigo enemigo-hueco');
+      div.setAttribute('aria-hidden', 'true');
+      const escala = e.def.escala ?? 1;
+      div.innerHTML = `
+        <div class="intencion">·</div>
+        ${ENEMY_RIGS[e.def.id]
+          ? `<div class="sprite sprite-enemigo sprite-ilustrado" style="--esc:${escala}"><div class="sprite-marioneta"></div></div>`
+          : `<div class="sprite sprite-enemigo" style="font-size:${escala * 4.2}rem">${e.def.arte}</div>`}
+        <div class="enemigo-nombre">${e.nombre}</div>
+        ${e.def.rasgo ? `<div class="rasgo-jefe">★ ${e.def.rasgo.nombre}</div>` : ''}
+        ${barraVida(e)}
+        <div class="estados"></div>`;
+      return div;
     }
 
     function objetivoIdxValido(): number {
@@ -878,7 +916,8 @@ export function pantallaCombate(
           ev.preventDefault();
           const dir = ev.code === 'ArrowRight' ? 1 : -1;
           if (modoObjetivo) {
-            const vivos = combate.enemigos.map((e, i) => (e.vivo ? i : -1)).filter((i) => i >= 0);
+            // screen order (fixed slots), not the engine's list order
+            const vivos = huecosEnemigos.filter((e) => e.vivo).map((e) => combate.enemigos.indexOf(e));
             const pos = vivos.indexOf(objetivoIdxValido());
             objetivoIdx = vivos[(pos + dir + vivos.length) % vivos.length];
           } else if (mano.length > 0) {
@@ -952,21 +991,29 @@ const BACKGROUND_URLS = import.meta.glob('../arte/fondos/*.webp', { eager: true,
 /**
  * Painted scenario background: a static image under the WebGL stage (no per-frame
  * cost). The CSS sky and silhouettes stay underneath until it has loaded.
+ * The layer covers the whole combat screen: the scene shows the painting exactly as
+ * before, and a mirrored copy carries its ground on under the hand, so no strip cuts it.
  */
-function montarFondo(escenarioEl: HTMLElement, capitulo: number, escenario: number) {
+function montarFondo(raiz: HTMLElement, escenarioEl: HTMLElement, capitulo: number, escenario: number) {
   const fondo = sceneBackground(capitulo, escenario);
   const wide = BACKGROUND_URLS[`../arte/fondos/${fondo.wide}`];
   const tall = BACKGROUND_URLS[`../arte/fondos/${fondo.tall}`] ?? wide;
   if (!wide) return;
   // pick by the scene's own shape: on a portrait phone the scene strip is still wide
   const { clientWidth: w, clientHeight: h } = escenarioEl;
+  const src = h > w ? tall : wide;
   const capa = document.createElement('div');
   capa.className = 'fondo-escena';
   const img = document.createElement('img');
   img.alt = '';
   img.decoding = 'async';
-  img.addEventListener('load', () => escenarioEl.classList.add('fondo-pintado'), { once: true });
-  img.src = h > w ? tall : wide;
-  capa.append(img);
-  escenarioEl.prepend(capa);
+  img.addEventListener('load', () => raiz.classList.add('fondo-pintado'), { once: true });
+  img.src = src;
+  const reflejo = document.createElement('img');
+  reflejo.className = 'fondo-reflejo';
+  reflejo.alt = '';
+  reflejo.decoding = 'async';
+  reflejo.src = src;
+  capa.append(img, reflejo);
+  raiz.prepend(capa);
 }

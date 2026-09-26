@@ -2,6 +2,7 @@ import type { EstadoRun, NodoMapa } from '../core/types.ts';
 import { nodosDisponibles } from '../core/mapa.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import { relicIcon } from './relic-art.ts';
 
 const ICONO_NODO: Record<string, string> = {
   combate: '⚔️', elite: '💀', descanso: '🏕️', cofre: '🧰', evento: '❓', jefe: '👹',
@@ -30,7 +31,7 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
         }</span>
         <span class="bs-pv">❤️ ${run.pv}/${run.pvMax}</span>
         <span class="bs-reliquias">${run.reliquias
-          .map((r) => `<span class="reliquia" data-tip="<strong>${r.icono} ${r.nombre}</strong><br>${r.texto}">${r.icono}</span>`)
+          .map((r) => `<span class="reliquia" data-tip="<strong>${relicIcon(r, 20)} ${r.nombre}</strong><br>${r.texto}">${relicIcon(r)}</span>`)
           .join('')}</span>
         <span class="bs-piso">🃏 ${run.mazo.length} cartas</span>
       </div>

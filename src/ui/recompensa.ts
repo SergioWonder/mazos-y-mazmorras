@@ -1,14 +1,16 @@
-import type { CartaDef, EstadoRun, ReliquiaDef } from '../core/types.ts';
-import { instanciar, recompensaCartas } from '../core/cartas.ts';
-import { POOL_RELIQUIAS } from '../core/reliquias.ts';
+import type { CartaDef, EstadoRun, OrigenReliquia } from '../core/types.ts';
+import { recompensaCartas } from '../core/cartas.ts';
+import { sortearReliquia, otorgarReliquia, NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
+import { afilarCarta, anadirCarta, curaDeDescanso, descansar, pesoRaroEfectivo } from '../core/run.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
+import { relicIcon } from './relic-art.ts';
 import { renderCarta } from './carta.ts';
 
 /** Overlay de elección de carta tras un combate. */
 export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Promise<void> {
   return new Promise((resolver) => {
-    const opciones = recompensaCartas(run.clase, rng, pesoRaro);
+    const opciones = recompensaCartas(run.clase, rng, pesoRaroEfectivo(run, pesoRaro));
     if (opciones.length === 0) return resolver();
 
     const overlay = document.getElementById('overlay')!;
@@ -54,8 +56,8 @@ export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Pr
     panel.querySelector('.btn-saltar')!.addEventListener('click', cerrar);
 
     function tomar(def: CartaDef) {
-      run.mazo.push(instanciar(def));
-      anuncio(`+ ${def.nombre}`, 'anuncio-botin');
+      const inst = anadirCarta(run, def);
+      anuncio(`+ ${def.nombre}${inst.mejorada ? '+' : ''}`, 'anuncio-botin');
       cerrar();
     }
     function cerrar() {
@@ -67,19 +69,17 @@ export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Pr
   });
 }
 
-/** Overlay de obtención de reliquia (cofres y élites). */
-export function obtenerReliquia(run: EstadoRun, rng: () => number): Promise<void> {
+/** Overlay de obtención de reliquia (cofres, élites y jefes). */
+export function obtenerReliquia(
+  run: EstadoRun, rng: () => number, origen: OrigenReliquia = 'cofre',
+): Promise<void> {
   return new Promise((resolver) => {
-    const propias = new Set(run.reliquias.map((r) => r.id));
-    const candidatas = POOL_RELIQUIAS.filter(
-      (r) => !propias.has(r.id) && (!r.soloClase || r.soloClase === run.clase),
-    );
-    if (candidatas.length === 0) {
+    const reliquia = sortearReliquia(run, rng, origen);
+    if (!reliquia) {
       run.pv = Math.min(run.pvMax, run.pv + 10);
       anuncio('El cofre contiene vendas: +10 PV', 'anuncio-botin');
       return resolver();
     }
-    const reliquia: ReliquiaDef = candidatas[Math.floor(rng() * candidatas.length)];
 
     const overlay = document.getElementById('overlay')!;
     overlay.innerHTML = '';
@@ -87,8 +87,9 @@ export function obtenerReliquia(run: EstadoRun, rng: () => number): Promise<void
     const panel = el('div', 'panel-recompensa panel-reliquia');
     panel.innerHTML = `
       <h2>🧰 ¡Has encontrado una reliquia!</h2>
-      <div class="reliquia-grande">${reliquia.icono}</div>
+      <div class="reliquia-grande">${relicIcon(reliquia, 96)}</div>
       <h3>${reliquia.nombre}</h3>
+      <p class="reliquia-rareza">${NOMBRE_RAREZA_RELIQUIA[reliquia.rareza]}${reliquia.soloClase ? ' · de tu clase' : ''}</p>
       <p>${reliquia.texto}</p>
       <button class="btn-tomar">Tomar <span class="atajo">[Enter]</span></button>
     `;
@@ -96,8 +97,7 @@ export function obtenerReliquia(run: EstadoRun, rng: () => number): Promise<void
     fx.estallido('divino');
 
     const cerrar = () => {
-      run.reliquias.push(reliquia);
-      reliquia.alObtener?.(run);
+      otorgarReliquia(run, reliquia);
       window.removeEventListener('keydown', teclado);
       overlay.className = '';
       overlay.innerHTML = '';
@@ -115,10 +115,10 @@ export function obtenerReliquia(run: EstadoRun, rng: () => number): Promise<void
 }
 
 /** Pantalla de campamento: descansar (curar) o afilar (mejorar 1 carta). */
-export function pantallaDescanso(run: EstadoRun): Promise<void> {
+export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random): Promise<void> {
   return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
-    const cura = Math.floor(run.pvMax * 0.3);
+    const cura = curaDeDescanso(run);
 
     function cerrar(fnTeclado: (ev: KeyboardEvent) => void) {
       window.removeEventListener('keydown', fnTeclado);
@@ -163,8 +163,10 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
       window.addEventListener('keydown', teclado);
 
       panel.querySelector('.btn-descansar')!.addEventListener('click', () => {
-        run.pv = Math.min(run.pvMax, run.pv + cura);
-        anuncio(`+${cura} PV`, 'anuncio-botin');
+        const maxAntes = run.pvMax;
+        const curado = descansar(run);
+        const extraMax = run.pvMax - maxAntes;
+        anuncio(extraMax > 0 ? `+${extraMax} PV máximos` : `+${curado} PV`, 'anuncio-botin');
         cerrar(teclado);
       });
       panel.querySelector('.btn-afilar')!.addEventListener('click', () => {
@@ -210,8 +212,8 @@ export function pantallaDescanso(run: EstadoRun): Promise<void> {
 
       function mejorar(i: number) {
         const inst = mejorables[i];
-        inst.mejorada = true;
-        anuncio(`⚒️ ${inst.def.nombre} → ${inst.def.nombre}+`, 'anuncio-botin');
+        const extra = afilarCarta(run, inst, rng);
+        anuncio(`⚒️ ${[`${inst.def.nombre}+`, ...extra].join(' · ')}`, 'anuncio-botin');
         cerrar(teclado);
       }
 

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+    <clipPath id="c"><circle cx="32" cy="40" r="17"/></clipPath>
+  </defs>
+  <!-- chain -->
+  <path d="M10 3 Q20 20 28 24 M54 3 Q44 20 36 24" stroke="#140d0a" stroke-width="4.4" fill="none" stroke-linecap="round"/>
+  <path d="M10 3 Q20 20 28 24 M54 3 Q44 20 36 24" stroke="#c9a040" stroke-width="2" fill="none" stroke-dasharray="3 2"/>
+  <!-- gold frame -->
+  <circle cx="32" cy="40" r="17" fill="#b8923a"/>
+  <g clip-path="url(#c)">
+    <path d="M52 22 Q48 52 16 56 L64 64 Z" fill="#7e5e1e"/>
+    <path d="M16 36 Q18 26 28 24 Q20 30 19 40 Z" fill="#ecd08a"/>
+  </g>
+  <circle cx="32" cy="40" r="17" fill="none" stroke="#140d0a" stroke-width="3"/>
+  <circle cx="32" cy="40" r="11" fill="#3a1414" stroke="#140d0a" stroke-width="2"/>
+  <circle cx="32" cy="23" r="3.5" fill="#b8923a" stroke="#140d0a" stroke-width="2.2"/>
+  <!-- ruby heart -->
+  <path d="M32 49 Q22 42 23.5 37 Q25 32.5 29 33.5 Q31 34 32 36 Q33 34 35 33.5 Q39 32.5 40.5 37 Q42 42 32 49 Z" fill="#ff4a4a" filter="url(#g)"/>
+  <path d="M32 49 Q22 42 23.5 37 Q25 32.5 29 33.5 Q31 34 32 36 Q33 34 35 33.5 Q39 32.5 40.5 37 Q42 42 32 49 Z" fill="#d83838" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M32 49 Q38 43 39.5 38 Q40 42 32 49 Z" fill="#8e1e22"/>
+  <path d="M26 36.5 Q27 35 29 35.5" stroke="#ffc0b0" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>

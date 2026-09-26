@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <!-- staff shaft -->
+  <path d="M12 60 L40 22" stroke="#140d0a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M12 60 L40 22" stroke="#5a3e28" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M13 57 L38 23" stroke="#7e5a3a" stroke-width="1.2"/>
+  <path d="M22 46 L27 49 M26 41 L31 44" stroke="#140d0a" stroke-width="4"/>
+  <path d="M22 46 L27 49 M26 41 L31 44" stroke="#a8b0b8" stroke-width="1.8"/>
+  <!-- silver claw holding the orb -->
+  <path d="M34 26 Q30 16 38 10 M42 30 Q52 28 56 20 M38 24 Q38 14 50 8" stroke="#140d0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M34 26 Q30 16 38 10 M42 30 Q52 28 56 20 M38 24 Q38 14 50 8" stroke="#a8b0b8" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <!-- arcane orb -->
+  <circle cx="45" cy="18" r="12" fill="#a896ff" opacity="0.9" filter="url(#g)"/>
+  <circle cx="45" cy="18" r="8" fill="#7a66e0" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M49 20 A5 5 0 0 1 41 22 A6 6 0 0 0 49 20 Z" fill="#4a3aa0"/>
+  <circle cx="42.5" cy="15" r="2.4" fill="#e4ddff"/>
+  <path d="M8 24 L10 20 L12 24 L10 28 Z M54 42 L56 38 L58 42 L56 46 Z" fill="#c8bcff"/>
+</svg>

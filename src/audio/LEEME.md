@@ -18,7 +18,7 @@ La música se **pausa** en segundo plano y el botón flotante 🔊/🔇 silencia
 | `jefe1.mp3` | Jefes del acto I | «Señor de la guerra», épica orquestal en re menor |
 | `cap2.mp3`  | Acto II: La Cripta y El Templo Oscuro | «Marcha de los huesos», misterio travieso en re dórico |
 | `jefe2.mp3` | Jefes del acto II | «Presagio», tensión ritual en mi frigio |
-| `cap3.mp3`  | Acto III: Guarida del Dragón y Laberinto | Aventura heroica ante el peligro |
+| `cap3.mp3`  | Acto III: Guarida del Dragón y Laberinto | «Brasas y locura», amenaza sombría en mi frigio a 90 BPM, con el leitmotiv como eco lúgubre |
 | `jefe3.mp3` | Jefes del acto III | Combate final, la pista más épica |
 
 Todas las pistas son MP3 a 160 kbps, 44,1 kHz y estéreo. Los scripts que las generan

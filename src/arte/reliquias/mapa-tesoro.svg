@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="m" d="M10 14 L50 10 L54 50 L14 54 Z"/>
+    <clipPath id="c"><use href="#m"/></clipPath>
+  </defs>
+  <!-- parchment -->
+  <use href="#m" fill="#d8c290"/>
+  <g clip-path="url(#c)">
+    <path d="M40 0 Q50 30 34 64 H64 V0 Z" fill="#b09a68"/>
+    <path d="M18 24 Q24 18 30 22 Q34 30 26 34 Q18 34 18 24 Z" fill="#9ab07a"/>
+    <path d="M36 38 Q42 34 48 40 Q46 48 38 46 Z" fill="#8aa06a"/>
+  </g>
+  <!-- dotted trail to the X -->
+  <path d="M16 46 Q22 38 30 40 Q38 42 36 28 Q36 20 44 20" stroke="#6a2a1e" stroke-width="1.8" fill="none" stroke-dasharray="2.5 2.5"/>
+  <path d="M40 16 L48 24 M48 16 L40 24" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M40 16 L48 24 M48 16 L40 24" stroke="#c83a2a" stroke-width="2.6" stroke-linecap="round"/>
+  <use href="#m" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- rolled ends -->
+  <path d="M7 12 Q10 8 13 12 L17 56 Q14 60 11 56 Z" fill="#c4ac78" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M47 8 Q50 4 53 8 L57 52 Q54 56 51 52 Z" fill="#a89060" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+</svg>

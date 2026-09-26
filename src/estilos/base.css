@@ -292,6 +292,15 @@ button {
   cursor: help;
   filter: drop-shadow(0 0 4px rgba(217, 169, 63, 0.5));
 }
+/* Hand-drawn relic art: sized in em so it matches the emoji it replaces. */
+.reliquia-img {
+  width: 1.2em;
+  height: 1.2em;
+  vertical-align: -0.25em;
+  object-fit: contain;
+  pointer-events: none;
+}
+.reliquia-grande .reliquia-img { width: 1.25em; height: 1.25em; vertical-align: middle; }
 
 /* ── Números flotantes ──────────────────────────────────────────────────── */
 .num-flotante {

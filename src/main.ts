@@ -5,7 +5,7 @@ import './estilos/pantallas.css';
 import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
-import { nuevaRun, avanzarCapitulo } from './core/run.ts';
+import { nuevaRun, avanzarCapitulo, entrarEnSala, cartaExtraEnSala } from './core/run.ts';
 import { ACTOS } from './core/enemigos.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
@@ -21,7 +21,7 @@ import { iniciarActualizaciones } from './ui/actualizacion.ts';
 import { elegirCarta, obtenerReliquia, pantallaDescanso } from './ui/recompensa.ts';
 import { pantallaEvento } from './ui/evento.ts';
 import { pantallaFin } from './ui/fin.ts';
-import { iniciarTooltips } from './ui/util.ts';
+import { iniciarTooltips, anuncio } from './ui/util.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
@@ -76,6 +76,8 @@ async function juego() {
       nodo.visitado = true;
       run.nodoActual = nodo.id;
       run.piso++;
+      // Relics that react to the room you step into (Adventurer's Journal…)
+      for (const nota of entrarEnSala(run, nodo.tipo, rng)) anuncio(nota, 'anuncio-botin');
 
       switch (nodo.tipo) {
         case 'combate': {
@@ -90,7 +92,7 @@ async function juego() {
           const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre, true);
           if (resultado === 'derrota') vivo = false;
           else {
-            await obtenerReliquia(run, rng);
+            await obtenerReliquia(run, rng, 'elite');
             await elegirCarta(run, rng, 25); // élite: bastante más probable que salga rara
           }
           break;
@@ -99,7 +101,7 @@ async function juego() {
           await obtenerReliquia(run, rng);
           break;
         case 'descanso':
-          await pantallaDescanso(run);
+          await pantallaDescanso(run, rng);
           break;
         case 'evento':
           await pantallaEvento(run, rng);
@@ -110,7 +112,7 @@ async function juego() {
             vivo = false;
           } else if (run.capitulo + 1 < ACTOS.length) {
             // botín de jefe, bendición de la Vidente y siguiente capítulo
-            await obtenerReliquia(run, rng);
+            await obtenerReliquia(run, rng, 'jefe');
             await elegirCarta(run, rng, 100); // garantiza elección de rara
             await pantallaBendicion(run, rng);
             avanzarCapitulo(run, rng);
@@ -121,6 +123,9 @@ async function juego() {
           break;
         }
       }
+
+      // Relics that add a card reward to some rooms (Treasure Map on chests)
+      if (vivo && !campanaCompleta && cartaExtraEnSala(run, nodo.tipo)) await elegirCarta(run, rng);
 
       // guardado automático tras resolver cada sala
       if (vivo && !campanaCompleta) guardarRun(run);

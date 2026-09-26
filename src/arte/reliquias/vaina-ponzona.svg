@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+    <path id="s" d="M22 22 L34 22 L33 50 L28 60 L23 50 Z"/>
+    <clipPath id="c"><use href="#s"/></clipPath>
+  </defs>
+  <g transform="rotate(-24 32 36)">
+    <!-- hilt -->
+    <rect x="25.5" y="6" width="5" height="12" rx="1.6" fill="#2a2a2a" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M18 18 L38 18 L37 22 L19 22 Z" fill="#6a6e70" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+    <circle cx="28" cy="5" r="2.8" fill="#72e0cc" stroke="#140d0a" stroke-width="1.4"/>
+    <!-- black leather scabbard -->
+    <use href="#s" fill="#2e3432"/>
+    <g clip-path="url(#c)"><path d="M29 20 H40 V64 H29 Z" fill="#1c201f"/></g>
+    <use href="#s" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  </g>
+  <!-- coiled serpent -->
+  <path d="M18 30 Q34 24 40 32 Q44 40 26 42 Q14 44 22 50 Q30 54 40 50" stroke="#140d0a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M18 30 Q34 24 40 32 Q44 40 26 42 Q14 44 22 50 Q30 54 40 50" stroke="#3e7a5a" stroke-width="3.6" fill="none" stroke-linecap="round"/>
+  <path d="M40 50 Q46 48 48 44" stroke="#140d0a" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <ellipse cx="48" cy="43" rx="5" ry="3.6" fill="#3e7a5a" stroke="#140d0a" stroke-width="2"/>
+  <circle cx="49.5" cy="42" r="1" fill="#e0ff80"/>
+  <!-- teal venom drop -->
+  <path d="M52 46 Q49 52 52 54 Q55 52 52 46 Z" fill="#72e0cc" filter="url(#g)"/>
+  <path d="M52 46 Q49.5 51 52 53 Q54.5 51 52 46 Z" fill="#9ff0e0" stroke="#140d0a" stroke-width="1.2"/>
+</svg>

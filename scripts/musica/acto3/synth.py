@@ -421,3 +421,42 @@ def render_song(names, run_track, sends, n_loop, out_base, workers=10, rt60=2.6,
     dec = decode(out_base + '.mp3')
     print(f'[mp3] decoded peak {db(np.abs(dec).max()):.2f} dBFS, dur {dec.shape[1] / SR:.2f}s')
     return mix
+
+
+# ---------------------------------------------------------------- additions (boss III)
+
+FORMANTS_OH = ((450.0, 80.0, 1.0), (800.0, 90.0, 0.45), (2830.0, 170.0, 0.07),
+               (3500.0, 200.0, 0.03))
+
+# organ stops as (harmonic of the 16' base, gain): 16', 8', 4', 2 2/3', 2', mixture
+ORGAN_FULL = ((1, 0.55), (2, 1.0), (4, 0.6), (6, 0.32), (8, 0.3), (12, 0.12), (16, 0.08))
+ORGAN_SOFT = ((1, 0.35), (2, 1.0), (4, 0.3), (6, 0.08))
+
+
+def organ_note(midi, dur, vel, rng, stops=ORGAN_FULL, attack=0.07, release=0.6,
+               celeste=3.0, max_fc=4200.0):
+    """Pipe organ: fixed ranks of sines over a 16' base, celeste rank and chiff."""
+    f16 = hz(midi) / 2.0
+    n = int((dur + release + 0.03) * SR)
+    t = np.arange(n) / SR
+    out = np.zeros(n)
+    for rank, det in ((0, 0.0), (1, celeste)):
+        ph = 2 * np.pi * f16 * 2.0 ** (det / 1200.0) * t
+        for k, g in stops:
+            fk = k * f16
+            if fk > MAX_FREQ:
+                continue
+            out += (0.6 if rank else 1.0) * g * lp_mag(fk, max_fc, 2) * np.sin(k * ph + rng.uniform(0, 6.3))
+    out /= 1.6
+    # chiff: short breathy burst around the 4' pitch
+    fch = min(4 * f16 * 2, 3500.0)
+    ch = fft_filter(rng.standard_normal(n), lambda f: 1.0 / (1.0 + ((f - fch) / (0.3 * fch)) ** 2))
+    ch *= np.exp(-t / 0.03) / (np.std(ch) + 1e-9) * 0.25 * np.std(out[: int(0.2 * SR)] + 1e-9)
+    env = envelope(n, attack, 0.2, 0.95, dur, release, curve=1.3)
+    return (out * env + ch) * vel
+
+
+def spiccato(midi, vel, rng, dur=0.085, bright=0.8, voices=3):
+    """Short bowed string note for fast ostinatos."""
+    return strings_note(midi, dur, vel, rng, voices=voices, attack=0.005, release=0.11,
+                        bright=bright, vib=False)

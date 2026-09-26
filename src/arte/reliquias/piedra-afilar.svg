@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.6"/></filter>
+    <path id="w" d="M8 42 L40 18 Q46 14 50 20 L56 28 Q58 32 54 36 L22 58 Q16 62 12 56 L6 48 Q4 44 8 42 Z"/>
+    <clipPath id="c"><use href="#w"/></clipPath>
+  </defs>
+  <!-- sparks -->
+  <path d="M44 12 L50 4 M50 14 L60 10 M40 10 L40 2" stroke="#ff9a50" stroke-width="3" filter="url(#g)"/>
+  <path d="M44 12 L50 4 M50 14 L60 10 M40 10 L40 2" stroke="#ffe0a0" stroke-width="1.3" stroke-linecap="round"/>
+  <!-- dwarven whetstone bar -->
+  <use href="#w" fill="#6a747e"/>
+  <g clip-path="url(#c)">
+    <path d="M0 52 L60 30 L64 64 L0 64 Z" fill="#454c54"/>
+    <path d="M6 44 L42 17 L46 20 L9 47 Z" fill="#9ea8b0"/>
+  </g>
+  <path d="M18 44 L42 26 M24 48 L46 31" stroke="#50585f" stroke-width="1" stroke-dasharray="2 2"/>
+  <use href="#w" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- carved rune band -->
+  <path d="M26 30 L34 40 M31 26 L39 36" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M29 32 L31 35 L34 33" stroke="#d8b068" stroke-width="1.4" fill="none"/>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+  <!-- chain -->
+  <path d="M14 3 Q24 14 29 17 M50 3 Q40 14 35 17" stroke="#140d0a" stroke-width="4.2" fill="none" stroke-linecap="round"/>
+  <path d="M14 3 Q24 14 29 17 M50 3 Q40 14 35 17" stroke="#a8b0b8" stroke-width="1.8" fill="none" stroke-dasharray="3 2"/>
+  <!-- frost halo -->
+  <path d="M32 18 L44 36 L32 60 L20 36 Z" fill="#a8e8ff" opacity="0.7" filter="url(#g)"/>
+  <!-- ice crystal -->
+  <path d="M32 18 L20 36 L32 38 Z" fill="#e4f8ff"/>
+  <path d="M32 18 L44 36 L32 38 Z" fill="#9ad8f0"/>
+  <path d="M20 36 L32 60 L32 38 Z" fill="#6ab8e0"/>
+  <path d="M44 36 L32 60 L32 38 Z" fill="#3a80b0"/>
+  <path d="M32 18 L44 36 L32 60 L20 36 Z" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M20 36 L32 38 L44 36 M32 18 V60" stroke="#140d0a" stroke-width="1"/>
+  <!-- side shards -->
+  <path d="M20 30 L12 26 L18 36 Z M44 30 L52 26 L46 36 Z" fill="#b8e8ff" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- violet pact clasp -->
+  <path d="M26 16 L38 16 L36 21 L28 21 Z" fill="#5a3a70" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <circle cx="32" cy="18.5" r="1.6" fill="#c98bff"/>
+  <path d="M26 30 L28 26" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

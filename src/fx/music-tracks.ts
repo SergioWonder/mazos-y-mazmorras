@@ -18,7 +18,7 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap1-jefe': { file: 'jefe1.mp3', loopSamples: 3024000 }, // «Señor de la guerra»
   'cap2': { file: 'cap2.mp3', loopSamples: 3256615 },      // «Marcha de los huesos»
   'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
-  'cap3': { file: 'cap3.mp3', loopSamples: 3175200 },      // heroic adventure, Lydian
+  'cap3': { file: 'cap3.mp3', loopSamples: 3528000 },      // «Brasas y locura», E phrygian, 90 BPM
   'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor
 };
 
