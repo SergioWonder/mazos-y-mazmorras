@@ -1200,8 +1200,6 @@ export class Combate {
       await this.infligir(e, e.pv, 'condena', true, true);
     }
 
-    // Imagen Espejo dura 1 turno: lo que quede se disipa
-    delete j.estados.espejismo;
     // Armadura de Agathys y las mejoras de un solo turno de la Explosión
     delete j.estados.agathys;
     delete j.estados.explosionTurno;
@@ -1280,20 +1278,15 @@ export class Combate {
       const veces = m.veces ?? 1;
       for (let i = 0; i < veces; i++) {
         if (this.terminado) return;
-        // Imagen Espejo: 20% de esquiva por carga; esquivar gasta una carga,
-        // recibir un golpe disipa el conjuro entero
+        // Mirror Image: each charge prevents the next attack hit for sure (no roll)
         const cargas = this.jugador.estados.espejismo ?? 0;
         if (cargas > 0) {
-          if (this.rng() < cargas * 0.2) {
-            this.jugador.estados.espejismo = cargas - 1;
-            if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
-            await this.ui.fxMensaje('🪞 ¡Esquivado!');
-            this.ui.render();
-            if (veces > 1) await this.ui.espera(220);
-            continue;
-          }
-          delete this.jugador.estados.espejismo; // el golpe rompe las imágenes
-          await this.ui.fxMensaje('🪞 Las imágenes se desvanecen…');
+          this.jugador.estados.espejismo = cargas - 1;
+          if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
+          await this.ui.fxMensaje('🪞 ¡Ataque prevenido!');
+          this.ui.render();
+          if (veces > 1) await this.ui.espera(220);
+          continue;
         }
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
         const bloqueoAntes = this.jugador.bloqueo;

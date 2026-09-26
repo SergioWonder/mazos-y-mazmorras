@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="34" cy="30" r="30" fill="url(#h)"/>
+  <circle cx="34" cy="30" r="21" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="34" cy="30" r="21" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="34" cy="30" r="21" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- pole -->
+  <path d="M14 6 L14 60" stroke="#140d0a" stroke-width="5.4" stroke-linecap="round"/>
+  <path d="M14 6 L14 60" stroke="#8a5a2e" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="14" cy="6" r="3.4" fill="#f0c040" stroke="#140d0a" stroke-width="2"/>
+  <!-- swallow-tail banner -->
+  <path d="M16 10 L52 12 L52 46 L42 40 L32 48 L32 46 L16 44 Z" fill="#2c4a8a"/>
+  <path d="M40 11.3 L52 12 L52 46 L42 40 L40 41.6 Z" fill="#1a2e5a"/>
+  <path d="M16 10 L52 12 L52 46 L42 40 L32 48 L32 46 L16 44 Z" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M16 15 L52 16.5" stroke="#f0c040" stroke-width="1.6"/>
+  <!-- golden lily -->
+  <path d="M33 20 Q38 26 33 34 Q28 26 33 20 Z M33 32 Q24 30 24 24 Q29 25 31 30 M33 32 Q42 30 42 24 Q37 25 35 30 M27 34 L39 34" fill="#f0c040" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M33 34 L33 40" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M56 50.5 Q56.7 53.3 59.5 54 Q56.7 54.7 56 57.5 Q55.3 54.7 52.5 54 Q55.3 53.3 56 50.5 Z" fill="#fff4c8"/>
+  <path d="M26 52.5 Q26.7 55.3 29.5 56 Q26.7 56.7 26 59.5 Q25.3 56.7 22.5 56 Q25.3 55.3 26 52.5 Z" fill="#fff4c8"/>
+</svg>

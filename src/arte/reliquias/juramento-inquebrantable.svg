@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="31" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- oath flame -->
+  <path d="M32 58 Q12 54 14 36 Q16 26 24 20 Q22 30 28 32 Q24 18 34 6 Q36 18 44 24 Q52 32 50 44 Q48 56 32 58 Z" fill="#ff8040" opacity="0.7" filter="url(#g)"/>
+  <path d="M32 58 Q12 54 14 36 Q16 26 24 20 Q22 30 28 32 Q24 18 34 6 Q36 18 44 24 Q52 32 50 44 Q48 56 32 58 Z" fill="#e04a1e"/>
+  <path d="M34 6 Q36 18 44 24 Q52 32 50 44 Q48 56 32 58 Q46 46 34 6 Z" fill="#a82a10"/>
+  <path d="M32 54 Q22 50 24 40 Q26 34 30 32 Q30 40 34 40 Q32 30 38 24 Q44 36 42 46 Q40 54 32 54 Z" fill="#ffb030"/>
+  <path d="M32 52 Q27 48 29 42 Q32 46 34 44 Q38 48 32 52 Z" fill="#fff0a0"/>
+  <path d="M32 58 Q12 54 14 36 Q16 26 24 20 Q22 30 28 32 Q24 18 34 6 Q36 18 44 24 Q52 32 50 44 Q48 56 32 58 Z" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <!-- unbroken ring -->
+  <ellipse cx="32" cy="44" rx="20" ry="5" fill="none" stroke="#140d0a" stroke-width="4.4"/>
+  <ellipse cx="32" cy="44" rx="20" ry="5" fill="none" stroke="#f0c040" stroke-width="2"/>
+  <path d="M9 6.5 Q9.7 9.3 12.5 10 Q9.7 10.7 9 13.5 Q8.3 10.7 5.5 10 Q8.3 9.3 9 6.5 Z" fill="#fff4c8"/>
+  <path d="M55 50.5 Q55.7 53.3 58.5 54 Q55.7 54.7 55 57.5 Q54.3 54.7 51.5 54 Q54.3 53.3 55 50.5 Z" fill="#fff4c8"/>
+</svg>

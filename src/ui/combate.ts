@@ -18,6 +18,14 @@ import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import { currentForm, type FormId } from '../fx/hero-rig.ts';
 import { layoutSlots } from './enemy-slots.ts';
 import { relicIcon } from './relic-art.ts';
+import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
+
+/** Player actions go through a FIFO queue: one resolves at a time, the rest wait. */
+type AccionJugador =
+  | { kind: 'start' }
+  | { kind: 'card'; card: CartaInstancia; target?: EnemigoCombate }
+  | { kind: 'endTurn' };
+type AccionCarta = Extract<AccionJugador, { kind: 'card' }>;
 
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
@@ -405,12 +413,101 @@ export function pantallaCombate(
 
     const combate = new Combate(run, defs, rng, ui, esJefe || esElite);
 
+    // ── Action queue ─────────────────────────────────────────────────────────
+    // Cards and "end turn" chosen while something resolves wait here instead of
+    // being refused. Each one is validated when its turn comes, not when queued.
+    const cola = new ActionQueue<AccionJugador>({
+      validate: (a) => {
+        if (a.kind !== 'card') return { ok: true };
+        const v = checkCardAction(a, {
+          inHand: (c) => combate.jugador.mano.includes(c),
+          canPlay: (c) => combate.puedeJugar(c),
+          reason: (c) => motivoNoJugable(c),
+          needsTarget: (c) => defDe(c).objetivo === 'enemigo',
+          isAlive: (e) => e.vivo,
+          // screen order, so a redirect goes to the nearest enemy on the left
+          livingTargets: () => huecosEnemigos.filter((e) => e.vivo),
+        });
+        if (!v.ok) return v;
+        if (v.action && v.action.target) {
+          anuncio(`«${defDe(a.card).nombre}» cambia de objetivo: ${v.action.target.nombre}`);
+          return { ok: true, action: { kind: 'card', card: a.card, target: v.action.target } };
+        }
+        return { ok: true };
+      },
+      execute: async (a) => {
+        if (a.kind === 'start') await combate.iniciar();
+        else if (a.kind === 'endTurn') await combate.terminarTurno();
+        else await jugar(a.card, a.target);
+      },
+      onDiscard: (a, motivo) => {
+        if (a.kind === 'card') anuncio(`«${defDe(a.card).nombre}» sale de la cola: ${motivo}`, 'anuncio-error');
+      },
+      onChange: () => render(),
+    });
+    const esCartaEnCola = (inst: CartaInstancia) => (a: AccionJugador) => a.kind === 'card' && a.card === inst;
+    const finTurnoEnCola = (a: AccionJugador) => a.kind === 'endTurn';
+    /** Queued cards plus the running one if it has not been paid yet (still in hand). */
+    function cartasPorPagar(): AccionCarta[] {
+      const cartas = cola.pending.filter((a): a is AccionCarta => a.kind === 'card');
+      const actual = cola.current;
+      if (actual?.kind === 'card' && combate.jugador.mano.includes(actual.card)) cartas.unshift(actual);
+      return cartas;
+    }
+    /** Why `inst` cannot be queued now (energy and spell slots left after the queue), or null. */
+    function motivoNoEncolable(inst: CartaInstancia): string | null {
+      if (combate.terminado || cola.isClosed) return 'El combate ha terminado';
+      if (cola.indexOf(finTurnoEnCola) >= 0) return 'Fin de turno pendiente (tócalo para cancelarlo)';
+      const def = defDe(inst);
+      const porPagar = cartasPorPagar();
+      const energia = forecastEnergy(combate.jugador.energia, porPagar, (a) => combate.costeEfectivo(defDe(a.card)));
+      if (energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
+      if (def.requiereConjuro) {
+        const libres = combate.jugador.conjuros.filter((c) => !c.gastado && c.nivel >= def.requiereConjuro!).length;
+        const reservados = porPagar.filter((a) => defDe(a.card).requiereConjuro).length;
+        if (libres - reservados <= 0) return `◈ Necesitas un espacio de conjuro de nivel ${def.requiereConjuro}+`;
+      }
+      return null;
+    }
+    /** Queues a card (it runs at once if nothing is resolving). */
+    function encolarCarta(inst: CartaInstancia, objetivo?: EnemigoCombate) {
+      if (cola.current?.kind === 'card' && cola.current.card === inst) return; // already flying
+      const motivo = motivoNoEncolable(inst);
+      if (motivo) {
+        anuncio(motivo, 'anuncio-error');
+        return;
+      }
+      if (cartaPendiente === inst) {
+        cartaPendiente = null;
+        modoObjetivo = false;
+      }
+      cola.enqueue({ kind: 'card', card: inst, target: objetivo });
+    }
+    /** Takes a queued card back to the hand. True if it was queued. */
+    function sacarDeCola(inst: CartaInstancia): boolean {
+      return cola.remove(esCartaEnCola(inst));
+    }
+    /** "End turn" toggles: queues it, or cancels it if already waiting. */
+    function pulsarFinTurno() {
+      if (combate.terminado || cola.isClosed) return;
+      if (cola.remove(finTurnoEnCola)) return;
+      // the enemy turn (and the draw of the next hand) is already an end turn running:
+      // a second one would skip the player's next turn
+      if (cola.current?.kind === 'endTurn') return;
+      cartaPendiente = null;
+      modoObjetivo = false;
+      cola.enqueue({ kind: 'endTurn' });
+    }
+    /** A pointer gesture on a hand card is in progress: the hand must not be rebuilt under it. */
+    let gestoMano = false;
+
     // ── Render ───────────────────────────────────────────────────────────────
     function render() {
       renderBarra();
       renderJugador();
       renderEnemigos();
       renderMano();
+      renderBotonFinTurno();
       renderEnergia();
       $('.pila-robo').innerHTML = `🂠<span>${combate.jugador.mazo.length}</span>`;
       $('.pila-descarte').innerHTML = `🗑<span>${combate.jugador.descarte.length}</span>`;
@@ -692,7 +789,25 @@ export function pantallaCombate(
       };
     }
 
+    /** The button tells whether an end turn is queued or the enemy turn is running. */
+    function renderBotonFinTurno() {
+      const btn = $('.btn-fin-turno');
+      const pendiente = cola.indexOf(finTurnoEnCola) >= 0;
+      const enCurso = cola.current?.kind === 'endTurn';
+      btn.classList.toggle('fin-pendiente', pendiente);
+      btn.classList.toggle('turno-enemigo', enCurso && !pendiente);
+      const html = pendiente
+        ? 'Fin de turno<span class="atajo">⏳ en cola</span>'
+        : enCurso
+          ? 'Turno enemigo<span class="atajo">…</span>'
+          : 'Fin de turno<span class="atajo">[E]</span>';
+      if (btn.innerHTML !== html) btn.innerHTML = html;
+      btn.title = pendiente ? 'Toca para cancelar el fin de turno' : '';
+    }
+
     function renderMano() {
+      // rebuilding the hand under a finger (or mouse) would drop the gesture: repaint on release
+      if (gestoMano) return;
       const mano = $('.mano');
       mano.innerHTML = '';
       const cartas = combate.jugador.mano;
@@ -709,7 +824,17 @@ export function pantallaCombate(
         const alza = Math.abs(i - (n - 1) / 2) * Math.min(6, 30 / n);
         c.style.setProperty('--ang', `${ang}deg`);
         c.style.setProperty('--alza', `${alza}px`);
-        if (!combate.puedeJugar(inst)) c.classList.add('sin-energia');
+        const orden = cola.indexOf(esCartaEnCola(inst));
+        const enCurso = cola.current?.kind === 'card' && cola.current.card === inst;
+        if (orden >= 0) {
+          // queued: lifted, translucent and numbered by its place in the queue
+          c.classList.add('en-cola');
+          c.appendChild(el('span', 'orden-cola', String(orden + 1)));
+        } else if (enCurso) {
+          c.classList.add('en-curso');
+        } else if (motivoNoEncolable(inst)) {
+          c.classList.add('sin-energia');
+        }
         if (i === seleccion && !cartaPendiente) c.classList.add('seleccionada');
         if (cartaPendiente === inst) c.classList.add('pendiente');
         enlazarArrastre(c, inst);
@@ -746,8 +871,11 @@ export function pantallaCombate(
 
     async function jugar(inst: CartaInstancia, objetivo?: EnemigoCombate) {
       if (!combate.puedeJugar(inst)) return;
-      cartaPendiente = null;
-      modoObjetivo = false;
+      // targeting another card meanwhile is left alone: only this card's own mode ends
+      if (cartaPendiente === inst) {
+        cartaPendiente = null;
+        modoObjetivo = false;
+      }
       const elem = raiz.querySelector(
         `.carta[data-mano="${combate.jugador.mano.indexOf(inst)}"]`,
       ) as HTMLElement | null;
@@ -784,26 +912,30 @@ export function pantallaCombate(
       if (!inst) return;
       const enemigo = combate.enemigos[idxEnemigo];
       if (!enemigo?.vivo) return;
-      void jugar(inst, enemigo);
+      encolarCarta(inst, enemigo);
     }
 
     function motivoNoJugable(inst: CartaInstancia): string {
       const def = defDe(inst);
-      if (combate.jugador.energia < def.coste) return 'Sin energía suficiente';
+      if (combate.jugador.energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
       if (def.requiereConjuro)
         return `◈ Necesitas un espacio de conjuro de nivel ${def.requiereConjuro}+`;
       return 'No puedes jugar esa carta ahora';
     }
 
     function activarCarta(inst: CartaInstancia) {
-      if (!combate.puedeJugar(inst)) {
-        anuncio(motivoNoJugable(inst), 'anuncio-error');
+      // touching a queued card again takes it back to the hand
+      if (sacarDeCola(inst)) return;
+      if (cola.current?.kind === 'card' && cola.current.card === inst) return;
+      const motivo = motivoNoEncolable(inst);
+      if (motivo) {
+        anuncio(motivo, 'anuncio-error');
         return;
       }
       if (inst.def.objetivo === 'enemigo') {
         const vivos = combate.enemigos.filter((e) => e.vivo);
         if (vivos.length === 1) {
-          void jugar(inst, vivos[0]);
+          encolarCarta(inst, vivos[0]);
         } else {
           cartaPendiente = inst;
           modoObjetivo = true;
@@ -811,24 +943,28 @@ export function pantallaCombate(
           render();
         }
       } else {
-        void jugar(inst);
+        encolarCarta(inst);
       }
     }
 
     // ── Arrastrar y soltar ───────────────────────────────────────────────────
     function enlazarArrastre(elemCarta: HTMLElement, inst: CartaInstancia) {
       elemCarta.addEventListener('pointerdown', (ev) => {
-        if (combate.enResolucion || combate.terminado) return;
+        // while something resolves the card is queued instead; the card flying right now is out of reach
+        if (combate.terminado || (cola.current?.kind === 'card' && cola.current.card === inst)) return;
         ev.preventDefault();
         const inicioX = ev.clientX;
         const inicioY = ev.clientY;
         let movido = false;
+        // a queued card is not dragged: a tap takes it back to the hand
+        const enCola = cola.indexOf(esCartaEnCola(inst)) >= 0;
+        gestoMano = true;
 
         let idxSobre = -1; // enemigo bajo el cursor (para el texto dinámico)
         const alMover = (e: PointerEvent) => {
           const dx = e.clientX - inicioX;
           const dy = e.clientY - inicioY;
-          if (!movido && Math.hypot(dx, dy) > 10) {
+          if (!movido && !enCola && Math.hypot(dx, dy) > 10) {
             movido = true;
             arrastrando = elemCarta;
             elemCarta.classList.add('arrastrando');
@@ -861,6 +997,8 @@ export function pantallaCombate(
         const alSoltar = (e: PointerEvent) => {
           window.removeEventListener('pointermove', alMover);
           window.removeEventListener('pointerup', alSoltar);
+          window.removeEventListener('pointercancel', alSoltar);
+          gestoMano = false;
           // IMPORTANTE: detecta el enemigo bajo el cursor ANTES de soltar la carta.
           // Mientras se arrastra, la carta tiene pointer-events:none; si quitáramos
           // la clase primero, elementFromPoint devolvería la propia carta (aún bajo
@@ -875,40 +1013,45 @@ export function pantallaCombate(
           raiz.classList.remove('mostrar-linea');
           arrastrando = null;
 
+          if (e.type === 'pointercancel') {
+            render();
+            return;
+          }
           if (!movido) {
+            // tapping a queued card again (mouse or touch) takes it out of the queue
+            if (sacarDeCola(inst)) return;
             if (e.pointerType === 'touch') {
               // en táctil un toque AMPLÍA la carta (para leerla); se juega arrastrando
               ampliarCarta(inst);
+              render(); // the hand may have changed during the gesture
               return;
             }
             // clic de ratón: seleccionar / activar
             seleccion = combate.jugador.mano.indexOf(inst);
             activarCarta(inst);
+            render();
             return;
           }
           if (inst.def.objetivo === 'enemigo') {
-            if (sobre) {
-              const idx = Number((sobre as HTMLElement).dataset.idx);
-              if (combate.puedeJugar(inst)) void jugar(inst, combate.enemigos[idx]);
-              else anuncio(motivoNoJugable(inst), 'anuncio-error');
-              return;
-            }
+            const objetivo = sobre ? combate.enemigos[Number((sobre as HTMLElement).dataset.idx)] : undefined;
+            if (objetivo?.vivo) encolarCarta(inst, objetivo);
           } else if (e.clientY < window.innerHeight * 0.62) {
-            if (combate.puedeJugar(inst)) void jugar(inst);
-            else anuncio(motivoNoJugable(inst), 'anuncio-error');
-            return;
+            encolarCarta(inst);
           }
-          render(); // vuelve a la mano
+          render(); // back to the hand, queued or not
         };
 
         window.addEventListener('pointermove', alMover);
         window.addEventListener('pointerup', alSoltar);
+        window.addEventListener('pointercancel', alSoltar);
       });
     }
 
     // ── Teclado (simulando mando) ────────────────────────────────────────────
     function alTeclar(ev: KeyboardEvent) {
       if (combate.terminado) return;
+      // a card selector (discard N, pick a card…) owns the keyboard until the player chooses
+      if (document.getElementById('overlay')?.classList.contains('overlay-activo')) return;
       const mano = combate.jugador.mano;
       switch (ev.code) {
         case 'ArrowLeft':
@@ -929,7 +1072,6 @@ export function pantallaCombate(
         case 'Enter':
         case 'Space': {
           ev.preventDefault();
-          if (combate.enResolucion) return;
           if (modoObjetivo && cartaPendiente) {
             jugarSobre(objetivoIdxValido());
           } else if (mano[seleccion]) {
@@ -944,22 +1086,21 @@ export function pantallaCombate(
           break;
         }
         case 'KeyE': {
-          if (!combate.enResolucion) void combate.terminarTurno();
+          pulsarFinTurno();
           break;
         }
       }
     }
     window.addEventListener('keydown', alTeclar);
 
-    $('.btn-fin-turno').addEventListener('click', () => {
-      if (!combate.enResolucion) void combate.terminarTurno();
-    });
+    $('.btn-fin-turno').addEventListener('click', pulsarFinTurno);
 
     // ── Final del combate ────────────────────────────────────────────────────
     let resuelto = false;
     function comprobarFinal() {
       if (!combate.terminado || resuelto) return;
       resuelto = true;
+      cola.close(); // whatever was still queued is dropped
       window.removeEventListener('keydown', alTeclar);
       setTimeout(() => {
         run.pv = Math.max(0, combate.jugador.pv);
@@ -981,7 +1122,8 @@ export function pantallaCombate(
       esJefe ? `☠️ ¡${defs[0].nombre.toUpperCase()}! ☠️` : '⚔️ ¡Combate!',
       esJefe ? 'anuncio-jefe' : '',
     );
-    void combate.iniciar();
+    // the intro runs through the queue too, so cards chosen meanwhile wait for it
+    cola.enqueue({ kind: 'start' });
   });
 }
 

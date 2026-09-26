@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="33" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- star chart -->
+  <circle cx="32" cy="32" r="19" fill="#1f1e48"/>
+  <path d="M45 18 A19 19 0 0 1 19 46 A22 22 0 0 0 45 18 Z" fill="#12112c"/>
+  <path d="M20 40 L27 26 L36 30 L44 20 M36 30 L40 42" stroke="#c8c0ff" stroke-width="1.2" fill="none"/>
+  <circle cx="32" cy="32" r="19" fill="none" stroke="#140d0a" stroke-width="2.8"/>
+  <path d="M20 36 L21.3 38.7 L24 40 L21.3 41.3 L20 44 L18.7 41.3 L16 40 L18.7 38.7 Z M27 22 L28.3 24.7 L31 26 L28.3 27.3 L27 30 L25.7 27.3 L23 26 L25.7 24.7 Z M44 16 L45.3 18.7 L48 20 L45.3 21.3 L44 24 L42.7 21.3 L40 20 L42.7 18.7 Z" fill="#fff0b0" stroke="#140d0a" stroke-width="0.8"/>
+  <circle cx="36" cy="30" r="2.2" fill="#fff0b0" stroke="#140d0a" stroke-width="0.8"/>
+  <circle cx="40" cy="42" r="2" fill="#a896ff" stroke="#140d0a" stroke-width="0.8"/>
+  <circle cx="36" cy="30" r="4" fill="#fff0b0" opacity="0.6" filter="url(#g)"/>
+  <path d="M8 4.5 Q8.7 7.3 11.5 8 Q8.7 8.7 8 11.5 Q7.3 8.7 4.5 8 Q7.3 7.3 8 4.5 Z" fill="#fff4c8"/>
+  <path d="M56 52.5 Q56.7 55.3 59.5 56 Q56.7 56.7 56 59.5 Q55.3 56.7 52.5 56 Q55.3 55.3 56 52.5 Z" fill="#fff4c8"/>
+</svg>

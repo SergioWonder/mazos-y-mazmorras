@@ -23,7 +23,7 @@ export type EstadoId =
   | 'quemadura'     // (jugador) cada carta jugada cuesta 3 PV; dura N turnos
   | 'corazonSalvaje' // al perder la Furia, ganas esta cantidad de Fuerza y Destreza para el combate
   | 'frenesi'       // la Furia se romperá al final del turno aunque recibas daño (Frenesí)
-  | 'espejismo'     // cargas de esquiva (20% por carga); un golpe recibido lo disipa
+  | 'espejismo'     // charges: each one prevents the next attack hit; kept until used
   | 'invulnerable'  // no recibe daño (N turnos)
   | 'furiaIndomita' // (bárbaro) bloqueo=Fuerza al inicio de turno; Furia aguanta si bloqueaste
   | 'hemorragia'    // (enemigo) pierde esta cantidad de PV al inicio de su turno (ignora bloqueo)
@@ -377,8 +377,11 @@ export interface NodoMapa {
 }
 
 /** Relic rarity: 'inicial' = class starting relic (never rolled); 'jefe' relics
- *  only drop from bosses. */
-export type RarezaReliquia = 'inicial' | 'comun' | 'rara' | 'jefe';
+ *  only drop from bosses; 'bendicion' relics only come from the Seer's blessings. */
+export type RarezaReliquia = 'inicial' | 'comun' | 'rara' | 'jefe' | 'bendicion';
+
+/** Kind of a blessing relic: it decides which slot of the blessing offer it fills. */
+export type TipoBendicion = 'general' | 'pacto' | 'mapa' | 'clase';
 
 /** Where a relic reward comes from (it decides which rarities can roll). */
 export type OrigenReliquia = 'cofre' | 'elite' | 'evento' | 'jefe';
@@ -411,9 +414,12 @@ export interface ReliquiaDef {
   rareza: RarezaReliquia;
   /** Solo puede aparecer para esta clase. */
   soloClase?: ClaseId;
+  /** Blessing relics only: which slot of the blessing offer it fills. */
+  tipoBendicion?: TipoBendicion;
 
   // ── Run hooks (pure, no combat) ─────────────────────────────────────────────
-  alObtener?: (run: EstadoRun) => void;
+  /** On pickup (never on rehydration). `rng` is the run's generator. */
+  alObtener?: (run: EstadoRun, rng: () => number) => void;
   finCombate?: (run: EstadoRun) => void;
   /** Fired by the engine once when a combat is won (before the rewards). */
   alVencerCombate?: (run: EstadoRun, info: { eliteOJefe: boolean }) => void;

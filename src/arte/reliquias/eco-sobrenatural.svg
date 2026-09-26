@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="25" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="16" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- eldritch echo rings -->
+  <path d="M18 18 A20 20 0 0 0 18 46 M46 18 A20 20 0 0 1 46 46" stroke="#140d0a" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M18 18 A20 20 0 0 0 18 46 M46 18 A20 20 0 0 1 46 46" stroke="#c98bff" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+  <path d="M10 12 A30 30 0 0 0 10 52 M54 12 A30 30 0 0 1 54 52" stroke="#c98bff" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <!-- orb -->
+  <circle cx="32" cy="32" r="11" fill="#d8a0ff" opacity="0.9" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="9" fill="#7a3ab8" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M32 23 A9 9 0 0 1 41 32 A9 9 0 0 1 32 41 Q38 32 32 23 Z" fill="#4a1c78"/>
+  <path d="M32 32 Q36 28 32 26 Q27 27 28 33 Q30 38 36 36" stroke="#f0d8ff" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  <path d="M8 28.5 Q8.7 31.3 11.5 32 Q8.7 32.7 8 35.5 Q7.3 32.7 4.5 32 Q7.3 31.3 8 28.5 Z" fill="#fff4c8"/>
+  <path d="M56 28.5 Q56.7 31.3 59.5 32 Q56.7 32.7 56 35.5 Q55.3 32.7 52.5 32 Q55.3 31.3 56 28.5 Z" fill="#fff4c8"/>
+</svg>

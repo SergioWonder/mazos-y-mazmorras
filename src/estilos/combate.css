@@ -563,6 +563,16 @@ body.arrastre-activo .zona-mano,
   box-shadow: 0 0 16px rgba(255, 209, 102, 0.35);
   transform: translateY(-2px);
 }
+/* end of turn queued behind the action resolving now (tap again to cancel) */
+.btn-fin-turno.fin-pendiente {
+  border-color: var(--brasa-viva);
+  border-style: dashed;
+  animation: fin-pendiente 1.1s ease-in-out infinite;
+}
+@keyframes fin-pendiente {
+  50% { box-shadow: 0 0 18px rgba(255, 209, 102, 0.6); }
+}
+.btn-fin-turno.turno-enemigo { opacity: 0.65; }
 
 /* línea de lanzamiento al arrastrar habilidades */
 .linea-lanzamiento {

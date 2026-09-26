@@ -5,23 +5,23 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790436399.1143959,
-    "ast_hash": "bff00be12b5f6c19e6f3a770a42b6f6c",
+    "mtime": 1790456563.2352142,
+    "ast_hash": "ebe9cbd2ee8e87b3c546dddbf73818a5",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790435333.6756961,
-    "ast_hash": "6ffea93ae92304e1be8193169ad74ed4",
+    "mtime": 1790455903.0228403,
+    "ast_hash": "0f32409ba5da9e1a98cc621e6d4f74fe",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
-    "mtime": 1787822647.5014374,
-    "ast_hash": "db582b14f0920a50fe2be1a24444fc4d",
+    "mtime": 1790455524.103096,
+    "ast_hash": "fa7278445aba53e42993d3ccdf9c6e22",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
-    "mtime": 1790434697.3836155,
-    "ast_hash": "9b88791fb140f1c2f9c8f0b4ada14218",
+    "mtime": 1790455492.4088619,
+    "ast_hash": "30f5b5ccfab1f50928ba5240f39692d2",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/conjuros.ts": {
@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/eventos.ts": {
-    "mtime": 1790436354.2688353,
-    "ast_hash": "da0ba67c1b9b7ee6b8ab2466c30b0f35",
+    "mtime": 1790455807.3119233,
+    "ast_hash": "46883a7f73fe98334bf5ae96b3e91759",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/guardado.ts": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias.ts": {
-    "mtime": 1790434866.8970537,
-    "ast_hash": "e0f644c0be1dfdeae01bb0bea92b8245",
+    "mtime": 1790455801.9916563,
+    "ast_hash": "7429c6b9e9cd9d8b48f68571c37a5809",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/rng.ts": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/types.ts": {
-    "mtime": 1790434633.770341,
-    "ast_hash": "3e8585c773f5e23263c78a005b88d217",
+    "mtime": 1790455728.4253457,
+    "ast_hash": "19e775f5f064359156507ff34074363b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1790434983.1956358,
-    "ast_hash": "d35cd08951bb69afeea78cac32153122",
+    "mtime": 1790456485.4794254,
+    "ast_hash": "c22a70f364e3f0329404e603de2bede5",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/bendicion.ts": {
-    "mtime": 1782371087.0831976,
-    "ast_hash": "d300452df8ba15518cc3e794a1614e74",
+    "mtime": 1790456509.6407585,
+    "ast_hash": "a992154d7c6c2283e8f4c8394e3a85f1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/capitulo.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790434443.4784868,
-    "ast_hash": "57d523e2e978a040a1bb0e669552a232",
+    "mtime": 1790455743.7523303,
+    "ast_hash": "73c8a249b33e3bd67df7a8b46059f875",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -149,14 +149,9 @@
     "ast_hash": "869db11bcb59881a7f6059a549f15ac0",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/ui/mision.ts": {
-    "mtime": 1782371134.1867232,
-    "ast_hash": "0b41084fdfe9898a90aac7af1450d9f7",
-    "semantic_hash": ""
-  },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/recompensa.ts": {
-    "mtime": 1790434955.464708,
-    "ast_hash": "92542d81f490b55f2759b061855c4e71",
+    "mtime": 1790455807.319959,
+    "ast_hash": "0c3616041107dcbb44ee4f6fc2c503fb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/titulo.ts": {
@@ -165,13 +160,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
-    "mtime": 1787822625.2301233,
-    "ast_hash": "21c084b54dd814d55faa2dd3daf68760",
+    "mtime": 1790455492.411916,
+    "ast_hash": "697b5aa5b9f0475f195d563d3d544941",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790436399.113597,
-    "ast_hash": "f9a62736aead4dce72dc3875fdd370cf",
+    "mtime": 1790456563.2340028,
+    "ast_hash": "777e37c5b8374932a45ce6b72769809e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +200,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790435048.8129942,
-    "ast_hash": "56caccece74ccf6b1a358c6e92a3a3c6",
+    "mtime": 1790456509.640554,
+    "ast_hash": "67c1b255f9c8edae13d321d6bb72f575",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -1887,6 +1882,136 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/vaina-ponzona.svg": {
     "mtime": 1790435136.1804771,
     "ast_hash": "9a0b603985a0a34528fea8761e87e1ea",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/core/bendiciones.ts": {
+    "mtime": 1790455822.8078673,
+    "ast_hash": "fa75e77836a57623a9881be12c81454f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias-bendicion.ts": {
+    "mtime": 1790455788.2438893,
+    "ast_hash": "27e4b8a7e13a4f9876d7b0c231d76e2d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/action-queue.ts": {
+    "mtime": 1790455595.3496168,
+    "ast_hash": "bd36afdf97ad045805b9cab3acb6e2c0",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/aureola-martir.svg": {
+    "mtime": 1790456089.27554,
+    "ast_hash": "3b4fa1f0bc74d4c6cfb57a9148b55e27",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-alba.svg": {
+    "mtime": 1790456089.275231,
+    "ast_hash": "d051c6977cd23b9653a5c6d2f050f5eb",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-constelacion.svg": {
+    "mtime": 1790456089.2762837,
+    "ast_hash": "d4d4e8ba93acad9919fdda2131775dce",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-manada.svg": {
+    "mtime": 1790456089.2760184,
+    "ast_hash": "4539f73391571becd711f1298b2c4368",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-raices.svg": {
+    "mtime": 1790456089.2760699,
+    "ast_hash": "6b53692d977af72836288509c831e06d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-trueno.svg": {
+    "mtime": 1790456089.2761257,
+    "ast_hash": "2bd9955ce00eadd01f310444efd544c5",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/brujula-sibila.svg": {
+    "mtime": 1790456089.2758598,
+    "ast_hash": "59e8992cf21b1f1b4898610efbd44074",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/campana-plegaria.svg": {
+    "mtime": 1790456089.2754111,
+    "ast_hash": "599c7f3b593280e91ebce27df2081edc",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/corazon-cristal.svg": {
+    "mtime": 1790456089.275658,
+    "ast_hash": "19b53f291053f059d358a3a56ef7558b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/diablillo-guardian.svg": {
+    "mtime": 1790456089.276507,
+    "ast_hash": "e1c8f1505d5f108f25f8bef0e4d738fe",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/eco-sobrenatural.svg": {
+    "mtime": 1790456089.276446,
+    "ast_hash": "19e70650c4ae93daff9651d907f9a9ab",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/estandarte-cruzada.svg": {
+    "mtime": 1790456089.275968,
+    "ast_hash": "bb8b18df34631332f92facf007935f92",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/estrella-fugaz.svg": {
+    "mtime": 1790456089.2753325,
+    "ast_hash": "e0b0a3825f2b823ef40680763bd97de8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/farol-peregrino.svg": {
+    "mtime": 1790456089.2758098,
+    "ast_hash": "c33e976a3c2a7511556d9439b358ea3f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/filo-consagrado.svg": {
+    "mtime": 1790456089.276336,
+    "ast_hash": "df6496c7cdb45748a087cf507808fc5f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/fuente-arcana.svg": {
+    "mtime": 1790456089.2762322,
+    "ast_hash": "78834c24ed49b2b54981aafe51eacc20",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/juramento-inquebrantable.svg": {
+    "mtime": 1790456089.2761796,
+    "ast_hash": "b07e928874809417d7ef6615a3f56258",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/mirada-vidente.svg": {
+    "mtime": 1790456089.2754767,
+    "ast_hash": "facd5c2a70fca430fe4b749c38c68920",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/pacto-codicia.svg": {
+    "mtime": 1790456089.2757595,
+    "ast_hash": "bb200ac90f3bd868733eeabf12efbc72",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/pacto-insomne.svg": {
+    "mtime": 1790456089.2757084,
+    "ast_hash": "9aa39bc262f4b3dfa28a7f0de4f580c0",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/pacto-sangre.svg": {
+    "mtime": 1790456089.2756057,
+    "ast_hash": "ead7962516324a9f5624d981d85c2932",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/sombra-veloz.svg": {
+    "mtime": 1790456089.2763913,
+    "ast_hash": "3dbf53eb8a3a1c3b546e0abc81078fe7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/trofeo-cazador.svg": {
+    "mtime": 1790456089.2759137,
+    "ast_hash": "90f2b712bb89624ef267804afa88d4e9",
     "semantic_hash": ""
   }
 }

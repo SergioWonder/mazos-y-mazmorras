@@ -121,6 +121,8 @@ descuelga de las demás en su mismo nivel.
   Armadura de Agathys).
 - **Cartas de 1 uso**: poderes que se consumen para siempre al jugarse y dejan un
   efecto permanente en la run (Voto de Sangre, Pacto con el Bosque, Estudio Arcano).
+- **Bendiciones de la Vidente**: al empezar la partida y entre actos, Síbila ofrece
+  bendiciones que son reliquias propias (ver [Bendiciones](#bendiciones)).
 - **Cartas de azar (incoloras)**: la Vidente puede dar «Seducir» (entrando al Acto II)
   o «Deseo» (entrando al Acto III). Tiran un d20 con animación 3D y el resultado va
   de la catástrofe al milagro (un 20 puede matar a un no-jefe / fulminar a un jefe).
@@ -171,6 +173,8 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
   en ningún otro sitio. Nunca se repite una reliquia que ya tienes.
 - **Reliquias de clase** (`soloClase`): solo se sortean para su clase (nunca para otra)
   y pesan el doble dentro de su rareza.
+- **Bendiciones** (rareza `bendicion`): solo las da Síbila en sus bendiciones y nunca
+  salen en el sorteo normal (ver [Bendiciones](#bendiciones)).
 
 **Generales**
 
@@ -186,7 +190,7 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | 🧪 Veneno de Drow | común | Aplicar Débil aplica también 2 de Veneno |
 | 💍 Anillo de Protección | común | Conservas hasta 5 de bloqueo entre turnos |
 | 🦾 Brazales de Defensa | común | Turno sin ataques: 6 de bloqueo al acabarlo |
-| 👘 Manto Espectral | común | Empiezas con 2 cargas de Espejismo |
+| 👘 Manto Espectral | común | Una ilusión previene el primer ataque de cada combate |
 | 🍀 Piedra de la Buena Suerte | común | Doble probabilidad de carta rara en las recompensas |
 | 🛌 Saco de Dormir Élfico | común | Descansar cura un 15 % más; ileso, +5 PV máximos |
 | 🪨 Piedra de Afilar Enana | común | Afilar mejora además otra carta al azar |
@@ -232,14 +236,56 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | Brujo | 😈 Corazón de Diablillo | rara | La invocación efímera que aguanta estalla (mitad de su vida a todos) |
 | Brujo | ❄️ Colgante de Escarcha | rara | El daño que bloqueas se vuelve Condena del atacante |
 
+### Bendiciones
+
+Las bendiciones se eligen dos veces por partida (`core/bendiciones.ts`, `ui/bendicion.ts`):
+
+- **Bendición inicial** (el encargo de Aldric, el Senescal, que sustituye a las antiguas
+  ayudas de mazo): 4 bendiciones-reliquia sin
+  repetir, sacadas al azar de un conjunto amplio para que cambien de partida a partida:
+  **una de tu clase, una general, un pacto** (riesgo y recompensa) y un comodín (general
+  o del camino).
+- **Entre actos** (Síbila, la Vidente del Manantial): te cura por completo y ofrece 3 opciones. Las **cartas únicas** siguen
+  igual («Seducir» entrando al Acto II; tu carta única de clase y «Deseo» entrando al
+  Acto III) y el resto de huecos son bendiciones-reliquia que aún no tienes.
+
+Cada bendición elegida (salvo las cartas únicas) es una **reliquia** con su ilustración
+dorada que se ve en la barra superior y se guarda con la partida.
+
+| Bendición | Tipo | Efecto |
+| --- | --- | --- |
+| 🌅 Bendición del Alba | general | En tus 2 primeros turnos: +1 de energía y robas 1 |
+| 🌠 Estrella Fugaz | general | La 4.ª carta de cada turno devuelve 1 de energía y roba 1 |
+| 🔔 Campana de Plegaria | general | Al barajar el descarte: te curas 3 y ganas 5 de bloqueo |
+| 👁️‍🗨️ Mirada de la Vidente | general | Al empezar: Débil 2 a quien va a atacar, Vulnerable 2 a quien no |
+| 😇 Aureola del Mártir | general | Cada golpe que te hiere te da bloqueo igual a la mitad del daño |
+| 🩸 Pacto de Sangre | pacto | +1 de energía por turno; al barajar el descarte pierdes 4 PV |
+| 💠 Corazón de Cristal | pacto | +3 de daño por golpe; empiezas cada combate con 2 de Vulnerable |
+| 🌘 Pacto del Insomne | pacto | Robas 2 más por turno; la primera carta de cada turno cuesta 3 PV |
+| 💰 Pacto de la Codicia | pacto | Al sellarlo, 2 reliquias al azar a cambio de 12 PV máximos |
+| 🏮 Farol del Peregrino | del camino | Al llegar a un campamento te cura 10 PV |
+| 🧭 Brújula de Síbila | del camino | Tras cada evento eliges también una carta |
+| 🏆 Trofeo del Cazador | del camino | Cada élite o jefe vencido mejora 1 carta al azar |
+| ⚜️ Estandarte de Cruzada | del camino | Contra élites y jefes: +1 de energía por turno y 8 de bloqueo al empezar |
+| 🐺 Bendición de la Manada | druida | Al transformarte, la forma dura 1 turno más e Invocas 4 |
+| 🌳 Raíces Profundas | druida | Al empezar, 2 de Raíces a todos (2 turnos); si tus Raíces aplastan, robas 1 |
+| ⛈️ Trueno Ancestral | bárbaro | Ganar Furia inflige 3 a todos los enemigos |
+| 🔥 Juramento Inquebrantable | bárbaro | La primera Furia perdida en cada combate vuelve a arder (+2 de Fuerza) |
+| ⛲ Fuente Arcana | mago | +1 espacio de conjuro en cada combate; gastar uno de nivel 2+ roba 1 |
+| ✨ Constelación | mago | Cada 2 espacios gastados en un combate, +1 de energía |
+| ⚔️ Filo Consagrado | pícaro | Tus Dagas hacen 2 más; la primera de cada turno roba 1 |
+| 🌫️ Sombra Veloz | pícaro | Cada carta descartada aplica 2 de Veneno a un enemigo al azar |
+| 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno inflige además 3 a todos |
+| 👹 Diablillo Guardián | brujo | Empiezas cada combate con un diablillo efímero (8 de vida, golpea por 6 y 2 de Condena) |
+
 Los efectos se enganchan al motor con ganchos genéricos de `ReliquiaDef`
 (`core/types.ts`): de combate (`inicioTurno`, `alJugarCarta`, `alBarajar`,
 `alQuedarseSinEnergia`, `alMatar`, `alAtacar`, `bonoAtaque`, `alSerGolpeado`,
 `alAplicarEstado`, `alDescartar`, `alTransformarse`, `alTerminarTransformacion`,
 `alGanarFuria`, `salvarFuria`, `alPerderFuria`, `alAplastarRaices`,
 `alDesvanecerseInvocacion`, `alVencerCombate`, `conservaBloqueo`, `retieneCartas`…) y
-de partida (`curaDescanso`, `alDescansar`, `alAfilar`, `alAnadirCarta`,
-`alEntrarEnSala`, `recompensaCartaEn`, `pesoRaroMult`), con sus ayudantes en
+de partida (`alObtener` —recibe el rng de la partida—, `curaDescanso`, `alDescansar`,
+`alAfilar`, `alAnadirCarta`, `alEntrarEnSala`, `recompensaCartaEn`, `pesoRaroMult`), con sus ayudantes en
 `core/run.ts`. Las reliquias guardan su estado de combate con `ctx.marca()`.
 
 ## Estructura

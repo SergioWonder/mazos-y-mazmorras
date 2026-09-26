@@ -748,7 +748,7 @@ console.log('— Imagen Espejo —');
   check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 1, 'Imagen Espejo: coste 1');
   check(espejo.requiereConjuro === 1, 'gasta un espacio de conjuro');
 
-  // al jugarse: 60 % base (3 cargas) + 20 % (1 carga) por nivel del espacio gastado
+  // al jugarse: previene los próximos (nivel + 1) ataques (antes 60 % + 20 % por nivel)
   const runE = nuevaRun('mago', 13);
   const combE = new Combate(runE, [GOBLIN_CORTADOR], () => 0.5, uiSilenciosa);
   await combE.iniciar();
@@ -757,30 +757,33 @@ console.log('— Imagen Espejo —');
   const instE = { uid: 9999, def: espejo, mejorada: false };
   combE.jugador.mano.push(instE);
   await combE.jugarCarta(instE, undefined);
-  check((combE.jugador.estados.espejismo ?? 0) === 5, 'nivel 2 gastado → 5 cargas (60 % + 40 %)');
+  check((combE.jugador.estados.espejismo ?? 0) === 3, 'nivel 2 gastado → previene los próximos 3 ataques');
   check(combE.jugador.conjuros.filter((c) => !c.gastado).length === 1, 'consume el espacio de mayor nivel');
+  check(/previenen? los próximos/i.test(espejo.texto) && !/%/.test(espejo.texto), 'el texto habla de ataques prevenidos, no de porcentajes');
 
-  // rng constante 0.01 → siempre esquiva (0.01 < cargas×0.2)
+  // sin azar: aunque el rng diga «falla», el ataque se previene y gasta una carga
   const runA = nuevaRun('mago', 11);
-  const combA = new Combate(runA, [GOBLIN_CORTADOR], () => 0.01, uiSilenciosa);
+  const combA = new Combate(runA, [GOBLIN_CORTADOR], () => 0.99, uiSilenciosa);
   await combA.iniciar();
-  combA.jugador.estados.espejismo = 4;
+  combA.jugador.estados.espejismo = 2;
   combA.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
   const pvAntes = combA.jugador.pv;
   await combA.terminarTurno();
-  check(combA.jugador.pv === pvAntes, 'esquiva el ataque sin recibir daño');
-  check((combA.jugador.estados.espejismo ?? 0) === 0, 'el espejismo expira tras 1 turno');
+  check(combA.jugador.pv === pvAntes, 'el ataque se previene siempre, sin tirada');
+  check((combA.jugador.estados.espejismo ?? 0) === 1, 'gasta una carga y la otra se guarda para el siguiente ataque');
 
-  // rng constante 0.99 → nunca esquiva: el golpe disipa el conjuro
+  // un ataque múltiple gasta una carga por golpe y los que sobran entran
   const runB = nuevaRun('mago', 12);
-  const combB = new Combate(runB, [GOBLIN_CORTADOR], () => 0.99, uiSilenciosa);
+  const combB = new Combate(runB, [GOBLIN_CORTADOR], () => 0.01, uiSilenciosa);
   await combB.iniciar();
-  combB.jugador.estados.espejismo = 4;
-  combB.enemigos[0].intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 7 };
+  combB.jugador.estados.espejismo = 1;
+  combB.enemigos[0].intencion = { nombre: 'Ráfaga', intencion: 'ataque', dano: 3, veces: 3 };
   const pvAntesB = combB.jugador.pv;
   await combB.terminarTurno();
-  check(combB.jugador.pv < pvAntesB, 'si el golpe entra, recibe el daño');
-  check((combB.jugador.estados.espejismo ?? 0) === 0, 'y las imágenes se disipan');
+  check(pvAntesB - combB.jugador.pv === 6 && (combB.jugador.estados.espejismo ?? 0) === 0, 'en un ataque de 3 golpes, 1 carga previene uno y entran los otros dos');
+
+  const embaucador = PICARO.find((c) => c.id === 'embaucador-arcano')!;
+  check(/previene el próximo ataque/i.test(embaucador.texto), 'Embaucador Arcano: previene el próximo ataque (antes 60 %)');
 }
 
 console.log('— Reliquias —');
@@ -2604,7 +2607,7 @@ console.log('\n💍 Reliquias ampliadas');
   }
   {
     const { comb } = await montar('druida', ['manto-espectral']);
-    check(comb.jugador.estados.espejismo === 2, 'Manto Espectral: el primer turno tienes 2 cargas de Espejismo');
+    check(comb.jugador.estados.espejismo === 1, 'Manto Espectral: previene el primer ataque del combate');
   }
   // — Generales: mapa, élites y economía —
   {
@@ -2893,6 +2896,572 @@ console.log('\n💍 Reliquias ampliadas');
         && rest.reliquias.every((r, i) => r.id === run.reliquias[i].id && r === RQ.reliquiaPorId(r.id)),
       `${clase}: las ${run.reliquias.length} reliquias se guardan y rehidratan con sus efectos`);
     }
+  }
+}
+
+// ── Cola de acciones del jugador (src/ui/action-queue.ts) ────────────────────
+{
+  console.log('\n— Cola de acciones —');
+  const { ActionQueue, forecastEnergy, checkCardAction } = await import('../src/ui/action-queue.ts');
+  const tick = (ms = 0) => new Promise<void>((r) => setTimeout(r, ms));
+
+  // FIFO order and a single action running at a time
+  {
+    const log: string[] = [];
+    let running = 0;
+    let maxRunning = 0;
+    const q = new ActionQueue<string>({
+      execute: async (a) => {
+        running++;
+        maxRunning = Math.max(maxRunning, running);
+        log.push(`start:${a}`);
+        await tick(5);
+        log.push(`end:${a}`);
+        running--;
+      },
+    });
+    q.enqueue('a');
+    q.enqueue('b');
+    q.enqueue('c');
+    check(q.current === 'a' && q.pending.join() === 'b,c', 'la primera acción arranca al momento y las demás esperan en cola');
+    check(q.busy, 'la cola está ocupada mientras se resuelve una acción');
+    await q.idle();
+    check(log.join(' ') === 'start:a end:a start:b end:b start:c end:c', 'las acciones se ejecutan en orden FIFO, una tras otra');
+    check(maxRunning === 1, 'nunca hay más de una acción en ejecución a la vez');
+    check(!q.busy && q.current === null && q.pending.length === 0, 'al acabar, la cola queda libre y vacía');
+  }
+
+  // Cancelling a queued action (the running one cannot be cancelled)
+  {
+    const log: string[] = [];
+    let changes = 0;
+    const q = new ActionQueue<string>({
+      execute: async (a) => { log.push(a); await tick(2); },
+      onChange: () => { changes++; },
+    });
+    q.enqueue('a');
+    q.enqueue('b');
+    q.enqueue('c');
+    check(q.indexOf((x) => x === 'c') === 1, 'indexOf da la posición de la acción entre las pendientes');
+    check(q.remove((x) => x === 'b'), 'se puede sacar de la cola una acción pendiente');
+    check(!q.remove((x) => x === 'a'), 'la acción en ejecución no se puede sacar de la cola');
+    await q.idle();
+    check(log.join() === 'a,c', 'la acción cancelada no llega a ejecutarse');
+    check(changes > 0, 'la cola avisa de cada cambio (para repintar)');
+  }
+
+  // Validation happens when the action runs, not when it is queued
+  {
+    const log: string[] = [];
+    const discarded: string[] = [];
+    let broken = false;
+    const q = new ActionQueue<string>({
+      validate: (a) => (a === 'b' && broken ? { ok: false, reason: 'ya no se puede' } : { ok: true }),
+      execute: async (a) => { log.push(a); if (a === 'a') broken = true; await tick(2); },
+      onDiscard: (a, reason) => { discarded.push(`${a}:${reason}`); },
+    });
+    q.enqueue('a');
+    q.enqueue('b');
+    q.enqueue('c');
+    await q.idle();
+    check(log.join() === 'a,c', 'una acción que deja de ser válida se descarta al llegarle el turno');
+    check(discarded.join() === 'b:ya no se puede', 'y se avisa con el motivo');
+    const q2 = new ActionQueue<string>({
+      validate: (a) => ({ ok: true, action: a === 'x' ? 'y' : a }),
+      execute: async (a) => { log.push(a); },
+    });
+    q2.enqueue('x');
+    await q2.idle();
+    check(log[log.length - 1] === 'y', 'la validación puede sustituir la acción (p. ej. redirigir el objetivo)');
+  }
+
+  // A failing action does not jam the queue
+  {
+    const log: string[] = [];
+    const errors: unknown[] = [];
+    const q = new ActionQueue<string>({
+      execute: async (a) => { if (a === 'a') throw new Error('boom'); log.push(a); },
+      onError: (e) => { errors.push(e); },
+    });
+    q.enqueue('a');
+    q.enqueue('b');
+    await q.idle();
+    check(errors.length === 1 && log.join() === 'b', 'si una acción falla, la cola sigue con la siguiente');
+  }
+
+  // End of combat: the queue empties and refuses new actions
+  {
+    const log: string[] = [];
+    const q = new ActionQueue<string>({ execute: async (a) => { log.push(a); await tick(2); } });
+    q.enqueue('a');
+    q.enqueue('b');
+    q.enqueue('c');
+    q.close();
+    check(q.pending.length === 0, 'al terminar el combate, la cola se vacía');
+    check(!q.enqueue('d'), 'y no admite acciones nuevas');
+    await q.idle();
+    check(log.join() === 'a', 'solo termina la acción que ya estaba en curso');
+  }
+
+  // Energy forecast when queueing
+  {
+    const cost = (a: { c: number }) => a.c;
+    check(forecastEnergy(3, [], cost) === 3, 'sin nada en cola, la previsión es la energía actual');
+    check(forecastEnergy(3, [{ c: 1 }, { c: 2 }], cost) === 0, 'la previsión descuenta lo ya encolado');
+    check(forecastEnergy(1, [{ c: 2 }], cost) === -1, 'la previsión puede quedar negativa (no se admite encolar más)');
+  }
+
+  // Card validation at execution time (pure, with a fake environment)
+  {
+    type T = { id: string; alive: boolean };
+    const a: T = { id: 'a', alive: true };
+    const b: T = { id: 'b', alive: true };
+    const env = {
+      inHand: (c: string) => c !== 'fuera',
+      canPlay: (c: string) => c !== 'cara',
+      reason: () => 'Sin energía suficiente',
+      needsTarget: (c: string) => c.startsWith('ataque'),
+      isAlive: (t: T) => t.alive,
+      livingTargets: () => [a, b].filter((t) => t.alive),
+    };
+    check(checkCardAction({ card: 'ataque', target: a }, env).ok, 'una carta válida pasa la validación');
+    const fuera = checkCardAction({ card: 'fuera' }, env);
+    check(!fuera.ok && /mano/.test(fuera.reason), 'una carta que ya no está en la mano se descarta');
+    const cara = checkCardAction({ card: 'cara' }, env);
+    check(!cara.ok && cara.reason === 'Sin energía suficiente', 'una carta que ya no se puede pagar se descarta con su motivo');
+    a.alive = false;
+    const red = checkCardAction({ card: 'ataque', target: a }, env);
+    check(red.ok && red.action?.target === b, 'si el objetivo ha muerto, la carta se redirige a otro enemigo vivo');
+    b.alive = false;
+    const nadie = checkCardAction({ card: 'ataque', target: a }, env);
+    check(!nadie.ok, 'sin enemigos vivos, la carta se descarta');
+  }
+
+  // Integration with the engine: 3 cards + end turn queued at once, with real waits
+  {
+    const run = nuevaRun('barbaro', 6060);
+    const lenta: Presentador = { ...uiSilenciosa, espera: (ms) => tick(Math.min(ms, 3)), fxGolpe: () => tick(2) };
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(6060), lenta);
+    for (const e of comb.enemigos) { e.pv = 999; e.pvMax = 999; }
+    type Accion = { kind: 'card'; card: CartaInstancia; target?: EnemigoCombate } | { kind: 'endTurn' } | { kind: 'start' };
+    const hechas: string[] = [];
+    const avisos: string[] = [];
+    let carreras = 0;
+    const env = {
+      inHand: (c: CartaInstancia) => comb.jugador.mano.includes(c),
+      canPlay: (c: CartaInstancia) => comb.puedeJugar(c),
+      reason: () => 'no se puede',
+      needsTarget: (c: CartaInstancia) => defDe(c).objetivo === 'enemigo',
+      isAlive: (e: EnemigoCombate) => e.vivo,
+      livingTargets: () => comb.enemigos.filter((e) => e.vivo),
+    };
+    const q = new ActionQueue<Accion>({
+      validate: (a) => {
+        if (a.kind !== 'card') return { ok: true };
+        const v = checkCardAction(a, env);
+        return v.ok ? { ok: true, action: v.action ? { kind: 'card', ...v.action } : a } : v;
+      },
+      execute: async (a) => {
+        if (comb.enResolucion) carreras++;
+        if (a.kind === 'start') await comb.iniciar();
+        else if (a.kind === 'endTurn') { hechas.push('fin'); await comb.terminarTurno(); }
+        else { hechas.push(a.card.uid); await comb.jugarCarta(a.card, a.target); }
+      },
+      onDiscard: (_a, reason) => { avisos.push(reason); },
+    });
+    q.enqueue({ kind: 'start' });
+    await q.idle();
+    const baratas = comb.jugador.mano.filter((c) => comb.costeEfectivo(defDe(c)) === 1).slice(0, 3);
+    const objetivo = comb.enemigos[0];
+    const turno = comb.turno;
+    const energia = comb.jugador.energia;
+    for (const c of baratas) {
+      q.enqueue({ kind: 'card', card: c, target: env.needsTarget(c) ? objetivo : undefined });
+    }
+    q.enqueue({ kind: 'endTurn' });
+    // the first card is already running (and paid); the other two are still queued
+    check(q.busy && q.pending.length === 3, 'integración: la primera carta arranca y el resto espera en cola');
+    check(forecastEnergy(comb.jugador.energia, q.pending.filter((a) => a.kind === 'card'), () => 1) === energia - baratas.length,
+      'integración: la previsión de energía cuenta la carta en curso y las encoladas');
+    // kill the target of the queued attacks: they are redirected to the other goblin
+    objetivo.pv = 0;
+    objetivo.vivo = false;
+    await q.idle();
+    check(baratas.length === 3, 'integración: el mazo inicial trae 3 cartas de coste 1 en la mano');
+    check(hechas.join() === [...baratas.map((c) => c.uid), 'fin'].join(),
+      'integración: 3 cartas y el fin de turno se resuelven en el orden en que se encolaron');
+    check(carreras === 0, 'integración: ninguna acción arranca mientras el motor sigue resolviendo otra');
+    check(comb.jugadasCombate === 3 && comb.turno === turno + 1,
+      'integración: las cartas se jugaron y el turno avanzó exactamente una vez');
+    check(avisos.length === 0, 'integración: ninguna carta se descartó (los ataques se redirigieron al enemigo vivo)');
+    check(comb.enemigos[1].pv < 999 || baratas.every((c) => !env.needsTarget(c)),
+      'integración: los ataques redirigidos dañan al enemigo que sigue vivo');
+  }
+}
+
+// ── Blessings: relic blessings, unique cards and the opening offer ──────────
+console.log('\n🙏 Bendiciones');
+{
+  const fs = await import('node:fs');
+  const RQ = await import('../src/core/reliquias.ts');
+  const BD = await import('../src/core/bendiciones.ts');
+  const RUN = await import('../src/core/run.ts');
+  const { cartaPorId } = await import('../src/core/cartas.ts');
+  const { crearEspacios } = await import('../src/core/conjuros.ts');
+  type Mov = ReturnType<EnemigoDef['ia']>;
+  type Reliquia = NonNullable<ReturnType<typeof RQ.reliquiaPorId>>;
+
+  const B = (id: string): Reliquia => {
+    const r = RQ.reliquiaPorId(id);
+    if (!r || r.rareza !== 'bendicion') check(false, `existe la bendición «${id}»`);
+    return r ?? ({ id, nombre: id, icono: '?', texto: '', rareza: 'bendicion' } as unknown as Reliquia);
+  };
+  const esperar: Mov = { nombre: 'Esperar', intencion: 'desconocido' };
+  const muneco = (pv = 200, mov: Mov = esperar, jefe = false): EnemigoDef => ({
+    id: 'muneco-pruebas', nombre: 'Muñeco', arte: '🎯', pv: [pv, pv], esJefe: jefe,
+    ia: () => ({ ...mov }),
+  });
+  const atacante = (dano: number, veces = 1) =>
+    muneco(200, { nombre: 'Golpe', intencion: 'ataque', dano, veces });
+  async function montar(
+    clase: ClaseId, ids: string[], defs: EnemigoDef[] = [muneco()], op: { elite?: boolean } = {},
+  ) {
+    const run = nuevaRun(clase, 777);
+    run.reliquias = ids.map(B);
+    const comb = new Combate(run, defs, crearRng(777), uiSilenciosa, op.elite ?? false);
+    await comb.iniciar();
+    return { run, comb, ctx: comb.contexto() };
+  }
+  const enMano = (comb: Combate, id: string) => {
+    const inst = instanciar(id === 'daga' ? DAGA : cartaPorId(id)!);
+    comb.jugador.mano.push(inst);
+    return inst;
+  };
+  const jugarCon = async (comb: Combate, id: string, energia = 3, obj = comb.enemigos.find((e) => e.vivo)) => {
+    comb.jugador.energia = energia;
+    await comb.jugarCarta(enMano(comb, id), obj);
+  };
+  const barajarDescarte = async (comb: Combate, ctx: ReturnType<Combate['contexto']>) => {
+    comb.jugador.descarte.push(...comb.jugador.mazo);
+    comb.jugador.mazo = [];
+    await ctx.robar(1);
+  };
+
+  // — Catalogue —
+  const todas = RQ.BENDICIONES;
+  {
+    check(todas.length >= 20, `conjunto amplio de bendiciones-reliquia (${todas.length})`);
+    check(todas.every((r) => r.rareza === 'bendicion' && !!r.tipoBendicion), 'toda bendición es una reliquia de rareza «bendición» con su tipo');
+    const enPool = todas.filter((r) => RQ.POOL_RELIQUIAS.some((p) => p.id === r.id));
+    check(enPool.length === 0, 'las bendiciones no están en el pool de reliquias corrientes');
+    const nombres = new Set([...RQ.POOL_RELIQUIAS, ...todas].map((r) => r.nombre));
+    check(nombres.size === RQ.POOL_RELIQUIAS.length + todas.length, 'sin nombres repetidos entre reliquias y bendiciones');
+    check(todas.every((r) => r.icono.length > 0 && !r.texto.includes('"')), 'todas tienen icono y su texto cabe en un data-tip');
+    check(todas.every((r) => (r.tipoBendicion === 'clase') === !!r.soloClase), 'las de clase (y solo ellas) van ligadas a una clase');
+    for (const t of ['general', 'pacto', 'mapa'] as const) {
+      const n = todas.filter((r) => r.tipoBendicion === t).length;
+      check(n >= 4, `al menos 4 bendiciones de tipo ${t} (${n})`);
+    }
+    for (const clase of CLASES) {
+      const n = todas.filter((r) => r.soloClase === clase).length;
+      check(n >= 2, `${clase}: al menos 2 bendiciones de clase (${n})`);
+    }
+    for (const r of todas) check(RQ.reliquiaPorId(r.id) === r, `«${r.nombre}» se encuentra por id`);
+  }
+  // — Never in the normal roll —
+  {
+    let fugas = 0;
+    const rng = crearRng(8080);
+    for (const clase of CLASES) {
+      for (let i = 0; i < 400; i++) {
+        const run = nuevaRun(clase, i);
+        const origen = (['cofre', 'elite', 'evento', 'jefe'] as const)[i % 4];
+        if (RQ.sortearReliquia(run, rng, origen)?.rareza === 'bendicion') fugas++;
+      }
+      const llena = nuevaRun(clase, 5);
+      llena.reliquias.push(...RQ.reliquiasDisponibles(llena));
+      if (RQ.sortearReliquia(llena, rng, 'cofre') !== undefined) fugas++;
+    }
+    check(fugas === 0, 'las bendiciones nunca salen en cofres, élites, eventos ni jefes (sortearReliquia)');
+  }
+  // — Opening blessing: 4 varied options —
+  {
+    let ok = true;
+    const firmas = new Set<string>();
+    for (const clase of CLASES) {
+      for (let s = 1; s <= 30; s++) {
+        const run = nuevaRun(clase, s);
+        const of = BD.ofrecerBendicionInicial(run, crearRng(s * 13));
+        const rel = of.flatMap((o) => (o.tipo === 'reliquia' ? [o.reliquia] : []));
+        const ids = rel.map((r) => r.id);
+        const tipos = rel.map((r) => r.tipoBendicion);
+        if (of.length !== 4 || rel.length !== 4 || new Set(ids).size !== 4
+          || !rel.some((r) => r.soloClase === clase) || rel.some((r) => r.soloClase && r.soloClase !== clase)
+          || !tipos.includes('general') || !tipos.includes('pacto')) {
+          ok = false;
+          console.error(`    ${clase}/${s}: ${ids.join(', ')}`);
+        }
+        firmas.add(`${clase}:${[...ids].sort().join(',')}`);
+      }
+    }
+    check(ok, 'la bendición inicial ofrece 4 reliquias sin repetir: una de clase, una general y un pacto (y nunca de otra clase)');
+    check(firmas.size >= 100, `la bendición inicial cambia de partida a partida (${firmas.size} combinaciones en 150 semillas)`);
+  }
+  // — Between acts: unique cards stay the same, the rest are relics —
+  {
+    const run = nuevaRun('druida', 21);
+    const of = BD.ofrecerBendicionEntreActos(run, crearRng(21));
+    const cartas = of.filter((o) => o.tipo === 'carta');
+    check(of.length === 3 && cartas.length === 1, 'entre el Acto I y el II: 3 opciones, una de ellas carta única');
+    const sed = cartas[0];
+    check(sed?.tipo === 'carta' && sed.icono === '💘' && sed.nombre === 'Carta única: Seducir'
+      && sed.detalle === 'Añade «Seducir» a tu mazo (incolora, tira 1d20)', 'Seducir conserva icono y textos');
+    check(of.every((o) => o.tipo === 'carta' || o.reliquia.rareza === 'bendicion'), 'el resto de opciones son bendiciones-reliquia');
+    const mazo = run.mazo.length;
+    const nRel = run.reliquias.length;
+    if (sed) BD.aplicarBendicion(run, sed, crearRng(1));
+    check(run.mazo.length === mazo + 1 && run.mazo[run.mazo.length - 1].def.id === 'seducir' && run.reliquias.length === nRel,
+      'elegir Seducir añade la carta al mazo (y ninguna reliquia)');
+    const rel = of.find((o) => o.tipo === 'reliquia');
+    if (rel) BD.aplicarBendicion(run, rel, crearRng(1));
+    check(rel?.tipo === 'reliquia' && run.reliquias.length === nRel + 1 && run.reliquias.includes(rel.reliquia),
+      'elegir una bendición-reliquia la añade a tus reliquias (barra superior)');
+
+    const run2 = nuevaRun('brujo', 22);
+    run2.capitulo = 1;
+    const of2 = BD.ofrecerBendicionEntreActos(run2, crearRng(22));
+    const unica = cartaUnicaDeClase('brujo');
+    const c2 = of2.filter((o) => o.tipo === 'carta');
+    check(of2.length === 3 && c2.length === 2
+      && c2.some((o) => o.tipo === 'carta' && o.icono === '🌟' && o.nombre === `Carta única: ${unica.nombre}`
+        && o.detalle === `Añade «${unica.nombre}» a tu mazo (única de clase)`)
+      && c2.some((o) => o.tipo === 'carta' && o.icono === '🌠' && o.nombre === 'Carta única: Deseo'
+        && o.detalle === 'Añade «Deseo» a tu mazo (incolora, tira 1d20)'),
+    'entre el Acto II y el III: la carta única de clase y Deseo, iguales que antes, y una bendición-reliquia');
+    const u = c2.find((o) => o.tipo === 'carta' && o.nombre.includes(unica.nombre));
+    if (u) BD.aplicarBendicion(run2, u, crearRng(2));
+    check(run2.mazo[run2.mazo.length - 1].def.id === unica.id, 'elegir la carta única de clase la añade al mazo');
+
+    // Owned blessings are never offered again
+    const run3 = nuevaRun('mago', 23);
+    run3.reliquias.push(...todas.filter((r) => r.tipoBendicion !== 'pacto'));
+    let repetida = false;
+    for (let s = 0; s < 20; s++) {
+      for (const o of BD.ofrecerBendicionEntreActos(run3, crearRng(s))) {
+        if (o.tipo === 'reliquia' && run3.reliquias.includes(o.reliquia)) repetida = true;
+      }
+    }
+    check(!repetida, 'no se ofrece una bendición que ya tienes');
+  }
+  // — No flat "+N stat" blessing —
+  {
+    const soloEstadistica = /^(al obtenerlo:?\s*)?(\+?\d+ de \w+ permanente al inicio de cada combate|(empiezas cada combate con\s*)?\+?\d+ (de )?(fuerza|destreza|pv máximos|bloqueo|energía)( al obtenerlo| permanente)?)\.?$/i;
+    const planas = todas.filter((r) => soloEstadistica.test(r.texto.trim()));
+    check(planas.length === 0, `ninguna bendición es solo «+N estadística» (${planas.map((r) => r.id).join(', ')})`);
+    const ofertas = [
+      ...BD.ofrecerBendicionInicial(nuevaRun('picaro', 3), crearRng(3)),
+      ...BD.ofrecerBendicionEntreActos(nuevaRun('picaro', 4), crearRng(4)),
+    ];
+    check(ofertas.every((o) => o.tipo === 'reliquia' || o.nombre.startsWith('Carta única')),
+      'toda bendición es una carta única o una reliquia (ya no hay «+N PV máximos» sueltos)');
+    const src = fs.readFileSync(new URL('../src/ui/bendicion.ts', import.meta.url), 'utf8');
+    check(/relicIcon\(/.test(src) && !/permanentes\./.test(src), 'la pantalla de bendición pinta las reliquias con su ilustración y no toca estadísticas');
+  }
+
+  // — Effects: general —
+  {
+    const { comb } = await montar('druida', ['bendicion-alba']);
+    const max = comb.jugador.energiaMax;
+    check(comb.jugador.energia === max + 1 && comb.jugador.mano.length === 6, 'Bendición del Alba: turno 1, +1 de energía y 1 carta más');
+    await comb.terminarTurno();
+    check(comb.jugador.energia === max + 1 && comb.jugador.mano.length === 6, 'Bendición del Alba: turno 2, otra vez');
+    await comb.terminarTurno();
+    check(comb.jugador.energia === max && comb.jugador.mano.length === 5, 'Bendición del Alba: desde el turno 3, nada');
+  }
+  {
+    const { comb } = await montar('druida', ['estrella-fugaz']);
+    comb.jugador.energia = 10;
+    for (let i = 0; i < 3; i++) await comb.jugarCarta(enMano(comb, 'golpe'), comb.enemigos[0]);
+    const mano = comb.jugador.mano.length;
+    check(comb.jugador.energia === 7, 'Estrella Fugaz: las 3 primeras cartas no devuelven nada');
+    await comb.jugarCarta(enMano(comb, 'golpe'), comb.enemigos[0]);
+    check(comb.jugador.energia === 7 && comb.jugador.mano.length === mano + 1,
+      'Estrella Fugaz: la 4.ª carta del turno devuelve 1 de energía y roba 1');
+  }
+  {
+    const { comb, ctx } = await montar('druida', ['campana-plegaria']);
+    comb.jugador.pv = 40;
+    await barajarDescarte(comb, ctx);
+    check(comb.jugador.pv === 43 && comb.jugador.bloqueo === 5, 'Campana de Plegaria: al barajar el descarte, te curas 3 y ganas 5 de bloqueo');
+  }
+  {
+    const { comb } = await montar('druida', ['mirada-vidente'], [atacante(5), muneco()]);
+    const [a, q] = comb.enemigos;
+    check(a.estados.debil === 2 && !a.estados.vulnerable && q.estados.vulnerable === 2 && !q.estados.debil,
+      'Mirada de la Vidente: quien pretende atacar queda Débil 2; quien no, Vulnerable 2');
+  }
+  {
+    const { comb } = await montar('druida', ['aureola-martir'], [atacante(6, 2)]);
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv - 9, 'Aureola del Mártir: cada golpe que te hiere te da bloqueo (la mitad) contra los siguientes');
+  }
+  // — Effects: pacts —
+  {
+    const { comb, ctx } = await montar('druida', ['pacto-sangre']);
+    check(comb.jugador.energiaMax === 4 && comb.jugador.energia === 4, 'Pacto de Sangre: +1 de energía por turno');
+    const pv = comb.jugador.pv;
+    await barajarDescarte(comb, ctx);
+    check(comb.jugador.pv === pv - 4, 'Pacto de Sangre: al barajar el descarte pierdes 4 PV');
+  }
+  {
+    const { comb } = await montar('druida', ['corazon-cristal']);
+    check(comb.jugador.estados.vulnerable === 2, 'Corazón de Cristal: empiezas cada combate con 2 de Vulnerable');
+    await jugarCon(comb, 'golpe');
+    check(comb.enemigos[0].pv === 200 - 9, 'Corazón de Cristal: tus ataques hacen 3 más por golpe');
+  }
+  {
+    const { comb } = await montar('druida', ['pacto-insomne']);
+    check(comb.jugador.mano.length === 7, 'Pacto del Insomne: robas 2 cartas más');
+    const pv = comb.jugador.pv;
+    await jugarCon(comb, 'defender');
+    check(comb.jugador.pv === pv - 3, 'Pacto del Insomne: la primera carta del turno cuesta 3 PV');
+    await jugarCon(comb, 'defender');
+    check(comb.jugador.pv === pv - 3, 'Pacto del Insomne: las siguientes, no');
+  }
+  {
+    const run = nuevaRun('barbaro', 30);
+    const max = run.pvMax;
+    const n = run.reliquias.length;
+    RQ.otorgarReliquia(run, B('pacto-codicia'), crearRng(30));
+    const nuevas = run.reliquias.slice(n);
+    check(nuevas.length === 3 && nuevas[0].id === 'pacto-codicia' && nuevas.slice(1).every((r) => r.rareza === 'comun' || r.rareza === 'rara')
+      && run.pvMax === max - 12 && run.pv === run.pvMax,
+    'Pacto de la Codicia: al sellarlo, 2 reliquias al azar a cambio de 12 PV máximos');
+  }
+  // — Effects: map —
+  {
+    const run = nuevaRun('druida', 40);
+    run.reliquias.push(B('farol-peregrino'));
+    run.pv = 20;
+    RUN.entrarEnSala(run, 'combate', crearRng(1));
+    check(run.pv === 20, 'Farol del Peregrino: fuera de los campamentos no hace nada');
+    const notas = RUN.entrarEnSala(run, 'descanso', crearRng(1));
+    check(run.pv === 30 && notas.length === 1, 'Farol del Peregrino: al llegar a un campamento te cura 10 PV');
+  }
+  {
+    const run = nuevaRun('druida', 41);
+    run.reliquias.push(B('brujula-sibila'));
+    check(RUN.cartaExtraEnSala(run, 'evento') && !RUN.cartaExtraEnSala(run, 'cofre'), 'Brújula de Síbila: tras cada evento eliges también una carta');
+  }
+  {
+    const { run, comb, ctx } = await montar('druida', ['trofeo-cazador'], [muneco(10)], { elite: true });
+    await ctx.danar(comb.enemigos[0], 50);
+    check(run.mazo.filter((c) => c.mejorada).length === 1, 'Trofeo del Cazador: vencer a un élite mejora 1 carta al azar');
+    const n = await montar('druida', ['trofeo-cazador'], [muneco(10)]);
+    await n.ctx.danar(n.comb.enemigos[0], 50);
+    check(n.run.mazo.every((c) => !c.mejorada), 'Trofeo del Cazador: un combate corriente no cuenta');
+  }
+  {
+    const { comb } = await montar('druida', ['estandarte-cruzada'], [muneco()], { elite: true });
+    check(comb.jugador.energiaMax === 4 && comb.jugador.bloqueo === 8, 'Estandarte de Cruzada: contra élites, +1 de energía por turno y 8 de bloqueo');
+    const n = await montar('druida', ['estandarte-cruzada']);
+    check(n.comb.jugador.energiaMax === 3 && n.comb.jugador.bloqueo === 0, 'Estandarte de Cruzada: en combates corrientes, nada');
+  }
+  // — Effects: class —
+  {
+    const { comb } = await montar('druida', ['bendicion-manada']);
+    await jugarCon(comb, 'forma-lobo');
+    check(comb.jugador.efectosTemporales[0]?.turnos === 5 && comb.jugador.invocacion?.vida === 4,
+      'Bendición de la Manada: la forma dura 1 turno más e Invocas 4');
+  }
+  {
+    const { comb } = await montar('druida', ['bendicion-raices'], [atacante(1)]);
+    check(comb.enemigos[0].estados.raices === 2, 'Raíces Profundas: al empezar, 2 de Raíces a todos');
+    await comb.terminarTurno();
+    check(comb.jugador.mano.length === 6, 'Raíces Profundas: cuando tus Raíces aplastan, robas 1');
+  }
+  {
+    const { comb, ctx } = await montar('barbaro', ['bendicion-trueno'], [muneco(), muneco()]);
+    await ctx.ganarFuria(1);
+    check(comb.enemigos.every((e) => e.pv === 197), 'Trueno Ancestral: ganar Furia inflige 3 a todos');
+  }
+  {
+    const { comb, ctx } = await montar('barbaro', ['juramento-inquebrantable']);
+    await ctx.ganarFuria(1);
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 2, 'Juramento Inquebrantable: la primera Furia perdida vuelve a arder (+2 de Fuerza)');
+    await comb.terminarTurno();
+    check(comb.jugador.furiaFuerza === 0, 'Juramento Inquebrantable: solo una vez por combate');
+  }
+  {
+    const { run, comb, ctx } = await montar('mago', ['fuente-arcana']);
+    check(comb.jugador.conjuros.length === run.espaciosConjuro + 1, 'Fuente Arcana: empiezas el combate con 1 espacio más');
+    comb.jugador.conjuros = crearEspacios(3);
+    const mano = comb.jugador.mano.length;
+    await ctx.gastarConjuro(2);
+    check(comb.jugador.mano.length === mano + 1, 'Fuente Arcana: gastar un espacio de nivel 2+ roba 1');
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.mano.length === mano + 1, 'Fuente Arcana: los de nivel 1, no');
+  }
+  {
+    const { comb, ctx } = await montar('mago', ['bendicion-constelacion']);
+    comb.jugador.conjuros = crearEspacios(3);
+    const en = comb.jugador.energia;
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.energia === en, 'Constelación: el primer espacio no da nada');
+    await ctx.gastarConjuro(1);
+    check(comb.jugador.energia === en + 1, 'Constelación: cada 2 espacios gastados, +1 de energía');
+  }
+  {
+    const { comb } = await montar('picaro', ['filo-consagrado']);
+    const mano = comb.jugador.mano.length;
+    const pv = comb.enemigos[0].pv;
+    await jugarCon(comb, 'daga', 0);
+    const golpe1 = pv - comb.enemigos[0].pv;
+    check(golpe1 === 4 + 2 && comb.jugador.mano.length === mano + 1, 'Filo Consagrado: la primera Daga del turno hace 2 más (4 + 2) y roba 1');
+    await jugarCon(comb, 'daga', 0);
+    check(comb.jugador.mano.length === mano + 1 && pv - golpe1 - comb.enemigos[0].pv === golpe1,
+      'Filo Consagrado: las siguientes Dagas también hacen 2 más, pero no roban');
+  }
+  {
+    const { comb } = await montar('picaro', ['sombra-veloz']);
+    await comb.descartarCarta(comb.jugador.mano[0]);
+    check(comb.enemigos[0].estados.veneno === 2, 'Sombra Veloz: cada carta descartada aplica 2 de Veneno a un enemigo');
+  }
+  {
+    const { comb } = await montar('brujo', ['eco-sobrenatural'], [muneco(), muneco()]);
+    const [a, b] = comb.enemigos;
+    await jugarCon(comb, 'explosion-sobrenatural', 3, a);
+    const pvB = b.pv;
+    check(pvB === 197, 'Eco Sobrenatural: la primera Explosión del turno inflige además 3 a todos');
+    await jugarCon(comb, 'explosion-sobrenatural', 3, a);
+    check(b.pv === pvB, 'Eco Sobrenatural: solo la primera de cada turno');
+  }
+  {
+    const { comb } = await montar('brujo', ['diablillo-guardian'], [muneco()]);
+    check(comb.jugador.invocacion?.vida === 8 && comb.jugador.invocacion?.efimera === true,
+      'Diablillo Guardián: empiezas cada combate con un diablillo efímero de 8 de vida');
+    await comb.terminarTurno();
+    check(comb.enemigos[0].pv === 194 && comb.enemigos[0].estados.condena === 2,
+      'Diablillo Guardián: si aguanta la ronda golpea por 6 y aplica 2 de Condena');
+  }
+  // — Saving —
+  {
+    for (const clase of CLASES) {
+      const run = nuevaRun(clase, 51);
+      run.reliquias.push(...todas.filter((r) => !r.soloClase || r.soloClase === clase));
+      const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))));
+      check(!!rest && rest.reliquias.length === run.reliquias.length
+        && rest.reliquias.every((r, i) => r === run.reliquias[i]),
+      `${clase}: las bendiciones-reliquia se guardan y rehidratan con sus efectos`);
+    }
+    const run = nuevaRun('druida', 52);
+    RQ.otorgarReliquia(run, B('pacto-codicia'), crearRng(52));
+    const max = run.pvMax;
+    const rest = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))));
+    check(!!rest && rest.pvMax === max && rest.reliquias.length === run.reliquias.length,
+      'rehidratar no vuelve a aplicar el pacto de la Codicia');
   }
 }
 

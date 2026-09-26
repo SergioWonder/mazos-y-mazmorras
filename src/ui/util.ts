@@ -144,7 +144,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   corazonSalvaje: 'Cuando pierdas tu Furia, ganas esa cantidad de Fuerza y Destreza para el resto del combate.',
   frenesi: 'Tu Furia se romperá al final de este turno aunque recibas daño.',
   espejismo:
-    'Copias ilusorias: 20 % de esquivar cada ataque por carga. Esquivar gasta 1 carga; recibir un golpe las disipa todas. Dura 1 turno.',
+    'Copias ilusorias: cada carga previene por completo el próximo golpe de un ataque. Duran hasta gastarse.',
   invulnerable: 'No recibe ningún daño mientras dure.',
   raizProlongada: 'Las Raíces que apliques reducen la Fuerza del enemigo esa cantidad de turnos adicionales.',
   formaProlongada: 'Tus Transformaciones duran esa cantidad de turnos adicionales.',

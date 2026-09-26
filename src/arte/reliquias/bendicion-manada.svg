@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="32" r="33" fill="url(#h)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- spirit wolf head -->
+  <path d="M14 10 L24 22 Q32 18 40 22 L50 10 L50 30 Q54 38 44 48 L36 56 L28 56 L20 48 Q10 38 14 30 Z" fill="#bfe8ff" opacity="0.7" filter="url(#g)"/>
+  <path d="M14 10 L24 22 Q32 18 40 22 L50 10 L50 30 Q54 38 44 48 L36 56 L28 56 L20 48 Q10 38 14 30 Z" fill="#a8d0e8"/>
+  <path d="M40 22 L50 10 L50 30 Q54 38 44 48 L36 56 L32 56 Q44 40 40 22 Z" fill="#6a94b8"/>
+  <path d="M17 16 L22 22 L17 26 Z M47 16 L42 22 L47 26 Z" fill="#46688c"/>
+  <path d="M22 32 L28 35 L22 37 Z M42 32 L36 35 L42 37 Z" fill="#e8fbff" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M28 48 Q32 44 36 48 L34 52 L30 52 Z" fill="#140d0a"/>
+  <path d="M32 26 L32 44" stroke="#dff4ff" stroke-width="1.4"/>
+  <path d="M14 10 L24 22 Q32 18 40 22 L50 10 L50 30 Q54 38 44 48 L36 56 L28 56 L20 48 Q10 38 14 30 Z" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M8 46.5 Q8.7 49.3 11.5 50 Q8.7 50.7 8 53.5 Q7.3 50.7 4.5 50 Q7.3 49.3 8 46.5 Z" fill="#fff4c8"/>
+  <path d="M56 46.5 Q56.7 49.3 59.5 50 Q56.7 50.7 56 53.5 Q55.3 50.7 52.5 50 Q55.3 49.3 56 46.5 Z" fill="#fff4c8"/>
+</svg>

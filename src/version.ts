@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '4.1.0';
+export const VERSION = '5.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,19 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.0.0',
+    fecha: '2026-09-26',
+    cambios: [
+      '💎 Mazo y Mazmorra 5.0: más de 70 reliquias ilustradas, con reliquias únicas para cada clase y bendiciones que ahora son reliquias.',
+      '🙏 El encargo del Senescal y las bendiciones de Síbila ofrecen reliquias con efectos únicos: pactos arriesgados, dones de tu clase y ventajas para el camino.',
+      '🎴 Las reliquias tienen efectos mucho más variados y las de tu clase potencian su mecánica: formas, Furia, conjuros, dagas y pactos.',
+      '🪞 Las ilusiones ya no dependen del azar: previenen por completo los próximos ataques.',
+      '⏩ Puedes jugar cartas y terminar el turno sin esperar a las animaciones: las acciones se encolan y se resuelven en orden.',
+      '🎵 El Acto III tiene una música nueva, mucho más oscura y seria.',
+      '📱 En el móvil, el fondo se extiende por detrás de la mano, los enemigos no se recolocan al caer uno y los estados se apilan en filas.',
+    ],
+  },
   {
     version: '4.1.0',
     fecha: '2026-09-26',

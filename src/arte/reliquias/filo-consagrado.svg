@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <radialGradient id="h"><stop offset="0" stop-color="#fff0b8" stop-opacity="0.75"/><stop offset="1" stop-color="#ffd060" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- holy halo -->
+  <circle cx="32" cy="26" r="29" fill="url(#h)"/>
+  <circle cx="32" cy="26" r="20" fill="none" stroke="#ffe08a" stroke-width="3" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="26" r="20" fill="none" stroke="#140d0a" stroke-width="3.4"/>
+  <circle cx="32" cy="26" r="20" fill="none" stroke="#e8b440" stroke-width="1.6"/>
+  <!-- consecrated dagger -->
+  <path d="M32 4 L38 16 L37 40 L27 40 L26 16 Z" fill="#fff4c0" opacity="0.8" filter="url(#g)"/>
+  <path d="M32 4 L38 16 L37 40 L27 40 L26 16 Z" fill="#e4e8ec"/>
+  <path d="M32 4 L38 16 L37 40 L32 40 Z" fill="#9aa4ae"/>
+  <path d="M32 8 L32 38" stroke="#ffffff" stroke-width="1" opacity="0.8"/>
+  <path d="M32 4 L38 16 L37 40 L27 40 L26 16 Z" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M18 40 Q32 36 46 40 L46 44 Q32 42 18 44 Z" fill="#e8b440" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M29 44 L35 44 L35 54 L29 54 Z" fill="#6a4426" stroke="#140d0a" stroke-width="2.2"/>
+  <circle cx="32" cy="57" r="3.4" fill="#e8b440" stroke="#140d0a" stroke-width="2"/>
+  <path d="M12 30 L18 32 M52 30 L46 32 M14 20 L20 24 M50 20 L44 24" stroke="#fff0b0" stroke-width="2" stroke-linecap="round"/>
+  <path d="M10 46.5 Q10.7 49.3 13.5 50 Q10.7 50.7 10 53.5 Q9.3 50.7 6.5 50 Q9.3 49.3 10 46.5 Z" fill="#fff4c8"/>
+  <path d="M54 46.5 Q54.7 49.3 57.5 50 Q54.7 50.7 54 53.5 Q53.3 50.7 50.5 50 Q53.3 49.3 54 46.5 Z" fill="#fff4c8"/>
+</svg>

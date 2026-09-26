@@ -87,7 +87,7 @@ export function reliquiaAleatoria(run: EstadoRun, rng: () => number): string {
     curar(run, 8);
     return 'unas vendas viejas (+8 PV)';
   }
-  otorgarReliquia(run, r);
+  otorgarReliquia(run, r, rng);
   // name only: the relic's illustration shows up in the top bar (event text is plain)
   return r.nombre;
 }

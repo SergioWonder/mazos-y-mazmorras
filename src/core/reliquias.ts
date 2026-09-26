@@ -1,6 +1,9 @@
 import type {
   ClaseId, ContextoEfecto, EnemigoCombate, EstadoRun, OrigenReliquia, RarezaReliquia, ReliquiaDef,
 } from './types.ts';
+import { BENDICIONES } from './reliquias-bendicion.ts';
+
+export { BENDICIONES };
 
 // ── Small helpers shared by the relic effects ────────────────────────────────
 
@@ -261,8 +264,8 @@ const GENERALES: ReliquiaDef[] = [
   },
   {
     id: 'manto-espectral', nombre: 'Manto Espectral', icono: '👘', rareza: 'comun',
-    texto: 'Empiezas cada combate envuelto en 2 cargas de Espejismo: 40 % de esquivar en el primer turno (un golpe recibido las disipa).',
-    inicioCombate: async (ctx) => { await ctx.aplicarEstado(ctx.jugador, 'espejismo', 2); },
+    texto: 'Empiezas cada combate envuelto en una ilusión que previene el primer ataque que recibas.',
+    inicioCombate: async (ctx) => { await ctx.aplicarEstado(ctx.jugador, 'espejismo', 1); },
   },
   // — Mapa, élites y economía —
   {
@@ -509,7 +512,7 @@ export const POOL_RELIQUIAS: ReliquiaDef[] = [
 
 /** Registro completo (para guardar/cargar partidas por id). */
 export function reliquiaPorId(id: string): ReliquiaDef | undefined {
-  return [...Object.values(INICIALES), ...POOL_RELIQUIAS].find((r) => r.id === id);
+  return [...Object.values(INICIALES), ...POOL_RELIQUIAS, ...BENDICIONES].find((r) => r.id === id);
 }
 
 /** Relics that can still be offered to this run: not owned yet and either
@@ -561,12 +564,12 @@ export function sortearReliquia(
 }
 
 /** Gives a relic to the run and applies its on-pickup effect. */
-export function otorgarReliquia(run: EstadoRun, reliquia: ReliquiaDef) {
+export function otorgarReliquia(run: EstadoRun, reliquia: ReliquiaDef, rng: () => number = Math.random) {
   run.reliquias.push(reliquia);
-  reliquia.alObtener?.(run);
+  reliquia.alObtener?.(run, rng);
 }
 
 /** Visible label of each rarity (reward panel and tooltips). */
 export const NOMBRE_RAREZA_RELIQUIA: Record<RarezaReliquia, string> = {
-  inicial: 'Inicial', comun: 'Común', rara: 'Rara', jefe: 'De jefe',
+  inicial: 'Inicial', comun: 'Común', rara: 'Rara', jefe: 'De jefe', bendicion: 'Bendición',
 };

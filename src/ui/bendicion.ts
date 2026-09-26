@@ -1,111 +1,66 @@
-import type { EstadoRun } from '../core/types.ts';
-import { reliquiaAleatoria } from '../core/eventos.ts';
-import { instanciar, NEUTRALES_ESPECIALES, cartaUnicaDeClase } from '../core/cartas.ts';
-import { barajar } from '../core/rng.ts';
+import type { EstadoRun, TipoBendicion } from '../core/types.ts';
+import {
+  ofrecerBendicionInicial, ofrecerBendicionEntreActos, aplicarBendicion, type OfertaBendicion,
+} from '../core/bendiciones.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
+import { relicIcon } from './relic-art.ts';
 
-interface Don {
-  icono: string;
-  nombre: string;
-  detalle: string;
-  aplicar: (run: EstadoRun, rng: () => number) => void;
-}
+/** When the Seer shows up: at the start of the run or between two acts. */
+export type MomentoBendicion = 'inicial' | 'entreActos';
 
-const DONES: Don[] = [
-  {
-    icono: '💎', nombre: 'Don del Vigor',
-    detalle: '+1 de energía máxima… pero solo contra élites y jefes',
-    aplicar: (run) => { run.permanentes.energiaElite += 1; },
-  },
-  {
-    icono: '❤️', nombre: 'Don de la Vida',
-    detalle: '+20 PV máximos',
-    aplicar: (run) => { run.pvMax += 20; },
-  },
-  {
-    icono: '🧠', nombre: 'Don de la Mente',
-    detalle: 'Robas 1 carta adicional cada turno y +5 PV máximos',
-    aplicar: (run) => {
-      run.permanentes.robo += 1;
-      run.pvMax += 5;
-    },
-  },
-  {
-    icono: '👑', nombre: 'Don del Tesoro',
-    detalle: 'Obtienes 2 reliquias al azar',
-    aplicar: (run, rng) => {
-      reliquiaAleatoria(run, rng);
-      reliquiaAleatoria(run, rng);
-    },
-  },
-  {
-    icono: '🔮', nombre: 'Don del Maná Eterno',
-    detalle: '+1 de energía en los 2 primeros turnos de cada combate',
-    aplicar: (run) => { run.permanentes.energiaInicial += 1; },
-  },
-  {
-    icono: '⚡', nombre: 'Don del Berserker',
-    detalle: '+1 de Fuerza y +1 de Destreza al inicio de cada combate',
-    aplicar: (run) => {
-      run.permanentes.fuerza += 1;
-      run.permanentes.destreza += 1;
-    },
-  },
-  {
-    icono: '🍀', nombre: 'Don del Peregrino',
-    detalle: '+10 PV máximos y obtienes 1 reliquia al azar',
-    aplicar: (run, rng) => {
-      run.pvMax += 10;
-      reliquiaAleatoria(run, rng);
-    },
-  },
-];
-
-/** Cartas únicas incoloras que ofrece la Vidente según el acto que vas a empezar. */
-const DON_CARTA: Record<string, Don> = {
-  seducir: {
-    icono: '💘', nombre: 'Carta única: Seducir',
-    detalle: 'Añade «Seducir» a tu mazo (incolora, tira 1d20)',
-    aplicar: (run) => { run.mazo.push(instanciar(NEUTRALES_ESPECIALES.find((c) => c.id === 'seducir')!)); },
-  },
-  deseo: {
-    icono: '🌠', nombre: 'Carta única: Deseo',
-    detalle: 'Añade «Deseo» a tu mazo (incolora, tira 1d20)',
-    aplicar: (run) => { run.mazo.push(instanciar(NEUTRALES_ESPECIALES.find((c) => c.id === 'deseo')!)); },
-  },
+/** Visible label of each kind of blessing relic. */
+const ETIQUETA_TIPO: Record<TipoBendicion, string> = {
+  general: 'Bendición', pacto: 'Pacto · riesgo y recompensa', mapa: 'Del camino', clase: 'De tu clase',
 };
 
+/** HTML of one option button (blessing relic with its art, or unique card). */
+function contenidoOpcion(o: OfertaBendicion): string {
+  if (o.tipo === 'carta') {
+    return `<span class="op-etiqueta">${o.icono} ${o.nombre}</span>
+      <span class="op-detalle">${o.detalle}</span>`;
+  }
+  const r = o.reliquia;
+  const tipo = r.tipoBendicion ?? 'general';
+  return `<span class="bendicion-icono">${relicIcon(r, 48)}</span>
+    <span class="bendicion-texto">
+      <span class="bendicion-tipo bendicion-tipo-${tipo}">${ETIQUETA_TIPO[tipo]}</span>
+      <span class="op-etiqueta">${r.nombre}</span>
+      <span class="op-detalle">${r.texto}</span>
+    </span>`;
+}
+
 /**
- * Encuentro especial entre actos: Síbila, la Vidente del Manantial.
- * Cura por completo y ofrece 3 dones (de un pool mayor) a elegir 1.
+ * Blessing screens: the Senescal's task at the start, and Síbila, the Seer of the Spring, between acts.
+ * - `inicial`: before setting off, 4 blessing relics (class, general, pact, wildcard).
+ * - `entreActos`: full heal plus the unique cards and blessing relics up to 3 options.
  */
-export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<void> {
+export function pantallaBendicion(
+  run: EstadoRun, rng: () => number, momento: MomentoBendicion = 'entreActos',
+): Promise<void> {
   return new Promise((resolver) => {
-    // Al pasar al Acto II se ofrece «Seducir»; al Acto III, «Deseo» + la carta
-    // única de tu clase (rareza especial).
-    const especiales: Don[] = [];
-    if (run.capitulo === 0) {
-      especiales.push(DON_CARTA.seducir);
-    } else if (run.capitulo === 1) {
-      const unica = cartaUnicaDeClase(run.clase);
-      especiales.push({
-        icono: '🌟', nombre: `Carta única: ${unica.nombre}`,
-        detalle: `Añade «${unica.nombre}» a tu mazo (única de clase)`,
-        aplicar: (r) => { r.mazo.push(instanciar(unica)); },
-      });
-      especiales.push(DON_CARTA.deseo);
-    }
-    const ofrecidos = [...especiales, ...barajar(rng, DONES).slice(0, Math.max(1, 3 - especiales.length))];
+    const inicial = momento === 'inicial';
+    const ofrecidos = inicial ? ofrecerBendicionInicial(run, rng) : ofrecerBendicionEntreActos(run, rng);
+    if (ofrecidos.length === 0) return resolver();
 
     const app = document.getElementById('app')!;
     app.innerHTML = '';
-    app.className = 'pantalla-fin pantalla-bendicion';
+    app.className = `pantalla-fin pantalla-bendicion${inicial ? ' bendicion-inicial' : ''}`;
     fx.ambiente(true);
     fx.estallido('estrellas');
 
     const raiz = el('div', 'fin');
-    raiz.innerHTML = `
+    raiz.innerHTML = inicial
+      ? `
+      <p class="titulo-sub">El encargo</p>
+      <div class="bendicion-arte">🧓</div>
+      <h1 class="fin-titulo capitulo-nombre">Aldric, Senescal del Valle</h1>
+      <p class="fin-texto">«Los goblins de Gorzug queman nuestras granjas, y bajo sus ruinas
+      algo peor remueve a los muertos. Acaba con ambos y el valle no lo olvidará. El
+      torreón guarda viejos tesoros bendecidos: llévate el que mejor te sirva.»</p>
+      <div class="evento-opciones bendicion-opciones"></div>
+    `
+      : `
       <p class="titulo-sub">Encuentro especial</p>
       <div class="bendicion-arte">🧝‍♀️</div>
       <h1 class="fin-titulo capitulo-nombre">Síbila, la Vidente del Manantial</h1>
@@ -118,12 +73,11 @@ export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<vo
     app.appendChild(raiz);
 
     const cont = raiz.querySelector('.bendicion-opciones') as HTMLElement;
-    const botones: HTMLButtonElement[] = ofrecidos.map((don, i) => {
-      const b = el('button', 'evento-opcion') as HTMLButtonElement;
-      b.innerHTML = `<span class="op-etiqueta">${don.icono} ${don.nombre}</span>
-        <span class="op-detalle">${don.detalle}</span>`;
+    const botones: HTMLButtonElement[] = ofrecidos.map((o, i) => {
+      const b = el('button', `evento-opcion${o.tipo === 'reliquia' ? ' opcion-bendicion' : ''}`) as HTMLButtonElement;
+      b.innerHTML = contenidoOpcion(o);
       b.style.setProperty('--retraso', `${0.3 + i * 0.1}s`);
-      b.addEventListener('click', () => elegirDon(don));
+      b.addEventListener('click', () => elegir(o));
       cont.appendChild(b);
       return b;
     });
@@ -132,11 +86,14 @@ export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<vo
     const marcar = () => botones.forEach((b, i) => b.classList.toggle('op-foco', i === idx));
     marcar();
 
-    function elegirDon(don: Don) {
-      don.aplicar(run, rng);
-      run.pv = run.pvMax; // curación completa
+    let elegido = false;
+    function elegir(o: OfertaBendicion) {
+      if (elegido) return;
+      elegido = true;
+      aplicarBendicion(run, o, rng);
+      if (!inicial) run.pv = run.pvMax; // full heal between acts
       fx.estallido('divino');
-      anuncio(`${don.icono} ${don.nombre}`, 'anuncio-rara');
+      anuncio(o.tipo === 'carta' ? `${o.icono} ${o.nombre}` : `✨ ${o.reliquia.nombre}`, 'anuncio-rara');
       window.removeEventListener('keydown', teclado);
       setTimeout(resolver, 900);
     }
@@ -152,7 +109,7 @@ export function pantallaBendicion(run: EstadoRun, rng: () => number): Promise<vo
         marcar();
       } else if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
-        elegirDon(ofrecidos[idx]);
+        elegir(ofrecidos[idx]);
       }
     };
     window.addEventListener('keydown', teclado);

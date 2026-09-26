@@ -97,7 +97,7 @@ export function obtenerReliquia(
     fx.estallido('divino');
 
     const cerrar = () => {
-      otorgarReliquia(run, reliquia);
+      otorgarReliquia(run, reliquia, rng);
       window.removeEventListener('keydown', teclado);
       overlay.className = '';
       overlay.innerHTML = '';

@@ -433,6 +433,40 @@
   text-shadow: 0 0 14px rgba(125, 230, 120, 0.6);
 }
 .bendicion-opciones { width: min(440px, 88vw); }
+/* blessing relics: art on the left, holy gold frame */
+.opcion-bendicion {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
+  border-color: rgba(255, 214, 120, 0.4);
+}
+.opcion-bendicion .bendicion-icono {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 226, 150, 0.28), rgba(255, 226, 150, 0) 70%);
+  filter: drop-shadow(0 0 6px rgba(255, 214, 120, 0.45));
+}
+.opcion-bendicion .bendicion-icono .reliquia-img { width: 48px; height: 48px; vertical-align: middle; }
+.opcion-bendicion .bendicion-texto { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.bendicion-tipo {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--oro);
+  opacity: 0.85;
+}
+.bendicion-tipo-pacto { color: #ff8a7a; }
+.bendicion-tipo-clase { color: #b8ffd9; }
+.bendicion-tipo-mapa { color: #a8d8ff; }
+.bendicion-inicial .bendicion-opciones { width: min(520px, 92vw); max-width: 520px; }
+/* long offers never get clipped: compact header and scroll instead of overflowing */
+.pantalla-bendicion .fin { overflow-y: auto; justify-content: safe center; gap: 1rem; }
+.pantalla-bendicion .fin-titulo { font-size: clamp(1.8rem, 4.6vw, 3.2rem); }
+.pantalla-bendicion .bendicion-arte { font-size: 3.6rem; }
 
 .btn-continuar {
   margin-bottom: 1rem;

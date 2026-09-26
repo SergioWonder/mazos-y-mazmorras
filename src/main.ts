@@ -15,7 +15,6 @@ import { pantallaMapa } from './ui/mapa.ts';
 import { pantallaCombate } from './ui/combate.ts';
 import { pantallaCapitulo } from './ui/capitulo.ts';
 import { pantallaBendicion } from './ui/bendicion.ts';
-import { pantallaMision } from './ui/mision.ts';
 import { avisoInstalacion } from './ui/instalar.ts';
 import { iniciarActualizaciones } from './ui/actualizacion.ts';
 import { elegirCarta, obtenerReliquia, pantallaDescanso } from './ui/recompensa.ts';
@@ -59,7 +58,7 @@ async function juego() {
       document.body.dataset.escenario = String(run.escenario);
       fx.estiloAmbiente = ACTOS[0][run.escenario].ambiente;
       await pantallaCapitulo(ACTOS[0][run.escenario]);
-      await pantallaMision(run, rng); // el Senescal encomienda la misión
+      await pantallaBendicion(run, rng, 'inicial'); // the Senescal's task: pick a blessing relic
       guardarRun(run);
     }
     let vivo = true;

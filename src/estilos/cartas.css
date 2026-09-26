@@ -213,6 +213,34 @@
   outline-offset: 3px;
 }
 .mano .carta.sin-energia { filter: grayscale(0.7) brightness(0.7); }
+/* queued while another action resolves: lifted out of the fan, translucent, numbered */
+.mano .carta.en-cola {
+  transform: rotate(0deg) translateY(-34px) scale(1.04);
+  opacity: 0.68;
+  z-index: 15;
+  outline: 2px dashed var(--brasa-viva);
+  outline-offset: 3px;
+}
+.mano .carta.en-curso { opacity: 0.3; }
+.orden-cola {
+  position: absolute;
+  top: -11px;
+  right: -11px;
+  z-index: 5;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--fuente-titulo);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #241d12;
+  background: var(--brasa-viva);
+  border: 2px solid #241d12;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
 .mano .carta.arrastrando {
   transform: translate(var(--dx, 0), var(--dy, 0)) rotate(0deg) scale(1.08);
   z-index: 30;

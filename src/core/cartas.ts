@@ -1943,14 +1943,14 @@ export const MAGO: CartaDef[] = [
     fx: 'luna',
     animRara: 'anim-ilusion',
     requiereConjuro: 1,
-    texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n60 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
+    texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques.',
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
-      await c.aplicarEstado(c.jugador, 'espejismo', 3 + nivel); // 60 % base + 20 % por nivel
+      await c.aplicarEstado(c.jugador, 'espejismo', 1 + nivel); // prevents the next (1 + level) attacks
     },
     mejora: {
       coste: 0,
-      texto: 'Gasta un conjuro. Copias ilusorias 1 turno:\n60 % de esquivar +20 % por nivel del\nespacio (un golpe recibido las disipa).',
+      texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques.',
     },
   },
   // — Raras de Creación de conjuros —
@@ -2605,16 +2605,16 @@ export const PICARO: CartaDef[] = [
     subclase: 'Embaucador Arcano',
     fx: 'luna',
     animRara: 'anim-ilusion',
-    texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas.',
+    texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'espejismo', 3);
+      await c.aplicarEstado(c.jugador, 'espejismo', 1);
       await c.robar(2);
     },
     mejora: {
       coste: 0,
-      texto: 'Copias ilusorias 1 turno (60 % de esquiva).\nRoba 2 cartas.',
+      texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'espejismo', 3);
+        await c.aplicarEstado(c.jugador, 'espejismo', 1);
         await c.robar(2);
       },
     },
