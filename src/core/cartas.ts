@@ -3713,12 +3713,12 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
     exhumar: true,
     texto: 'Tira 1d20 y seduce al enemigo.\nEl azar decide tu suerte… o tu perdición.\nSe agota.',
     jugar: async (c) => {
-      await resolverSeducir(c, await c.tirarDado(20));
+      await resolverSeducir(c, await c.tirarDado(20, 'seducir'));
     },
     mejora: {
       texto: 'Con ventaja: tira 2d20 y usa el mejor.\nSeduce al enemigo. Se agota.',
       jugar: async (c) => {
-        await resolverSeducir(c, await c.tirarDadoVentaja(20));
+        await resolverSeducir(c, await c.tirarDadoVentaja(20, 'seducir'));
       },
     },
   },
@@ -3735,12 +3735,12 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
     exhumar: true,
     texto: 'Tira 1d20 y formula tu deseo.\nLa fortuna —o la ruina— responderá.\nSe agota.',
     jugar: async (c) => {
-      await resolverDeseo(c, await c.tirarDado(20));
+      await resolverDeseo(c, await c.tirarDado(20, 'deseo'));
     },
     mejora: {
       texto: 'Con ventaja: tira 2d20 y usa el mejor.\nFormula tu deseo. Se agota.',
       jugar: async (c) => {
-        await resolverDeseo(c, await c.tirarDadoVentaja(20));
+        await resolverDeseo(c, await c.tirarDadoVentaja(20, 'deseo'));
       },
     },
   },

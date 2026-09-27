@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.3.0';
+export const VERSION = '5.4.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.4.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🎲 Nuevo d20 de resina, translúcido, con remolinos, purpurina y números grabados. Rebota con físicas reales y se detiene justo en el número que sale.',
+      '🐢 Arreglado: tener maldiciones en la mano ya no ralentiza el juego.',
+    ],
+  },
   {
     version: '5.3.0',
     fecha: '2026-09-27',

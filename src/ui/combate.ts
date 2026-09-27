@@ -428,14 +428,14 @@ export function pantallaCombate(
         render();
         await espera(220);
       },
-      async fxDado(n, caras) {
+      async fxDado(n, caras, theme) {
         audio.sfx('carta');
-        await rodarDado(n, caras); // icosaedro 3D (WebGL) rodando por la pantalla
+        await rodarDado(n, caras, theme); // icosaedro 3D (WebGL) rodando por la pantalla
         if (n === caras) fx.estallido('estrellas');
       },
-      async fxDadoVentaja(a, b, caras) {
+      async fxDadoVentaja(a, b, caras, theme) {
         audio.sfx('carta');
-        await rodarDados([a, b], caras); // los dos dados ruedan a la vez
+        await rodarDados([a, b], caras, theme); // los dos dados ruedan a la vez
         if (Math.max(a, b) === caras) fx.estallido('estrellas');
       },
       elegirCarta(cartas, titulo) {

@@ -4348,7 +4348,7 @@ console.log('\n🎵 Botón de música');
   const src = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
   const toggle = /toggleMusica\(\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
   check(toggle.length > 0 && !/maestro/.test(toggle), 'el botón solo apaga o enciende la música (no el volumen general)');
-  const sfx = /\n  sfx\(nombre: string\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
+  const sfx = /\n  sfx\(nombre: string[^)]*\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
   check(sfx.length > 0 && !/musicaApagada|silenciado/.test(sfx), 'los efectos de sonido siguen sonando con la música apagada');
   check(/🎵/.test(src) && !/🔇|🔊/.test(src), 'el botón lleva un icono de música');
 }
@@ -4688,6 +4688,94 @@ try {
   }
 } catch (e) {
   check(false, `las pruebas del brujo reforzado revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Curse cards stay cheap to paint (no CSS filters) ─────────────────────────
+console.log('\n🐢 Rendimiento de las maldiciones');
+{
+  const fs = await import('node:fs');
+  const css = fs.readFileSync(new URL('../src/estilos/cartas.css', import.meta.url), 'utf8');
+  const reglas = [...css.matchAll(/([^{}]*carta-maldicion[^{}]*)\{([^}]*)\}/g)];
+  check(reglas.length > 0, 'hay estilos propios de las maldiciones');
+  check(reglas.every(([, , cuerpo]) => !/(^|[\s;])filter\s*:(?!\s*none)/.test(cuerpo)) && /carta-maldicion\.sin-energia\s*\{\s*filter:\s*none/.test(css), 'las maldiciones no usan filter y anulan el gris de «sin energía» (se repintaba en cada fotograma con la mano llena)');
+  check(reglas.every(([, , cuerpo]) => !/inset 0 0 1[0-9]px/.test(cuerpo)), 'sin sombras interiores grandes y difuminadas');
+}
+
+// ── 3D d20: rigid-body roll that lands on the requested face ─────────────────
+console.log('\n🎲 Física del d20');
+try {
+  const D = await import('../src/fx/d20-physics.ts');
+  const geo = D.d20Geometry();
+  const numeros = D.d20Numbering();
+  check(geo.faces.length === 20 && geo.vertices.length === 12 && new Set(numeros).size === 20 && numeros.every((n) => n >= 1 && n <= 20),
+    'el icosaedro tiene 20 caras numeradas del 1 al 20 sin repetir');
+  check(geo.normals.every((nor, f) => {
+    const o = D.oppositeFace(f);
+    const dot = nor[0] * geo.normals[o][0] + nor[1] * geo.normals[o][1] + nor[2] * geo.normals[o][2];
+    return dot < -0.999 && numeros[f] + numeros[o] === 21;
+  }), 'las caras opuestas suman 21, como en un d20 real');
+  check(Array.from({ length: 20 }, (_, i) => numeros[D.faceOfNumber(i + 1)] === i + 1).every(Boolean), 'cada número se localiza en su cara');
+
+  const UP = [0, 1, 0];
+  const dot3 = (a: number[], b: number[]) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  let todasArriba = true, sinGiroFinal = true, enRango = true;
+  for (let r = 1; r <= 20; r++) {
+    const pista = D.simulateRoll({ result: r, seed: 1000 + r * 7 });
+    const fin = D.poseAt(pista, pista.duration);
+    const arriba = D.rotateVec(fin.q, geo.normals[D.faceOfNumber(r)]);
+    if (dot3(arriba, UP) < 0.995) todasArriba = false;
+    // after coming to rest nothing moves or turns any more
+    for (const t of [pista.duration + 0.01, pista.duration + 0.5, pista.duration + 3]) {
+      const p = D.poseAt(pista, t);
+      if (p.q.some((c, i) => Math.abs(c - fin.q[i]) > 1e-9) || p.x.some((c, i) => Math.abs(c - fin.x[i]) > 1e-9)) sinGiroFinal = false;
+    }
+    // the last simulated frame is already the resting pose (no correction after landing)
+    const ultimo = pista.frames[pista.frames.length - 1];
+    if (Math.hypot(...ultimo.w) > 1e-9 || Math.hypot(...ultimo.v) > 1e-9) sinGiroFinal = false;
+    if (pista.duration < D.ROLL_MIN_S || pista.duration > D.ROLL_MAX_S) enRango = false;
+  }
+  check(todasArriba, 'para cada resultado del 1 al 20 el dado acaba con esa cara hacia arriba');
+  check(sinGiroFinal, 'tras el reposo no hay ninguna rotación ni desplazamiento');
+  check(enRango, `la tirada dura entre ${D.ROLL_MIN_S} y ${D.ROLL_MAX_S} s`);
+
+  // the physics does not depend on the result: only the constant compensation changes
+  const a7 = D.simulateRoll({ result: 7, seed: 42 });
+  const a19 = D.simulateRoll({ result: 19, seed: 42 });
+  check(a7.frames.length === a19.frames.length && a7.frames.every((f, i) => f.q.every((c, k) => c === a19.frames[i].q[k])),
+    'la trayectoria física es la misma para cualquier resultado (solo cambia la compensación)');
+  const otra = D.simulateRoll({ result: 7, seed: 42 });
+  check(JSON.stringify(otra) === JSON.stringify(a7), 'la tirada es determinista con la misma semilla');
+  check(JSON.stringify(D.simulateRoll({ result: 7, seed: 43 }).frames) !== JSON.stringify(a7.frames), 'otra semilla, otra tirada');
+  check(D.isIcosahedralSymmetry(a7.compensation) && D.isIcosahedralSymmetry(a19.compensation),
+    'la compensación es una simetría del icosaedro (la forma física no cambia)');
+
+  // energy only goes down (small tolerance for the numerical contact solver)
+  let energiaBaja = true, rebotes = true;
+  for (let s = 0; s < 12; s++) {
+    const p = D.simulateRoll({ result: 20, seed: 300 + s });
+    const E = p.frames.map((f) => D.rollEnergy(f));
+    const tol = E[0] * 0.01;
+    let max = E[0];
+    for (const e of E) { if (e > max + tol) energiaBaja = false; max = Math.min(max, e); }
+    // at rest only the potential energy of the die lying on a face is left
+    if (E[E.length - 1] > E[0] * 0.2) energiaBaja = false;
+    const golpes = p.impacts.map((i) => i.strength);
+    if (golpes.length < 2 || golpes[golpes.length - 1] >= golpes[0]) rebotes = false;
+  }
+  check(energiaBaja, 'la energía del dado decrece durante toda la tirada');
+  check(rebotes, 'rebota varias veces perdiendo fuerza en cada impacto');
+
+  // two dice (advantage) roll in their own lanes and each lands on its value
+  const lanes = D.advantageLanes(D.DEFAULT_BOX);
+  const d1 = D.simulateRoll({ result: 3, seed: 77, box: lanes[0] });
+  const d2 = D.simulateRoll({ result: 18, seed: 78, box: lanes[1] });
+  const fin1 = D.poseAt(d1, d1.duration), fin2 = D.poseAt(d2, d2.duration);
+  check(dot3(D.rotateVec(fin1.q, geo.normals[D.faceOfNumber(3)]), UP) > 0.995 && dot3(D.rotateVec(fin2.q, geo.normals[D.faceOfNumber(18)]), UP) > 0.995
+    && Math.abs(fin1.x[2] - fin2.x[2]) > 1.5, 'con ventaja, los dos dados caen separados y cada uno en su número');
+  // stays inside the zone
+  check([a7, d1, d2].every((p) => p.frames.every((f) => f.x[1] > 0.5)), 'el dado nunca atraviesa el suelo');
+} catch (e) {
+  check(false, `las pruebas del d20 revientan: ${(e as Error).stack ?? e}`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

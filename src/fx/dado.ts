@@ -1,371 +1,636 @@
-// Dado d20 (icosaedro) en 3D real con WebGL: cada cara lleva su número grabado
-// (textura), rueda y rebota por la pantalla y aterriza con el resultado mirando
-// a la cámara. Sin dependencias. Si no hay WebGL, cae a una versión simple.
+// 3D d20 in WebGL (WebGL2 when available, WebGL1 otherwise; plain number without
+// GL). The roll itself is a seeded rigid-body simulation (`d20-physics.ts`): it
+// bounces, rolls, rocks on an edge and settles, and a constant compensation
+// rotation of the numbering makes the face that lands on top show the result
+// the engine already decided, so nothing turns after the die stops.
+// Look: bevelled resin with a colour gradient, swirls, glitter and bubbles,
+// engraved inked numbers, specular, fresnel, fake translucency and a procedural
+// environment. The canvas only exists during the roll and no loop outlives it.
 
-// ── Matrices 4×4 (column-major) ──────────────────────────────────────────────
+import {
+  d20Geometry, d20Numbering, simulateRoll, poseAt, rotateVec, advantageLanes,
+  type RollBox, type RollTrack, type Vec3, type Quat,
+} from './d20-physics.ts';
+import { audio } from './audio.ts';
+import type { DiceTheme } from '../core/types.ts';
+
+// ── 4×4 matrices (column-major) ──────────────────────────────────────────────
 type Mat4 = Float32Array;
 
-function identidad(): Mat4 {
-  return new Float32Array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
-}
-function multiplicar(a: Mat4, b: Mat4): Mat4 {
+function mul(a: Mat4, b: Mat4): Mat4 {
   const o = new Float32Array(16);
   for (let c = 0; c < 4; c++) {
     for (let r = 0; r < 4; r++) {
-      o[c * 4 + r] =
-        a[r] * b[c * 4] + a[4 + r] * b[c * 4 + 1] + a[8 + r] * b[c * 4 + 2] + a[12 + r] * b[c * 4 + 3];
+      o[c * 4 + r] = a[r] * b[c * 4] + a[4 + r] * b[c * 4 + 1] + a[8 + r] * b[c * 4 + 2] + a[12 + r] * b[c * 4 + 3];
     }
   }
   return o;
 }
-function perspectiva(fovy: number, aspect: number, near: number, far: number): Mat4 {
-  const f = 1 / Math.tan(fovy / 2);
-  const nf = 1 / (near - far);
+function perspective(fovy: number, aspect: number, near: number, far: number): Mat4 {
+  const f = 1 / Math.tan(fovy / 2), nf = 1 / (near - far);
+  return new Float32Array([f / aspect, 0, 0, 0, 0, f, 0, 0, 0, 0, (far + near) * nf, -1, 0, 0, 2 * far * near * nf, 0]);
+}
+function lookAt(eye: Vec3, target: Vec3): Mat4 {
+  let zx = eye[0] - target[0], zy = eye[1] - target[1], zz = eye[2] - target[2];
+  const zl = Math.hypot(zx, zy, zz); zx /= zl; zy /= zl; zz /= zl;
+  // x = up × z with up = (0,1,0)
+  let xx = zz, xz = -zx;
+  const xl = Math.hypot(xx, xz); xx /= xl; xz /= xl;
+  const yx = zy * xz, yy = zz * xx - zx * xz, yz = -zy * xx;
   return new Float32Array([
-    f / aspect, 0, 0, 0,
-    0, f, 0, 0,
-    0, 0, (far + near) * nf, -1,
-    0, 0, 2 * far * near * nf, 0,
+    xx, yx, zx, 0, 0, yy, zy, 0, xz, yz, zz, 0,
+    -(xx * eye[0] + xz * eye[2]), -(yx * eye[0] + yy * eye[1] + yz * eye[2]), -(zx * eye[0] + zy * eye[1] + zz * eye[2]), 1,
   ]);
 }
-function traslacion(x: number, y: number, z: number): Mat4 {
-  const m = identidad();
-  m[12] = x; m[13] = y; m[14] = z;
-  return m;
-}
-function escala(s: number): Mat4 {
-  const m = identidad();
-  m[0] = s; m[5] = s; m[10] = s;
-  return m;
-}
-
-// ── Cuaterniones (para girar y aterrizar en una cara concreta) ───────────────
-type Quat = [number, number, number, number]; // x, y, z, w
-
-function qNorm(q: Quat): Quat {
-  const l = Math.hypot(q[0], q[1], q[2], q[3]) || 1;
-  return [q[0] / l, q[1] / l, q[2] / l, q[3] / l];
-}
-function qMul(a: Quat, b: Quat): Quat {
-  return [
-    a[3] * b[0] + a[0] * b[3] + a[1] * b[2] - a[2] * b[1],
-    a[3] * b[1] - a[0] * b[2] + a[1] * b[3] + a[2] * b[0],
-    a[3] * b[2] + a[0] * b[1] - a[1] * b[0] + a[2] * b[3],
-    a[3] * b[3] - a[0] * b[0] - a[1] * b[1] - a[2] * b[2],
-  ];
-}
-function qAxis(x: number, y: number, z: number, ang: number): Quat {
-  const l = Math.hypot(x, y, z) || 1;
-  const s = Math.sin(ang / 2);
-  return [(x / l) * s, (y / l) * s, (z / l) * s, Math.cos(ang / 2)];
-}
-function qSlerp(a: Quat, b: Quat, t: number): Quat {
-  let dot = a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
-  let bb: Quat = b;
-  if (dot < 0) { bb = [-b[0], -b[1], -b[2], -b[3]]; dot = -dot; }
-  if (dot > 0.9995) {
-    return qNorm([a[0] + (bb[0] - a[0]) * t, a[1] + (bb[1] - a[1]) * t, a[2] + (bb[2] - a[2]) * t, a[3] + (bb[3] - a[3]) * t]);
-  }
-  const th = Math.acos(dot), s = Math.sin(th);
-  const wa = Math.sin((1 - t) * th) / s, wb = Math.sin(t * th) / s;
-  return [a[0] * wa + bb[0] * wb, a[1] * wa + bb[1] * wb, a[2] * wa + bb[2] * wb, a[3] * wa + bb[3] * wb];
-}
-/** Cuaternión que lleva el vector unitario v hasta (0,0,1) — cara mirando a cámara. */
-function qHaciaCamara(v: [number, number, number]): Quat {
-  const z: [number, number, number] = [0, 0, 1];
-  const dot = v[0] * z[0] + v[1] * z[1] + v[2] * z[2];
-  if (dot > 0.9999) return [0, 0, 0, 1];
-  if (dot < -0.9999) return [0, 1, 0, 0]; // 180° sobre Y
-  const cx = v[1] * z[2] - v[2] * z[1];
-  const cy = v[2] * z[0] - v[0] * z[2];
-  const cz = v[0] * z[1] - v[1] * z[0];
-  return qNorm([cx, cy, cz, 1 + dot]);
-}
-function qToMat4(q: Quat): Mat4 {
-  const [x, y, z, w] = q;
+function modelMatrix(q: Quat, x: Vec3): Mat4 {
+  const [a, b, c, w] = q;
   return new Float32Array([
-    1 - 2 * (y * y + z * z), 2 * (x * y + w * z), 2 * (x * z - w * y), 0,
-    2 * (x * y - w * z), 1 - 2 * (x * x + z * z), 2 * (y * z + w * x), 0,
-    2 * (x * z + w * y), 2 * (y * z - w * x), 1 - 2 * (x * x + y * y), 0,
-    0, 0, 0, 1,
+    1 - 2 * (b * b + c * c), 2 * (a * b + w * c), 2 * (a * c - w * b), 0,
+    2 * (a * b - w * c), 1 - 2 * (a * a + c * c), 2 * (b * c + w * a), 0,
+    2 * (a * c + w * b), 2 * (b * c - w * a), 1 - 2 * (a * a + b * b), 0,
+    x[0], x[1], x[2], 1,
   ]);
 }
+const conj = (q: Quat): Quat => [-q[0], -q[1], -q[2], q[3]];
 
-// ── Geometría del icosaedro: posiciones, normales por cara, UV y normal de cada cara ─
-const COLS = 5, FILAS = 4, TEX = 512;
+// ── Themes: resin colours per card ───────────────────────────────────────────
+type RGB = [number, number, number];
+interface Resin { deep: RGB; bright: RGB; swirl: RGB; glitter: RGB; ink: RGB }
+const hex = (h: string): RGB => [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255];
+const RESINS: Record<DiceTheme, Resin> = {
+  // Seduce: violet into pink, gold ink
+  seducir: { deep: hex('#3a0f63'), bright: hex('#ff6fb8'), swirl: hex('#ffc2ea'), glitter: hex('#ffd9f2'), ink: hex('#f6c75a') },
+  // Wish: amber into gold, ivory ink
+  deseo: { deep: hex('#6a3204'), bright: hex('#ffc23d'), swirl: hex('#fff1b8'), glitter: hex('#fff6d8'), ink: hex('#fff8ea') },
+  // anything else (relics): teal jade, silver ink
+  neutral: { deep: hex('#07343f'), bright: hex('#5fd6c4'), swirl: hex('#d6fff6'), glitter: hex('#e8fffb'), ink: hex('#f1f4f6') },
+};
 
-function geometria() {
-  const t = (1 + Math.sqrt(5)) / 2;
-  const v = [
-    [-1, t, 0], [1, t, 0], [-1, -t, 0], [1, -t, 0],
-    [0, -1, t], [0, 1, t], [0, -1, -t], [0, 1, -t],
-    [t, 0, -1], [t, 0, 1], [-t, 0, -1], [-t, 0, 1],
-  ].map(([x, y, z]) => { const l = Math.hypot(x, y, z); return [x / l, y / l, z / l] as [number, number, number]; });
-  const caras = [
-    [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
-    [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
-    [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
-    [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1],
-  ];
-  const pos: number[] = [], nor: number[] = [], uv: number[] = [];
-  const normalCara: [number, number, number][] = [];
-  const cw = TEX / COLS, ch = TEX / FILAS;
-  const aUV = (px: number, py: number): [number, number] => [px / TEX, 1 - py / TEX];
-  caras.forEach(([ia, ib, ic], idx) => {
-    const a = v[ia], b = v[ib], c = v[ic];
-    const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
-    const wx = c[0] - a[0], wy = c[1] - a[1], wz = c[2] - a[2];
-    let nx = uy * wz - uz * wy, ny = uz * wx - ux * wz, nz = ux * wy - uy * wx;
-    const nl = Math.hypot(nx, ny, nz) || 1; nx /= nl; ny /= nl; nz /= nl;
-    normalCara.push([nx, ny, nz]);
-    const col = idx % COLS, fila = Math.floor(idx / COLS);
-    const x0 = col * cw, y0 = fila * ch;
-    const triUV: [number, number][] = [
-      aUV(x0 + cw * 0.5, y0 + ch * 0.16),
-      aUV(x0 + cw * 0.12, y0 + ch * 0.9),
-      aUV(x0 + cw * 0.88, y0 + ch * 0.9),
-    ];
-    [a, b, c].forEach((p, k) => {
-      pos.push(p[0], p[1], p[2]);
-      nor.push(nx, ny, nz);
-      uv.push(triUV[k][0], triUV[k][1]);
-    });
+// ── Bevelled mesh: flat inset faces + rounded edge strips + vertex caps ──────
+const COLS = 5, ROWS = 4, TEX = 1024;
+const CELL_W = TEX / COLS, CELL_H = TEX / ROWS;
+/** Triangle of each atlas cell (fractions of the cell): top vertex = top of the number. */
+const CELL_TRI: [number, number][] = [[0.5, 0.1], [0.06, 0.94], [0.94, 0.94]];
+
+function buildMesh(): Float32Array {
+  const { faces, normals, corners, vertices } = d20Geometry();
+  const data: number[] = [];
+  const put = (p: Vec3, n: Vec3, u: number, v: number, mark: number) => data.push(p[0], p[1], p[2], n[0], n[1], n[2], u, v, mark);
+  const uvOf = (face: number, k: number): [number, number] => {
+    const col = face % COLS, row = Math.floor(face / COLS);
+    return [(col + CELL_TRI[k][0]) / COLS, 1 - (row + CELL_TRI[k][1]) / ROWS];
+  };
+  const corner = (face: number, vert: number): Vec3 => corners[face * 3 + faces[face].indexOf(vert)];
+  // flat faces (the only part with numbers)
+  faces.forEach((_, f) => {
+    for (let k = 0; k < 3; k++) { const [u, v] = uvOf(f, k); put(corners[f * 3 + k], normals[f], u, v, 1); }
   });
-  return { pos: new Float32Array(pos), nor: new Float32Array(nor), uv: new Float32Array(uv), normalCara };
+  // edge strips between neighbouring faces; normals blend from one face to the other
+  for (let f1 = 0; f1 < 20; f1++) {
+    for (let f2 = f1 + 1; f2 < 20; f2++) {
+      const shared = faces[f1].filter((v) => faces[f2].includes(v));
+      if (shared.length !== 2) continue;
+      const [a, b] = shared;
+      const p1a = corner(f1, a), p1b = corner(f1, b), p2a = corner(f2, a), p2b = corner(f2, b);
+      const n1 = normals[f1], n2 = normals[f2];
+      put(p1a, n1, 0, 0, 0); put(p1b, n1, 0, 0, 0); put(p2b, n2, 0, 0, 0);
+      put(p1a, n1, 0, 0, 0); put(p2b, n2, 0, 0, 0); put(p2a, n2, 0, 0, 0);
+    }
+  }
+  // rounded caps at the 12 vertices
+  vertices.forEach((vtx, vi) => {
+    const around = faces.map((f, i) => (f.includes(vi) ? i : -1)).filter((i) => i >= 0);
+    // order the 5 faces around the vertex axis
+    const ref = corner(around[0], vi);
+    const t1 = norm3(sub3(ref, scale3(vtx, dot3(ref, vtx))));
+    const t2 = cross3(vtx, t1);
+    around.sort((i, j) => {
+      const pi = corner(i, vi), pj = corner(j, vi);
+      return Math.atan2(dot3(pi, t2), dot3(pi, t1)) - Math.atan2(dot3(pj, t2), dot3(pj, t1));
+    });
+    const ring = around.map((i) => corner(i, vi));
+    const avg = ring.reduce<Vec3>((s, p) => [s[0] + p[0] / 5, s[1] + p[1] / 5, s[2] + p[2] / 5], [0, 0, 0]);
+    const tip: Vec3 = [avg[0] + vtx[0] * 0.018, avg[1] + vtx[1] * 0.018, avg[2] + vtx[2] * 0.018];
+    for (let k = 0; k < 5; k++) {
+      const i = around[k], j = around[(k + 1) % 5];
+      put(tip, vtx, 0, 0, 0); put(ring[k], normals[i], 0, 0, 0); put(ring[(k + 1) % 5], normals[j], 0, 0, 0);
+    }
+  });
+  return new Float32Array(data);
 }
+const dot3 = (a: Vec3, b: Vec3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const sub3 = (a: Vec3, b: Vec3): Vec3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const scale3 = (a: Vec3, s: number): Vec3 => [a[0] * s, a[1] * s, a[2] * s];
+const cross3 = (a: Vec3, b: Vec3): Vec3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+const norm3 = (a: Vec3): Vec3 => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 
-/** Textura con los 20 números, uno por celda de la rejilla 5×4. */
-function crearTextura(gl: WebGLRenderingContext): WebGLTexture | null {
-  const cw = TEX / COLS, ch = TEX / FILAS;
+let meshCache: Float32Array | null = null;
+let atlasCache: HTMLCanvasElement | null = null;
+
+/** Number atlas, drawn once: white glyphs on black (6 and 9 underlined). */
+function numberAtlas(): HTMLCanvasElement {
+  if (atlasCache) return atlasCache;
   const cv = document.createElement('canvas');
   cv.width = TEX; cv.height = TEX;
   const c = cv.getContext('2d')!;
-  c.clearRect(0, 0, TEX, TEX);
-  c.fillStyle = '#241a08';
+  c.fillStyle = '#000';
+  c.fillRect(0, 0, TEX, TEX);
+  c.fillStyle = '#fff';
   c.textAlign = 'center';
   c.textBaseline = 'middle';
-  c.font = `bold ${Math.round(ch * 0.3)}px Georgia, "Times New Roman", serif`;
-  for (let i = 0; i < 20; i++) {
-    const col = i % COLS, fila = Math.floor(i / COLS);
-    const x0 = col * cw, y0 = fila * ch;
-    const cx = (x0 + cw * 0.5 + x0 + cw * 0.12 + x0 + cw * 0.88) / 3;
-    const cy = (y0 + ch * 0.16 + y0 + ch * 0.9 + y0 + ch * 0.9) / 3;
-    c.fillText(String(i + 1), cx, cy);
+  const nums = d20Numbering();
+  for (let f = 0; f < 20; f++) {
+    const col = f % COLS, row = Math.floor(f / COLS);
+    const cx = (col + (CELL_TRI[0][0] + CELL_TRI[1][0] + CELL_TRI[2][0]) / 3) * CELL_W;
+    const cy = (row + (CELL_TRI[0][1] + CELL_TRI[1][1] + CELL_TRI[2][1]) / 3) * CELL_H + CELL_H * 0.04;
+    const txt = String(nums[f]);
+    const size = Math.round(CELL_H * (txt.length > 1 ? 0.3 : 0.36));
+    c.font = `800 ${size}px Georgia, "Times New Roman", serif`;
+    c.fillText(txt, cx, cy);
+    if (txt === '6' || txt === '9') c.fillRect(cx - size * 0.2, cy + size * 0.45, size * 0.4, size * 0.07);
   }
-  const tex = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cv);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  return tex;
+  atlasCache = cv;
+  return cv;
 }
 
-const VERTEX_SRC = `
+const DIE_VS = `
 attribute vec3 aPos;
 attribute vec3 aNor;
 attribute vec2 aUV;
+attribute float aMark;
 uniform mat4 uProj;
-uniform mat4 uMV;
-varying vec3 vNor;
+uniform mat4 uView;
+uniform mat4 uModel;
+varying vec3 vObj;
+varying vec3 vNObj;
+varying vec3 vW;
+varying vec3 vNW;
 varying vec2 vUV;
+varying float vMark;
 void main() {
-  gl_Position = uProj * uMV * vec4(aPos, 1.0);
-  vNor = mat3(uMV) * aNor;
+  vec4 w = uModel * vec4(aPos, 1.0);
+  gl_Position = uProj * uView * w;
+  vObj = aPos;
+  vNObj = aNor;
+  vW = w.xyz;
+  vNW = (uModel * vec4(aNor, 0.0)).xyz;
   vUV = aUV;
+  vMark = aMark;
 }`;
 
-const FRAGMENT_SRC = `
+const DIE_FS = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+precision highp float;
+#else
 precision mediump float;
-varying vec3 vNor;
+#endif
+varying vec3 vObj;
+varying vec3 vNObj;
+varying vec3 vW;
+varying vec3 vNW;
 varying vec2 vUV;
-uniform vec3 uColor;
+varying float vMark;
+uniform vec3 uCamObj;
+uniform vec3 uCamW;
+uniform vec3 uLight;
+uniform vec3 uLightObj;
+uniform vec3 uDeep;
+uniform vec3 uBright;
+uniform vec3 uSwirl;
+uniform vec3 uGlitter;
+uniform vec3 uInk;
+uniform float uSeed;
+uniform float uDim;
+uniform float uGlow;
+uniform vec3 uGlowCol;
 uniform sampler2D uTex;
+
+float h31(vec3 p) {
+  p = fract(p * 0.3183099 + vec3(0.71, 0.113, 0.419));
+  p *= 17.0;
+  return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
+}
+vec3 h33(vec3 p) { return vec3(h31(p), h31(p + 19.19), h31(p + 47.7)); }
+float vnoise(vec3 p) {
+  vec3 i = floor(p);
+  vec3 f = fract(p);
+  f = f * f * (3.0 - 2.0 * f);
+  float a = mix(mix(h31(i), h31(i + vec3(1.0, 0.0, 0.0)), f.x), mix(h31(i + vec3(0.0, 1.0, 0.0)), h31(i + vec3(1.0, 1.0, 0.0)), f.x), f.y);
+  float b = mix(mix(h31(i + vec3(0.0, 0.0, 1.0)), h31(i + vec3(1.0, 0.0, 1.0)), f.x), mix(h31(i + vec3(0.0, 1.0, 1.0)), h31(i + vec3(1.0, 1.0, 1.0)), f.x), f.y);
+  return mix(a, b, f.z);
+}
+
 void main() {
-  vec3 N = normalize(vNor);
-  vec3 L = normalize(vec3(0.45, 0.75, 0.85));
-  float dif = max(dot(N, L), 0.0);
-  vec3 base = uColor * (0.4 + 0.7 * dif);
-  vec4 tx = texture2D(uTex, vUV); // dígito oscuro sobre alfa
-  vec3 col = mix(base, vec3(0.12, 0.09, 0.04) * (0.5 + 0.7 * dif), tx.a);
+  vec3 N = normalize(vNObj);
+  vec3 V = normalize(vObj - uCamObj);
+  vec3 Hobj = normalize(uLightObj - V);
+
+  // ── resin interior: short march along the refracted ray ──
+  vec3 Rr = refract(V, N, 0.67);
+  vec3 acc = vec3(0.0);
+  float T = 1.0;
+  for (int i = 0; i < 6; i++) {
+    float s = 0.06 + float(i) * 0.13;
+    vec3 q = vObj + Rr * s;
+    vec3 p = q + vec3(uSeed);
+    float n1 = vnoise(p * 2.1);
+    float grad = clamp(0.5 + 0.6 * q.y + 0.35 * q.x + 0.5 * (n1 - 0.5), 0.0, 1.0);
+    vec3 c = mix(uDeep, uBright, grad);
+    // swirls of colour
+    float sw = vnoise(p * 3.2 + vec3(n1 * 2.7));
+    c = mix(c, uSwirl, smoothstep(0.075, 0.0, abs(sw - 0.5)) * 0.75);
+    // glitter flakes that flash when they face the light
+    vec3 cell = floor(p * 12.0);
+    vec3 hh = h33(cell);
+    vec3 fp = fract(p * 12.0) - 0.5 - (hh - 0.5) * 0.5;
+    float flake = step(0.72, hh.x) * smoothstep(0.17, 0.03, length(fp));
+    float glint = pow(abs(dot(normalize(hh * 2.0 - 1.0), Hobj)), 20.0);
+    c += uGlitter * flake * (0.25 + 3.2 * glint);
+    // tiny bubbles: bright rims
+    vec3 bc = floor(p * 5.0);
+    vec3 hb = h33(bc + 3.1);
+    float bd = length(fract(p * 5.0) - 0.5 - (hb - 0.5) * 0.5);
+    float bub = step(0.82, hb.y) * smoothstep(0.1, 0.075, bd) * smoothstep(0.035, 0.07, bd);
+    c += vec3(0.9) * bub;
+    // denser towards the core
+    float core = 1.0 - smoothstep(0.2, 0.9, length(q));
+    acc += T * c * (0.2 + 0.1 * core);
+    T *= 0.74;
+  }
+
+  // ── surface lighting in world space ──
+  vec3 Nw = normalize(vNW);
+  vec3 Vw = normalize(uCamW - vW);
+  vec3 L = uLight;
+  float ndv = max(dot(Nw, Vw), 0.0);
+  float dif = max(dot(Nw, L), 0.0);
+  vec3 H = normalize(L + Vw);
+  float nh = max(dot(Nw, H), 0.0);
+  float spec = pow(nh, 140.0) * 1.8 + pow(nh, 16.0) * 0.1;
+  float F = 0.04 + 0.96 * pow(1.0 - ndv, 5.0);
+  vec3 Rw = reflect(-Vw, Nw);
+  vec3 env = mix(vec3(0.05, 0.04, 0.07), vec3(0.75, 0.72, 0.7), smoothstep(-0.15, 0.9, Rw.y));
+  env += vec3(1.5) * smoothstep(0.9, 0.97, dot(Rw, normalize(vec3(-0.5, 0.78, 0.35))));
+  env += vec3(1.0, 0.72, 0.45) * smoothstep(0.93, 0.99, dot(Rw, normalize(vec3(0.75, 0.45, -0.3))));
+
+  vec3 body = acc * (0.4 + 0.85 * dif);
+  // fake translucency: light leaks through the thin rims
+  body += uBright * pow(1.0 - ndv, 2.2) * 0.55;
+  body += uBright * 0.18 * dif;
+
+  // ── engraved, inked numbers ──
+  vec2 o = vec2(-0.0035, 0.0035);
+  float m = texture2D(uTex, vUV).r * vMark;
+  float e = (texture2D(uTex, vUV + o).r - texture2D(uTex, vUV - o).r) * vMark;
+  vec3 ink = uInk * (0.55 + 0.55 * dif) + vec3(pow(nh, 30.0) * 0.8);
+  vec3 col = mix(body, ink, m);
+  // inside the groove: the wall facing away from the light is in shadow, the other one catches it
+  col *= 1.0 - 0.6 * clamp(-e, 0.0, 1.0) * m;
+  col += uInk * 0.35 * clamp(e, 0.0, 1.0) * m;
+  // bevelled edges glow a little brighter (light travelling through the resin)
+  col += uBright * 0.22 * (1.0 - vMark) * (0.5 + 0.5 * dif);
+  col += env * F * (1.0 - 0.5 * m) + vec3(spec) * (1.0 - 0.4 * m);
+
+  col = mix(col, vec3(dot(col, vec3(0.3, 0.59, 0.11))) * 0.5, uDim);
+  col += uGlowCol * uGlow * (0.18 + 0.9 * pow(1.0 - ndv, 2.0));
   gl_FragColor = vec4(col, 1.0);
 }`;
 
-function compilar(gl: WebGLRenderingContext, tipo: number, src: string): WebGLShader | null {
-  const s = gl.createShader(tipo);
+const SHADOW_VS = `
+attribute vec2 aCorner;
+uniform mat4 uProj;
+uniform mat4 uView;
+uniform vec3 uCenter;
+uniform float uSize;
+varying vec2 vC;
+void main() {
+  vC = aCorner;
+  gl_Position = uProj * uView * vec4(uCenter + vec3(aCorner.x * uSize, 0.0, aCorner.y * uSize), 1.0);
+}`;
+const SHADOW_FS = `
+precision mediump float;
+varying vec2 vC;
+uniform float uAlpha;
+void main() {
+  float r = length(vC);
+  float a = uAlpha * pow(clamp(1.0 - r, 0.0, 1.0), 1.7);
+  gl_FragColor = vec4(0.0, 0.0, 0.0, a);
+}`;
+
+function compile(gl: WebGLRenderingContext, type: number, src: string): WebGLShader | null {
+  const s = gl.createShader(type);
   if (!s) return null;
   gl.shaderSource(s, src);
   gl.compileShader(s);
-  return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
+  if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn('d20 shader:', gl.getShaderInfoLog(s)); return null; }
+  return s;
+}
+function program(gl: WebGLRenderingContext, vs: string, fs: string): WebGLProgram | null {
+  const v = compile(gl, gl.VERTEX_SHADER, vs), f = compile(gl, gl.FRAGMENT_SHADER, fs);
+  if (!v || !f) return null;
+  const p = gl.createProgram()!;
+  gl.attachShader(p, v); gl.attachShader(p, f);
+  gl.linkProgram(p);
+  return gl.getProgramParameter(p, gl.LINK_STATUS) ? p : null;
 }
 
-const COLOR_NORMAL: [number, number, number] = [0.92, 0.84, 0.58];
-const COLOR_CRITICO: [number, number, number] = [1.0, 0.82, 0.3];
-const COLOR_PIFIA: [number, number, number] = [0.78, 0.26, 0.18];
-const COLOR_TENUE: [number, number, number] = [0.42, 0.4, 0.34]; // dado perdedor (ventaja)
+// ── Timing and debugging ─────────────────────────────────────────────────────
+const HOLD_MS = 1250;       // result on show after the die stops
+const HOLD_CRIT_MS = 1650;  // a little longer for a natural 20 or a 1
+const FADE_MS = 320;
+const LIGHT: Vec3 = norm3([-0.35, 1, 0.45]);
+const PITCH = (74 * Math.PI) / 180;
+const FOV = (36 * Math.PI) / 180;
 
-const RODAR_MS = 2600;
-const MANTENER_MS = 2100;
-const FIN_TUMBO = 0.74; // hasta aquí da tumbos; luego se orienta a la cara
+interface DebugOptions { preserve?: boolean; timeScale?: number; seed?: number }
+const debugOptions = (): DebugOptions | null =>
+  (typeof window !== 'undefined' && (window as unknown as { __dadoDebug?: DebugOptions }).__dadoDebug) || null;
 
-function easeOut(t: number): number { return 1 - Math.pow(1 - t, 3); }
-function suave(t: number): number { return t * t * (3 - 2 * t); }
-
-/** Lanza un único dado (atajo de `rodarDados`). */
-export function rodarDado(n: number, caras: number): Promise<void> {
-  return rodarDados([n], caras);
+/** Rolls a single die (shortcut for `rodarDados`). */
+export function rodarDado(n: number, caras: number, theme: DiceTheme = 'neutral'): Promise<void> {
+  return rodarDados([n], caras, theme);
 }
 
-/** Lanza 1 o más icosaedros 3D a la vez; cada uno aterriza con su valor de cara.
- *  Con varios dados, el de mayor resultado se resalta (el resto se atenúa). */
-export function rodarDados(valores: number[], caras: number): Promise<void> {
-  const n = valores[0];
-  return new Promise((resolver) => {
+/** Rolls 1 or 2 d20s at once; each one lands on its value. With several dice the
+ *  highest is highlighted and the others are dimmed. */
+export function rodarDados(valores: number[], caras: number, theme: DiceTheme = 'neutral'): Promise<void> {
+  return new Promise((resolve) => {
+    const dbg = debugOptions();
     const overlay = document.createElement('div');
     overlay.className = 'dado3d-overlay';
     const canvas = document.createElement('canvas');
     overlay.appendChild(canvas);
     document.body.appendChild(overlay);
 
-    const cerrar = () => {
+    let closed = false;
+    const close = (gl?: WebGLRenderingContext | null) => {
+      if (closed) return;
+      closed = true;
       overlay.classList.add('dado3d-fuera');
-      setTimeout(() => { overlay.remove(); resolver(); }, 320);
+      setTimeout(() => {
+        // free the GPU context right away (mobile browsers cap how many exist)
+        if (!dbg) gl?.getExtension('WEBGL_lose_context')?.loseContext();
+        overlay.remove();
+        resolve();
+      }, FADE_MS);
     };
 
-    const gl = (canvas.getContext('webgl', { alpha: true }) ||
-      canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
-    if (!gl) {
-      // Respaldo sin WebGL: número(s) girando en el centro
+    const attrs: WebGLContextAttributes = { alpha: true, antialias: true, premultipliedAlpha: true, preserveDrawingBuffer: !!dbg?.preserve };
+    const gl = (canvas.getContext('webgl2', attrs) || canvas.getContext('webgl', attrs)) as WebGLRenderingContext | null;
+    const dieProg = gl && program(gl, DIE_VS, DIE_FS);
+    const shadowProg = gl && program(gl, SHADOW_VS, SHADOW_FS);
+    if (!gl || !dieProg || !shadowProg) {
+      // fallback without WebGL: just the number(s)
       const num = document.createElement('span');
-      num.className = 'dado3d-num sin-gl';
-      overlay.appendChild(num);
+      num.className = 'dado3d-num sin-gl revelado';
       num.textContent = valores.join('  ·  ');
-      setTimeout(cerrar, MANTENER_MS);
+      overlay.appendChild(num);
+      setTimeout(() => close(gl), 1800);
       return;
     }
 
-    const prog = gl.createProgram()!;
-    gl.attachShader(prog, compilar(gl, gl.VERTEX_SHADER, VERTEX_SRC)!);
-    gl.attachShader(prog, compilar(gl, gl.FRAGMENT_SHADER, FRAGMENT_SRC)!);
-    gl.linkProgram(prog);
-    gl.useProgram(prog);
+    const resin = RESINS[theme] ?? RESINS.neutral;
+    const multiple = valores.length > 1;
+    const best = Math.max(...valores);
+    const bestIndex = valores.indexOf(best);
 
-    const { pos, nor, uv, normalCara } = geometria();
-    const subir = (datos: Float32Array, nombre: string, tam: number) => {
-      const buf = gl.createBuffer();
-      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-      gl.bufferData(gl.ARRAY_BUFFER, datos, gl.STATIC_DRAW);
-      const loc = gl.getAttribLocation(prog, nombre);
-      gl.enableVertexAttribArray(loc);
-      gl.vertexAttribPointer(loc, tam, gl.FLOAT, false, 0, 0);
-    };
-    subir(pos, 'aPos', 3);
-    subir(nor, 'aNor', 3);
-    subir(uv, 'aUV', 2);
+    // play area follows the screen shape (the simulation is deterministic per box)
+    const aspect0 = window.innerWidth / Math.max(1, window.innerHeight);
+    const hz = multiple ? 2.6 : 2.2;
+    const box: RollBox = aspect0 >= 1
+      ? { minX: -Math.min(4.4, Math.max(2.6, hz * aspect0 * 0.95)), maxX: Math.min(4.4, Math.max(2.6, hz * aspect0 * 0.95)), minZ: -hz, maxZ: hz }
+      : { minX: -2.2, maxX: 2.2, minZ: -Math.min(4, 2.2 / aspect0 * 0.8), maxZ: Math.min(4, 2.2 / aspect0 * 0.8) };
+    const lanes = multiple ? advantageLanes(box) : [box];
+    const baseSeed = dbg?.seed ?? Math.floor(Math.random() * 1e9);
+    const tracks: RollTrack[] = valores.map((v, i) =>
+      simulateRoll({ result: Math.min(20, Math.max(1, Math.round((v / Math.max(1, caras)) * 20))), seed: baseSeed + i * 7717, box: lanes[i % lanes.length] }));
+    const restAt = Math.max(...tracks.map((t) => t.duration));
+    if (dbg) (window as unknown as { __dadoUltimo?: unknown }).__dadoUltimo = { tracks, canvas, restAt };
 
-    const tex = crearTextura(gl);
-    gl.activeTexture(gl.TEXTURE0);
+    // ── GPU resources ──
+    const mesh = meshCache ?? (meshCache = buildMesh());
+    const vbo = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.STATIC_DRAW);
+    const quad = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1]), gl.STATIC_DRAW);
+    const tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, numberAtlas());
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-    const uProj = gl.getUniformLocation(prog, 'uProj');
-    const uMV = gl.getUniformLocation(prog, 'uMV');
-    const uColor = gl.getUniformLocation(prog, 'uColor');
-    gl.uniform1i(gl.getUniformLocation(prog, 'uTex'), 0);
-    gl.enable(gl.DEPTH_TEST);
+    const U = (p: WebGLProgram, n: string) => gl.getUniformLocation(p, n);
+    const du = {
+      proj: U(dieProg, 'uProj'), view: U(dieProg, 'uView'), model: U(dieProg, 'uModel'),
+      camObj: U(dieProg, 'uCamObj'), camW: U(dieProg, 'uCamW'), light: U(dieProg, 'uLight'), lightObj: U(dieProg, 'uLightObj'),
+      deep: U(dieProg, 'uDeep'), bright: U(dieProg, 'uBright'), swirl: U(dieProg, 'uSwirl'), glitter: U(dieProg, 'uGlitter'), ink: U(dieProg, 'uInk'),
+      seed: U(dieProg, 'uSeed'), dim: U(dieProg, 'uDim'), glow: U(dieProg, 'uGlow'), glowCol: U(dieProg, 'uGlowCol'), tex: U(dieProg, 'uTex'),
+    };
+    const su = {
+      proj: U(shadowProg, 'uProj'), view: U(shadowProg, 'uView'), center: U(shadowProg, 'uCenter'), size: U(shadowProg, 'uSize'), alpha: U(shadowProg, 'uAlpha'),
+    };
+    const aPos = gl.getAttribLocation(dieProg, 'aPos'), aNor = gl.getAttribLocation(dieProg, 'aNor');
+    const aUV = gl.getAttribLocation(dieProg, 'aUV'), aMark = gl.getAttribLocation(dieProg, 'aMark');
+    const aCorner = gl.getAttribLocation(shadowProg, 'aCorner');
 
-    const DEPTH = 6;
-    const FOV = (50 * Math.PI) / 180;
-    const RADIO = Math.tan(FOV / 2) * DEPTH;
+    // ── camera fitted to the play area ──
+    let proj = perspective(FOV, 1, 0.1, 100), view = lookAt([0, 10, 6], [0, 0, 0]);
+    let eye: Vec3 = [0, 10, 6];
+    let cssW = 0, cssH = 0;
+    const project = (p: Vec3): [number, number, number] => {
+      const m = mul(proj, view);
+      const x = m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12];
+      const y = m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13];
+      const w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15];
+      return [(x / w * 0.5 + 0.5) * cssW, (1 - (y / w * 0.5 + 0.5)) * cssH, w];
+    };
+    const fitCamera = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cssW = window.innerWidth; cssH = window.innerHeight;
+      canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      const aspect = cssW / Math.max(1, cssH);
+      proj = perspective(FOV, aspect, 0.1, 100);
+      const target: Vec3 = [0, 0, 0.3];
+      const pts: Vec3[] = [];
+      for (const x of [box.minX - 1.2, box.maxX + 1.2]) for (const z of [box.minZ - 1.2, box.maxZ + 1.2]) pts.push([x, 0, z]);
+      for (let d = 5; d < 60; d += 0.25) {
+        eye = [0, target[1] + d * Math.sin(PITCH), target[2] + d * Math.cos(PITCH)];
+        view = lookAt(eye, target);
+        const m = mul(proj, view);
+        const fits = pts.every((p) => {
+          const w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15];
+          const x = (m[0] * p[0] + m[4] * p[1] + m[8] * p[2] + m[12]) / w;
+          const y = (m[1] * p[0] + m[5] * p[1] + m[9] * p[2] + m[13]) / w;
+          return Math.abs(x) < 0.94 && Math.abs(y) < 0.9;
+        });
+        if (fits) break;
+      }
+    };
+    fitCamera();
+    if (dbg) Object.assign((window as unknown as { __dadoUltimo: object }).__dadoUltimo, { eye: () => eye, view: () => view, proj: () => proj, box });
 
-    const ganador = Math.max(...valores);
-    let ganadorUsado = false; // resalta un único dado ganador (el mejor)
-    // Datos por dado: cara destino, ranura horizontal y desfase de tumbo
-    const dados = valores.map((v, i) => ({
-      v,
-      qDestino: qHaciaCamara(normalCara[Math.min(v, caras) - 1] ?? [0, 0, 1]),
-      slot: valores.length === 1 ? 0 : (i / (valores.length - 1)) * 2 - 1, // −1..+1
-      fase: i * 1.9,
-    }));
-    const varios = valores.length > 1;
-
-    const qTumbo = (p: number, fase: number): Quat =>
-      qMul(
-        qAxis(0.3, 1, 0.2, (easeOut(p) * Math.PI * 9) + fase),
-        qAxis(1, 0.25, 0.5, (easeOut(p) * Math.PI * 7) + fase),
-      );
-    const qFinTumbo = (fase: number) => qTumbo(FIN_TUMBO, fase);
-    let color = COLOR_NORMAL;
-
-    const dibujarUno = (proj: Mat4, x: number, y: number, q: Quat, s: number) => {
-      let mv = traslacion(x, y, -DEPTH);
-      mv = multiplicar(mv, qToMat4(q));
-      mv = multiplicar(mv, escala(s));
-      gl.uniformMatrix4fv(uProj, false, proj);
-      gl.uniformMatrix4fv(uMV, false, mv);
-      gl.uniform3fv(uColor, color);
-      gl.drawArrays(gl.TRIANGLES, 0, pos.length / 3);
+    const drawShadow = (x: Vec3) => {
+      const h = Math.max(0, x[1] - 0.8);
+      gl.useProgram(shadowProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+      gl.enableVertexAttribArray(aCorner);
+      gl.vertexAttribPointer(aCorner, 2, gl.FLOAT, false, 0, 0);
+      gl.uniformMatrix4fv(su.proj, false, proj);
+      gl.uniformMatrix4fv(su.view, false, view);
+      // the light comes from above and slightly behind: the shadow slides away as it rises
+      gl.uniform3f(su.center, x[0] - LIGHT[0] * h * 0.35 + 0.08, 0.002, x[2] - LIGHT[2] * h * 0.35 + 0.1);
+      gl.uniform1f(su.size, 1.25 + h * 0.32);
+      gl.uniform1f(su.alpha, 0.62 / (1 + h * 0.55));
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      gl.disableVertexAttribArray(aCorner);
+    };
+    const drawDie = (q: Quat, x: Vec3, dim: number, glow: number, glowCol: RGB, seed: number) => {
+      gl.useProgram(dieProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+      const stride = 9 * 4;
+      gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, stride, 0);
+      gl.enableVertexAttribArray(aNor); gl.vertexAttribPointer(aNor, 3, gl.FLOAT, false, stride, 12);
+      gl.enableVertexAttribArray(aUV); gl.vertexAttribPointer(aUV, 2, gl.FLOAT, false, stride, 24);
+      gl.enableVertexAttribArray(aMark); gl.vertexAttribPointer(aMark, 1, gl.FLOAT, false, stride, 32);
+      gl.uniformMatrix4fv(du.proj, false, proj);
+      gl.uniformMatrix4fv(du.view, false, view);
+      gl.uniformMatrix4fv(du.model, false, modelMatrix(q, x));
+      const inv = conj(q);
+      gl.uniform3fv(du.camObj, rotateVec(inv, [eye[0] - x[0], eye[1] - x[1], eye[2] - x[2]]));
+      gl.uniform3fv(du.camW, eye);
+      gl.uniform3fv(du.light, LIGHT);
+      gl.uniform3fv(du.lightObj, rotateVec(inv, LIGHT));
+      gl.uniform3fv(du.deep, resin.deep); gl.uniform3fv(du.bright, resin.bright); gl.uniform3fv(du.swirl, resin.swirl);
+      gl.uniform3fv(du.glitter, resin.glitter); gl.uniform3fv(du.ink, resin.ink);
+      gl.uniform1f(du.seed, seed); gl.uniform1f(du.dim, dim); gl.uniform1f(du.glow, glow); gl.uniform3fv(du.glowCol, glowCol);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.uniform1i(du.tex, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, mesh.length / 9);
+      gl.disableVertexAttribArray(aPos); gl.disableVertexAttribArray(aNor);
+      gl.disableVertexAttribArray(aUV); gl.disableVertexAttribArray(aMark);
     };
 
-    let t0 = 0;
-    const frame = (ts: number) => {
-      if (!t0) t0 = ts;
-      const e = ts - t0;
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = window.innerWidth, h = window.innerHeight;
-      if (canvas.width !== w * dpr || canvas.height !== h * dpr) {
-        canvas.width = w * dpr; canvas.height = h * dpr;
-        gl.viewport(0, 0, canvas.width, canvas.height);
+    // ── effects: knocks, shake, dust ──
+    const pendingImpacts = tracks.map((t) => t.impacts.slice());
+    let knocks = 0, lastKnock = -1, shake = 0;
+    const dust = (p: Vec3, strength: number, flash: boolean) => {
+      const [sx, sy] = project(p);
+      const puffs = Math.round(4 + Math.min(6, strength * 0.4));
+      for (let i = 0; i < puffs; i++) {
+        const d = document.createElement('span');
+        d.className = 'dado3d-polvo';
+        const ang = (i / puffs) * Math.PI * 2 + Math.random() * 0.6;
+        const dist = 18 + strength * 2.2 + Math.random() * 14;
+        d.style.left = `${sx}px`; d.style.top = `${sy}px`;
+        d.style.setProperty('--dx', `${Math.cos(ang) * dist}px`);
+        d.style.setProperty('--dy', `${Math.sin(ang) * dist * 0.45}px`);
+        overlay.appendChild(d);
+        setTimeout(() => d.remove(), 700);
       }
-      const aspect = canvas.width / canvas.height;
-      const proj = perspectiva(FOV, aspect, 0.1, 100);
-      const halfW = RADIO * aspect;
-      const slotX = halfW * (varios ? 0.42 : 0); // separación entre dados en reposo
+      if (flash) {
+        const f = document.createElement('span');
+        f.className = 'dado3d-destello';
+        f.style.left = `${sx}px`; f.style.top = `${sy}px`;
+        overlay.appendChild(f);
+        setTimeout(() => f.remove(), 600);
+      }
+    };
+    const lastImpacts = tracks.map((t) => t.impacts[t.impacts.length - 1]);
 
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    const colourOf = (v: number): { glow: number; col: RGB; cls: string } =>
+      v === caras ? { glow: 0.55, col: [1, 0.78, 0.25], cls: 'critico' } : v === 1 ? { glow: 0.5, col: [0.95, 0.12, 0.08], cls: 'pifia' } : { glow: 0, col: [0, 0, 0], cls: '' };
 
-      for (const d of dados) {
-        if (e < RODAR_MS) {
-          const p = e / RODAR_MS;
-          const k = 1 - easeOut(p);
-          const wob = varios ? 0.32 : 0.8;
-          const x = d.slot * slotX + halfW * wob * k * Math.cos(p * Math.PI * 3.2 + d.fase);
-          const y = RADIO * (varios ? 0.45 : 0.7) * k * Math.sin(p * Math.PI * 4.4 + d.fase);
-          const s = (varios ? 0.92 : 1.05) + 0.2 * (1 - k);
-          let q: Quat;
-          if (p < FIN_TUMBO) {
-            q = qTumbo(p, d.fase);
-          } else {
-            q = qSlerp(qFinTumbo(d.fase), d.qDestino, suave((p - FIN_TUMBO) / (1 - FIN_TUMBO)));
-          }
-          // color base mientras ruedan
-          color = COLOR_NORMAL;
-          dibujarUno(proj, x, y, q, s);
-        } else {
-          // En reposo: resalta el dado ganador; atenúa los perdedores
-          const esGanador = !ganadorUsado || d.v === ganador;
-          if (varios) {
-            if (d.v === ganador && !ganadorUsado) {
-              ganadorUsado = true;
-              color = ganador === caras ? COLOR_CRITICO : ganador === 1 ? COLOR_PIFIA : COLOR_NORMAL;
-            } else if (d.v === ganador && esGanador) {
-              color = ganador === caras ? COLOR_CRITICO : COLOR_NORMAL;
-            } else {
-              color = COLOR_TENUE;
-            }
-          } else {
-            color = d.v === caras ? COLOR_CRITICO : d.v === 1 ? COLOR_PIFIA : COLOR_NORMAL;
-          }
-          const base = 1.28 + Math.sin((e - RODAR_MS) * 0.004 + d.fase) * 0.03;
-          const s = varios ? base * (d.v === ganador ? 0.92 : 0.74) : base;
-          dibujarUno(proj, d.slot * slotX, 0, d.qDestino, s);
+    const showResult = () => {
+      tracks.forEach((tr, i) => {
+        const v = valores[i];
+        const winner = !multiple || i === bestIndex;
+        const x = poseAt(tr, tr.duration).x;
+        const [sx, sy, w] = project(x);
+        const [, sy2] = project([x[0], x[1], x[2] + 1]);
+        const px = Math.abs(sy2 - sy) || 60 / w;
+        const { cls } = colourOf(v);
+        if (winner && cls) {
+          const halo = document.createElement('span');
+          halo.className = `dado3d-halo ${cls}`;
+          halo.style.left = `${sx}px`; halo.style.top = `${sy}px`;
+          halo.style.setProperty('--r', `${Math.round(px * 3.4)}px`);
+          overlay.insertBefore(halo, canvas);
         }
+        const label = document.createElement('span');
+        label.className = `dado3d-num dado3d-etiqueta revelado ${winner ? cls : 'perdedor'}`;
+        label.textContent = String(v);
+        label.style.left = `${sx}px`;
+        label.style.top = `${sy + px * 1.55}px`;
+        overlay.appendChild(label);
+      });
+    };
+
+    const timeScale = dbg?.timeScale ?? 1;
+    let t0 = 0, rested = false;
+    const frame = (ts: number) => {
+      if (closed) return;
+      if (!t0) t0 = ts;
+      const t = ((ts - t0) / 1000) * timeScale;
+      if (window.innerWidth !== cssW || window.innerHeight !== cssH) fitCamera();
+
+      // knocks on the table: soft sound, tiny shake, dust on the last one
+      tracks.forEach((tr, i) => {
+        const list = pendingImpacts[i];
+        while (list.length && list[0].t <= t) {
+          const imp = list.shift()!;
+          if (knocks < 6 && imp.t - lastKnock > 0.06) {
+            audio.sfx('bloqueo', Math.min(0.5, 0.1 + imp.strength / 30));
+            knocks++; lastKnock = imp.t;
+          }
+          shake = Math.max(shake, Math.min(7, imp.strength * 0.45));
+          if (imp === lastImpacts[i] || imp.strength > 9) dust(imp.x, imp.strength, imp === lastImpacts[i]);
+        }
+      });
+      if (shake > 0.2) {
+        canvas.style.transform = `translate(${(Math.random() - 0.5) * shake}px, ${(Math.random() - 0.5) * shake}px)`;
+        shake *= 0.82;
+      } else if (canvas.style.transform) {
+        canvas.style.transform = '';
+        shake = 0;
       }
 
-      if (e < RODAR_MS + MANTENER_MS) requestAnimationFrame(frame);
-      else cerrar();
+      const done = t >= restAt;
+      gl.clearColor(0, 0, 0, 0);
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+      const poses = tracks.map((tr) => poseAt(tr, t));
+      // shadows first (no depth), then the dice
+      gl.disable(gl.DEPTH_TEST);
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+      poses.forEach((p) => drawShadow(p.x));
+      gl.disable(gl.BLEND);
+      gl.enable(gl.DEPTH_TEST);
+      poses.forEach((p, i) => {
+        const v = valores[i];
+        const settled = t >= tracks[i].duration;
+        const winner = !multiple || i === bestIndex;
+        const { glow, col } = colourOf(v);
+        drawDie(p.q, p.x, done && !winner ? 0.65 : 0, settled && winner ? glow : 0, col, i * 3.7 + (baseSeed % 97) * 0.13);
+      });
+
+      if (done && !rested) {
+        rested = true;
+        canvas.style.transform = '';
+        showResult();
+        const crit = best === caras || best === 1;
+        // nothing keeps drawing while the result is on show
+        setTimeout(() => close(gl), (crit ? HOLD_CRIT_MS : HOLD_MS) / timeScale);
+        return;
+      }
+      requestAnimationFrame(frame);
     };
     requestAnimationFrame(frame);
   });

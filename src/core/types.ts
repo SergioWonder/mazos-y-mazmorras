@@ -354,10 +354,11 @@ export interface ContextoEfecto {
   /** Seduce against the Dungeon Master: only a natural 20 gets past his screen
    *  (secret true ending); any other roll bounces off it. */
   seducirDM?(e: EnemigoCombate, tirada: number): Promise<void>;
-  /** Tira un dado de N caras: anima el lanzamiento y devuelve el resultado (1..N). */
-  tirarDado(caras: number): Promise<number>;
+  /** Tira un dado de N caras: anima el lanzamiento y devuelve el resultado (1..N).
+   *  `theme` only changes the look of the die (the card that rolls it). */
+  tirarDado(caras: number, theme?: DiceTheme): Promise<number>;
   /** Con ventaja: lanza 2 dados de N caras a la vez y devuelve el mejor. */
-  tirarDadoVentaja(caras: number): Promise<number>;
+  tirarDadoVentaja(caras: number, theme?: DiceTheme): Promise<number>;
   /** El enemigo ejecuta su intención ahora mismo y vuelve a prepararse. */
   forzarAccion(e: EnemigoCombate): Promise<void>;
   /** Marca al enemigo para que se salte su próxima acción. */
@@ -559,3 +560,6 @@ export interface EstadoRun {
   /** Active tavern quest (null/absent when there is none). */
   mision?: MisionTaberna | null;
 }
+
+/** Look of the 3D die: the card that rolls it (Seduce, Wish) or a plain one. */
+export type DiceTheme = 'seducir' | 'deseo' | 'neutral';

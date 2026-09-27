@@ -7,7 +7,7 @@ import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
-import type { EfectoConjuro, EfectoInvocacion, FormaInvocacion } from './types.ts';
+import type { DiceTheme, EfectoConjuro, EfectoInvocacion, FormaInvocacion } from './types.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -22,8 +22,8 @@ export interface Presentador {
   fxEnemigoActua(e: EnemigoCombate): Promise<void>;
   fxFuriaPerdida(): Promise<void>;
   /** Anima el lanzamiento de un dado de `caras` que cae en `n`. */
-  fxDado(n: number, caras: number): Promise<void>;
-  fxDadoVentaja(a: number, b: number, caras: number): Promise<void>;
+  fxDado(n: number, caras: number, theme?: DiceTheme): Promise<void>;
+  fxDadoVentaja(a: number, b: number, caras: number, theme?: DiceTheme): Promise<void>;
   /** Lanza partículas sobre un luchador, sin número ni texto. */
   fxParticulas(obj: Luchador, efecto: string): Promise<void>;
   /** La invocación absorbe daño (número rojo sobre ella). */
@@ -495,15 +495,15 @@ export class Combate {
       estaTransformado: () => self.estaTransformadoPublico(),
       mensaje: (txt) => self.ui.fxMensaje(txt),
       seducirDM: (e, tirada) => self.seducirDM(e, tirada),
-      async tirarDado(caras) {
+      async tirarDado(caras, theme) {
         const n = 1 + Math.floor(self.rng() * caras);
-        await self.ui.fxDado(n, caras);
+        await self.ui.fxDado(n, caras, theme);
         return n;
       },
-      async tirarDadoVentaja(caras) {
+      async tirarDadoVentaja(caras, theme) {
         const a = 1 + Math.floor(self.rng() * caras);
         const b = 1 + Math.floor(self.rng() * caras);
-        await self.ui.fxDadoVentaja(a, b, caras);
+        await self.ui.fxDadoVentaja(a, b, caras, theme);
         return Math.max(a, b);
       },
       async forzarAccion(e) {

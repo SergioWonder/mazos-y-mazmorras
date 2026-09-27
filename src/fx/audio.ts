@@ -209,7 +209,7 @@ class MotorAudio {
   }
 
   /** Plays one variation of a decoded effect with a slight random change of pitch and volume. */
-  private reproducirArchivo(nombre: string): boolean {
+  private reproducirArchivo(nombre: string, volume = 1): boolean {
     const bufs = this.sfxBuffers.get(nombre);
     if (!bufs?.length || !this.ctx) return false;
     const i = pickVariant(bufs.length, this.ultimaVariante.get(nombre) ?? -1, Math.random);
@@ -219,29 +219,30 @@ class MotorAudio {
     fuente.buffer = bufs[i];
     fuente.playbackRate.value = rate;
     const vol = this.ctx.createGain();
-    vol.gain.value = gain * SFX_FILE_GAIN;
+    vol.gain.value = gain * SFX_FILE_GAIN * volume;
     fuente.connect(vol).connect(this.busSfx);
     fuente.start();
     return true;
   }
 
-  /** Dispara un efecto de sonido por nombre (admite los mismos nombres que las partículas). */
-  sfx(nombre: string) {
+  /** Dispara un efecto de sonido por nombre (admite los mismos nombres que las partículas).
+   *  `volume` scales it (1 = normal), e.g. for the soft knocks of a rolling die. */
+  sfx(nombre: string, volume = 1) {
     this.desbloquear();
     if (!this.ctx) return;
-    if (this.reproducirArchivo(resolveSfx(nombre))) return;
+    if (this.reproducirArchivo(resolveSfx(nombre), volume)) return;
     // fallback while the files load (or if they fail): the synthesised recipe
     const receta = RECETAS[nombre] ?? RECETAS.carta;
     const t0 = this.ctx.currentTime;
-    for (const capa of receta) this.reproducirCapa(capa, t0 + (capa.retardo ?? 0));
+    for (const capa of receta) this.reproducirCapa(capa, t0 + (capa.retardo ?? 0), volume);
   }
 
-  private reproducirCapa(c: Capa, inicio: number) {
+  private reproducirCapa(c: Capa, inicio: number, volume = 1) {
     const ctx = this.ctx!;
     const g = ctx.createGain();
     const ataque = c.ataque ?? 0.005;
     g.gain.setValueAtTime(0.0001, inicio);
-    g.gain.exponentialRampToValueAtTime(c.vol, inicio + ataque);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, c.vol * volume), inicio + ataque);
     g.gain.exponentialRampToValueAtTime(0.0001, inicio + c.dur);
     g.connect(this.busSfx);
 
