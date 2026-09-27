@@ -12146,7 +12146,7 @@
       "label": "RelicLike",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2569",
+      "source_location": "L2572",
       "id": "scripts_smoke_test_reliclike",
       "community": 74,
       "norm_label": "reliclike"
@@ -12155,7 +12155,7 @@
       "label": "Mov",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2624",
+      "source_location": "L2627",
       "id": "scripts_smoke_test_mov",
       "community": 74,
       "norm_label": "mov"
@@ -12164,7 +12164,7 @@
       "label": "Reliquia",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2625",
+      "source_location": "L2628",
       "id": "scripts_smoke_test_reliquia",
       "community": 74,
       "norm_label": "reliquia"
@@ -12173,7 +12173,7 @@
       "label": "montar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2640",
+      "source_location": "L2643",
       "id": "scripts_smoke_test_montar",
       "community": 74,
       "norm_label": "montar()"
@@ -12182,7 +12182,7 @@
       "label": "T",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3234",
+      "source_location": "L3237",
       "id": "scripts_smoke_test_t",
       "community": 74,
       "norm_label": "t"
@@ -12191,7 +12191,7 @@
       "label": "Accion",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3264",
+      "source_location": "L3267",
       "id": "scripts_smoke_test_accion",
       "community": 74,
       "norm_label": "accion"
@@ -12200,7 +12200,7 @@
       "label": "montarM()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4034",
+      "source_location": "L4037",
       "id": "scripts_smoke_test_montarm",
       "community": 74,
       "norm_label": "montarm()"
@@ -12209,7 +12209,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4639",
+      "source_location": "L4642",
       "id": "scripts_smoke_test_montarb",
       "community": 74,
       "norm_label": "montarb()"
@@ -21416,7 +21416,7 @@
       "label": "BACKGROUND_URLS",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1303",
+      "source_location": "L1290",
       "id": "ui_combate_background_urls",
       "community": 54,
       "norm_label": "background_urls"
@@ -21425,7 +21425,7 @@
       "label": "montarFondo()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1311",
+      "source_location": "L1298",
       "id": "ui_combate_montarfondo",
       "community": 54,
       "norm_label": "montarfondo()"
@@ -98539,5 +98539,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "f950818b7d9e218a4e30c42a4f3b97959f8f86a0"
+  "built_at_commit": "a1726c0e01889d35f4cd0b285a41bd59b89b666a"
 }

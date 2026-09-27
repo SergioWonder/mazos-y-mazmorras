@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.6.0';
+export const VERSION = '5.6.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.6.1',
+    fecha: '2026-09-27',
+    cambios: [
+      '🧍 Los personajes se quedan quietos en su sitio: aunque aparezcan estados, transformaciones o nombres largos, ya no se desplazan (Abaddon incluido).',
+    ],
+  },
   {
     version: '5.6.0',
     fecha: '2026-09-27',

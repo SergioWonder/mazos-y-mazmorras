@@ -594,21 +594,8 @@ export function pantallaCombate(
       renderEnergia();
       $('.pila-robo').innerHTML = `🂠<span>${combate.jugador.mazo.length}</span>`;
       $('.pila-descarte').innerHTML = `🗑<span>${combate.jugador.descarte.length}</span>`;
-      ajustarEstados();
       altoEscenario(); // the scene grows with its fighters (portrait phones)
       comprobarFinal();
-    }
-
-    /** Status rows take height from the sprite (CSS budget), so fighters stay inside the scene. */
-    function ajustarEstados() {
-      const luchadores = raiz.querySelectorAll<HTMLElement>('.heroe, .enemigo:not(.enemigo-hueco)');
-      // twice: a smaller sprite narrows the fighter, which may wrap the statuses once more
-      for (let pasada = 0; pasada < 2; pasada++) {
-        luchadores.forEach((l) => {
-          const estados = l.querySelector<HTMLElement>(':scope > .estados');
-          if (estados) l.style.setProperty('--alto-estados', `${Math.max(22, estados.offsetHeight)}px`);
-        });
-      }
     }
 
     function renderBarra() {

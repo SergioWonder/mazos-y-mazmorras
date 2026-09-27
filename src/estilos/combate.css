@@ -116,6 +116,10 @@ body.arrastre-activo .zona-mano,
   gap: 4px;
   min-width: 130px;
   padding-top: 2.6rem;
+  /* fixed room for two status rows: statuses live out of flow inside it, so
+     gaining or losing one never moves the sprite (fighters used to "dance") */
+  --reserva-hud: 48px;
+  padding-bottom: var(--reserva-hud);
 }
 
 .sprite {
@@ -150,10 +154,10 @@ body.arrastre-activo .zona-mano,
 /* Short scenes (landscape phones): a big boss would push its health bar and statuses
    below the scene edge. The sprite gives way, leaving room for the top bar, intent,
    name, trait, health bar and statuses (~180px with one row of statuses).
-   Extra status rows (--alto-estados, measured after each render) come out of it too. */
-.escenario .sprite-marioneta { max-width: max(3.4rem, calc((100cqh - 158px - var(--alto-estados, 22px)) * 140 / 135)); }
+   The status rows have a fixed reserve (--reserva-hud), so the size never changes mid-fight. */
+.escenario .sprite-marioneta { max-width: max(3.4rem, calc((100cqh - 158px - 26px) * 140 / 135)); }
 /* the hero (and druid forms) only carry the health bar and statuses underneath */
-.escenario .sprite-silueta .sprite-marioneta { max-width: max(4.4rem, calc((100cqh - 103px - var(--alto-estados, 22px)) * 140 / 135)); }
+.escenario .sprite-silueta .sprite-marioneta { max-width: max(4.4rem, calc((100cqh - 103px - 26px) * 140 / 135)); }
 .sprite-silueta .sprite-marioneta { width: 11.4rem; }
 /* enemigos e invocaciones ilustrados: la marioneta ya respira y ataca sola */
 .sprite.sprite-ilustrado { font-size: 0; line-height: 0; animation: none; filter: none; }
@@ -256,6 +260,7 @@ body.arrastre-activo .zona-mano,
   font-family: var(--fuente-display);
   font-size: 0.95rem;
   opacity: 0.85;
+  white-space: nowrap; /* a second line would push the sprite up */
 }
 
 /* rasgo único de jefe */
@@ -361,9 +366,14 @@ body.arrastre-activo .zona-mano,
   gap: 4px;
   flex-wrap: wrap;
   justify-content: center;
-  align-self: stretch;
+  align-content: flex-start;
+  /* out of flow, in the fighter's reserved bottom strip: rows grow downwards */
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - var(--reserva-hud) + 4px);
   contain: inline-size;
-  min-height: 22px;
+  z-index: 2;
 }
 .estado {
   font-size: 0.78rem;
@@ -381,7 +391,18 @@ body.arrastre-activo .zona-mano,
   background: rgba(60, 28, 94, 0.75);
 }
 
-.temporales { display: flex; flex-direction: column; gap: 2px; min-height: 1px; }
+.temporales {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* beside the hero's feet, out of flow: a new transformation never lifts the sprite */
+  position: absolute;
+  left: calc(100% + 2px);
+  bottom: var(--reserva-hud);
+  width: max-content;
+  max-width: 9.5rem;
+  z-index: 2;
+}
 .efecto-temporal {
   font-size: 0.78rem;
   color: #c9f29b;

@@ -2333,8 +2333,11 @@ console.log('\n📐 Luchadores dentro del escenario');
 
   // Many statuses wrap into rows without widening the fighter
   check(/\.estados\s*\{[^}]*contain:\s*inline-size/.test(css), 'los estados se reparten en varias filas sin ensanchar al luchador');
-  check(/\.escenario \.sprite-marioneta\s*\{[^}]*var\(--alto-estados/.test(css) && /--alto-estados/.test(ui),
-    'los sprites ceden alto cuando los estados ocupan varias filas');
+  // Fighters stay put: status rows, temporary effects and long names never move the sprite
+  check(!/--alto-estados/.test(css) && !/--alto-estados/.test(ui), 'el tamaño del sprite no depende de cuántos estados tenga (antes cambiaba y el luchador bailaba)');
+  check(/\.heroe,\s*\.enemigo\s*\{[^}]*padding-bottom:\s*var\(--reserva-hud/.test(css), 'cada luchador reserva siempre el mismo hueco para dos filas de estados');
+  check(/\.estados\s*\{[^}]*position:\s*absolute/.test(css) && /\.temporales\s*\{[^}]*position:\s*absolute/.test(css), 'los estados y los efectos temporales van fuera del flujo: aparecer no empuja al sprite');
+  check(/\.enemigo-nombre\s*\{[^}]*white-space:\s*nowrap/.test(css), 'los nombres largos (Abaddon, el Demonio Mayor) no saltan de línea');
 }
 
 // ── Recorded-style sound effects (MP3 bank) ──────────────────────────────────
