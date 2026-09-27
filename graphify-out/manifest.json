@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790538887.1373572,
-    "ast_hash": "0c660058490eb0950395d75713f2e26b",
+    "mtime": 1790541058.2821245,
+    "ast_hash": "985eb69c310ab2ad29a3f6a0d30e99b8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790537647.2208397,
-    "ast_hash": "d498fc2578d5b6a1bcddf9541b3ba76e",
+    "mtime": 1790539340.4862983,
+    "ast_hash": "05575a740a4689e16451b7550d278f47",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790538887.136767,
-    "ast_hash": "c330d87375b46d4fedf8dc7e66a196ff",
+    "mtime": 1790541058.2814245,
+    "ast_hash": "55dfaacd91d9de3dae28af0c97ee8ff7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -2450,188 +2450,188 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/mapa/gen_scenario_icons.py": {
-    "mtime": 1790538118.4570096,
-    "ast_hash": "491d023df621d01c1fc607c78c9ccdb5",
+    "mtime": 1790540902.0688155,
+    "ast_hash": "9391bac9ef89b3ac3c147a44f11a5092",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-contemplador.svg": {
-    "mtime": 1790538119.0831013,
+    "mtime": 1790540902.6754615,
     "ast_hash": "bab3a015c390ccc112883a237654381c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-contrabandistas.svg": {
-    "mtime": 1790538118.6699526,
+    "mtime": 1790540902.2058508,
     "ast_hash": "f8199a8a697597145e47c90b8166b4af",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-cripta.svg": {
-    "mtime": 1790538118.7002926,
+    "mtime": 1790540902.4296095,
     "ast_hash": "6cc439bc19f0a879d0a5bc9533843e35",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-dragon.svg": {
-    "mtime": 1790538119.0458498,
+    "mtime": 1790540902.642839,
     "ast_hash": "1c6354931b639ffb7e277fdd177841f1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-ogro.svg": {
-    "mtime": 1790538118.6038973,
+    "mtime": 1790540902.1905792,
     "ast_hash": "86a021311547cb4d545b62a4c120b9b8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre-templo.svg": {
-    "mtime": 1790538118.725908,
+    "mtime": 1790540902.5587232,
     "ast_hash": "e1ced71ffc0f4d1c5d5f171ded4d7c71",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-contemplador.svg": {
-    "mtime": 1790538119.0512512,
+    "mtime": 1790540902.6466353,
     "ast_hash": "b203bdb4eca231b57841ed8f74146661",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-contrabandistas.svg": {
-    "mtime": 1790538118.642273,
+    "mtime": 1790540902.1959846,
     "ast_hash": "1d3349a9bf58f2485af7ae796b248bfc",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-cripta.svg": {
-    "mtime": 1790538118.6737752,
+    "mtime": 1790540902.2227762,
     "ast_hash": "a44c8663192ddeda1bf5929f5ae0a7d4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-dragon.svg": {
-    "mtime": 1790538118.7313397,
+    "mtime": 1790540902.5624626,
     "ast_hash": "8da402270289e7f1b6783a8fc4f91856",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-ogro.svg": {
-    "mtime": 1790538118.5851488,
+    "mtime": 1790540902.161415,
     "ast_hash": "f2c70a9a6b5eb33d8516b14a34b6be42",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-templo.svg": {
-    "mtime": 1790538118.7071846,
+    "mtime": 1790540902.4375346,
     "ast_hash": "97563e63eec56a56e1723d997230f8ff",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-contemplador.svg": {
-    "mtime": 1790538119.0744095,
-    "ast_hash": "2cf12991f400fb83a0aed0f04fdeda23",
+    "mtime": 1790540902.6732094,
+    "ast_hash": "bacd559122e45dee3cd33ac5f5161a38",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-contrabandistas.svg": {
-    "mtime": 1790538118.6668382,
-    "ast_hash": "cfcc269023a99af7f42dc9253db41d00",
+    "mtime": 1790540902.2027907,
+    "ast_hash": "55eb240519e7ce27e88399e76ee83b2f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-cripta.svg": {
-    "mtime": 1790538118.6914313,
-    "ast_hash": "63aa10ade7c80ba8153ebf9cb40c8397",
+    "mtime": 1790540902.4268246,
+    "ast_hash": "b019196d58dc3ce6e8d588f7597c5b8a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-dragon.svg": {
-    "mtime": 1790538119.0360825,
-    "ast_hash": "112bb8ad2fdc6bbeaf11a3ec3c380e8e",
+    "mtime": 1790540902.5694218,
+    "ast_hash": "f58f7936238ee00b5c04016dfef3764c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-ogro.svg": {
-    "mtime": 1790538118.601771,
-    "ast_hash": "8336d8dcbc427428a721c9e5ee8089c6",
+    "mtime": 1790540902.187902,
+    "ast_hash": "fd71dc24cdd6979f3df77f65c82d4c9f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso-templo.svg": {
-    "mtime": 1790538118.721912,
-    "ast_hash": "578e57319826770a2d2b0782aa77d185",
+    "mtime": 1790540902.5554261,
+    "ast_hash": "3db4b98ea358223f14f0f54fbb40041f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-contemplador.svg": {
-    "mtime": 1790538119.0583794,
+    "mtime": 1790540902.649792,
     "ast_hash": "b21867c8acdc7788265ff592e28941ee",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-contrabandistas.svg": {
-    "mtime": 1790538118.6467733,
+    "mtime": 1790540902.1975594,
     "ast_hash": "95ea95cfc5938ee08468d478c7706856",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-cripta.svg": {
-    "mtime": 1790538118.680278,
+    "mtime": 1790540902.3407857,
     "ast_hash": "43c222da851acabfd8dbce7bcb944d93",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-dragon.svg": {
-    "mtime": 1790538118.7361374,
+    "mtime": 1790540902.564346,
     "ast_hash": "c6d5882995aebe0a5642627423a42f73",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-ogro.svg": {
-    "mtime": 1790538118.5871608,
+    "mtime": 1790540902.1724925,
     "ast_hash": "b1f93be2430b3f90f5b1b673dad8ec72",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite-templo.svg": {
-    "mtime": 1790538118.71394,
+    "mtime": 1790540902.5193942,
     "ast_hash": "3ef8496294ca531fcb3c324d4dcc075c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-contemplador.svg": {
-    "mtime": 1790538119.0673869,
-    "ast_hash": "505c580270229cb673c01e73f075d814",
+    "mtime": 1790540902.6545339,
+    "ast_hash": "02e3cdcd8f0f277b9cbf2b469c9deef8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-contrabandistas.svg": {
-    "mtime": 1790538118.6536214,
-    "ast_hash": "1dbca7bed7ed3647834aa8d7fd752cc7",
+    "mtime": 1790540902.2007926,
+    "ast_hash": "b60c6b38fa922f4092130f45caac769e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-cripta.svg": {
-    "mtime": 1790538118.6823852,
-    "ast_hash": "2e42bb03c597d27330d16fa81582b7f5",
+    "mtime": 1790540902.3898633,
+    "ast_hash": "e20bd431cd14d8a0b230b4bed09cc284",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-dragon.svg": {
-    "mtime": 1790538118.871173,
-    "ast_hash": "30c2908f0a79ae1b85006d5f8ab5989c",
+    "mtime": 1790540902.56689,
+    "ast_hash": "e3e5b6a42bcd8888e7ea62b714320534",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-ogro.svg": {
-    "mtime": 1790538118.5891747,
-    "ast_hash": "bd8ea5fd068c2b2c567b5bceb766f7a1",
+    "mtime": 1790540902.1756659,
+    "ast_hash": "38ac396566102bcad1eb30de5097adbb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento-templo.svg": {
-    "mtime": 1790538118.7185495,
-    "ast_hash": "77b90947c4578d784c27ee83061a55ab",
+    "mtime": 1790540902.5500796,
+    "ast_hash": "81a207fcf71a2237d805e07aac442b44",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-contemplador.svg": {
-    "mtime": 1790538119.0864036,
-    "ast_hash": "b29694f2cd8b1a7da4bf4a9316e010f0",
+    "mtime": 1790540902.678076,
+    "ast_hash": "15505f3c6b9a9ed23a77c0ca2d036611",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-contrabandistas.svg": {
-    "mtime": 1790538118.671542,
+    "mtime": 1790540902.2088683,
     "ast_hash": "07fccee8b61cc0d803f9b17e90d098ed",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-cripta.svg": {
-    "mtime": 1790538118.7042227,
+    "mtime": 1790540902.4346666,
     "ast_hash": "eeb3b1a0e9cfcf6afcc34ef2c819eba5",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-dragon.svg": {
-    "mtime": 1790538119.0477686,
-    "ast_hash": "688a0affcbc4380accdf5675896f4f44",
+    "mtime": 1790540902.6448605,
+    "ast_hash": "3d3adead6c8d0888763b393311afcbf0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-ogro.svg": {
-    "mtime": 1790538118.6366003,
+    "mtime": 1790540902.1931586,
     "ast_hash": "1f568da41c777133d5e9050634d4bb92",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna-templo.svg": {
-    "mtime": 1790538118.7285302,
-    "ast_hash": "274081c248a1ef4241983e3ca46e19f0",
+    "mtime": 1790540902.561309,
+    "ast_hash": "e43995f55f728428646a0ad9f63f9763",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-contemplador-ancho.webp": {

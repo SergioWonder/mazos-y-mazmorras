@@ -73,50 +73,6 @@ def elite_ogro():
     s.save()
 
 
-def evento_ogro():
-    s = Svg('evento-ogro', seed=311)
-    # carved pole with two stacked faces and a skull on top
-    pole = [(24, 24), (40, 24), (41, 61), (23, 61)]
-    s.wash(pole, '#6b4420', 0.18)
-    s.hatch([(34, 24), (40, 24), (41, 61), (35, 61)], angle=80, gap=1.2, w=0.45)
-    s.stroke([(24, 24), (23.5, 42), (23, 61)], 1.8)
-    s.stroke([(40, 24), (40.5, 42), (41, 61)], 1.8)
-    s.line((21, 61), (43, 61), 1.8)
-    for y in (42,):
-        s.line((23, y), (41, y), 1.3)
-    # upper face: angry brows and fanged mouth
-    s.stroke([(26, 29), (30, 31)], 1.5)
-    s.stroke([(38, 29), (34, 31)], 1.5)
-    s.dot(28.5, 33, 1.1)
-    s.dot(35.5, 33, 1.1)
-    s.stroke([(27, 38), (32, 36.5), (37, 38)], 1.2)
-    s.stroke([(28, 37.6), (29, 40), (30, 37.2)], 0.7, taper=False)
-    s.stroke([(34, 37.2), (35, 40), (36, 37.6)], 0.7, taper=False)
-    # lower face: round eyes, open mouth
-    s.ring(28.5, 47, 1.8, w=0.9)
-    s.ring(35.5, 47, 1.8, w=0.9)
-    s.blot([(29, 52), (35, 52), (34, 56), (30, 56)], INK)
-    # little wings to the sides
-    s.stroke([(24, 45), (14, 40), (8, 42), (12, 46), (8, 49), (14, 50), (23, 51)], 1.4)
-    s.stroke([(40, 45), (50, 40), (56, 42), (52, 46), (56, 49), (50, 50), (41, 51)], 1.4)
-    s.hatch([(24, 45), (14, 40), (8, 42), (12, 46), (23, 50)], angle=-15, gap=1.4, w=0.4)
-    s.hatch([(40, 45), (50, 40), (56, 42), (52, 46), (41, 50)], angle=15, gap=1.4, w=0.4)
-    # small horned skull on the top
-    sk = [(25, 20), (25, 12), (32, 7), (39, 12), (39, 20), (36, 24), (28, 24)]
-    s.wash(sk, '#e8d8b0', 0.25)
-    s.stroke(sk, 1.5, closed=True)
-    s.blot([(27, 15), (30, 14), (30, 18), (27, 18)], INK)
-    s.blot([(34, 14), (37, 15), (37, 18), (34, 18)], INK)
-    s.line((29, 22), (35, 22), 0.7)
-    s.stroke([(25, 13), (19, 9), (17, 3)], 1.4)
-    s.stroke([(39, 13), (45, 9), (47, 3)], 1.4)
-    # hanging feathers
-    for x in (14, 50):
-        s.line((x, 50), (x, 55), 0.7)
-        s.stroke([(x, 55), (x - 1.8, 59), (x, 63), (x + 1.8, 59)], 0.9, closed=True)
-    s.save()
-
-
 def cofre_ogro():
     s = Svg('cofre-ogro', seed=321)
     sack = [(14, 58), (10, 48), (12, 38), (19, 30), (26, 26), (38, 26), (45, 30), (52, 38), (54, 48), (50, 58)]
@@ -206,74 +162,6 @@ def elite_contrabandistas():
     s.save()
 
 
-def evento_contrabandistas():
-    s = Svg('evento-contrabandistas', seed=351)
-    # half-unrolled treasure map
-    sheet = [(6, 30), (48, 26), (54, 56), (10, 60)]
-    s.wash(sheet, '#b8945a', 0.18)
-    s.stroke([(6, 30), (27, 28), (48, 26)], 1.4)
-    s.stroke([(10, 60), (32, 58), (54, 56)], 1.4)
-    s.stroke([(6, 30), (8, 45), (10, 60)], 1.4)
-    # rolled right end
-    s.stroke([(48, 26), (51, 41), (54, 56)], 1.4)
-    s.stroke([(52, 25), (55, 40), (58, 55)], 1.4)
-    s.ring(55, 25.5, 3, 2, w=1.0)
-    s.hatch([(48, 26), (52, 25), (58, 55), (54, 56)], angle=70, gap=1.1, w=0.4)
-    # dotted route, coastline and the X
-    for i in range(9):
-        t = i / 8
-        x, y = 13 + 26 * t, 52 - 16 * math.sin(t * math.pi * 0.9) - 4 * t
-        s.dot(x, y, 0.55)
-    s.stroke([(10, 40), (16, 37), (18, 42), (24, 44), (28, 40)], 0.8)
-    s.stroke([(38, 34), (44, 38)], 1.6, color=RED)
-    s.stroke([(44, 34), (38, 38)], 1.6, color=RED)
-    # oil lamp sitting on the corner
-    lamp = [(4, 20), (10, 16), (20, 16), (26, 20), (20, 24), (10, 24)]
-    s.wash(lamp, '#8a6a2a', 0.25)
-    s.stroke(lamp, 1.5, closed=True)
-    s.stroke([(26, 20), (31, 18), (34, 16)], 1.3)
-    s.stroke([(4, 20), (1, 18), (2, 14), (6, 16)], 1.0)
-    s.hatch([(15, 16), (20, 16), (26, 20), (20, 24), (15, 24)], angle=60, gap=1.1, w=0.4)
-    fl = [(34, 15), (32, 10), (34.5, 3), (37, 10)]
-    s.wash(fl, '#c9642a', 0.35)
-    s.stroke(fl, 1.1, closed=True)
-    for x, y in [(40, 6), (29, 5), (41, 13)]:
-        s.line((x, y), (x + (x - 34) * 0.15, y - 1.5), 0.5)
-    s.save()
-
-
-def descanso_contrabandistas():
-    s = Svg('descanso-contrabandistas', seed=361)
-    # two posts with a sagging hammock slung between them
-    for x in (6, 58):
-        s.stroke([(x, 12), (x, 60)], 2.4, taper=False)
-        s.line((x - 3, 60), (x + 3, 60), 1.4)
-        s.ring(x, 20, 2, 1, w=0.8)
-    s.stroke([(6, 20), (14, 30)], 0.9)
-    s.stroke([(6, 20), (14, 34)], 0.9)
-    s.stroke([(58, 20), (50, 30)], 0.9)
-    s.stroke([(58, 20), (50, 34)], 0.9)
-    top = [(14, 30), (22, 36), (32, 38), (42, 36), (50, 30)]
-    bot = [(14, 34), (20, 44), (32, 48), (44, 44), (50, 34)]
-    s.wash(top + list(reversed(bot)), '#8a6a3a', 0.18)
-    s.hatch(top + list(reversed(bot)), angle=45, gap=2.2, w=0.45, cross=True)
-    s.stroke(top, 1.5)
-    s.stroke(bot, 1.9)
-    # a rolled blanket and a hat hanging on the post
-    s.stroke([(20, 35), (26, 33), (27, 38), (21, 40)], 1.1, closed=True)
-    s.ring(23.5, 36.5, 1.4, w=0.6)
-    s.stroke([(55, 12), (61, 12)], 1.4)
-    s.stroke([(56, 12), (57, 7), (59, 7), (60, 12)], 1.1)
-    # lantern hanging from a hook
-    s.line((32, 4), (32, 12), 0.7)
-    s.stroke(box(29, 12, 35, 20), 1.2, closed=True)
-    s.dot(32, 16, 1.2, '#c9642a')
-    # Zs of sleep
-    s.stroke([(38, 8), (42, 8), (38, 12), (42, 12)], 0.9, taper=False)
-    s.stroke([(44, 2), (47, 2), (44, 5), (47, 5)], 0.7, taper=False)
-    s.save()
-
-
 def cofre_contrabandistas():
     s = Svg('cofre-contrabandistas', seed=371)
     # barrel of contraband, lying slightly tilted, cork and stencilled mark
@@ -358,65 +246,6 @@ def elite_cripta():
     s.blot([(46, 58), (48, 57), (47, 61)], INK)
     for x, y in [(52, 60), (54, 57), (51, 55)]:
         s.dot(x, y, 0.5)
-    s.save()
-
-
-def evento_cripta():
-    s = Svg('evento-cripta', seed=401)
-    stone = [(14, 54), (14, 24), (18, 14), (26, 8), (38, 8), (46, 14), (50, 24), (50, 54)]
-    s.wash(stone, '#7a7a6a', 0.16)
-    s.hatch([(40, 9), (46, 14), (50, 24), (50, 54), (42, 54), (44, 24)], angle=40, gap=1.3, w=0.45)
-    s.stroke(stone, 1.9, taper=False)
-    s.stroke([(18, 52), (18, 25), (21, 17), (28, 12), (36, 12), (43, 17), (46, 25), (46, 52)], 0.6, taper=False)
-    # carved cross and a few chiselled lines standing in for the epitaph
-    s.stroke([(32, 17), (32, 35)], 2.0, taper=False)
-    s.stroke([(26, 23), (38, 23)], 2.0, taper=False)
-    for y, w0 in [(40, 10), (44, 8), (48, 9)]:
-        s.line((32 - w0 / 2, y), (32 + w0 / 2, y), 0.8)
-    # crack
-    s.stroke([(44, 28), (40, 33), (43, 36), (39, 42)], 0.9, taper=False)
-    # heaped earth and grass
-    s.stroke([(4, 58), (14, 54), (32, 53), (50, 54), (60, 58)], 1.8)
-    s.hatch([(6, 58), (14, 55), (32, 54), (50, 55), (58, 58), (32, 61)], angle=0, gap=1.1, w=0.4)
-    for x in (8, 12, 52, 56, 22):
-        s.stroke([(x, 56), (x - 1, 51), (x + 0.5, 55), (x + 2, 50), (x + 1.5, 56)], 0.7, taper=False)
-    # wisps of mist
-    s.stroke([(2, 46), (8, 44), (12, 46)], 0.7)
-    s.stroke([(52, 44), (57, 42), (62, 45)], 0.7)
-    s.save()
-
-
-def descanso_cripta():
-    s = Svg('descanso-cripta', seed=411)
-    # stone blocks around an arched niche
-    for y in (4, 16, 28, 40):
-        off = 0 if (y // 12) % 2 else 6
-        s.line((2, y), (62, y), 0.5)
-        for x in range(2 + off, 62, 12):
-            s.line((x, y), (x, y + 12), 0.5)
-    niche = [(18, 58), (18, 26), (20, 18), (26, 12), (32, 10), (38, 12), (44, 18), (46, 26), (46, 58)]
-    s.blot(niche, '#f0e2bc', 0.95)
-    s.hatch(niche, angle=0, gap=1.4, w=0.4, op=0.8)
-    s.stroke(niche, 2.2, taper=False)
-    s.line((14, 58), (50, 58), 2.2)
-    # candle with dripping wax on a little dish
-    s.stroke([(27, 56), (37, 56)], 1.6)
-    s.stroke([(25, 56), (26, 54), (38, 54), (39, 56)], 1.1)
-    s.wash(box(29, 34, 35, 54), '#f5ecd0', 0.9)
-    s.stroke([(29, 36), (29, 54)], 1.4, taper=False)
-    s.stroke([(35, 36), (35, 54)], 1.4, taper=False)
-    s.stroke([(29, 36), (31, 35), (32, 37), (33, 35), (35, 36)], 1.1)
-    s.stroke([(29, 38), (28.5, 43), (29.5, 44)], 0.9)
-    s.stroke([(35, 37), (36, 40), (35.5, 42)], 0.9)
-    s.line((32, 35.5), (32, 32), 0.7)
-    fl = [(32, 32), (29.5, 27), (32, 19), (34.5, 27)]
-    s.wash(fl, '#d9a040', 0.4)
-    s.stroke(fl, 1.1, closed=True)
-    s.stroke([(32, 29.5), (31, 27), (32, 24)], 0.6)
-    # halo of light
-    for a in range(0, 360, 45):
-        r = math.radians(a)
-        s.line((32 + 9 * math.cos(r), 27 + 9 * math.sin(r)), (32 + 11.5 * math.cos(r), 27 + 11.5 * math.sin(r)), 0.5)
     s.save()
 
 
@@ -555,70 +384,6 @@ def elite_templo():
     s.save()
 
 
-def evento_templo():
-    s = Svg('evento-templo', seed=461)
-    # stone altar block with a sigil carved on its face
-    top = [(6, 36), (58, 36), (54, 42), (10, 42)]
-    s.wash(top, '#6a5a5a', 0.2)
-    s.stroke(top, 1.8, closed=True)
-    body = [(12, 42), (52, 42), (50, 60), (14, 60)]
-    s.wash(body, '#5a4a4a', 0.16)
-    s.hatch([(40, 42), (52, 42), (50, 60), (40, 60)], angle=60, gap=1.2, w=0.45)
-    s.stroke(body, 1.8, closed=True)
-    s.line((8, 61), (56, 61), 1.8)
-    s.ring(30, 51, 6, w=1.1)
-    s.stroke([(30, 45.5), (34, 55), (25, 49), (35, 49), (26, 55), (30, 45.5)], 0.7, taper=False)
-    # red stain dripping down the side
-    s.stroke([(46, 42), (47, 48), (46.5, 51)], 1.4, color=RED)
-    s.dot(46.5, 52.5, 1.0, RED)
-    # black candle: filled wax, pale flame, smoke
-    s.blot([(27, 16), (37, 16), (37, 36), (27, 36)], INK, 0.95)
-    s.stroke([(27, 16), (29, 14.5), (32, 16.5), (35, 14.5), (37, 16)], 1.1)
-    s.stroke([(37, 17), (38, 22), (37.5, 25)], 1.0)
-    s.stroke([(24, 36), (40, 36)], 1.4)
-    s.line((32, 15.5), (32, 12), 0.7)
-    fl = [(32, 12), (29.5, 7), (32, 0.5), (34.5, 7)]
-    s.wash(fl, '#6a3a8a', 0.3)
-    s.stroke(fl, 1.1, closed=True)
-    s.stroke([(38, 4), (42, 2), (40, 6), (44, 5)], 0.6)
-    # scattered bones and a dagger lying on the altar
-    s.stroke([(10, 34), (20, 32)], 1.2)
-    s.stroke([(8, 33.5), (10, 34), (9, 35.5)], 0.9)
-    s.stroke([(44, 34), (54, 32)], 1.4)
-    s.stroke([(44, 32), (44, 36)], 1.2)
-    s.save()
-
-
-def descanso_templo():
-    s = Svg('descanso-templo', seed=471)
-    # a carved temple pew with a kneeler, seen three-quarter
-    back = [(10, 14), (50, 8), (50, 34), (10, 38)]
-    s.wash(back, '#5a3a2a', 0.18)
-    s.hatch(back, angle=80, gap=1.6, w=0.4)
-    s.stroke([(10, 38), (10, 14), (18, 9), (26, 12), (34, 6), (42, 9), (50, 4), (50, 34)], 1.9, taper=False)
-    s.stroke([(14, 34), (14, 18), (46, 12), (46, 31)], 0.8, closed=True)
-    # carved arch window on the backrest
-    s.stroke([(24, 31), (24, 22), (27, 17), (30, 16), (33, 17), (35, 21), (35, 30)], 1.1)
-    s.hatch([(24, 31), (24, 22), (27, 17), (33, 17), (35, 21), (35, 30)], angle=0, gap=1.1, w=0.4)
-    # seat plank
-    seat = [(8, 38), (50, 34), (58, 38), (16, 43)]
-    s.wash(seat, '#8a6a3a', 0.2)
-    s.stroke(seat, 1.6, closed=True)
-    s.line((16, 43), (58, 38), 1.0)
-    s.line((16, 45), (58, 40), 1.0)
-    # legs
-    for x0, y0 in [(10, 40), (18, 45), (50, 36), (56, 40)]:
-        s.stroke([(x0, y0), (x0, y0 + 16)], 1.6, taper=False)
-    # kneeler rail in front
-    s.stroke([(14, 56), (58, 50)], 2.2, taper=False)
-    s.stroke([(14, 59), (58, 53)], 1.0)
-    s.hatch([(14, 56), (58, 50), (58, 53), (14, 59)], angle=80, gap=0.9, w=0.35)
-    # a closed prayer book resting on the seat
-    s.stroke([(32, 34), (42, 33), (44, 36), (34, 37.5)], 1.0, closed=True)
-    s.line((33, 35.8), (43, 34.6), 0.5)
-    s.save()
-
-
 def cofre_templo():
     s = Svg('cofre-templo', seed=481)
     # jewelled chalice
@@ -645,36 +410,6 @@ def cofre_templo():
     for x, y in [(10, 6), (54, 14), (8, 26)]:
         s.line((x - 2.2, y), (x + 2.2, y), 0.6)
         s.line((x, y - 2.2), (x, y + 2.2), 0.6)
-    s.save()
-
-
-def taberna_templo():
-    s = Svg('taberna-templo', seed=491)
-    # a skull-bowl ritual cup on a tripod, brimming and smoking
-    bowl = [(8, 30), (56, 30), (52, 40), (42, 47), (22, 47), (12, 40)]
-    s.wash(bowl, '#e8d8b0', 0.3)
-    s.hatch([(42, 30), (56, 30), (52, 40), (42, 47), (38, 47), (46, 38)], angle=40, gap=1.2, w=0.45)
-    s.stroke(bowl, 1.9, closed=True)
-    # liquid surface and a drip
-    s.stroke([(10, 30), (32, 26), (54, 30), (32, 33), (10, 30)], 1.1, closed=True)
-    s.wash([(12, 30), (32, 27), (52, 30), (32, 32)], RED, 0.45)
-    s.stroke([(14, 34), (13, 40), (14, 43)], 1.3, color=RED)
-    s.dot(14, 44.5, 1.0, RED)
-    # sockets and teeth on the bowl side
-    s.blot([(22, 35), (28, 34.5), (27, 39), (23, 39)], INK)
-    s.blot([(36, 34.5), (42, 35), (41, 39), (37, 39)], INK)
-    s.blot([(32, 39), (30.6, 42), (33.4, 42)], INK)
-    for x in (26, 30, 34, 38):
-        s.line((x, 44), (x, 47), 0.6)
-    # tripod legs
-    s.stroke([(22, 47), (14, 60)], 1.7, taper=False)
-    s.stroke([(42, 47), (50, 60)], 1.7, taper=False)
-    s.stroke([(32, 47), (32, 61)], 1.7, taper=False)
-    s.line((10, 61), (54, 61), 1.2)
-    # incense smoke curling up
-    s.stroke([(24, 26), (20, 20), (25, 15), (21, 9), (26, 4)], 0.9)
-    s.stroke([(38, 26), (42, 20), (37, 15), (42, 10), (39, 4)], 0.9)
-    s.stroke([(31, 25), (33, 19), (30, 14)], 0.7)
     s.save()
 
 
@@ -710,61 +445,6 @@ def elite_dragon():
     s.save()
 
 
-def evento_dragon():
-    s = Svg('evento-dragon', seed=511)
-    # a dragon egg nested among stones and embers
-    egg = ell(32, 30, 14, 20, 12, -math.pi / 2)
-    s.wash(egg, '#6a3a1a', 0.16)
-    s.stroke(egg, 1.9, closed=True)
-    s.hatch([(38, 12), (44, 20), (46, 32), (43, 44), (36, 50), (40, 32)], angle=40, gap=1.3, w=0.45)
-    # scale pattern
-    for row, y in enumerate((18, 25, 32, 39)):
-        half = [8, 11, 12, 11][row]
-        x = 32 - half + (row % 2) * 3.5
-        while x < 32 + half - 3:
-            s.stroke([(x, y), (x + 3.5, y + 3), (x + 7, y)], 0.6, taper=False, jitter=0.2)
-            x += 7
-    # glowing crack
-    s.stroke([(30, 10), (33, 16), (29, 21), (34, 26)], 1.2, taper=False, color=RED)
-    # nest of stones
-    for x, y, r in [(12, 52, 5), (22, 55, 5.5), (32, 56, 5), (42, 55, 5.5), (52, 52, 5), (6, 58, 3.5), (58, 58, 3.5)]:
-        s.ring(x, y, r, r * 0.6, w=1.0)
-        s.line((x - r * 0.5, y + r * 0.3), (x + r * 0.4, y + r * 0.2), 0.5)
-    # heat shimmer and sparks
-    for x in (10, 54):
-        s.stroke([(x, 42), (x - 2, 36), (x + 1, 30), (x - 1, 24)], 0.7)
-    for x, y in [(16, 20), (48, 14), (50, 26)]:
-        s.dot(x, y, 0.7, '#c9642a')
-    s.save()
-
-
-def descanso_dragon():
-    s = Svg('descanso-dragon', seed=521)
-    # a bed of glowing embers ringed by stones, no big flame: the lair's warmth
-    s.wash(ell(32, 46, 24, 10, 12), '#c9642a', 0.18)
-    coals = [(18, 46, 5), (26, 42, 5.5), (36, 42, 5), (45, 46, 5), (24, 50, 5), (34, 50, 5.5), (42, 52, 4)]
-    s.wash(ell(32, 47, 20, 8, 10), '#8b1e12', 0.2)
-    for i, (x, y, r) in enumerate(coals):
-        pts = ell(x, y, r, r * 0.65, 6, 0.3)
-        s.stroke(pts, 1.2, closed=True, n=2)
-        if i in (4, 5):
-            s.hatch(pts, angle=35, gap=1.5, w=0.4)
-        s.line((x - r * 0.4, y), (x + r * 0.4, y - 0.5), 0.6, color=RED)
-    # ring of stones
-    for i in range(7):
-        a = math.pi * (0.02 + 0.96 * i / 6)
-        x, y = 32 - 27 * math.cos(a), 52 + 7 * math.sin(a)
-        s.ring(x, y, 3, 2, w=0.9)
-    # little tongues of flame and rising sparks
-    for x, y in [(24, 38), (35, 37), (44, 41)]:
-        fl = [(x - 2, y + 2), (x - 2.4, y - 2), (x, y - 6), (x + 2.4, y - 2), (x + 2, y + 2)]
-        s.stroke(fl, 0.9, closed=True, n=2)
-    for x, y in [(20, 28), (30, 22), (40, 26), (46, 18), (26, 12), (36, 8)]:
-        s.dot(x, y, 0.8, '#c9642a')
-    s.stroke([(30, 34), (28, 28), (32, 22)], 0.6)
-    s.save()
-
-
 def cofre_dragon():
     s = Svg('cofre-dragon', seed=531)
     # a heaped hoard of gold coins with a crown and goblet on top
@@ -791,35 +471,6 @@ def cofre_dragon():
     for x, y in [(8, 36), (56, 16), (14, 26)]:
         s.line((x - 2.2, y), (x + 2.2, y), 0.6)
         s.line((x, y - 2.2), (x, y + 2.2), 0.6)
-    s.save()
-
-
-def taberna_dragon():
-    s = Svg('taberna-dragon', seed=541)
-    # a curved drinking horn with metal bands, brimming with foam
-    outer = [(10, 18), (14, 34), (24, 48), (40, 56), (54, 58), (60, 56)]
-    inner = [(24, 12), (26, 28), (32, 40), (44, 48), (54, 52), (60, 56)]
-    s.wash(outer + list(reversed(inner)), '#b8945a', 0.22)
-    s.hatch(outer + list(reversed(inner)), angle=-40, gap=1.4, w=0.45)
-    s.stroke(outer, 2.0, taper=False)
-    s.stroke(inner, 1.6, taper=False)
-    # metal bands and the rim
-    for t in (0.3, 0.62):
-        a = lerp(outer[1], outer[2], t) if t < 0.5 else lerp(outer[2], outer[3], t - 0.3)
-        b = lerp(inner[1], inner[2], t) if t < 0.5 else lerp(inner[2], inner[3], t - 0.3)
-        s.stroke([a, b], 2.2, taper=False)
-    s.stroke([(10, 18), (17, 14), (24, 12)], 2.2, taper=False)
-    s.stroke([(9, 21), (17, 16.5), (25, 15)], 1.0, taper=False)
-    # tip cap
-    s.stroke([(56, 56), (62, 54), (63, 58), (58, 59)], 1.2, closed=True)
-    # foam spilling over
-    foam = [(8, 17), (8, 11), (13, 8), (17, 3), (22, 6), (27, 4), (29, 10), (25, 13), (17, 13)]
-    s.stroke(foam, 1.3, closed=True)
-    s.stroke([(10, 18), (9, 24), (10.5, 26), (11.5, 22)], 0.8)
-    for x, y in [(14, 9), (21, 8)]:
-        s.ring(x, y, 1.2, w=0.5)
-    # carrying strap
-    s.stroke([(16, 30), (26, 22), (36, 22), (44, 30), (46, 44)], 0.9)
     s.save()
 
 
@@ -871,65 +522,6 @@ def elite_contemplador():
     s.save()
 
 
-def evento_contemplador():
-    s = Svg('evento-contemplador', seed=571)
-    # a cluster of arcane crystals jutting from rock, humming with light
-    for pts, sh in [
-        ([(26, 54), (24, 22), (32, 6), (40, 22), (38, 54)], [(32, 6), (40, 22), (38, 54), (32, 54)]),
-        ([(14, 56), (10, 36), (16, 26), (24, 38), (24, 56)], [(16, 26), (24, 38), (24, 56), (18, 56)]),
-        ([(40, 56), (42, 34), (50, 26), (54, 40), (50, 56)], [(50, 26), (54, 40), (50, 56), (46, 56)]),
-    ]:
-        s.wash(pts, '#4a5a9a', 0.2)
-        s.hatch(sh, angle=70, gap=1.2, w=0.45)
-        s.stroke(pts, 1.7, closed=True)
-    s.line((32, 6), (32, 54), 0.7)
-    s.line((16, 26), (18, 56), 0.6)
-    s.line((50, 26), (46, 56), 0.6)
-    # rock at the base
-    s.stroke([(4, 60), (10, 54), (24, 55), (32, 53), (42, 55), (54, 54), (60, 60)], 1.8)
-    s.line((4, 60), (60, 60), 1.4)
-    # sparkles and a rune spark
-    for x, y, r in [(10, 14, 3.2), (52, 12, 2.6), (56, 30, 2)]:
-        s.line((x - r, y), (x + r, y), 0.7)
-        s.line((x, y - r), (x, y + r), 0.7)
-    for a in range(-150, -20, 26):
-        rr = math.radians(a)
-        s.line((32 + 12 * math.cos(rr), 20 + 12 * math.sin(rr)), (32 + 16 * math.cos(rr), 20 + 16 * math.sin(rr)), 0.5)
-    s.save()
-
-
-def descanso_contemplador():
-    s = Svg('descanso-contemplador', seed=581)
-    # a protective circle of runes chalked on the floor
-    s.ring(32, 32, 28, w=1.8)
-    s.ring(32, 32, 22, w=1.0)
-    s.ring(32, 32, 8, w=1.0)
-    s.wash(ell(32, 32, 8, 8, 10), '#4a5a9a', 0.25)
-    # hexagram of two triangles
-    tri1 = [(32 + 22 * math.cos(a), 32 + 22 * math.sin(a)) for a in (-math.pi / 2, math.pi / 6, 5 * math.pi / 6)]
-    tri2 = [(32 + 22 * math.cos(a), 32 + 22 * math.sin(a)) for a in (math.pi / 2, -math.pi / 6, 7 * math.pi / 6)]
-    for t in (tri1, tri2):
-        s.stroke(t + [t[0]], 1.1, taper=False)
-    # rune marks between the rings
-    glyphs = [[(-1.5, -2), (1.5, 0), (-1.5, 2)], [(-1.5, 2), (0, -2), (1.5, 2)], [(0, -2), (0, 2), (1.5, 0)],
-              [(-1.5, -2), (1.5, -2), (-1.5, 2), (1.5, 2)]]
-    for i in range(12):
-        a = i * math.pi / 6 + math.pi / 12
-        cx, cy = 32 + 25 * math.cos(a), 32 + 25 * math.sin(a)
-        s.stroke([(cx + x, cy + y) for x, y in glyphs[i % 4]], 0.8, taper=False)
-    # a sleeping eye at the heart
-    s.stroke([(26, 32), (29, 34.5), (32, 35.3), (35, 34.5), (38, 32)], 1.2)
-    for x in (28, 32, 36):
-        s.line((x, 35), (x, 37.5), 0.6)
-    # candles at three points
-    for a in (-math.pi / 2, math.pi / 6, 5 * math.pi / 6):
-        x, y = 32 + 28 * math.cos(a), 32 + 28 * math.sin(a)
-        s.dot(x, y, 2.2, '#f0e2bc')
-        s.ring(x, y, 2.2, w=0.8)
-        s.dot(x, y, 0.8, '#c9642a')
-    s.save()
-
-
 def cofre_contemplador():
     s = Svg('cofre-contemplador', seed=591)
     # a chest turned to stone by a petrifying gaze: cracked, chipped, speckled
@@ -959,37 +551,507 @@ def cofre_contemplador():
     s.save()
 
 
+# ── shared families: rest = a fire, event = a question mark, tavern = a tankard ─
+# The player must spot these three at a glance in every scenario, so each one
+# keeps the same silhouette and only the material and surroundings change.
+FLAME_OUT = [(-10, 0), (-14, -11), (-9, -21), (-6, -15), (-2, -33), (4, -21), (9, -28), (14, -13), (12, 0)]
+FLAME_IN = [(-4, 0), (-5, -9), (0, -18), (2, -13), (4, -16), (7, -7), (5, 0)]
+
+
+def fire(s, cx, by, sc=1.0, color='#c9642a', core='#e8b040', w=1.6):
+    """The common campfire flame: three tongues and an inner core, base centred at (cx, by)."""
+    out = [(cx + x * sc, by + y * sc) for x, y in FLAME_OUT]
+    inn = [(cx + x * sc, by + y * sc) for x, y in FLAME_IN]
+    s.wash(out, color, 0.34)
+    s.wash(inn, core, 0.5)
+    s.hatch([out[0], out[1], out[2], out[3], inn[1], inn[0]], angle=70, gap=1.3, w=0.4)
+    s.stroke(out, w, closed=True)
+    s.stroke(inn, 1.0, closed=True)
+    return out
+
+
+def sparks(s, pts, color=INK, r=0.8):
+    for x, y in pts:
+        s.dot(x, y, r, color)
+
+
+# centre line of the common question mark (hook, then stem), dot below it
+Q_LINE = [(20, 20), (22, 12), (29, 6.5), (37, 6.5), (43, 11), (44.5, 18), (41, 25), (34, 30), (32, 35), (32, 40)]
+Q_DOT = (32, 49.5)
+
+
+def qline(ox=0.0, oy=0.0, sc=1.0):
+    return [(32 + (x - 32) * sc + ox, 28 + (y - 28) * sc + oy) for x, y in Q_LINE]
+
+
+def offset(pts, d):
+    out = []
+    for i, p in enumerate(pts):
+        a, b = pts[max(i - 1, 0)], pts[min(i + 1, len(pts) - 1)]
+        dx, dy = b[0] - a[0], b[1] - a[1]
+        n = math.hypot(dx, dy) or 1
+        dd = d(i / (len(pts) - 1)) if callable(d) else d
+        out.append((p[0] - dy / n * dd, p[1] + dx / n * dd))
+    return out
+
+
+def qshape(line, hw):
+    """Closed outline of a thick question-mark stroke with rounded ends."""
+    left, right = offset(line, hw), offset(line, lambda t: -(hw(t) if callable(hw) else hw))
+    h0 = hw(0) if callable(hw) else hw
+    h1 = hw(1) if callable(hw) else hw
+    a, b = line[0], line[1]
+    n = math.hypot(b[0] - a[0], b[1] - a[1])
+    cap0 = (a[0] - (b[0] - a[0]) / n * h0 * 0.8, a[1] - (b[1] - a[1]) / n * h0 * 0.8)
+    a, b = line[-1], line[-2]
+    n = math.hypot(b[0] - a[0], b[1] - a[1])
+    cap1 = (a[0] - (b[0] - a[0]) / n * h1 * 0.8, a[1] - (b[1] - a[1]) / n * h1 * 0.8)
+    return [cap0] + left + [cap1] + list(reversed(right))
+
+
+def bone(s, p, q, r=2.0, w=1.1):
+    s.line(along(p, q, 0.1, r), along(p, q, 0.9, r), w)
+    s.line(along(p, q, 0.1, -r), along(p, q, 0.9, -r), w)
+    for t in (0.02, 0.98):
+        for o in (r * 0.95, -r * 0.95):
+            c = along(p, q, t, o)
+            s.ring(c[0], c[1], r * 1.1, w=w * 0.9)
+
+
+def tankard(s, x0=18, x1=42, top=22, bot=56, washc='#a0661e', op=0.15, foamc=None, bands=(28, 50)):
+    """Body, bands, handle and foam of the common beer tankard; returns the body outline."""
+    body = [(x0, top), (x1, top), (x1 - 1.5, bot), (x0 + 1.5, bot)]
+    s.wash(body, washc, op)
+    s.hatch([(x1 - 8, top), (x1, top), (x1 - 1.5, bot), (x1 - 9, bot)], angle=75, gap=1.3, w=0.45)
+    s.stroke([(x0, top), (x0 + 0.8, (top + bot) / 2), (x0 + 1.5, bot)], 1.9)
+    s.stroke([(x1, top), (x1 - 0.8, (top + bot) / 2), (x1 - 1.5, bot)], 1.9)
+    s.line((x0 + 1, bot), (x1 - 1, bot), 1.9)
+    for y in bands:
+        s.line((x0 + 0.4, y), (x1 - 0.4, y), 1.2)
+    # handle
+    s.stroke([(x1, top + 5), (x1 + 9, top + 5), (x1 + 13, top + 12), (x1 + 12, top + 22), (x1 + 6, top + 27), (x1 - 1, top + 27)], 2.0, taper=False)
+    s.stroke([(x1 - 1, top + 10), (x1 + 6, top + 10), (x1 + 8, top + 16), (x1 + 6, top + 21), (x1 - 1, top + 22)], 1.0, taper=False)
+    # foam crown and a drip
+    cx = (x0 + x1) / 2
+    foam = [(x0 - 3, top + 1), (x0 - 1, top - 6), (x0 + 5, top - 7), (cx - 4, top - 12), (cx + 2, top - 9), (cx + 7, top - 12),
+            (x1 + 1, top - 8), (x1 + 3, top - 1), (x1 - 2, top + 2), (cx + 4, top + 1), (cx - 2, top + 3), (x0 + 4, top + 2)]
+    if foamc:
+        s.wash(foam, foamc, 0.38)
+    s.stroke(foam, 1.4, closed=True)
+    s.stroke([(x0 + 3, top + 2), (x0 + 3, top + 8), (x0 + 4.5, top + 10), (x0 + 5, top + 7), (x0 + 5, top + 3)], 0.8)
+    for x, y in [(x0 + 6, top - 3), (cx + 1, top - 5), (cx + 8, top - 4)]:
+        s.ring(x, y, 1.3, w=0.6)
+    return body
+
+
+# ── rest: always a fire ──────────────────────────────────────────────────────
+def descanso_ogro():
+    s = Svg('descanso-ogro', seed=611)
+    # campfire whose firewood is a pair of gnawed thigh bones, ringed by stones
+    for i in range(7):
+        a = math.pi * (0.05 + 0.9 * i / 6)
+        x, y = 32 - 24 * math.cos(a), 55 + 5 * math.sin(a)
+        s.ring(x, y, 3.2, 2.2, w=0.9)
+    bone(s, (13, 54), (51, 44), r=2.2, w=1.3)
+    bone(s, (13, 44), (51, 54), r=2.2, w=1.3)
+    fire(s, 31, 47, 1.0, '#c9642a', '#e8b040')
+    # a skull and a rib lying by the fire
+    sk = [(50, 36), (50, 30), (55, 27), (60, 30), (60, 36), (58, 39), (52, 39)]
+    s.wash(sk, '#e8d8b0', 0.3)
+    s.stroke(sk, 1.3, closed=True)
+    s.blot([(51.8, 32), (54.2, 31.5), (54, 34.5), (52, 34.5)], INK)
+    s.blot([(56, 31.5), (58.4, 32), (58, 34.5), (56.2, 34.5)], INK)
+    s.stroke([(4, 40), (8, 34), (14, 32)], 1.1)
+    s.stroke([(6, 42), (10, 37), (15, 36)], 0.9)
+    sparks(s, [(24, 7), (40, 8), (33, 3), (46, 13)])
+    s.save()
+
+
+def descanso_contrabandistas():
+    s = Svg('descanso-contrabandistas', seed=361)
+    # an iron basket brazier on a tripod in the cellar, a keg to sit on
+    s.stroke([(2, 16), (62, 16)], 0.5)
+    for x in range(4, 62, 10):
+        s.line((x, 4), (x, 16), 0.5)
+    fire(s, 34, 38, 0.85, '#c9642a', '#e8b040')
+    basket = [(20, 36), (48, 36), (44, 48), (24, 48)]
+    s.wash(basket, '#3a3a3a', 0.2)
+    s.stroke([(19, 36), (34, 34.5), (49, 36)], 1.8, taper=False)
+    s.stroke([(24, 48), (44, 48)], 1.8, taper=False)
+    for t in (0, 0.2, 0.4, 0.6, 0.8, 1):
+        s.line((20 + 28 * t, 36), (24 + 20 * t, 48), 1.0)
+    s.line((22, 42), (46, 42), 0.9)
+    # tripod legs
+    s.stroke([(26, 48), (18, 61)], 1.7, taper=False)
+    s.stroke([(42, 48), (50, 61)], 1.7, taper=False)
+    s.stroke([(34, 48), (34, 61)], 1.7, taper=False)
+    # little keg on the left and a bottle on the right
+    keg = [(2, 46), (12, 46), (13, 53), (12, 61), (2, 61), (1, 53)]
+    s.wash(keg, '#7a5230', 0.2)
+    s.stroke(keg, 1.3, closed=True)
+    for y in (49, 58):
+        s.line((1.5, y), (12.5, y), 0.9)
+    s.stroke([(56, 44), (56, 48), (54, 50), (54, 61), (60, 61), (60, 50), (58, 48), (58, 44)], 1.1)
+    s.wash([(54, 50), (60, 50), (60, 61), (54, 61)], '#3a5a2a', 0.3)
+    s.line((10, 62), (60, 62), 1.2)
+    sparks(s, [(26, 8), (42, 5), (46, 12)], '#c9642a')
+    s.save()
+
+
+def descanso_cripta():
+    s = Svg('descanso-cripta', seed=411)
+    # a stone brazier on a pedestal, burning with a cold blue will-o'-the-wisp
+    fire(s, 32, 32, 0.8, '#4a7ab0', '#a8c8e0')
+    # wisp curling off the tip of the flame
+    s.stroke([(30, 6), (27, 2), (31, 0.5)], 0.8, color='#3a5a80')
+    bowl = [(14, 30), (50, 30), (46, 38), (18, 38)]
+    s.wash(bowl, '#7a7a6a', 0.2)
+    s.hatch([(38, 30), (50, 30), (46, 38), (36, 38)], angle=40, gap=1.2, w=0.45)
+    s.stroke(bowl, 1.9, closed=True)
+    s.line((13, 30), (51, 30), 2.0)
+    # column with a carved skull, and a stepped plinth
+    s.stroke([(26, 38), (27, 52)], 1.7, taper=False)
+    s.stroke([(38, 38), (37, 52)], 1.7, taper=False)
+    s.hatch([(33, 38), (38, 38), (37, 52), (33, 52)], angle=80, gap=1.1, w=0.4)
+    s.stroke([(29.5, 41), (32, 40), (34.5, 41), (34.5, 44), (33.5, 45.5), (30.5, 45.5), (29.5, 44)], 0.9, closed=True)
+    s.dot(31, 42.5, 0.7)
+    s.dot(33, 42.5, 0.7)
+    s.stroke(box(20, 52, 44, 56), 1.6, closed=True)
+    s.stroke(box(16, 56, 48, 60), 1.6, closed=True)
+    s.hatch(box(38, 52, 48, 60), angle=40, gap=1.2, w=0.4)
+    # cobweb in the corner and drifting mist
+    for e in [(2, 14), (6, 10), (12, 4), (16, 2)]:
+        s.line((2, 2), e, 0.45)
+    for r in (0.5, 0.9):
+        pts = [lerp((2, 2), e, r) for e in [(2, 14), (6, 10), (12, 4), (16, 2)]]
+        s.stroke(pts, 0.4, taper=False)
+    s.stroke([(2, 50), (8, 48), (14, 50)], 0.7)
+    s.stroke([(50, 46), (56, 44), (62, 47)], 0.7)
+    s.save()
+
+
+def descanso_templo():
+    s = Svg('descanso-templo', seed=471)
+    # a ritual brazier on three claw feet, its fire burning violet
+    fire(s, 32, 36, 0.9, '#6a3a8a', '#c0a0d8')
+    bowl = [(12, 34), (52, 34), (48, 42), (40, 46), (24, 46), (16, 42)]
+    s.wash(bowl, '#5a3a3a', 0.2)
+    s.hatch([(40, 34), (52, 34), (48, 42), (40, 46), (38, 46)], angle=40, gap=1.2, w=0.45)
+    s.stroke(bowl, 1.9, closed=True)
+    s.line((11, 34), (53, 34), 2.0)
+    # small horns on the rim
+    s.stroke([(12, 34), (7, 30), (6, 24)], 1.4)
+    s.stroke([(52, 34), (57, 30), (58, 24)], 1.4)
+    # sigil on the belly
+    s.ring(32, 40.5, 3.2, w=0.9)
+    s.stroke([(32, 37.3), (34, 42.8), (29.2, 39.5), (34.8, 39.5), (30, 42.8), (32, 37.3)], 0.6, taper=False)
+    # claw feet
+    for bx, ex in [(22, 14), (32, 32), (42, 50)]:
+        s.stroke([(bx, 46), ((bx + ex) / 2, 53), (ex, 58)], 1.7, taper=False)
+        for d in (-2.2, 0, 2.2):
+            s.line((ex, 58), (ex + d, 60.5), 0.8)
+    # drops of wax or blood below and a curl of incense smoke
+    s.stroke([(46, 42), (46.5, 47)], 1.1, color=RED)
+    s.dot(46.6, 48.4, 0.9, RED)
+    s.stroke([(46, 10), (50, 6), (47, 2)], 0.7)
+    sparks(s, [(18, 12), (44, 16)], '#6a3a8a')
+    s.save()
+
+
+def descanso_dragon():
+    s = Svg('descanso-dragon', seed=521)
+    # a bonfire roaring over a bed of volcanic embers, jagged rocks around
+    s.wash(ell(32, 50, 26, 9, 12), '#8b1e12', 0.2)
+    coals = [(16, 50, 4.5), (24, 47, 5), (40, 47, 5), (48, 50, 4.5), (22, 54, 4.5), (32, 54, 5), (42, 54, 4.5)]
+    for i, (x, y, r) in enumerate(coals):
+        pts = ell(x, y, r, r * 0.6, 6, 0.3)
+        s.stroke(pts, 1.1, closed=True, n=2)
+        s.line((x - r * 0.4, y), (x + r * 0.4, y - 0.5), 0.7, color=RED)
+    fire(s, 31, 47, 1.0, '#c9642a', '#e8b040')
+    # jagged volcanic rocks with glowing cracks
+    for pts in ([(1, 60), (3, 50), (7, 45), (10, 52), (12, 60)], [(52, 60), (55, 48), (59, 43), (62, 50), (63, 60)]):
+        s.wash(pts, '#3a2a2a', 0.25)
+        s.hatch(pts, angle=60, gap=1.5, w=0.45)
+        s.stroke(pts, 1.5, taper=False)
+    s.stroke([(6, 50), (7, 55), (5, 59)], 0.8, color=RED)
+    s.stroke([(58, 47), (57, 53), (59, 58)], 0.8, color=RED)
+    s.line((1, 61), (63, 61), 1.3)
+    # smoke and rising sparks
+    s.stroke([(46, 16), (50, 10), (47, 4), (51, 0.5)], 0.8)
+    sparks(s, [(18, 18), (22, 8), (42, 4), (54, 22)], '#c9642a', 0.9)
+    s.save()
+
+
+def descanso_contemplador():
+    s = Svg('descanso-contemplador', seed=581)
+    # an arcane turquoise fire burning inside a rune circle chalked on the floor
+    s.ring(32, 50, 29, 10, w=1.7)
+    s.ring(32, 50, 23, 7.5, w=0.9)
+    glyphs = [[(-1.4, -1.6), (1.4, 0), (-1.4, 1.6)], [(-1.4, 1.6), (0, -1.6), (1.4, 1.6)], [(0, -1.6), (0, 1.6), (1.4, 0)],
+              [(-1.4, -1.6), (1.4, -1.6), (-1.4, 1.6), (1.4, 1.6)]]
+    for i in range(10):
+        a = i * math.pi / 5 + math.pi / 10
+        cx, cy = 32 + 26 * math.cos(a), 50 + 8.7 * math.sin(a)
+        s.stroke([(cx + x, cy + y * 0.8) for x, y in glyphs[i % 4]], 0.8, taper=False)
+    fire(s, 31, 51, 1.0, '#3a8a9a', '#a8e0d8')
+    # an open eye glimmering in the heart of the flame
+    s.stroke([(27, 40), (31, 37.5), (35, 40), (31, 42.5)], 1.0, closed=True)
+    s.dot(31, 40, 1.1)
+    # floating motes of light
+    for x, y, r in [(10, 20, 2.4), (52, 14, 2.2), (56, 32, 1.8)]:
+        s.stroke([(x, y - r), (x + r * 0.7, y), (x, y + r), (x - r * 0.7, y)], 0.8, closed=True)
+    s.save()
+
+
+# ── event: always a question mark ────────────────────────────────────────────
+def evento_ogro():
+    s = Svg('evento-ogro', seed=311)
+    # question mark hacked out of a log, lashed with rope, with a knucklebone for a dot
+    line = qline(0, -1, 0.95)
+    shape = qshape(line, 4.2)
+    s.wash(shape, '#6b4420', 0.28)
+    s.stroke(shape, 1.8, closed=True)
+    for d in (-1.6, 1.4):
+        s.stroke(offset(line, d)[1:-1], 0.5)
+    s.hatch(shape, angle=75, gap=1.9, w=0.4)
+    # knot on the hook and a rope binding on the stem
+    s.ring(38, 7, 1.4, 1.0, w=0.7)
+    s.stroke([(27.5, 34), (32, 32.5), (36.5, 34)], 1.2)
+    # the dot: the sawn end of a log, its growth rings showing
+    s.wash(ell(32, 50, 5, 4.6, 10), '#8a6a3a', 0.35)
+    s.ring(32, 50, 5, 4.6, w=1.7)
+    s.ring(32, 50, 2.8, 2.5, w=0.6)
+    s.dot(32, 50, 0.6)
+    # tufts of grass and feathers on the hook tip
+    s.stroke([(10, 62), (20, 59), (32, 60), (44, 59), (54, 62)], 1.3)
+    for x in (14, 48):
+        s.stroke([(x, 60), (x - 1, 55), (x + 0.5, 59), (x + 2, 54), (x + 1.5, 60)], 0.7, taper=False)
+    s.line((17, 21), (13, 26), 0.7)
+    s.stroke([(13, 26), (11, 30), (13, 34), (15, 30)], 0.9, closed=True)
+    s.save()
+
+
+def evento_contrabandistas():
+    s = Svg('evento-contrabandistas', seed=351)
+    # a question mark inked on a parchment note, sealed with red wax as its dot
+    sheet = [(8, 6), (31, 5), (54, 4), (55.5, 31), (57, 58), (31, 59), (6, 60), (7, 33)]
+    s.wash(sheet, '#b8945a', 0.2)
+    s.stroke([(8, 6), (31, 5), (54, 4)], 1.3)
+    s.stroke([(54, 4), (55.5, 31), (57, 58)], 1.3)
+    s.stroke([(6, 60), (31, 59), (57, 58)], 1.3)
+    s.stroke([(8, 6), (7, 33), (6, 60)], 1.3)
+    # curled corners
+    s.stroke([(8, 6), (12, 12), (15, 7)], 0.9)
+    s.stroke([(57, 58), (51, 55), (52, 60)], 0.9)
+    s.hatch([(54, 4), (57, 58), (53, 58), (51, 5)], angle=80, gap=1.2, w=0.4)
+    line = qline(0, -2, 0.82)
+    s.stroke(line, 5.4)
+    s.stroke(offset(line, 1.8)[1:-2], 0.5)
+    s.dot(line[0][0] - 1, line[0][1] + 1.5, 1.5)
+    # ink splatter
+    for x, y, r in [(46, 30, 0.8), (44, 33, 0.5), (17, 38, 0.6)]:
+        s.dot(x, y, r)
+    # wax seal as the dot, with its ribbon
+    s.stroke([(28, 52), (24, 60), (22, 63)], 1.2, color=RED)
+    s.stroke([(36, 52), (40, 60), (43, 62)], 1.2, color=RED)
+    seal = []
+    for i in range(10):
+        a = i * math.pi / 5
+        r = 5.6 + (0.9 if i % 2 else 0)
+        seal.append((32 + r * math.cos(a), 49 + r * math.sin(a)))
+    s.blot(seal, '#8b1e12', 0.65)
+    s.stroke(seal, 1.2, closed=True)
+    s.ring(32, 49, 3.2, w=0.7)
+    s.save()
+
+
+def evento_cripta():
+    s = Svg('evento-cripta', seed=401)
+    # a tombstone with a question mark chiselled deep into it
+    stone = [(12, 56), (12, 24), (16, 13), (25, 6), (39, 6), (48, 13), (52, 24), (52, 56)]
+    s.wash(stone, '#7a7a6a', 0.18)
+    s.hatch([(42, 7), (48, 13), (52, 24), (52, 56), (46, 56), (48, 24)], angle=40, gap=1.3, w=0.45)
+    s.stroke(stone, 1.9, taper=False)
+    line = qline(0, 3, 0.74)
+    shape = qshape(line, 3.3)
+    s.blot(shape, INK, 0.3)
+    s.hatch(shape, angle=45, gap=1.5, w=0.45)
+    s.stroke(shape, 1.3, closed=True)
+    s.stroke(offset(line, 3.3)[2:-1], 0.9)
+    dot = ell(32, 48, 3.4, 3.2, 8)
+    s.blot(dot, INK, 0.3)
+    s.stroke(dot, 1.3, closed=True)
+    # crack and moss
+    s.stroke([(46, 30), (43, 35), (46, 38), (43, 44)], 0.9, taper=False)
+    s.stroke([(12, 40), (15, 42), (13, 46)], 0.8)
+    # heaped earth, grass and mist
+    s.stroke([(3, 60), (12, 56), (32, 55), (52, 56), (61, 60)], 1.8)
+    s.hatch([(5, 60), (12, 57), (32, 56), (52, 57), (59, 60), (32, 63)], angle=0, gap=1.5, w=0.4)
+    for x in (8, 55):
+        s.stroke([(x, 58), (x - 1, 53), (x + 0.5, 57), (x + 2, 52), (x + 1.5, 58)], 0.7, taper=False)
+    s.stroke([(1, 48), (6, 46), (10, 48)], 0.7)
+    s.stroke([(54, 46), (58, 44), (63, 47)], 0.7)
+    s.save()
+
+
+def evento_templo():
+    s = Svg('evento-templo', seed=461)
+    # a question mark of black wax, lit at its tip and dripping onto an altar
+    line = qline(0, 2, 0.9)
+    shape = qshape(line, 3.6)
+    s.blot(shape, INK, 0.95)
+    # drips hanging from the hook and the stem
+    for x, y, ln in [(43.5, 20, 6), (30.5, 40, 4)]:
+        s.blot([(x - 1.4, y - 1), (x + 1.4, y - 1), (x + 1, y + ln), (x, y + ln + 1.6), (x - 1, y + ln)], INK)
+    # wick and violet flame at the start of the hook
+    tip = line[0]
+    fx, fy = tip[0] - 1.5, tip[1] - 4
+    s.line((tip[0] - 1, tip[1] - 2), (fx, fy), 0.8)
+    fl = [(fx, fy), (fx - 3.6, fy - 5), (fx - 0.5, fy - 14), (fx + 3.2, fy - 5)]
+    s.wash(fl, '#6a3a8a', 0.45)
+    s.stroke(fl, 1.2, closed=True)
+    s.stroke([(fx, fy - 1.5), (fx - 1.2, fy - 4.5), (fx - 0.3, fy - 8)], 0.6)
+    # the dot: a puddle of wax
+    s.blot(ell(32, 50, 4.2, 3.4, 8), INK, 0.95)
+    # altar slab with a sigil
+    slab = [(6, 56), (58, 56), (55, 62), (9, 62)]
+    s.wash(slab, '#6a5a5a', 0.2)
+    s.hatch([(40, 56), (58, 56), (55, 62), (40, 62)], angle=60, gap=1.2, w=0.45)
+    s.stroke(slab, 1.6, closed=True)
+    s.stroke([(46, 50), (50, 54), (54, 50), (50, 46)], 0.9, closed=True)
+    s.dot(50, 50, 0.8, RED)
+    s.stroke([(12, 44), (16, 40), (13, 36), (17, 32)], 0.6)
+    s.save()
+
+
+def evento_dragon():
+    s = Svg('evento-dragon', seed=511)
+    # a question mark forged in gold, scaled like a dragon's tail with a spiny ridge
+    line = qline(0, -1, 0.95)
+    shape = qshape(line, lambda t: 4.4 - 1.4 * t)
+    s.wash(shape, '#b8860b', 0.4)
+    s.hatch([shape[i] for i in range(len(shape) // 2, len(shape))], angle=40, gap=1.3, w=0.45)
+    s.stroke(shape, 1.8, closed=True)
+    # scales along the body
+    for i in range(1, len(line) - 1):
+        p, q = line[i], line[i + 1]
+        m = lerp(p, q, 0.5)
+        s.stroke([along(p, q, 0.2, 1.8), (m[0], m[1]), along(p, q, 0.8, 1.8)], 0.6, taper=False)
+    # spines along the outer edge of the hook
+    outer = offset(line, 4.2)
+    for i in range(1, 7):
+        p, q = outer[i], outer[i + 1]
+        tip = along(p, q, 0.5, 3.2)
+        s.stroke([lerp(p, q, 0.15), tip, lerp(p, q, 0.85)], 1.0, taper=False)
+    # the dot: a gold coin
+    s.wash(ell(32, 50, 4.4, 4.2, 10), '#b8860b', 0.45)
+    s.ring(32, 50, 4.4, w=1.6)
+    s.ring(32, 50, 2.4, w=0.6)
+    # little heaps of coins and glints
+    for x, y in [(14, 59), (20, 60.5), (44, 60.5), (50, 59)]:
+        coin(s, x, y, 3.0)
+    for x, y in [(8, 36), (56, 34)]:
+        s.line((x - 2.2, y), (x + 2.2, y), 0.6)
+        s.line((x, y - 2.2), (x, y + 2.2), 0.6)
+    s.save()
+
+
+def evento_contemplador():
+    s = Svg('evento-contemplador', seed=571)
+    # a tentacle curled into a question mark, an eye staring up as its dot
+    line = qline(0, -1, 0.95)
+    shape = qshape(line, lambda t: 1.4 + 3.2 * t ** 0.8)
+    s.wash(shape, '#7a5a8a', 0.28)
+    s.stroke(shape, 1.8, closed=True)
+    s.hatch([shape[i] for i in range(len(shape) // 2, len(shape))], angle=50, gap=1.3, w=0.45)
+    # suckers along the inner side
+    inner = offset(line, lambda t: -(0.2 + 1.6 * t))
+    for i in range(3, len(inner) - 1):
+        s.ring(inner[i][0], inner[i][1], 0.9 + 0.2 * i / len(inner), w=0.6)
+    # the dot: an eye
+    eye = [(24, 50), (28, 46.5), (32, 45.5), (36, 46.5), (40, 50), (36, 53.5), (32, 54.5), (28, 53.5)]
+    s.wash(eye, '#e8d8b0', 0.45)
+    s.stroke(eye, 1.6, closed=True)
+    s.ring(32, 50, 3.4, w=1.0)
+    s.wash(ell(32, 50, 3.2, 3.2, 8), '#3a6a5a', 0.35)
+    s.blot([(31.2, 47.4), (32.8, 47.4), (33.2, 50), (32.8, 52.6), (31.2, 52.6), (30.8, 50)], INK)
+    for a in (-2.5, -1.57, -0.64):
+        s.line((32 + 8 * math.cos(a), 50 + 4.8 * math.sin(a)), (32 + 10.5 * math.cos(a), 50 + 7 * math.sin(a)), 0.8)
+    # psionic ripples
+    s.stroke(arc(32, 30, 28, 26, 2.9, 3.6, 4), 0.6)
+    s.stroke(arc(32, 30, 28, 26, -0.45, 0.25, 4), 0.6)
+    for x, y, r in [(10, 10, 2.4), (54, 40, 2)]:
+        s.line((x - r, y), (x + r, y), 0.7)
+        s.line((x, y - r), (x, y + r), 0.7)
+    s.save()
+
+
+# ── tavern: always a tankard of beer ─────────────────────────────────────────
+def taberna_templo():
+    s = Svg('taberna-templo', seed=491)
+    # a pewter tankard with the cult's sigil and reddish foam
+    tankard(s, washc='#6a6a70', op=0.22, foamc='#b04a3a', bands=(28, 51))
+    # hinge knuckle of the lid on top of the handle
+    s.ring(46, 25, 2, 1.6, w=1.0)
+    # sigil: a ringed pentagram with a drop of red
+    s.ring(29, 39.5, 6.4, w=1.1)
+    pts = [(29 + 6 * math.cos(-math.pi / 2 + k * 4 * math.pi / 5), 39.5 + 6 * math.sin(-math.pi / 2 + k * 4 * math.pi / 5)) for k in range(6)]
+    s.stroke(pts, 0.7, taper=False)
+    s.dot(29, 39.5, 0.8, RED)
+    # dents in the pewter
+    s.stroke([(37, 32), (36, 35), (37.5, 37)], 0.6)
+    s.save()
+
+
+def taberna_dragon():
+    s = Svg('taberna-dragon', seed=541)
+    # a copper tankard covered in scales, a claw handle, foam still steaming
+    tankard(s, washc='#b0602a', op=0.24, bands=(27, 51))
+    for row, y in enumerate((31, 36, 41, 46)):
+        x = 21 + (row % 2) * 2.5
+        while x < 36:
+            s.stroke([(x, y), (x + 2.5, y + 2.6), (x + 5, y)], 0.6, taper=False, jitter=0.2)
+            x += 5
+    # spikes on the handle's back
+    for x, y, dx, dy in [(51, 28, 3, -2), (55, 34, 3.5, 0), (54, 42, 3, 2.5)]:
+        s.stroke([(x - 1, y - 1.5), (x + dx, y + dy), (x + 1, y + 1.5)], 0.9, taper=False)
+    # clawed feet
+    for x in (22, 38):
+        s.stroke([(x - 3, 56), (x - 4, 60), (x, 58), (x + 4, 60), (x + 3, 56)], 1.0, taper=False)
+    # steam
+    s.stroke([(22, 9), (19, 5), (23, 1)], 0.8)
+    s.stroke([(34, 7), (37, 3), (34, 0.5)], 0.8)
+    s.stroke([(44, 11), (47, 7), (45, 3)], 0.7)
+    s.save()
+
+
 def taberna_contemplador():
     s = Svg('taberna-contemplador', seed=601)
-    # a round-bellied bottle whose draught glows in the dark
-    for a in range(0, 360, 30):
-        r = math.radians(a)
-        s.line((32 + 22 * math.cos(r), 42 + 20 * math.sin(r)), (32 + 28 * math.cos(r), 42 + 25 * math.sin(r)), 0.6)
-    flask = [(28, 20), (28, 28), (18, 34), (14, 44), (18, 54), (32, 60), (46, 54), (50, 44), (46, 34), (36, 28), (36, 20)]
-    s.wash(flask, '#e8e0c0', 0.5)
-    s.stroke(flask, 1.9, taper=False)
-    s.stroke([(18, 54), (32, 60), (46, 54)], 1.9, taper=False)
-    # liquid
-    liquid = [(16, 44), (24, 41), (32, 43), (40, 41), (48, 44), (46, 53), (32, 58), (18, 53)]
-    s.wash(liquid, '#3a8a9a', 0.45)
-    s.stroke([(16, 44), (24, 41), (32, 43), (40, 41), (48, 44)], 1.0)
-    s.hatch([(40, 42), (48, 44), (46, 53), (38, 57)], angle=60, gap=1.2, w=0.4)
-    for x, y, r in [(26, 50, 1.6), (36, 47, 1.1), (30, 38, 1.0), (33, 32, 0.8)]:
-        s.ring(x, y, r, w=0.5)
-    # cork and neck bands
-    s.stroke(box(27, 12, 37, 20), 1.4, closed=True)
-    s.hatch(box(27, 12, 37, 20), angle=90, gap=1.4, w=0.4)
-    s.line((27, 22), (37, 22), 1.0)
-    # highlight
-    s.stroke([(21, 38), (19, 44), (21, 49)], 1.0, color='#f5ecd0')
+    # a glass tankard: beer seen through the glass, an eye floating in it, turquoise foam
+    body = tankard(s, washc='#e8e0c0', op=0.3, foamc='#3a8a9a', bands=())
+    s.wash([(19, 27), (40.5, 27), (39.5, 55), (20, 55)], '#6a8a3a', 0.25)
+    s.stroke([(19, 27), (25, 26), (31, 27.5), (40.5, 26.5)], 0.8)
+    # facets of the glass and a highlight
+    for x in (24, 30, 36):
+        s.line((x, 28), (x, 54), 0.4)
+    s.stroke([(21, 30), (21, 44)], 1.0, color='#f5ecd0')
+    # the eye bobbing in the beer
+    eye = [(22, 40), (26, 36.5), (30, 35.5), (34, 36.5), (38, 40), (34, 43.5), (30, 44.5), (26, 43.5)]
+    s.wash(eye, '#f0e2bc', 0.8)
+    s.stroke(eye, 1.3, closed=True)
+    s.ring(30, 40, 3, w=0.9)
+    s.blot([(29.3, 37.8), (30.7, 37.8), (31, 40), (30.7, 42.2), (29.3, 42.2), (29, 40)], INK)
+    # bubbles rising
+    for x, y, r in [(25, 50, 1.0), (34, 48, 0.8), (27, 31, 0.7)]:
+        s.ring(x, y, r, w=0.45)
     s.save()
 
 
 # ── the full per-scenario set ────────────────────────────────────────────────
 SCENARIO_ICONS = [
-    # Ogre Settlement (reuses the goblin, the campfire and the tankard)
+    # Ogre Settlement (reuses the goblin and the tankard)
     lambda: g.combate_acto1('combate-ogro'), elite_ogro, evento_ogro,
-    lambda: g.descanso('descanso-ogro'), cofre_ogro, lambda: g.taberna('taberna-ogro'),
+    descanso_ogro, cofre_ogro, lambda: g.taberna('taberna-ogro'),
     # Smugglers' Den
     combate_contrabandistas, elite_contrabandistas, evento_contrabandistas,
     descanso_contrabandistas, cofre_contrabandistas, taberna_contrabandistas,
