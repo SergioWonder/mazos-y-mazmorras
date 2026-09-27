@@ -369,9 +369,10 @@ export interface ContextoEfecto {
   danarPerforante(obj: Luchador, n: number, fx?: string): Promise<void>;
   /** Deja elegir una carta del descarte y la pone en lo alto del mazo. */
   recuperarDelDescarte(): Promise<void>;
-  /** Descarta hasta N cartas de la mano (las elige el jugador). Devuelve cuántas
-   *  se descartaron. Cada descarte dispara la sinergia de Preparación. */
-  descartar(n: number): Promise<number>;
+  /** Discards N cards chosen by the player; mandatory unless `opcional` («descarta
+   *  hasta N», which may stop early). Returns how many were discarded. Each discard
+   *  triggers the Preparation synergy. */
+  descartar(n: number, opcional?: boolean): Promise<number>;
   /** Nº de cartas que has descartado en lo que va de turno (para pagos de descarte). */
   descartadasEsteTurno(): number;
   /** Discards a random card of the hand (never `excepto`). Returns it, or null. */

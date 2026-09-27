@@ -1,16 +1,16 @@
-# Graph Report - videogame  (2026-09-27)
+# Graph Report - videogame  (2026-09-28)
 
 ## Corpus Check
-- 143 files · ~849,625 words
+- 143 files · ~855,063 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3067 nodes · 7412 edges · 102 communities (93 shown, 9 thin omitted)
+- 3067 nodes · 7412 edges · 101 communities (92 shown, 9 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 363 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `61e1a4bd`
+- Built from commit: `6584c390`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -113,7 +113,6 @@
 - [[_COMMUNITY_Community 96|Community 96]]
 - [[_COMMUNITY_Community 97|Community 97]]
 - [[_COMMUNITY_Community 98|Community 98]]
-- [[_COMMUNITY_Community 99|Community 99]]
 - [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
 
@@ -151,7 +150,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (102 total, 9 thin omitted)
+## Communities (101 total, 9 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.04
@@ -230,8 +229,8 @@ Cohesion: 0.31
 Nodes (24): bear(), beholder(), biped(), brain(), candle(), canine(), card(), crawler() (+16 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.11
-Nodes (21): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, cardSpellKey(), hitSpell(), preludeKey() (+13 more)
+Cohesion: 0.09
+Nodes (26): cardSpellKey(), hitSpell(), preludeKey(), DeathCue, DeathCueId, DeathSequence, deathTimeScale(), FULL (+18 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -486,11 +485,11 @@ Cohesion: 0.13
 Nodes (14): strandShapes(), wolfChains(), wolfShapes(), ACTIONS, CAPE, CAPE_BACK, CORE, FALLEN (+6 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.24
-Nodes (7): broadleaf(), cartouche(), compass_rose(), crossbones(), eye_glyph(), A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Ornamental scroll cartouche with illegible lettering.
+Cohesion: 0.22
+Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
 
 ### Community 94 - "Community 94"
-Cohesion: 0.22
+Cohesion: 0.20
 Nodes (5): densify(), Plan, Dungeon-style floor plan: rooms and tunnels with solid walls, rock hatching outs, Wall points with outward normals., SVG elements for every floor piece grown by `grow` px, filled/stroked with col.
 
 ### Community 95 - "Community 95"
@@ -498,20 +497,16 @@ Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.40
-Nodes (5): dagger(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+Cohesion: 0.24
+Nodes (8): broadleaf(), dagger(), eye_glyph(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 97 - "Community 97"
 Cohesion: 0.33
 Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
 
 ### Community 98 - "Community 98"
-Cohesion: 0.40
-Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
-
-### Community 99 - "Community 99"
-Cohesion: 0.18
-Nodes (11): DeathCue, DeathCueId, DeathSequence, deathTimeScale(), FULL, HERO_DEATH_FX, HeroDeathFx, heroDeathSequence() (+3 more)
+Cohesion: 0.29
+Nodes (6): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, montarFondo()
 
 ### Community 101 - "Community 101"
 Cohesion: 0.33

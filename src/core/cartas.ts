@@ -2301,13 +2301,13 @@ export const PICARO: CartaDef[] = [
     fx: 'estrellas',
     texto: 'Descarta hasta 2 cartas.\nRoba esa cantidad +1.',
     jugar: async (c) => {
-      const d = await c.descartar(2);
+      const d = await c.descartar(2, true); // «hasta»: optional
       await c.robar(d + 1);
     },
     mejora: {
       texto: 'Descarta hasta 3 cartas.\nRoba esa cantidad +1.',
       jugar: async (c) => {
-        const d = await c.descartar(3);
+        const d = await c.descartar(3, true); // «hasta»: optional
         await c.robar(d + 1);
       },
     },

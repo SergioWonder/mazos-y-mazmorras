@@ -464,14 +464,16 @@ export function pantallaCombate(
         await rodarDados([a, b], caras, theme); // los dos dados ruedan a la vez
         if (Math.max(a, b) === caras) fx.estallido('estrellas');
       },
-      elegirCarta(cartas, titulo) {
+      elegirCarta(cartas, titulo, opciones) {
+        // mandatory choices (a forced discard) show no way out
+        const cancelable = opciones?.cancelable !== false;
         return new Promise((resolver) => {
           const overlay = document.getElementById('overlay')!;
           overlay.innerHTML = '';
           overlay.className = 'overlay-activo';
           const panel = el('div', 'panel-recompensa panel-mejora');
           panel.innerHTML = `<h2>🔎 ${titulo}</h2><div class="mejora-rejilla"></div>
-            <button class="btn-saltar">Cancelar <span class="atajo">[Esc]</span></button>`;
+            ${cancelable ? '<button class="btn-saltar">Cancelar <span class="atajo">[Esc]</span></button>' : ''}`;
           overlay.appendChild(panel);
           const rejilla = panel.querySelector('.mejora-rejilla') as HTMLElement;
 
@@ -490,10 +492,10 @@ export function pantallaCombate(
             rejilla.appendChild(c);
           });
           const teclado = (ev: KeyboardEvent) => {
-            if (ev.code === 'Escape') cerrar(null);
+            if (ev.code === 'Escape' && cancelable) cerrar(null);
           };
           window.addEventListener('keydown', teclado);
-          panel.querySelector('.btn-saltar')!.addEventListener('click', () => cerrar(null));
+          panel.querySelector('.btn-saltar')?.addEventListener('click', () => cerrar(null));
         });
       },
     };

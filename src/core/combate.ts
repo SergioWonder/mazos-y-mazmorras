@@ -35,7 +35,8 @@ export interface Presentador {
   /** La invocación se cura (número verde sobre ella). */
   fxInvocacionCura(n: number): Promise<void>;
   /** Deja al jugador elegir una carta de una lista (o cancelar). */
-  elegirCarta(cartas: CartaInstancia[], titulo: string): Promise<CartaInstancia | null>;
+  /** Lets the player pick a card; with `cancelable: false` there is no way out (mandatory choice). */
+  elegirCarta(cartas: CartaInstancia[], titulo: string, opciones?: { cancelable?: boolean }): Promise<CartaInstancia | null>;
   /** (optional) An enemy speaks: speech bubble over it (the Dungeon Master). */
   fxDialogo?(e: EnemigoCombate, txt: string): Promise<void>;
   /** (optional) The hero falls for good (the Dungeon Master's ray). */
@@ -243,7 +244,7 @@ export class Combate {
     if (malditas.length === 0) return null;
     const carta = malditas.length === 1
       ? malditas[0]
-      : (await this.ui.elegirCarta(malditas, 'Elige la maldición que ofreces')) ?? malditas[0];
+      : (await this.ui.elegirCarta(malditas, 'Elige la maldición que ofreces', { cancelable: false })) ?? malditas[0];
     const idx = this.jugador.mano.indexOf(carta);
     if (idx < 0) return null;
     this.jugador.mano.splice(idx, 1);
@@ -542,13 +543,17 @@ export class Combate {
         self.jugador.mazo.push(elegida); // pop() roba del final = lo alto del mazo
         self.ui.render();
       },
-      async descartar(n) {
+      async descartar(n, opcional = false) {
         let hechos = 0;
         for (let i = 0; i < n; i++) {
           const mano = self.jugador.mano.slice();
           if (mano.length === 0) break;
-          const elegida = await self.ui.elegirCarta(mano, `Descarta una carta (${i + 1}/${n})`);
-          if (!elegida) break; // se puede descartar menos de N
+          const titulo = opcional ? `Descarta hasta ${n} cartas (${i + 1}/${n})` : `Descarta una carta (${i + 1}/${n})`;
+          let elegida = await self.ui.elegirCarta(mano, titulo, { cancelable: opcional });
+          if (!elegida) {
+            if (opcional) break; // «descarta hasta N»: you may stop early
+            elegida = mano[0]; // a mandatory discard always happens
+          }
           await self.descartarCarta(elegida);
           hechos++;
         }

@@ -5456,5 +5456,40 @@ try {
   check(false, `la muerte épica se carga (${(err as Error).message})`);
 }
 
+// ── Mandatory discards cannot be cancelled (only «descarta hasta X» can) ─────
+console.log('\n🗑️ Descartes obligatorios');
+{
+  const fs = await import('node:fs');
+  const todas = [...PICARO, ...MAGO, ...DRUIDA, ...BARBARO, ...BRUJO, ...BASICAS];
+  const probar = async (id: string) => {
+    const def = todas.find((c) => c.id === id)!;
+    const run = nuevaRun('picaro', 31);
+    const pedidas: boolean[] = [];
+    // a player who always tries to cancel
+    const ui = { ...uiSilenciosa, elegirCarta: async (_c: any, _t: string, op?: { cancelable?: boolean }) => { pedidas.push(op?.cancelable !== false); return null; } };
+    const comb = new Combate(run, [GOBLIN_CORTADOR], () => 0.5, ui as any);
+    await comb.iniciar();
+    comb.jugador.energia = 5;
+    const inst = { uid: 9200, def, mejorada: false };
+    comb.jugador.mano.push(inst);
+    const antes = comb.jugador.descarte.length;
+    await comb.jugarCarta(inst, def.objetivo === 'enemigo' ? comb.enemigos[0] : undefined);
+    return { pedidas, descartadas: comb.jugador.descarte.length - antes - (comb.jugador.descarte.includes(inst) ? 1 : 0) };
+  };
+  const obligatorias = todas.filter((c) => /descarta 1 carta/i.test(c.texto) && !/hasta/i.test(c.texto)).map((c) => c.id);
+  check(obligatorias.length >= 2, `hay cartas con descarte obligatorio (${obligatorias.join(', ')})`);
+  for (const id of obligatorias) {
+    const r = await probar(id);
+    check(r.pedidas.length > 0 && r.pedidas.every((c) => !c) && r.descartadas >= 1, `${id}: el descarte no se puede cancelar y siempre se descarta`);
+  }
+  const hasta = todas.filter((c) => /descarta hasta/i.test(c.texto)).map((c) => c.id);
+  for (const id of hasta) {
+    const r = await probar(id);
+    check(r.pedidas.length > 0 && r.pedidas.every((c) => c) && r.descartadas === 0, `${id}: «descarta hasta» sí deja cancelar`);
+  }
+  const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/cancelable/.test(ui), 'la ventana de elegir carta oculta «Cancelar» cuando no se puede cancelar');
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

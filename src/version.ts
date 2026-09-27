@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.2.0';
+export const VERSION = '6.2.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.2.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '🗑️ Las cartas que te obligan a descartar ya no se pueden cancelar. Solo las que dicen «descarta hasta» te dejan parar antes.',
+    ],
+  },
   {
     version: '6.2.0',
     fecha: '2026-09-27',
