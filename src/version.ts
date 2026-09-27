@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.2.1';
+export const VERSION = '6.2.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.2.2',
+    fecha: '2026-09-28',
+    cambios: [
+      '⚖️ Brujo: Hambre del Patrón cuesta 2 (1 mejorada) y da +2 por maldición (+3 mejorada), y Haz Desdoblado cuesta 2 (1 mejorada).',
+    ],
+  },
   {
     version: '6.2.1',
     fecha: '2026-09-28',

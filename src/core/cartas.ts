@@ -3385,18 +3385,19 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'infrecuente',
-    coste: 1,
+    coste: 2, // toned down: it scaled the Blast too hard for 1 energy
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Poder: tu Explosión Sobrenatural inflige\n3 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
+    texto: 'Poder: tu Explosión Sobrenatural inflige\n2 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'explosionMaldita', 3);
+      await c.aplicarEstado(c.jugador, 'explosionMaldita', 2);
       await maldicionDelPacto(c, 'descarte');
     },
     mejora: {
-      texto: 'Poder: tu Explosión Sobrenatural inflige\n4 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
+      coste: 1,
+      texto: 'Poder: tu Explosión Sobrenatural inflige\n3 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'explosionMaldita', 4);
+        await c.aplicarEstado(c.jugador, 'explosionMaldita', 3);
         await maldicionDelPacto(c, 'descarte');
       },
     },
@@ -3565,7 +3566,7 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 1,
+    coste: 2, // a second hit on every Blast is strong: it costs its weight again
     objetivo: 'ninguno',
     fx: 'abisal',
     animRara: 'anim-psionico',
@@ -3574,7 +3575,7 @@ export const BRUJO: CartaDef[] = [
       await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
     },
     mejora: {
-      coste: 0,
+      coste: 1,
       texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'explosionVeces', 1);

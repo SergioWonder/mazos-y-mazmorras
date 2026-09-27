@@ -100,9 +100,9 @@ descuelga de las demás en su mismo nivel.
     | 😖 Verbo Agonizante | 1 | +3 de daño y 3 de Condena a cada enemigo que golpea (+5 y 4) |
     | ☄️ Lanza Sobrenatural | 1 | Crece +2 de daño cada vez que la lanzas, el resto del combate (+3) |
     | 🤝 Don del Patrón | 1 (0) | Cuesta 0 y te da 3 de bloqueo al lanzarla |
-    | 🔀 Haz Desdoblado | 1 (0) | Golpea 1 vez más |
+    | 🔀 Haz Desdoblado | 2 (1) | Golpea 1 vez más |
     | 🔱 Explosión Trifurcada | 1 (0) | Golpea a TODOS los enemigos |
-    | 🍽️ Hambre del Patrón | 1 | +3 de daño por cada maldición en tus cartas y mete una en tu descarte (+4) |
+    | 🍽️ Hambre del Patrón | 2 (1) | +2 de daño por cada maldición en tus cartas y mete una en tu descarte (+3) |
     | 🔯 Canalizar el Pacto | 0 | Este turno +5 de daño y robas 1 (+7) |
     | 📜 Pacto Sangriento | 0 | Pierdes 3 PV, robas 2 y este turno +6 de daño (2 PV, +9) |
     | 📣 Llamada del Vacío | 0 | La trae a tu mano desde donde esté y este turno +4 (+7) |

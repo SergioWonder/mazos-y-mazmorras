@@ -13874,7 +13874,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5373",
+      "source_location": "L5375",
       "id": "scripts_smoke_test_sprite2",
       "community": 67,
       "norm_label": "sprite2"
@@ -14171,7 +14171,7 @@
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3633",
+      "source_location": "L3634",
       "id": "core_cartas_resolverseducir",
       "community": 67,
       "norm_label": "resolverseducir()"
@@ -14180,7 +14180,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3666",
+      "source_location": "L3667",
       "id": "core_cartas_resolverdeseo",
       "community": 67,
       "norm_label": "resolverdeseo()"
@@ -14189,7 +14189,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3703",
+      "source_location": "L3704",
       "id": "core_cartas_neutrales_especiales",
       "community": 67,
       "norm_label": "neutrales_especiales"
@@ -14198,7 +14198,7 @@
       "label": "maldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3759",
+      "source_location": "L3760",
       "id": "core_cartas_maldicion",
       "community": 67,
       "norm_label": "maldicion()"
@@ -14207,7 +14207,7 @@
       "label": "MALDICIONES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3767",
+      "source_location": "L3768",
       "id": "core_cartas_maldiciones",
       "community": 67,
       "norm_label": "maldiciones"
@@ -14216,7 +14216,7 @@
       "label": "nuevaMaldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3854",
+      "source_location": "L3855",
       "id": "core_cartas_nuevamaldicion",
       "community": 75,
       "norm_label": "nuevamaldicion()"
@@ -14225,7 +14225,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3863",
+      "source_location": "L3864",
       "id": "core_cartas_iniciales_de_clase",
       "community": 67,
       "norm_label": "iniciales_de_clase"
@@ -14234,7 +14234,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3877",
+      "source_location": "L3878",
       "id": "core_cartas_pools",
       "community": 67,
       "norm_label": "pools"
@@ -14243,7 +14243,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3881",
+      "source_location": "L3882",
       "id": "core_cartas_mazoinicial",
       "community": 67,
       "norm_label": "mazoinicial()"
@@ -14252,7 +14252,7 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3892",
+      "source_location": "L3893",
       "id": "core_cartas_pooldeclase",
       "community": 67,
       "norm_label": "pooldeclase()"
@@ -14261,7 +14261,7 @@
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3899",
+      "source_location": "L3900",
       "id": "core_cartas_cartaunicadeclase",
       "community": 90,
       "norm_label": "cartaunicadeclase()"
@@ -14270,7 +14270,7 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3904",
+      "source_location": "L3905",
       "id": "core_cartas_cartaporid",
       "community": 46,
       "norm_label": "cartaporid()"
@@ -14279,7 +14279,7 @@
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3914",
+      "source_location": "L3915",
       "id": "core_cartas_recompensacartas",
       "community": 67,
       "norm_label": "recompensacartas()"
@@ -17206,7 +17206,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L1",
       "id": "fx_background",
-      "community": 98,
+      "community": 19,
       "norm_label": "background.ts"
     },
     {
@@ -17215,7 +17215,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L17",
       "id": "fx_background_scenebackground",
-      "community": 98,
+      "community": 19,
       "norm_label": "scenebackground"
     },
     {
@@ -17224,7 +17224,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L11",
       "id": "fx_background_scenes",
-      "community": 98,
+      "community": 19,
       "norm_label": "scenes"
     },
     {
@@ -19096,7 +19096,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L1",
       "id": "fx_hero_death",
-      "community": 19,
+      "community": 98,
       "norm_label": "hero-death.ts"
     },
     {
@@ -19105,7 +19105,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L8",
       "id": "fx_hero_death_deathcueid",
-      "community": 19,
+      "community": 98,
       "norm_label": "deathcueid"
     },
     {
@@ -19114,7 +19114,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L9",
       "id": "fx_hero_death_deathcue",
-      "community": 19,
+      "community": 98,
       "norm_label": "deathcue"
     },
     {
@@ -19123,7 +19123,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L10",
       "id": "fx_hero_death_deathsequence",
-      "community": 19,
+      "community": 98,
       "norm_label": "deathsequence"
     },
     {
@@ -19132,7 +19132,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L28",
       "id": "fx_hero_death_full",
-      "community": 19,
+      "community": 98,
       "norm_label": "full"
     },
     {
@@ -19141,7 +19141,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L48",
       "id": "fx_hero_death_short",
-      "community": 19,
+      "community": 98,
       "norm_label": "short"
     },
     {
@@ -19150,7 +19150,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L69",
       "id": "fx_hero_death_herodeathsequence",
-      "community": 19,
+      "community": 98,
       "norm_label": "herodeathsequence()"
     },
     {
@@ -19159,7 +19159,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L75",
       "id": "fx_hero_death_deathtimescale",
-      "community": 19,
+      "community": 98,
       "norm_label": "deathtimescale()"
     },
     {
@@ -19168,7 +19168,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L84",
       "id": "fx_hero_death_realend",
-      "community": 19,
+      "community": 98,
       "norm_label": "realend()"
     },
     {
@@ -19177,7 +19177,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L94",
       "id": "fx_hero_death_herodeathfx",
-      "community": 19,
+      "community": 98,
       "norm_label": "herodeathfx"
     },
     {
@@ -19186,7 +19186,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L102",
       "id": "fx_hero_death_hero_death_fx",
-      "community": 19,
+      "community": 98,
       "norm_label": "hero_death_fx"
     },
     {
@@ -19195,7 +19195,7 @@
       "source_file": "src/fx/hero-death.ts",
       "source_location": "L116",
       "id": "fx_hero_death_playsdefeatsequence",
-      "community": 19,
+      "community": 98,
       "norm_label": "playsdefeatsequence()"
     },
     {
@@ -23380,7 +23380,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1382",
       "id": "ui_combate_montarfondo",
-      "community": 98,
+      "community": 19,
       "norm_label": "montarfondo()"
     },
     {
@@ -26394,7 +26394,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L6",
-      "community": 98,
+      "community": 19,
       "norm_label": "backdropshape",
       "id": "fx_background_backdropshape"
     },
@@ -26412,7 +26412,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L15",
-      "community": 98,
+      "community": 19,
       "norm_label": "themes",
       "id": "fx_background_themes"
     },
@@ -26421,7 +26421,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L33",
-      "community": 98,
+      "community": 19,
       "norm_label": "backgroundtheme()",
       "id": "fx_background_backgroundtheme"
     },
@@ -106522,5 +106522,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "6584c39009009f26217249e0e2fd9c94a0bd7df3"
+  "built_at_commit": "087a68134cf569499162009fd4586fa76831ee08"
 }

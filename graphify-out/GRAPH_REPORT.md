@@ -1,7 +1,7 @@
 # Graph Report - videogame  (2026-09-28)
 
 ## Corpus Check
-- 143 files · ~855,063 words
+- 143 files · ~855,143 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `6584c390`
+- Built from commit: `087a6813`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -229,8 +229,8 @@ Cohesion: 0.31
 Nodes (24): bear(), beholder(), biped(), brain(), candle(), canine(), card(), crawler() (+16 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.09
-Nodes (26): cardSpellKey(), hitSpell(), preludeKey(), DeathCue, DeathCueId, DeathSequence, deathTimeScale(), FULL (+18 more)
+Cohesion: 0.11
+Nodes (21): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, cardSpellKey(), hitSpell(), preludeKey() (+13 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -505,8 +505,8 @@ Cohesion: 0.33
 Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
 
 ### Community 98 - "Community 98"
-Cohesion: 0.29
-Nodes (6): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, montarFondo()
+Cohesion: 0.18
+Nodes (11): DeathCue, DeathCueId, DeathSequence, deathTimeScale(), FULL, HERO_DEATH_FX, HeroDeathFx, heroDeathSequence() (+3 more)
 
 ### Community 101 - "Community 101"
 Cohesion: 0.33

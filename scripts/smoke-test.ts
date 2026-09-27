@@ -4770,7 +4770,7 @@ try {
   // — Cheaper blast powers —
   {
     const haz = cartaB('haz-desdoblado');
-    check(haz.coste === 1 && haz.mejora?.coste === 0, 'Haz Desdoblado cuesta 1 (0 mejorado; antes 2 y 1)');
+    check(haz.coste === 2 && haz.mejora?.coste === 1, 'Haz Desdoblado cuesta 2 (1 mejorado): golpear dos veces sale caro');
   }
   // — Other warlock numbers —
   {
@@ -4793,10 +4793,12 @@ try {
     check(malditasEn(comb) === 1 && comb.jugador.descarte.some((c) => c.def.tipo === 'maldicion')
       && !run.mazo.some((c) => c.def.tipo === 'maldicion'),
     'Hambre del Patrón: al jugarla una maldición entra en tu descarte (solo este combate)');
-    check(await lanzar(comb, exp(comb)) === 10, 'Hambre del Patrón: la Explosión inflige 3 más por maldición (1 → 10)');
+    check(await lanzar(comb, exp(comb)) === 9, 'Hambre del Patrón: la Explosión inflige 2 más por maldición (1 → 9)');
     comb.jugador.mazo.push(instanciar(cartaB('duda')));
     aMano(comb, 'grilletes');
-    check(await lanzar(comb, exp(comb)) === 16, 'cuenta las maldiciones del mazo, la mano y el descarte (3 → 16)');
+    check(await lanzar(comb, exp(comb)) === 13, 'cuenta las maldiciones del mazo, la mano y el descarte (3 → 13)');
+    const hambre = cartaB('hambre-patron');
+    check(hambre.coste === 2 && hambre.mejora?.coste === 1, 'Hambre del Patrón cuesta 2 (1 mejorada)');
   }
   // — Curses: Contrato Maldito —
   {
