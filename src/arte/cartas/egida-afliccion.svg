@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a1c48"/>
+      <stop offset="1" stop-color="#0c0616"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.58" r="0.42">
+      <stop offset="0" stop-color="#c98bff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#c98bff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.78">
+      <stop offset="0.58" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <!-- graveyard at night, a pale moon -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <circle cx="226" cy="30" r="14" fill="#d8d0e8" opacity="0.8"/>
+  <circle cx="232" cy="26" r="12" fill="#2a1c48"/>
+  <g fill="#170c26" stroke="#140d0a" stroke-width="1.5">
+    <path d="M14 122 L14 92 Q24 80 34 92 L34 122 Z"/>
+    <path d="M50 122 L50 100 Q58 92 66 100 L66 122 Z"/>
+    <path d="M214 122 L214 96 Q224 84 234 96 L234 122 Z"/>
+    <path d="M248 122 L248 104 L244 104 L244 98 L248 98 L248 92 L254 92 L254 98 L258 98 L258 104 L254 104 L254 122 Z"/>
+  </g>
+  <path d="M20 100 L28 100 M220 104 L228 104" stroke="#2a1c3a" stroke-width="1.2"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 120 Q140 112 280 120 L280 160 L0 160 Z" fill="#100818"/>
+
+  <!-- arrows breaking against the aegis -->
+  <g stroke-linecap="round">
+    <path d="M0 58 L86 70 M4 88 L84 88 M280 60 L196 70 M276 92 L198 90" stroke="#140d0a" stroke-width="3"/>
+    <path d="M0 58 L86 70 M4 88 L84 88 M280 60 L196 70 M276 92 L198 90" stroke="#8a7a68" stroke-width="1.2"/>
+    <path d="M86 70 L80 64 M86 70 L80 74 M198 90 L204 84 M198 90 L204 96" stroke="#b8b0a0" stroke-width="1.2"/>
+  </g>
+  <path d="M88 70 L96 64 M88 70 L96 76 M196 70 L188 64 M196 70 L188 76" stroke="#f0dcff" stroke-width="1.2"/>
+
+  <!-- the shield of orbiting curses bound by chains -->
+  <ellipse cx="140" cy="80" rx="58" ry="46" fill="#c98bff" opacity="0.18" filter="url(#fuerte)"/>
+  <ellipse cx="140" cy="80" rx="54" ry="42" fill="none" stroke="#c98bff" stroke-width="5" opacity="0.55" filter="url(#brillo)"/>
+  <ellipse cx="140" cy="80" rx="54" ry="42" fill="none" stroke="#140d0a" stroke-width="3.4" stroke-dasharray="6 3"/>
+  <ellipse cx="140" cy="80" rx="54" ry="42" fill="none" stroke="#6a6474" stroke-width="1.6" stroke-dasharray="6 3"/>
+  <g stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round">
+    <g transform="translate(92 60) rotate(-30)">
+      <rect x="-9" y="-12" width="18" height="24" rx="2" fill="#3a2a30"/>
+      <path d="M-5 -6 L5 4 M5 -6 L-5 4" stroke="#8ae05a" stroke-width="1.4"/>
+    </g>
+    <g transform="translate(188 62) rotate(28)">
+      <rect x="-9" y="-12" width="18" height="24" rx="2" fill="#40202a"/>
+      <circle cx="0" cy="-1" r="4" fill="none" stroke="#ff6a3a" stroke-width="1.4"/>
+    </g>
+    <g transform="translate(140 36)">
+      <rect x="-9" y="-12" width="18" height="24" rx="2" fill="#2c2438"/>
+      <path d="M-4 -4 Q0 -9 4 -4 Q4 2 0 2 M0 5 L0 6" fill="none" stroke="#c98bff" stroke-width="1.4"/>
+    </g>
+    <g transform="translate(104 110) rotate(22)">
+      <rect x="-9" y="-12" width="18" height="24" rx="2" fill="#343034"/>
+      <path d="M-5 0 L5 0 M-5 -5 L5 -5 M-5 5 L5 5" stroke="#8a8494" stroke-width="1.2"/>
+    </g>
+    <g transform="translate(178 108) rotate(-20)">
+      <rect x="-9" y="-12" width="18" height="24" rx="2" fill="#3a1e2c"/>
+      <path d="M-4 -6 L0 4 L4 -6" fill="none" stroke="#e05a6a" stroke-width="1.4"/>
+    </g>
+  </g>
+
+  <!-- the warlock inside, braced, with a violet flame -->
+  <g transform="translate(1.3 -1.3)" fill="#c98bff" opacity="0.85">
+    <path d="M122 124 Q118 100 126 86 Q132 78 140 78 Q148 78 154 86 Q162 100 158 124 Z"/>
+    <path d="M132 80 Q128 70 132 64 Q140 58 148 64 Q152 70 148 80 Z"/>
+  </g>
+  <g fill="#0b0910">
+    <path d="M122 124 Q118 100 126 86 Q132 78 140 78 Q148 78 154 86 Q162 100 158 124 Z"/>
+    <path d="M116 124 L124 92 Q112 106 110 124 Z M164 124 L156 92 Q168 106 170 124 Z"/>
+    <path d="M132 80 Q128 70 132 64 Q140 58 148 64 Q152 70 148 80 Z"/>
+    <path d="M133 66 Q126 58 128 50 Q132 58 136 63 Z M147 66 Q154 58 152 50 Q148 58 144 63 Z"/>
+    <path d="M126 88 Q128 76 136 80 L144 80 Q152 76 154 88 Z"/>
+    <path d="M154 96 L170 84 L173 88 L158 102 Z"/>
+  </g>
+  <circle cx="137" cy="70" r="1.2" fill="#f0dcff"/>
+  <circle cx="143" cy="70" r="1.2" fill="#f0dcff"/>
+  <circle cx="174" cy="82" r="6" fill="#c98bff" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M174 76 Q179 82 174 88 Q169 82 174 76 Z" fill="#f0dcff"/>
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

@@ -232,10 +232,11 @@ const DE_CLASE: ReliquiaDef[] = [
   // Brujo
   {
     id: 'eco-sobrenatural', nombre: 'Bendición del Eco Sobrenatural', icono: '🌀', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'brujo',
-    texto: 'La primera Explosión Sobrenatural de cada turno resuena: además inflige 3 de daño a TODOS los enemigos.',
-    alJugarCarta: async (ctx, { carta }) => {
-      if (carta.def.id !== 'explosion-sobrenatural' || !primeraDelTurno(ctx, 'eco-sobrenatural')) return;
-      for (const e of vivos(ctx)) await ctx.danar(e, 3, 'abisal');
+    texto: 'La primera Explosión Sobrenatural de cada turno resuena: repite la mitad de su daño (mínimo 3) a TODOS los enemigos.',
+    alLanzarExplosion: async (ctx, _golpeados, dano) => {
+      if (!primeraDelTurno(ctx, 'eco-sobrenatural')) return;
+      const n = Math.max(3, Math.floor(dano / 2));
+      for (const e of vivos(ctx)) await ctx.danar(e, n, 'abisal');
     },
   },
   {

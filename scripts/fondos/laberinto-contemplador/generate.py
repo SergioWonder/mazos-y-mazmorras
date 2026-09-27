@@ -1,681 +1,660 @@
-"""Combat background for Act III: "El Laberinto del Contemplador".
+"""Combat background «Laberinto del Contemplador» (Act III): the heart of the labyrinth.
 
-Paints an impossible arcane labyrinth procedurally: twisting carved walls,
-isometric floating maze islands with stairs and arches that defy
-perspective (an upside-down island, a sideways flight, a stair into
-nowhere), embedded arcane crystals, faint glowing runes, petrified
-adventurers and, far away in the mist, the silhouette of a giant eye.
-A warm arcane orb (upper left) is the main light.
+A carved-stone gallery seen from floor level. Ashlar walls with carved eyes and faint runes,
+turquoise and violet arcane crystals growing out of the rock, adventurers turned to stone
+with faces of terror, side passages of the maze, and a great arch at the back that opens on
+a void where a stone causeway keeps going through gate after gate, each one twisted a little
+more than the last (an impossible corridor, but in frontal perspective). Behind the gates,
+veiled by the mist, the giant eye of the Beholder looks out of the darkness. The main light
+is a warm arcane orb hanging from chains at the top left, behind the hero.
 
-Usage: python3 generate.py <scratch_dir> <output_dir>
+Usage: python3 generate.py [output_dir] [work_dir]
 """
-
 import math
 import os
+import random
 import sys
 
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import paint_tools as pt  # noqa: E402
+from paint_kit import (STD_DEFS, Camera, Canvas, blur, blur_hdr, fbm, finish, hexc, jitter,  # noqa: E402
+                       mix, mockup, pts, radial, render, save_webp, to_f)
 
-LIGHT = (255, 150, 110)
-MIST = (58, 48, 82)
-STONE = (104, 96, 124)
+ORB = (255, 150, 110)
+TURQ = (70, 225, 205)
+VIOL = (165, 105, 245)
+
+FORMATS = {
+    "wide": dict(W=1920, H=1080, cam=dict(vpx=0.53, vpy=0.50, yn=1.05, yb=0.655, bw=0.21, vt=0.20, ys=0.40),
+                 orb=(0.22, 0.25, 2.2), eye=(0.548, 0.30, 205),
+                 statues=[(0.315, 3.0, "shield", 1), (0.745, 3.25, "kneel", -1), (0.83, 2.75, "flee", -1)],
+                 suffix="", max_kb=380),
+    "tall": dict(W=1080, H=1440, cam=dict(vpx=0.50, vpy=0.52, yn=1.04, yb=0.66, bw=0.35, vt=0.24, ys=0.42),
+                 orb=(0.22, 0.25, 2.5), eye=(0.505, 0.33, 170),
+                 statues=[(0.16, 3.0, "shield", 1), (0.83, 3.2, "kneel", -1)],
+                 suffix="-movil", max_kb=300),
+}
+
+C = dict(
+    wall=(52, 48, 66), wall_r=(48, 45, 62), back=(46, 43, 60), ceil=(30, 28, 40), floor=(33, 31, 42),
+    mortar=(20, 18, 27), trim=(62, 58, 78), trim_side=(36, 33, 47), void=(10, 8, 18), statue=(84, 84, 96),
+    statue_dark=(50, 50, 62), bronze=(70, 52, 40), iron=(24, 22, 30),
+)
 
 
-def hexc(r, g, b):
-    return "#%02x%02x%02x" % tuple(int(max(0, min(255, v))) for v in (r, g, b))
+# ---------------------------------------------------------------------------
+# helpers
+# ---------------------------------------------------------------------------
+def stone_courses(cv, rng, quad_fn, u0, u1, v0, v1, course_h, block_w, base, var=0.14, z=5.0, gap=0.012):
+    """Fills a planar region with staggered ashlar blocks. quad_fn maps (u, v) to screen."""
+    v = v0
+    row = 0
+    while v < v1 - 1e-6:
+        h = min(course_h * rng.uniform(0.85, 1.15), v1 - v)
+        u = u0 - (block_w * 0.5 if row % 2 else 0) * rng.uniform(0.3, 1)
+        while u < u1 - 1e-6:
+            w = block_w * rng.uniform(0.5, 1.4)
+            a, b = max(u, u0), min(u + w, u1)
+            if b - a > 0.04:
+                col = jitter(base, var, rng)
+                if rng.random() < 0.05:
+                    col = mix(col, (40, 70, 72), 0.25)  # a touch of arcane lichen
+                q = [quad_fn(a + gap, v + gap), quad_fn(b - gap, v + gap),
+                     quad_fn(b - gap, v + h - gap), quad_fn(a + gap, v + h - gap)]
+                cv.poly(q, col, z)
+            u += w
+        v += h
+        row += 1
 
 
-def mix(c1, c2, t):
-    t = max(0.0, min(1.0, t))
-    return tuple(a + (b - a) * t for a, b in zip(c1, c2))
+def box(cv, cam, x0, x1, y0, y1, z0, z1, front, side, top):
+    """Axis-aligned box; draws only the faces that face the camera."""
+    P = cam.p
+    if x1 < 0:
+        cv.poly([P(x1, y0, z0), P(x1, y0, z1), P(x1, y1, z1), P(x1, y1, z0)], side, z0)
+    if x0 > 0:
+        cv.poly([P(x0, y0, z0), P(x0, y0, z1), P(x0, y1, z1), P(x0, y1, z0)], side, z0)
+    if y0 > 0:
+        cv.poly([P(x0, y0, z0), P(x1, y0, z0), P(x1, y0, z1), P(x0, y0, z1)], top, z0)
+    if y1 < 0:
+        cv.poly([P(x0, y1, z0), P(x1, y1, z0), P(x1, y1, z1), P(x0, y1, z1)], side, z0)
+    cv.poly([P(x0, y0, z0), P(x1, y0, z0), P(x1, y1, z0), P(x0, y1, z0)], front, z0)
 
 
-def mul(c, k):
-    return tuple(v * k for v in c)
+def almond(fn, cu, cv_, ru, rv, n=24):
+    """Almond (eye) outline in plane coordinates, mapped through fn."""
+    top = [fn(cu - ru + 2 * ru * i / n, cv_ - rv * math.sin(math.pi * i / n) ** 0.8) for i in range(n + 1)]
+    bot = [fn(cu + ru - 2 * ru * i / n, cv_ + rv * math.sin(math.pi * i / n) ** 0.9) for i in range(1, n)]
+    return top + bot
 
 
-def pts(points):
-    return " ".join(f"{x:.1f},{y:.1f}" for x, y in points)
+def ellipse_on(fn, cu, cv_, ru, rv, n=20):
+    return [fn(cu + ru * math.cos(2 * math.pi * i / n), cv_ + rv * math.sin(2 * math.pi * i / n)) for i in range(n)]
 
 
-class Scene:
-    def __init__(self, w, h, seed):
-        self.w, self.h = w, h
-        self.s = min(w, h) / 1080.0
-        self.rng = np.random.default_rng(seed)
-        self.defs = []
-        self.body = []
-        self.lx, self.ly = 0.22 * w, 0.23 * h
-        self.floor = 0.78 * h
+def carved_eye(cv, fn, cu, cv_, ru, z, stone, glow=None, glow_op=0.0, look=0.0):
+    """A carved eye relief on a plane: socket, lids, iris and slit pupil. Optional faint glow in the iris."""
+    rv = ru * 0.46
+    cv.poly(almond(fn, cu, cv_, ru * 1.28, rv * 1.55), mix(stone, (0, 0, 0), 0.45), z)            # socket shadow
+    lid = almond(fn, cu, cv_, ru * 1.14, rv * 1.3)
+    cv.poly(lid, mix(stone, (255, 240, 230), 0.12), z)                                              # upper lid ridge
+    cv.poly(almond(fn, cu, cv_ + rv * 0.08, ru, rv), mix(stone, (0, 0, 0), 0.25), z)               # eyeball
+    iris = ellipse_on(fn, cu + look * ru * 0.35, cv_ + rv * 0.1, ru * 0.36, rv * 0.78)
+    cv.poly(iris, mix(stone, (0, 0, 0), 0.5), z)
+    pupil = ellipse_on(fn, cu + look * ru * 0.35, cv_ + rv * 0.1, ru * 0.07, rv * 0.7, 12)
+    cv.poly(pupil, (8, 7, 12), z)
+    if glow:
+        cv.glow('<polygon points="%s" fill="%s" opacity="%.2f" filter="url(#blur5)"/>' % (
+            pts(iris), hexc(glow), glow_op),
+            '<polygon points="%s" fill="%s" opacity="%.2f"/>' % (pts(iris), hexc(mix(glow, stone, 0.5)), glow_op))
+    # lower lid line
+    lo = [fn(cu - ru + 2 * ru * i / 16, cv_ + rv * 1.05 * math.sin(math.pi * i / 16)) for i in range(17)]
+    cv.paint('<polyline points="%s" fill="none" stroke="%s" stroke-width="1.2" opacity="0.7"/>' % (
+        pts(lo), hexc(mix(stone, (255, 240, 230), 0.2))))
 
-    def add(self, s):
-        self.body.append(s)
 
-    def light_at(self, x, y):
-        d = math.hypot((x - self.lx) / self.w, (y - self.ly) / self.h)
-        return max(0.0, 1.0 - d / 0.8) ** 1.5
+RUNES = [
+    [(0, 0), (0, 1), (0.5, 0.5)], [(0, 1), (0.25, 0), (0.5, 1)], [(0, 0.2), (0.5, 0.2), (0.25, 1)],
+    [(0.1, 0), (0.1, 1), (0.5, 0.7)], [(0, 0.5), (0.5, 0), (0.5, 1)], [(0.25, 0), (0.25, 1), (0, 0.4), (0.5, 0.6)],
+    [(0, 0), (0.5, 1), (0, 1), (0.5, 0)], [(0.1, 1), (0.1, 0.2), (0.45, 0.2), (0.45, 0.6)],
+]
 
-    # ------------------------------------------------------------------ defs
-    def build_defs(self):
-        w, h, s = self.w, self.h, self.s
-        lr, lg, lb = LIGHT
-        self.defs.append(f"""
-<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#0c0a16"/>
-  <stop offset="0.35" stop-color="#1e1830"/>
-  <stop offset="0.6" stop-color="#2c2440"/>
-  <stop offset="0.8" stop-color="#16121f"/>
-  <stop offset="1" stop-color="#0b0911"/>
-</linearGradient>
-<radialGradient id="orbGlow" gradientUnits="userSpaceOnUse" cx="{self.lx}" cy="{self.ly}" r="{0.6 * w}">
-  <stop offset="0" stop-color="rgb({lr},{lg},{lb})" stop-opacity="0.7"/>
-  <stop offset="0.2" stop-color="rgb({lr},{lg - 20},{lb - 10})" stop-opacity="0.32"/>
-  <stop offset="0.55" stop-color="rgb(150,80,90)" stop-opacity="0.1"/>
-  <stop offset="1" stop-color="rgb(60,40,80)" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="orbCore" cx="0.4" cy="0.38" r="0.6">
-  <stop offset="0" stop-color="#fff0dc"/>
-  <stop offset="0.35" stop-color="#ffc49a"/>
-  <stop offset="0.8" stop-color="rgb({lr},{lg},{lb})"/>
-  <stop offset="1" stop-color="#b85a48"/>
-</radialGradient>
-<radialGradient id="eyeIris" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#0c0814"/>
-  <stop offset="0.35" stop-color="#2a1c3c"/>
-  <stop offset="0.8" stop-color="#4a3464"/>
-  <stop offset="1" stop-color="#2a2038"/>
-</radialGradient>
-<linearGradient id="floorG" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#262036"/>
-  <stop offset="0.3" stop-color="#18141f"/>
-  <stop offset="1" stop-color="#0a0810"/>
-</linearGradient>
-<linearGradient id="penumbra" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#0c0a14" stop-opacity="0"/>
-  <stop offset="0.5" stop-color="#0c0a14" stop-opacity="0"/>
-  <stop offset="0.8" stop-color="#0c0a14" stop-opacity="0.3"/>
-  <stop offset="1" stop-color="#08060e" stop-opacity="0.55"/>
-</linearGradient>
-<linearGradient id="crystalT" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#b8fff0"/>
-  <stop offset="0.5" stop-color="#3ab0a8"/>
-  <stop offset="1" stop-color="#123c44"/>
-</linearGradient>
-<linearGradient id="crystalV" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#e8d0ff"/>
-  <stop offset="0.5" stop-color="#8a5ad8"/>
-  <stop offset="1" stop-color="#2a1a4a"/>
-</linearGradient>
-<linearGradient id="crystalW" x1="0" y1="0" x2="1" y2="1">
-  <stop offset="0" stop-color="#fff0d8"/>
-  <stop offset="0.5" stop-color="#ff9a70"/>
-  <stop offset="1" stop-color="#6a2a24"/>
-</linearGradient>
-<filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
-  <feTurbulence type="fractalNoise" baseFrequency="{0.02 / s:.4f}" numOctaves="3" seed="4"/>
-  <feDisplacementMap in="SourceGraphic" scale="{6 * s:.1f}" xChannelSelector="R" yChannelSelector="G"/>
-</filter>
-<filter id="stoneTex" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" x="0" y="0" width="{w}" height="{h}">
-  <feTurbulence type="fractalNoise" baseFrequency="{0.016 / s:.4f} {0.024 / s:.4f}" numOctaves="6" seed="31" result="n"/>
-  <feDiffuseLighting in="n" surfaceScale="{4 * s:.1f}" lighting-color="#ffffff" result="lit">
-    <feDistantLight azimuth="210" elevation="45"/>
-  </feDiffuseLighting>
-  <feBlend in="lit" in2="SourceGraphic" mode="overlay" result="bl"/>
-  <feComposite in="bl" in2="SourceAlpha" operator="in"/>
-</filter>
-<filter id="mist" x="-30%" y="-30%" width="160%" height="160%">
-  <feTurbulence type="fractalNoise" baseFrequency="{0.006 / s:.4f}" numOctaves="4" seed="8"/>
-  <feDisplacementMap in="SourceGraphic" scale="{140 * s:.0f}" xChannelSelector="R" yChannelSelector="B"/>
-  <feGaussianBlur stdDeviation="{18 * s:.1f}"/>
-</filter>
-""")
-        for r in (1, 3, 6, 12, 30, 70):
-            self.defs.append(
-                f'<filter id="b{r}" x="-100%" y="-100%" width="300%" height="300%">'
-                f'<feGaussianBlur stdDeviation="{r * s:.1f}"/></filter>')
 
-    # ----------------------------------------------------------- isometric
-    @staticmethod
-    def iso(ox, oy, u, x, y, z):
-        return (ox + (x - y) * 0.866 * u, oy + (x + y) * 0.5 * u - z * u)
+def rune_band(cv, rng, fn, u0, u1, v, size, colour, op, z):
+    """A band of faint glowing runes along a plane."""
+    u = u0
+    d = ""
+    while u < u1 - size:
+        g = rng.choice(RUNES)
+        seq = [fn(u + gx * size, v + gy * size * 1.6) for gx, gy in g]
+        d += "M%.1f,%.1f " % seq[0] + " ".join("L%.1f,%.1f" % p for p in seq[1:]) + " "
+        u += size * rng.uniform(0.8, 1.3)
+    cv.paint('<path d="%s" fill="none" stroke="#0c0a12" stroke-width="2.2" opacity="0.6"/>' % d)
+    cv.glow('<path d="%s" fill="none" stroke="%s" stroke-width="1.6" opacity="%.2f"/>' % (d, hexc(colour), op),
+            '<path d="%s" fill="none" stroke="%s" stroke-width="1.3" opacity="%.2f"/>' % (
+                d, hexc(mix(colour, (40, 40, 60), 0.3)), op * 0.9))
 
-    def shade(self, px, py, haze):
-        """Face colours (top, left, right) for a stone box at screen point."""
-        lit = self.light_at(px, py)
-        top = mix(STONE, (230, 170, 140), lit * 0.8)
-        left = mix(mul(STONE, 0.72), (180, 120, 104), lit * 0.55)
-        right = mix(mul(STONE, 0.38), (90, 60, 66), lit * 0.4)
-        return tuple(hexc(*mix(c, MIST, haze)) for c in (top, left, right))
 
-    def box(self, ox, oy, u, x, y, z, dx, dy, dz, haze=0.0, bricks=True, out=None):
-        P = lambda a, b, c: self.iso(ox, oy, u, a, b, c)  # noqa: E731
-        cx, cy = P(x + dx / 2, y + dy / 2, z + dz)
-        top, left, right = self.shade(cx, cy, haze)
-        g = []
-        g.append(f'<polygon points="{pts([P(x, y, z + dz), P(x + dx, y, z + dz), P(x + dx, y + dy, z + dz), P(x, y + dy, z + dz)])}" fill="{top}"/>')
-        g.append(f'<polygon points="{pts([P(x, y + dy, z), P(x + dx, y + dy, z), P(x + dx, y + dy, z + dz), P(x, y + dy, z + dz)])}" fill="{left}"/>')
-        g.append(f'<polygon points="{pts([P(x + dx, y, z), P(x + dx, y + dy, z), P(x + dx, y + dy, z + dz), P(x + dx, y, z + dz)])}" fill="{right}"/>')
-        edge = hexc(*mix((20, 16, 30), MIST, haze))
-        g.append(f'<polyline points="{pts([P(x, y + dy, z + dz), P(x + dx, y + dy, z + dz), P(x + dx, y, z + dz)])}" '
-                 f'fill="none" stroke="{hexc(*mix((240, 200, 180), MIST, haze))}" stroke-width="{0.8 * self.s:.1f}" opacity="0.35"/>')
-        g.append(f'<line x1="{P(x + dx, y + dy, z)[0]:.1f}" y1="{P(x + dx, y + dy, z)[1]:.1f}" '
-                 f'x2="{P(x + dx, y + dy, z + dz)[0]:.1f}" y2="{P(x + dx, y + dy, z + dz)[1]:.1f}" stroke="{edge}" stroke-width="{0.8 * self.s:.1f}" opacity="0.6"/>')
-        if bricks and dz > 1.2 and u > 6 * self.s:
-            zz = z + 0.55
-            row = 0
-            while zz < z + dz - 0.1:
-                a, b = P(x, y + dy, zz), P(x + dx, y + dy, zz)
-                c, d = P(x + dx, y, zz), P(x + dx, y + dy, zz)
-                g.append(f'<line x1="{a[0]:.1f}" y1="{a[1]:.1f}" x2="{b[0]:.1f}" y2="{b[1]:.1f}" stroke="{edge}" stroke-width="{0.7 * self.s:.1f}" opacity="0.45"/>')
-                g.append(f'<line x1="{c[0]:.1f}" y1="{c[1]:.1f}" x2="{d[0]:.1f}" y2="{d[1]:.1f}" stroke="{edge}" stroke-width="{0.7 * self.s:.1f}" opacity="0.45"/>')
-                # vertical joints, staggered
-                xx = x + (0.5 if row % 2 else 1.0)
-                while xx < x + dx:
-                    p1, p2 = P(xx, y + dy, zz), P(xx, y + dy, min(zz + 0.55, z + dz))
-                    g.append(f'<line x1="{p1[0]:.1f}" y1="{p1[1]:.1f}" x2="{p2[0]:.1f}" y2="{p2[1]:.1f}" stroke="{edge}" stroke-width="{0.6 * self.s:.1f}" opacity="0.35"/>')
-                    xx += 1.0
-                zz += 0.55
-                row += 1
-        svg = "".join(g)
-        if out is not None:
-            out.append(((x + dx) + (y + dy) + z * 0.01, svg))
+def crystal_cluster(cv, rng, bx, by, s, colour, strength, z, lean=0.0, n=5):
+    """Cluster of faceted arcane crystals growing from (bx, by). s = size in pixels."""
+    dark = mix(colour, (10, 8, 20), 0.62)
+    lite = mix(colour, (255, 255, 255), 0.15)
+    shards = []
+    for i in range(n):
+        a = lean + (i - (n - 1) / 2) * 0.32 + rng.uniform(-0.12, 0.12)
+        L = s * rng.uniform(0.45, 1.0) * (1.0 if i == n // 2 else 0.8)
+        w = s * rng.uniform(0.09, 0.15)
+        ox = bx + (i - (n - 1) / 2) * s * 0.1
+        tip = (ox + math.sin(a) * L, by - math.cos(a) * L)
+        nx, ny = math.cos(a) * w, math.sin(a) * w
+        mid = (ox + math.sin(a) * L * 0.78, by - math.cos(a) * L * 0.78)
+        shards.append((L, [(ox - nx, by - ny), (mid[0] - nx, mid[1] - ny), tip, (mid[0] + nx, mid[1] + ny),
+                           (ox + nx, by + ny)], (ox, by), tip))
+    shards.sort(key=lambda t: t[0])
+    for L, poly, base, tip in shards:
+        cv.poly(poly, dark, z)
+        half = [poly[0], poly[1], poly[2], base] if rng.random() < 0.5 else [base, poly[2], poly[3], poly[4]]
+        cv.paint('<polygon points="%s" fill="%s" opacity="0.8"/>' % (pts(half), hexc(mix(colour, dark, 0.35))))
+        cv.paint('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="%s" stroke-width="1" opacity="0.7"/>' % (
+            base[0], base[1], tip[0], tip[1], hexc(lite)))
+        cv.glow('<polygon points="%s" fill="%s" opacity="%.2f" filter="url(#blur2)"/>' % (
+            pts(poly), hexc(colour), 0.55 * strength))
+    cv.glow('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="%s" opacity="%.2f" filter="url(#blur30)"/>' % (
+        bx, by - s * 0.4, s * 0.9, s * 0.7, hexc(colour), 0.28 * strength))
+
+
+def statue(cv, rng, bx, by, s, pose, flip, z, stone=C["statue"], dark=C["statue_dark"], face=True):
+    """A petrified adventurer frozen in terror. (bx, by) is the foot point, s = pixels per unit (height ~1.75)."""
+    def T(x, y):
+        return (bx + flip * x * s, by + y * s)
+
+    def limb(seq, w, col=stone):
+        cv.solid("polyline", 'points="%s"' % pts([T(*p) for p in seq]), "none", z, stroke=col, sw=w * s)
+
+    def poly(seq, col=stone):
+        cv.poly([T(*p) for p in seq], col, z)
+
+    # rubble base where the feet fused with the floor
+    poly([(-0.42, 0.02), (-0.3, -0.07), (0.3, -0.08), (0.45, 0.02)], dark)
+    if pose == "shield":
+        poly([(-0.36, -1.36), (-0.52, -0.35), (-0.4, -0.12), (-0.1, -0.85)], dark)          # cloak
+        limb([(-0.14, -0.02), (-0.1, -0.45), (-0.06, -0.82)], 0.13)                           # legs, stepping back
+        limb([(0.24, -0.02), (0.14, -0.42), (0.06, -0.82)], 0.13)
+        poly([(-0.2, -0.8), (0.18, -0.8), (0.16, -1.36), (-0.24, -1.38)])                      # torso
+        poly([(-0.2, -0.8), (0.18, -0.8), (0.2, -0.66), (-0.22, -0.66)], dark)                 # belt / tunic hem
+        limb([(-0.2, -1.3), (-0.34, -1.02), (-0.3, -0.76)], 0.09)                              # sword arm
+        limb([(-0.3, -0.76), (-0.1, -0.1)], 0.035, dark)                                       # sword
+        limb([(0.16, -1.32), (0.36, -1.5), (0.16, -1.74)], 0.09)                               # arm raised to the face
+        poly([(0.28, -1.95), (0.5, -1.72), (0.4, -1.4), (0.2, -1.5)], mix(stone, dark, 0.3))   # small shield
+        head = (-0.02, -1.52)
+    elif pose == "kneel":
+        limb([(-0.3, -0.02), (-0.18, -0.36), (0.12, -0.38)], 0.13)                             # kneeling leg
+        limb([(0.14, -0.02), (0.2, -0.36), (0.04, -0.62)], 0.13)
+        poly([(-0.16, -0.6), (0.2, -0.62), (0.12, -1.14), (-0.26, -1.1)])
+        poly([(-0.3, -1.14), (-0.46, -0.3), (-0.2, -0.5)], dark)                               # hood / cloak
+        limb([(0.1, -1.08), (0.32, -1.18), (0.3, -1.46)], 0.085)                               # both hands raised
+        limb([(-0.18, -1.06), (0.04, -1.24), (0.16, -1.5)], 0.085)
+        poly([(0.26, -1.52), (0.34, -1.62), (0.38, -1.5)], stone)
+        head = (-0.08, -1.3)
+    else:  # flee: turning away, one arm reaching back
+        limb([(-0.3, -0.02), (-0.14, -0.42), (0.0, -0.8)], 0.13)
+        limb([(0.28, -0.06), (0.2, -0.4), (0.12, -0.8)], 0.13)
+        poly([(-0.14, -0.8), (0.22, -0.78), (0.14, -1.34), (-0.22, -1.3)])
+        limb([(0.12, -1.28), (0.44, -1.2), (0.7, -1.3)], 0.085)                                # reaching out
+        limb([(-0.18, -1.26), (-0.36, -0.98), (-0.5, -0.9)], 0.085)
+        poly([(-0.24, -1.3), (-0.56, -0.9), (-0.44, -0.5), (-0.12, -0.9)], dark)               # satchel / cape
+        head = (0.02, -1.48)
+    hx, hy = head
+    cv.solid("ellipse", 'cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f"' % (*T(hx, hy), 0.12 * s, 0.145 * s), stone, z)
+    if pose == "shield":   # open helmet with a crest
+        poly([(hx - 0.14, hy - 0.02), (hx - 0.13, hy - 0.12), (hx, hy - 0.2), (hx + 0.13, hy - 0.12), (hx + 0.14, hy - 0.02),
+              (hx + 0.1, hy - 0.08), (hx - 0.1, hy - 0.08)], dark)
+        poly([(hx - 0.02, hy - 0.19), (hx + 0.02, hy - 0.19), (hx - 0.12, hy - 0.34), (hx - 0.16, hy - 0.3)], stone)
+    elif pose == "kneel":  # hood
+        poly([(hx - 0.16, hy + 0.12), (hx - 0.15, hy - 0.1), (hx, hy - 0.2), (hx + 0.15, hy - 0.1), (hx + 0.13, hy - 0.04),
+              (hx + 0.1, hy - 0.1), (hx - 0.1, hy - 0.1), (hx - 0.11, hy + 0.1)], dark)
+    else:                  # travelling hat
+        poly([(hx - 0.22, hy - 0.08), (hx + 0.22, hy - 0.1), (hx + 0.1, hy - 0.14), (hx + 0.03, hy - 0.3),
+              (hx - 0.1, hy - 0.14)], dark)
+    for sx_ in (-1, 1):    # shoulders
+        cv.solid("ellipse", 'cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f"' % (
+            *T(sx_ * 0.19 + (hx if pose == "kneel" else 0) * 0.5, hy + 0.2), 0.07 * s, 0.05 * s), stone, z)
+    if not face:
+        return
+    # face of terror: wide eyes, raised brows, screaming mouth
+    for ex in (-0.045, 0.045):
+        cv.paint('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#16141c"/>' % (*T(hx + ex, hy - 0.02), 0.024 * s))
+        a, b = T(hx + ex - 0.03 * (1 if ex < 0 else -1), hy - 0.05), T(hx + ex + 0.03 * (1 if ex < 0 else -1), hy - 0.08)
+        cv.paint('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#1c1a22" stroke-width="%.1f"/>' % (
+            a[0], a[1], b[0], b[1], max(1, 0.012 * s)))
+    cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#121018"/>' % (*T(hx, hy + 0.07), 0.03 * s, 0.045 * s))
+    # shading on the side away from the orb (left light: shade the right)
+    cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#000" opacity="0.28"/>' % (
+        *T(hx + 0.07 * flip, hy + 0.02), 0.07 * s, 0.13 * s))
+    # cracks and a crystal sprouting from the shoulder
+    for _ in range(5):
+        x, y = rng.uniform(-0.2, 0.2), rng.uniform(-1.4, -0.2)
+        d = "M%.1f,%.1f" % T(x, y)
+        for _ in range(3):
+            x += rng.uniform(-0.08, 0.08)
+            y += rng.uniform(0.02, 0.12)
+            d += " L%.1f,%.1f" % T(x, y)
+        cv.paint('<path d="%s" fill="none" stroke="#1d1b24" stroke-width="%.1f" opacity="0.8"/>' % (d, max(0.8, s * 0.008)))
+    # moss of dust on top surfaces
+    cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#fff" opacity="0.07"/>' % (
+        *T(hx - 0.03, hy - 0.09), 0.08 * s, 0.04 * s))
+
+
+def chain(cv, x0, y0, x1, y1, link, z):
+    n = max(2, int(math.hypot(x1 - x0, y1 - y0) / link))
+    for i in range(n):
+        t = (i + 0.5) / n
+        x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+        if i % 2 == 0:
+            cv.solid("ellipse", 'cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f"' % (x, y, link * 0.32, link * 0.6), "none", z,
+                     stroke=C["iron"], sw=max(1.2, link * 0.16))
         else:
-            self.add(svg)
-
-    def stairs(self, ox, oy, u, x, y, z, steps, axis, haze, out, width=2.0, rise=0.5, run=0.7):
-        """A flight ascending along +x (axis='x') or -y (axis='y')."""
-        for i in range(steps):
-            if axis == "x":
-                self.box(ox, oy, u, x + i * run, y, z, run, width, rise * (i + 1), haze, bricks=False, out=out)
-            else:
-                self.box(ox, oy, u, x, y - (i + 1) * run, z, width, run, rise * (i + 1), haze, bricks=False, out=out)
-
-    def arch_on_left_face(self, ox, oy, u, x0, x1, y, z, height, haze):
-        """Dark arched doorway cut into a wall face at plane y."""
-        P = lambda a, b, c: self.iso(ox, oy, u, a, b, c)  # noqa: E731
-        r = (x1 - x0) / 2
-        cxk = x0 + r
-        p = [P(x0, y, z)]
-        p.append(P(x0, y, z + height - r))
-        for k in range(1, 12):
-            a = math.pi - math.pi * k / 12
-            p.append(P(cxk + math.cos(a) * r, y, z + height - r + math.sin(a) * r))
-        p.append(P(x1, y, z + height - r))
-        p.append(P(x1, y, z))
-        dark = hexc(*mix((10, 8, 18), MIST, haze))
-        lip = hexc(*mix((200, 170, 170), MIST, haze))
-        return (f'<polygon points="{pts(p)}" fill="{dark}"/>'
-                f'<polyline points="{pts(p[1:-1])}" fill="none" stroke="{lip}" stroke-width="{1.2 * self.s:.1f}" opacity="0.35"/>')
-
-    def island_underside(self, ox, oy, u, dx, dy, depth, haze):
-        """Jagged rock root hanging below a floating platform."""
-        rng = self.rng
-        P = lambda a, b, c: self.iso(ox, oy, u, a, b, c)  # noqa: E731
-        edge = [P(0, dy, 0), P(dx / 2, dy, 0), P(dx, dy, 0), P(dx, dy / 2, 0), P(dx, 0, 0)]
-        tip = P(dx * 0.6, dy * 0.6, -depth)
-        pts_l = [edge[0]]
-        n = 10
-        for i in range(1, n):
-            t = i / n
-            bx = edge[0][0] + (edge[-1][0] - edge[0][0]) * t
-            by = max(edge[0][1], edge[-1][1]) + 6 * self.s
-            k = 1 - abs(2 * t - 1)
-            pts_l.append((bx + (rng.random() - 0.5) * u, by + (tip[1] - by) * k ** 0.8 * (0.6 + rng.random() * 0.4)))
-        pts_l.append(edge[-1])
-        pts_l += [edge[3], edge[2], edge[1]]
-        c = hexc(*mix((36, 30, 50), MIST, haze))
-        return f'<polygon points="{pts(pts_l)}" fill="{c}"/>'
-
-    def island(self, ox, oy, u, dx, dy, haze, walls, stair=None, arch=None, tower=None, crystals=0):
-        """Floating platform with maze walls. Returns list of screen points for props."""
-        out = []
-        self.add(self.island_underside(ox, oy, u, dx, dy, dx * 0.7, haze))
-        self.box(ox, oy, u, 0, 0, -1.0, dx, dy, 1.0, haze, bricks=False)
-        for (x, y, wx, wy, hz) in walls:
-            self.box(ox, oy, u, x, y, 0, wx, wy, hz, haze, out=out)
-        if stair:
-            self.stairs(ox, oy, u, *stair, haze=haze, out=out)
-        if tower:
-            tx, ty, tw, th = tower
-            self.box(ox, oy, u, tx, ty, 0, tw, tw, th, haze, out=out)
-            # crenellations
-            for k in range(3):
-                self.box(ox, oy, u, tx + k * tw / 3, ty + tw - 0.35, th, tw / 6, 0.35, 0.5, haze, bricks=False, out=out)
-        out.sort(key=lambda t: t[0])
-        for _, svg in out:
-            self.add(svg)
-        if arch:
-            self.add(self.arch_on_left_face(ox, oy, u, *arch, haze=haze))
-
-    # --------------------------------------------------------------- scene
-    def background(self):
-        w, h = self.w, self.h
-        self.add(f'<rect width="{w}" height="{h}" fill="url(#bg)"/>')
-        self.add(f'<rect width="{w}" height="{h}" fill="url(#orbGlow)"/>')
-
-    def giant_eye(self):
-        """Very subtle silhouette of the Beholder's eye, deep in the mist."""
-        w, h, s = self.w, self.h, self.s
-        cx, cy = 0.64 * w, 0.30 * h
-        ew, eh = 0.15 * w * (1 if w > h else 1.35), 0.07 * h
-        d = f"M{cx - ew:.1f},{cy:.1f} Q{cx:.1f},{cy - eh * 2:.1f} {cx + ew:.1f},{cy:.1f} Q{cx:.1f},{cy + eh * 2:.1f} {cx - ew:.1f},{cy:.1f} Z"
-        self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{ew * 1.5:.1f}" ry="{eh * 2.6:.1f}" fill="#120e1c" opacity="0.5" filter="url(#b30)"/>')
-        self.add(f'<path d="{d}" fill="#5a4a6e" opacity="0.22" filter="url(#b6)"/>')
-        ir = eh * 0.95
-        self.add(f'<circle cx="{cx + ew * 0.08:.1f}" cy="{cy:.1f}" r="{ir:.1f}" fill="url(#eyeIris)" opacity="0.35" filter="url(#b3)"/>')
-        self.add(f'<ellipse cx="{cx + ew * 0.08:.1f}" cy="{cy:.1f}" rx="{ir * 0.18:.1f}" ry="{ir * 0.75:.1f}" fill="#06040a" opacity="0.32" filter="url(#b3)"/>')
-        self.add(f'<circle cx="{cx + ew * 0.08:.1f}" cy="{cy:.1f}" r="{ir:.1f}" fill="none" stroke="#9a70d0" stroke-width="{2 * s:.1f}" opacity="0.18" filter="url(#b3)"/>')
-        # lids and faint veins
-        self.add(f'<path d="M{cx - ew:.1f},{cy:.1f} Q{cx:.1f},{cy - eh * 2:.1f} {cx + ew:.1f},{cy:.1f}" fill="none" stroke="#1a1426" stroke-width="{8 * s:.1f}" opacity="0.45" filter="url(#b3)"/>')
-        rng = self.rng
-        for _ in range(9):
-            a = rng.random() * 2 * math.pi
-            r0 = ir * 1.05
-            x, y = cx + math.cos(a) * r0, cy + math.sin(a) * r0 * 0.9
-            p = [(x, y)]
-            for _ in range(4):
-                x += math.cos(a) * ew * 0.12 + (rng.random() - 0.5) * 8 * s
-                y += math.sin(a) * eh * 0.25 + (rng.random() - 0.5) * 6 * s
-                p.append((x, y))
-            self.add(f'<polyline points="{pts(p)}" fill="none" stroke="#7a3a5a" stroke-width="{1.2 * s:.1f}" opacity="0.14"/>')
-
-    def maze_walls(self, n):
-        """Perfect maze on an n x n grid (recursive backtracker); returns wall segments."""
-        rng = self.rng
-        visited = np.zeros((n, n), bool)
-        h_walls = np.ones((n + 1, n), bool)   # wall along x at row j, cell i
-        v_walls = np.ones((n, n + 1), bool)   # wall along y at column i, cell j
-        stack = [(0, 0)]
-        visited[0, 0] = True
-        while stack:
-            i, j = stack[-1]
-            nb = [(di, dj) for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1))
-                  if 0 <= i + di < n and 0 <= j + dj < n and not visited[i + di, j + dj]]
-            if not nb:
-                stack.pop()
-                continue
-            di, dj = nb[rng.integers(0, len(nb))]
-            if di == 1:
-                v_walls[j, i + 1] = False
-            elif di == -1:
-                v_walls[j, i] = False
-            elif dj == 1:
-                h_walls[j + 1, i] = False
-            else:
-                h_walls[j, i] = False
-            visited[i + di, j + dj] = True
-            stack.append((i + di, j + dj))
-        segs = []
-        for j in range(n + 1):
-            for i in range(n):
-                if h_walls[j, i]:
-                    segs.append((i, j - 0.14, 1.0, 0.28))
-        for j in range(n):
-            for i in range(n + 1):
-                if v_walls[j, i]:
-                    segs.append((i - 0.14, j, 0.28, 1.0))
-        return segs
-
-    def maze_plane(self, ox, oy, u, n, haze_far, haze_near, wall_h=1.3):
-        """A vast labyrinth seen from above, fading into the mist with depth."""
-        self.box(ox, oy, u, 0, 0, -0.6, n, n, 0.6, (haze_far + haze_near) / 2, bricks=False)
-        out = []
-        for x, y, dx, dy in self.maze_walls(n):
-            t = (x + y) / (2 * n)
-            haze = haze_far + (haze_near - haze_far) * t
-            hz = wall_h * (1 + 0.6 * (self.rng.random() < 0.04))
-            self.box(ox, oy, u, x, y, 0, dx, dy, hz, haze, bricks=False, out=out)
-        out.sort(key=lambda t: t[0])
-        for _, svg in out:
-            self.add(svg)
-
-    def mist(self, y0, y1, color, op, n=7):
-        w, h, s, rng = self.w, self.h, self.s, self.rng
-        for _ in range(n):
-            cx = rng.random() * w
-            cy = y0 + rng.random() * (y1 - y0)
-            self.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="{(160 + rng.random() * 260) * s:.1f}" '
-                     f'ry="{(30 + rng.random() * 60) * s:.1f}" fill="{color}" opacity="{op * (0.6 + rng.random() * 0.6):.2f}" filter="url(#mist)"/>')
-
-    def far_structures(self):
-        """Hazy distant fragments: stairs, arches and walls at odd angles."""
-        w, h, s, rng = self.w, self.h, self.s, self.rng
-        specs = [
-            (0.08, 0.40, 0), (0.40, 0.22, 90), (0.52, 0.47, 0), (0.83, 0.42, 180),
-            (0.30, 0.52, 0), (0.93, 0.20, 270), (0.72, 0.56, 0), (0.60, 0.14, 180),
-        ]
-        for fx, fy, rot in specs:
-            ox, oy = fx * w, fy * h
-            u = (7 + rng.random() * 4) * s
-            haze = 0.72 + rng.random() * 0.12
-            self.add(f'<g transform="rotate({rot} {ox:.1f} {oy:.1f})">')
-            out = []
-            self.box(ox, oy, u, 0, 0, -0.8, 7, 4, 0.8, haze, bricks=False)
-            self.stairs(ox, oy, u, 0.5, 3, 0, 6, "x", haze, out, width=1.5)
-            self.box(ox, oy, u, 4.5, 0.5, 0, 0.6, 3, 4 + rng.random() * 3, haze, bricks=False, out=out)
-            out.sort(key=lambda t: t[0])
-            for _, svg in out:
-                self.add(svg)
-            self.add(self.arch_on_left_face(ox, oy, u, 4.6, 5.0, 3.5, 0, 2.2, haze))
-            self.add('</g>')
-
-    def orb(self):
-        """Warm arcane orb floating over an amber crystal shard: the key light."""
-        w, h, s, rng = self.w, self.h, self.s, self.rng
-        x, y = self.lx, self.ly
-        r = 30 * s
-        self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r * 5:.1f}" fill="rgb(255,150,110)" opacity="0.35" filter="url(#b30)"/>')
-        self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r * 2:.1f}" fill="#ffb890" opacity="0.5" filter="url(#b12)"/>')
-        # orbiting rune rings
-        for k, (rx, ry, rot) in enumerate(((r * 2.6, r * 0.8, -18), (r * 3.4, r * 1.0, 24))):
-            self.add(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{rx:.1f}" ry="{ry:.1f}" transform="rotate({rot} {x:.1f} {y:.1f})" '
-                     f'fill="none" stroke="#ffc8a0" stroke-width="{1.6 * s:.1f}" stroke-dasharray="{6 * s:.1f} {4 * s:.1f} {1.5 * s:.1f} {4 * s:.1f}" opacity="{0.55 - 0.15 * k:.2f}"/>')
-        self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="url(#orbCore)"/>')
-        self.add(f'<ellipse cx="{x - r * 0.35:.1f}" cy="{y - r * 0.4:.1f}" rx="{r * 0.35:.1f}" ry="{r * 0.2:.1f}" fill="#fff8f0" opacity="0.7"/>')
-        # floating shards
-        for i in range(7):
-            a = i / 7 * 2 * math.pi + rng.random() * 0.4
-            d = r * (3.2 + rng.random() * 1.8)
-            sx, sy = x + math.cos(a) * d, y + math.sin(a) * d * 0.45 + r * 0.6
-            sz = (5 + rng.random() * 7) * s
-            self.add(f'<polygon points="{pts([(sx, sy - sz * 1.6), (sx + sz * 0.5, sy), (sx, sy + sz * 0.9), (sx - sz * 0.5, sy)])}" '
-                     f'fill="url(#crystalW)" opacity="0.9"/>')
-        # rock with amber crystals underneath
-        base_y = y + r * 3.2
-        rock = [(x - r * 2.6, base_y), (x - r * 1.2, base_y - r * 0.5), (x + r * 1.4, base_y - r * 0.4),
-                (x + r * 2.4, base_y + r * 0.2), (x + r * 0.6, base_y + r * 1.4), (x - r * 0.2, base_y + r * 2.8),
-                (x - r * 1.3, base_y + r * 1.2)]
-        self.add(f'<polygon points="{pts(rock)}" fill="#3a2a36" filter="url(#rough)"/>')
-        self.add(f'<polyline points="{pts(rock[:4])}" fill="none" stroke="#ffb890" stroke-width="{2 * s:.1f}" opacity="0.6"/>')
-        self.crystal_cluster(x - r * 0.4, base_y - r * 0.2, 1.3 * s, "crystalW", 5, glow="#ffb080")
-
-    def crystal_cluster(self, x, y, u, grad, n, glow, glow_op=0.35, spread=1.0):
-        rng = self.rng
-        self.add(f'<ellipse cx="{x:.1f}" cy="{y - 18 * u:.1f}" rx="{36 * u * spread:.1f}" ry="{30 * u:.1f}" fill="{glow}" '
-                 f'opacity="{glow_op:.2f}" filter="url(#b12)"/>')
-        for i in range(n):
-            ang = (i - (n - 1) / 2) * 16 + (rng.random() - 0.5) * 12
-            hgt = (22 + rng.random() * 34) * u
-            wid = (6 + rng.random() * 6) * u
-            bx = x + (i - (n - 1) / 2) * 7 * u * spread
-            g = (f'<g transform="translate({bx:.1f},{y:.1f}) rotate({ang:.1f})">'
-                 f'<polygon points="{-wid / 2:.1f},0 {-wid / 2:.1f},{-hgt * 0.8:.1f} 0,{-hgt:.1f} {wid / 2:.1f},{-hgt * 0.8:.1f} {wid / 2:.1f},0" fill="url(#{grad})"/>'
-                 f'<polygon points="0,0 0,{-hgt:.1f} {wid / 2:.1f},{-hgt * 0.8:.1f} {wid / 2:.1f},0" fill="#000" opacity="0.28"/>'
-                 f'<line x1="{-wid * 0.25:.1f}" y1="{-hgt * 0.1:.1f}" x2="{-wid * 0.25:.1f}" y2="{-hgt * 0.75:.1f}" stroke="#fff" stroke-width="{0.8 * u:.1f}" opacity="0.45"/></g>')
-            self.add(g)
-
-    def rune(self, x, y, size, color, op):
-        """A random angular glyph."""
-        rng = self.rng
-        segs = []
-        for _ in range(3 + rng.integers(0, 3)):
-            a = rng.integers(0, 8) * math.pi / 4
-            b = rng.integers(0, 8) * math.pi / 4
-            r1, r2 = size * rng.random(), size * rng.random()
-            segs.append(f"M{x + math.cos(a) * r1:.1f},{y + math.sin(a) * r1:.1f} L{x + math.cos(b) * r2:.1f},{y + math.sin(b) * r2:.1f}")
-        if rng.random() < 0.5:
-            segs.append(f"M{x - size * 0.5:.1f},{y:.1f} a{size * 0.5:.1f},{size * 0.5:.1f} 0 1 0 {size:.1f},0")
-        d = " ".join(segs)
-        return (f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{2.4 * self.s:.1f}" opacity="{op * 0.5:.2f}" filter="url(#b3)"/>'
-                f'<path d="{d}" fill="none" stroke="{color}" stroke-width="{1.0 * self.s:.1f}" opacity="{op:.2f}"/>')
-
-    def twisting_wall(self, x0, x1, top, bottom, phase, dim, flip=False):
-        """Tall carved wall whose edges and courses twist like a ribbon."""
-        s, rng = self.s, self.rng
-        n = 40
-        left, right = [], []
-        for i in range(n + 1):
-            t = i / n
-            y = top + (bottom - top) * t
-            tw = math.sin(t * math.pi * 1.6 + phase)
-            wmid = (x0 + x1) / 2 + tw * (x1 - x0) * 0.18
-            half = (x1 - x0) / 2 * (0.75 + 0.25 * math.cos(t * math.pi * 1.6 + phase))
-            left.append((wmid - half, y))
-            right.append((wmid + half, y))
-        poly = left + right[::-1]
-        base = mix((20, 18, 32), STONE, 0.55 * dim)
-        self.add(f'<polygon points="{pts(poly)}" fill="{hexc(*base)}"/>')
-        # the face turning away: shade the side where the twist narrows
-        for i in range(n):
-            t = i / n
-            c = math.cos(t * math.pi * 1.6 + phase)
-            if c < 0:
-                (ax, ay), (bx, by) = left[i], right[i]
-                (cx2, cy2), (dx2, dy2) = right[i + 1], left[i + 1]
-                self.add(f'<polygon points="{pts([(ax, ay), (bx, by), (cx2, cy2), (dx2, dy2)])}" fill="#0a0812" opacity="{min(0.6, -c * 0.6):.2f}"/>')
-        # curving stone courses
-        for i in range(1, n, 2):
-            (ax, ay), (bx, by) = left[i], right[i]
-            bend = math.sin(i * 0.4 + phase) * 10 * s
-            self.add(f'<path d="M{ax:.1f},{ay:.1f} Q{(ax + bx) / 2:.1f},{ay + bend:.1f} {bx:.1f},{by:.1f}" stroke="#0c0a14" '
-                     f'stroke-width="{1.4 * s:.1f}" fill="none" opacity="0.6"/>')
-            if i % 4 == 1:
-                jx = ax + (bx - ax) * (0.3 + rng.random() * 0.4)
-                ny = left[i + 1][1] if i + 1 <= n else by
-                self.add(f'<line x1="{jx:.1f}" y1="{ay:.1f}" x2="{jx:.1f}" y2="{ny:.1f}" stroke="#0c0a14" stroke-width="{1.1 * s:.1f}" opacity="0.5"/>')
-        # rim light on the edge facing the orb
-        edge = left if not flip else right
-        lit = self.light_at(edge[n // 3][0], edge[n // 3][1])
-        self.add(f'<polyline points="{pts(edge)}" fill="none" stroke="rgb(255,160,120)" stroke-width="{2.2 * s:.1f}" opacity="{0.2 + lit * 0.5:.2f}"/>')
-        return left, right
-
-    def petrified(self, x, base, u, pose, dim):
-        """Adventurer turned to stone by the eye's gaze."""
-        lit = self.light_at(x, base) * dim
-        stone = hexc(*mix((70, 66, 82), (180, 160, 160), lit))
-        dark = hexc(*mix((24, 22, 32), (80, 70, 80), lit))
-        rim = hexc(*mix((90, 84, 100), (255, 190, 160), lit))
-        sw = 7
-        g = [f'<ellipse cx="0" cy="0" rx="26" ry="5" fill="#0a0810" opacity="0.6"/>',
-             f'<rect x="-22" y="-8" width="44" height="8" fill="{dark}"/>']  # plinth of rubble
-        if pose == "warrior":
-            g += [
-                f'<path d="M-6 -8 L-9 -38 M6 -8 L9 -38" stroke="{stone}" stroke-width="{sw}" stroke-linecap="round"/>',
-                f'<path d="M-10 -38 L10 -38 L12 -66 L-12 -66 Z" fill="{stone}"/>',
-                f'<circle cx="0" cy="-74" r="7" fill="{stone}"/>',
-                f'<path d="M-6 -80 Q0 -90 6 -80" stroke="{dark}" stroke-width="3" fill="none"/>',
-                f'<path d="M-12 -62 L-26 -76" stroke="{stone}" stroke-width="{sw}" stroke-linecap="round"/>',
-                f'<ellipse cx="-30" cy="-80" rx="11" ry="15" fill="{dark}" stroke="{stone}" stroke-width="2"/>',
-                f'<path d="M12 -62 L22 -50 L40 -92" stroke="{stone}" stroke-width="{sw - 2}" stroke-linecap="round" fill="none"/>',
-                f'<path d="M-12 -66 L-12 -40" stroke="{rim}" stroke-width="1.6" opacity="0.8"/>',
-            ]
-        elif pose == "mage":
-            g += [
-                f'<path d="M-14 -8 L-6 -56 L8 -56 L16 -8 Z" fill="{stone}"/>',
-                f'<path d="M-8 -56 L0 -84 L9 -56 Z" fill="{dark}"/>',
-                f'<circle cx="1" cy="-60" r="6" fill="{stone}"/>',
-                f'<path d="M6 -48 L26 -60" stroke="{stone}" stroke-width="{sw - 1}" stroke-linecap="round"/>',
-                f'<line x1="24" y1="-4" x2="30" y2="-96" stroke="{dark}" stroke-width="3.5"/>',
-                f'<circle cx="30" cy="-98" r="4" fill="{stone}"/>',
-                f'<path d="M-6 -46 L-22 -70" stroke="{stone}" stroke-width="{sw - 1}" stroke-linecap="round"/>',
-                f'<path d="M-14 -8 L-6 -56" stroke="{rim}" stroke-width="1.6" opacity="0.8"/>',
-            ]
-        else:  # kneeling, shielding the face
-            g += [
-                f'<path d="M-10 -8 L-2 -22 L14 -8" stroke="{stone}" stroke-width="{sw}" stroke-linecap="round" fill="none"/>',
-                f'<path d="M-8 -20 L8 -20 L4 -46 L-10 -44 Z" fill="{stone}"/>',
-                f'<circle cx="-2" cy="-54" r="6.5" fill="{stone}"/>',
-                f'<path d="M4 -40 L-4 -56 M-6 -40 L-12 -56" stroke="{stone}" stroke-width="{sw - 2}" stroke-linecap="round"/>',
-                f'<path d="M-10 -44 L-8 -20" stroke="{rim}" stroke-width="1.6" opacity="0.8"/>',
-            ]
-        # cracks
-        g.append(f'<path d="M-4 -30 l3 6 l-2 5 M6 -50 l-3 4" stroke="{dark}" stroke-width="1" fill="none"/>')
-        self.add(f'<g transform="translate({x:.1f},{base:.1f}) scale({u:.2f})">{"".join(g)}</g>')
-
-    def floor_plane(self):
-        w, h, s, rng = self.w, self.h, self.s, self.rng
-        fy = self.floor
-        self.add(f'<rect x="-10" y="{fy:.1f}" width="{w + 20}" height="{h - fy + 10:.1f}" fill="url(#floorG)"/>')
-        # perspective flagstones, very faint
-        vx, vy = 0.45 * w, fy - 0.35 * h
-        for i in range(-14, 15):
-            xb = vx + i * 0.09 * w
-            x_top = vx + (xb - vx) * ((fy - vy) / (h - vy))
-            self.add(f'<line x1="{x_top:.1f}" y1="{fy:.1f}" x2="{xb:.1f}" y2="{h:.1f}" stroke="#08060c" stroke-width="{1.4 * s:.1f}" opacity="0.4"/>')
-        y = fy + 8 * s
-        step = 14 * s
-        while y < h:
-            self.add(f'<line x1="0" y1="{y:.1f}" x2="{w}" y2="{y:.1f}" stroke="#08060c" stroke-width="{1.4 * s:.1f}" opacity="0.35"/>')
-            step *= 1.35
-            y += step
-        # rear kerb of the floor
-        self.add(f'<rect x="-10" y="{fy - 4 * s:.1f}" width="{w + 20}" height="{10 * s:.1f}" fill="#2e2840"/>')
-        self.add(f'<rect x="-10" y="{fy - 4 * s:.1f}" width="{w + 20}" height="{2 * s:.1f}" fill="#8a6a70" opacity="0.4"/>')
-        # warm pool of orb light near the hero
-        self.add(f'<ellipse cx="{0.22 * w:.1f}" cy="{fy + 0.05 * h:.1f}" rx="{0.28 * w:.1f}" ry="{0.045 * h:.1f}" fill="rgb(255,150,110)" opacity="0.12" filter="url(#b30)"/>')
-        # a faint arcane circle on the rear flagstones (very subdued)
-        self.add(f'<ellipse cx="{0.45 * w:.1f}" cy="{fy + 0.04 * h:.1f}" rx="{0.16 * w:.1f}" ry="{0.022 * h:.1f}" fill="none" stroke="#7ad8c8" stroke-width="{1.5 * s:.1f}" opacity="0.12"/>')
-        self.add(f'<ellipse cx="{0.45 * w:.1f}" cy="{fy + 0.04 * h:.1f}" rx="{0.13 * w:.1f}" ry="{0.017 * h:.1f}" fill="none" stroke="#7ad8c8" stroke-width="{1 * s:.1f}" stroke-dasharray="{8 * s:.1f} {6 * s:.1f}" opacity="0.1"/>')
-
-    def motes(self):
-        w, h, s, rng = self.w, self.h, self.s, self.rng
-        for _ in range(int(110 * w * h / (1920 * 1080))):
-            x, y = rng.random() * w, (0.1 + rng.random() * 0.7) * h
-            near = self.light_at(x, y)
-            col = "#ffc8a0" if rng.random() < near * 1.5 else ("#8ae8d8" if rng.random() < 0.6 else "#c0a0ff")
-            r = (0.7 + rng.random() * 1.6) * s
-            op = 0.3 + rng.random() * 0.5
-            if x > 0.55 * w:
-                op *= 0.5
-            self.add(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r * 3:.1f}" fill="{col}" opacity="{op * 0.25:.2f}" filter="url(#b3)"/>'
-                     f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{col}" opacity="{op:.2f}"/>')
-
-    # --------------------------------------------------------------- build
-    def build(self):
-        w, h, s = self.w, self.h, self.s
-        portrait = h > w
-        self.build_defs()
-        self.background()
-        # the labyrinth below and its mirror on the vault: an hourglass of mazes
-        # converging on the misty horizon where the eye watches
-        self.add('<g filter="url(#stoneTex)">')
-        mu = (24 if not portrait else 17) * s
-        self.maze_plane(0.5 * w, 0.40 * h, mu, 40, 0.88, 0.55)
-        cy_top = 0.24 * h
-        self.add(f'<g transform="rotate(180 {0.5 * w:.1f} {cy_top:.1f})">')
-        self.maze_plane(0.5 * w, cy_top, mu, 40, 0.9, 0.7)
-        self.add('</g>')
-        self.add('</g>')
-        # sink the vault maze into shadow and darken the near labyrinth toward the floor
-        self.add(f'<rect x="-20" y="-20" width="{w + 40}" height="{cy_top + 20:.1f}" fill="#0c0a14" opacity="0.5" filter="url(#b30)"/>')
-        self.add(f'<linearGradient id="nearDark" x1="0" y1="0" x2="0" y2="1">'
-                 f'<stop offset="0" stop-color="#0e0b16" stop-opacity="0"/>'
-                 f'<stop offset="1" stop-color="#0e0b16" stop-opacity="0.5"/></linearGradient>')
-        self.add(f'<rect x="0" y="{0.5 * h:.1f}" width="{w}" height="{self.floor - 0.5 * h:.1f}" fill="url(#nearDark)"/>')
-        self.mist(0.22 * h, 0.44 * h, "#3a3050", 0.5, n=10)
-        self.giant_eye()
-        self.mist(0.2 * h, 0.45 * h, "#3a3050", 0.3, n=8)
-        self.add('<g filter="url(#stoneTex)">')
-        self.far_structures()
-        self.add('</g>')
-        self.mist(0.35 * h, 0.6 * h, "#40365a", 0.3, n=8)
-
-        self.add('<g filter="url(#stoneTex)">')
-        # upside-down island hanging from the vault, top right (Escher cue)
-        ox, oy = (0.80 if not portrait else 0.76) * w, 0.2 * h
-        self.add(f'<g transform="rotate(180 {ox:.1f} {oy:.1f})">')
-        self.island(ox, oy, 12 * s, 10, 6, 0.45,
-                    walls=[(0.3, 0.3, 9.4, 0.6, 3.2), (0.3, 0.3, 0.6, 5.4, 3.2), (5, 0.9, 0.6, 4.5, 2.4)],
-                    stair=(1.2, 5.2, 0, 6, "x"), arch=(6.2, 7.6, 0.9, 0, 2.6))
-        self.add('</g>')
-        # sideways flight climbing a vertical face (gravity turned 90 degrees)
-        ox2, oy2 = (0.845 if not portrait else 0.8) * w, 0.47 * h
-        self.add(f'<g transform="rotate(-90 {ox2:.1f} {oy2:.1f})">')
-        out = []
-        self.box(ox2, oy2, 11 * s, 0, 0, -1, 9, 3, 1, 0.5, bricks=False)
-        self.stairs(ox2, oy2, 11 * s, 0.5, 2.6, 0, 8, "x", 0.5, out, width=2)
-        out.sort(key=lambda t: t[0])
-        for _, svg in out:
-            self.add(svg)
-        self.add('</g>')
-
-        # right island, higher and further (kept dim: enemies stand below)
-        self.island(0.60 * w, 0.40 * h, 15 * s, 12, 7, 0.38,
-                    walls=[(0.4, 0.4, 11, 0.6, 3.4), (0.4, 0.4, 0.6, 6, 3.4), (4, 3, 0.6, 3.6, 2.6),
-                           (7.5, 0.9, 0.6, 3.2, 2.6), (8, 5, 3.6, 0.6, 1.8)],
-                    tower=(9, 1.2, 2.2, 6.5), arch=(1.6, 3.2, 1.0, 0, 2.8))
-        # central left island with a stair that ends in mid-air
-        self.island(0.34 * w, 0.49 * h, 18 * s, 11, 7, 0.2,
-                    walls=[(0.4, 0.4, 10, 0.6, 3.6), (0.4, 0.4, 0.6, 6.2, 3.6), (3.6, 1, 0.6, 3.8, 2.8),
-                           (6.8, 3.4, 3.6, 0.6, 2.8), (6.8, 1, 0.6, 2.4, 2.8)],
-                    stair=(6.6, 5.6, 0, 9, "x"), arch=(1.4, 3.0, 1.0, 0, 3.0))
-        self.add('</g>')
-
-        # crystals embedded in the islands
-        self.crystal_cluster(0.36 * w, 0.52 * h, 0.9 * s, "crystalT", 4, glow="#4ad0c0", glow_op=0.3)
-        self.crystal_cluster(0.66 * w, 0.44 * h, 0.7 * s, "crystalV", 3, glow="#9a70ff", glow_op=0.22)
-        self.crystal_cluster(0.52 * w, 0.62 * h, 0.8 * s, "crystalV", 5, glow="#9a70ff", glow_op=0.25)
-
-        self.mist(0.55 * h, 0.75 * h, "#2e2644", 0.35, n=6)
-
-        # twisting framing walls
-        self.add('<g filter="url(#stoneTex)">')
-        L = self.twisting_wall(-0.04 * w, 0.11 * w if not portrait else 0.16 * w, -0.02 * h, self.floor + 4 * s, 0.4, 0.9)
-        R = self.twisting_wall(0.88 * w if not portrait else 0.84 * w, 1.06 * w, -0.02 * h, self.floor + 4 * s, 2.3, 0.45, flip=True)
-        self.add('</g>')
-        rng = self.rng
-        for (left, right), col, op in ((L, "#7ae8d8", 0.55), (R, "#b090ff", 0.3)):
-            for i in range(6, 36, 4):
-                (ax, ay), (bx, by) = left[i], right[i]
-                if 0 < (ax + bx) / 2 < w:
-                    self.add(self.rune(ax + (bx - ax) * (0.3 + rng.random() * 0.4), ay, 9 * s, col, op))
-        self.crystal_cluster(0.05 * w if not portrait else 0.08 * w, 0.66 * h, 1.0 * s, "crystalT", 4, glow="#4ad0c0", glow_op=0.35)
-        self.crystal_cluster(0.95 * w if not portrait else 0.93 * w, 0.58 * h, 0.8 * s, "crystalV", 3, glow="#9a70ff", glow_op=0.18)
-
-        self.orb()
-        # petrified adventurers on the rear flagstones
-        self.petrified(0.33 * w, self.floor + 2 * s, 1.15 * s, "warrior", 1.0)
-        self.petrified(0.45 * w, self.floor + 2 * s, 1.05 * s, "kneeling", 0.9)
-        self.petrified(0.40 * w, 0.49 * h + 5 * s, 0.55 * s, "mage", 0.8)
-        self.add(f'<rect width="{w}" height="{h}" fill="url(#penumbra)"/>')
-        self.add('<g filter="url(#stoneTex)">')
-        self.floor_plane()
-        self.add('</g>')
-        self.add(f'<rect x="-20" y="{self.floor - 10 * s:.1f}" width="{w + 40}" height="{30 * s:.1f}" fill="#06050a" opacity="0.4" filter="url(#b12)"/>')
-        self.motes()
-        return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">'
-                f'<defs>{"".join(self.defs)}</defs>{"".join(self.body)}</svg>')
+            cv.solid("line", 'x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"' % (x, y - link * 0.5, x, y + link * 0.5), "none", z,
+                     stroke=C["iron"], sw=max(1.2, link * 0.2))
 
 
-def post(img, w, h, seed):
+# ---------------------------------------------------------------------------
+# scene
+# ---------------------------------------------------------------------------
+def build(fmt, seed=11):
+    rng = random.Random(seed)
+    W, H = fmt["W"], fmt["H"]
+    cam = Camera(W, H, **fmt["cam"])
+    P = cam.p
+    Wr, Zb, Yc = cam.Wr, cam.Zb, cam.Yc
+    k0 = min(W / 1920, H / 1080) ** 0.5
+    cv = Canvas(W, H)
+    cv.defs.append(STD_DEFS)
+    cv.defs.append(
+        '<radialGradient id="voidg" cx="0.5" cy="0.45" r="0.6"><stop offset="0" stop-color="#1b1430"/>'
+        '<stop offset="0.6" stop-color="#0f0b1c"/><stop offset="1" stop-color="#07060d"/></radialGradient>'
+        '<radialGradient id="irisg" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#44283a"/>'
+        '<stop offset="0.55" stop-color="#3f2340"/><stop offset="1" stop-color="#1b1226"/></radialGradient>'
+        '<radialGradient id="bodyg" cx="0.42" cy="0.38" r="0.62"><stop offset="0" stop-color="#2a2038"/>'
+        '<stop offset="0.8" stop-color="#150f22"/><stop offset="1" stop-color="#0d0916"/></radialGradient>'
+        '<radialGradient id="orbg" cx="0.4" cy="0.38" r="0.6"><stop offset="0" stop-color="#fff0e0"/>'
+        '<stop offset="0.35" stop-color="#ffb58e"/><stop offset="1" stop-color="#c0583e"/></radialGradient>')
+
+    # ---- the void beyond the great arch ----------------------------------------------
+    cv.solid("rect", 'x="0" y="0" width="%d" height="%d"' % (W, H), C["void"], 12.0)
+    cv.paint('<rect x="0" y="0" width="%d" height="%d" fill="url(#voidg)"/>' % (W, H))
+
+    # the Beholder: a huge dark body with eye stalks and one great eye, deep in the darkness
+    ex, ey, erx = fmt["eye"][0] * W, fmt["eye"][1] * H, fmt["eye"][2] * k0 * (1.0 if W > H else 1.15)
+    R = erx * 1.9
+    cv.solid("circle", 'cx="%.1f" cy="%.1f" r="%.1f"' % (ex, ey + erx * 0.25, R), (18, 13, 28), 11.0)
+    cv.paint('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="url(#bodyg)"/>' % (ex, ey + erx * 0.25, R))
+    for i in range(7):
+        a = -math.pi / 2 + (i - 3) * 0.33 + rng.uniform(-0.06, 0.06)
+        sx, sy = ex + math.cos(a) * R * 0.85, ey + erx * 0.25 + math.sin(a) * R * 0.85
+        L = R * rng.uniform(0.55, 0.85)
+        bend = rng.uniform(-0.6, 0.6)
+        tx, ty = sx + math.cos(a + bend * 0.5) * L, sy + math.sin(a + bend * 0.5) * L
+        cx_, cy_ = sx + math.cos(a - bend) * L * 0.6, sy + math.sin(a - bend) * L * 0.6
+        cv.solid("path", 'd="M%.1f,%.1f Q%.1f,%.1f %.1f,%.1f"' % (sx, sy, cx_, cy_, tx, ty), "none", 11.0,
+                 stroke=(20, 15, 31), sw=R * 0.07)
+        cv.solid("circle", 'cx="%.1f" cy="%.1f" r="%.1f"' % (tx, ty, R * 0.075), (24, 18, 36), 11.0)
+        cv.paint('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#3a2436" opacity="0.8"/>' % (tx, ty, R * 0.035))
+    # the great eye
+    lid = [(ex - erx * 1.25 + 2.5 * erx * i / 30, ey - erx * 0.62 * math.sin(math.pi * i / 30) ** 0.8) for i in range(31)]
+    lid += [(ex + erx * 1.25 - 2.5 * erx * i / 30, ey + erx * 0.55 * math.sin(math.pi * i / 30) ** 0.9) for i in range(1, 30)]
+    cv.poly(lid, (26, 18, 34), 10.5)
+    cv.paint('<polygon points="%s" fill="#33273a" opacity="0.9"/>' % pts(lid))
+    upper = [(ex - erx * 1.3 + 2.6 * erx * i / 30, ey - erx * 0.66 * math.sin(math.pi * i / 30) ** 0.8) for i in range(31)]
+    fold = [(ex + erx * 1.2 - 2.4 * erx * i / 30, ey - erx * 0.9 * math.sin(math.pi * i / 30) ** 0.7) for i in range(31)]
+    cv.poly(upper + fold, (30, 22, 40), 10.5)
+    lower = [(ex - erx * 1.25 + 2.5 * erx * i / 30, ey + erx * 0.55 * math.sin(math.pi * i / 30) ** 0.9) for i in range(31)]
+    lfold = [(ex + erx * 1.15 - 2.3 * erx * i / 30, ey + erx * 0.72 * math.sin(math.pi * i / 30) ** 0.8) for i in range(31)]
+    cv.poly(lower + lfold, (24, 18, 33), 10.5)
+    for j in range(9):  # veins in the sclera
+        a = math.pi * (0.1 + 0.8 * j / 8)
+        x0, y0 = ex + math.cos(a) * erx * 1.1 * (1 if j % 2 else -1), ey + rng.uniform(-0.2, 0.2) * erx
+        cv.paint('<path d="M%.1f,%.1f q%.1f,%.1f %.1f,%.1f" fill="none" stroke="#4a2233" stroke-width="1.5" opacity="0.7"/>' % (
+            x0, y0, (ex - x0) * 0.3, rng.uniform(-10, 10), (ex - x0) * 0.5, rng.uniform(-8, 8)))
+    cv.paint('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="url(#irisg)"/>' % (ex - erx * 0.05, ey + erx * 0.02, erx * 0.5))
+    cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#07050b"/>' % (ex - erx * 0.05, ey + erx * 0.02,
+                                                                                  erx * 0.09, erx * 0.44))
+    cv.paint('<polyline points="%s" fill="none" stroke="#0a0710" stroke-width="%.1f" opacity="0.9"/>' % (
+        pts(lid[:31]), erx * 0.08))
+    cv.glow('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#7a3a5a" opacity="0.10" filter="url(#blur30)"/>' % (
+        ex, ey, erx * 0.9))
+    # banks of mist drifting in front of the eye
+    for j in range(7):
+        mx = ex + rng.uniform(-0.9, 0.9) * erx
+        my = ey + (-0.55 + 1.3 * j / 6) * erx + rng.uniform(-0.08, 0.08) * erx
+        cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#56496c" opacity="%.2f" filter="url(#blur12)"/>' % (
+            mx, my, erx * rng.uniform(1.1, 1.9), erx * rng.uniform(0.07, 0.14), rng.uniform(0.35, 0.55)))
+
+    # ---- the twisting causeway with its gates, far to near ------------------------------
+    gates = []
+    Zg = Zb + 0.9
+    while Zg < 34:
+        gates.append(Zg)
+        Zg *= 1.3
+    twist = 8.0 if W > H else 7.0
+    half = 0.8
+    seg_bounds = [Zb] + gates
+    for i in range(len(gates) - 1, -1, -1):
+        za, zg = seg_bounds[i], gates[i]
+        ang = twist * (i + 1) * (1 if i % 2 == 0 else 1.15)
+        fx, fy = P(0, 1, za)
+        cv.open("", 'transform="rotate(%.2f %.1f %.1f)"' % (ang, fx, fy))
+        # causeway slab from za to zg, with its dark side faces over the abyss
+        cv.poly([P(-half, 1, za), P(half, 1, za), P(half, 1, zg), P(-half, 1, zg)], jitter(C["floor"], 0.06, rng), za)
+        for sd in (-1, 1):
+            cv.poly([P(sd * half, 1, za), P(sd * half, 1, zg), P(sd * half, 1.35, zg), P(sd * half, 1.35, za)],
+                    (16, 14, 22), za)
+        cv.poly([P(-half, 1, za), P(half, 1, za), P(half, 1.35, za), P(-half, 1.35, za)], (22, 20, 30), za)
+        # maze walls standing on the slab, alternating sides like a winding corridor
+        sd = -1 if i % 2 == 0 else 1
+        wz0, wz1 = za + (zg - za) * 0.15, zg - 0.05
+        cv.poly([P(sd * half * 0.9, 1, wz0), P(sd * half * 0.9, 1, wz1), P(sd * half * 0.9, -0.25, wz1),
+                 P(sd * half * 0.9, -0.25, wz0)], jitter(C["wall"], 0.08, rng), wz0)
+        cv.poly([P(sd * half * 0.9, -0.25, wz0), P(sd * half * 0.9, -0.25, wz1), P(sd * half * 0.7, -0.25, wz1),
+                 P(sd * half * 0.7, -0.25, wz0)], C["trim"], wz0)
+        # the gate: two posts and an arch
+        t = 0.16
+        for sx in (-1, 1):
+            box(cv, cam, sx * half - (t if sx > 0 else 0), sx * half + (t if sx < 0 else 0), -0.3, 1, zg, zg + 0.2,
+                jitter(C["trim"], 0.06, rng), C["trim_side"], C["trim"])
+        outer = [P(-half * math.cos(math.pi * j / 20), -0.3 - 0.65 * math.sin(math.pi * j / 20), zg) for j in range(21)]
+        inner = [P(-(half - t) * math.cos(math.pi * j / 20), -0.3 - (0.65 - t) * math.sin(math.pi * j / 20), zg)
+                 for j in range(21)]
+        cv.poly(outer + inner[::-1], jitter(C["trim"], 0.06, rng), zg, stroke=C["mortar"], sw=0.8)
+        kx, ky = P(0, -0.87, zg)
+        cv.paint('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="#0b0912" opacity="0.8"/>' % (
+            kx, ky, cam.scale(zg) * 0.07, cam.scale(zg) * 0.035))
+        # a faint turquoise rune on the keystone
+        cv.glow('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="%s" opacity="0.35" filter="url(#blur2)"/>' % (
+            kx, ky, max(1.2, cam.scale(zg) * 0.03), hexc(TURQ)))
+        cv.close()
+
+    # ---- back wall with the great arch ---------------------------------------------------
+    Ao, spring, crown = Wr * 0.8, -0.15, Yc * 0.93
+    arch = [P(-Ao, 1, Zb), P(-Ao, spring, Zb)]
+    arch += [P(-Ao * math.cos(math.pi * j / 40), spring - (spring - crown) * math.sin(math.pi * j / 40), Zb)
+             for j in range(1, 40)]
+    arch += [P(Ao, spring, Zb), P(Ao, 1, Zb)]
+    wall = [P(-Wr, 1, Zb), P(-Wr, Yc, Zb), P(Wr, Yc, Zb), P(Wr, 1, Zb)]
+    d = "M" + " L".join("%.1f,%.1f" % p for p in wall) + " Z M" + " L".join("%.1f,%.1f" % p for p in arch) + " Z"
+    cv.defs.append('<clipPath id="backwall"><path clip-rule="evenodd" d="%s"/></clipPath>' % d)
+    cv.path(d, C["mortar"], Zb, extra='fill-rule="evenodd"')
+    cv.open('filter="url(#rock)"', 'clip-path="url(#backwall)"')
+    stone_courses(cv, rng, lambda u, v: P(u, v, Zb), -Wr, Wr, Yc, 1.0, 0.3, 0.75, C["back"], z=Zb)
+    cv.close()
+    # voussoirs framing the great arch
+    nv = 23
+    for j in range(nv):
+        a0, a1 = math.pi * j / nv, math.pi * (j + 1) / nv
+
+        def ap(a, o):
+            return P(-(Ao + o) * math.cos(a), spring - (spring - crown + o) * math.sin(a), Zb)
+        big = j == nv // 2
+        o = 0.34 if big else 0.22
+        cv.poly([ap(a0, 0), ap(a1, 0), ap(a1, o), ap(a0, o)], jitter(C["trim"], 0.08, rng), Zb,
+                stroke=C["mortar"], sw=1.4)
+    # jambs
+    for sd in (-1, 1):
+        x0, x1 = (sd * Ao, sd * (Ao + 0.22))
+        cv.poly([P(x0, spring, Zb), P(x1, spring, Zb), P(x1, 1, Zb), P(x0, 1, Zb)], jitter(C["trim"], 0.05, rng), Zb)
+        cv.poly([P(x0, spring, Zb), P(x0, 1, Zb), P(x0, 1, Zb + 0.35), P(x0, spring, Zb + 0.35)], C["trim_side"], Zb)
+    # the soffit under the arch (thickness of the wall)
+    soff_a = [P(-Ao * math.cos(math.pi * j / 40), spring - (spring - crown) * math.sin(math.pi * j / 40), Zb)
+              for j in range(41)]
+    soff_b = [P(-Ao * math.cos(math.pi * j / 40), spring - (spring - crown) * math.sin(math.pi * j / 40), Zb + 0.35)
+              for j in range(41)]
+    cv.poly(soff_a + soff_b[::-1], (24, 21, 33), Zb)
+    # carved eye in the keystone and on the piers
+    fnb = lambda u, v: P(u, v, Zb)  # noqa: E731
+    carved_eye(cv, fnb, 0, crown - 0.17, 0.2, Zb, C["trim"], TURQ, 0.35)
+    for sd in (-1, 1):
+        carved_eye(cv, fnb, sd * (Ao + (Wr - Ao) * 0.55), -0.95, 0.17, Zb, C["back"],
+                   TURQ if sd < 0 else VIOL, 0.3 if sd < 0 else 0.14, look=-sd * 0.6)
+    rune_band(cv, rng, fnb, -Wr + 0.05, -Ao - 0.28, 0.25, 0.1, TURQ, 0.35, Zb)
+    rune_band(cv, rng, fnb, Ao + 0.28, Wr - 0.05, 0.25, 0.1, VIOL, 0.18, Zb)
+
+    # ---- ceiling --------------------------------------------------------------------------
+    z_near = 1.02
+    ceil = [P(-Wr, Yc, z_near), P(Wr, Yc, z_near), P(Wr, Yc, Zb), P(-Wr, Yc, Zb)]
+    cv.poly(ceil, C["mortar"], 2.0)
+    cv.open('filter="url(#rock)"')
+    stone_courses(cv, rng, lambda u, v: P(u, Yc, v), -Wr, Wr, z_near, Zb, 0.4, 0.9, C["ceil"], z=2.0)
+    cv.close()
+
+    # ---- side walls --------------------------------------------------------------------
+    doors = {-1: (2.55, 3.15), 1: (2.35, 3.0)} if W > H else {-1: (2.6, 3.2), 1: (2.4, 3.1)}
+    for side in (-1, 1):
+        Xw = side * Wr
+        fn = (lambda Xw_: (lambda u, v: P(Xw_, v, u)))(Xw)
+        quad = [fn(z_near, Yc), fn(Zb, Yc), fn(Zb, 1), fn(z_near, 1)]
+        cv.poly(quad, C["mortar"], 2.2)
+        cv.open('filter="url(#rock)"')
+        stone_courses(cv, rng, fn, z_near, Zb, Yc, 1.0, 0.3, 0.62, C["wall"] if side < 0 else C["wall_r"], z=2.4)
+        cv.close()
+        # a side passage of the maze, dark, with a few steps of corridor visible
+        da, db = doors[side]
+        top = -0.5
+        door = [fn(da, 1), fn(da, top)]
+        door += [fn(da + (db - da) * (0.5 - 0.5 * math.cos(math.pi * j / 12)), top - 0.45 * math.sin(math.pi * j / 12))
+                 for j in range(1, 12)]
+        door += [fn(db, top), fn(db, 1)]
+        cv.poly(door, (9, 8, 14), (da + db) / 2 + 1.5)
+        cv.defs.append('<linearGradient id="doorg%d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050409"/>'
+                       '<stop offset="1" stop-color="#1a1626"/></linearGradient>' % (side + 1))
+        cv.paint('<polygon points="%s" fill="url(#doorg%d)"/>' % (pts(door), side + 1))
+        for j in range(12):
+            a0, a1 = math.pi * j / 12, math.pi * (j + 1) / 12
+
+            def dp(a, o):
+                return fn(da + (db - da) * (0.5 - 0.5 * math.cos(a)) - o * math.cos(a) * 0.4,
+                          top - (0.45 + o) * math.sin(a))
+            cv.poly([dp(a0, 0), dp(a1, 0), dp(a1, 0.13), dp(a0, 0.13)], jitter(C["trim"], 0.1, rng), da,
+                    stroke=C["mortar"], sw=1)
+        # carved eyes along the wall, at eye level of the statues, and runes below the ceiling
+        for (zc, yc, r) in ((1.6, -0.95, 0.12), (1.85, 0.05, 0.1), (3.2, -0.9, 0.15)):
+            if not (da - 0.2 < zc < db + 0.2):
+                glow = TURQ if side < 0 else VIOL
+                carved_eye(cv, fn, zc, yc, r, zc, C["wall"], glow, 0.2 if side < 0 else 0.08, look=0.5)
+        rune_band(cv, rng, fn, z_near + 0.2, Zb - 0.1, Yc + 0.22, 0.08, TURQ if side < 0 else VIOL,
+                  0.3 if side < 0 else 0.14, 2.5)
+        # plinth along the base of the wall
+        cv.poly([fn(z_near, 0.84), fn(Zb, 0.84), fn(Zb, 1), fn(z_near, 1)], mix(C["trim"], C["mortar"], 0.35), 2.0)
+        cv.paint('<polyline points="%s" fill="none" stroke="%s" stroke-width="1.4" opacity="0.6"/>' % (
+            pts([fn(z_near, 0.84), fn(Zb, 0.84)]), hexc(mix(C["trim"], ORB, 0.15))))
+
+    # ---- floor ---------------------------------------------------------------------------
+    cv.poly([P(-Wr, 1, z_near), P(Wr, 1, z_near), P(Wr, 1, Zb), P(-Wr, 1, Zb)], C["mortar"], 2.0)
+    cv.open('filter="url(#rockfine)"')
+    zf = [z_near]
+    while zf[-1] < Zb:
+        zf.append(min(Zb, zf[-1] * 1.1))
+    for i in range(len(zf) - 1):
+        za, zb2 = zf[i], zf[i + 1]
+        calm = max(0.0, min(1.0, (za - 1.9) / 1.0))
+        X = -Wr - (0.3 if i % 2 else 0)
+        while X < Wr:
+            w = 0.6 * rng.uniform(0.85, 1.15)
+            a, b = max(X, -Wr), min(X + w, Wr)
+            g = 0.008 + 0.012 * calm
+            col = jitter(C["floor"], 0.03 + 0.08 * calm, rng)
+            cv.poly([P(a + g, 1, za + g * 0.6), P(b - g, 1, za + g * 0.6), P(b - g, 1, zb2 - g * 0.6),
+                     P(a + g, 1, zb2 - g * 0.6)], col, za)
+            X += w
+    cv.close()
+    # the threshold of the great arch, with a worn maze inlay leading into the causeway
+    cv.poly([P(-half, 1, Zb - 0.6), P(half, 1, Zb - 0.6), P(half, 1, Zb), P(-half, 1, Zb)], (38, 35, 50), Zb - 0.3)
+    for j in range(5):
+        Zl = Zb - 0.55 + j * 0.11
+        cv.paint('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#15121d" stroke-width="1.2"/>' % (
+            *P(-half + (0.15 if j % 2 else 0), 1, Zl), *P(half - (0 if j % 2 else 0.2), 1, Zl)))
+
+    # ---- crystals and statues (mid-ground) ----------------------------------------------
+    s_unit = lambda Z: cam.scale(Z)  # noqa: E731
+    crystals = [(-Wr + 0.02, 1, 3.3, 0.45, VIOL, 0.6, 0.4),
+                (-Ao - 0.1, 1, Zb - 0.05, 0.35, TURQ, 0.55, -0.2), (Ao + 0.12, 1, Zb - 0.05, 0.32, VIOL, 0.28, 0.3),
+                (Wr - 0.05, 1, 3.4, 0.4, TURQ, 0.15, -0.4)]
+    for (X, Y, Z, size, colr, st, lean) in crystals:
+        bx, by = P(X, Y, Z)
+        crystal_cluster(cv, rng, bx, by, s_unit(Z) * size, colr, st, Z, lean)
+    # crystals growing out of the wall high on the left, near the orb, and on the right
+    for (X, Y, Z, size, colr, st, lean) in ((-Wr, -1.3, 2.9, 0.3, TURQ, 0.7, 1.4), (Wr, -1.2, 2.7, 0.28, VIOL, 0.2, -1.4),
+                                            (-Wr, -0.3, 3.35, 0.22, VIOL, 0.5, 1.3), (-Wr, 0.35, 1.7, 0.3, TURQ, 0.35, 1.3)):
+        bx, by = P(X, Y, Z)
+        crystal_cluster(cv, rng, bx, by, s_unit(Z) * size, colr, st, Z, lean, n=4)
+    for (xf, Z, pose, flip) in fmt["statues"]:
+        bx = xf * W
+        by = P(0, 1, Z)[1]
+        su = s_unit(Z) * 0.62
+        cv.open('filter="url(#rockfine)"')
+        statue(cv, rng, bx + su * 0.035, by, su, pose, flip, Z, stone=(36, 35, 46), dark=(28, 27, 36), face=False)
+        statue(cv, rng, bx - su * 0.012, by, su * 0.985, pose, flip, Z)
+        cv.close()
+        # dust and a crystal that has started to grow over the stone
+        crystal_cluster(cv, rng, bx - flip * s_unit(Z) * 0.2, by, s_unit(Z) * 0.16,
+                        TURQ if bx < W * 0.5 else VIOL, 0.35 if bx < W * 0.5 else 0.15, Z - 0.05, 0.3 * flip, n=3)
+    # scattered gear of the petrified: a dropped helmet and a sword, half buried in dust
+    for (xf, Z) in ((0.43, 2.9), (0.66, 3.2)):
+        bx, by = xf * W, P(0, 1, Z)[1]
+        k = s_unit(Z)
+        cv.solid("ellipse", 'cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f"' % (bx, by - 0.05 * k, 0.12 * k, 0.07 * k),
+                 (46, 43, 54), Z)
+        cv.solid("line", 'x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f"' % (bx + 0.1 * k, by, bx + 0.6 * k, by - 0.03 * k),
+                 "none", Z, stroke=(52, 50, 60), sw=0.035 * k)
+
+    # ---- foreground pillars framing the view -------------------------------------------
+    Zf = 1.25
+    for side in (-1, 1):
+        edge = 0 if side < 0 else W
+        wpx = W * (0.055 if W > H else 0.07)
+        x0, x1 = (edge, edge + wpx) if side < 0 else (edge - wpx, edge)
+        cv.solid("rect", 'x="%.1f" y="-5" width="%.1f" height="%.1f"' % (x0, x1 - x0, H + 10), (16, 14, 22), Zf)
+        gid = "pilg%d" % (side + 1)
+        cv.defs.append(('<linearGradient id="%s" x1="0" x2="1"><stop offset="0" stop-color="%s"/>'
+                        '<stop offset="1" stop-color="%s"/></linearGradient>') % (
+            gid, "#0c0b12" if side < 0 else "#2a2536", "#2a2536" if side < 0 else "#0c0b12"))
+        cv.paint('<rect x="%.1f" y="-5" width="%.1f" height="%.1f" fill="url(#%s)" filter="url(#rockfine)"/>' % (
+            x0, x1 - x0, H + 10, gid))
+        for j in range(1, 9):
+            yy = H * j / 9 + rng.uniform(-8, 8)
+            cv.paint('<line x1="%.1f" y1="%.1f" x2="%.1f" y2="%.1f" stroke="#07060b" stroke-width="2" opacity="0.7"/>' % (
+                x0, yy, x1, yy))
+    # top lintel keeps the band under the UI bar calm
+    cv.solid("rect", 'x="-5" y="-5" width="%d" height="%.1f"' % (W + 10, H * 0.06 + 5), (14, 12, 19), Zf)
+    cv.paint('<rect x="-5" y="%.1f" width="%d" height="3" fill="#2c2738"/>' % (H * 0.06 - 2, W + 10))
+
+    # ---- the warm arcane orb, hanging from chains (main light) -----------------------------
+    oxf, oyf, oz = fmt["orb"]
+    ox, oy = oxf * W, oyf * H
+    r = cam.scale(oz) * 0.2
+    link = max(5, r * 0.22)
+    for dx in (-0.8, 0.8):
+        chain(cv, ox + dx * r * 0.6, H * 0.06, ox + dx * r * 0.95, oy - r * 0.7, link, oz)
+    # bronze cage with claws holding the orb
+    cv.solid("circle", 'cx="%.1f" cy="%.1f" r="%.1f"' % (ox, oy, r), (120, 60, 45), oz)
+    cv.glow('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#ff9670" filter="url(#blur30)" opacity="0.35"/>' % (ox, oy, r * 2.4))
+    cv.glow('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#ffb08a" filter="url(#blur5)" opacity="0.55"/>' % (ox, oy, r * 0.95),
+            '<circle cx="%.1f" cy="%.1f" r="%.1f" fill="url(#orbg)"/>' % (ox, oy, r))
+    cv.glow('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="#fff0e4" filter="url(#blur5)" opacity="0.5"/>' % (
+        ox - r * 0.15, oy - r * 0.15, r * 0.4))
+    for j in range(5):
+        a = -math.pi / 2 + (j - 2) * 0.55
+        p0 = (ox + math.cos(a) * r * 1.35, oy + math.sin(a) * r * 1.25 - r * 0.2)
+        p1 = (ox + math.cos(a) * r * 0.75, oy + math.sin(a) * r * 0.75)
+        p2 = (ox + math.cos(a) * r * 0.95, oy + math.sin(a) * r * 0.2 + r * 0.5)
+        cv.solid("path", 'd="M%.1f,%.1f Q%.1f,%.1f %.1f,%.1f"' % (*p0, *p1, *p2), "none", oz - 0.05,
+                 stroke=C["bronze"], sw=max(2, r * 0.12))
+    cv.solid("ellipse", 'cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f"' % (ox, oy - r * 1.25, r * 0.55, r * 0.16),
+             C["bronze"], oz - 0.05)
+    # shard crystals floating around the orb
+    for j in range(6):
+        a = j * 1.05 + 0.3
+        dx, dy = math.cos(a) * r * 1.9, math.sin(a) * r * 1.4
+        sz = r * rng.uniform(0.18, 0.3)
+        shard = [(ox + dx, oy + dy - sz), (ox + dx + sz * 0.3, oy + dy), (ox + dx, oy + dy + sz * 0.6),
+                 (ox + dx - sz * 0.3, oy + dy)]
+        cv.glow('<polygon points="%s" fill="#ffa07a" opacity="0.9" filter="url(#blur2)"/>' % pts(shard),
+                '<polygon points="%s" fill="#e88a66"/>' % pts(shard))
+    return cv, cam
+
+
+# ---------------------------------------------------------------------------
+# compositing
+# ---------------------------------------------------------------------------
+def composite(col, dep, emi, fmt, cam, seed=5):
     rng = np.random.default_rng(seed)
-    a = np.asarray(img, np.float32) / 255.0
-    a = pt.kuwahara(a, r=2)
-    a = pt.painterly_warp(a, rng, amp=2.2 * min(w, h) / 1080, scale=10)
-    n1 = pt.fractal_noise(h, w, rng, octaves=6, base=6)[..., None]
-    n2 = pt.fractal_noise(h, w, rng, octaves=3, base=2)[..., None]
-    a *= 0.86 + 0.26 * n1
-    # low-frequency hue drift between violet and teal
-    a *= np.concatenate([0.97 + 0.06 * n2, 0.97 + 0.05 * (1 - n2), 0.97 + 0.06 * (1 - n2)], axis=2)
-    a *= pt.brush_texture(h, w, rng, strength=0.07)
-    a = pt.bloom(a, threshold=0.55)
-    a = np.clip(a, 0, None) ** np.array([1.0, 1.02, 0.97], np.float32)
-    a = a * 0.95 + np.array([0.012, 0.010, 0.022], np.float32)
-    a *= pt.vertical_band(h, w, 0.0, 0.16, 0.45)
-    fy = np.clip((np.linspace(0, 1, h)[:, None, None] - 0.8) / 0.2, 0, 1)
-    a *= 1 - 0.35 * fy
-    a *= pt.vignette(h, w, cx=0.35, cy=0.45, strength=0.5)
-    a += (rng.normal(0, 0.012, a.shape[:2])[..., None]).astype(np.float32)
-    return np.clip(a, 0, 0.93)
+    W, H = fmt["W"], fmt["H"]
+    orb = np.array(ORB, np.float32) / 255.0
+    z = dep[..., 0] * 12.0
+    y, x = np.mgrid[0:H, 0:W].astype(np.float32)
+    ox, oy = fmt["orb"][0] * W, fmt["orb"][1] * H
+    # warm arcane light from the orb, fading with distance; cool violet ambient elsewhere
+    wash = np.exp(-radial(W, H, ox, oy + H * 0.12, W * 0.36 if W > H else W * 0.6, H * 0.5) ** 2)
+    floor_pool = np.exp(-radial(W, H, ox + W * 0.04, H * 0.86, W * 0.22 if W > H else W * 0.4, H * 0.1) ** 2)
+    ambient = np.array([0.62, 0.6, 0.78], np.float32)
+    light = ambient[None, None, :] * 0.8 + (1.05 * wash + 0.45 * floor_pool)[..., None] * orb[None, None, :]
+    img = col * light
+    # depth fog: violet haze, the void recedes into darkness
+    fog_amt = 1 - np.exp(-np.clip(z - 2.2, 0, None) * 0.28)
+    fog_col = np.array([0.08, 0.065, 0.13], np.float32)
+    img = img * (1 - 0.55 * fog_amt[..., None]) + fog_col * 0.55 * fog_amt[..., None]
+    # mist veiling the Beholder: soft drifting bank across the void
+    ex, ey = fmt["eye"][0] * W, fmt["eye"][1] * H
+    n1 = fbm(W, H, 220, rng, 4, stretch=(3.0, 1.0))
+    veil = np.clip(0.3 + (n1 - 0.3) * 1.8, 0, 1) * np.exp(-((y - ey - H * 0.06) / (H * 0.14)) ** 2) * np.clip(z / 12 * 1.4 - 0.4, 0, 1)
+    veil_c = np.array([0.2, 0.17, 0.3], np.float32)
+    img = img * (1 - 0.7 * veil[..., None]) + veil_c * 0.5 * veil[..., None]
+    img = img * (1 - 0.35 * np.exp(-radial(W, H, ex, ey, W * 0.2, H * 0.2) ** 2) * np.clip(z - 9, 0, 1))[..., None]
+    # ground mist, layered, hugging the floor
+    horizon = cam.cy + cam.f / cam.Zb
+    prof = (np.exp(-((y - (horizon + H * 0.03)) / (H * 0.06)) ** 2)
+            + 0.45 * np.exp(-((y - H * 0.84) / (H * 0.08)) ** 2))
+    m1 = fbm(W, H, 240, rng, 4, stretch=(3.5, 1.0))
+    m2 = fbm(W, H, 80, rng, 3, stretch=(4.0, 1.0))
+    mist = np.clip((m1 * 0.7 + m2 * 0.5 - 0.38) * 1.7, 0, 1) * prof
+    mist_c = np.array([0.36, 0.32, 0.5], np.float32)
+    img = img * (1 - 0.4 * mist[..., None]) + mist_c * 0.38 * mist[..., None] * (0.7 + 0.9 * wash[..., None])
+    # crystals and orb light the stone around them
+    img = img + col * blur_hdr(emi, 55) * 2.2
+    img = img + emi * 0.85
+    bloom = blur_hdr(emi, 12) * 0.8 + blur_hdr(emi, 42) * 0.7
+    img = img + bloom
+    img = img + blur_hdr(emi, 90) * mist[..., None] * 1.4
+    # arcane motes drifting in the air
+    motes = np.zeros((H, W), np.float32)
+    n = int(W * H / 9000)
+    motes[rng.integers(0, H, n), rng.integers(0, W, n)] = rng.random(n)
+    motes = blur(np.clip(motes, 0, 1), 1.0) * 5 * np.clip(1 - np.abs(y - H * 0.5) / (H * 0.4), 0, 1)
+    motes *= (1 - 0.7 * np.clip((x - W * 0.5) / (W * 0.4), 0, 1))  # fewer behind the enemies
+    tint = np.where(rng.random((H, W, 1)) < 0.5, np.array(TURQ, np.float32) / 255, np.array(VIOL, np.float32) / 255)
+    img = img + motes[..., None] * blur(tint, 2) * 0.35
+    return finish(img, rng, max_value=0.84, shadow_tint=(0.02, 0.015, 0.05))
 
 
 def main():
-    scratch = sys.argv[1]
-    outdir = sys.argv[2]
-    os.makedirs(scratch, exist_ok=True)
-    os.makedirs(outdir, exist_ok=True)
-    for suffix, (w, h), max_kb in (("", (1920, 1080), 380), ("-movil", (1080, 1440), 300)):
-        name = f"laberinto-contemplador{suffix}"
-        svg = Scene(w, h, seed=5).build()
-        png = os.path.join(scratch, f"{name}.png")
-        img = pt.render_svg(svg, w, h, png)
-        arr = post(img, w, h, seed=13)
-        q, kb = pt.save_webp(arr, os.path.join(outdir, f"{name}.webp"), quality=85, max_kb=max_kb)
-        pt.mockup(arr, os.path.join(scratch, f"{name}-maqueta.png"))
-        print(f"{name}.webp  q={q}  {kb:.0f} KB")
+    here = os.path.dirname(os.path.abspath(__file__))
+    out_dir = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, "..", "..", "..", "src", "arte", "fondos")
+    work = sys.argv[2] if len(sys.argv) > 2 else os.path.join(here, "_work")
+    os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(work, exist_ok=True)
+    only = os.environ.get("ONLY")
+    for name, fmt in FORMATS.items():
+        if only and only != name:
+            continue
+        cv, cam = build(fmt)
+        passes = {}
+        for which in ("color", "depth", "emissive"):
+            passes[which] = to_f(render(cv, which, os.path.join(work, "laberinto-%s-%s.png" % (name, which))))
+        img = composite(passes["color"], passes["depth"], passes["emissive"], fmt, cam)
+        out = os.path.join(out_dir, "laberinto-contemplador%s.webp" % fmt["suffix"])
+        q, kb = save_webp(img, out, fmt["max_kb"])
+        mockup(img, os.path.join(work, "laberinto-%s-maqueta.png" % name))
+        print("%s  q=%d  %.0f KB" % (out, q, kb))
 
 
 if __name__ == "__main__":

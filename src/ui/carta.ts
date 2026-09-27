@@ -309,6 +309,8 @@ export const ARTE_CARTA: Record<string, string> = {
   celestial: '😇', infernal: '😈', 'gran-antiguo': '👁️',
   'explosion-trifurcada': '🔱', 'haz-desdoblado': '🔀',
   'verbo-aniquilacion': '☠️', 'pacto-final': '🕳️',
+  'lanza-sobrenatural': '☄️', 'hambre-patron': '🍽️', 'contrato-maldito': '✍️',
+  'ofrenda-maldita': '⚱️', 'egida-afliccion': '🪦',
   // ── Incoloras ──
   seducir: '💗', deseo: '🪄',
   // ── Maldiciones ──

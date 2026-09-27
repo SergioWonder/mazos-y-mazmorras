@@ -221,14 +221,36 @@ export class Combate {
     this.robadasPendientes = [];
   }
 
-  /** End of the player's turn: every curse still in the hand does its harm. */
+  /** End of the player's turn: every curse still in the hand does its harm,
+   *  unless a relic (the warlock's Curse Collector) turns it into something else. */
   private async efectosMaldicionesEnMano() {
     for (const carta of [...this.jugador.mano]) {
       if (this.terminado) return;
-      if (!carta.def.finTurnoEnMano || !this.jugador.mano.includes(carta)) continue;
-      await carta.def.finTurnoEnMano(this.contexto());
+      if (carta.def.tipo !== 'maldicion' || !this.jugador.mano.includes(carta)) continue;
+      let sustituida = false;
+      for (const r of this.run.reliquias) {
+        if (sustituida || !r.alMaldicionFinTurno) continue;
+        sustituida = await r.alMaldicionFinTurno(this.contexto(), carta);
+      }
+      if (!sustituida && carta.def.finTurnoEnMano) await carta.def.finTurnoEnMano(this.contexto());
       this.ui.render();
     }
+  }
+
+  /** Consumes a curse from the hand (Cursed Offering): exhausted for this combat. */
+  private async consumirMaldicion(): Promise<CartaInstancia | null> {
+    const malditas = this.jugador.mano.filter((c) => c.def.tipo === 'maldicion');
+    if (malditas.length === 0) return null;
+    const carta = malditas.length === 1
+      ? malditas[0]
+      : (await this.ui.elegirCarta(malditas, 'Elige la maldición que ofreces')) ?? malditas[0];
+    const idx = this.jugador.mano.indexOf(carta);
+    if (idx < 0) return null;
+    this.jugador.mano.splice(idx, 1);
+    this.jugador.agotadas.push(carta);
+    await this.ui.fxMensaje(`☠️ Ofreces «${carta.def.nombre}» a tu patrón`);
+    this.ui.render();
+    return carta;
   }
 
   /** Pays a curse off (Blood Debt): spends its energy and removes it from the
@@ -452,6 +474,11 @@ export class Combate {
       invocarEfimero: (forma, vida, dano, condena) =>
         self.invocarEfimero(forma, vida, dano, condena),
       vidaInvocacion: () => self.jugador.invocacion?.vida ?? 0,
+      async explosionLanzada(golpeados, dano) {
+        if (!self.terminado) await self.ganchos((r, c) => r.alLanzarExplosion?.(c, golpeados, dano));
+      },
+      meterMaldicion: (id, destino) => self.meterMaldicion(id, destino),
+      consumirMaldicion: () => self.consumirMaldicion(),
       async sacrificarInvocacion() {
         const inv = self.jugador.invocacion;
         if (!inv || inv.vida <= 0) return 0;
@@ -1274,6 +1301,16 @@ export class Combate {
     // Reliquias de fin de turno
     for (const r of this.run.reliquias) {
       if (r.finTurno) await r.finTurno(this.contexto());
+    }
+
+    // Aegis of Affliction (warlock): block for every curse held, before the Final
+    // Pact turns the block into Doom
+    const bxm = j.estados.bloqueoPorMaldicion ?? 0;
+    const enMano = j.mano.filter((c) => c.def.tipo === 'maldicion').length;
+    if (bxm > 0 && enMano > 0 && !this.terminado) {
+      const b = this.bloqueoDeCarta(bxm * enMano);
+      j.bloqueo += b;
+      await this.ui.fxBloqueo(j, b);
     }
 
     // Pacto Final (brujo): tu bloqueo se convierte en Condena para todos

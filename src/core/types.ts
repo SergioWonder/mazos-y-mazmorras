@@ -49,6 +49,12 @@ export type EstadoId =
   | 'explosionVeces' // (jugador) tu Explosión Sobrenatural golpea N veces más
   | 'explosionArea'  // (jugador) tu Explosión Sobrenatural golpea a todos los enemigos
   | 'explosionGratis'// (jugador) tu Explosión Sobrenatural cuesta 0
+  | 'explosionCondena'// (warlock/Agonizing Blast) each enemy the blast hits takes this much Doom
+  | 'explosionCrece' // (warlock/Eldritch Spear) every cast adds this much damage for the whole combat
+  | 'explosionCarga' // (warlock) damage the blast has grown so far this combat (Eldritch Spear)
+  | 'explosionBloqueo'// (warlock/Patron's Gift) casting the blast grants this much block
+  | 'explosionMaldita'// (warlock/Patron's Hunger) the blast deals this much more per curse in your cards
+  | 'bloqueoPorMaldicion'// (warlock/Aegis of Affliction) end of turn: this much block per curse in hand
   | 'condenaPorAtaque'// (brujo/Gran Antiguo) tus ataques aplican esta Condena al objetivo
   | 'oscuridadPorTurno'// (brujo/Archifata) al inicio de cada turno aplicas esta Oscuridad a todos
   | 'bloqueoPorTurno'// (brujo/Celestial) ganas este bloqueo al inicio de cada turno
@@ -323,6 +329,14 @@ export interface ContextoEfecto {
   ): Promise<void>;
   /** Vida actual de la invocación (0 si no hay ninguna). */
   vidaInvocacion(): number;
+  /** (warlock) An Eldritch Blast has just been cast: tells the relics which
+   *  enemies it hit and its damage per hit (before the target's modifiers). */
+  explosionLanzada(golpeados: EnemigoCombate[], dano: number): Promise<void>;
+  /** Slips a curse into the player's draw pile or discard for THIS combat only. */
+  meterMaldicion(id: string, destino: 'mazo' | 'descarte'): Promise<void>;
+  /** Consumes a curse from the hand (the player picks one if there are several):
+   *  it is exhausted for this combat. Returns it, or null if there was none. */
+  consumirMaldicion(): Promise<CartaInstancia | null>;
   /** Sacrifica la invocación: la retira y devuelve la vida que le quedaba. */
   sacrificarInvocacion(): Promise<number>;
   /** Estado persistente de la partida (para cartas de 1 uso / permanentes). */
@@ -505,6 +519,11 @@ export interface ReliquiaDef {
   alAplastarRaices?: (ctx: ContextoEfecto, enemigo: EnemigoCombate, dolor: number) => Promise<void>;
   /** A warlock's ephemeral summon survived the round and is about to vanish. */
   alDesvanecerseInvocacion?: (ctx: ContextoEfecto, inv: Invocacion) => Promise<void>;
+  /** (warlock) An Eldritch Blast was cast: the enemies it hit and its damage per hit. */
+  alLanzarExplosion?: (ctx: ContextoEfecto, golpeados: EnemigoCombate[], dano: number) => Promise<void>;
+  /** End of turn, for each curse still in the hand: return true to replace the
+   *  curse's own end-of-turn effect (it then does nothing to the player). */
+  alMaldicionFinTurno?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<boolean>;
   robaExtraPorTurno?: number;
   /** Block kept between turns (up to this much). */
   conservaBloqueo?: number;

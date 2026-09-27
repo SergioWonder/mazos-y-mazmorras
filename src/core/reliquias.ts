@@ -231,15 +231,14 @@ const GENERALES: ReliquiaDef[] = [
     },
   },
   {
-    id: 'frasco-plaga', nombre: 'Frasco de la Plaga', icono: '🦠', rareza: 'rara',
-    texto: 'Cuando muere un enemigo envenenado, su Veneno salta entero a otro enemigo al azar.',
+    id: 'frasco-plaga', nombre: 'Frasco de la Plaga', icono: '🦠', rareza: 'rara', soloClase: 'picaro',
+    texto: 'Cuando muere un enemigo envenenado, su Veneno entero se propaga a todos los demás enemigos.',
     alMatar: async (ctx, muerto) => {
       const ven = muerto.estados.veneno ?? 0;
       const otros = vivos(ctx).filter((e) => e !== muerto);
       if (ven <= 0 || otros.length === 0) return;
-      const destino = otros[Math.floor(ctx.rng() * otros.length)];
-      await ctx.mensaje(`🦠 La plaga salta a ${destino.nombre}`);
-      await ctx.aplicarEstado(destino, 'veneno', ven);
+      await ctx.mensaje('🦠 La plaga se propaga');
+      for (const destino of otros) await ctx.aplicarEstado(destino, 'veneno', ven);
     },
   },
   // — Bloqueo —
@@ -468,11 +467,46 @@ const DE_PICARO: ReliquiaDef[] = [
 const DE_BRUJO: ReliquiaDef[] = [
   {
     id: 'ojo-patron', nombre: 'Ojo del Patrón', icono: '👁️', rareza: 'comun', soloClase: 'brujo',
-    texto: 'Tu Explosión Sobrenatural aplica 2 de Condena al objetivo.',
-    alJugarCarta: async (ctx, { carta, objetivo }) => {
-      if (carta.def.id === 'explosion-sobrenatural' && objetivo?.vivo) {
-        await ctx.aplicarEstado(objetivo, 'condena', 2);
-      }
+    texto: 'Tu Explosión Sobrenatural aplica Condena igual a la mitad de su daño (mínimo 3) a cada enemigo que golpea.',
+    alLanzarExplosion: async (ctx, golpeados, dano) => {
+      const n = Math.max(3, Math.floor(dano / 2));
+      for (const e of golpeados) if (e.vivo) await ctx.aplicarEstado(e, 'condena', n);
+    },
+  },
+  {
+    id: 'libro-sombras', nombre: 'Libro de las Sombras', icono: '📓', rareza: 'comun', soloClase: 'brujo',
+    texto: 'Empiezas cada combate con tu Explosión Sobrenatural en la mano, y la primera que lanzas cada turno te hace robar 1 carta.',
+    inicioCombate: async (ctx) => { await ctx.traerALaMano('explosion-sobrenatural'); },
+    alLanzarExplosion: async (ctx) => {
+      if (ctx.marca('libro-sombras') === ctx.turnoActual()) return;
+      ctx.marca('libro-sombras', ctx.turnoActual());
+      await ctx.robar(1);
+    },
+  },
+  {
+    id: 'vara-pacto', nombre: 'Vara del Guardián del Pacto', icono: '🦯', rareza: 'rara', soloClase: 'brujo',
+    texto: 'Cuando tu Explosión Sobrenatural mata a un enemigo, vuelve a tu mano en vez de a lo alto del mazo.',
+    alLanzarExplosion: async (ctx, golpeados) => {
+      if (golpeados.some((e) => !e.vivo)) ctx.marca('vara-pacto', 1);
+    },
+    alJugarCarta: async (ctx, { carta }) => {
+      const mato = ctx.marca('vara-pacto') > 0;
+      ctx.marca('vara-pacto', 0);
+      if (!mato || carta.def.id !== 'explosion-sobrenatural' || ctx.jugador.mano.length >= 10) return;
+      const i = ctx.jugador.mazo.indexOf(carta);
+      if (i < 0) return;
+      ctx.jugador.mazo.splice(i, 1);
+      ctx.jugador.mano.push(carta);
+      await ctx.mensaje('🦯 La Explosión vuelve a tu mano');
+    },
+  },
+  {
+    id: 'coleccionista-maldiciones', nombre: 'Coleccionista de Maldiciones', icono: '⚱️', rareza: 'rara', soloClase: 'brujo',
+    texto: 'Las maldiciones de tu mano ya no te castigan al final del turno: en su lugar, cada una aplica 3 de Condena a TODOS los enemigos.',
+    alMaldicionFinTurno: async (ctx, carta) => {
+      await ctx.mensaje(`🏺 «${carta.def.nombre}» pasa a tu colección: 3 de Condena a todos`);
+      for (const e of vivos(ctx)) await ctx.aplicarEstado(e, 'condena', 3);
+      return true;
     },
   },
   {

@@ -1,4 +1,4 @@
-import type { CartaDef, CartaInstancia, ClaseId, ContextoEfecto, Rareza } from './types.ts';
+import type { CartaDef, CartaInstancia, ClaseId, ContextoEfecto, EnemigoCombate, Rareza } from './types.ts';
 
 let uidSiguiente = 1;
 export function instanciar(def: CartaDef): CartaInstancia {
@@ -2742,26 +2742,63 @@ export const PICARO: CartaDef[] = [
 // muerde con la Armadura de Agathys. Subclases raras: Archifata, Celestial,
 // Infernal y Gran Antiguo.
 
-/** Daño real de la Explosión Sobrenatural con todas sus mejoras acumuladas. */
-function danoExplosion(c: ContextoEfecto, base: number): number {
-  return base
-    + (c.jugador.estados.explosionFuerza ?? 0)
-    + (c.jugador.estados.explosionTurno ?? 0);
+/** Curses among the player's cards in this combat (draw pile, hand and discard). */
+function maldicionesEnCartas(c: ContextoEfecto): number {
+  const j = c.jugador;
+  return [...j.mazo, ...j.mano, ...j.descarte].filter((x) => x.def.tipo === 'maldicion').length;
 }
 
-/** Lanza la Explosión: 1 golpe (+ los que sumen los poderes), a uno o a todos. */
+/** Curses the warlock's pacts can hand out (never the Greed nor the Blood Debt). */
+const MALDICIONES_DEL_PACTO = [
+  'herida-infectada', 'duda', 'pesadilla', 'marca-condenado', 'remordimiento', 'paralisis', 'grilletes',
+];
+
+/** Slips a random pact curse into the player's piles for this combat only. */
+async function maldicionDelPacto(c: ContextoEfecto, destino: 'mazo' | 'descarte') {
+  const id = MALDICIONES_DEL_PACTO[Math.floor(c.rng() * MALDICIONES_DEL_PACTO.length)];
+  await c.meterMaldicion(id, destino);
+}
+
+/** Daño real de la Explosión Sobrenatural con todas sus mejoras acumuladas. */
+function danoExplosion(c: ContextoEfecto, base: number): number {
+  const s = c.jugador.estados;
+  return base
+    + (s.explosionFuerza ?? 0)
+    + (s.explosionTurno ?? 0)
+    + (s.explosionCarga ?? 0)
+    + (s.explosionMaldita ?? 0) * maldicionesEnCartas(c);
+}
+
+/** Lanza la Explosión: 1 golpe (+ los que sumen los poderes), a uno o a todos.
+ *  Order: it grows first (Eldritch Spear, so it shows from the first cast), then
+ *  hits, then its on-hit add-ons (Doom, block) and finally the relics hear of it. */
 async function lanzarExplosion(c: ContextoEfecto, base: number) {
+  const s = c.jugador.estados;
+  const crece = s.explosionCrece ?? 0;
+  if (crece > 0) s.explosionCarga = (s.explosionCarga ?? 0) + crece;
   const dmg = danoExplosion(c, base);
-  const golpes = 1 + (c.jugador.estados.explosionVeces ?? 0);
-  const area = (c.jugador.estados.explosionArea ?? 0) > 0;
+  const golpes = 1 + (s.explosionVeces ?? 0);
+  const area = (s.explosionArea ?? 0) > 0;
+  const golpeados: EnemigoCombate[] = [];
+  const marcar = (e: EnemigoCombate) => { if (!golpeados.includes(e)) golpeados.push(e); };
   for (let i = 0; i < golpes; i++) {
-    if (area) await c.atacarTodos(dmg, 'abisal');
-    else {
-      const obj = c.objetivo!.vivo ? c.objetivo! : c.enemigos.find((e) => e.vivo);
+    if (area) {
+      c.enemigos.filter((e) => e.vivo).forEach(marcar);
+      await c.atacarTodos(dmg, 'abisal');
+    } else {
+      const obj = c.objetivo?.vivo ? c.objetivo : c.enemigos.find((e) => e.vivo);
       if (!obj) break;
+      marcar(obj);
       await c.atacar(obj, dmg, 1, 'abisal');
     }
   }
+  const condena = s.explosionCondena ?? 0;
+  if (condena > 0) {
+    for (const e of golpeados) if (e.vivo) await c.aplicarEstado(e, 'condena', condena);
+  }
+  const bloqueo = s.explosionBloqueo ?? 0;
+  if (bloqueo > 0) await c.ganarBloqueo(bloqueo);
+  await c.explosionLanzada(golpeados, dmg);
 }
 
 export const BRUJO: CartaDef[] = [
@@ -2776,14 +2813,14 @@ export const BRUJO: CartaDef[] = [
     objetivo: 'enemigo',
     fx: 'abisal',
     alTopeDelMazo: true,
-    texto: 'Inflige 6 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
+    texto: 'Inflige 7 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
     jugar: async (c) => {
-      await lanzarExplosion(c, 6);
+      await lanzarExplosion(c, 7);
     },
     mejora: {
-      texto: 'Inflige 9 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
+      texto: 'Inflige 10 de daño.\nAl jugarla vuelve a lo alto de tu mazo.',
       jugar: async (c) => {
-        await lanzarExplosion(c, 9);
+        await lanzarExplosion(c, 10);
       },
     },
   },
@@ -2901,14 +2938,14 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'oscuridad',
-    texto: 'Invoca un Sabueso: 7 de vida y 5 de daño.\nSolo dura este turno.',
+    texto: 'Invoca un Sabueso: 8 de vida y 6 de daño.\nSolo dura este turno.',
     jugar: async (c) => {
-      await c.invocarEfimero('sabueso', 7, 5);
+      await c.invocarEfimero('sabueso', 8, 6);
     },
     mejora: {
-      texto: 'Invoca un Sabueso: 9 de vida y 7 de daño.\nSolo dura este turno.',
+      texto: 'Invoca un Sabueso: 10 de vida y 8 de daño.\nSolo dura este turno.',
       jugar: async (c) => {
-        await c.invocarEfimero('sabueso', 9, 7);
+        await c.invocarEfimero('sabueso', 10, 8);
       },
     },
   },
@@ -2921,18 +2958,20 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'todos',
     fx: 'oscuridad',
-    texto: 'Aplica 2 de Oscuridad a todos\nlos enemigos (baja su ataque).',
+    texto: 'Aplica 3 de Oscuridad a todos\nlos enemigos (baja su ataque).\nRoba 1 carta.',
     jugar: async (c) => {
       for (const e of c.enemigos.filter((x) => x.vivo)) {
-        await c.aplicarEstado(e, 'oscuridad', 2);
+        await c.aplicarEstado(e, 'oscuridad', 3);
       }
+      await c.robar(1);
     },
     mejora: {
-      texto: 'Aplica 3 de Oscuridad a todos\nlos enemigos (baja su ataque).',
+      texto: 'Aplica 4 de Oscuridad a todos\nlos enemigos (baja su ataque).\nRoba 1 carta.',
       jugar: async (c) => {
         for (const e of c.enemigos.filter((x) => x.vivo)) {
-          await c.aplicarEstado(e, 'oscuridad', 3);
+          await c.aplicarEstado(e, 'oscuridad', 4);
         }
+        await c.robar(1);
       },
     },
   },
@@ -2977,6 +3016,30 @@ export const BRUJO: CartaDef[] = [
       jugar: async (c) => {
         const extra = (c.objetivo!.estados.condena ?? 0) > 0 ? 6 : 0;
         await c.atacar(c.objetivo!, 9 + extra, 1, 'sangre');
+      },
+    },
+  },
+  {
+    id: 'contrato-maldito',
+    nombre: 'Contrato Maldito',
+    clase: 'brujo',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'sangre',
+    texto: 'Gana 1 de energía y roba 2 cartas.\nUna maldición al azar entra en tu mazo\n(solo este combate).',
+    jugar: async (c) => {
+      c.ganarEnergia(1);
+      await c.robar(2);
+      await maldicionDelPacto(c, 'mazo');
+    },
+    mejora: {
+      texto: 'Gana 2 de energía y roba 2 cartas.\nUna maldición al azar entra en tu mazo\n(solo este combate).',
+      jugar: async (c) => {
+        c.ganarEnergia(2);
+        await c.robar(2);
+        await maldicionDelPacto(c, 'mazo');
       },
     },
   },
@@ -3168,18 +3231,18 @@ export const BRUJO: CartaDef[] = [
     coste: 0,
     objetivo: 'ninguno',
     fx: 'sangre',
-    texto: 'Pierde 4 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 4 más.',
+    texto: 'Pierde 3 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 6 más.',
     jugar: async (c) => {
-      await c.perderPV(4);
+      await c.perderPV(3);
       await c.robar(2);
-      await c.aplicarEstado(c.jugador, 'explosionTurno', 4);
+      await c.aplicarEstado(c.jugador, 'explosionTurno', 6);
     },
     mejora: {
-      texto: 'Pierde 2 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 6 más.',
+      texto: 'Pierde 2 PV. Roba 2 cartas y este turno\ntu Explosión Sobrenatural inflige 9 más.',
       jugar: async (c) => {
         await c.perderPV(2);
         await c.robar(2);
-        await c.aplicarEstado(c.jugador, 'explosionTurno', 6);
+        await c.aplicarEstado(c.jugador, 'explosionTurno', 9);
       },
     },
   },
@@ -3192,14 +3255,36 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Poder: tu Explosión Sobrenatural\ninflige 3 de daño adicional.',
+    texto: 'Poder: tu Explosión Sobrenatural\ninflige 3 más y aplica 3 de Condena\na cada enemigo que golpea.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'explosionFuerza', 3);
+      await c.aplicarEstado(c.jugador, 'explosionCondena', 3);
     },
     mejora: {
-      texto: 'Poder: tu Explosión Sobrenatural\ninflige 5 de daño adicional.',
+      texto: 'Poder: tu Explosión Sobrenatural\ninflige 5 más y aplica 4 de Condena\na cada enemigo que golpea.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'explosionFuerza', 5);
+        await c.aplicarEstado(c.jugador, 'explosionCondena', 4);
+      },
+    },
+  },
+  {
+    id: 'lanza-sobrenatural',
+    nombre: 'Lanza Sobrenatural',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Poder: cada vez que lanzas tu Explosión\nSobrenatural, crece: inflige 2 más\nel resto del combate.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionCrece', 2);
+    },
+    mejora: {
+      texto: 'Poder: cada vez que lanzas tu Explosión\nSobrenatural, crece: inflige 3 más\nel resto del combate.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionCrece', 3);
       },
     },
   },
@@ -3212,15 +3297,17 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0.',
+    texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0 y, al lanzarla,\nganas 3 de bloqueo.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
+      await c.aplicarEstado(c.jugador, 'explosionBloqueo', 3);
     },
     mejora: {
       coste: 0,
-      texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0.',
+      texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0 y, al lanzarla,\nganas 3 de bloqueo.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
+        await c.aplicarEstado(c.jugador, 'explosionBloqueo', 3);
       },
     },
   },
@@ -3233,16 +3320,16 @@ export const BRUJO: CartaDef[] = [
     coste: 0,
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 3 más.',
+    texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 4 más.',
     jugar: async (c) => {
       await c.traerALaMano('explosion-sobrenatural');
-      await c.aplicarEstado(c.jugador, 'explosionTurno', 3);
+      await c.aplicarEstado(c.jugador, 'explosionTurno', 4);
     },
     mejora: {
-      texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 6 más.',
+      texto: 'Pon tu Explosión Sobrenatural en tu mano.\nEste turno inflige 7 más.',
       jugar: async (c) => {
         await c.traerALaMano('explosion-sobrenatural');
-        await c.aplicarEstado(c.jugador, 'explosionTurno', 6);
+        await c.aplicarEstado(c.jugador, 'explosionTurno', 7);
       },
     },
   },
@@ -3277,16 +3364,83 @@ export const BRUJO: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'muerte',
-    texto: 'Inflige 12 de daño.\nAplica 2 de Vulnerable.',
+    texto: 'Inflige 14 de daño.\nAplica 2 de Vulnerable.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 12, 1, 'muerte');
+      await c.atacar(c.objetivo!, 14, 1, 'muerte');
       if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'vulnerable', 2);
     },
     mejora: {
-      texto: 'Inflige 16 de daño.\nAplica 3 de Vulnerable.',
+      texto: 'Inflige 18 de daño.\nAplica 3 de Vulnerable.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 16, 1, 'muerte');
+        await c.atacar(c.objetivo!, 18, 1, 'muerte');
         if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'vulnerable', 3);
+      },
+    },
+  },
+  // — Pact with the curses: they fuel the warlock instead of just clogging —
+  {
+    id: 'hambre-patron',
+    nombre: 'Hambre del Patrón',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'abisal',
+    texto: 'Poder: tu Explosión Sobrenatural inflige\n3 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'explosionMaldita', 3);
+      await maldicionDelPacto(c, 'descarte');
+    },
+    mejora: {
+      texto: 'Poder: tu Explosión Sobrenatural inflige\n4 más por cada maldición en tus cartas.\nUna maldición entra en tu descarte.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'explosionMaldita', 4);
+        await maldicionDelPacto(c, 'descarte');
+      },
+    },
+  },
+  {
+    id: 'ofrenda-maldita',
+    nombre: 'Ofrenda Maldita',
+    clase: 'brujo',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'muerte',
+    texto: 'Consume una maldición de tu mano:\ninflige 18 de daño y aplica 6 de Condena.\nSin maldición, solo inflige 6.',
+    jugar: async (c) => {
+      if (!(await c.consumirMaldicion())) { await c.atacar(c.objetivo!, 6, 1, 'muerte'); return; }
+      await c.atacar(c.objetivo!, 18, 1, 'muerte');
+      if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', 6);
+    },
+    mejora: {
+      texto: 'Consume una maldición de tu mano:\ninflige 24 de daño y aplica 8 de Condena.\nSin maldición, solo inflige 8.',
+      jugar: async (c) => {
+        if (!(await c.consumirMaldicion())) { await c.atacar(c.objetivo!, 8, 1, 'muerte'); return; }
+        await c.atacar(c.objetivo!, 24, 1, 'muerte');
+        if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', 8);
+      },
+    },
+  },
+  {
+    id: 'egida-afliccion',
+    nombre: 'Égida de la Aflicción',
+    clase: 'brujo',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bloqueo',
+    texto: 'Poder: al final de tu turno ganas\n4 de bloqueo por cada maldición\nen tu mano.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'bloqueoPorMaldicion', 4);
+    },
+    mejora: {
+      texto: 'Poder: al final de tu turno ganas\n6 de bloqueo por cada maldición\nen tu mano.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'bloqueoPorMaldicion', 6);
       },
     },
   },
@@ -3410,7 +3564,7 @@ export const BRUJO: CartaDef[] = [
     clase: 'brujo',
     tipo: 'poder',
     rareza: 'rara',
-    coste: 2,
+    coste: 1,
     objetivo: 'ninguno',
     fx: 'abisal',
     animRara: 'anim-psionico',
@@ -3419,7 +3573,7 @@ export const BRUJO: CartaDef[] = [
       await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
     },
     mejora: {
-      coste: 1,
+      coste: 0,
       texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
@@ -3596,7 +3750,9 @@ export const NEUTRALES_ESPECIALES: CartaDef[] = [
 // Unplayable dead weight: they take a slot in the hand and in the deck. Some hurt
 // at the end of the turn while held, some on being drawn. They never show up in
 // card rewards (they are not in any class pool) and are removed by purifying them
-// at a campfire. Only the Blood Debt can be paid off in combat.
+// at a campfire. Only the Blood Debt can be paid off in combat. They are never
+// played: the warlock's Cursed Offering consumes one (exhausting it for the fight)
+// and his pact cards feed on them, but that goes through ctx.consumirMaldicion.
 
 /** Common shape of a curse; the engine never calls `jugar` on one. */
 function maldicion(d: Omit<CartaDef, 'clase' | 'tipo' | 'rareza' | 'coste' | 'objetivo' | 'jugar'>): CartaDef {

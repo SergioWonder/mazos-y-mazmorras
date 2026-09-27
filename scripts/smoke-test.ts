@@ -1303,7 +1303,7 @@ console.log('— Brujo: mecánicas nuevas —');
     const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
     const descarteAntes = comb.jugador.descarte.length;
     await comb.jugarCarta(exp, e);
-    check(60 - e.pv === 6, 'la Explosión inflige 6 de daño base');
+    check(60 - e.pv === 7, 'la Explosión inflige 7 de daño base');
     check(comb.jugador.descarte.length === descarteAntes, 'no va al descarte');
     check(comb.jugador.mazo[comb.jugador.mazo.length - 1].uid === exp.uid,
       'la Explosión vuelve a lo alto del mazo de robo');
@@ -1349,23 +1349,23 @@ console.log('— Brujo: mecánicas nuevas —');
 
     comb.jugador.estados.explosionFuerza = 3; // Verbo Agonizante
     await exp.jugar(comb.contexto(a));
-    check(200 - a.pv === 9, 'Verbo Agonizante: 6 + 3 = 9');
+    check(200 - a.pv === 10, 'Verbo Agonizante: 7 + 3 = 10');
 
     a.pv = 200;
     comb.jugador.estados.explosionTurno = 5; // Canalizar el Pacto
     await exp.jugar(comb.contexto(a));
-    check(200 - a.pv === 14, 'con mejora de turno: 6 + 3 + 5 = 14');
+    check(200 - a.pv === 15, 'con mejora de turno: 7 + 3 + 5 = 15');
 
     a.pv = 200;
     comb.jugador.estados.explosionVeces = 1; // Haz Desdoblado
     await exp.jugar(comb.contexto(a));
-    check(200 - a.pv === 28, 'Haz Desdoblado: golpea dos veces (14 + 14)');
+    check(200 - a.pv === 30, 'Haz Desdoblado: golpea dos veces (15 + 15)');
 
     a.pv = 200; b.pv = 200;
     delete comb.jugador.estados.explosionVeces;
     comb.jugador.estados.explosionArea = 1; // Explosión Trifurcada
     await exp.jugar(comb.contexto(a));
-    check(200 - a.pv === 14 && 200 - b.pv === 14, 'Explosión Trifurcada: golpea a todos');
+    check(200 - a.pv === 15 && 200 - b.pv === 15, 'Explosión Trifurcada: golpea a todos');
 
     // la mejora de un turno se limpia al acabar el turno; la permanente no
     defender(comb);
@@ -1453,14 +1453,16 @@ console.log('— Brujo: mecánicas nuevas —');
     e.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 10 };
     check(comb.danoIntencion(e) === 10, 'sin Oscuridad el ataque es de 10');
     await carta('oscuridad').jugar(comb.contexto());
-    check(comb.enemigos.every((x) => (x.estados.oscuridad ?? 0) === 2), 'Oscuridad: 2 a todos');
-    check(comb.danoIntencion(e) === 8, 'la Oscuridad le resta 2 al ataque');
+    check(comb.enemigos.every((x) => (x.estados.oscuridad ?? 0) === 3), 'Oscuridad: 3 a todos');
+    check(comb.danoIntencion(e) === 7, 'la Oscuridad le resta 3 al ataque');
     defender(comb);
     await comb.terminarTurno();
-    check((e.estados.oscuridad ?? 0) === 1, 'la Oscuridad baja 1 por turno');
+    check((e.estados.oscuridad ?? 0) === 2, 'la Oscuridad baja 1 por turno');
     defender(comb);
     await comb.terminarTurno();
-    check((e.estados.oscuridad ?? 0) === 0, 'y se agota al segundo turno');
+    defender(comb);
+    await comb.terminarTurno();
+    check((e.estados.oscuridad ?? 0) === 0, 'y se agota al tercer turno');
   }
 
   // Invocación efímera: absorbe daño, golpea si sobrevive y se desvanece
@@ -1504,10 +1506,10 @@ console.log('— Brujo: mecánicas nuevas —');
     await comb.iniciar();
     const e = comb.enemigos[0];
     e.pv = e.pvMax = 60; e.bloqueo = 0;
-    await carta('sabueso-sombra').jugar(comb.contexto()); // 7 de vida
+    await carta('sabueso-sombra').jugar(comb.contexto()); // 8 de vida
     const energiaAntes = comb.jugador.energia;
     await carta('sacrificio-familiar').jugar(comb.contexto(e));
-    check(60 - e.pv === 7, 'Sacrificio del Familiar inflige los 7 de vida que quedaban');
+    check(60 - e.pv === 8, 'Sacrificio del Familiar inflige los 8 de vida que quedaban');
     check(comb.jugador.invocacion === undefined, 'la invocación desaparece');
     check(comb.jugador.energia === energiaAntes + 1, 'y devuelve 1 de energía');
   }
@@ -1602,7 +1604,7 @@ console.log('— Brujo: mecánicas nuevas —');
     comb.jugador.energia = 0;
     const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
     await comb.jugarCarta(exp, e);
-    check(60 - e.pv === 6, 'se lanza con 0 de energía');
+    check(60 - e.pv === 7, 'se lanza con 0 de energía');
   }
 
   // Llamada del Vacío: recupera la Explosión de donde esté
@@ -1620,7 +1622,7 @@ console.log('— Brujo: mecánicas nuevas —');
     await carta('llamada-vacio').jugar(comb.contexto());
     check(comb.jugador.mano.some((c) => c.uid === exp.uid),
       'Llamada del Vacío trae la Explosión del descarte a la mano');
-    check((comb.jugador.estados.explosionTurno ?? 0) === 3, 'y le da +3 de daño este turno');
+    check((comb.jugador.estados.explosionTurno ?? 0) === 4, 'y le da +4 de daño este turno');
     // si ya está en la mano no la duplica
     await carta('llamada-vacio').jugar(comb.contexto());
     check(comb.jugador.mano.filter((c) => c.def.id === 'explosion-sobrenatural').length === 1,
@@ -1641,7 +1643,7 @@ console.log('— Brujo: mecánicas nuevas —');
     e.pv = e.pvMax = 90; e.bloqueo = 0;
     comb.jugador.pv = comb.jugador.pvMax - 20;
     await carta('marchitar').jugar(comb.contexto(e));
-    check(90 - e.pv === 12, 'Marchitar inflige 12 de daño');
+    check(90 - e.pv === 14, 'Marchitar inflige 14 de daño');
     check((e.estados.vulnerable ?? 0) === 2, 'y aplica 2 de Vulnerable');
     check(comb.jugador.pv === comb.jugador.pvMax - 20, 'ya no cura al brujo');
   }
@@ -2583,10 +2585,13 @@ console.log('\n💍 Reliquias ampliadas');
     check(comb.enemigos[0].estados.veneno === 2, 'Veneno de Drow: al aplicar Débil también aplicas 2 de Veneno');
   }
   {
-    const { comb, ctx } = await montar('druida', ['frasco-plaga'], [muneco(10), muneco()]);
+    const { comb, ctx } = await montar('picaro', ['frasco-plaga'], [muneco(10), muneco(), muneco()]);
     comb.enemigos[0].estados.veneno = 5;
+    comb.enemigos[2].estados.veneno = 1;
     await ctx.danar(comb.enemigos[0], 50);
-    check(comb.enemigos[1].estados.veneno === 5, 'Frasco de la Plaga: el Veneno de un enemigo muerto salta a otro');
+    check(comb.enemigos[1].estados.veneno === 5 && comb.enemigos[2].estados.veneno === 6, 'Frasco de la Plaga: el Veneno de un enemigo muerto se propaga a todos los demás');
+    const { reliquiaPorId } = await import('../src/core/reliquias.ts');
+    check(reliquiaPorId('frasco-plaga')?.soloClase === 'picaro', 'Frasco de la Plaga es una reliquia del pícaro');
   }
   // — Generales: bloqueo —
   {
@@ -2836,7 +2841,7 @@ console.log('\n💍 Reliquias ampliadas');
   {
     const { comb } = await montar('brujo', ['ojo-patron']);
     await jugarCon(comb, 'explosion-sobrenatural');
-    check(comb.enemigos[0].estados.condena === 2, 'Ojo del Patrón: la Explosión Sobrenatural aplica 2 de Condena');
+    check(comb.enemigos[0].estados.condena === 3, 'Ojo del Patrón: la Explosión Sobrenatural (7) aplica 3 de Condena');
   }
   {
     const { comb, ctx } = await montar('brujo', ['corazon-diablillo'], [muneco(), muneco()]);
@@ -4404,6 +4409,285 @@ try {
   check(mapCss.length > 0 && frames.length > 0 && frames.every((k) => !/filter|box-shadow/.test(k)), 'las animaciones del mapa solo tocan transform y opacity');
 } catch (e) {
   check(false, `las pruebas del mapa a tinta revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Warlock: stronger Eldritch Blast and a pact with the curses ──────────────
+console.log('\n💥 Brujo: Explosión reforzada y pacto con las maldiciones');
+try {
+  const RQB: any = await import('../src/core/reliquias.ts');
+  const CTB: any = await import('../src/core/cartas.ts');
+  const quietoB: EnemigoDef = {
+    id: 'muneco-brujo', nombre: 'Muñeco', arte: '🎯', pv: [300, 300],
+    ia: () => ({ nombre: 'Esperar', intencion: 'desconocido' }),
+  };
+  const munecoB = (pv = 300, dano?: number): EnemigoDef => ({
+    ...quietoB, pv: [pv, pv],
+    ia: () => (dano ? { nombre: 'Golpe', intencion: 'ataque', dano } : { nombre: 'Esperar', intencion: 'desconocido' }),
+  });
+  const cartaB = (id: string): CartaDef => {
+    const c = CTB.cartaPorId(id);
+    if (!c) throw new Error(`falta la carta «${id}»`);
+    return c;
+  };
+  const reliquiaB = (id: string) => {
+    const r = RQB.reliquiaPorId(id);
+    if (!r) throw new Error(`falta la reliquia «${id}»`);
+    return r;
+  };
+  /** Warlock fight against dummies, with the chosen relics and an empty hand. */
+  async function montarB(reliquias: string[] = [], defs: EnemigoDef[] = [quietoB]) {
+    const run = nuevaRun('brujo', 6060);
+    run.reliquias = reliquias.map(reliquiaB);
+    const comb = new Combate(run, defs, crearRng(6060), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.descarte.push(...comb.jugador.mano);
+    comb.jugador.mano = [];
+    return { run, comb };
+  }
+  const aMano = (comb: Combate, id: string, mejorada = false) => {
+    const inst = instanciar(cartaB(id));
+    inst.mejorada = mejorada;
+    comb.jugador.mano.push(inst);
+    return inst;
+  };
+  /** Plays a card from the hand with energy to spare; returns the damage `obj` took. */
+  const lanzar = async (comb: Combate, inst: CartaInstancia, obj = comb.enemigos.find((e) => e.vivo)) => {
+    comb.jugador.energia = 5;
+    const antes = obj?.pv ?? 0;
+    await comb.jugarCarta(inst, obj);
+    return antes - (obj?.pv ?? 0);
+  };
+  const exp = (comb: Combate, mejorada = false) => aMano(comb, 'explosion-sobrenatural', mejorada);
+  const malditasEn = (comb: Combate) => [...comb.jugador.mazo, ...comb.jugador.mano, ...comb.jugador.descarte]
+    .filter((c) => c.def.tipo === 'maldicion').length;
+
+  // — Base damage —
+  {
+    const { comb } = await montarB();
+    check(await lanzar(comb, exp(comb)) === 7, 'Explosión Sobrenatural: 7 de daño base (antes 6)');
+    check(await lanzar(comb, exp(comb, true)) === 10, 'Explosión Sobrenatural+: 10 de daño (antes 9)');
+  }
+  // — Verbo Agonizante: damage and Doom on every enemy it hits —
+  {
+    const { comb } = await montarB([], [quietoB, quietoB]);
+    const [a, b] = comb.enemigos;
+    await lanzar(comb, aMano(comb, 'verbo-agonizante'));
+    const d = await lanzar(comb, exp(comb), a);
+    check(d === 10 && a.estados.condena === 3 && !b.estados.condena,
+      `Verbo Agonizante: la Explosión inflige 3 más (${d}) y aplica 3 de Condena al que golpea`);
+    await lanzar(comb, aMano(comb, 'explosion-trifurcada'));
+    await lanzar(comb, exp(comb), a);
+    check(a.estados.condena === 6 && b.estados.condena === 3, 'con Explosión Trifurcada, la Condena del Verbo cae sobre todos');
+    const m = await montarB();
+    await lanzar(m.comb, aMano(m.comb, 'verbo-agonizante', true));
+    check(await lanzar(m.comb, exp(m.comb)) === 12 && m.comb.enemigos[0].estados.condena === 4,
+      'Verbo Agonizante+: 5 más y 4 de Condena');
+  }
+  // — Lanza Sobrenatural: the blast grows with every cast, from the first one —
+  {
+    const { comb } = await montarB();
+    await lanzar(comb, aMano(comb, 'lanza-sobrenatural'));
+    const d1 = await lanzar(comb, exp(comb));
+    const d2 = await lanzar(comb, exp(comb));
+    const d3 = await lanzar(comb, exp(comb));
+    check(d1 === 9 && d2 === 11 && d3 === 13, `Lanza Sobrenatural: +2 por cada lanzamiento, ya desde el primero (${d1}, ${d2}, ${d3})`);
+    await comb.terminarTurno();
+    comb.jugador.mano = [];
+    check(await lanzar(comb, exp(comb)) === 15, 'el crecimiento dura todo el combate');
+    const m = await montarB();
+    await lanzar(m.comb, aMano(m.comb, 'lanza-sobrenatural', true));
+    check(await lanzar(m.comb, exp(m.comb)) === 10, 'Lanza Sobrenatural+: crece 3 por lanzamiento');
+    check(poolDeClase('brujo').some((c) => c.id === 'lanza-sobrenatural'), 'Lanza Sobrenatural sale en las recompensas del brujo');
+  }
+  // — Don del Patrón: free and it shields you —
+  {
+    const { comb } = await montarB();
+    await lanzar(comb, aMano(comb, 'don-del-patron'));
+    const e = exp(comb);
+    check(comb.costeEfectivo(defDe(e)) === 0, 'Don del Patrón: la Explosión sigue costando 0');
+    comb.jugador.bloqueo = 0;
+    comb.jugador.energia = 0;
+    await comb.jugarCarta(e, comb.enemigos[0]);
+    check(comb.jugador.bloqueo === 3 && comb.enemigos[0].pv === 293, 'Don del Patrón: al lanzarla ganas 3 de bloqueo');
+  }
+  // — Cheaper blast powers —
+  {
+    const haz = cartaB('haz-desdoblado');
+    check(haz.coste === 1 && haz.mejora?.coste === 0, 'Haz Desdoblado cuesta 1 (0 mejorado; antes 2 y 1)');
+  }
+  // — Other warlock numbers —
+  {
+    const { comb } = await montarB();
+    const pv = comb.jugador.pv;
+    await lanzar(comb, aMano(comb, 'pacto-sangriento'));
+    check(pv - comb.jugador.pv === 3 && comb.jugador.estados.explosionTurno === 6 && comb.jugador.mano.length === 2,
+      'Pacto Sangriento: pierdes 3 PV, robas 2 y la Explosión inflige 6 más este turno');
+    comb.jugador.mano = [];
+    await lanzar(comb, aMano(comb, 'oscuridad'));
+    check(comb.enemigos[0].estados.oscuridad === 3 && comb.jugador.mano.length === 1, 'Oscuridad: 3 a todos y roba 1 carta');
+    check(cartaB('sabueso-sombra').texto.includes('8 de vida y 6 de daño'), 'Sabueso de Sombra: 8 de vida y 6 de daño');
+  }
+
+  // — Curses: Hambre del Patrón —
+  {
+    const { comb, run } = await montarB();
+    check(malditasEn(comb) === 0, 'el brujo empieza sin maldiciones');
+    await lanzar(comb, aMano(comb, 'hambre-patron'));
+    check(malditasEn(comb) === 1 && comb.jugador.descarte.some((c) => c.def.tipo === 'maldicion')
+      && !run.mazo.some((c) => c.def.tipo === 'maldicion'),
+    'Hambre del Patrón: al jugarla una maldición entra en tu descarte (solo este combate)');
+    check(await lanzar(comb, exp(comb)) === 10, 'Hambre del Patrón: la Explosión inflige 3 más por maldición (1 → 10)');
+    comb.jugador.mazo.push(instanciar(cartaB('duda')));
+    aMano(comb, 'grilletes');
+    check(await lanzar(comb, exp(comb)) === 16, 'cuenta las maldiciones del mazo, la mano y el descarte (3 → 16)');
+  }
+  // — Curses: Contrato Maldito —
+  {
+    const { comb, run } = await montarB();
+    const inst = aMano(comb, 'contrato-maldito');
+    comb.jugador.energia = 1;
+    await comb.jugarCarta(inst);
+    check(comb.jugador.energia === 2 && comb.jugador.mano.length === 2, 'Contrato Maldito: cuesta 0, ganas 1 de energía y robas 2');
+    check(comb.jugador.mazo.filter((c) => c.def.tipo === 'maldicion').length === 1 && !run.mazo.some((c) => c.def.tipo === 'maldicion'),
+      'y una maldición al azar entra en tu mazo de robo (solo este combate)');
+    const m = await montarB();
+    const mej = aMano(m.comb, 'contrato-maldito', true);
+    m.comb.jugador.energia = 1;
+    await m.comb.jugarCarta(mej);
+    check(m.comb.jugador.energia === 3, 'Contrato Maldito+: ganas 2 de energía');
+    check(defDe(inst).tipo !== 'maldicion' && poolDeClase('brujo').some((c) => c.id === 'contrato-maldito'), 'es una carta normal del brujo');
+  }
+  // — Curses: Ofrenda Maldita —
+  {
+    const { comb } = await montarB();
+    const e = comb.enemigos[0];
+    const herida = aMano(comb, 'herida-infectada');
+    const d = await lanzar(comb, aMano(comb, 'ofrenda-maldita'), e);
+    check(d === 18 && e.estados.condena === 6, `Ofrenda Maldita: consumiendo una maldición, 18 de daño y 6 de Condena (${d})`);
+    check(!comb.jugador.mano.includes(herida) && comb.jugador.agotadas.includes(herida), 'la maldición consumida se agota');
+    const d2 = await lanzar(comb, aMano(comb, 'ofrenda-maldita'), e);
+    check(d2 === 6 && e.estados.condena === 6, 'sin maldiciones en la mano, solo inflige 6');
+    aMano(comb, 'duda');
+    aMano(comb, 'grilletes');
+    await lanzar(comb, aMano(comb, 'ofrenda-maldita'), e);
+    check(comb.jugador.mano.filter((c) => c.def.tipo === 'maldicion').length === 1, 'consume una sola maldición');
+    const m = await montarB();
+    aMano(m.comb, 'grilletes');
+    check(await lanzar(m.comb, aMano(m.comb, 'ofrenda-maldita', true)) === 24 && m.comb.enemigos[0].estados.condena === 8,
+      'Ofrenda Maldita+: 24 de daño y 8 de Condena');
+  }
+  // — Curses: Égida de la Aflicción —
+  {
+    const { comb } = await montarB([], [munecoB(300, 10)]);
+    await lanzar(comb, aMano(comb, 'egida-afliccion'));
+    aMano(comb, 'grilletes');
+    aMano(comb, 'grilletes');
+    comb.jugador.bloqueo = 0;
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(pv - comb.jugador.pv === 2, 'Égida de la Aflicción: 4 de bloqueo por maldición en la mano al final del turno (8 contra 10)');
+    const m = await montarB();
+    await lanzar(m.comb, aMano(m.comb, 'egida-afliccion'));
+    await lanzar(m.comb, instanciar(cartaUnicaDeClase('brujo')));
+    m.comb.jugador.mano = [];
+    aMano(m.comb, 'duda');
+    aMano(m.comb, 'grilletes');
+    m.comb.jugador.bloqueo = 0;
+    await m.comb.terminarTurno();
+    check(m.comb.enemigos[0].estados.condena === 8, 'con el Pacto Final, ese bloqueo se vuelve Condena el mismo turno');
+  }
+  // — Curses: Coleccionista de Maldiciones —
+  {
+    const { comb } = await montarB(['coleccionista-maldiciones'], [quietoB, quietoB]);
+    aMano(comb, 'herida-infectada');
+    aMano(comb, 'duda');
+    aMano(comb, 'grilletes');
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv && !comb.jugador.estados.debil, 'Coleccionista de Maldiciones: las maldiciones de tu mano ya no te castigan');
+    check(comb.enemigos.every((e) => e.estados.condena === 9), 'cada maldición de tu mano aplica 3 de Condena a todos (3 → 9)');
+    const sin = await montarB([], [quietoB]);
+    aMano(sin.comb, 'herida-infectada');
+    const pv2 = sin.comb.jugador.pv;
+    await sin.comb.terminarTurno();
+    check(pv2 - sin.comb.jugador.pv === 2, 'sin la reliquia, la Herida Infectada sigue doliendo');
+    const r = reliquiaB('coleccionista-maldiciones');
+    check(r.soloClase === 'brujo' && CLASES.filter((c) => c !== 'brujo')
+      .every((c) => !RQB.reliquiasDisponibles(nuevaRun(c, 3)).some((x: { id: string }) => x.id === r.id)),
+    'el Coleccionista es del brujo: nunca se ofrece a otra clase');
+  }
+  // — Curses stay unplayable —
+  {
+    const { comb } = await montarB(['coleccionista-maldiciones', 'ojo-patron', 'vara-pacto', 'libro-sombras']);
+    await lanzar(comb, aMano(comb, 'egida-afliccion'));
+    await lanzar(comb, aMano(comb, 'hambre-patron'));
+    comb.jugador.mano = [];
+    const insts = MALDICIONES.filter((c) => c.purgar === undefined).map((c) => aMano(comb, c.id));
+    comb.jugador.energia = 9;
+    check(insts.every((i) => !comb.puedeJugar(i)), 'con todo el arsenal del brujo, las maldiciones siguen sin poder jugarse');
+    await comb.jugarCarta(insts[0]);
+    check(comb.jugador.mano.includes(insts[0]) && comb.jugador.energia === 9, 'intentarlo no hace nada');
+    const nuevas = ['lanza-sobrenatural', 'hambre-patron', 'contrato-maldito', 'ofrenda-maldita', 'egida-afliccion'];
+    check(nuevas.every((id) => BRUJO.some((c) => c.id === id && c.tipo !== 'maldicion')), 'las cartas nuevas del brujo son jugables (no maldiciones)');
+  }
+
+  // — Relics: Ojo del Patrón and Eco Sobrenatural scale with the blast —
+  {
+    const { comb } = await montarB(['ojo-patron'], [quietoB, quietoB]);
+    const [a, b] = comb.enemigos;
+    await lanzar(comb, exp(comb), a);
+    check(a.estados.condena === 3 && !b.estados.condena, 'Ojo del Patrón: Condena igual a la mitad del daño, mínimo 3 (7 → 3)');
+    comb.jugador.estados.explosionFuerza = 13;
+    delete a.estados.condena;
+    await lanzar(comb, exp(comb), a);
+    check(a.estados.condena === 10, 'Ojo del Patrón escala: 20 de daño → 10 de Condena');
+    delete a.estados.condena;
+    comb.jugador.estados.explosionArea = 1;
+    await lanzar(comb, exp(comb), a);
+    check(a.estados.condena === 10 && b.estados.condena === 10, 'en área condena a todos los que golpea');
+  }
+  {
+    const { comb } = await montarB(['eco-sobrenatural'], [quietoB, quietoB]);
+    const [a, b] = comb.enemigos;
+    comb.jugador.estados.explosionFuerza = 5;
+    await lanzar(comb, exp(comb), a);
+    check(a.pv === 300 - 12 - 6 && b.pv === 300 - 6, 'Eco Sobrenatural: repite la mitad del daño a todos (12 → 6)');
+    await lanzar(comb, exp(comb), a);
+    check(b.pv === 294, 'solo la primera Explosión de cada turno');
+  }
+  // — Relics: Libro de las Sombras —
+  {
+    const run = nuevaRun('brujo', 6061);
+    run.reliquias = [reliquiaB('libro-sombras')];
+    const comb = new Combate(run, [quietoB], crearRng(6061), uiSilenciosa);
+    await comb.iniciar();
+    const enMano = comb.jugador.mano.find((c) => c.def.id === 'explosion-sobrenatural');
+    check(!!enMano && comb.jugador.mano.length === 6, 'Libro de las Sombras: la Explosión empieza el combate en tu mano (y robas tus 5)');
+    const n = comb.jugador.mano.length;
+    if (enMano) await lanzar(comb, enMano);
+    check(comb.jugador.mano.length === n && !comb.jugador.mano.includes(enMano!), 'la primera Explosión de cada turno roba 1 carta');
+    await lanzar(comb, exp(comb));
+    check(comb.jugador.mano.length === n, 'la segunda del turno ya no roba');
+  }
+  // — Relics: Vara del Pacto —
+  {
+    const { comb } = await montarB(['vara-pacto'], [munecoB(5), quietoB]);
+    const [a, b] = comb.enemigos;
+    const e = exp(comb);
+    await lanzar(comb, e, a);
+    check(!a.vivo && comb.jugador.mano.includes(e) && !comb.jugador.mazo.includes(e), 'Vara del Pacto: si la Explosión mata, vuelve a tu mano');
+    await lanzar(comb, e, b);
+    check(comb.jugador.mazo[comb.jugador.mazo.length - 1] === e && !comb.jugador.mano.includes(e),
+      'si no mata, vuelve a lo alto del mazo como siempre');
+  }
+  // — New warlock relics are class relics with art —
+  {
+    const ids = ['libro-sombras', 'vara-pacto', 'coleccionista-maldiciones'];
+    check(ids.every((id) => RQB.POOL_RELIQUIAS.some((r: { id: string; soloClase?: string }) => r.id === id && r.soloClase === 'brujo')),
+      'Libro de las Sombras, Vara del Pacto y Coleccionista de Maldiciones son reliquias del brujo');
+  }
+} catch (e) {
+  check(false, `las pruebas del brujo reforzado revientan: ${(e as Error).stack ?? e}`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.8"/></filter>
+  </defs>
+  <circle cx="40" cy="22" r="16" fill="#c98bff" opacity="0.45" filter="url(#g)"/>
+  <!-- the rod shaft, diagonal -->
+  <path d="M10 58 L34 30" stroke="#140d0a" stroke-width="7.4" stroke-linecap="round"/>
+  <path d="M10 58 L34 30" stroke="#3a2230" stroke-width="4" stroke-linecap="round"/>
+  <path d="M12 55 L32 32" stroke="#6a4458" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- wrapped grip -->
+  <path d="M16 48 L22 52 M19 44 L25 48 M22 40 L28 44" stroke="#8a6a3a" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- horned head holding the crystal -->
+  <path d="M30 34 Q24 26 28 16 Q32 24 36 26 Z" fill="#2c1a28" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M34 36 Q44 38 52 30 Q44 30 40 26 Z" fill="#2c1a28" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M28 16 Q26 10 30 6 M52 30 Q58 30 60 26" stroke="#140d0a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+  <path d="M28 16 Q26 10 30 6 M52 30 Q58 30 60 26" stroke="#d8d0c0" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- violet crystal -->
+  <path d="M40 10 L50 18 L46 30 L34 28 L32 16 Z" fill="#c98bff" filter="url(#g)" opacity="0.8"/>
+  <path d="M40 10 L50 18 L46 30 L34 28 L32 16 Z" fill="#8a4ad0" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M40 10 L40 22 L50 18 M40 22 L34 28 M40 22 L46 30" stroke="#5a2a90" stroke-width="1" fill="none"/>
+  <path d="M36 16 L40 12 L40 20 Z" fill="#e0c8ff"/>
+  <circle cx="40" cy="21" r="2" fill="#f4e8ff"/>
+  <!-- sparks returning to the hand -->
+  <path d="M52 10 Q58 16 54 22 M8 40 Q4 34 10 30" stroke="#c98bff" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+  <path d="M54 22 L51 20 M54 22 L55 19" stroke="#c98bff" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

@@ -89,13 +89,34 @@ descuelga de las demás en su mismo nivel.
   robo/descarte con sinergias (Preparación, Tempestad de Acero). Cartas raras: subclases
   de D&D 2024 (Asesino → veneno, Psiónico → dagas, Embaucador Arcano → ilusiones).
 - **Brujo** (64 PV): un pacto con cuatro patas que se cruzan:
-  - **Explosión Sobrenatural**: carta inicial de coste 1 que **al jugarse vuelve a lo alto
-    de tu mazo** en vez de al descarte, así que la lanzas casi todos los turnos (aguanta
-    incluso el Rayo Áureo del Contemplador). Hace daño y nada más… hasta que la engordas:
-    poderes permanentes (Verbo Agonizante → +daño, Haz Desdoblado → un golpe más,
-    Explosión Trifurcada → golpea a todos), el **Don del Patrón** la deja a coste 0, la
-    **Llamada del Vacío** la rescata a tu mano desde donde esté (mazo, descarte o agotadas)
-    y varias cartas la mejoran **solo ese turno** (Canalizar el Pacto, Pacto Sangriento).
+  - **Explosión Sobrenatural**: carta inicial de coste 1 y **7 de daño** (10 mejorada) que
+    **al jugarse vuelve a lo alto de tu mazo** en vez de al descarte, así que la lanzas casi
+    todos los turnos (aguanta incluso el Rayo Áureo del Contemplador). Construir alrededor
+    de ella es una estrategia completa; sus poderes permanentes se notan desde el primer
+    lanzamiento:
+
+    | Carta | Coste | Efecto sobre la Explosión (mejorada) |
+    | --- | --- | --- |
+    | 😖 Verbo Agonizante | 1 | +3 de daño y 3 de Condena a cada enemigo que golpea (+5 y 4) |
+    | ☄️ Lanza Sobrenatural | 1 | Crece +2 de daño cada vez que la lanzas, el resto del combate (+3) |
+    | 🤝 Don del Patrón | 1 (0) | Cuesta 0 y te da 3 de bloqueo al lanzarla |
+    | 🔀 Haz Desdoblado | 1 (0) | Golpea 1 vez más |
+    | 🔱 Explosión Trifurcada | 1 (0) | Golpea a TODOS los enemigos |
+    | 🍽️ Hambre del Patrón | 1 | +3 de daño por cada maldición en tus cartas y mete una en tu descarte (+4) |
+    | 🔯 Canalizar el Pacto | 0 | Este turno +5 de daño y robas 1 (+7) |
+    | 📜 Pacto Sangriento | 0 | Pierdes 3 PV, robas 2 y este turno +6 de daño (2 PV, +9) |
+    | 📣 Llamada del Vacío | 0 | La trae a tu mano desde donde esté y este turno +4 (+7) |
+
+    Todas se suman: con el Haz Desdoblado cada golpe lleva el bonus entero, y con la
+    Trifurcada la Condena del Verbo cae sobre todos.
+  - **Pacto con las maldiciones**: al brujo las maldiciones le sirven de combustible. El
+    **Contrato Maldito** (coste 0: +1 de energía y robas 2) mete una maldición al azar en
+    tu mazo solo ese combate; el **Hambre del Patrón** hace que la Explosión pegue más por
+    cada una; la **Ofrenda Maldita** consume una de tu mano para infligir 18 y 6 de
+    Condena; la **Égida de la Aflicción** te da 4 de bloqueo por cada maldición en la mano
+    al final del turno (antes de que el Pacto Final la convierta en Condena), y la reliquia
+    **Coleccionista de Maldiciones** cambia su castigo de fin de turno por 3 de Condena a
+    todos los enemigos. Las maldiciones siguen sin poder jugarse.
   - **Condena**: puntos que se acumulan sobre el enemigo y **no decaen**. Al final de su
     turno, si su Condena iguala o supera sus PV **actuales**, muere — así que vale tanto
     subir la Condena como bajarle la vida. Brazos de Hadar la reparte con Débil a todos,
@@ -112,8 +133,9 @@ descuelga de las demás en su mismo nivel.
     más te peguen, más devuelves. El Pacto Infernal te blinda con cada muerte enemiga y
     el **Pacto Final** (carta única de clase) convierte tu bloqueo restante en Condena
     para todos al final de cada turno.
-  Y **Oscuridad**, que reduce el ataque de todos los enemigos y baja 1 por turno (el
-  Sello del Pacto, su reliquia inicial, ya empieza el combate con 2 puesta). Cartas
+  Y **Oscuridad**, que reduce el ataque de todos los enemigos y baja 1 por turno (la carta
+  Oscuridad aplica 3 y roba 1; el Sello del Pacto, su reliquia inicial, ya empieza el
+  combate con 2 puesta). Cartas
   raras: subclases de D&D 2024 (Archifata, Celestial, Infernal y Gran Antiguo).
 - Mazos iniciales: 5 Golpe + 4 Defender + **2 cartas de clase** (Druida: Zarpazo y
   Forma de Lobo · Bárbaro: Furia Primaria y Golpe Imprudente · Mago: Canalizar Maná y
@@ -267,7 +289,6 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | 🃏 Baraja de las Maravillas | rara | 1d20 al empezar cada combate: de una Duda en la mano a Débil y Vulnerable 3 a todos |
 | 🧿 Amuleto de Salud | rara | La primera vez que un golpe te deja por debajo de la mitad, te curas 10 |
 | 🗡️ Talismán Vorpal | rara | Decapita al Vulnerable (no jefe) que dejas a ≤ 15 % de PV |
-| 🦠 Frasco de la Plaga | rara | El Veneno de un enemigo muerto salta a otro |
 | 🛡️ Escudo Centinela | rara | Un golpe detenido del todo devuelve 4 de daño |
 | 📕 Manual del Ejercicio Provechoso | rara | Cada élite o jefe vencido: +1 de Fuerza permanente |
 | 🎺 Cuerno de Caza | rara | Contra élites y jefes: 2 de Vulnerable a todos y robas 2 |
@@ -298,8 +319,12 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | Pícaro | 🤸 Capa del Acróbata | común | Descartar da 2 de bloqueo aplazado (Acrobacias) |
 | Pícaro | 🎒 Bandolera de Cuchillos | común | Empiezas con 2 Dagas; al barajar, otra |
 | Pícaro | 🎭 Máscara del Asesino | rara | Atacar a quien no pretende atacar aplica 3 de Veneno |
-| Brujo | 👁️ Ojo del Patrón | común | La Explosión Sobrenatural aplica 2 de Condena |
+| Pícaro | 🦠 Frasco de la Plaga | rara | Cuando muere un enemigo envenenado, su Veneno se propaga a todos los demás |
+| Brujo | 👁️ Ojo del Patrón | común | La Explosión aplica Condena igual a la mitad de su daño (mín. 3) a cada enemigo que golpea |
+| Brujo | 📓 Libro de las Sombras | común | La Explosión empieza cada combate en tu mano; la primera de cada turno roba 1 |
 | Brujo | ⛓️ Cadena del Condenado | común | Muere un enemigo con Condena: +1 de energía el próximo turno |
+| Brujo | 🦯 Vara del Guardián del Pacto | rara | Si la Explosión mata a un enemigo, vuelve a tu mano en vez de al mazo |
+| Brujo | ⚱️ Coleccionista de Maldiciones | rara | Las maldiciones de tu mano no te castigan al final del turno: cada una aplica 3 de Condena a todos |
 | Brujo | 😈 Corazón de Diablillo | rara | La invocación efímera que aguanta estalla (mitad de su vida a todos) |
 | Brujo | ❄️ Colgante de Escarcha | rara | El daño que bloqueas se vuelve Condena del atacante |
 
@@ -345,7 +370,7 @@ jugarla; nunca salen en los huecos normales ni en el sorteo de reliquias.
 | ✨ Constelación | mago | Cada 2 espacios gastados en un combate, +1 de energía |
 | ⚔️ Filo Consagrado | pícaro | Tus Dagas hacen 2 más; la primera de cada turno roba 1 |
 | 🌫️ Sombra Veloz | pícaro | Cada carta descartada aplica 2 de Veneno a un enemigo al azar |
-| 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno inflige además 3 a todos |
+| 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno repite la mitad de su daño (mín. 3) a todos |
 | 👹 Diablillo Guardián | brujo | Empiezas cada combate con un diablillo efímero (8 de vida, golpea por 6 y 2 de Condena) |
 | 💘 Dado del Encanto | carta única | Añade «Seducir»; la primera Seducir de cada combate te devuelve su energía |
 | 🌠 Dado de los Deseos | carta única | Añade «Deseo»; al jugarla robas 1 |

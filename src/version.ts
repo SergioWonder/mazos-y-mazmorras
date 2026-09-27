@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.2.0';
+export const VERSION = '5.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.3.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '💥 Brujo reforzado: la Explosión Sobrenatural pega más y sus mejoras permanentes ahora escalan, dan Condena y bloqueo, y se notan desde el primer lanzamiento.',
+      '☠️ El brujo pacta con las maldiciones: nuevas cartas y reliquias las convierten en daño, bloqueo y Condena.',
+      '🦠 El Frasco de la Plaga es ahora del pícaro, y el veneno del enemigo que muere se propaga a todos los demás.',
+      '👁️ Nuevo fondo para el Laberinto del Contemplador: una galería de ojos tallados con el gran ojo acechando al fondo.',
+    ],
+  },
   {
     version: '5.2.0',
     fecha: '2026-09-27',

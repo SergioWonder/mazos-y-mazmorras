@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#381c50"/>
+      <stop offset="1" stop-color="#11071c"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.36" cy="0.6" r="0.42">
+      <stop offset="0" stop-color="#9ae05a" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#9ae05a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.78">
+      <stop offset="0.58" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <!-- blighted moor with dead trees at dusk -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 96 Q60 84 120 92 Q190 80 280 90 L280 120 L0 120 Z" fill="#1a0c28"/>
+  <g fill="none" stroke="#140a20" stroke-linecap="round">
+    <path d="M22 118 L24 70 M24 86 L12 72 M24 78 L36 62 M256 118 L254 66 M254 84 L266 70 M254 76 L244 60" stroke-width="4"/>
+  </g>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 118 Q140 112 280 120 L280 160 L0 160 Z" fill="#12081c"/>
+
+  <!-- the altar urn where the curse burns -->
+  <g stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round">
+    <path d="M72 140 L112 140 L106 126 L78 126 Z" fill="#2c2432"/>
+    <path d="M76 126 Q66 108 74 96 L110 96 Q118 108 108 126 Z" fill="#4a3e50"/>
+    <path d="M70 96 L114 96 L110 90 L74 90 Z" fill="#5a4e62"/>
+  </g>
+  <path d="M96 98 Q110 108 104 124 L108 124 Q118 108 110 96 Z" fill="#2e2636"/>
+  <path d="M80 104 Q92 110 104 104" stroke="#8a7a90" stroke-width="1" fill="none"/>
+  <!-- the curse card, consumed by sickly fire -->
+  <g transform="translate(92 76) rotate(-10)">
+    <rect x="-10" y="-14" width="20" height="28" rx="2" fill="#3a2a30" stroke="#140d0a" stroke-width="1.6"/>
+    <path d="M-5 -7 L5 5 M5 -7 L-5 5" stroke="#8ae05a" stroke-width="1.4"/>
+    <path d="M-10 8 Q-4 2 0 10 Q4 2 10 8 L10 14 L-10 14 Z" fill="#140d0a"/>
+  </g>
+  <ellipse cx="92" cy="80" rx="18" ry="24" fill="#8ae05a" opacity="0.35" filter="url(#fuerte)"/>
+  <path d="M78 92 Q72 76 82 66 Q84 76 90 72 Q88 58 98 50 Q98 64 104 68 Q110 76 106 92 Z" fill="#6ab040" opacity="0.7" filter="url(#brillo)"/>
+  <path d="M82 92 Q78 80 86 72 Q88 80 92 76 Q92 64 98 58 Q100 70 104 74 Q106 84 102 92 Z" fill="#b8f080" opacity="0.55"/>
+
+  <!-- the offering turns into a skull-shaped bolt that strikes the cultist -->
+  <path d="M104 64 Q150 44 196 62" fill="none" stroke="#c98bff" stroke-width="8" opacity="0.5" filter="url(#brillo)"/>
+  <path d="M104 64 Q150 44 196 62" fill="none" stroke="#f0dcff" stroke-width="1.6" stroke-dasharray="6 3"/>
+  <g transform="translate(166 50)">
+    <circle r="14" fill="#c98bff" opacity="0.55" filter="url(#brillo)"/>
+    <path d="M-10 -2 Q-10 -14 0 -14 Q10 -14 10 -2 Q10 4 6 6 L6 10 L-6 10 L-6 6 Q-10 4 -10 -2 Z" fill="#e8dcff" stroke="#140d0a" stroke-width="1.8"/>
+    <circle cx="-4" cy="-3" r="3" fill="#2a0a3a"/>
+    <circle cx="4" cy="-3" r="3" fill="#2a0a3a"/>
+    <path d="M-3 10 L-3 6 M0 10 L0 6 M3 10 L3 6" stroke="#140d0a" stroke-width="1"/>
+  </g>
+
+  <!-- the hooded cultist that takes the blow -->
+  <g stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round">
+    <path d="M200 124 Q198 92 210 78 Q220 68 230 78 Q242 92 240 124 Z" fill="#5a1e2c"/>
+    <path d="M208 84 Q208 66 220 62 Q232 66 232 84 Q226 88 220 88 Q214 88 208 84 Z" fill="#6a2434"/>
+  </g>
+  <path d="M222 80 Q230 94 232 124 L240 124 Q242 92 230 78 Z" fill="#40121e"/>
+  <path d="M212 82 Q220 74 228 82 Q224 86 220 86 Q216 86 212 82 Z" fill="#1a0810"/>
+  <circle cx="216" cy="80" r="1.6" fill="#ffd060"/>
+  <circle cx="224" cy="80" r="1.6" fill="#ffd060"/>
+  <!-- impact and the doom rune it leaves -->
+  <circle cx="204" cy="66" r="12" fill="#c98bff" opacity="0.5" filter="url(#fuerte)"/>
+  <path d="M204 66 L192 56 M204 66 L196 78 M204 66 L214 54" stroke="#f0dcff" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="220" cy="104" r="7" fill="none" stroke="#c98bff" stroke-width="3" opacity="0.6" filter="url(#suave)"/>
+  <circle cx="220" cy="104" r="7" fill="none" stroke="#f0dcff" stroke-width="1"/>
+  <path d="M220 97 L220 111 M213 104 L227 104" stroke="#f0dcff" stroke-width="1"/>
+
+  <!-- the warlock's outstretched hand over the urn -->
+  <g transform="translate(1.2 -1.2)" fill="#c98bff" opacity="0.8">
+    <path d="M0 150 L0 128 Q24 120 44 116 L62 112 Q68 112 66 118 L48 130 Q30 142 0 150 Z"/>
+  </g>
+  <path d="M0 150 L0 128 Q24 120 44 116 L62 112 Q68 112 66 118 L48 130 Q30 142 0 150 Z" fill="#0b0910"/>
+  <path d="M56 114 L62 104 M60 114 L68 106 M62 116 L70 112" stroke="#0b0910" stroke-width="3" stroke-linecap="round"/>
+
+  <g fill="#b8f080" opacity="0.8">
+    <circle cx="84" cy="44" r="1"/><circle cx="102" cy="40" r="0.9"/><circle cx="92" cy="30" r="0.8"/>
+  </g>
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

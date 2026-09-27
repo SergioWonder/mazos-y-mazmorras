@@ -104,6 +104,8 @@ export const ICONO_ESTADO: Record<string, string> = {
   explosionTurno: '✨', explosionVeces: '🔀', explosionArea: '🌌', explosionGratis: '🆓',
   condenaPorAtaque: '👁️', oscuridadPorTurno: '🌘', bloqueoPorTurno: '😇',
   bendicionOscura: '😈', condenaPorBloqueo: '⚖️',
+  explosionCondena: '😖', explosionCrece: '🔱', explosionCarga: '📈', explosionBloqueo: '🤝',
+  explosionMaldita: '🩸', bloqueoPorMaldicion: '🛡️',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -130,6 +132,9 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   condenaPorAtaque: 'Mente del Gran Antiguo', oscuridadPorTurno: 'Presencia Feérica',
   bloqueoPorTurno: 'Bendición Celestial', bendicionOscura: 'Pacto Infernal',
   condenaPorBloqueo: 'Pacto Final',
+  explosionCondena: 'Verbo Agonizante (Condena)', explosionCrece: 'Lanza Sobrenatural',
+  explosionCarga: 'Explosión Cargada', explosionBloqueo: 'Don del Patrón (bloqueo)',
+  explosionMaldita: 'Hambre del Patrón', bloqueoPorMaldicion: 'Égida de la Aflicción',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -186,6 +191,12 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   bloqueoPorTurno: 'Ganas esa cantidad de bloqueo al inicio de cada turno.',
   bendicionOscura: 'Cada vez que un enemigo muere, ganas esa cantidad de bloqueo.',
   condenaPorBloqueo: 'Al final de cada turno aplicas Condena igual a tu bloqueo restante a todos los enemigos.',
+  explosionCondena: 'Tu Explosión Sobrenatural aplica esa cantidad de Condena a cada enemigo que golpea.',
+  explosionCrece: 'Cada vez que lanzas tu Explosión Sobrenatural, su daño crece esa cantidad para el resto del combate.',
+  explosionCarga: 'Daño que tu Explosión Sobrenatural ha ganado ya en este combate al lanzarse.',
+  explosionBloqueo: 'Cada vez que lanzas tu Explosión Sobrenatural, ganas esa cantidad de bloqueo.',
+  explosionMaldita: 'Tu Explosión Sobrenatural inflige esa cantidad de daño adicional por cada maldición en tu mazo, tu mano y tu descarte.',
+  bloqueoPorMaldicion: 'Al final de tu turno ganas esa cantidad de bloqueo por cada maldición en tu mano.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */
