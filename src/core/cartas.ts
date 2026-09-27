@@ -1937,20 +1937,21 @@ export const MAGO: CartaDef[] = [
     clase: 'mago',
     tipo: 'habilidad',
     rareza: 'rara',
-    coste: 1,
+    coste: 2, // illusions cost more and exhaust: they used to loop endlessly
     objetivo: 'ninguno',
     subclase: 'Ilusión',
     fx: 'luna',
     animRara: 'anim-ilusion',
     requiereConjuro: 1,
-    texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques.',
+    exhumar: true,
+    texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques. Se agota.',
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
       await c.aplicarEstado(c.jugador, 'espejismo', 1 + nivel); // prevents the next (1 + level) attacks
     },
     mejora: {
-      coste: 0,
-      texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques.',
+      coste: 1,
+      texto: 'Gasta un conjuro. Copias ilusorias:\nprevienen los próximos (1 + nivel\ndel espacio) ataques. Se agota.',
     },
   },
   // — Raras de Creación de conjuros —
@@ -2600,19 +2601,20 @@ export const PICARO: CartaDef[] = [
     clase: 'picaro',
     tipo: 'habilidad',
     rareza: 'rara',
-    coste: 1,
+    coste: 2, // illusions cost more and exhaust: they used to loop endlessly
     objetivo: 'ninguno',
     subclase: 'Embaucador Arcano',
     fx: 'luna',
     animRara: 'anim-ilusion',
-    texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas.',
+    exhumar: true,
+    texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas. Se agota.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'espejismo', 1);
       await c.robar(2);
     },
     mejora: {
-      coste: 0,
-      texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas.',
+      coste: 1,
+      texto: 'Copias ilusorias: previene el próximo ataque.\nRoba 2 cartas. Se agota.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'espejismo', 1);
         await c.robar(2);

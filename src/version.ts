@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.5.0';
+export const VERSION = '5.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.6.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '⚡ Rendimiento: el combate ya no se repinta en cada fotograma, y las maldiciones en la mano dejan de ralentizar el juego.',
+      '🪞 Las cartas de ilusión (Imagen Espejo y Mano Fantasmal) cuestan 1 más y se agotan: se acabaron los bucles de ilusiones.',
+      '🗡️ Ilustración nueva para la Daga del pícaro.',
+    ],
+  },
   {
     version: '5.5.0',
     fecha: '2026-09-27',

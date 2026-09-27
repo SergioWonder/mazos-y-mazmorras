@@ -745,7 +745,7 @@ console.log('— Cartas de azar (Seducir / Deseo) —');
 console.log('— Imagen Espejo —');
 {
   const espejo = MAGO.find((c) => c.id === 'escuela-ilusion')!;
-  check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 1, 'Imagen Espejo: coste 1');
+  check(espejo.nombre === 'Imagen Espejo' && espejo.coste === 2, 'Imagen Espejo: coste 2 (las ilusiones se encarecieron para evitar bucles)');
   check(espejo.requiereConjuro === 1, 'gasta un espacio de conjuro');
 
   // al jugarse: previene los próximos (nivel + 1) ataques (antes 60 % + 20 % por nivel)
@@ -784,6 +784,12 @@ console.log('— Imagen Espejo —');
 
   const embaucador = PICARO.find((c) => c.id === 'embaucador-arcano')!;
   check(/previene el próximo ataque/i.test(embaucador.texto), 'Embaucador Arcano: previene el próximo ataque (antes 60 %)');
+  // no more illusion loops: every illusion card costs one more and exhausts
+  for (const c of [espejo, embaucador]) {
+    const mej = defDe({ uid: 0, def: c, mejorada: true });
+    check(c.coste === 2 && mej.coste === 1, `${c.nombre}: cuesta 2 (1 mejorada)`);
+    check(!!c.exhumar && !!mej.exhumar && /se agota/i.test(c.texto) && /se agota/i.test(mej.texto), `${c.nombre}: se agota al jugarla`);
+  }
 }
 
 console.log('— Reliquias —');
@@ -5113,6 +5119,23 @@ console.log('\n🫁 Transición suave entre reposo y acción');
   const t = 0.6; // mid-breath, where the old damping jump was largest
   check(figuras.every((r) => salto(r, 'attack', 0, t) < 0.5 && salto(r, 'spell', 0, t) < 0.5), 'al empezar una acción la pose no da un salto respecto al reposo');
   check(figuras.every((r) => salto(r, 'attack', 0.999, t) < 0.8 && salto(r, 'hit', 0.999, t) < 0.8), 'al terminar una acción vuelve al reposo sin salto');
+}
+
+// ── Endless animations must not repaint (only transform/opacity) ─────────────
+console.log('\n🎞️ Animaciones continuas sin repintado');
+{
+  const fs = await import('node:fs');
+  const malas: string[] = [];
+  for (const f of ['combate.css', 'cartas.css', 'movil.css']) {
+    const css = fs.readFileSync(new URL(`../src/estilos/${f}`, import.meta.url), 'utf8');
+    const infinitas = new Set([...css.matchAll(/animation:\s*([\w-]+)[^;]*infinite/g)].map((m) => m[1]));
+    for (const m of css.matchAll(/@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^}]*\})*)\s*\}/g)) {
+      if (!infinitas.has(m[1])) continue;
+      const props = [...m[2].matchAll(/([a-z-]+)\s*:/g)].map((x) => x[1]).filter((x) => !['transform', 'opacity', 'animation-timing-function'].includes(x));
+      if (props.length) malas.push(`${m[1]} (${[...new Set(props)].join(', ')})`);
+    }
+  }
+  check(malas.length === 0, `las animaciones que no paran solo mueven transform/opacity (repintaban la mano en cada fotograma) ${malas.join('; ')}`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
