@@ -1,6 +1,31 @@
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { EPILOGO_DM } from '../core/escena-final.ts';
+import { lapida, type DatosCaida } from '../core/epitafio.ts';
+import type { ClaseId } from '../core/types.ts';
+import { ACTION_DURATION } from '../fx/hero-rig.ts';
+import { HeroSprite } from './hero-sprite.ts';
+import { spriteClock } from './puppet-sprite.ts';
+import { reducedMotion } from './card-fly.ts';
+import { htmlDerrota } from './lapida.ts';
+import '../estilos/muerte.css';
+
+/** What the player picks on the end screen. */
+export type EleccionFin = 'reintentar' | 'titulo';
+
+/** Still silhouette of the hero on his knees (a single frame of his death, no live animation). */
+function siluetaCaida(clase: string): Node | null {
+  try {
+    const s = new HeroSprite(clase as ClaseId);
+    s.play('death');
+    s.tick(spriteClock() + ACTION_DURATION.death * 0.3);
+    const copia = s.element.cloneNode(true);
+    s.destroy();
+    return copia;
+  } catch {
+    return null;
+  }
+}
 
 /** Cierre de campaña por escenario final: el Acto III tiene dos jefes posibles. */
 const EPILOGO: Record<string, string> = {
@@ -21,7 +46,8 @@ export function pantallaFin(
   clase: string,
   jefeFinal = 'ignifax',
   epilogoDM = false,
-): Promise<void> {
+  caida: DatosCaida | null = null,
+): Promise<EleccionFin> {
   return new Promise((resolver) => {
     const app = document.getElementById('app')!;
     app.innerHTML = '';
@@ -39,29 +65,43 @@ export function pantallaFin(
         ${epilogoDM ? `<p class="fin-epilogo-dm">🎲 ${EPILOGO_DM}</p>` : ''}
         <p class="fin-sub">Campaña completada con el ${nombreClase}</p>
         <button class="btn-tomar">Volver al título <span class="atajo">[Enter]</span></button>`
-      : `
-        <h1 class="fin-titulo">☠️ HAS CAÍDO</h1>
-        <p class="fin-texto">Tu aventura termina lejos de casa.
-        Los bardos cantarán tu valor… tus enemigos, tu derrota.</p>
-        <button class="btn-tomar">Intentarlo de nuevo <span class="atajo">[Enter]</span></button>`;
+      : htmlDerrota(lapida(caida ?? {
+        clase, capitulo: 0, subtitulo: '', escenario: 'tierras lejanas', asesino: null, salas: 0, turnos: null, semilla: Date.now(),
+      }));
     app.appendChild(raiz);
 
+    let ceniza = 0;
     if (victoria) {
       fx.estallido('divino');
       setTimeout(() => fx.estallido('estrellas'), 400);
+    } else {
+      const silueta = siluetaCaida(clase);
+      if (silueta) raiz.querySelector('.caido-silueta')?.appendChild(silueta);
+      // ash drifting down over the tombstone (one flake per tick, a few dozen alive)
+      ceniza = window.setInterval(() => {
+        fx.emitir('ceniza', Math.random() * window.innerWidth, -8);
+      }, reducedMotion() ? 600 : 170);
     }
 
-    const cerrar = () => {
+    const cerrar = (eleccion: EleccionFin) => {
       window.removeEventListener('keydown', teclado);
-      resolver();
+      clearInterval(ceniza);
+      resolver(eleccion);
     };
     const teclado = (ev: KeyboardEvent) => {
       if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
-        cerrar();
+        cerrar(victoria ? 'titulo' : 'reintentar');
+      } else if (ev.code === 'Escape' && !victoria) {
+        ev.preventDefault();
+        cerrar('titulo');
       }
     };
     window.addEventListener('keydown', teclado);
-    raiz.querySelector('.btn-tomar')!.addEventListener('click', cerrar);
+    if (victoria) raiz.querySelector('.btn-tomar')!.addEventListener('click', () => cerrar('titulo'));
+    else {
+      raiz.querySelector('.btn-reintentar')!.addEventListener('click', () => cerrar('reintentar'));
+      raiz.querySelector('.btn-titulo')!.addEventListener('click', () => cerrar('titulo'));
+    }
   });
 }

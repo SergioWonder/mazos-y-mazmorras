@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" width="240" height="300">
+  <defs>
+    <linearGradient id="gruta" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f3c3a"/>
+      <stop offset="1" stop-color="#0b1918"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.54" cy="0.34" r="0.4">
+      <stop offset="0" stop-color="#b8ffd9" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#b8ffd9" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.45" r="0.72">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <linearGradient id="chorro" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e6fff6"/>
+      <stop offset="1" stop-color="#72e0cc"/>
+    </linearGradient>
+    <filter id="brillo" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <!-- the grotto of the spring -->
+  <rect width="240" height="300" fill="url(#gruta)"/>
+  <path d="M150 0 Q170 60 200 80 Q230 96 240 150 L240 0 Z" fill="#142a28"/>
+  <path d="M180 170 Q200 130 240 126 L240 300 L170 300 Z" fill="#11221f"/>
+  <rect width="240" height="300" fill="url(#halo)"/>
+
+  <!-- rock face where the water is born -->
+  <path d="M0 0 L60 0 Q78 40 70 90 Q88 120 78 160 Q92 200 70 240 L60 300 L0 300 Z" fill="#2c3634" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M40 0 L60 0 Q78 40 70 90 Q88 120 78 160 Q92 200 70 240 L60 300 L44 300 Q62 240 56 190 Q70 150 52 110 Q62 60 40 0 Z" fill="#1c2422"/>
+  <path d="M12 40 Q30 34 44 46 M8 120 Q24 110 40 122 M14 200 Q30 192 46 204" fill="none" stroke="#4a5856" stroke-width="1.6"/>
+  <path d="M56 138 Q66 134 72 142 Q66 150 58 148 Z" fill="#081010" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M22 74 Q30 66 38 72 M26 160 Q34 154 40 160" fill="none" stroke="#3a6a3e" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- halo of water behind her head -->
+  <circle cx="130" cy="104" r="52" fill="none" stroke="#9ff0e0" stroke-width="6" opacity="0.5" filter="url(#brillo)"/>
+  <circle cx="130" cy="104" r="52" fill="none" stroke="#c8fff0" stroke-width="1.6" stroke-dasharray="14 5 3 5"/>
+  <circle cx="130" cy="104" r="45" fill="none" stroke="#72e0cc" stroke-width="0.8" opacity="0.7"/>
+  <g fill="#e6fff6">
+    <circle cx="78" cy="104" r="2.2"/><circle cx="182" cy="104" r="2.2"/><circle cx="130" cy="52" r="2.4"/>
+    <circle cx="93" cy="67" r="1.6"/><circle cx="167" cy="67" r="1.6"/><circle cx="93" cy="141" r="1.6"/><circle cx="167" cy="141" r="1.6"/>
+  </g>
+
+  <!-- long silver hair falling behind -->
+  <path d="M96 96 Q88 150 80 220 Q100 214 110 190 L150 190 Q160 214 180 220 Q172 150 164 96 Q160 60 130 58 Q100 60 96 96 Z" fill="#c4ccd0" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M150 70 Q162 80 164 96 Q172 150 180 220 Q164 214 154 196 Q162 150 150 70 Z" fill="#8a969e"/>
+
+  <!-- robe and veils -->
+  <path d="M40 300 Q48 230 84 204 Q106 194 130 194 Q156 194 178 206 Q210 232 214 300 Z" fill="#2e5a5a" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M150 196 Q170 200 180 208 Q210 232 214 300 L170 300 Q176 240 150 196 Z" fill="#1d3c3e"/>
+  <path d="M108 196 Q130 226 152 196" fill="none" stroke="#b8c8c8" stroke-width="2.4"/>
+  <path d="M130 214 L130 300" stroke="#b8c8c8" stroke-width="2"/>
+  <path d="M130 214 L130 300" stroke="#140d0a" stroke-width="0.8" opacity="0.5"/>
+  <path d="M84 240 Q90 270 86 300 M176 240 Q172 270 178 300" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="130" cy="212" r="5" fill="#72e0cc" opacity="0.7" filter="url(#suave)"/>
+  <circle cx="130" cy="212" r="3.4" fill="#b8ffd9" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- the spring: glowing stream falling into the pool -->
+  <path d="M68 143 Q86 148 88 190 Q90 240 86 278" fill="none" stroke="#9ff0e0" stroke-width="10" opacity="0.55" filter="url(#brillo)"/>
+  <path d="M68 143 Q86 148 88 190 Q90 240 86 278" fill="none" stroke="url(#chorro)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M70 144 Q84 150 85 186" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>
+
+  <!-- neck and face -->
+  <path d="M120 150 L120 176 Q130 184 140 176 L140 150 Z" fill="#b8a49a" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M100 98 L84 76 L104 92 Z M160 98 L176 76 L156 92 Z" fill="#d9c4b4" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M160 98 L176 76 L162 90 Z" fill="#a8928a"/>
+  <path d="M104 96 Q104 70 130 68 Q156 70 156 96 L154 124 Q150 150 130 158 Q110 150 106 124 Z" fill="#d9c4b4" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M142 72 Q156 78 156 96 L154 124 Q150 150 130 158 Q146 136 146 104 Q146 84 142 72 Z" fill="#a8928a"/>
+  <path d="M112 80 Q120 72 130 72" fill="none" stroke="#f2e6dc" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- white seeing eyes -->
+  <path d="M112 108 Q118 103 125 108 Q118 112 112 108 Z M135 108 Q142 103 148 108 Q142 112 135 108 Z" fill="#e6fff6" opacity="0.9" filter="url(#suave)"/>
+  <path d="M112 108 Q118 103 125 108 Q118 112 112 108 Z M135 108 Q142 103 148 108 Q142 112 135 108 Z" fill="#f4fffb" stroke="#140d0a" stroke-width="1.1"/>
+  <path d="M111 101 Q118 97 126 101 M134 101 Q142 97 149 101" fill="none" stroke="#6a7a80" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M130 108 Q131 120 134 126 Q131 129 127 127" fill="none" stroke="#8a746a" stroke-width="1.2"/>
+  <path d="M122 136 Q130 142 138 136 Q130 139 122 136 Z" fill="#9a5e5e" stroke="#140d0a" stroke-width="1"/>
+  <path d="M130 150 Q140 146 146 138" fill="none" stroke="#8a746a" stroke-width="0.8"/>
+
+  <!-- the veil over her head, see-through -->
+  <path d="M98 92 Q100 56 130 52 Q160 56 162 92 Q176 150 190 214 Q170 206 160 180 Q158 120 150 92 Q130 80 110 92 Q102 120 100 180 Q90 206 70 214 Q84 150 98 92 Z" fill="#cfe8e4" opacity="0.28"/>
+  <path d="M98 92 Q100 56 130 52 Q160 56 162 92 Q176 150 190 214 M98 92 Q84 150 70 214" fill="none" stroke="#e6fff6" stroke-width="1.2" opacity="0.7"/>
+  <path d="M104 86 Q130 74 156 86" fill="none" stroke="#b8c8c8" stroke-width="2.4"/>
+  <circle cx="130" cy="78" r="3.6" fill="#72e0cc" opacity="0.8" filter="url(#suave)"/>
+  <circle cx="130" cy="78" r="2.4" fill="#b8ffd9" stroke="#140d0a" stroke-width="1"/>
+
+  <!-- open hand offering the water -->
+  <path d="M168 300 Q170 262 182 244 L200 250 Q190 272 192 300 Z" fill="#244a4a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M176 246 Q184 232 200 234 Q212 236 214 244 Q210 254 196 256 Q182 256 176 246 Z" fill="#d9c4b4" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M214 244 Q210 254 196 256 Q206 248 214 244 Z" fill="#a8928a"/>
+  <path d="M200 234 Q204 226 208 236 M206 236 Q212 230 214 240" fill="none" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="198" cy="226" r="10" fill="#9ff0e0" opacity="0.6" filter="url(#brillo)"/>
+  <circle cx="198" cy="226" r="6.4" fill="#72e0cc" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M194 222 Q197 219 201 221" fill="none" stroke="#f4fffb" stroke-width="1.2"/>
+
+  <!-- the pool -->
+  <path d="M0 276 Q60 268 120 274 Q180 268 240 276 L240 300 L0 300 Z" fill="#1c4a48" stroke="#140d0a" stroke-width="2"/>
+  <path d="M84 282 Q100 278 116 282 M60 290 Q90 286 120 290 M150 286 Q170 283 190 287" fill="none" stroke="#9ff0e0" stroke-width="1.2" opacity="0.8"/>
+  <ellipse cx="86" cy="279" rx="14" ry="3" fill="#b8ffd9" opacity="0.5" filter="url(#suave)"/>
+
+  <!-- fireflies -->
+  <g fill="#e0ff9a" opacity="0.85" filter="url(#brillo)">
+    <circle cx="36" cy="228" r="3.4"/><circle cx="196" cy="160" r="3"/><circle cx="210" cy="44" r="3"/>
+    <circle cx="88" cy="36" r="2.6"/><circle cx="60" cy="262" r="2.6"/><circle cx="222" cy="200" r="2.6"/>
+  </g>
+  <g fill="#fbffe0">
+    <circle cx="36" cy="228" r="1.4"/><circle cx="196" cy="160" r="1.2"/><circle cx="210" cy="44" r="1.2"/>
+    <circle cx="88" cy="36" r="1"/><circle cx="60" cy="262" r="1"/><circle cx="222" cy="200" r="1"/>
+  </g>
+
+  <rect width="240" height="300" fill="url(#vineta)"/>
+</svg>

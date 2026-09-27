@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="sala" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2a22"/>
+      <stop offset="1" stop-color="#120b08"/>
+    </linearGradient>
+    <radialGradient id="fuego" cx="0.22" cy="0.66" r="0.5">
+      <stop offset="0" stop-color="#ff9a50" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff9a50" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.64" cy="0.6" r="0.36">
+      <stop offset="0" stop-color="#8ad8ff" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#8ad8ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+  </defs>
+
+  <!-- stone hall interior -->
+  <rect width="320" height="180" fill="url(#sala)"/>
+  <!-- back arches -->
+  <path d="M150 140 L150 50 Q190 10 230 50 L230 140 Z M246 140 L246 58 Q276 26 306 58 L306 140 Z" fill="#1c130e"/>
+  <path d="M158 140 L158 54 Q190 22 222 54 L222 140 Z" fill="#241913"/>
+  <path d="M140 0 L140 140 M236 0 L236 140 M312 0 L312 140" stroke="#281c15" stroke-width="12"/>
+  <path d="M134 30 L146 30 M134 70 L146 70 M134 110 L146 110 M230 40 L242 40 M230 90 L242 90" stroke="#150e0a" stroke-width="1"/>
+  <!-- carved dwarven face on keystone -->
+  <path d="M182 20 L198 20 L200 34 L190 40 L180 34 Z" fill="#2e2119" stroke="#140d0a" stroke-width="1"/>
+  <path d="M183 25 L188 27 M197 25 L192 27 M186 31 L194 31" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <path d="M182 33 L190 48 L198 33 L194 36 L190 34 L186 36 Z" fill="#2a1e17" stroke="#140d0a" stroke-width="1"/>
+  <rect width="320" height="180" fill="url(#fuego)"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- floor -->
+  <path d="M0 140 L320 140 L320 180 L0 180 Z" fill="#1a110c"/>
+  <path d="M0 150 L320 150 M0 164 L320 164 M40 140 L28 180 M110 140 L104 180 M190 140 L194 180 M270 140 L284 180" stroke="#0e0906" stroke-width="1"/>
+  <path d="M0 140 L320 140" stroke="#3a281c" stroke-width="1.2"/>
+
+  <!-- forge: stone hood and hearth -->
+  <path d="M40 0 L96 0 L100 60 L120 78 L120 142 L20 142 L20 78 L36 60 Z" fill="#4a3a30" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M82 0 L96 0 L100 60 L120 78 L120 142 L104 142 L104 84 L86 66 Z" fill="#33271f"/>
+  <path d="M40 2 L42 58 L24 76" fill="none" stroke="#6e5848" stroke-width="1.6"/>
+  <path d="M38 20 L98 20 M37 40 L99 40 M60 0 L60 20 M78 20 L78 40 M56 40 L56 60 M26 100 L40 100 M104 100 L118 100 M26 122 L38 122" stroke="#140d0a" stroke-width="1"/>
+  <!-- hearth mouth -->
+  <path d="M36 142 L36 100 Q70 76 104 100 L104 142 Z" fill="#1a0c06" stroke="#140d0a" stroke-width="2.2"/>
+  <!-- embers glow -->
+  <path d="M40 142 Q48 118 60 124 Q66 108 76 120 Q86 110 92 124 Q100 118 100 142 Z" fill="#ff9a50" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M42 142 Q50 128 58 132 Q66 120 74 130 Q84 122 90 132 Q98 128 98 142 Z" fill="#c8481c" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M50 142 Q58 134 64 138 Q72 128 80 136 Q88 132 92 142 Z" fill="#ffb060"/>
+  <path d="M60 140 Q66 136 70 139 M78 138 Q82 135 86 139" fill="none" stroke="#ffe6b0" stroke-width="1.2"/>
+  <!-- bellows -->
+  <path d="M112 118 L136 108 Q144 116 136 126 L112 126 Z" fill="#5a3a24" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M120 116 L132 112 M120 122 L134 120" stroke="#140d0a" stroke-width="0.9"/>
+
+  <!-- song rings around the anvil -->
+  <path d="M166 86 Q200 56 240 86 M154 80 Q200 38 252 80" fill="none" stroke="#8ad8ff" stroke-width="3" opacity="0.6" filter="url(#suave)"/>
+  <path d="M166 86 Q200 56 240 86 M154 80 Q200 38 252 80" fill="none" stroke="#d8f4ff" stroke-width="0.9" stroke-dasharray="6 5"/>
+
+  <!-- anvil base stone -->
+  <path d="M170 124 L236 124 L246 150 L160 150 Z" fill="#4e4038" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M220 124 L236 124 L246 150 L226 150 Z" fill="#362b25"/>
+  <path d="M172 126 L164 148" stroke="#72604e" stroke-width="1.4"/>
+  <path d="M184 136 L200 136 M210 142 L222 142" stroke="#140d0a" stroke-width="0.9"/>
+
+  <!-- runic anvil -->
+  <path d="M136 92 Q156 86 178 86 L246 86 L252 92 L246 100 L230 102 Q222 106 220 116 L234 124 L172 124 L186 116 Q184 106 176 102 L166 100 Q150 98 136 92 Z" fill="#5c5c66" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M166 100 L246 100 L230 102 Q222 106 220 116 L234 124 L204 124 L210 116 Q210 106 204 102 Z" fill="#3c3c46"/>
+  <path d="M140 91 Q158 86 178 88 L244 88" fill="none" stroke="#a8a8b4" stroke-width="1.6"/>
+  <path d="M176 102 Q184 106 186 116" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <!-- runes, glowing -->
+  <path d="M184 92 L188 98 L192 92 M200 92 L200 98 M197 94 L203 94 M212 92 L216 98 M216 92 L212 98 M226 92 L226 98 L231 95 Z" fill="none" stroke="#8ad8ff" stroke-width="3" opacity="0.9" filter="url(#suave)"/>
+  <path d="M184 92 L188 98 L192 92 M200 92 L200 98 M197 94 L203 94 M212 92 L216 98 M216 92 L212 98 M226 92 L226 98 L231 95 Z" fill="none" stroke="#e8faff" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M198 110 L204 104 L210 110 L204 116 Z" fill="#8ad8ff" opacity="0.8" filter="url(#suave)"/>
+  <path d="M198 110 L204 104 L210 110 L204 116 Z" fill="none" stroke="#e8faff" stroke-width="1"/>
+
+  <!-- hammer resting against the stone -->
+  <path d="M252 150 L270 104" stroke="#140d0a" stroke-width="6" stroke-linecap="round"/>
+  <path d="M252 150 L270 104" stroke="#6a4a2e" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M258 96 L282 106 L278 116 L254 106 Z" fill="#5c5c66" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M266 110 L278 116 L282 106 L270 101 Z" fill="#3c3c46"/>
+  <path d="M258 98 L278 106" stroke="#a8a8b4" stroke-width="1"/>
+
+  <!-- floating embers -->
+  <path d="M70 92h0.1M84 70h0.1M58 60h0.1M110 50h0.1M132 74h0.1M96 40h0.1M150 60h0.1M76 30h0.1" stroke="#ff9a50" stroke-width="4" stroke-linecap="round" opacity="0.8" filter="url(#suave)"/>
+  <path d="M70 92h0.1M84 70h0.1M58 60h0.1M110 50h0.1M132 74h0.1M96 40h0.1M150 60h0.1M76 30h0.1" stroke="#ffe0b0" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- debris on the floor -->
+  <path d="M128 150 Q136 144 146 150 Z M284 152 Q292 146 300 152 Z" fill="#2c2019" stroke="#140d0a" stroke-width="1.2"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

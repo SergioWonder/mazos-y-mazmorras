@@ -1,6 +1,7 @@
 import type { Capitulo } from '../core/enemigos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import { sceneArt, chapterSceneId } from './scene-art.ts';
 
 /** Pantalla de introducción de capítulo. */
 export function pantallaCapitulo(cap: Capitulo): Promise<void> {
@@ -13,6 +14,7 @@ export function pantallaCapitulo(cap: Capitulo): Promise<void> {
     const raiz = el('div', 'fin');
     raiz.innerHTML = `
       <p class="titulo-sub">${cap.subtitulo}</p>
+      ${sceneArt(chapterSceneId(cap), '', 'capitulo-arte', cap.nombre)}
       <h1 class="fin-titulo capitulo-nombre">${cap.nombre}</h1>
       <p class="fin-texto">${cap.intro}</p>
       <button class="btn-tomar">Adentrarse <span class="atajo">[Enter]</span></button>

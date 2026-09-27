@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2e2440"/>
+      <stop offset="0.55" stop-color="#6a3e48"/>
+      <stop offset="1" stop-color="#a8603e"/>
+    </linearGradient>
+    <radialGradient id="farol" cx="0.56" cy="0.3" r="0.45">
+      <stop offset="0" stop-color="#ffc070" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffc070" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- dusk sky and hills -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <path d="M0 108 Q50 88 100 100 Q150 84 200 98 Q260 86 320 100 L320 180 L0 180 Z" fill="#3a2630"/>
+  <path d="M0 110 L6 92 L12 110 L16 96 L22 110 Z M290 104 L296 84 L302 104 L306 90 L312 104 Z" fill="#241820"/>
+  <rect width="320" height="180" fill="url(#farol)"/>
+
+  <!-- dirt path -->
+  <path d="M0 132 Q160 118 320 128 L320 180 L0 180 Z" fill="#4a3226"/>
+  <path d="M60 180 Q120 140 170 124 Q210 140 260 180 Z" fill="#6a4a32"/>
+  <path d="M100 160 Q130 150 150 152 M190 150 Q214 156 230 168" fill="none" stroke="#3a261c" stroke-width="1.2"/>
+
+  <!-- wagon -->
+  <!-- canvas roof -->
+  <path d="M170 70 Q172 38 234 34 Q296 38 300 70 Z" fill="#b8a480" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M254 36 Q296 40 300 70 L262 70 Q270 50 254 36 Z" fill="#8a7a5c"/>
+  <path d="M190 68 Q196 46 214 40 M234 34 L236 70 M180 52 Q234 44 292 52" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <path d="M178 58 Q184 44 206 38" fill="none" stroke="#e0d0a8" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- wooden box -->
+  <path d="M166 70 L304 70 L302 130 L168 130 Z" fill="#6a4a30" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M262 70 L304 70 L302 130 L262 130 Z" fill="#4e3622"/>
+  <path d="M168 90 L302 90 M168 110 L302 110" stroke="#140d0a" stroke-width="1"/>
+  <!-- shelf of wares -->
+  <rect x="176" y="76" width="80" height="30" fill="#2a1a12" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M176 92 L256 92" stroke="#6a4a30" stroke-width="2"/>
+  <path d="M182 90 L182 82 L180 80 L186 80 L184 82 L184 90 Z" fill="#5a8a6a" stroke="#140d0a" stroke-width="1"/>
+  <path d="M190 90 Q188 84 192 82 Q196 84 194 90 Z" fill="#8a3a3a" stroke="#140d0a" stroke-width="1"/>
+  <rect x="199" y="83" width="8" height="7" fill="#a8845a" stroke="#140d0a" stroke-width="1"/>
+  <path d="M212 90 L212 80 L218 80 L218 90 Z" fill="#6a5a9a" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="228" cy="86" r="4" fill="#c8b890" stroke="#140d0a" stroke-width="1"/>
+  <path d="M240 90 L238 82 L246 82 L244 90 Z" fill="#7a8a3a" stroke="#140d0a" stroke-width="1"/>
+  <path d="M182 104 Q186 96 192 104 Z M200 104 L200 96 L210 96 L210 104 Z M216 104 Q222 94 228 104 Z M234 104 L236 97 L244 97 L246 104 Z" fill="#8a6a44" stroke="#140d0a" stroke-width="1"/>
+  <!-- hanging pots, pans and rope -->
+  <path d="M266 72 L266 80 M280 72 L280 84 M294 72 L294 78" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="266" cy="86" r="6" fill="#5a5a5e" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M266 92 L266 100" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M274 84 L286 84 L284 96 L276 96 Z" fill="#8a5a3a" stroke="#140d0a" stroke-width="1.6"/>
+  <ellipse cx="294" cy="84" rx="5" ry="6" fill="none" stroke="#a8844a" stroke-width="2.2"/>
+  <path d="M170 116 L200 116 M176 118 Q186 124 196 118" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <!-- wheels -->
+  <circle cx="196" cy="136" r="18" fill="#3a2618" stroke="#140d0a" stroke-width="2.8"/>
+  <circle cx="196" cy="136" r="13" fill="none" stroke="#6a4a30" stroke-width="2.4"/>
+  <path d="M196 118 L196 154 M178 136 L214 136 M183 123 L209 149 M209 123 L183 149" stroke="#6a4a30" stroke-width="2"/>
+  <circle cx="196" cy="136" r="3.5" fill="#8a6a44" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="278" cy="136" r="18" fill="#2e1e14" stroke="#140d0a" stroke-width="2.8"/>
+  <circle cx="278" cy="136" r="13" fill="none" stroke="#4e3622" stroke-width="2.4"/>
+  <path d="M278 118 L278 154 M260 136 L296 136 M265 123 L291 149 M291 123 L265 149" stroke="#4e3622" stroke-width="2"/>
+  <circle cx="278" cy="136" r="3.5" fill="#6a4a30" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- lantern pole with glowing lantern -->
+  <path d="M168 128 L164 44 L182 40" fill="none" stroke="#140d0a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M168 128 L164 44 L182 40" fill="none" stroke="#6a4a30" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M178 41 L178 48" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="178" cy="56" r="14" fill="#ffb050" opacity="0.6" filter="url(#brillo)"/>
+  <path d="M172 50 L184 50 L182 64 L174 64 Z" fill="#ffd488" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M178 50 L178 64" stroke="#140d0a" stroke-width="1"/>
+  <path d="M171 48 L185 48 L182 50 L174 50 Z M173 64 L183 64 L180 67 L176 67 Z" fill="#3a2a1a" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M178 54 Q180 58 178 61 Q176 58 178 54 Z" fill="#fff4d0"/>
+
+  <!-- the peddler -->
+  <!-- legs -->
+  <path d="M94 164 L98 132 L110 132 L108 164 Z M114 164 L114 132 L126 132 L128 164 Z" fill="#3e3228" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M88 168 Q88 162 98 162 L110 163 L110 169 Z M112 169 L112 163 L126 162 Q136 162 134 169 Z" fill="#2a1e16" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <!-- coat -->
+  <path d="M84 138 Q82 102 94 88 Q108 80 124 86 Q138 96 136 138 Q110 144 84 138 Z" fill="#5a5a3a" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M120 86 Q138 96 136 138 Q124 141 114 141 Q126 112 120 86 Z" fill="#40422a"/>
+  <path d="M108 88 L110 140 M92 110 Q96 118 94 130" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <!-- patch on the coat -->
+  <path d="M88 118 L98 116 L99 126 L89 128 Z" fill="#7a5a3a" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M90 120 L92 118 M94 124 L96 122" stroke="#140d0a" stroke-width="0.8"/>
+  <!-- satchel strap and belt -->
+  <path d="M96 90 L130 124" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M96 90 L130 124" stroke="#7a5230" stroke-width="3" stroke-linecap="round"/>
+  <path d="M86 124 Q110 130 135 124" fill="none" stroke="#2a1a10" stroke-width="3.2"/>
+  <rect x="106" y="123" width="6" height="6" fill="#c8a040" stroke="#140d0a" stroke-width="1"/>
+  <!-- left arm on hip -->
+  <path d="M88 96 Q72 108 80 124 L88 122" fill="none" stroke="#140d0a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 96 Q72 108 80 124 L88 122" fill="none" stroke="#6a6a44" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- right arm raised, offering a trinket -->
+  <path d="M130 96 Q146 100 150 84" fill="none" stroke="#140d0a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M130 96 Q146 100 150 84" fill="none" stroke="#4e5034" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M146 82 Q146 74 152 74 Q158 76 156 84 Q152 88 146 82 Z" fill="#c8967a" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M152 74 L152 66" stroke="#c8a040" stroke-width="1.2"/>
+  <circle cx="152" cy="63" r="6" fill="#ff7050" opacity="0.5" filter="url(#suave)"/>
+  <path d="M152 58 L156 63 L152 68 L148 63 Z" fill="#d04a3a" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M150 61 L152 59" stroke="#ffb0a0" stroke-width="0.9"/>
+
+  <!-- head -->
+  <path d="M96 76 Q94 60 108 56 Q122 56 124 70 Q124 84 110 88 Q98 88 96 76 Z" fill="#c8967a" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M116 58 Q124 62 124 72 Q122 84 110 88 Q120 76 116 58 Z" fill="#9a6e58"/>
+  <!-- stubble -->
+  <path d="M98 78 Q104 90 118 84 Q122 80 122 76 Q114 84 104 82 Q100 80 98 78 Z" fill="#6a5040" opacity="0.7"/>
+  <!-- hooked nose -->
+  <path d="M110 66 Q118 66 120 74 Q120 78 116 78 Q114 74 112 76 Z" fill="#b8866a" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <!-- narrowed eyes and raised brow -->
+  <path d="M102 66 Q105 64 108 66" fill="none" stroke="#140d0a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M114 64 Q117 62 120 64" fill="none" stroke="#140d0a" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="105.5" cy="67.5" r="1.2" fill="#140d0a"/>
+  <circle cx="117" cy="65.8" r="1.1" fill="#140d0a"/>
+  <path d="M100 62 Q104 60 108 62 M114 58 Q118 56 122 60" fill="none" stroke="#3a261c" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- crooked sly grin with a gold tooth -->
+  <path d="M102 80 Q110 84 120 76 Q118 82 112 84 Q106 84 102 80 Z" fill="#3a1a14" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M106 81 L108 83 L110 81.5 Z" fill="#e8c860"/>
+  <path d="M120 76 L122 74" stroke="#140d0a" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- ear -->
+  <path d="M97 70 Q92 70 94 76 Q96 78 98 76" fill="#b8866a" stroke="#140d0a" stroke-width="1.4"/>
+  <!-- hat: wide floppy brim, bent crown and feather -->
+  <path d="M84 60 Q98 52 112 52 Q128 52 136 58 Q126 62 110 60 Q96 60 84 60 Z" fill="#3a2e26" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M96 56 Q96 40 108 36 Q118 34 122 40 L118 44 Q122 48 122 56 Q108 58 96 56 Z" fill="#4a3c30" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M114 38 Q122 40 118 44 Q122 48 122 56 L114 56 Q118 46 114 38 Z" fill="#32281f"/>
+  <path d="M96 52 Q108 55 122 52" fill="none" stroke="#8a3a2a" stroke-width="2.4"/>
+  <path d="M98 52 Q84 36 88 24 Q96 34 100 50 Z" fill="#6a8a5a" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M98 50 Q90 38 88 26" fill="none" stroke="#140d0a" stroke-width="0.8"/>
+  <path d="M98 42 Q102 38 104 44" fill="none" stroke="#6a584a" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- warm lantern light on the lit edges -->
+  <path d="M124 70 Q124 80 118 86" fill="none" stroke="#ffc890" stroke-width="1.2" opacity="0.8" stroke-linecap="round"/>
+  <path d="M132 96 Q138 110 136 136" fill="none" stroke="#ffb870" stroke-width="1.2" opacity="0.6" stroke-linecap="round"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

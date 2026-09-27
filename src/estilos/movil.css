@@ -133,6 +133,11 @@
   .fin-titulo { font-size: clamp(1.8rem, 7vw, 3rem); }
   .fin-texto { font-size: 0.92rem; }
   .pantalla-bendicion .bendicion-arte { font-size: 3.4rem; }
+  /* illustrated scenes shrink so the choices stay on screen */
+  .evento-arte.escena, .hoguera.escena, .bendicion-arte.escena, .capitulo-arte.escena { margin: 0 auto 0.3rem; }
+  .escena-vineta .escena-img { height: min(170px, 24vh); }
+  .escena-retrato .escena-img { height: min(190px, 25vh); }
+  .capitulo-arte .escena-img { height: min(200px, 30vh); }
   .opcion-bendicion { gap: 0.6rem; }
   .opcion-bendicion .bendicion-icono { width: 42px; height: 42px; }
   .opcion-bendicion .bendicion-icono .reliquia-img { width: 36px; height: 36px; }
@@ -321,4 +326,41 @@
   }
   /* la línea de soltar cartas baja al borde de la mano */
   .linea-lanzamiento { top: auto; bottom: 150px; }
+}
+
+/* ── Illustrated scenes on phones: the NPC stands beside the words ── */
+@media (orientation: landscape) and (max-height: 540px) {
+  .pantalla-bendicion .fin:has(> .escena) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 520px);
+    justify-content: center;
+    align-content: safe center;
+    column-gap: 1.2rem;
+    row-gap: 0.5rem;
+  }
+  .pantalla-bendicion .fin > .escena { grid-column: 1; grid-row: 1 / span 6; align-self: start; position: sticky; top: 0; margin: 0; }
+  .pantalla-bendicion .fin:has(> .escena) > :not(.escena) { grid-column: 2; justify-self: center; }
+  .pantalla-bendicion .fin > .escena .escena-img { height: min(300px, 80vh); }
+}
+@media (orientation: portrait) and (max-width: 700px) {
+  .pantalla-bendicion .fin:has(> .escena) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-content: safe center;
+    column-gap: 0.8rem;
+    row-gap: 0.6rem;
+  }
+  .pantalla-bendicion .fin:has(> .escena) > * { grid-column: 1 / -1; justify-self: center; }
+  .pantalla-bendicion .fin:has(> .escena) > .titulo-sub { grid-column: 2; grid-row: 1; align-self: end; }
+  .pantalla-bendicion .fin:has(> .escena) > .fin-titulo { grid-column: 2; grid-row: 2; align-self: start; font-size: clamp(1.4rem, 6.4vw, 2rem); }
+  .pantalla-bendicion .fin > .escena { grid-column: 1; grid-row: 1 / span 2; margin: 0; }
+  .pantalla-bendicion .fin > .escena .escena-img { height: min(140px, 18vh); }
+}
+/* landscape phones: the event vignette sits beside its title and text */
+@media (orientation: landscape) and (max-height: 540px) {
+  .panel-evento > .evento-arte.escena { float: left; margin: 0.2rem 1rem 0.4rem 0; }
+  .panel-evento > .evento-arte.escena .escena-img { height: min(150px, 30vh); }
+  .panel-evento > .evento-arte.escena ~ h2, .panel-evento > .evento-arte.escena ~ .evento-texto { text-align: left; }
+  .panel-evento > .evento-arte.escena ~ .evento-texto { margin-bottom: 0.8rem; }
+  .panel-evento .evento-opciones { clear: both; }
 }

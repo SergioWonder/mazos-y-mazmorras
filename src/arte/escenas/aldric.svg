@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" width="240" height="300">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3c3a4c"/>
+      <stop offset="0.55" stop-color="#6e5444"/>
+      <stop offset="1" stop-color="#1c1812"/>
+    </linearGradient>
+    <radialGradient id="ocaso" cx="0.22" cy="0.46" r="0.5">
+      <stop offset="0" stop-color="#ffc27a" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffc27a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.36" r="0.36">
+      <stop offset="0" stop-color="#ffe0a0" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#ffe0a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.45" r="0.72">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.65"/>
+    </radialGradient>
+    <filter id="brillo" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- dusk over the valley -->
+  <rect width="240" height="300" fill="url(#cielo)"/>
+  <rect width="240" height="300" fill="url(#ocaso)"/>
+  <path d="M0 150 Q40 132 80 146 Q120 128 170 142 Q210 132 240 140 L240 300 L0 300 Z" fill="#3a2e2a"/>
+  <path d="M0 176 Q50 160 100 172 Q160 158 240 170 L240 300 L0 300 Z" fill="#261e1a"/>
+
+  <!-- the valley keep behind his shoulder -->
+  <g stroke="#140d0a" stroke-width="2" stroke-linejoin="round">
+    <path d="M176 176 L178 58 L172 58 L172 44 L180 44 L180 50 L188 50 L188 44 L196 44 L196 50 L204 50 L204 44 L212 44 L212 58 L206 58 L208 176 Z" fill="#2e2a2e"/>
+    <path d="M196 58 L206 58 L208 176 L198 176 Z" fill="#221e22" stroke="none"/>
+    <path d="M150 176 L152 104 L146 104 L146 94 L154 94 L154 98 L160 98 L160 94 L168 94 L168 98 L174 98 L174 176 Z" fill="#282428"/>
+    <path d="M200 44 L200 20 L218 26 L200 32" fill="#6e2a24" stroke-width="1.4"/>
+  </g>
+  <path d="M188 72 L188 84 L194 84 L194 72 Q191 68 188 72 Z" fill="#ffc86a" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M188 72 L188 84 L194 84 L194 72 Q191 68 188 72 Z" fill="#ffd98a" stroke="#140d0a" stroke-width="1"/>
+  <path d="M159 116 L159 124 L164 124 L164 116 Z" fill="#ffd98a" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M184 110 L184 118 M196 104 L196 112" stroke="#140d0a" stroke-width="2"/>
+  <rect width="240" height="300" fill="url(#halo)"/>
+
+  <!-- cloak and shoulders -->
+  <path d="M22 300 L30 222 Q42 186 86 174 L154 174 Q198 186 210 222 L218 300 Z" fill="#4a3424" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M154 174 Q198 186 210 222 L218 300 L178 300 Q182 240 162 190 Z" fill="#35251a"/>
+  <path d="M36 220 Q48 190 86 178" fill="none" stroke="#6e5238" stroke-width="2"/>
+  <path d="M60 300 L64 240 M186 300 L182 240" stroke="#140d0a" stroke-width="1" fill="none"/>
+
+  <!-- tabard of the valley -->
+  <path d="M70 300 L76 194 Q120 180 164 194 L170 300 Z" fill="#2c4a6a" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M124 186 Q146 186 164 194 L170 300 L132 300 Q140 240 124 186 Z" fill="#1d344e"/>
+  <path d="M79 198 L73 300 M161 198 L167 300" stroke="#c9a040" stroke-width="3" fill="none"/>
+  <path d="M79 198 L73 300 M161 198 L167 300" stroke="#140d0a" stroke-width="0.8" fill="none" opacity="0.6"/>
+
+  <!-- coat of arms: green valley, river and white tower -->
+  <path d="M100 232 L140 232 L140 254 Q140 272 120 282 Q100 272 100 254 Z" fill="#3e6a3a" stroke="#140d0a" stroke-width="2"/>
+  <path d="M100 232 L140 232 L140 254 Q140 272 120 282 Q100 272 100 254 Z" fill="none" stroke="#c9a040" stroke-width="1.6" transform="translate(120 256) scale(0.88) translate(-120 -256)"/>
+  <path d="M101 262 Q112 252 120 258 Q128 252 139 260 L139 256 Q140 270 120 281 Q100 270 101 262 Z" fill="#2a4a28"/>
+  <path d="M106 268 Q116 262 122 268 Q128 274 134 268" fill="none" stroke="#9ec8e0" stroke-width="2"/>
+  <path d="M114 256 L114 240 L112 240 L112 236 L116 236 L116 238 L118 238 L118 236 L122 236 L122 238 L124 238 L124 236 L128 236 L128 240 L126 240 L126 256 Z" fill="#e8e0cc" stroke="#140d0a" stroke-width="1"/>
+  <path d="M119 256 L119 250 Q120 247 121 250 L121 256 Z" fill="#140d0a"/>
+
+  <!-- chain of office -->
+  <path d="M84 186 Q98 214 120 222 Q142 214 156 186" fill="none" stroke="#140d0a" stroke-width="4.4"/>
+  <path d="M84 186 Q98 214 120 222 Q142 214 156 186" fill="none" stroke="#c9a040" stroke-width="2.4" stroke-dasharray="4 2"/>
+
+  <!-- head -->
+  <path d="M93 104 Q88 98 90 110 Q92 120 98 118 Z M147 104 Q152 98 150 110 Q148 120 142 118 Z" fill="#b88a6a" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M96 96 Q96 66 120 64 Q144 66 144 96 L144 122 Q142 144 120 148 Q98 144 96 122 Z" fill="#c89a78" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M130 66 Q144 70 144 96 L144 122 Q142 144 120 148 Q136 128 136 100 Q136 80 130 66 Z" fill="#9e7458"/>
+  <path d="M104 72 Q112 66 122 67" fill="none" stroke="#ecc9a4" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M106 82 Q120 78 134 82 M108 88 Q120 85 132 88" fill="none" stroke="#7a5640" stroke-width="0.9"/>
+
+  <!-- white hair at the temples -->
+  <path d="M96 106 Q88 88 96 78 Q94 90 100 96 Q98 84 104 76 Q102 92 100 102 Z" fill="#dcd6ca" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M144 106 Q152 88 144 78 Q146 90 140 96 Q142 84 136 76 Q138 92 140 102 Z" fill="#aaa498" stroke="#140d0a" stroke-width="1.4"/>
+
+  <!-- brows, eyes and nose -->
+  <path d="M99 101 Q104 92 117 93 Q109 96 101 103 Z" fill="#ece6da" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M141 101 Q136 92 123 93 Q131 96 139 103 Z" fill="#c8c2b6" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M104 104 Q109 101 115 104 Q109 107 104 104 Z M125 104 Q131 101 136 104 Q131 107 125 104 Z" fill="#efe6d6" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="110" cy="104" r="2" fill="#3a4a5a"/>
+  <circle cx="130.5" cy="104" r="2" fill="#3a4a5a"/>
+  <circle cx="109.4" cy="103.3" r="0.7" fill="#fff"/>
+  <circle cx="129.9" cy="103.3" r="0.7" fill="#fff"/>
+  <path d="M103 108 Q109 111 115 108 M125 108 Q131 111 137 108" fill="none" stroke="#7a5640" stroke-width="0.9"/>
+  <path d="M120 100 Q121 110 125 118 Q122 122 116 120" fill="#b88a6a" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M100 116 Q104 120 106 116 M140 116 Q136 120 134 116" fill="none" stroke="#7a5640" stroke-width="0.8"/>
+
+  <!-- beard and moustache -->
+  <path d="M97 114 Q92 150 104 188 Q112 214 120 226 Q128 214 136 188 Q148 150 143 114 Q142 134 132 136 Q120 132 108 136 Q98 134 97 114 Z" fill="#d6d0c4" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M143 114 Q148 150 136 188 Q128 214 120 226 Q124 196 130 170 Q138 144 143 114 Z" fill="#a39c90"/>
+  <path d="M106 146 Q108 170 114 194 M114 144 Q116 174 120 206 M126 146 Q128 170 126 196 M100 128 Q100 150 106 168" fill="none" stroke="#8e887c" stroke-width="1"/>
+  <path d="M102 126 Q98 136 102 146" fill="none" stroke="#f2ede2" stroke-width="1.6"/>
+  <path d="M104 126 Q112 118 120 123 Q128 118 136 126 Q140 136 132 136 Q126 128 120 130 Q114 128 108 136 Q100 136 104 126 Z" fill="#ece6da" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M120 130 Q126 128 132 136 Q138 134 136 126 Q130 124 124 126 Z" fill="#bab4a8"/>
+
+  <!-- hand raising the keys of the keep -->
+  <path d="M40 300 Q36 258 60 240 L76 250 Q60 266 62 300 Z" fill="#35251a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M58 224 Q70 218 80 226 Q84 234 78 242 Q68 250 58 244 Q52 234 58 224 Z" fill="#c89a78" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M80 226 Q84 234 78 242 Q72 246 66 246 Q76 236 80 226 Z" fill="#9e7458"/>
+  <path d="M62 230 L76 230 M60 236 L76 237" stroke="#7a5640" stroke-width="0.9"/>
+  <circle cx="70" cy="222" r="10" fill="none" stroke="#140d0a" stroke-width="4.6"/>
+  <circle cx="70" cy="222" r="10" fill="none" stroke="#8e8a80" stroke-width="2.4"/>
+  <path d="M62 216 Q66 212 72 212" fill="none" stroke="#d8d4c8" stroke-width="1"/>
+  <g stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round">
+    <path d="M60 214 L48 196 L44 198 L42 194 L46 191 L44 188 L48 186 L52 190 L63 211 Z" fill="#c9a040"/>
+    <circle cx="42" cy="188" r="4" fill="none" stroke-width="3.2"/>
+    <circle cx="42" cy="188" r="4" fill="none" stroke="#c9a040" stroke-width="1.6"/>
+    <path d="M78 213 L88 194 L92 196 L94 192 L90 190 L92 186 L88 184 L85 190 L75 211 Z" fill="#6e6a64"/>
+    <circle cx="90" cy="182" r="4.4" fill="none" stroke-width="3.2"/>
+    <circle cx="90" cy="182" r="4.4" fill="none" stroke="#8e8a80" stroke-width="1.6"/>
+  </g>
+  <path d="M60 214 L48 196" stroke="#f0d890" stroke-width="0.8"/>
+
+  <rect width="240" height="300" fill="url(#vineta)"/>
+</svg>

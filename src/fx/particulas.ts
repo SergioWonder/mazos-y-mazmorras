@@ -74,6 +74,10 @@ class MotorParticulas {
   /** Hand-authored spell compositions (spell-fx.ts), drawn with the particles. */
   private readonly hechizos = new SpellSystem();
   private ultimoT = 0;
+  /** Virtual clock (s) of particles and spells: it runs slower under slow motion. */
+  private reloj = 0;
+  /** Global time factor (1 normal, < 1 slow motion: the hero's death). */
+  escalaTiempo = 1;
   private ambienteActivo = false;
   private acumulador = 0;
   /** Full-art cards emitting motes (drawn in this same WebGL pass). */
@@ -123,7 +127,7 @@ class MotorParticulas {
   hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
     return this.hechizos.add(nombre, {
       box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: movimientoReducido(),
-    }, performance.now() / 1000);
+    }, this.reloj);
   }
 
   /** A full-art card sheds motes and twinkles in its colour while it is on screen. */
@@ -175,8 +179,9 @@ class MotorParticulas {
   }
 
   private bucle(t: number) {
-    const dt = Math.min((t - this.ultimoT) / 1000, 0.05);
+    const dt = Math.min((t - this.ultimoT) / 1000, 0.05) * this.escalaTiempo;
     this.ultimoT = t;
+    this.reloj += dt;
     const w = window.innerWidth, h = window.innerHeight;
     if (this.ambienteActivo) {
       this.acumulador += dt;
@@ -188,7 +193,7 @@ class MotorParticulas {
     }
     if (this.fuentes.size) this.emitirFuentes(dt, t);
     stepParticles(this.particulas, dt);
-    const spells = this.hechizos.active ? this.hechizos.frame(t / 1000, Math.max(0, MAX_LIVE_SPRITES - this.particulas.length)) : [];
+    const spells = this.hechizos.active ? this.hechizos.frame(this.reloj, Math.max(0, MAX_LIVE_SPRITES - this.particulas.length)) : [];
     const lista: Sprite[] = spells.length ? [...this.particulas, ...spells] : this.particulas;
     // mobile: the pixel ratio is capped, particles are small and soft anyway
     this.renderer?.render(lista, w, h, Math.min(window.devicePixelRatio || 1, 2));

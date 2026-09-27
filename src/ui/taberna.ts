@@ -4,6 +4,7 @@ import { NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { relicIcon } from './relic-art.ts';
+import { sceneArt } from './scene-art.ts';
 
 const LUGAR_MISION: Record<string, string> = {
   combate: '⚔️ Combate', elite: '💀 Élite', evento: '❓ Evento', cofre: '🧰 Tesoro',
@@ -23,7 +24,7 @@ export function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: () => nu
     const panel = el('div', 'panel-recompensa panel-evento panel-taberna');
     panel.innerHTML = `
       <p class="evento-tono">✦ Taberna</p>
-      <div class="evento-arte taberna-arte">🍺</div>
+      ${sceneArt('taberna', '🍺', 'evento-arte taberna-arte', 'El tabernero de La Jarra Tuerta')}
       <h2>La Jarra Tuerta</h2>
       <p class="evento-texto">Humo de pipa, risas roncas y un fuego que calienta los huesos.
         Entre jarra y jarra, las lenguas se sueltan. Escucha bien: algún rumor puede valer una reliquia.</p>

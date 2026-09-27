@@ -5,6 +5,7 @@ import { afilarCarta, anadirCarta, curaDeDescanso, descansar, maldicionesDe, pes
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { relicIcon } from './relic-art.ts';
+import { sceneArt } from './scene-art.ts';
 import { renderCarta } from './carta.ts';
 
 /** Overlay de elección de carta tras un combate. */
@@ -136,7 +137,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       const panel = el('div', 'panel-recompensa panel-descanso');
       panel.innerHTML = `
         <h2>🏕️ Campamento</h2>
-        <div class="hoguera">🔥</div>
+        ${sceneArt('campamento', '🔥', 'hoguera', 'Una hoguera en la noche')}
         <p>El fuego crepita. Hay tiempo para una sola cosa antes de seguir.</p>
         <div class="descanso-opciones">
           <button class="btn-tomar btn-descansar">😴 Descansar<small>Cura ${cura} PV</small></button>

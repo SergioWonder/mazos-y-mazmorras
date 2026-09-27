@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a5e74"/>
+      <stop offset="0.6" stop-color="#9aa6a8"/>
+      <stop offset="1" stop-color="#c8b898"/>
+    </linearGradient>
+    <radialGradient id="sol" cx="0.66" cy="0.5" r="0.45">
+      <stop offset="0" stop-color="#fff4dc" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#fff4dc" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.44" cy="0.55" r="0.35">
+      <stop offset="0" stop-color="#d8f0ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#d8f0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <linearGradient id="agua" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8ec4dc"/>
+      <stop offset="1" stop-color="#3a6a88"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- dawn sky over the hills -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <rect width="320" height="180" fill="url(#sol)"/>
+  <circle cx="212" cy="96" r="14" fill="#fff6e0" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M-10 34 Q20 22 50 28 Q66 20 86 28 Q100 30 96 36 Z M170 30 Q196 18 222 24 Q240 16 262 24 Q282 26 278 32 Z" fill="#6a7888"/>
+  <path d="M-10 34 Q20 22 50 28 Q66 20 86 28 M170 30 Q196 18 222 24 Q240 16 262 24" fill="none" stroke="#e8d8c0" stroke-width="1.4" opacity="0.8"/>
+  <path d="M120 58 Q150 50 176 56 Q200 52 220 60 Z" fill="#8a929a" opacity="0.8"/>
+  <path d="M0 104 Q40 84 84 96 Q130 80 170 94 Q220 82 260 92 Q292 84 320 92 L320 180 L0 180 Z" fill="#6a7a78"/>
+  <path d="M0 116 Q60 100 110 112 Q170 100 230 110 Q280 102 320 110 L320 180 L0 180 Z" fill="#4e5e58"/>
+  <!-- distant trees -->
+  <path d="M250 110 L256 90 L262 110 Z M264 110 L268 96 L272 110 Z M30 112 L36 92 L42 112 Z M44 112 L48 98 L52 112 Z" fill="#3c4a44"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- meadow -->
+  <path d="M0 128 Q80 118 160 124 Q240 118 320 126 L320 180 L0 180 Z" fill="#5a6a44"/>
+  <path d="M0 128 Q80 118 160 124 L160 128 Q80 122 0 132 Z" fill="#7a8a58"/>
+
+  <!-- back white rocks, angular and faceted -->
+  <path d="M84 130 L88 104 L102 86 L118 80 L132 64 L152 60 L170 68 L180 84 L178 98 L194 108 L196 130 Z" fill="#d8d4c8" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M152 60 L170 68 L180 84 L178 98 L194 108 L196 130 L166 130 L172 110 L164 92 L166 76 Z" fill="#a6a296"/>
+  <path d="M104 88 L118 82 L132 66 L150 62" fill="none" stroke="#f6f4ee" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M118 80 L122 100 L108 116 M132 64 L140 84 M122 100 L146 106 L150 128 M164 92 L150 96" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <path d="M90 104 L96 106" stroke="#f6f4ee" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- moss tufts on the rocks -->
+  <path d="M130 66 Q138 60 148 62 Q142 66 136 66 Z M176 100 Q186 100 192 108 Q184 106 178 104 Z" fill="#6a7a48" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- crack the water springs from -->
+  <path d="M136 84 L140 92 L138 98 L146 98" fill="none" stroke="#140d0a" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- gushing water arc -->
+  <path d="M140 96 Q170 88 186 108 Q198 124 200 144" fill="none" stroke="#d8f0ff" stroke-width="12" opacity="0.55" filter="url(#brillo)"/>
+  <path d="M140 94 Q170 84 188 106 Q200 122 204 144 L194 144 Q192 124 182 112 Q168 98 140 100 Z" fill="url(#agua)" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M146 95 Q170 88 184 104 Q194 118 198 140" fill="none" stroke="#eaf8ff" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M150 98 Q168 94 178 106" fill="none" stroke="#eaf8ff" stroke-width="0.9" stroke-linecap="round"/>
+
+  <!-- front white rocks -->
+  <path d="M58 154 L60 134 L74 120 L94 118 L108 124 L124 124 L132 140 L128 156 Z" fill="#e2ded2" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M108 124 L124 124 L132 140 L128 156 L106 156 L116 140 Z" fill="#aeaa9e"/>
+  <path d="M62 134 L74 122 L92 120" fill="none" stroke="#fafaf4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M94 118 L96 136 L84 148 M96 136 L116 140" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <path d="M206 154 L208 136 L220 126 L238 126 L248 138 L248 156 Z" fill="#dcd8cc" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M232 126 L238 126 L248 138 L248 156 L232 156 L240 140 Z" fill="#a8a498"/>
+  <path d="M210 136 L220 128 L230 128" fill="none" stroke="#fafaf4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M252 158 L256 146 L268 142 L276 150 L274 160 Z" fill="#cfcabc" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M268 142 L276 150 L274 160 L264 160 Q270 150 268 142 Z" fill="#a09c90"/>
+
+  <!-- pool -->
+  <path d="M112 150 Q150 138 200 142 Q236 144 250 156 Q210 168 160 166 Q120 164 112 150 Z" fill="#4a86a4" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M200 142 Q236 144 250 156 Q220 164 190 165 Q226 154 200 142 Z" fill="#35657e"/>
+  <ellipse cx="199" cy="146" rx="14" ry="3" fill="none" stroke="#eaf8ff" stroke-width="1.2"/>
+  <ellipse cx="199" cy="147" rx="26" ry="6" fill="none" stroke="#b8e0f0" stroke-width="0.9" opacity="0.8"/>
+  <path d="M130 154 Q146 150 162 153 M150 160 Q166 157 180 160" fill="none" stroke="#b8e0f0" stroke-width="1" stroke-linecap="round"/>
+  <ellipse cx="199" cy="142" rx="18" ry="7" fill="#eaf8ff" opacity="0.5" filter="url(#brillo)"/>
+  <!-- splash drops -->
+  <path d="M190 140 Q186 134 188 130 M206 140 Q212 134 212 130 M198 138 L198 132" fill="none" stroke="#eaf8ff" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- blessed glints -->
+  <g fill="#e8f6ff" opacity="0.8" filter="url(#suave)">
+    <circle cx="168" cy="82" r="4"/>
+    <circle cx="210" cy="124" r="3.5"/>
+    <circle cx="150" cy="148" r="3.5"/>
+    <circle cx="186" cy="96" r="3"/>
+    <circle cx="228" cy="150" r="3"/>
+  </g>
+  <g fill="#ffffff">
+    <path d="M168 76 L169 81 L174 82 L169 83 L168 88 L167 83 L162 82 L167 81 Z"/>
+    <path d="M210 119 L210.8 123 L215 124 L210.8 125 L210 129 L209.2 125 L205 124 L209.2 123 Z"/>
+    <path d="M150 143 L150.8 147 L155 148 L150.8 149 L150 153 L149.2 149 L145 148 L149.2 147 Z"/>
+    <circle cx="186" cy="96" r="1.2"/>
+    <circle cx="228" cy="150" r="1.2"/>
+    <circle cx="176" cy="70" r="0.9"/>
+  </g>
+
+  <!-- reeds and grass -->
+  <path d="M38 166 Q34 144 26 124 Q38 142 44 166 Z M46 166 Q50 146 60 132 Q54 150 52 166 Z M30 166 Q24 154 14 148 Q28 152 36 166 Z M268 166 Q266 140 258 122 Q272 140 274 166 Z M276 166 Q282 148 292 136 Q286 152 282 166 Z M284 166 Q294 156 304 152 Q294 160 290 166 Z" fill="#4e5e34" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M0 168 Q80 160 160 170 Q240 162 320 168 L320 180 L0 180 Z" fill="#3a4a2e"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

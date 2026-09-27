@@ -258,6 +258,13 @@ const active = new Set<PuppetSprite>();
 let clock = 0;
 let last = 0;
 let running = false;
+/** Global time factor of every sprite (1 normal, < 1 slow motion). */
+let timeScale = 1;
+
+/** Slows down (or restores) the shared sprite clock: the hero's death in slow motion. */
+export function setSpriteTimeScale(k: number) {
+  timeScale = Math.max(0, Math.min(1, k));
+}
 
 /** Current time of the shared sprite clock (s); dev tools drive `tick` from it. */
 export const spriteClock = () => clock;
@@ -265,7 +272,7 @@ export const spriteClock = () => clock;
 function loop(now: number) {
   const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
   last = now;
-  clock += dt;
+  clock += dt * timeScale;
   for (const s of active) if (s.element.isConnected && s.visible) s.tick(clock);
   for (const st of stages) st.draw();
   if (active.size) requestAnimationFrame(loop);

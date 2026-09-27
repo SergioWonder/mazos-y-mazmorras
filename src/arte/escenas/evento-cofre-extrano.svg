@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c6a48"/>
+      <stop offset="1" stop-color="#1e2014"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.52" cy="0.56" r="0.4">
+      <stop offset="0" stop-color="#ffe0a0" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffe0a0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
+  </defs>
+
+  <!-- dusk forest -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <path d="M0 96 Q40 70 70 84 Q100 62 140 88 L200 88 Q230 66 262 82 Q292 68 320 86 L320 110 L0 110 Z" fill="#363824"/>
+  <!-- far trees -->
+  <path d="M0 110 L0 20 Q10 0 22 18 L26 110 Z M34 110 L40 40 Q48 24 56 42 L60 110 Z M262 110 L266 34 Q276 16 286 36 L290 110 Z M296 110 L298 12 Q310 -4 320 14 L320 110 Z" fill="#23261a"/>
+  <path d="M-10 60 Q20 20 60 54 Q40 70 0 70 Z M250 50 Q286 12 330 44 Q300 64 256 62 Z" fill="#1c1f15"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- ground and path -->
+  <path d="M0 108 L320 108 L320 180 L0 180 Z" fill="#2a2c1c"/>
+  <path d="M150 108 L190 108 Q230 140 300 180 L20 180 Q100 140 150 108 Z" fill="#6e6044"/>
+  <path d="M190 108 Q230 140 300 180 L262 180 Q214 144 180 108 Z" fill="#524630"/>
+  <path d="M150 108 Q110 136 40 176" fill="none" stroke="#8e7e5a" stroke-width="1.4"/>
+  <path d="M120 170 Q130 166 140 170 M210 162 Q218 158 226 162 M168 124 Q172 122 176 124" fill="none" stroke="#3e3424" stroke-width="1"/>
+  <!-- grass tufts -->
+  <path d="M30 150 L34 138 L36 150 L40 136 L42 150 M270 140 L273 128 L276 140 L280 130 L282 140 M60 124 L62 116 L64 124" fill="none" stroke="#4a5030" stroke-width="1.4"/>
+
+  <!-- shadow under chest -->
+  <path d="M100 150 Q160 160 238 146 Q230 138 210 138 L110 142 Z" fill="#141008" opacity="0.6"/>
+
+  <!-- breath vapour from the seam -->
+  <path d="M106 100 Q96 94 100 86 Q106 80 98 72 M232 94 Q244 88 240 80 Q236 72 244 66" fill="none" stroke="#e8e4d0" stroke-width="3" opacity="0.35" filter="url(#suave)"/>
+
+  <!-- chest body: side face -->
+  <path d="M208 108 L228 98 L226 136 L206 148 Z" fill="#4a321e" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M208 120 L227 111 M207 134 L226 124" stroke="#140d0a" stroke-width="0.9"/>
+  <!-- chest body: front -->
+  <path d="M112 108 L208 108 L206 148 L114 148 Z" fill="#7a5634" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M180 108 L208 108 L206 148 L178 148 Z" fill="#5e412a"/>
+  <path d="M113 121 L207 121 M113 134 L207 134" stroke="#140d0a" stroke-width="1"/>
+  <path d="M115 110 L115 146" stroke="#a07a4e" stroke-width="1.4"/>
+
+  <!-- the gaping seam: mouth -->
+  <path d="M112 108 Q160 118 208 108 L228 98 L230 94 Q170 102 110 100 Z" fill="#1a0808" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- teeth: lower row -->
+  <path d="M116 108.8 L119.5 105.3 L123 110.0 L126.5 106.5 L130 111.0 L133.5 107.5 L137 111.9 L140.5 108.4 L144 112.4 L147.5 108.9 L151 112.8 L154.5 109.3 L158 113.0 L161.5 109.5 L165 112.9 L168.5 109.4 L172 112.7 L175.5 109.2 L179 112.2 L182.5 108.7 L186 111.5 L189.5 108.0 L193 110.6 L196.5 107.1 L200 109.5 L203.5 106.0 L207 108.2 L210.5 104.7 L212 108.0" fill="#e8dcc0" stroke="#140d0a" stroke-width="1" stroke-linejoin="round"/>
+  <!-- teeth: upper row -->
+  <path d="M116 100.5 L119.5 104 L123 100.5 L126.5 104 L130 100.5 L133.5 104 L137 100.5 L140.5 104 L144 100.5 L147.5 104 L151 100.5 L154.5 104 L158 100.5 L161.5 104 L165 100.5 L168.5 104 L172 100.5 L175.5 104 L179 100.5 L182.5 104 L186 100.5 L189.5 104 L193 100.5 L196.5 104 L200 100.5 L203.5 104 L207 100.5 L210.5 104 L212 100 L220 99 L226 96" fill="#d8ccae" stroke="#140d0a" stroke-width="1" stroke-linejoin="round"/>
+  <!-- tongue tip lolling out -->
+  <path d="M171 112 Q169 122 174 128 Q180 132 182 124 Q183 116 180 111 Z" fill="#a83a48" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M179 113 Q181 120 180 127 Q183 123 182 116 Z" fill="#7a2432"/>
+  <path d="M176 115 Q176 121 177 126" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M173 115 Q172 120 174 124" fill="none" stroke="#d86a78" stroke-width="1"/>
+
+  <!-- lid -->
+  <path d="M110 100 Q110 66 160 64 Q210 66 212 100 Q170 104 110 100 Z" fill="#7a5634" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M212 100 Q210 66 160 64 L182 58 Q226 60 230 94 Z" fill="#4a321e" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M178 66 Q204 72 210 98 L212 100 Q196 102 186 102 Q190 80 178 66 Z" fill="#5e412a"/>
+  <path d="M116 88 Q124 70 154 68" fill="none" stroke="#a07a4e" stroke-width="1.6"/>
+  <path d="M111 84 Q160 88 210 84 M114 74 Q160 78 206 74" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+
+  <!-- bronze bands with rivets -->
+  <path d="M126 66 L134 66 L134 101 L126 101 Z M186 66 L194 66 L195 104 L187 105 Z M128 110 L136 111 L136 148 L128 148 Z M184 110 L192 109 L192 148 L184 148 Z" fill="#b08040" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M190 67 L194 67 L195 104 L191 104 Z M188 110 L192 109 L192 148 L188 148 Z" fill="#7a5428"/>
+  <path d="M127 68 L127 100 M129 112 L129 146" stroke="#f0c880" stroke-width="1"/>
+  <g fill="#e0b070" stroke="#140d0a" stroke-width="0.7">
+    <circle cx="130" cy="72" r="1.6"/><circle cx="130" cy="94" r="1.6"/><circle cx="190" cy="72" r="1.6"/><circle cx="191" cy="96" r="1.6"/>
+    <circle cx="132" cy="116" r="1.6"/><circle cx="132" cy="142" r="1.6"/><circle cx="188" cy="116" r="1.6"/><circle cx="188" cy="142" r="1.6"/>
+  </g>
+  <!-- lock plate -->
+  <path d="M152 112 L168 112 L166 132 L154 132 Z" fill="#b08040" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M162 112 L168 112 L166 132 L161 132 Z" fill="#7a5428"/>
+  <path d="M160 118 a2 2 0 1 0 0.1 0 Z M159 120 L158 126 L162 126 L161 120 Z" fill="#140d0a"/>
+
+  <!-- eyes glinting in the dark seam -->
+  <path d="M139 106 Q145 101 151 106 Q145 111 139 106 Z M163 106 Q169 101 175 106 Q169 111 163 106 Z" fill="#ffd040" filter="url(#brillo)"/>
+  <path d="M141 106 Q145 103.5 149 106 Q145 108.5 141 106 Z M165 106 Q169 103.5 173 106 Q169 108.5 165 106 Z" fill="#ffe680" stroke="#140d0a" stroke-width="0.6"/>
+  <path d="M145 104 L145 108 M169 104 L169 108" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- too-clean glints -->
+  <path d="M140 70 L140 78 M136 74 L144 74 M202 118 L202 124 M199 121 L205 121" stroke="#fff6d8" stroke-width="3" opacity="0.6" filter="url(#suave)"/>
+  <path d="M140 70 L140 78 M136 74 L144 74 M202 118 L202 124 M199 121 L205 121" stroke="#fffaf0" stroke-width="1"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

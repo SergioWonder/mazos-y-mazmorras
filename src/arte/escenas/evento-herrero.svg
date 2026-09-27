@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a3640"/>
+      <stop offset="0.7" stop-color="#4a5250"/>
+      <stop offset="1" stop-color="#2a2a24"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.45" cy="0.78" r="0.35">
+      <stop offset="0" stop-color="#ffc070" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffc070" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <linearGradient id="acero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b8c0c4"/>
+      <stop offset="1" stop-color="#6a747a"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- overcast evening over the road -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <path d="M0 40 Q60 24 120 36 Q180 22 240 34 Q290 26 320 34 L320 0 L0 0 Z" fill="#222c34"/>
+  <path d="M0 98 Q60 86 110 94 Q170 82 230 92 Q280 86 320 94 L320 180 L0 180 Z" fill="#363a34"/>
+  <!-- dead trees and a broken fence -->
+  <path d="M40 98 L42 60 L34 46 M42 66 L52 52 M42 76 L32 70 M276 96 L278 52 L270 40 M278 60 L290 46 M278 72 L288 68" fill="none" stroke="#1e2022" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M220 96 L222 84 M236 94 L238 80 M252 94 L252 84 M218 88 L256 84" fill="none" stroke="#1e2022" stroke-width="2.4" stroke-linecap="round"/>
+
+  <!-- road -->
+  <path d="M0 118 Q160 104 320 116 L320 180 L0 180 Z" fill="#3e382c"/>
+  <path d="M120 180 Q150 130 164 98 Q176 130 240 180 Z" fill="#5a5040"/>
+  <path d="M140 150 Q156 146 170 150 M160 120 L168 120" fill="none" stroke="#3e382c" stroke-width="1.4"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- goblin arrows stuck in the ground -->
+  <path d="M252 142 L266 116 M276 148 L284 124" stroke="#140d0a" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M252 142 L266 116 M276 148 L284 124" stroke="#6a5a3a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M266 116 L262 110 L270 112 Z M284 124 L282 118 L289 120 Z" fill="#5a6a3a" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+
+  <!-- dropped hammer -->
+  <g transform="translate(44 8)">
+  <path d="M206 160 L236 150" stroke="#140d0a" stroke-width="5.6" stroke-linecap="round"/>
+  <path d="M206 160 L236 150" stroke="#6a4a2e" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M232 142 L244 138 L250 154 L238 158 Z" fill="#5e6468" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M244 138 L250 154 L245 156 L240 140 Z" fill="#40464a"/>
+
+  </g>
+
+  <!-- the fallen smith lying on his back -->
+  <!-- far leg bent -->
+  <path d="M166 126 L198 104 L226 128" fill="none" stroke="#140d0a" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M166 126 L198 104 L226 128" fill="none" stroke="#4a3e30" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M220 132 Q222 120 232 122 L240 130 L236 136 Z" fill="#2e2218" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <!-- near leg stretched -->
+  <path d="M160 136 L232 142" fill="none" stroke="#140d0a" stroke-width="17" stroke-linecap="round"/>
+  <path d="M160 136 L232 142" fill="none" stroke="#5a4c3a" stroke-width="13" stroke-linecap="round"/>
+  <path d="M170 142 L230 146" stroke="#40362a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M232 132 Q246 130 250 140 Q250 150 238 150 L230 148 Z" fill="#3a2a1e" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M234 134 Q244 134 246 140" fill="none" stroke="#5a4430" stroke-width="1.2"/>
+  <!-- leather apron / tassets -->
+  <path d="M146 116 L170 120 L172 146 L148 148 Z" fill="#6a4a2e" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M148 140 L172 138 L172 146 L148 148 Z" fill="#4e3622"/>
+  <!-- breastplate -->
+  <path d="M86 132 Q86 108 108 102 Q136 98 150 110 Q156 126 150 146 Q120 152 90 146 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M150 110 Q156 126 150 146 Q134 149 122 149 Q144 132 136 104 Z" fill="#555e64"/>
+  <path d="M92 110 Q108 102 128 102" fill="none" stroke="#e4eaec" stroke-width="2" stroke-linecap="round"/>
+  <path d="M118 102 Q116 124 120 148" fill="none" stroke="#140d0a" stroke-width="1"/>
+  <!-- goblin claw gashes torn through the plate -->
+  <path d="M100 112 L128 138 M110 108 L138 132 M122 106 L146 126" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M100 112 L128 138 M110 108 L138 132 M122 106 L146 126" stroke="#6a1a14" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M101 110 L127 135 M111 106 L137 129" stroke="#e4eaec" stroke-width="0.9" stroke-linecap="round"/>
+  <path d="M128 138 L126 146 M138 132 L140 140" stroke="#6a1a14" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- pauldron -->
+  <path d="M78 122 Q76 106 92 104 Q104 104 104 118 Q96 128 78 122 Z" fill="#8a949a" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M96 105 Q104 108 104 118 Q98 124 88 124 Q100 116 96 105 Z" fill="#5a6268"/>
+  <path d="M82 116 Q90 110 98 112" fill="none" stroke="#140d0a" stroke-width="1"/>
+
+  <!-- head resting on the ground, eyes closed -->
+  <path d="M50 128 Q46 110 60 104 Q76 100 82 114 Q86 128 72 134 Q56 138 50 128 Z" fill="#b8886c" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M76 106 Q86 118 80 128 Q76 134 70 134 Q80 122 76 106 Z" fill="#8a6450"/>
+  <!-- grey hair and bushy beard -->
+  <path d="M50 124 Q42 116 48 106 Q56 96 70 100 Q58 104 54 114 Z" fill="#6a6660" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M64 130 Q66 144 82 146 Q96 144 92 132 Q86 124 78 126 Q72 132 64 130 Z" fill="#7a7468" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M72 134 Q78 140 86 138 M76 130 Q82 134 88 132" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+  <!-- closed eyes, heavy brows, nose, bruise -->
+  <path d="M58 116 Q61 118 64 116 M68 112 Q71 114 74 112" fill="none" stroke="#140d0a" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M56 112 Q60 109 65 111 M67 108 Q71 105 76 108" fill="none" stroke="#4a4640" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M66 116 Q72 120 70 124 L66 124" fill="none" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M54 106 Q58 104 60 108" fill="none" stroke="#7a4a4a" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M64 127 Q68 128 72 126" fill="none" stroke="#140d0a" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- arm reaching forward along the ground -->
+  <path d="M96 138 Q106 152 128 158" fill="none" stroke="#140d0a" stroke-width="13" stroke-linecap="round"/>
+  <path d="M96 138 Q106 152 128 158" fill="none" stroke="#5a4c3a" stroke-width="9" stroke-linecap="round"/>
+  <path d="M110 148 L120 158 L128 150 L118 142 Z" fill="#6a6e70" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+
+  <!-- whetstone with faint runes, glowing amber and cyan -->
+  <ellipse cx="146" cy="160" rx="22" ry="10" fill="#ffb050" opacity="0.45" filter="url(#brillo)"/>
+  <path d="M130 156 Q132 150 144 150 L162 152 Q168 154 166 160 Q164 166 152 166 L136 164 Q128 162 130 156 Z" fill="#5a6a74" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M150 164 L162 162 Q166 160 166 158 Q166 164 152 166 Z" fill="#3e4a52"/>
+  <path d="M134 154 Q140 151 150 151" fill="none" stroke="#9aaab4" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M140 155 L142 161 L144 155 M149 154 L149 162 M146 158 L152 158 M156 155 Q160 158 156 162" fill="none" stroke="#6ae0f0" stroke-width="3" opacity="0.7" filter="url(#suave)"/>
+  <path d="M140 155 L142 161 L144 155 M149 154 L149 162 M146 158 L152 158 M156 155 Q160 158 156 162" fill="none" stroke="#d8fbff" stroke-width="1" stroke-linecap="round"/>
+  <!-- fingers wrapped around the stone -->
+  <path d="M124 152 Q132 148 136 152 Q138 158 134 162 Q128 166 122 162 Q118 156 124 152 Z" fill="#b8886c" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M130 150 Q138 150 140 156 M132 162 Q138 162 140 158" fill="none" stroke="#140d0a" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M130 150 Q138 150 140 156 M132 162 Q138 162 140 158" fill="none" stroke="#b8886c" stroke-width="0.8" stroke-linecap="round"/>
+  <!-- amber sparks drifting up from the runes -->
+  <g fill="#ffd488">
+    <circle cx="150" cy="142" r="1.2"/>
+    <circle cx="158" cy="134" r="1"/>
+    <circle cx="142" cy="138" r="0.9"/>
+  </g>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

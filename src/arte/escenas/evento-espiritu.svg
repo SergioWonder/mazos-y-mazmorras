@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1e3040"/>
+      <stop offset="1" stop-color="#070b10"/>
+    </linearGradient>
+    <radialGradient id="luna" cx="0.18" cy="0.18" r="0.3">
+      <stop offset="0" stop-color="#d8f0ff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#d8f0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.54" cy="0.5" r="0.34">
+      <stop offset="0" stop-color="#9af0ff" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#9af0ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3.5"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.5"/></filter>
+  </defs>
+
+  <!-- night sky and moon -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <rect width="320" height="180" fill="url(#luna)"/>
+  <circle cx="58" cy="32" r="13" fill="#d8ecf0" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M64 21 Q74 32 64 43 Q70 32 64 21 Z" fill="#a8c0c8"/>
+  <path d="M52 28 a2.4 2 0 1 0 0.1 0 Z M58 38 a1.6 1.4 0 1 0 0.1 0 Z" fill="#b8ccd4"/>
+  <path d="M20 16h0.1M100 12h0.1M130 30h0.1M210 14h0.1M252 30h0.1M296 12h0.1M88 50h0.1" stroke="#d8f0ff" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- distant hill with chapel -->
+  <path d="M0 110 Q60 88 120 100 Q180 84 240 96 Q290 88 320 100 L320 180 L0 180 Z" fill="#142230"/>
+  <path d="M252 96 L252 76 L260 68 L268 76 L268 96 Z M259 68 L259 58 M255 62 L263 62" fill="#0e1822" stroke="#0e1822" stroke-width="1.6"/>
+  <path d="M258 80 L262 80 L262 86 L258 86 Z" fill="#ffd890" opacity="0.7"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- crooked dead tree -->
+  <path d="M286 150 Q280 110 290 80 Q294 64 282 48 M288 90 Q306 78 314 60 M284 60 Q270 52 262 40 M290 74 Q300 66 298 54" fill="none" stroke="#0a1018" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M284 150 Q278 112 288 84" fill="none" stroke="#0a1018" stroke-width="7"/>
+
+  <!-- road -->
+  <path d="M0 128 L320 128 L320 180 L0 180 Z" fill="#101a22"/>
+  <path d="M148 128 L180 128 Q210 150 250 180 L70 180 Q112 150 148 128 Z" fill="#2e3a40"/>
+  <path d="M180 128 Q210 150 250 180 L226 180 Q196 150 172 128 Z" fill="#222c32"/>
+  <path d="M148 128 Q116 150 80 176" fill="none" stroke="#46545a" stroke-width="1.2"/>
+
+  <!-- tombstones and fence -->
+  <path d="M18 140 L18 112 Q30 98 42 112 L42 140 Z M60 136 L60 118 L66 118 L66 108 L72 108 L72 118 L78 118 L78 136 Z M222 138 L222 116 Q232 106 242 116 L242 138 Z" fill="#3a4852" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M32 104 Q42 108 42 140 L34 140 Q36 114 32 104 Z M72 118 L78 118 L78 136 L72 136 Z M234 110 Q242 114 242 138 L236 138 Q238 118 234 110 Z" fill="#26323a"/>
+  <path d="M22 114 Q26 106 32 104" fill="none" stroke="#6a7c88" stroke-width="1.2"/>
+  <path d="M24 122 L36 122 M26 128 L34 128" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M92 132 L92 112 M102 132 L102 112 M112 132 L112 112 M200 132 L200 112 M210 132 L210 112 M88 118 L116 118 M196 118 L214 118" stroke="#0a1018" stroke-width="2"/>
+  <path d="M90 110 L92 106 L94 110 M100 110 L102 106 L104 110 M110 110 L112 106 L114 110 M198 110 L200 106 L202 110 M208 110 L210 106 L212 110" fill="#0a1018"/>
+  <!-- tombstone behind the spirit, visible through it -->
+  <path d="M150 140 L150 110 Q162 96 174 110 L174 140 Z" fill="#3a4852" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M162 102 Q174 106 174 140 L166 140 Q168 114 162 102 Z" fill="#26323a"/>
+  <path d="M160 116 L160 130 M154 121 L166 121" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- spirit: glow underlay -->
+  <path d="M150 60 Q148 38 170 34 Q192 38 190 62 Q200 80 204 104 Q208 130 196 150 Q188 140 182 154 Q176 142 168 158 Q160 144 152 152 Q148 138 140 146 Q134 120 142 96 Q146 78 150 60 Z M188 72 Q214 78 236 88 L240 98 Q212 94 190 92 Z" fill="#9af0ff" opacity="0.5" filter="url(#brillo)"/>
+  <!-- spirit: translucent body -->
+  <path d="M150 60 Q148 38 170 34 Q192 38 190 62 Q200 80 204 104 Q208 130 196 150 Q188 140 182 154 Q176 142 168 158 Q160 144 152 152 Q148 138 140 146 Q134 120 142 96 Q146 78 150 60 Z" fill="#b8f0f4" fill-opacity="0.32" stroke="#140d0a" stroke-width="2" stroke-opacity="0.8" stroke-linejoin="round"/>
+  <path d="M184 56 Q200 80 204 104 Q208 130 196 150 Q188 140 182 154 Q190 110 184 56 Z" fill="#2a5a6a" fill-opacity="0.35"/>
+  <path d="M152 58 Q150 42 166 37" fill="none" stroke="#e8ffff" stroke-width="1.6" opacity="0.8"/>
+  <path d="M146 90 Q142 110 144 136 M158 96 Q156 120 160 146 M176 100 Q180 124 178 148" fill="none" stroke="#d8ffff" stroke-width="0.9" opacity="0.5"/>
+  <!-- limp arm hanging at its side -->
+  <path d="M152 72 Q138 96 140 120 L146 122 Q146 100 158 80 Z" fill="#b8f0f4" fill-opacity="0.3" stroke="#140d0a" stroke-width="1.4" stroke-opacity="0.7" stroke-linejoin="round"/>
+  <path d="M140 120 L136 130 M142 121 L140 132 M145 122 L145 131" stroke="#140d0a" stroke-width="1.2" stroke-opacity="0.7" stroke-linecap="round"/>
+  <!-- extended begging arm, palm up -->
+  <path d="M188 72 Q214 78 234 88 L238 98 Q212 94 190 92 Z" fill="#b8f0f4" fill-opacity="0.36" stroke="#140d0a" stroke-width="2" stroke-opacity="0.8" stroke-linejoin="round"/>
+  <path d="M234 88 Q244 86 254 90 L262 90 Q264 93 256 94 L262 96 Q262 99 254 98 L258 101 Q256 104 248 101 Q242 102 238 98 Z" fill="#c8f6f8" fill-opacity="0.45" stroke="#140d0a" stroke-width="1.6" stroke-opacity="0.8" stroke-linejoin="round"/>
+  <path d="M236 88 L244 86" stroke="#e8ffff" stroke-width="1" opacity="0.8"/>
+  <path d="M192 90 Q214 92 236 97" fill="none" stroke="#2a5a6a" stroke-width="1" opacity="0.6"/>
+
+  <!-- gaunt face -->
+  <path d="M158 48 Q164 42 168 50 Q164 58 158 54 Z M172 50 Q176 42 182 48 Q182 54 176 58 Z" fill="#0a1a22" stroke="#140d0a" stroke-width="1"/>
+  <path d="M170 60 Q164 64 166 76 Q170 82 174 76 Q176 64 170 60 Z" fill="#0a1a22" stroke="#140d0a" stroke-width="1"/>
+  <path d="M158 60 Q160 68 164 72 M182 60 Q180 68 176 72 M168 46 Q170 42 172 46" fill="none" stroke="#2a5a6a" stroke-width="0.9"/>
+  <!-- tattered shroud over the head -->
+  <path d="M144 76 Q138 40 170 26 Q202 40 198 76 L194 70 L192 78 Q192 56 186 46 Q180 38 170 38 Q158 38 154 48 Q148 58 150 78 L148 70 Z" fill="#5a98a6" fill-opacity="0.45" stroke="#140d0a" stroke-width="1.8" stroke-opacity="0.8" stroke-linejoin="round"/>
+  <path d="M146 60 Q146 38 168 29" fill="none" stroke="#e8ffff" stroke-width="1.2" opacity="0.7"/>
+  <path d="M190 44 Q198 58 196 72" fill="none" stroke="#1a3a46" stroke-width="1" opacity="0.7"/>
+
+  <!-- pale cyan glowing eyes -->
+  <circle cx="163.5" cy="51" r="4" fill="#9af0ff" filter="url(#suave)"/>
+  <circle cx="176.5" cy="51" r="4" fill="#9af0ff" filter="url(#suave)"/>
+  <circle cx="163.5" cy="51" r="1.8" fill="#f0ffff"/>
+  <circle cx="176.5" cy="51" r="1.8" fill="#f0ffff"/>
+
+  <!-- wisps trailing from the hem -->
+  <path d="M146 150 Q140 162 128 166 M168 158 Q166 168 154 174 M194 152 Q204 160 214 162" fill="none" stroke="#9af0ff" stroke-width="3" opacity="0.4" filter="url(#suave)"/>
+  <path d="M146 150 Q140 162 128 166 M168 158 Q166 168 154 174 M194 152 Q204 160 214 162" fill="none" stroke="#d8ffff" stroke-width="0.9" opacity="0.7"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

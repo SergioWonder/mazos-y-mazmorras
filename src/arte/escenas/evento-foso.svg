@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5e2218"/>
+      <stop offset="1" stop-color="#220a06"/>
+    </linearGradient>
+    <linearGradient id="hoyo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c140c"/>
+      <stop offset="1" stop-color="#0c0503"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.44" cy="0.46" r="0.34">
+      <stop offset="0" stop-color="#ff6a4a" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#ff6a4a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.2"/></filter>
+  </defs>
+
+  <!-- blood-red dusk over the woods -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <path d="M0 58 L0 30 L10 14 L18 32 L26 8 L36 34 L46 20 L56 58 Z M236 64 L244 26 L252 42 L262 12 L272 40 L284 22 L296 44 L306 18 L320 36 L320 64 Z" fill="#2a0e0a"/>
+  <path d="M60 58 Q90 44 120 58 Z M200 64 Q220 52 240 64 Z" fill="#2a0e0a"/>
+
+  <!-- pit interior -->
+  <path d="M120 58 L232 64 L238 180 L114 180 Z" fill="url(#hoyo)"/>
+  <path d="M130 70 Q176 76 224 74 M128 92 Q180 98 228 96 M126 116 Q176 122 232 120" fill="none" stroke="#1a0a06" stroke-width="1.2"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- left rim: earth block -->
+  <path d="M0 58 L120 56 Q124 70 118 90 Q122 130 114 180 L0 180 Z" fill="#4a2a1a" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M100 60 L120 56 Q124 70 118 90 Q122 130 114 180 L96 180 Q104 130 100 90 Z" fill="#341c10"/>
+  <path d="M0 58 L120 56" stroke="#140d0a" stroke-width="2.6"/>
+  <path d="M0 60 L96 58" stroke="#6e4a30" stroke-width="1.4"/>
+  <path d="M10 80 Q30 76 50 82 M40 110 Q60 104 80 110 M14 140 Q40 136 60 142 M70 160 Q84 156 96 162" fill="none" stroke="#2a150c" stroke-width="1"/>
+  <path d="M30 96 a3 2 0 1 0 0.1 0 Z M76 130 a4 2.4 0 1 0 0.1 0 Z" fill="#5e3a26" stroke="#140d0a" stroke-width="0.9"/>
+  <!-- grass on left rim -->
+  <path d="M6 58 L9 50 L12 58 L16 48 L19 58 M60 57 L63 49 L66 57 M92 57 L95 50 L98 57 L101 51 L104 57" fill="none" stroke="#3a2a14" stroke-width="1.6"/>
+
+  <!-- right rim -->
+  <path d="M232 64 L320 64 L320 180 L238 180 Q232 130 236 96 Q228 80 232 64 Z" fill="#3e2214" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M232 64 L252 64 Q246 80 250 100 Q244 140 250 180 L238 180 Q232 130 236 96 Q228 80 232 64 Z" fill="#2a150c"/>
+  <path d="M260 100 Q280 96 300 102 M270 140 Q290 134 312 140" fill="none" stroke="#24120a" stroke-width="1"/>
+  <!-- broken cover planks on the right lip -->
+  <path d="M226 62 L250 58 L252 62 L230 70 Z" fill="#6a4a2e" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M230 70 L252 62 L250 58 Q244 64 230 66 Z" fill="#4a321e"/>
+
+  <!-- goblin peering over the far rim -->
+  <g transform="translate(0 -7)">
+  <path d="M258 60 Q256 50 262 46 L252 38 Q262 38 266 42 Q272 36 282 38 Q290 34 300 38 L290 46 Q296 52 292 62 Z" fill="#6a8a3a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M282 40 Q296 42 292 62 L278 62 Q286 50 282 40 Z M290 46 L300 38 Q296 44 292 48 Z" fill="#4a6428"/>
+  <path d="M258 42 L264 44 M254 40 Q260 40 264 43" fill="none" stroke="#8aa85a" stroke-width="1.2"/>
+  <path d="M264 50 Q268 47 272 50 M278 50 Q282 47 286 50" fill="none" stroke="#ffd040" stroke-width="3" opacity="0.9" filter="url(#suave)"/>
+  <path d="M265 50.5 Q268 48 271 50.5 Z M279 50.5 Q282 48 285 50.5 Z" fill="#ffe680" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M266 56 Q275 62 286 56 L284 58 Q275 62 268 58 Z" fill="#1a0808" stroke="#140d0a" stroke-width="1"/>
+  <path d="M269 57 L270 59 L272 57.6 L274 59.6 L276 58 L278 59.6 L280 57.6 L282 59 L283 57" fill="none" stroke="#e8dcc0" stroke-width="0.9"/>
+  </g>
+  <!-- bush in front of the goblin -->
+  <path d="M244 66 Q246 54 258 56 Q264 50 274 56 Q286 52 294 58 Q306 56 308 66 Z" fill="#241a0e" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+
+  <!-- stakes -->
+  <path d="M124.0 180 L127.3 137.5 L133.7 180 Z M135.0 180 L139.2 144.9 L144.2 180 Z M146.8 180 L151.4 139.5 L158.1 180 Z M159.7 180 L162.9 135.0 L169.2 180 Z M172.0 180 L179.0 143.2 L183.5 180 Z M184.9 180 L190.4 142.2 L194.8 180 Z M197.6 180 L201.7 140.5 L209.2 180 Z M211.5 180 L215.5 138.6 L222.1 180 Z M223.2 180 L230.6 139.7 L235.0 180 Z" fill="#8a6a44" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M127.3 137.5 L133.7 180 L128.3 180 Z M139.2 144.9 L144.2 180 L140.2 180 Z M151.4 139.5 L158.1 180 L152.4 180 Z M162.9 135.0 L169.2 180 L163.9 180 Z M179.0 143.2 L183.5 180 L180.0 180 Z M190.4 142.2 L194.8 180 L191.4 180 Z M201.7 140.5 L209.2 180 L202.7 180 Z M215.5 138.6 L222.1 180 L216.5 180 Z M230.6 139.7 L235.0 180 L231.6 180 Z" fill="#5a4028"/>
+  <path d="M127.3 137.5 L129.5 145.5 L125.7 145.5 Z M139.2 144.9 L141.4 152.9 L137.6 152.9 Z M151.4 139.5 L153.6 147.5 L149.8 147.5 Z M162.9 135.0 L165.1 143.0 L161.3 143.0 Z M179.0 143.2 L181.2 151.2 L177.4 151.2 Z M190.4 142.2 L192.6 150.2 L188.8 150.2 Z M201.7 140.5 L203.9 148.5 L200.1 148.5 Z M215.5 138.6 L217.7 146.6 L213.9 146.6 Z M230.6 139.7 L232.8 147.7 L229.0 147.7 Z" fill="#7a1a14" stroke="#140d0a" stroke-width="0.8" stroke-linejoin="round"/>
+
+  <!-- falling dirt and a twig from the collapsed cover -->
+  <path d="M130 64h0.1M136 72h0.1M128 84h0.1M142 94h0.1M134 102h0.1" stroke="#6e4a30" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M190 104 L206 96 M198 100 L202 106" stroke="#140d0a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M190 104 L206 96 M198 100 L202 106" stroke="#5a4028" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M172 122 L184 124 L182 128 L170 126 Z" fill="#5a4028" stroke="#140d0a" stroke-width="1.4"/>
+
+  <!-- hero rim light (red), offset up-right -->
+  <g transform="translate(1.4 -1.4)" fill="#ff5a3a" opacity="0.9">
+    <path d="M114 58 Q116 52 121 54 L124 58 L131 76 L125 78 Z"/>
+    <path d="M122 58 Q126 52 130 56 L132 60 L136 78 L130 78 Z"/>
+    <circle cx="138.5" cy="69" r="6.5"/>
+    <path d="M124 76 Q134 72 140 80 L139 106 Q130 111 122 106 Z"/>
+    <path d="M138 78 Q150 76 158 82 L158 110 Q150 116 138 110 Z"/>
+    <path d="M124 104 L119 132 L125 134 L130 108 Z M131 106 L135 132 L141 131 L138 104 Z"/>
+  </g>
+  <!-- hero silhouette hanging from the rim, backpack dragging -->
+  <g fill="#0b0910">
+    <path d="M114 58 Q116 52 121 54 L124 58 L131 76 L125 78 Z"/>
+    <path d="M122 58 Q126 52 130 56 L132 60 L136 78 L130 78 Z"/>
+    <circle cx="138.5" cy="69" r="6.5"/>
+    <path d="M124 76 Q134 72 140 80 L139 106 Q130 111 122 106 Z"/>
+    <path d="M124 104 L119 132 L125 134 L130 108 Z M131 106 L135 132 L141 131 L138 104 Z"/>
+    <path d="M118 132 L126 134 L124 137 L116 135 Z M134 132 L142 130 L143 133 L135 135 Z"/>
+    <!-- backpack with bedroll -->
+    <path d="M138 80 Q150 78 158 84 L158 110 Q150 116 138 110 Z"/>
+    <path d="M140 78 Q150 72 160 80 L158 86 Q148 80 140 84 Z"/>
+    <path d="M150 112 L154 122 L146 124 L144 114 Z"/>
+  </g>
+  <!-- strap and pouch details on the pack -->
+  <path d="M140 94 L158 96 M148 82 L148 110" stroke="#2a1c22" stroke-width="1"/>
+  <!-- strain lines: the pack pulls down -->
+  <path d="M162 100 L162 112 M166 96 L166 114 M170 102 L170 110" stroke="#ff9a7a" stroke-width="1" opacity="0.7" stroke-linecap="round"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

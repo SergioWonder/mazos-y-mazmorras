@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3e5c32"/>
+      <stop offset="1" stop-color="#131f11"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.52" r="0.4">
+      <stop offset="0" stop-color="#a8e070" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#a8e070" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <linearGradient id="rayo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8f0c0" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#e8f0c0" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+  </defs>
+
+  <!-- forest clearing background -->
+  <rect width="320" height="180" fill="url(#cielo)"/>
+  <path d="M44 40 L50 60 L46 58 L55 81 L49 79 L60 102 L51 100 L66 122 L22 122 L37 100 L28 102 L39 79 L33 81 L42 58 L38 60 Z M88 64 L92 78 L90 76 L96 93 L92 91 L100 108 L93 106 L104 122 L72 122 L83 106 L76 108 L84 91 L80 93 L86 76 L84 78 Z M108 78 L111 89 L109 87 L114 100 L111 98 L117 111 L112 109 L120 122 L96 122 L104 109 L99 111 L105 98 L102 100 L107 87 L105 89 Z M222 72 L226 84 L224 82 L229 97 L225 95 L232 110 L227 108 L236 122 L208 122 L217 108 L212 110 L219 95 L215 97 L220 82 L218 84 Z M244 54 L248 71 L246 69 L253 88 L248 86 L258 105 L250 103 L262 122 L226 122 L238 103 L230 105 L240 86 L235 88 L242 69 L240 71 Z M282 34 L288 56 L285 54 L294 78 L287 76 L300 100 L290 98 L306 122 L258 122 L274 98 L264 100 L277 76 L270 78 L279 54 L276 56 Z" fill="#2c4224"/>
+  <path d="M66 70 L70 84 L68 82 L75 98 L70 96 L80 112 L72 110 L84 126 L48 126 L60 110 L52 112 L62 96 L57 98 L64 82 L62 84 Z M262 66 L266 81 L264 79 L271 96 L266 94 L276 111 L268 109 L280 126 L244 126 L256 109 L248 111 L258 94 L253 96 L260 79 L258 81 Z" fill="#20301a"/>
+  <!-- light shafts through the canopy -->
+  <path d="M70 0 L110 0 L200 150 L150 150 Z" fill="url(#rayo)"/>
+  <path d="M128 0 L146 0 L214 140 L190 140 Z" fill="url(#rayo)"/>
+  <!-- foreground tree trunks -->
+  <path d="M0 0 L30 0 Q24 60 30 120 Q38 150 50 180 L0 180 Z" fill="#131a10" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M22 20 Q18 70 26 128" fill="none" stroke="#223018" stroke-width="1.2"/>
+  <path d="M292 0 L320 0 L320 180 L272 180 Q286 150 290 110 Q294 60 292 0 Z" fill="#131a10" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M300 30 Q302 80 294 140" fill="none" stroke="#223018" stroke-width="1.2"/>
+  <path d="M0 0 L320 0 L320 16 Q280 30 250 14 Q220 30 190 12 Q160 26 130 10 Q96 28 66 12 Q30 30 0 18 Z" fill="#0f170c"/>
+
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- ground -->
+  <path d="M0 126 Q80 116 160 120 Q240 116 320 126 L320 180 L0 180 Z" fill="#1c2a16"/>
+  <path d="M0 146 Q90 136 170 142 Q250 138 320 148 L320 180 L0 180 Z" fill="#141f10"/>
+  <!-- rune circle on the ground -->
+  <ellipse cx="160" cy="138" rx="78" ry="12" fill="none" stroke="#a8e070" stroke-width="4" opacity="0.4" filter="url(#brillo)"/>
+  <ellipse cx="160" cy="138" rx="78" ry="12" fill="none" stroke="#a8e070" stroke-width="1" opacity="0.7" stroke-dasharray="6 4"/>
+
+  <!-- ferns -->
+  <path d="M60 150 Q64 132 76 124 M60 150 Q56 134 44 128 M60 150 Q70 140 84 138" fill="none" stroke="#140d0a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M60 150 Q64 132 76 124 M60 150 Q56 134 44 128 M60 150 Q70 140 84 138" fill="none" stroke="#4a6a34" stroke-width="2" stroke-linecap="round"/>
+  <path d="M262 152 Q256 134 244 126 M262 152 Q268 136 280 130 M262 152 Q252 142 238 140" fill="none" stroke="#140d0a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M262 152 Q256 134 244 126 M262 152 Q268 136 280 130 M262 152 Q252 142 238 140" fill="none" stroke="#3e5a2c" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- altar: two pillars and a slab -->
+  <path d="M116 136 L118 96 L140 94 L142 136 Z" fill="#7a7a6a" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M132 95 L140 94 L142 136 L134 136 Z" fill="#55574a"/>
+  <path d="M121 104 L130 106 M124 118 L136 120" stroke="#140d0a" stroke-width="1" fill="none"/>
+  <path d="M178 136 L180 94 L202 96 L204 136 Z" fill="#7a7a6a" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M194 95 L202 96 L204 136 L196 136 Z" fill="#55574a"/>
+  <path d="M184 110 L194 112 M182 124 L190 126" stroke="#140d0a" stroke-width="1" fill="none"/>
+  <!-- slab -->
+  <path d="M104 96 L108 82 L212 82 L218 96 Q160 102 104 96 Z" fill="#8a8a78" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M190 83 L212 82 L218 96 Q200 99 186 99 Z" fill="#62645a"/>
+  <path d="M110 84 L180 84" stroke="#b0b09c" stroke-width="1.6"/>
+  <!-- glowing runes carved on the slab -->
+  <path d="M136 88 L140 94 L144 88 M156 87 L156 95 M152 91 L160 91 M172 88 Q176 92 172 95 Q168 92 172 88 Z" fill="none" stroke="#a8e070" stroke-width="3" opacity="0.7" filter="url(#suave)"/>
+  <path d="M136 88 L140 94 L144 88 M156 87 L156 95 M152 91 L160 91 M172 88 Q176 92 172 95 Q168 92 172 88 Z" fill="none" stroke="#e4ffc0" stroke-width="1.1"/>
+  <!-- moss draped over the altar -->
+  <path d="M106 86 Q118 76 140 80 Q156 76 170 80 Q160 86 150 84 Q146 92 140 88 Q130 86 124 94 Q120 88 112 92 Z" fill="#4e6e32" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M110 84 Q124 78 138 81" fill="none" stroke="#7a9a4a" stroke-width="1.4"/>
+  <path d="M196 82 Q206 80 214 90 Q208 94 204 92 Q202 100 198 96 Z" fill="#3e5a28" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M118 100 Q116 110 120 118 Q124 108 126 98 Z M182 98 Q180 108 184 114 Q188 104 188 96 Z" fill="#4e6e32" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- dried offerings at the foot of the altar -->
+  <path d="M146 140 L150 124 L156 120 L158 138 Z" fill="#8a6a3a" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M150 124 L146 116 M154 121 L156 112 M152 122 L151 114" stroke="#140d0a" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M150 124 L146 116 M154 121 L156 112 M152 122 L151 114" stroke="#9a7a48" stroke-width="1.2" stroke-linecap="round"/>
+  <circle cx="146" cy="115" r="2.4" fill="#7a4a3a" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="156.5" cy="111" r="2.4" fill="#8a6a40" stroke="#140d0a" stroke-width="1"/>
+  <path d="M148 132 Q152 130 157 131" stroke="#5a3a22" stroke-width="1.6" fill="none"/>
+  <!-- clay bowl -->
+  <path d="M162 134 Q164 142 172 142 Q180 142 182 134 Z" fill="#8a5a3a" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M174 135 Q180 135 181 134 Q180 141 172 142 Q178 138 174 135 Z" fill="#62402a"/>
+  <path d="M166 133 Q170 130 176 132" fill="none" stroke="#6a4a2a" stroke-width="2"/>
+  <!-- skull offering -->
+  <path d="M126 142 Q124 132 132 130 Q140 130 140 138 Q140 142 136 143 L136 146 L128 146 L128 143 Z" fill="#c8bea0" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M136 131 Q140 134 140 138 Q140 142 136 143 L136 146 L133 146 Q138 138 136 131 Z" fill="#948a70"/>
+  <circle cx="130" cy="137" r="1.8" fill="#140d0a"/>
+  <circle cx="136" cy="137" r="1.6" fill="#140d0a"/>
+  <!-- candle stubs -->
+  <rect x="188" y="134" width="5" height="8" fill="#b8ac88" stroke="#140d0a" stroke-width="1.4"/>
+  <rect x="112" y="136" width="4" height="6" fill="#b8ac88" stroke="#140d0a" stroke-width="1.4"/>
+
+  <!-- ancient green energy rising and vibrating -->
+  <path d="M130 80 Q124 64 134 50 Q144 36 136 22 M160 78 Q168 62 158 46 Q150 32 162 16 M188 80 Q196 66 186 52 Q178 40 188 28" fill="none" stroke="#a8e070" stroke-width="5" opacity="0.5" filter="url(#brillo)"/>
+  <path d="M130 80 Q124 64 134 50 Q144 36 136 22 M160 78 Q168 62 158 46 Q150 32 162 16 M188 80 Q196 66 186 52 Q178 40 188 28" fill="none" stroke="#d8ffa8" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M146 64 Q160 58 174 64 M140 44 Q160 36 180 44" fill="none" stroke="#a8e070" stroke-width="1" opacity="0.7" stroke-linecap="round"/>
+  <g fill="#e4ffc0">
+    <circle cx="120" cy="58" r="1.4"/>
+    <circle cx="200" cy="48" r="1.6"/>
+    <circle cx="174" cy="30" r="1.2"/>
+    <circle cx="144" cy="30" r="1.3"/>
+    <circle cx="210" cy="70" r="1.1"/>
+    <circle cx="108" cy="72" r="1.2"/>
+  </g>
+  <g fill="#a8e070" opacity="0.6" filter="url(#suave)">
+    <circle cx="120" cy="58" r="3.4"/>
+    <circle cx="200" cy="48" r="3.6"/>
+    <circle cx="174" cy="30" r="3"/>
+    <circle cx="144" cy="30" r="3"/>
+  </g>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

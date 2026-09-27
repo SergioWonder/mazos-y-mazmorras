@@ -13651,7 +13651,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1",
       "id": "scripts_smoke_test",
-      "community": 74,
+      "community": 67,
       "norm_label": "smoke-test.ts"
     },
     {
@@ -13660,7 +13660,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L35",
       "id": "scripts_smoke_test_clases",
-      "community": 74,
+      "community": 67,
       "norm_label": "clases"
     },
     {
@@ -13669,7 +13669,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L38",
       "id": "scripts_smoke_test_check",
-      "community": 74,
+      "community": 67,
       "norm_label": "check()"
     },
     {
@@ -13678,7 +13678,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L47",
       "id": "scripts_smoke_test_uisilenciosa",
-      "community": 74,
+      "community": 67,
       "norm_label": "uisilenciosa"
     },
     {
@@ -13687,7 +13687,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L74",
       "id": "scripts_smoke_test_sintildes",
-      "community": 74,
+      "community": 67,
       "norm_label": "sintildes()"
     },
     {
@@ -13696,7 +13696,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L77",
       "id": "scripts_smoke_test_danoentrante",
-      "community": 74,
+      "community": 67,
       "norm_label": "danoentrante()"
     },
     {
@@ -13705,7 +13705,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L86",
       "id": "scripts_smoke_test_mitiga",
-      "community": 74,
+      "community": 67,
       "norm_label": "mitiga"
     },
     {
@@ -13714,7 +13714,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L91",
       "id": "scripts_smoke_test_esescalado",
-      "community": 74,
+      "community": 67,
       "norm_label": "esescalado()"
     },
     {
@@ -13723,7 +13723,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L98",
       "id": "scripts_smoke_test_puntuarcarta",
-      "community": 74,
+      "community": 67,
       "norm_label": "puntuarcarta()"
     },
     {
@@ -13732,7 +13732,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L129",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 74,
+      "community": 67,
       "norm_label": "mejorobjetivo()"
     },
     {
@@ -13741,7 +13741,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L137",
       "id": "scripts_smoke_test_opcionessim",
-      "community": 74,
+      "community": 67,
       "norm_label": "opcionessim"
     },
     {
@@ -13750,7 +13750,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L139",
       "id": "scripts_smoke_test_simular",
-      "community": 74,
+      "community": 67,
       "norm_label": "simular()"
     },
     {
@@ -13759,7 +13759,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L281",
       "id": "scripts_smoke_test_cap",
-      "community": 74,
+      "community": 67,
       "norm_label": "cap"
     },
     {
@@ -13768,7 +13768,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1885",
       "id": "scripts_smoke_test_rig",
-      "community": 74,
+      "community": 67,
       "norm_label": "rig"
     },
     {
@@ -13777,7 +13777,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1886",
       "id": "scripts_smoke_test_spec",
-      "community": 74,
+      "community": 67,
       "norm_label": "spec"
     },
     {
@@ -13786,7 +13786,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1887",
       "id": "scripts_smoke_test_act",
-      "community": 74,
+      "community": 67,
       "norm_label": "act"
     },
     {
@@ -13795,7 +13795,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2321",
       "id": "scripts_smoke_test_e",
-      "community": 74,
+      "community": 67,
       "norm_label": "e"
     },
     {
@@ -13804,7 +13804,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2578",
       "id": "scripts_smoke_test_reliclike",
-      "community": 74,
+      "community": 67,
       "norm_label": "reliclike"
     },
     {
@@ -13813,7 +13813,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2633",
       "id": "scripts_smoke_test_mov",
-      "community": 74,
+      "community": 67,
       "norm_label": "mov"
     },
     {
@@ -13822,7 +13822,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2634",
       "id": "scripts_smoke_test_reliquia",
-      "community": 74,
+      "community": 67,
       "norm_label": "reliquia"
     },
     {
@@ -13831,7 +13831,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2649",
       "id": "scripts_smoke_test_montar",
-      "community": 46,
+      "community": 67,
       "norm_label": "montar()"
     },
     {
@@ -13840,7 +13840,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L3243",
       "id": "scripts_smoke_test_t",
-      "community": 74,
+      "community": 67,
       "norm_label": "t"
     },
     {
@@ -13849,7 +13849,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L3273",
       "id": "scripts_smoke_test_accion",
-      "community": 74,
+      "community": 67,
       "norm_label": "accion"
     },
     {
@@ -13858,7 +13858,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L4043",
       "id": "scripts_smoke_test_montarm",
-      "community": 46,
+      "community": 67,
       "norm_label": "montarm()"
     },
     {
@@ -13867,8 +13867,17 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L4695",
       "id": "scripts_smoke_test_montarb",
-      "community": 46,
+      "community": 67,
       "norm_label": "montarb()"
+    },
+    {
+      "label": "Sprite2",
+      "file_type": "code",
+      "source_file": "scripts/smoke-test.ts",
+      "source_location": "L5373",
+      "id": "scripts_smoke_test_sprite2",
+      "community": 67,
+      "norm_label": "sprite2"
     },
     {
       "label": "sprite-capture.ts",
@@ -13876,7 +13885,7 @@
       "source_file": "scripts/sprite-capture.ts",
       "source_location": "L1",
       "id": "scripts_sprite_capture",
-      "community": 13,
+      "community": 81,
       "norm_label": "sprite-capture.ts"
     },
     {
@@ -13885,7 +13894,7 @@
       "source_file": "scripts/sprite-capture.ts",
       "source_location": "L18",
       "id": "scripts_sprite_capture_captureoptions",
-      "community": 13,
+      "community": 81,
       "norm_label": "captureoptions"
     },
     {
@@ -13894,7 +13903,7 @@
       "source_file": "scripts/sprite-capture.ts",
       "source_location": "L35",
       "id": "scripts_sprite_capture_post",
-      "community": 13,
+      "community": 81,
       "norm_label": "post()"
     },
     {
@@ -13903,7 +13912,7 @@
       "source_file": "scripts/sprite-capture.ts",
       "source_location": "L39",
       "id": "scripts_sprite_capture_rastersvg",
-      "community": 13,
+      "community": 81,
       "norm_label": "rastersvg()"
     },
     {
@@ -13912,7 +13921,7 @@
       "source_file": "scripts/sprite-capture.ts",
       "source_location": "L49",
       "id": "scripts_sprite_capture_captureaction",
-      "community": 13,
+      "community": 81,
       "norm_label": "captureaction()"
     },
     {
@@ -14047,7 +14056,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L30",
       "id": "core_cartas_basicas",
-      "community": 59,
+      "community": 67,
       "norm_label": "basicas"
     },
     {
@@ -14099,7 +14108,7 @@
       "label": "PICARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2031",
+      "source_location": "L2030",
       "id": "core_cartas_picaro",
       "community": 67,
       "norm_label": "picaro"
@@ -14108,7 +14117,7 @@
       "label": "maldicionesEnCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2748",
+      "source_location": "L2747",
       "id": "core_cartas_maldicionesencartas",
       "community": 67,
       "norm_label": "maldicionesencartas()"
@@ -14117,7 +14126,7 @@
       "label": "MALDICIONES_DEL_PACTO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2754",
+      "source_location": "L2753",
       "id": "core_cartas_maldiciones_del_pacto",
       "community": 67,
       "norm_label": "maldiciones_del_pacto"
@@ -14126,7 +14135,7 @@
       "label": "maldicionDelPacto()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2759",
+      "source_location": "L2758",
       "id": "core_cartas_maldiciondelpacto",
       "community": 67,
       "norm_label": "maldiciondelpacto()"
@@ -14135,7 +14144,7 @@
       "label": "danoExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2765",
+      "source_location": "L2764",
       "id": "core_cartas_danoexplosion",
       "community": 67,
       "norm_label": "danoexplosion()"
@@ -14144,7 +14153,7 @@
       "label": "lanzarExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2777",
+      "source_location": "L2776",
       "id": "core_cartas_lanzarexplosion",
       "community": 67,
       "norm_label": "lanzarexplosion()"
@@ -14153,16 +14162,16 @@
       "label": "BRUJO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2806",
+      "source_location": "L2805",
       "id": "core_cartas_brujo",
-      "community": 23,
+      "community": 67,
       "norm_label": "brujo"
     },
     {
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3634",
+      "source_location": "L3633",
       "id": "core_cartas_resolverseducir",
       "community": 67,
       "norm_label": "resolverseducir()"
@@ -14171,7 +14180,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3667",
+      "source_location": "L3666",
       "id": "core_cartas_resolverdeseo",
       "community": 67,
       "norm_label": "resolverdeseo()"
@@ -14180,16 +14189,16 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3704",
+      "source_location": "L3703",
       "id": "core_cartas_neutrales_especiales",
-      "community": 90,
+      "community": 67,
       "norm_label": "neutrales_especiales"
     },
     {
       "label": "maldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3760",
+      "source_location": "L3759",
       "id": "core_cartas_maldicion",
       "community": 67,
       "norm_label": "maldicion()"
@@ -14198,16 +14207,16 @@
       "label": "MALDICIONES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3768",
+      "source_location": "L3767",
       "id": "core_cartas_maldiciones",
-      "community": 59,
+      "community": 67,
       "norm_label": "maldiciones"
     },
     {
       "label": "nuevaMaldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3855",
+      "source_location": "L3854",
       "id": "core_cartas_nuevamaldicion",
       "community": 75,
       "norm_label": "nuevamaldicion()"
@@ -14216,7 +14225,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3864",
+      "source_location": "L3863",
       "id": "core_cartas_iniciales_de_clase",
       "community": 67,
       "norm_label": "iniciales_de_clase"
@@ -14225,7 +14234,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3878",
+      "source_location": "L3877",
       "id": "core_cartas_pools",
       "community": 67,
       "norm_label": "pools"
@@ -14234,7 +14243,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3882",
+      "source_location": "L3881",
       "id": "core_cartas_mazoinicial",
       "community": 67,
       "norm_label": "mazoinicial()"
@@ -14243,16 +14252,16 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3893",
+      "source_location": "L3892",
       "id": "core_cartas_pooldeclase",
-      "community": 74,
+      "community": 67,
       "norm_label": "pooldeclase()"
     },
     {
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3900",
+      "source_location": "L3899",
       "id": "core_cartas_cartaunicadeclase",
       "community": 90,
       "norm_label": "cartaunicadeclase()"
@@ -14261,18 +14270,18 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3905",
+      "source_location": "L3904",
       "id": "core_cartas_cartaporid",
-      "community": 79,
+      "community": 46,
       "norm_label": "cartaporid()"
     },
     {
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3915",
+      "source_location": "L3914",
       "id": "core_cartas_recompensacartas",
-      "community": 74,
+      "community": 67,
       "norm_label": "recompensacartas()"
     },
     {
@@ -14281,7 +14290,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1",
       "id": "core_combate",
-      "community": 79,
+      "community": 90,
       "norm_label": "combate.ts"
     },
     {
@@ -14290,7 +14299,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L13",
       "id": "core_combate_presentador",
-      "community": 74,
+      "community": 67,
       "norm_label": "presentador"
     },
     {
@@ -14317,7 +14326,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L78",
       "id": "core_combate_combate_constructor",
-      "community": 79,
+      "community": 90,
       "norm_label": ".constructor()"
     },
     {
@@ -14569,7 +14578,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L826",
       "id": "core_combate_combate_escribirconjuro",
-      "community": 67,
+      "community": 23,
       "norm_label": ".escribirconjuro()"
     },
     {
@@ -14578,7 +14587,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L847",
       "id": "core_combate_combate_invocar",
-      "community": 23,
+      "community": 90,
       "norm_label": ".invocar()"
     },
     {
@@ -14587,7 +14596,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L868",
       "id": "core_combate_combate_invocarefimero",
-      "community": 23,
+      "community": 90,
       "norm_label": ".invocarefimero()"
     },
     {
@@ -14758,7 +14767,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L1",
       "id": "core_conjuros",
-      "community": 79,
+      "community": 90,
       "norm_label": "conjuros.ts"
     },
     {
@@ -14767,7 +14776,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L19",
       "id": "core_conjuros_orden_niveles",
-      "community": 79,
+      "community": 90,
       "norm_label": "orden_niveles"
     },
     {
@@ -14776,7 +14785,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L21",
       "id": "core_conjuros_piramideconjuros",
-      "community": 79,
+      "community": 90,
       "norm_label": "piramideconjuros()"
     },
     {
@@ -14785,7 +14794,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L31",
       "id": "core_conjuros_crearespacios",
-      "community": 79,
+      "community": 90,
       "norm_label": "crearespacios()"
     },
     {
@@ -14875,7 +14884,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L65",
       "id": "core_enemigos_goblin_famelico",
-      "community": 0,
+      "community": 23,
       "norm_label": "goblin_famelico"
     },
     {
@@ -15028,7 +15037,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L286",
       "id": "core_enemigos_ignifax",
-      "community": 74,
+      "community": 0,
       "norm_label": "ignifax"
     },
     {
@@ -15109,7 +15118,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L384",
       "id": "core_enemigos_imagen_ilusoria",
-      "community": 0,
+      "community": 13,
       "norm_label": "imagen_ilusoria"
     },
     {
@@ -15289,7 +15298,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L587",
       "id": "core_enemigos_observador",
-      "community": 0,
+      "community": 13,
       "norm_label": "observador"
     },
     {
@@ -15316,7 +15325,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L631",
       "id": "core_enemigos_dungeon_master",
-      "community": 0,
+      "community": 13,
       "norm_label": "dungeon_master"
     },
     {
@@ -15347,12 +15356,84 @@
       "norm_label": "crearenemigo()"
     },
     {
+      "label": "epitafio.ts",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L1",
+      "id": "core_epitafio",
+      "community": 81,
+      "norm_label": "epitafio.ts"
+    },
+    {
+      "label": "DatosCaida",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L5",
+      "id": "core_epitafio_datoscaida",
+      "community": 81,
+      "norm_label": "datoscaida"
+    },
+    {
+      "label": "lapida",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L70",
+      "id": "core_epitafio_lapida",
+      "community": 81,
+      "norm_label": "lapida"
+    },
+    {
+      "label": "NOMBRE_CLASE",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L30",
+      "id": "core_epitafio_nombre_clase",
+      "community": 81,
+      "norm_label": "nombre_clase"
+    },
+    {
+      "label": "EPITAFIOS",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L35",
+      "id": "core_epitafio_epitafios",
+      "community": 81,
+      "norm_label": "epitafios"
+    },
+    {
+      "label": "pick()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L54",
+      "id": "core_epitafio_pick",
+      "community": 81,
+      "norm_label": "pick()"
+    },
+    {
+      "label": "plural()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L60",
+      "id": "core_epitafio_plural",
+      "community": 81,
+      "norm_label": "plural()"
+    },
+    {
+      "label": "elegirEpitafio()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L63",
+      "id": "core_epitafio_elegirepitafio",
+      "community": 81,
+      "norm_label": "elegirepitafio()"
+    },
+    {
       "label": "escena-final.ts",
       "file_type": "code",
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 46,
+      "community": 89,
       "norm_label": "escena-final.ts"
     },
     {
@@ -15361,7 +15442,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L8",
       "id": "core_escena_final_frases_dm",
-      "community": 46,
+      "community": 89,
       "norm_label": "frases_dm"
     },
     {
@@ -15370,7 +15451,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 46,
+      "community": 89,
       "norm_label": "intencion_dm"
     },
     {
@@ -15388,7 +15469,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 46,
+      "community": 89,
       "norm_label": "dias_agenda"
     },
     {
@@ -15397,7 +15478,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 46,
+      "community": 89,
       "norm_label": "diaagenda"
     },
     {
@@ -15406,7 +15487,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 46,
+      "community": 89,
       "norm_label": "lineaagenda"
     },
     {
@@ -15415,7 +15496,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 46,
+      "community": 89,
       "norm_label": "guion_agenda"
     },
     {
@@ -15424,7 +15505,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L97",
       "id": "core_escena_final_almacensimple",
-      "community": 46,
+      "community": 89,
       "norm_label": "almacensimple"
     },
     {
@@ -15433,7 +15514,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L102",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 46,
+      "community": 89,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -15442,7 +15523,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L111",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 46,
+      "community": 89,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -15451,7 +15532,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L120",
       "id": "core_escena_final_finalverdaderodesbloqueado",
-      "community": 26,
+      "community": 89,
       "norm_label": "finalverdaderodesbloqueado()"
     },
     {
@@ -15586,7 +15667,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L368",
       "id": "core_eventos_elegirevento",
-      "community": 75,
+      "community": 79,
       "norm_label": "elegirevento()"
     },
     {
@@ -15595,7 +15676,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardado.ts"
     },
     {
@@ -15604,7 +15685,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L9",
       "id": "core_guardado_guardado",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardado"
     },
     {
@@ -15613,7 +15694,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L30",
       "id": "core_guardado_serializarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "serializarrun()"
     },
     {
@@ -15622,7 +15703,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L51",
       "id": "core_guardado_rehidratarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "rehidratarrun()"
     },
     {
@@ -15631,7 +15712,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L90",
       "id": "core_guardado_guardarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardarrun()"
     },
     {
@@ -15667,7 +15748,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 92,
+      "community": 46,
       "norm_label": "mapa.ts"
     },
     {
@@ -15676,7 +15757,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L8",
       "id": "core_mapa_generarmapa",
-      "community": 92,
+      "community": 46,
       "norm_label": "generarmapa()"
     },
     {
@@ -15685,7 +15766,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L94",
       "id": "core_mapa_tipos_mision",
-      "community": 92,
+      "community": 46,
       "norm_label": "tipos_mision"
     },
     {
@@ -15694,7 +15775,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L96",
       "id": "core_mapa_distancia_mision",
-      "community": 92,
+      "community": 46,
       "norm_label": "distancia_mision"
     },
     {
@@ -15703,7 +15784,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L99",
       "id": "core_mapa_alcanzablesdesde",
-      "community": 92,
+      "community": 46,
       "norm_label": "alcanzablesdesde()"
     },
     {
@@ -15712,7 +15793,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L115",
       "id": "core_mapa_esalcanzable",
-      "community": 92,
+      "community": 46,
       "norm_label": "esalcanzable()"
     },
     {
@@ -15721,7 +15802,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L121",
       "id": "core_mapa_candidatosmision",
-      "community": 92,
+      "community": 46,
       "norm_label": "candidatosmision()"
     },
     {
@@ -15730,7 +15811,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L135",
       "id": "core_mapa_colocartabernas",
-      "community": 92,
+      "community": 46,
       "norm_label": "colocartabernas()"
     },
     {
@@ -15739,7 +15820,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L157",
       "id": "core_mapa_nodosdisponibles",
-      "community": 92,
+      "community": 46,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -15748,7 +15829,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L1",
       "id": "core_reliquias_bendicion",
-      "community": 90,
+      "community": 75,
       "norm_label": "reliquias-bendicion.ts"
     },
     {
@@ -15757,7 +15838,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L10",
       "id": "core_reliquias_bendicion_vivos",
-      "community": 90,
+      "community": 75,
       "norm_label": "vivos()"
     },
     {
@@ -15766,7 +15847,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L13",
       "id": "core_reliquias_bendicion_primeravez",
-      "community": 90,
+      "community": 75,
       "norm_label": "primeravez()"
     },
     {
@@ -15775,7 +15856,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L20",
       "id": "core_reliquias_bendicion_primeradelturno",
-      "community": 90,
+      "community": 75,
       "norm_label": "primeradelturno()"
     },
     {
@@ -15784,7 +15865,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L28",
       "id": "core_reliquias_bendicion_generales",
-      "community": 90,
+      "community": 75,
       "norm_label": "generales"
     },
     {
@@ -15793,7 +15874,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L75",
       "id": "core_reliquias_bendicion_pactos",
-      "community": 90,
+      "community": 75,
       "norm_label": "pactos"
     },
     {
@@ -15802,7 +15883,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L115",
       "id": "core_reliquias_bendicion_mejoraralazar",
-      "community": 90,
+      "community": 75,
       "norm_label": "mejoraralazar()"
     },
     {
@@ -15811,7 +15892,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L123",
       "id": "core_reliquias_bendicion_de_mapa",
-      "community": 90,
+      "community": 75,
       "norm_label": "de_mapa"
     },
     {
@@ -15820,7 +15901,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L161",
       "id": "core_reliquias_bendicion_de_clase",
-      "community": 90,
+      "community": 75,
       "norm_label": "de_clase"
     },
     {
@@ -15829,7 +15910,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L255",
       "id": "core_reliquias_bendicion_dondecarta",
-      "community": 90,
+      "community": 75,
       "norm_label": "dondecarta()"
     },
     {
@@ -15838,7 +15919,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L272",
       "id": "core_reliquias_bendicion_de_carta_unica",
-      "community": 90,
+      "community": 75,
       "norm_label": "de_carta_unica"
     },
     {
@@ -15847,7 +15928,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L308",
       "id": "core_reliquias_bendicion_bendiciones",
-      "community": 90,
+      "community": 75,
       "norm_label": "bendiciones"
     },
     {
@@ -15928,7 +16009,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L58",
       "id": "core_reliquias_sello_pacto",
-      "community": 23,
+      "community": 84,
       "norm_label": "sello_pacto"
     },
     {
@@ -15946,7 +16027,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L71",
       "id": "core_reliquias_reliquiainicial",
-      "community": 75,
+      "community": 67,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -16009,7 +16090,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L547",
       "id": "core_reliquias_pool_reliquias",
-      "community": 75,
+      "community": 84,
       "norm_label": "pool_reliquias"
     },
     {
@@ -16018,7 +16099,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L552",
       "id": "core_reliquias_reliquiaporid",
-      "community": 79,
+      "community": 46,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -16072,7 +16153,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L611",
       "id": "core_reliquias_nombre_rareza_reliquia",
-      "community": 92,
+      "community": 75,
       "norm_label": "nombre_rareza_reliquia"
     },
     {
@@ -16090,7 +16171,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L2",
       "id": "core_rng_crearrng",
-      "community": 46,
+      "community": 67,
       "norm_label": "crearrng()"
     },
     {
@@ -16108,7 +16189,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 92,
+      "community": 46,
       "norm_label": "elegir()"
     },
     {
@@ -16144,7 +16225,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L15",
       "id": "core_run_nuevarun",
-      "community": 46,
+      "community": 67,
       "norm_label": "nuevarun()"
     },
     {
@@ -16252,7 +16333,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L1",
       "id": "core_taberna",
-      "community": 92,
+      "community": 46,
       "norm_label": "taberna.ts"
     },
     {
@@ -16261,7 +16342,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L9",
       "id": "core_taberna_plantillarumor",
-      "community": 92,
+      "community": 46,
       "norm_label": "plantillarumor"
     },
     {
@@ -16270,7 +16351,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L17",
       "id": "core_taberna_rumortaberna",
-      "community": 92,
+      "community": 46,
       "norm_label": "rumortaberna"
     },
     {
@@ -16279,7 +16360,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L25",
       "id": "core_taberna_rumores",
-      "community": 92,
+      "community": 46,
       "norm_label": "rumores"
     },
     {
@@ -16288,7 +16369,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L60",
       "id": "core_taberna_distancias",
-      "community": 92,
+      "community": 46,
       "norm_label": "distancias"
     },
     {
@@ -16297,7 +16378,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L62",
       "id": "core_taberna_barajar",
-      "community": 92,
+      "community": 46,
       "norm_label": "barajar()"
     },
     {
@@ -16306,7 +16387,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L73",
       "id": "core_taberna_rumorestaberna",
-      "community": 92,
+      "community": 46,
       "norm_label": "rumorestaberna()"
     },
     {
@@ -16315,7 +16396,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L106",
       "id": "core_taberna_aceptarrumor",
-      "community": 92,
+      "community": 46,
       "norm_label": "aceptarrumor()"
     },
     {
@@ -16342,7 +16423,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L135",
       "id": "core_taberna_curajarra",
-      "community": 92,
+      "community": 46,
       "norm_label": "curajarra()"
     },
     {
@@ -16351,7 +16432,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L140",
       "id": "core_taberna_beberjarra",
-      "community": 92,
+      "community": 46,
       "norm_label": "beberjarra()"
     },
     {
@@ -16360,7 +16441,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L1",
       "id": "core_types",
-      "community": 79,
+      "community": 90,
       "norm_label": "types.ts"
     },
     {
@@ -16369,7 +16450,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 79,
+      "community": 6,
       "norm_label": "claseid"
     },
     {
@@ -16378,7 +16459,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L5",
       "id": "core_types_tipocarta",
-      "community": 79,
+      "community": 90,
       "norm_label": "tipocarta"
     },
     {
@@ -16387,7 +16468,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_rareza",
-      "community": 67,
+      "community": 75,
       "norm_label": "rareza"
     },
     {
@@ -16396,7 +16477,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L7",
       "id": "core_types_modoobjetivo",
-      "community": 79,
+      "community": 90,
       "norm_label": "modoobjetivo"
     },
     {
@@ -16405,7 +16486,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L10",
       "id": "core_types_estadoid",
-      "community": 23,
+      "community": 84,
       "norm_label": "estadoid"
     },
     {
@@ -16414,7 +16495,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L68",
       "id": "core_types_efectoconjuro",
-      "community": 79,
+      "community": 90,
       "norm_label": "efectoconjuro"
     },
     {
@@ -16423,7 +16504,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L71",
       "id": "core_types_formainvocacion",
-      "community": 23,
+      "community": 90,
       "norm_label": "formainvocacion"
     },
     {
@@ -16432,7 +16513,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L75",
       "id": "core_types_efectoinvocacion",
-      "community": 79,
+      "community": 90,
       "norm_label": "efectoinvocacion"
     },
     {
@@ -16441,7 +16522,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L80",
       "id": "core_types_invocacion",
-      "community": 23,
+      "community": 90,
       "norm_label": "invocacion"
     },
     {
@@ -16450,7 +16531,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L93",
       "id": "core_types_efectotemporal",
-      "community": 79,
+      "community": 90,
       "norm_label": "efectotemporal"
     },
     {
@@ -16468,7 +16549,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L113",
       "id": "core_types_tipointencion",
-      "community": 79,
+      "community": 90,
       "norm_label": "tipointencion"
     },
     {
@@ -16477,7 +16558,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L115",
       "id": "core_types_movimiento",
-      "community": 79,
+      "community": 23,
       "norm_label": "movimiento"
     },
     {
@@ -16486,7 +16567,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L141",
       "id": "core_types_enemigodef",
-      "community": 79,
+      "community": 90,
       "norm_label": "enemigodef"
     },
     {
@@ -16522,7 +16603,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L221",
       "id": "core_types_cartadef",
-      "community": 75,
+      "community": 67,
       "norm_label": "cartadef"
     },
     {
@@ -16531,7 +16612,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L262",
       "id": "core_types_mejoracarta",
-      "community": 79,
+      "community": 90,
       "norm_label": "mejoracarta"
     },
     {
@@ -16549,7 +16630,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L277",
       "id": "core_types_contextoefecto",
-      "community": 79,
+      "community": 67,
       "norm_label": "contextoefecto"
     },
     {
@@ -16558,7 +16639,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L409",
       "id": "core_types_tiponodo",
-      "community": 92,
+      "community": 46,
       "norm_label": "tiponodo"
     },
     {
@@ -16567,7 +16648,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L412",
       "id": "core_types_misiontaberna",
-      "community": 79,
+      "community": 46,
       "norm_label": "misiontaberna"
     },
     {
@@ -16576,7 +16657,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L418",
       "id": "core_types_nodomapa",
-      "community": 79,
+      "community": 46,
       "norm_label": "nodomapa"
     },
     {
@@ -16612,7 +16693,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L439",
       "id": "core_types_cartajugada",
-      "community": 79,
+      "community": 90,
       "norm_label": "cartajugada"
     },
     {
@@ -16621,7 +16702,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L449",
       "id": "core_types_golperecibido",
-      "community": 79,
+      "community": 90,
       "norm_label": "golperecibido"
     },
     {
@@ -16630,7 +16711,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L458",
       "id": "core_types_reliquiadef",
-      "community": 79,
+      "community": 46,
       "norm_label": "reliquiadef"
     },
     {
@@ -16639,7 +16720,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L535",
       "id": "core_types_estadorun",
-      "community": 75,
+      "community": 90,
       "norm_label": "estadorun"
     },
     {
@@ -16648,7 +16729,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L565",
       "id": "core_types_dicetheme",
-      "community": 79,
+      "community": 90,
       "norm_label": "dicetheme"
     },
     {
@@ -16792,7 +16873,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "id": "fx_audio",
-      "community": 100,
+      "community": 4,
       "norm_label": "audio.ts"
     },
     {
@@ -16801,7 +16882,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L19",
       "id": "fx_audio_track_urls",
-      "community": 100,
+      "community": 4,
       "norm_label": "track_urls"
     },
     {
@@ -16810,7 +16891,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L22",
       "id": "fx_audio_sfx_files",
-      "community": 100,
+      "community": 4,
       "norm_label": "sfx_files"
     },
     {
@@ -16819,7 +16900,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L29",
       "id": "fx_audio_capa",
-      "community": 100,
+      "community": 4,
       "norm_label": "capa"
     },
     {
@@ -16828,7 +16909,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L40",
       "id": "fx_audio_recetas",
-      "community": 100,
+      "community": 4,
       "norm_label": "recetas"
     },
     {
@@ -16837,7 +16918,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L102",
       "id": "fx_audio_temachip",
-      "community": 100,
+      "community": 4,
       "norm_label": "temachip"
     },
     {
@@ -16846,14 +16927,14 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L112",
       "id": "fx_audio_temas",
-      "community": 89,
+      "community": 46,
       "norm_label": "temas"
     },
     {
       "label": "MotorAudio",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L154",
+      "source_location": "L157",
       "id": "fx_audio_motoraudio",
       "community": 4,
       "norm_label": "motoraudio"
@@ -16862,7 +16943,7 @@
       "label": ".desbloquear()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L176",
+      "source_location": "L179",
       "id": "fx_audio_motoraudio_desbloquear",
       "community": 4,
       "norm_label": ".desbloquear()"
@@ -16871,7 +16952,7 @@
       "label": ".cargarSfx()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L196",
+      "source_location": "L199",
       "id": "fx_audio_motoraudio_cargarsfx",
       "community": 4,
       "norm_label": ".cargarsfx()"
@@ -16880,16 +16961,16 @@
       "label": ".reproducirArchivo()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L212",
+      "source_location": "L215",
       "id": "fx_audio_motoraudio_reproducirarchivo",
-      "community": 100,
+      "community": 4,
       "norm_label": ".reproducirarchivo()"
     },
     {
       "label": ".sfx()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L230",
+      "source_location": "L233",
       "id": "fx_audio_motoraudio_sfx",
       "community": 4,
       "norm_label": ".sfx()"
@@ -16898,7 +16979,7 @@
       "label": ".reproducirCapa()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L240",
+      "source_location": "L243",
       "id": "fx_audio_motoraudio_reproducircapa",
       "community": 4,
       "norm_label": ".reproducircapa()"
@@ -16907,7 +16988,7 @@
       "label": ".bufferRuido()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L274",
+      "source_location": "L277",
       "id": "fx_audio_motoraudio_bufferruido",
       "community": 4,
       "norm_label": ".bufferruido()"
@@ -16916,7 +16997,7 @@
       "label": ".menu()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L294",
+      "source_location": "L297",
       "id": "fx_audio_motoraudio_menu",
       "community": 4,
       "norm_label": ".menu()"
@@ -16925,7 +17006,7 @@
       "label": ".musica()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L299",
+      "source_location": "L302",
       "id": "fx_audio_motoraudio_musica",
       "community": 4,
       "norm_label": ".musica()"
@@ -16934,7 +17015,7 @@
       "label": ".reproducirTema()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L304",
+      "source_location": "L307",
       "id": "fx_audio_motoraudio_reproducirtema",
       "community": 4,
       "norm_label": ".reproducirtema()"
@@ -16943,7 +17024,7 @@
       "label": ".refrescarMusica()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L316",
+      "source_location": "L319",
       "id": "fx_audio_motoraudio_refrescarmusica",
       "community": 4,
       "norm_label": ".refrescarmusica()"
@@ -16952,7 +17033,7 @@
       "label": ".detenerMusica()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L324",
+      "source_location": "L327",
       "id": "fx_audio_motoraudio_detenermusica",
       "community": 4,
       "norm_label": ".detenermusica()"
@@ -16961,34 +17042,34 @@
       "label": ".arrancarTema()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L341",
+      "source_location": "L344",
       "id": "fx_audio_motoraudio_arrancartema",
-      "community": 89,
+      "community": 4,
       "norm_label": ".arrancartema()"
     },
     {
       "label": ".cargarPista()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L371",
+      "source_location": "L377",
       "id": "fx_audio_motoraudio_cargarpista",
-      "community": 89,
+      "community": 4,
       "norm_label": ".cargarpista()"
     },
     {
       "label": ".chiptune()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L385",
+      "source_location": "L391",
       "id": "fx_audio_motoraudio_chiptune",
-      "community": 89,
+      "community": 4,
       "norm_label": ".chiptune()"
     },
     {
       "label": ".notaChip()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L411",
+      "source_location": "L417",
       "id": "fx_audio_motoraudio_notachip",
       "community": 4,
       "norm_label": ".notachip()"
@@ -16997,7 +17078,7 @@
       "label": ".charles()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L429",
+      "source_location": "L435",
       "id": "fx_audio_motoraudio_charles",
       "community": 4,
       "norm_label": ".charles()"
@@ -17006,7 +17087,7 @@
       "label": ".bombo()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L445",
+      "source_location": "L451",
       "id": "fx_audio_motoraudio_bombo",
       "community": 4,
       "norm_label": ".bombo()"
@@ -17015,7 +17096,7 @@
       "label": ".engancharVisibilidad()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L462",
+      "source_location": "L468",
       "id": "fx_audio_motoraudio_engancharvisibilidad",
       "community": 4,
       "norm_label": ".engancharvisibilidad()"
@@ -17024,7 +17105,7 @@
       "label": ".pausarPorFondo()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L471",
+      "source_location": "L477",
       "id": "fx_audio_motoraudio_pausarporfondo",
       "community": 4,
       "norm_label": ".pausarporfondo()"
@@ -17033,16 +17114,34 @@
       "label": ".reanudarDeFondo()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L478",
+      "source_location": "L484",
       "id": "fx_audio_motoraudio_reanudardefondo",
       "community": 4,
       "norm_label": ".reanudardefondo()"
     },
     {
+      "label": ".fundirMusica()",
+      "file_type": "code",
+      "source_file": "src/fx/audio.ts",
+      "source_location": "L492",
+      "id": "fx_audio_motoraudio_fundirmusica",
+      "community": 4,
+      "norm_label": ".fundirmusica()"
+    },
+    {
+      "label": ".gongFunebre()",
+      "file_type": "code",
+      "source_file": "src/fx/audio.ts",
+      "source_location": "L501",
+      "id": "fx_audio_motoraudio_gongfunebre",
+      "community": 4,
+      "norm_label": ".gongfunebre()"
+    },
+    {
       "label": ".sfxRara()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L487",
+      "source_location": "L543",
       "id": "fx_audio_motoraudio_sfxrara",
       "community": 4,
       "norm_label": ".sfxrara()"
@@ -17051,7 +17150,7 @@
       "label": ".arpegio()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L506",
+      "source_location": "L562",
       "id": "fx_audio_motoraudio_arpegio",
       "community": 4,
       "norm_label": ".arpegio()"
@@ -17060,7 +17159,7 @@
       "label": ".toggleMusica()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L539",
+      "source_location": "L595",
       "id": "fx_audio_motoraudio_togglemusica",
       "community": 4,
       "norm_label": ".togglemusica()"
@@ -17069,7 +17168,7 @@
       "label": ".crearBoton()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L549",
+      "source_location": "L605",
       "id": "fx_audio_motoraudio_crearboton",
       "community": 4,
       "norm_label": ".crearboton()"
@@ -17078,7 +17177,7 @@
       "label": ".actualizarBoton()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L563",
+      "source_location": "L619",
       "id": "fx_audio_motoraudio_actualizarboton",
       "community": 4,
       "norm_label": ".actualizarboton()"
@@ -17087,18 +17186,18 @@
       "label": "leerMusicaApagada()",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L572",
+      "source_location": "L628",
       "id": "fx_audio_leermusicaapagada",
-      "community": 100,
+      "community": 4,
       "norm_label": "leermusicaapagada()"
     },
     {
       "label": "audio",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
-      "source_location": "L581",
+      "source_location": "L637",
       "id": "fx_audio_audio",
-      "community": 100,
+      "community": 4,
       "norm_label": "audio"
     },
     {
@@ -17926,7 +18025,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L59",
       "id": "fx_chains_chainrun",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainrun"
     },
     {
@@ -18025,7 +18124,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L234",
       "id": "fx_chains_strandshapes",
-      "community": 64,
+      "community": 92,
       "norm_label": "strandshapes()"
     },
     {
@@ -18542,12 +18641,93 @@
       "norm_label": "rodardados()"
     },
     {
+      "label": "death-spells.ts",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L1",
+      "id": "fx_death_spells",
+      "community": 3,
+      "norm_label": "death-spells.ts"
+    },
+    {
+      "label": "mix()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L10",
+      "id": "fx_death_spells_mix",
+      "community": 3,
+      "norm_label": "mix()"
+    },
+    {
+      "label": "muerteBarbaro()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L17",
+      "id": "fx_death_spells_muertebarbaro",
+      "community": 3,
+      "norm_label": "muertebarbaro()"
+    },
+    {
+      "label": "muerteDruida()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L49",
+      "id": "fx_death_spells_muertedruida",
+      "community": 3,
+      "norm_label": "muertedruida()"
+    },
+    {
+      "label": "muerteMago()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L81",
+      "id": "fx_death_spells_muertemago",
+      "community": 3,
+      "norm_label": "muertemago()"
+    },
+    {
+      "label": "muertePicaro()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L109",
+      "id": "fx_death_spells_muertepicaro",
+      "community": 3,
+      "norm_label": "muertepicaro()"
+    },
+    {
+      "label": "muerteBrujo()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L141",
+      "id": "fx_death_spells_muertebrujo",
+      "community": 3,
+      "norm_label": "muertebrujo()"
+    },
+    {
+      "label": "almaHeroe()",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L170",
+      "id": "fx_death_spells_almaheroe",
+      "community": 3,
+      "norm_label": "almaheroe()"
+    },
+    {
+      "label": "DEATH_SPELLS",
+      "file_type": "code",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L194",
+      "id": "fx_death_spells_death_spells",
+      "community": 3,
+      "norm_label": "death_spells"
+    },
+    {
       "label": "enemy-rigs.ts",
       "file_type": "code",
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1",
       "id": "fx_enemy_rigs",
-      "community": 18,
+      "community": 86,
       "norm_label": "enemy-rigs.ts"
     },
     {
@@ -18556,7 +18736,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L10",
       "id": "fx_enemy_rigs_pt",
-      "community": 86,
+      "community": 45,
       "norm_label": "pt"
     },
     {
@@ -18565,7 +18745,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L12",
       "id": "fx_enemy_rigs_default_palette",
-      "community": 18,
+      "community": 86,
       "norm_label": "default_palette"
     },
     {
@@ -18574,7 +18754,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L23",
       "id": "fx_enemy_rigs_phaseof",
-      "community": 18,
+      "community": 86,
       "norm_label": "phaseof()"
     },
     {
@@ -18592,7 +18772,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L35",
       "id": "fx_enemy_rigs_headtype",
-      "community": 18,
+      "community": 86,
       "norm_label": "headtype"
     },
     {
@@ -18601,7 +18781,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L39",
       "id": "fx_enemy_rigs_headopts",
-      "community": 18,
+      "community": 86,
       "norm_label": "headopts"
     },
     {
@@ -18619,7 +18799,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L210",
       "id": "fx_enemy_rigs_weapontype",
-      "community": 18,
+      "community": 86,
       "norm_label": "weapontype"
     },
     {
@@ -18628,7 +18808,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L213",
       "id": "fx_enemy_rigs_offhandtype",
-      "community": 18,
+      "community": 86,
       "norm_label": "offhandtype"
     },
     {
@@ -18637,7 +18817,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L215",
       "id": "fx_enemy_rigs_grip",
-      "community": 18,
+      "community": 86,
       "norm_label": "grip"
     },
     {
@@ -18664,7 +18844,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L335",
       "id": "fx_enemy_rigs_build",
-      "community": 18,
+      "community": 86,
       "norm_label": "build"
     },
     {
@@ -18673,7 +18853,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L336",
       "id": "fx_enemy_rigs_builds",
-      "community": 18,
+      "community": 86,
       "norm_label": "builds"
     },
     {
@@ -18682,7 +18862,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L343",
       "id": "fx_enemy_rigs_bipedopts",
-      "community": 18,
+      "community": 86,
       "norm_label": "bipedopts"
     },
     {
@@ -18700,7 +18880,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L483",
       "id": "fx_enemy_rigs_canineopts",
-      "community": 18,
+      "community": 86,
       "norm_label": "canineopts"
     },
     {
@@ -18727,7 +18907,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L550",
       "id": "fx_enemy_rigs_drake_wings",
-      "community": 18,
+      "community": 86,
       "norm_label": "drake_wings"
     },
     {
@@ -18808,7 +18988,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L767",
       "id": "fx_enemy_rigs_bossextras",
-      "community": 10,
+      "community": 86,
       "norm_label": "bossextras"
     },
     {
@@ -18817,7 +18997,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L778",
       "id": "fx_enemy_rigs_boss",
-      "community": 18,
+      "community": 86,
       "norm_label": "boss()"
     },
     {
@@ -18853,7 +19033,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L825",
       "id": "fx_enemy_rigs_bosses",
-      "community": 18,
+      "community": 86,
       "norm_label": "bosses"
     },
     {
@@ -18871,7 +19051,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1082",
       "id": "fx_enemy_rigs_g",
-      "community": 18,
+      "community": 86,
       "norm_label": "g"
     },
     {
@@ -18880,7 +19060,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1083",
       "id": "fx_enemy_rigs_bone",
-      "community": 18,
+      "community": 86,
       "norm_label": "bone"
     },
     {
@@ -18889,7 +19069,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1084",
       "id": "fx_enemy_rigs_kobold",
-      "community": 18,
+      "community": 86,
       "norm_label": "kobold"
     },
     {
@@ -18898,7 +19078,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1086",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 46,
+      "community": 13,
       "norm_label": "enemy_rigs"
     },
     {
@@ -18909,6 +19089,114 @@
       "id": "fx_enemy_rigs_invocation_rigs",
       "community": 13,
       "norm_label": "invocation_rigs"
+    },
+    {
+      "label": "hero-death.ts",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L1",
+      "id": "fx_hero_death",
+      "community": 99,
+      "norm_label": "hero-death.ts"
+    },
+    {
+      "label": "DeathCueId",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L8",
+      "id": "fx_hero_death_deathcueid",
+      "community": 99,
+      "norm_label": "deathcueid"
+    },
+    {
+      "label": "DeathCue",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L9",
+      "id": "fx_hero_death_deathcue",
+      "community": 99,
+      "norm_label": "deathcue"
+    },
+    {
+      "label": "DeathSequence",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L10",
+      "id": "fx_hero_death_deathsequence",
+      "community": 99,
+      "norm_label": "deathsequence"
+    },
+    {
+      "label": "FULL",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L28",
+      "id": "fx_hero_death_full",
+      "community": 99,
+      "norm_label": "full"
+    },
+    {
+      "label": "SHORT",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L48",
+      "id": "fx_hero_death_short",
+      "community": 99,
+      "norm_label": "short"
+    },
+    {
+      "label": "heroDeathSequence()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L69",
+      "id": "fx_hero_death_herodeathsequence",
+      "community": 99,
+      "norm_label": "herodeathsequence()"
+    },
+    {
+      "label": "deathTimeScale()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L75",
+      "id": "fx_hero_death_deathtimescale",
+      "community": 99,
+      "norm_label": "deathtimescale()"
+    },
+    {
+      "label": "realEnd()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L84",
+      "id": "fx_hero_death_realend",
+      "community": 99,
+      "norm_label": "realend()"
+    },
+    {
+      "label": "HeroDeathFx",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L94",
+      "id": "fx_hero_death_herodeathfx",
+      "community": 99,
+      "norm_label": "herodeathfx"
+    },
+    {
+      "label": "HERO_DEATH_FX",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L102",
+      "id": "fx_hero_death_hero_death_fx",
+      "community": 99,
+      "norm_label": "hero_death_fx"
+    },
+    {
+      "label": "playsDefeatSequence()",
+      "file_type": "code",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L116",
+      "id": "fx_hero_death_playsdefeatsequence",
+      "community": 99,
+      "norm_label": "playsdefeatsequence()"
     },
     {
       "label": "hero-rig.ts",
@@ -19024,7 +19312,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L1",
       "id": "heroes_barbaro",
-      "community": 81,
+      "community": 77,
       "norm_label": "barbaro.ts"
     },
     {
@@ -19033,7 +19321,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L17",
       "id": "heroes_barbaro_lock_top",
-      "community": 81,
+      "community": 77,
       "norm_label": "lock_top"
     },
     {
@@ -19042,7 +19330,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L21",
       "id": "heroes_barbaro_lock_back",
-      "community": 81,
+      "community": 77,
       "norm_label": "lock_back"
     },
     {
@@ -19051,7 +19339,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L25",
       "id": "heroes_barbaro_lock_nape",
-      "community": 81,
+      "community": 77,
       "norm_label": "lock_nape"
     },
     {
@@ -19060,7 +19348,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L29",
       "id": "heroes_barbaro_lock_crown",
-      "community": 81,
+      "community": 77,
       "norm_label": "lock_crown"
     },
     {
@@ -19069,7 +19357,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L33",
       "id": "heroes_barbaro_beard",
-      "community": 81,
+      "community": 77,
       "norm_label": "beard"
     },
     {
@@ -19078,7 +19366,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L38",
       "id": "heroes_barbaro_loincloth",
-      "community": 81,
+      "community": 77,
       "norm_label": "loincloth"
     },
     {
@@ -19087,7 +19375,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L46",
       "id": "heroes_barbaro_chop",
-      "community": 81,
+      "community": 77,
       "norm_label": "chop"
     },
     {
@@ -19096,7 +19384,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L51",
       "id": "heroes_barbaro_attack",
-      "community": 81,
+      "community": 77,
       "norm_label": "attack"
     },
     {
@@ -19105,7 +19393,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L71",
       "id": "heroes_barbaro_roar",
-      "community": 81,
+      "community": 77,
       "norm_label": "roar"
     },
     {
@@ -19114,7 +19402,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L77",
       "id": "heroes_barbaro_spell",
-      "community": 81,
+      "community": 77,
       "norm_label": "spell"
     },
     {
@@ -19123,7 +19411,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L87",
       "id": "heroes_barbaro_hit",
-      "community": 81,
+      "community": 77,
       "norm_label": "hit"
     },
     {
@@ -19132,7 +19420,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L95",
       "id": "heroes_barbaro_kneel",
-      "community": 81,
+      "community": 77,
       "norm_label": "kneel"
     },
     {
@@ -19141,7 +19429,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L100",
       "id": "heroes_barbaro_slump",
-      "community": 81,
+      "community": 77,
       "norm_label": "slump"
     },
     {
@@ -19150,7 +19438,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L101",
       "id": "heroes_barbaro_death",
-      "community": 81,
+      "community": 77,
       "norm_label": "death"
     },
     {
@@ -19159,7 +19447,7 @@
       "source_file": "src/fx/heroes/barbaro.ts",
       "source_location": "L112",
       "id": "heroes_barbaro_barbaro_rig",
-      "community": 81,
+      "community": 77,
       "norm_label": "barbaro_rig"
     },
     {
@@ -19438,7 +19726,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L164",
       "id": "heroes_druida_formid",
-      "community": 0,
+      "community": 13,
       "norm_label": "formid"
     },
     {
@@ -19465,7 +19753,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L176",
       "id": "heroes_druida_wolfchains",
-      "community": 64,
+      "community": 92,
       "norm_label": "wolfchains()"
     },
     {
@@ -19474,7 +19762,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L194",
       "id": "heroes_druida_wolfshapes",
-      "community": 64,
+      "community": 92,
       "norm_label": "wolfshapes()"
     },
     {
@@ -19843,7 +20131,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L1",
       "id": "heroes_picaro",
-      "community": 77,
+      "community": 92,
       "norm_label": "picaro.ts"
     },
     {
@@ -19852,7 +20140,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L26",
       "id": "heroes_picaro_core",
-      "community": 77,
+      "community": 92,
       "norm_label": "core"
     },
     {
@@ -19861,7 +20149,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L29",
       "id": "heroes_picaro_scarf",
-      "community": 77,
+      "community": 92,
       "norm_label": "scarf"
     },
     {
@@ -19870,7 +20158,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L33",
       "id": "heroes_picaro_scarf_tail",
-      "community": 77,
+      "community": 92,
       "norm_label": "scarf_tail"
     },
     {
@@ -19879,7 +20167,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L37",
       "id": "heroes_picaro_cape",
-      "community": 77,
+      "community": 92,
       "norm_label": "cape"
     },
     {
@@ -19888,7 +20176,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L41",
       "id": "heroes_picaro_cape_back",
-      "community": 77,
+      "community": 92,
       "norm_label": "cape_back"
     },
     {
@@ -19897,7 +20185,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L45",
       "id": "heroes_picaro_hood_peak",
-      "community": 77,
+      "community": 92,
       "norm_label": "hood_peak"
     },
     {
@@ -19906,7 +20194,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L49",
       "id": "heroes_picaro_sash",
-      "community": 77,
+      "community": 92,
       "norm_label": "sash"
     },
     {
@@ -19915,7 +20203,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L56",
       "id": "heroes_picaro_stab",
-      "community": 77,
+      "community": 92,
       "norm_label": "stab"
     },
     {
@@ -19924,7 +20212,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L60",
       "id": "heroes_picaro_fallen",
-      "community": 77,
+      "community": 92,
       "norm_label": "fallen"
     },
     {
@@ -19933,7 +20221,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L65",
       "id": "heroes_picaro_actions",
-      "community": 77,
+      "community": 92,
       "norm_label": "actions"
     },
     {
@@ -19942,7 +20230,7 @@
       "source_file": "src/fx/heroes/picaro.ts",
       "source_location": "L122",
       "id": "heroes_picaro_picaro_rig",
-      "community": 77,
+      "community": 92,
       "norm_label": "picaro_rig"
     },
     {
@@ -20005,7 +20293,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L1",
       "id": "fx_music_tracks",
-      "community": 100,
+      "community": 4,
       "norm_label": "music-tracks.ts"
     },
     {
@@ -20014,7 +20302,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L5",
       "id": "fx_music_tracks_musictrack",
-      "community": 100,
+      "community": 4,
       "norm_label": "musictrack"
     },
     {
@@ -20023,7 +20311,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L15",
       "id": "fx_music_tracks_music_tracks",
-      "community": 100,
+      "community": 4,
       "norm_label": "music_tracks"
     },
     {
@@ -20032,7 +20320,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L30",
       "id": "fx_music_tracks_loopwindow",
-      "community": 100,
+      "community": 4,
       "norm_label": "loopwindow()"
     },
     {
@@ -20113,7 +20401,7 @@
       "source_file": "src/fx/particle-sim.ts",
       "source_location": "L4",
       "id": "fx_particle_sim_particleshape",
-      "community": 3,
+      "community": 17,
       "norm_label": "particleshape"
     },
     {
@@ -20149,14 +20437,14 @@
       "source_file": "src/fx/particle-sim.ts",
       "source_location": "L43",
       "id": "fx_particle_sim_effects",
-      "community": 17,
+      "community": 67,
       "norm_label": "effects"
     },
     {
       "label": "AmbientStyle",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L89",
+      "source_location": "L91",
       "id": "fx_particle_sim_ambientstyle",
       "community": 17,
       "norm_label": "ambientstyle"
@@ -20165,7 +20453,7 @@
       "label": "AmbientPreset",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L90",
+      "source_location": "L92",
       "id": "fx_particle_sim_ambientpreset",
       "community": 17,
       "norm_label": "ambientpreset"
@@ -20174,7 +20462,7 @@
       "label": "AMBIENTS",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L91",
+      "source_location": "L93",
       "id": "fx_particle_sim_ambients",
       "community": 17,
       "norm_label": "ambients"
@@ -20183,7 +20471,7 @@
       "label": "pick()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L99",
+      "source_location": "L101",
       "id": "fx_particle_sim_pick",
       "community": 17,
       "norm_label": "pick()"
@@ -20192,7 +20480,7 @@
       "label": "between()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L100",
+      "source_location": "L102",
       "id": "fx_particle_sim_between",
       "community": 17,
       "norm_label": "between()"
@@ -20201,7 +20489,7 @@
       "label": "spawnEffect()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L102",
+      "source_location": "L104",
       "id": "fx_particle_sim_spawneffect",
       "community": 17,
       "norm_label": "spawneffect()"
@@ -20210,7 +20498,7 @@
       "label": "spawnAmbient()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L118",
+      "source_location": "L120",
       "id": "fx_particle_sim_spawnambient",
       "community": 17,
       "norm_label": "spawnambient()"
@@ -20219,7 +20507,7 @@
       "label": "stepParticles()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L131",
+      "source_location": "L133",
       "id": "fx_particle_sim_stepparticles",
       "community": 17,
       "norm_label": "stepparticles()"
@@ -20228,7 +20516,7 @@
       "label": "particleAlpha()",
       "file_type": "code",
       "source_file": "src/fx/particle-sim.ts",
-      "source_location": "L145",
+      "source_location": "L147",
       "id": "fx_particle_sim_particlealpha",
       "community": 17,
       "norm_label": "particlealpha()"
@@ -20300,7 +20588,7 @@
       "label": ".iniciar()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L82",
+      "source_location": "L86",
       "id": "fx_particulas_motorparticulas_iniciar",
       "community": 17,
       "norm_label": ".iniciar()"
@@ -20309,7 +20597,7 @@
       "label": ".ambiente()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L93",
+      "source_location": "L97",
       "id": "fx_particulas_motorparticulas_ambiente",
       "community": 17,
       "norm_label": ".ambiente()"
@@ -20318,7 +20606,7 @@
       "label": ".emitir()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L97",
+      "source_location": "L101",
       "id": "fx_particulas_motorparticulas_emitir",
       "community": 17,
       "norm_label": ".emitir()"
@@ -20327,7 +20615,7 @@
       "label": ".tieneHechizo()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L102",
+      "source_location": "L106",
       "id": "fx_particulas_motorparticulas_tienehechizo",
       "community": 17,
       "norm_label": ".tienehechizo()"
@@ -20336,7 +20624,7 @@
       "label": ".anclaHechizo()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L107",
+      "source_location": "L111",
       "id": "fx_particulas_motorparticulas_anclahechizo",
       "community": 17,
       "norm_label": ".anclahechizo()"
@@ -20345,7 +20633,7 @@
       "label": ".receptorHechizo()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L112",
+      "source_location": "L116",
       "id": "fx_particulas_motorparticulas_receptorhechizo",
       "community": 17,
       "norm_label": ".receptorhechizo()"
@@ -20354,7 +20642,7 @@
       "label": ".sacudidaHechizo()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L117",
+      "source_location": "L121",
       "id": "fx_particulas_motorparticulas_sacudidahechizo",
       "community": 17,
       "norm_label": ".sacudidahechizo()"
@@ -20363,7 +20651,7 @@
       "label": ".hechizo()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L123",
+      "source_location": "L127",
       "id": "fx_particulas_motorparticulas_hechizo",
       "community": 17,
       "norm_label": ".hechizo()"
@@ -20372,7 +20660,7 @@
       "label": ".fuenteCarta()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L130",
+      "source_location": "L134",
       "id": "fx_particulas_motorparticulas_fuentecarta",
       "community": 17,
       "norm_label": ".fuentecarta()"
@@ -20381,7 +20669,7 @@
       "label": ".emitirFuentes()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L134",
+      "source_location": "L138",
       "id": "fx_particulas_motorparticulas_emitirfuentes",
       "community": 17,
       "norm_label": ".emitirfuentes()"
@@ -20390,7 +20678,7 @@
       "label": ".estallido()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L152",
+      "source_location": "L156",
       "id": "fx_particulas_motorparticulas_estallido",
       "community": 17,
       "norm_label": ".estallido()"
@@ -20399,7 +20687,7 @@
       "label": ".contadorFps()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L158",
+      "source_location": "L162",
       "id": "fx_particulas_motorparticulas_contadorfps",
       "community": 17,
       "norm_label": ".contadorfps()"
@@ -20408,7 +20696,7 @@
       "label": ".bucle()",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L177",
+      "source_location": "L181",
       "id": "fx_particulas_motorparticulas_bucle",
       "community": 17,
       "norm_label": ".bucle()"
@@ -20417,9 +20705,9 @@
       "label": "fx",
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
-      "source_location": "L199",
+      "source_location": "L204",
       "id": "fx_particulas_fx",
-      "community": 46,
+      "community": 79,
       "norm_label": "fx"
     },
     {
@@ -20500,7 +20788,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L50",
       "id": "fx_puppet_gpu_parsecolour",
-      "community": 45,
+      "community": 17,
       "norm_label": "parsecolour()"
     },
     {
@@ -20509,7 +20797,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L56",
       "id": "fx_puppet_gpu_shapebbox",
-      "community": 74,
+      "community": 45,
       "norm_label": "shapebbox()"
     },
     {
@@ -20554,7 +20842,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L11",
       "id": "fx_puppet_chain_slots",
-      "community": 45,
+      "community": 10,
       "norm_label": "chain_slots"
     },
     {
@@ -20572,7 +20860,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L14",
       "id": "fx_puppet_chainbone",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainbone"
     },
     {
@@ -20608,7 +20896,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L29",
       "id": "fx_puppet_shape",
-      "community": 10,
+      "community": 86,
       "norm_label": "shape"
     },
     {
@@ -20635,7 +20923,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L46",
       "id": "fx_puppet_emitter",
-      "community": 10,
+      "community": 86,
       "norm_label": "emitter"
     },
     {
@@ -20644,7 +20932,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L57",
       "id": "fx_puppet_burst",
-      "community": 10,
+      "community": 86,
       "norm_label": "burst"
     },
     {
@@ -20671,7 +20959,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L77",
       "id": "fx_puppet_chainspec",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainspec"
     },
     {
@@ -20698,7 +20986,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L162",
       "id": "fx_puppet_actiontype",
-      "community": 13,
+      "community": 81,
       "norm_label": "actiontype"
     },
     {
@@ -21067,7 +21355,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L1",
       "id": "fx_sfx_bank",
-      "community": 100,
+      "community": 4,
       "norm_label": "sfx-bank.ts"
     },
     {
@@ -21076,7 +21364,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L9",
       "id": "fx_sfx_bank_sfx_names",
-      "community": 100,
+      "community": 4,
       "norm_label": "sfx_names"
     },
     {
@@ -21085,7 +21373,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L21",
       "id": "fx_sfx_bank_frequent_sfx",
-      "community": 100,
+      "community": 4,
       "norm_label": "frequent_sfx"
     },
     {
@@ -21094,7 +21382,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L27",
       "id": "fx_sfx_bank_resolvesfx",
-      "community": 100,
+      "community": 4,
       "norm_label": "resolvesfx()"
     },
     {
@@ -21103,7 +21391,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L32",
       "id": "fx_sfx_bank_groupsfxfiles",
-      "community": 100,
+      "community": 4,
       "norm_label": "groupsfxfiles()"
     },
     {
@@ -21112,7 +21400,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L45",
       "id": "fx_sfx_bank_pickvariant",
-      "community": 100,
+      "community": 4,
       "norm_label": "pickvariant()"
     },
     {
@@ -21121,7 +21409,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L52",
       "id": "fx_sfx_bank_playbackjitter",
-      "community": 100,
+      "community": 4,
       "norm_label": "playbackjitter()"
     },
     {
@@ -22343,7 +22631,7 @@
       "label": "MomentoBendicion",
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
-      "source_location": "L10",
+      "source_location": "L11",
       "id": "ui_bendicion_momentobendicion",
       "community": 90,
       "norm_label": "momentobendicion"
@@ -22352,7 +22640,7 @@
       "label": "ETIQUETA_TIPO",
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
-      "source_location": "L13",
+      "source_location": "L14",
       "id": "ui_bendicion_etiqueta_tipo",
       "community": 90,
       "norm_label": "etiqueta_tipo"
@@ -22361,16 +22649,16 @@
       "label": "contenidoOpcion()",
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "ui_bendicion_contenidoopcion",
-      "community": 90,
+      "community": 52,
       "norm_label": "contenidoopcion()"
     },
     {
       "label": "pantallaBendicion()",
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
-      "source_location": "L35",
+      "source_location": "L36",
       "id": "ui_bendicion_pantallabendicion",
       "community": 46,
       "norm_label": "pantallabendicion()"
@@ -22381,14 +22669,14 @@
       "source_file": "src/ui/capitulo.ts",
       "source_location": "L1",
       "id": "ui_capitulo",
-      "community": 46,
+      "community": 79,
       "norm_label": "capitulo.ts"
     },
     {
       "label": "pantallaCapitulo()",
       "file_type": "code",
       "source_file": "src/ui/capitulo.ts",
-      "source_location": "L6",
+      "source_location": "L7",
       "id": "ui_capitulo_pantallacapitulo",
       "community": 46,
       "norm_label": "pantallacapitulo()"
@@ -22777,7 +23065,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L14",
       "id": "ui_card_svgs_picksvg",
-      "community": 52,
+      "community": 59,
       "norm_label": "picksvg()"
     },
     {
@@ -22786,7 +23074,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L19",
       "id": "ui_card_svgs_cardsvgurl",
-      "community": 52,
+      "community": 59,
       "norm_label": "cardsvgurl()"
     },
     {
@@ -22921,7 +23209,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L102",
       "id": "ui_carta_efecto_conjuro",
-      "community": 19,
+      "community": 59,
       "norm_label": "efecto_conjuro"
     },
     {
@@ -22930,7 +23218,7 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L110",
       "id": "ui_carta_modscarta",
-      "community": 19,
+      "community": 59,
       "norm_label": "modscarta"
     },
     {
@@ -23015,10 +23303,19 @@
       "norm_label": "combate.ts"
     },
     {
+      "label": "caidaDelHeroe()",
+      "file_type": "code",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L34",
+      "id": "ui_combate_caidadelheroe",
+      "community": 46,
+      "norm_label": "caidadelheroe()"
+    },
+    {
       "label": "AccionJugador",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L28",
+      "source_location": "L37",
       "id": "ui_combate_accionjugador",
       "community": 19,
       "norm_label": "accionjugador"
@@ -23027,7 +23324,7 @@
       "label": "AccionCarta",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L32",
+      "source_location": "L41",
       "id": "ui_combate_accioncarta",
       "community": 19,
       "norm_label": "accioncarta"
@@ -23036,7 +23333,7 @@
       "label": "NOMBRE_CLASE",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L34",
+      "source_location": "L43",
       "id": "ui_combate_nombre_clase",
       "community": 19,
       "norm_label": "nombre_clase"
@@ -23045,7 +23342,7 @@
       "label": "SPRITE_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L38",
+      "source_location": "L47",
       "id": "ui_combate_sprite_invocacion",
       "community": 19,
       "norm_label": "sprite_invocacion"
@@ -23054,7 +23351,7 @@
       "label": "PASIVA_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L42",
+      "source_location": "L51",
       "id": "ui_combate_pasiva_invocacion",
       "community": 19,
       "norm_label": "pasiva_invocacion"
@@ -23063,7 +23360,7 @@
       "label": "pantallaCombate()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L50",
+      "source_location": "L59",
       "id": "ui_combate_pantallacombate",
       "community": 46,
       "norm_label": "pantallacombate()"
@@ -23072,7 +23369,7 @@
       "label": "BACKGROUND_URLS",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1290",
+      "source_location": "L1372",
       "id": "ui_combate_background_urls",
       "community": 19,
       "norm_label": "background_urls"
@@ -23081,7 +23378,7 @@
       "label": "montarFondo()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1298",
+      "source_location": "L1380",
       "id": "ui_combate_montarfondo",
       "community": 19,
       "norm_label": "montarfondo()"
@@ -23092,7 +23389,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L1",
       "id": "ui_compendio",
-      "community": 59,
+      "community": 67,
       "norm_label": "compendio.ts"
     },
     {
@@ -23110,7 +23407,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L22",
       "id": "ui_compendio_comentarios",
-      "community": 59,
+      "community": 67,
       "norm_label": "comentarios"
     },
     {
@@ -23119,7 +23416,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L24",
       "id": "ui_compendio_cargar",
-      "community": 59,
+      "community": 67,
       "norm_label": "cargar()"
     },
     {
@@ -23128,7 +23425,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L31",
       "id": "ui_compendio_guardar",
-      "community": 59,
+      "community": 67,
       "norm_label": "guardar()"
     },
     {
@@ -23137,7 +23434,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L37",
       "id": "ui_compendio_grupos",
-      "community": 59,
+      "community": 67,
       "norm_label": "grupos"
     },
     {
@@ -23182,14 +23479,14 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L1",
       "id": "ui_evento",
-      "community": 75,
+      "community": 79,
       "norm_label": "evento.ts"
     },
     {
       "label": "pantallaEvento()",
       "file_type": "code",
       "source_file": "src/ui/evento.ts",
-      "source_location": "L7",
+      "source_location": "L8",
       "id": "ui_evento_pantallaevento",
       "community": 46,
       "norm_label": "pantallaevento()"
@@ -23200,23 +23497,41 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L1",
       "id": "ui_fin",
-      "community": 46,
+      "community": 81,
       "norm_label": "fin.ts"
+    },
+    {
+      "label": "EleccionFin",
+      "file_type": "code",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L14",
+      "id": "ui_fin_eleccionfin",
+      "community": 81,
+      "norm_label": "eleccionfin"
+    },
+    {
+      "label": "siluetaCaida()",
+      "file_type": "code",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L17",
+      "id": "ui_fin_siluetacaida",
+      "community": 81,
+      "norm_label": "siluetacaida()"
     },
     {
       "label": "EPILOGO",
       "file_type": "code",
       "source_file": "src/ui/fin.ts",
-      "source_location": "L6",
+      "source_location": "L31",
       "id": "ui_fin_epilogo",
-      "community": 46,
+      "community": 81,
       "norm_label": "epilogo"
     },
     {
       "label": "pantallaFin()",
       "file_type": "code",
       "source_file": "src/ui/fin.ts",
-      "source_location": "L19",
+      "source_location": "L44",
       "id": "ui_fin_pantallafin",
       "community": 46,
       "norm_label": "pantallafin()"
@@ -23227,7 +23542,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 46,
+      "community": 89,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -23236,7 +23551,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 46,
+      "community": 89,
       "norm_label": "nombre_clase"
     },
     {
@@ -23245,7 +23560,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 46,
+      "community": 89,
       "norm_label": "izquierda"
     },
     {
@@ -23254,7 +23569,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 46,
+      "community": 89,
       "norm_label": "derecha"
     },
     {
@@ -23272,7 +23587,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L1",
       "id": "ui_gallery_catalogue",
-      "community": 0,
+      "community": 13,
       "norm_label": "gallery-catalogue.ts"
     },
     {
@@ -23290,7 +23605,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L18",
       "id": "ui_gallery_catalogue_gallerysection",
-      "community": 0,
+      "community": 13,
       "norm_label": "gallerysection"
     },
     {
@@ -23299,7 +23614,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L26",
       "id": "ui_gallery_catalogue_heroes",
-      "community": 0,
+      "community": 13,
       "norm_label": "heroes"
     },
     {
@@ -23308,7 +23623,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L29",
       "id": "ui_gallery_catalogue_forms",
-      "community": 0,
+      "community": 13,
       "norm_label": "forms"
     },
     {
@@ -23317,7 +23632,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L33",
       "id": "ui_gallery_catalogue_invocations",
-      "community": 0,
+      "community": 13,
       "norm_label": "invocations"
     },
     {
@@ -23326,7 +23641,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L39",
       "id": "ui_gallery_catalogue_boss_summons",
-      "community": 0,
+      "community": 13,
       "norm_label": "boss_summons"
     },
     {
@@ -23389,7 +23704,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L26",
       "id": "ui_gallery_gallerysprites",
-      "community": 13,
+      "community": 81,
       "norm_label": "gallerysprites"
     },
     {
@@ -23407,7 +23722,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L35",
       "id": "ui_gallery_showgallery",
-      "community": 13,
+      "community": 26,
       "norm_label": "showgallery()"
     },
     {
@@ -23454,6 +23769,42 @@
       "id": "ui_instalar_avisoinstalacion",
       "community": 59,
       "norm_label": "avisoinstalacion()"
+    },
+    {
+      "label": "lapida.ts",
+      "file_type": "code",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L1",
+      "id": "ui_lapida",
+      "community": 81,
+      "norm_label": "lapida.ts"
+    },
+    {
+      "label": "escape()",
+      "file_type": "code",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L7",
+      "id": "ui_lapida_escape",
+      "community": 81,
+      "norm_label": "escape()"
+    },
+    {
+      "label": "tituloLetras()",
+      "file_type": "code",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L11",
+      "id": "ui_lapida_tituloletras",
+      "community": 81,
+      "norm_label": "tituloletras()"
+    },
+    {
+      "label": "htmlDerrota()",
+      "file_type": "code",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L17",
+      "id": "ui_lapida_htmlderrota",
+      "community": 81,
+      "norm_label": "htmlderrota()"
     },
     {
       "label": "map-icons.ts",
@@ -23713,7 +24064,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L61",
       "id": "ui_puppet_sprite_arcsector",
-      "community": 86,
+      "community": 45,
       "norm_label": "arcsector()"
     },
     {
@@ -23780,19 +24131,28 @@
       "norm_label": "active"
     },
     {
+      "label": "setSpriteTimeScale()",
+      "file_type": "code",
+      "source_file": "src/ui/puppet-sprite.ts",
+      "source_location": "L265",
+      "id": "ui_puppet_sprite_setspritetimescale",
+      "community": 45,
+      "norm_label": "setspritetimescale()"
+    },
+    {
       "label": "spriteClock()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L263",
+      "source_location": "L270",
       "id": "ui_puppet_sprite_spriteclock",
-      "community": 13,
+      "community": 81,
       "norm_label": "spriteclock()"
     },
     {
       "label": "loop()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L265",
+      "source_location": "L272",
       "id": "ui_puppet_sprite_loop",
       "community": 45,
       "norm_label": "loop()"
@@ -23801,7 +24161,7 @@
       "label": "PuppetSprite",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L275",
+      "source_location": "L282",
       "id": "ui_puppet_sprite_puppetsprite",
       "community": 45,
       "norm_label": "puppetsprite"
@@ -23810,7 +24170,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L296",
+      "source_location": "L303",
       "id": "ui_puppet_sprite_puppetsprite_constructor",
       "community": 45,
       "norm_label": ".constructor()"
@@ -23819,16 +24179,16 @@
       "label": ".play()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L324",
+      "source_location": "L331",
       "id": "ui_puppet_sprite_puppetsprite_play",
-      "community": 13,
+      "community": 81,
       "norm_label": ".play()"
     },
     {
       "label": ".setIntensity()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L334",
+      "source_location": "L341",
       "id": "ui_puppet_sprite_puppetsprite_setintensity",
       "community": 45,
       "norm_label": ".setintensity()"
@@ -23837,7 +24197,7 @@
       "label": ".reset()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L339",
+      "source_location": "L346",
       "id": "ui_puppet_sprite_puppetsprite_reset",
       "community": 45,
       "norm_label": ".reset()"
@@ -23846,7 +24206,7 @@
       "label": ".setAura()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L345",
+      "source_location": "L352",
       "id": "ui_puppet_sprite_puppetsprite_setaura",
       "community": 45,
       "norm_label": ".setaura()"
@@ -23855,7 +24215,7 @@
       "label": ".setEchoes()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L350",
+      "source_location": "L357",
       "id": "ui_puppet_sprite_puppetsprite_setechoes",
       "community": 45,
       "norm_label": ".setechoes()"
@@ -23864,7 +24224,7 @@
       "label": ".destroy()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L354",
+      "source_location": "L361",
       "id": "ui_puppet_sprite_puppetsprite_destroy",
       "community": 45,
       "norm_label": ".destroy()"
@@ -23873,7 +24233,7 @@
       "label": ".tick()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L360",
+      "source_location": "L367",
       "id": "ui_puppet_sprite_puppetsprite_tick",
       "community": 45,
       "norm_label": ".tick()"
@@ -23882,7 +24242,7 @@
       "label": ".emit()",
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
-      "source_location": "L376",
+      "source_location": "L383",
       "id": "ui_puppet_sprite_puppetsprite_emit",
       "community": 45,
       "norm_label": ".emit()"
@@ -23992,7 +24352,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L307",
       "id": "ui_puppet_stage_puppetstage_texturefor",
-      "community": 45,
+      "community": 54,
       "norm_label": ".texturefor()"
     },
     {
@@ -24010,7 +24370,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L344",
       "id": "ui_puppet_stage_puppetstage_drawsprite",
-      "community": 45,
+      "community": 54,
       "norm_label": ".drawsprite()"
     },
     {
@@ -24028,7 +24388,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L460",
       "id": "ui_puppet_stage_puppetstage_draweffect",
-      "community": 45,
+      "community": 54,
       "norm_label": ".draweffect()"
     },
     {
@@ -24046,7 +24406,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L482",
       "id": "ui_puppet_stage_stages",
-      "community": 13,
+      "community": 45,
       "norm_label": "stages"
     },
     {
@@ -24062,7 +24422,7 @@
       "label": "elegirCarta()",
       "file_type": "code",
       "source_file": "src/ui/recompensa.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "ui_recompensa_elegircarta",
       "community": 46,
       "norm_label": "elegircarta()"
@@ -24071,7 +24431,7 @@
       "label": "obtenerReliquia()",
       "file_type": "code",
       "source_file": "src/ui/recompensa.ts",
-      "source_location": "L73",
+      "source_location": "L74",
       "id": "ui_recompensa_obtenerreliquia",
       "community": 46,
       "norm_label": "obtenerreliquia()"
@@ -24080,7 +24440,7 @@
       "label": "pantallaDescanso()",
       "file_type": "code",
       "source_file": "src/ui/recompensa.ts",
-      "source_location": "L119",
+      "source_location": "L120",
       "id": "ui_recompensa_pantalladescanso",
       "community": 46,
       "norm_label": "pantalladescanso()"
@@ -24091,7 +24451,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L1",
       "id": "ui_relic_art",
-      "community": 90,
+      "community": 52,
       "norm_label": "relic-art.ts"
     },
     {
@@ -24100,7 +24460,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L4",
       "id": "ui_relic_art_svgtable",
-      "community": 90,
+      "community": 52,
       "norm_label": "svgtable"
     },
     {
@@ -24109,7 +24469,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L11",
       "id": "ui_relic_art_pickrelicsvg",
-      "community": 90,
+      "community": 52,
       "norm_label": "pickrelicsvg()"
     },
     {
@@ -24118,7 +24478,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L15",
       "id": "ui_relic_art_reliclike",
-      "community": 90,
+      "community": 52,
       "norm_label": "reliclike"
     },
     {
@@ -24127,8 +24487,80 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L19",
       "id": "ui_relic_art_relicicon",
-      "community": 90,
+      "community": 52,
       "norm_label": "relicicon()"
+    },
+    {
+      "label": "scene-art.ts",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L1",
+      "id": "ui_scene_art",
+      "community": 79,
+      "norm_label": "scene-art.ts"
+    },
+    {
+      "label": "UrlTable",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L9",
+      "id": "ui_scene_art_urltable",
+      "community": 79,
+      "norm_label": "urltable"
+    },
+    {
+      "label": "PORTRAIT_SCENES",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L16",
+      "id": "ui_scene_art_portrait_scenes",
+      "community": 79,
+      "norm_label": "portrait_scenes"
+    },
+    {
+      "label": "chapterSceneId()",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L19",
+      "id": "ui_scene_art_chaptersceneid",
+      "community": 79,
+      "norm_label": "chaptersceneid()"
+    },
+    {
+      "label": "eventSceneId()",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L28",
+      "id": "ui_scene_art_eventsceneid",
+      "community": 79,
+      "norm_label": "eventsceneid()"
+    },
+    {
+      "label": "pickSceneArt()",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L31",
+      "id": "ui_scene_art_picksceneart",
+      "community": 79,
+      "norm_label": "picksceneart()"
+    },
+    {
+      "label": "sceneFigure()",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L36",
+      "id": "ui_scene_art_scenefigure",
+      "community": 79,
+      "norm_label": "scenefigure()"
+    },
+    {
+      "label": "sceneArt()",
+      "file_type": "code",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L43",
+      "id": "ui_scene_art_sceneart",
+      "community": 79,
+      "norm_label": "sceneart()"
     },
     {
       "label": "taberna.ts",
@@ -24136,23 +24568,23 @@
       "source_file": "src/ui/taberna.ts",
       "source_location": "L1",
       "id": "ui_taberna",
-      "community": 92,
+      "community": 46,
       "norm_label": "taberna.ts"
     },
     {
       "label": "LUGAR_MISION",
       "file_type": "code",
       "source_file": "src/ui/taberna.ts",
-      "source_location": "L8",
+      "source_location": "L9",
       "id": "ui_taberna_lugar_mision",
-      "community": 92,
+      "community": 46,
       "norm_label": "lugar_mision"
     },
     {
       "label": "pantallaTaberna()",
       "file_type": "code",
       "source_file": "src/ui/taberna.ts",
-      "source_location": "L14",
+      "source_location": "L15",
       "id": "ui_taberna_pantallataberna",
       "community": 46,
       "norm_label": "pantallataberna()"
@@ -24161,7 +24593,7 @@
       "label": "panelMisionCumplida()",
       "file_type": "code",
       "source_file": "src/ui/taberna.ts",
-      "source_location": "L92",
+      "source_location": "L93",
       "id": "ui_taberna_panelmisioncumplida",
       "community": 46,
       "norm_label": "panelmisioncumplida()"
@@ -24217,7 +24649,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L14",
       "id": "ui_util_espera",
-      "community": 46,
+      "community": 89,
       "norm_label": "espera()"
     },
     {
@@ -24244,7 +24676,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L39",
       "id": "ui_util_sacudir",
-      "community": 19,
+      "community": 59,
       "norm_label": "sacudir()"
     },
     {
@@ -24289,7 +24721,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L140",
       "id": "ui_util_descripcion_estado",
-      "community": 59,
+      "community": 84,
       "norm_label": "descripcion_estado"
     },
     {
@@ -24298,7 +24730,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L203",
       "id": "ui_util_tipestado",
-      "community": 19,
+      "community": 59,
       "norm_label": "tipestado()"
     },
     {
@@ -24793,7 +25225,7 @@
       "source_file": "README.md",
       "source_location": "L254",
       "id": "readme_reliquias",
-      "community": 75,
+      "community": 84,
       "norm_label": "reliquias"
     },
     {
@@ -24802,7 +25234,7 @@
       "source_file": "README.md",
       "source_location": "L331",
       "id": "readme_bendiciones",
-      "community": 75,
+      "community": 84,
       "norm_label": "bendiciones"
     },
     {
@@ -25035,7 +25467,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L177",
-      "community": 0,
+      "community": 13,
       "norm_label": "formid",
       "id": "fx_hero_rig_formid"
     },
@@ -25044,7 +25476,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L201",
-      "community": 99,
+      "community": 6,
       "norm_label": "wolfshapes()",
       "id": "fx_hero_rig_wolfshapes"
     },
@@ -25053,7 +25485,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L226",
-      "community": 99,
+      "community": 6,
       "norm_label": "swarmshapes()",
       "id": "fx_hero_rig_swarmshapes"
     },
@@ -25062,7 +25494,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L245",
-      "community": 6,
+      "community": 67,
       "norm_label": "form_rigs",
       "id": "fx_hero_rig_form_rigs"
     },
@@ -25737,7 +26169,7 @@
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
-      "community": 75,
+      "community": 90,
       "norm_label": "don",
       "id": "ui_bendicion_don"
     },
@@ -26052,7 +26484,7 @@
       "file_type": "code",
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L381",
-      "community": 45,
+      "community": 54,
       "norm_label": ".renderstill()",
       "id": "ui_puppet_stage_puppetstage_renderstill"
     },
@@ -26268,7 +26700,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L66",
-      "community": 6,
+      "community": 81,
       "norm_label": "action_duration",
       "id": "fx_hero_rig_action_duration"
     },
@@ -26295,7 +26727,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L72",
-      "community": 99,
+      "community": 6,
       "norm_label": "c()",
       "id": "fx_hero_rig_c"
     },
@@ -26304,7 +26736,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L73",
-      "community": 99,
+      "community": 6,
       "norm_label": "e()",
       "id": "fx_hero_rig_e"
     },
@@ -26806,7 +27238,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 89,
+      "community": 46,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -26832,7 +27264,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 67,
+      "community": 84,
       "norm_label": "clase barbaro (80 pv)",
       "id": "readme_clase_barbaro"
     },
@@ -26897,7 +27329,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 90,
       "norm_label": "invocacion del druida",
       "id": "readme_invocacion"
     },
@@ -26910,7 +27342,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 67,
+      "community": 84,
       "norm_label": "furia (barbaro)",
       "id": "readme_furia"
     },
@@ -26923,7 +27355,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 67,
+      "community": 84,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -26962,7 +27394,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "acrobacias (picaro)",
       "id": "readme_acrobacias"
     },
@@ -26975,7 +27407,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 84,
       "norm_label": "veneno",
       "id": "readme_veneno"
     },
@@ -27014,7 +27446,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 23,
       "norm_label": "intencion enemiga",
       "id": "readme_intencion_enemiga"
     },
@@ -27105,7 +27537,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 74,
+      "community": 67,
       "norm_label": "mejora de cartas en campamentos",
       "id": "readme_mejora_cartas"
     },
@@ -27118,7 +27550,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 75,
+      "community": 79,
       "norm_label": "eventos narrativos",
       "id": "readme_eventos_narrativos"
     },
@@ -27131,7 +27563,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 59,
+      "community": 67,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -27144,7 +27576,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 92,
+      "community": 46,
       "norm_label": "mapa de 10 filas por capitulo",
       "id": "readme_mapa_capitulo"
     },
@@ -27170,7 +27602,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 84,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -27183,7 +27615,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 84,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -27209,7 +27641,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 74,
+      "community": 67,
       "norm_label": "arquitectura: nucleo sin dom + interfaz presentador",
       "id": "readme_arquitectura_presentador"
     },
@@ -27222,7 +27654,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 74,
+      "community": 67,
       "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
       "id": "readme_estructura_carpetas"
     },
@@ -27235,7 +27667,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 74,
+      "community": 67,
       "norm_label": "smoke test del motor sin navegador",
       "id": "readme_smoke_test_motor"
     },
@@ -27248,7 +27680,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 59,
+      "community": 46,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -27261,7 +27693,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 89,
+      "community": 46,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -27274,7 +27706,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 89,
+      "community": 46,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -27287,7 +27719,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 100,
+      "community": 4,
       "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
       "id": "audio_leeme_sfx_sintetizados"
     },
@@ -27352,7 +27784,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 59,
+      "community": 67,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -27378,7 +27810,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 74,
+      "community": 67,
       "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
       "id": "index_shell_html"
     },
@@ -27391,7 +27823,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 84,
       "norm_label": "clase brujo (64 pv)",
       "id": "readme_clase_brujo"
     },
@@ -27417,7 +27849,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 84,
       "norm_label": "condena (ejecuta al igualar los pv actuales)",
       "id": "readme_condena"
     },
@@ -27430,7 +27862,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 90,
       "norm_label": "invocaciones efimeras (brujo)",
       "id": "readme_invocacion_efimera"
     },
@@ -45476,9 +45908,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L612",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_bone",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_bone"
     },
     {
       "relation": "contains",
@@ -45636,9 +46068,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L648",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_descanso_ogro",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_descanso_ogro"
     },
     {
       "relation": "contains",
@@ -45786,9 +46218,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L561",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "contains",
@@ -45796,9 +46228,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L587",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "contains",
@@ -45816,9 +46248,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L583",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "contains",
@@ -45826,9 +46258,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L598",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "contains",
@@ -45836,9 +46268,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L573",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_sparks",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_sparks"
     },
     {
       "relation": "contains",
@@ -45896,9 +46328,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L621",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons",
-      "target": "mapa_gen_scenario_icons_tankard",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_tankard"
     },
     {
       "relation": "contains",
@@ -45982,9 +46414,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L976",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contemplador",
-      "target": "mapa_gen_scenario_icons_ell",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_ell"
     },
     {
       "relation": "calls",
@@ -45993,9 +46425,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L881",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_cripta",
-      "target": "mapa_gen_scenario_icons_ell",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_ell"
     },
     {
       "relation": "calls",
@@ -46015,9 +46447,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L821",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_ogro",
-      "target": "mapa_gen_scenario_icons_ell",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_ell"
     },
     {
       "relation": "calls",
@@ -46026,9 +46458,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L915",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_templo",
-      "target": "mapa_gen_scenario_icons_ell",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_ell"
     },
     {
       "relation": "calls",
@@ -46048,9 +46480,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L981",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contemplador",
-      "target": "mapa_gen_scenario_icons_arc",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_arc"
     },
     {
       "relation": "calls",
@@ -46157,9 +46589,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L952",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_dragon",
-      "target": "mapa_gen_scenario_icons_coin",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_coin"
     },
     {
       "relation": "calls",
@@ -46190,9 +46622,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L796",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_contemplador",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46201,9 +46633,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L676",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_contrabandistas",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46212,9 +46644,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L704",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_cripta",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46223,9 +46655,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L770",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_dragon",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46234,9 +46666,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L657",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_ogro",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46245,9 +46677,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L736",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_templo",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "rationale_for",
@@ -46255,9 +46687,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L562",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_rationale_562",
-      "target": "mapa_gen_scenario_icons_fire",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_fire"
     },
     {
       "relation": "calls",
@@ -46266,9 +46698,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L697",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_contrabandistas",
-      "target": "mapa_gen_scenario_icons_sparks",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_sparks"
     },
     {
       "relation": "calls",
@@ -46277,9 +46709,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L781",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_dragon",
-      "target": "mapa_gen_scenario_icons_sparks",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_sparks"
     },
     {
       "relation": "calls",
@@ -46288,9 +46720,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L666",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_ogro",
-      "target": "mapa_gen_scenario_icons_sparks",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_sparks"
     },
     {
       "relation": "calls",
@@ -46299,9 +46731,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L757",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_templo",
-      "target": "mapa_gen_scenario_icons_sparks",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_sparks"
     },
     {
       "relation": "calls",
@@ -46310,9 +46742,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L962",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contemplador",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46321,9 +46753,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L847",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contrabandistas",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46332,9 +46764,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L875",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_cripta",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46343,9 +46775,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L930",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_dragon",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46354,9 +46786,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L810",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_ogro",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46365,9 +46797,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L900",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_templo",
-      "target": "mapa_gen_scenario_icons_qline",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qline"
     },
     {
       "relation": "calls",
@@ -46376,9 +46808,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L968",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contemplador",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46387,9 +46819,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L849",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contrabandistas",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46398,9 +46830,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L880",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_cripta",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46409,9 +46841,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L941",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_dragon",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46420,9 +46852,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L815",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_ogro",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46431,9 +46863,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L600",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_qshape",
-      "target": "mapa_gen_scenario_icons_offset",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_offset"
     },
     {
       "relation": "calls",
@@ -46442,9 +46874,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L963",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_contemplador",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "calls",
@@ -46453,9 +46885,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L876",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_cripta",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "calls",
@@ -46464,9 +46896,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L931",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_dragon",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "calls",
@@ -46475,9 +46907,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L811",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_ogro",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "calls",
@@ -46486,9 +46918,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L901",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_evento_templo",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "rationale_for",
@@ -46496,9 +46928,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L599",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_rationale_599",
-      "target": "mapa_gen_scenario_icons_qshape",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_qshape"
     },
     {
       "relation": "calls",
@@ -46507,9 +46939,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L655",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_descanso_ogro",
-      "target": "mapa_gen_scenario_icons_bone",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_bone"
     },
     {
       "relation": "rationale_for",
@@ -46517,9 +46949,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L622",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_rationale_622",
-      "target": "mapa_gen_scenario_icons_tankard",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_tankard"
     },
     {
       "relation": "calls",
@@ -46528,9 +46960,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L1031",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_taberna_contemplador",
-      "target": "mapa_gen_scenario_icons_tankard",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_tankard"
     },
     {
       "relation": "calls",
@@ -46539,9 +46971,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L1009",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_taberna_dragon",
-      "target": "mapa_gen_scenario_icons_tankard",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_tankard"
     },
     {
       "relation": "calls",
@@ -46550,9 +46982,9 @@
       "source_file": "scripts/mapa/gen_scenario_icons.py",
       "source_location": "L993",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "mapa_gen_scenario_icons_taberna_templo",
-      "target": "mapa_gen_scenario_icons_tankard",
-      "confidence_score": 1.0
+      "target": "mapa_gen_scenario_icons_tankard"
     },
     {
       "relation": "contains",
@@ -65096,6 +65528,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/smoke-test.ts",
+      "source_location": "L5373",
+      "weight": 1.0,
+      "source": "scripts_smoke_test",
+      "target": "scripts_smoke_test_sprite2",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/smoke-test.ts",
       "source_location": "L3016",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -70286,6 +70728,17 @@
       "target": "core_enemigos"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "core_enemigos",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "conceptually_related_to",
       "confidence": "INFERRED",
       "confidence_score": 0.75,
@@ -70396,6 +70849,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "core_enemigos_capitulo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/main.ts",
       "source_location": "L9",
       "weight": 1.0,
@@ -70435,6 +70899,175 @@
       "confidence_score": 1.0,
       "source": "ui_mapa",
       "target": "core_enemigos_actos"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "core_enemigos_actos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_datoscaida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_elegirepitafio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_epitafios",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_lapida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_nombre_clase",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_pick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_plural",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "core_epitafio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_lapida",
+      "target": "core_epitafio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "core_epitafio_datoscaida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "core_epitafio_lapida",
+      "target": "core_epitafio_elegirepitafio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "core_epitafio_lapida",
+      "target": "core_epitafio_plural",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "core_epitafio_lapida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_lapida",
+      "target": "core_epitafio_lapida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "core_epitafio_elegirepitafio",
+      "target": "core_epitafio_pick",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -73861,6 +74494,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "core_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L6",
       "weight": 1.0,
@@ -73955,6 +74599,17 @@
       "confidence_score": 1.0,
       "source": "fx_hero_rig",
       "target": "core_types_claseid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "core_types_claseid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -75603,6 +76258,26 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/fx/audio.ts",
+      "source_location": "L492",
+      "weight": 1.0,
+      "source": "fx_audio_motoraudio",
+      "target": "fx_audio_motoraudio_fundirmusica",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/audio.ts",
+      "source_location": "L501",
+      "weight": 1.0,
+      "source": "fx_audio_motoraudio",
+      "target": "fx_audio_motoraudio_gongfunebre",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/audio.ts",
       "source_location": "L243",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -75739,6 +76414,17 @@
       "confidence_score": 1.0,
       "source": "fx_audio_motoraudio_desbloquear",
       "target": "fx_audio_motoraudio_cargarsfx"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/audio.ts",
+      "source_location": "L502",
+      "weight": 1.0,
+      "source": "fx_audio_motoraudio_gongfunebre",
+      "target": "fx_audio_motoraudio_desbloquear",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -76240,6 +76926,17 @@
       "target": "fx_background"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "fx_background",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -76260,6 +76957,17 @@
       "confidence_score": 1.0,
       "source": "ui_combate_montarfondo",
       "target": "fx_background_scenebackground"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "fx_background_scenebackground",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -82547,6 +83255,647 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_almaheroe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L194",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_death_spells",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_mix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_muertebarbaro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_muertebrujo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_muertedruida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_muertemago",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_death_spells_muertepicaro",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_build",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_clamp01",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_dropangle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_easein",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_easeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_fly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_lerp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_smooth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_death_spells",
+      "target": "fx_spell_fx_spells",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_death_spells",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "fx_death_spells_mix",
+      "target": "fx_spell_fx_clamp01",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "fx_death_spells_mix",
+      "target": "fx_spell_fx_lerp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_death_spells_mix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_death_spells_mix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_death_spells_mix",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_spell_fx_easeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_spell_fx_fly",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebarbaro",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_spell_fx_easein",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L57",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_spell_fx_easeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertedruida",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_spell_fx_easein",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_spell_fx_easeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertemago",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L137",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_easein",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_easeout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_lerp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertepicaro",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_bell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L153",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_dropangle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_easein",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L149",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_lerp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L164",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_smooth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L144",
+      "weight": 1.0,
+      "source": "fx_death_spells_muertebrujo",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L178",
+      "weight": 1.0,
+      "source": "fx_death_spells_almaheroe",
+      "target": "fx_spell_fx_clamp01",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "fx_death_spells_almaheroe",
+      "target": "fx_spell_fx_geo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "fx_death_spells_almaheroe",
+      "target": "fx_spell_fx_smooth",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/death-spells.ts",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "fx_death_spells_almaheroe",
+      "target": "fx_spell_fx_span",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L517",
       "weight": 1.0,
@@ -84212,6 +85561,193 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_deathcue",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_deathcueid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_deathsequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_deathtimescale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_full",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_hero_death_fx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_herodeathfx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_herodeathsequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_playsdefeatsequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_realend",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "fx_hero_death",
+      "target": "fx_hero_death_short",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death_deathcueid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death_herodeathsequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/fx/hero-death.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "fx_hero_death_realend",
+      "target": "fx_hero_death_deathtimescale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death_deathtimescale",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death_herodeathfx",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "fx_hero_death_playsdefeatsequence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L43",
       "weight": 1.0,
@@ -85085,6 +86621,17 @@
       "confidence_score": 1.0,
       "source": "ui_combate",
       "target": "fx_hero_rig"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "fx_hero_rig",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -90488,6 +92035,17 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "fx_puppet_action_duration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L9",
       "weight": 1.0,
@@ -95222,6 +96780,17 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/main.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "ui_combate_caidadelheroe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -95431,6 +97000,17 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/main.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "src_main",
+      "target": "ui_titulo_elecciontitulo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
       "source_location": "L13",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -95491,6 +97071,17 @@
       "confidence_score": 1.0,
       "source": "src_main_juego",
       "target": "ui_capitulo_pantallacapitulo"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/main.ts",
+      "source_location": "L166",
+      "weight": 1.0,
+      "source": "src_main_juego",
+      "target": "ui_combate_caidadelheroe",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -96328,6 +97919,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/bendicion.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_bendicion",
+      "target": "ui_scene_art",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/bendicion.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_bendicion",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/bendicion.ts",
       "source_location": "L6",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -96376,6 +97989,39 @@
       "confidence_score": 1.0,
       "source": "ui_capitulo",
       "target": "ui_capitulo_pantallacapitulo"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/capitulo.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_capitulo",
+      "target": "ui_scene_art",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/capitulo.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_capitulo",
+      "target": "ui_scene_art_chaptersceneid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/capitulo.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "ui_capitulo",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -96642,6 +98288,17 @@
       "target": "ui_card_fly"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_card_fly",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -96706,6 +98363,17 @@
       "confidence_score": 1.0,
       "source": "ui_combate",
       "target": "ui_card_fly_reducedmotion"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_card_fly_reducedmotion",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -98226,6 +99894,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/combate.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_combate_caidadelheroe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
       "source_location": "L865",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -98368,6 +100046,17 @@
       "confidence_score": 1.0,
       "source": "ui_combate",
       "target": "ui_puppet_sprite_puppetsprite"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_puppet_sprite_setspritetimescale",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -98704,6 +100393,39 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/evento.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_evento",
+      "target": "ui_scene_art",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/evento.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_evento",
+      "target": "ui_scene_art_eventsceneid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/evento.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "ui_evento",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/evento.ts",
       "source_location": "L4",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -98720,6 +100442,27 @@
       "confidence_score": 1.0,
       "source": "ui_evento",
       "target": "ui_util_el"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "fx_hero_rig_action_duration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_fin_eleccionfin",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -98742,6 +100485,82 @@
       "target": "ui_fin_pantallafin"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_fin_siluetacaida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_hero_sprite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_hero_sprite_herosprite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_lapida",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_lapida_htmlderrota",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_puppet_sprite",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_fin",
+      "target": "ui_puppet_sprite_spriteclock",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -98762,6 +100581,17 @@
       "confidence_score": 1.0,
       "source": "ui_fin",
       "target": "ui_util_el"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/fin.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "ui_fin_siluetacaida",
+      "target": "ui_puppet_sprite_spriteclock",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -99656,6 +101486,58 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_lapida",
+      "target": "ui_lapida_escape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "ui_lapida",
+      "target": "ui_lapida_htmlderrota",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "ui_lapida",
+      "target": "ui_lapida_tituloletras",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "ui_lapida_htmlderrota",
+      "target": "ui_lapida_escape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/lapida.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "ui_lapida_htmlderrota",
+      "target": "ui_lapida_tituloletras",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/map-icons.ts",
       "source_location": "L23",
       "weight": 1.0,
@@ -100180,6 +102062,16 @@
       "confidence_score": 1.0,
       "source": "ui_puppet_sprite",
       "target": "ui_puppet_sprite_runs"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/puppet-sprite.ts",
+      "source_location": "L265",
+      "weight": 1.0,
+      "source": "ui_puppet_sprite",
+      "target": "ui_puppet_sprite_setspritetimescale",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -101066,6 +102958,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/recompensa.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_recompensa",
+      "target": "ui_scene_art",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/recompensa.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_recompensa",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/recompensa.ts",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -101166,6 +103080,120 @@
       "confidence_score": 1.0,
       "source": "ui_taberna",
       "target": "ui_relic_art_relicicon"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_chaptersceneid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_eventsceneid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_picksceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_portrait_scenes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_scenefigure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "ui_scene_art",
+      "target": "ui_scene_art_urltable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/taberna.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_taberna",
+      "target": "ui_scene_art",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "ui_scene_art_sceneart",
+      "target": "ui_scene_art_picksceneart",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/scene-art.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "ui_scene_art_sceneart",
+      "target": "ui_scene_art_scenefigure",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/taberna.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "ui_taberna",
+      "target": "ui_scene_art_sceneart",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -104494,5 +106522,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "395ef2451e96e71e3ecc9519329438371f11d484"
+  "built_at_commit": "61e1a4bddfe07bc8569f1edf4550430b4154ac6d"
 }

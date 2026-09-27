@@ -5218,5 +5218,243 @@ console.log('\n😈 Abaddon no se desplaza');
   check(tras === 'abaddon' && estable, `Abaddon ocupa el sitio del Heraldo y no se mueve en los siguientes renders (${tras})`);
 }
 
+// ── Clairvoyance pays off from the next turn, not the moment it is played ────
+console.log('\n🔮 Clarividencia');
+{
+  const clari = MAGO.find((c) => c.nombre === 'Clarividencia')!;
+  for (const mejorada of [false, true]) {
+    const run = nuevaRun('mago', 21);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], () => 0.5, uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.energia = 3;
+    const inst = { uid: 9100 + Number(mejorada), def: clari, mejorada };
+    comb.jugador.mano.push(inst);
+    const max = comb.jugador.energiaMax;
+    await comb.jugarCarta(inst, undefined);
+    check(comb.jugador.energia === 3 - defDe(inst).coste, `Clarividencia${mejorada ? '+' : ''}: al jugarla no da energía en ese turno`);
+    comb.enemigos[0].intencion = { nombre: 'Espera', intencion: 'defensa', bloqueo: 1 } as any;
+    await comb.terminarTurno();
+    check(comb.jugador.energiaMax === max + 1 && comb.jugador.energia === max + 1, `Clarividencia${mejorada ? '+' : ''}: desde el siguiente turno empiezas con 1 de energía más`);
+  }
+  check(/siguiente turno/i.test(clari.texto), 'el texto aclara que la energía llega a partir del siguiente turno');
+}
+
+// ── Illustrated narrative scenes (src/arte/escenas) ──────────────────────────
+console.log('\n🖼️ Escenas ilustradas');
+try {
+  const fs = await import('node:fs');
+  const SA: any = await import('../src/ui/scene-art.ts');
+  const dir = new URL('../src/arte/escenas/', import.meta.url);
+  const files: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.svg')) : [];
+  const has = (id: string) => files.includes(`${id}.svg`);
+  // — every screen or event with art has its SVG —
+  const chapterIds = ACTOS.flatMap((acto) => acto.map((cap) => SA.chapterSceneId(cap) as string));
+  check(chapterIds.length === 6 && new Set(chapterIds).size === 6 && chapterIds.every((id) => /^capitulo-[a-z-]+$/.test(id)),
+    `cada escenario tiene su propia vista de capítulo (${chapterIds.join(', ')})`);
+  const eventos = [...EVENTOS_POSITIVOS, ...EVENTOS_NEGATIVOS];
+  const eventIds = eventos.map((e) => SA.eventSceneId(e.id) as string);
+  const portraits: string[] = SA.PORTRAIT_SCENES ?? [];
+  check(['aldric', 'sibila'].every((id) => portraits.includes(id)), 'Aldric y Síbila son retratos verticales');
+  const expected = [...portraits, 'taberna', 'campamento', ...chapterIds, ...eventIds];
+  const missing = expected.filter((id) => !has(id));
+  check(missing.length === 0, `cada pantalla o evento con arte tiene su SVG (${expected.length}) ${missing.slice(0, 8).join(', ')}`);
+  check(files.every((f) => expected.includes(f.replace(/\.svg$/, ''))), `no sobran SVG de escenas sin pantalla ${files.filter((f) => !expected.includes(f.replace(/\.svg$/, ''))).join(', ')}`);
+  // — SVG validation: viewBox, forbidden elements, weight, well-formed XML —
+  const bad: string[] = [];
+  for (const f of files) {
+    const xml = fs.readFileSync(new URL(f, dir), 'utf8');
+    const portrait = portraits.includes(f.replace(/\.svg$/, ''));
+    const [viewBox, maxKb] = portrait ? ['0 0 240 300', 24] : ['0 0 320 180', 18];
+    const stack: string[] = [];
+    let nested = true;
+    for (const m of xml.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<(\/?)([a-zA-Z][\w:-]*)[^>]*?(\/?)>/g)) {
+      const [, closing, tag, selfClosing] = m;
+      if (selfClosing) continue;
+      if (closing) { if (stack.pop() !== tag) nested = false; } else stack.push(tag);
+    }
+    if (!xml.trimStart().startsWith('<svg') || !xml.includes(`viewBox="${viewBox}"`)) bad.push(`${f}: formato`);
+    else if (/<(text|image|script)\b/.test(xml) || /href="(?!#)/.test(xml)) bad.push(`${f}: elemento prohibido`);
+    else if (xml.length > maxKb * 1024) bad.push(`${f}: ${Math.round(xml.length / 1024)} KB`);
+    else if (!nested || stack.length > 0) bad.push(`${f}: XML mal formado`);
+  }
+  check(files.length > 0 && bad.length === 0, `${files.length} escenas con su viewBox (retratos 240×300, viñetas 320×180), sin elementos prohibidos, dentro de su peso y bien formadas ${bad.slice(0, 5).join(', ')}`);
+  // — the loader: the image when drawn, the emoji only as fallback —
+  const table = { '../arte/escenas/aldric.svg': '/a/aldric.svg' };
+  check(SA.pickSceneArt(table, 'aldric') === '/a/aldric.svg' && SA.pickSceneArt(table, 'sibila') === null, 'la escena se busca por id en la tabla de Vite');
+  const withArt: string = SA.sceneFigure('/a/aldric.svg', '🧓', 'bendicion-arte', 'Aldric', true);
+  const withoutArt: string = SA.sceneFigure(null, '🧓', 'bendicion-arte', 'Aldric', true);
+  check(/<img[^>]+src="\/a\/aldric\.svg"/.test(withArt) && /alt="Aldric"/.test(withArt) && !withArt.includes('🧓') && /escena-retrato/.test(withArt),
+    'con imagen se pinta la ilustración (con marco de retrato) y no el emoji');
+  check(!/<img/.test(withoutArt) && withoutArt.includes('🧓') && /bendicion-arte/.test(withoutArt), 'sin imagen queda el emoji de respaldo');
+  // — the screens use the image and keep the emoji only as fallback —
+  const ui = (f: string) => fs.readFileSync(new URL(`../src/ui/${f}`, import.meta.url), 'utf8');
+  const bendicion = ui('bendicion.ts'), capitulo = ui('capitulo.ts'), taberna = ui('taberna.ts'), evento = ui('evento.ts'), descanso = ui('recompensa.ts');
+  check(/sceneArt\('aldric'/.test(bendicion) && /sceneArt\('sibila'/.test(bendicion) && !/class="bendicion-arte">/.test(bendicion),
+    'la bendición muestra a Aldric y a Síbila ilustrados, con el emoji solo de respaldo');
+  check(/sceneArt\(chapterSceneId\(cap\)/.test(capitulo), 'el inicio de capítulo muestra la vista de su escenario');
+  check(/sceneArt\('taberna'/.test(taberna) && !/taberna-arte">🍺/.test(taberna), 'la taberna muestra su ilustración');
+  check(/sceneArt\(eventSceneId\(evento\.id\),\s*evento\.arte/.test(evento) && !/evento-arte">\$\{evento\.arte\}/.test(evento),
+    'cada evento muestra su viñeta y usa su emoji solo de respaldo');
+  check(/sceneArt\('campamento'/.test(descanso) && !/class="hoguera">🔥/.test(descanso), 'el campamento muestra la hoguera ilustrada');
+  // — the frame fits on desktop, 844×390 and 375×812 —
+  const css = fs.readFileSync(new URL('../src/estilos/pantallas.css', import.meta.url), 'utf8');
+  const movil = fs.readFileSync(new URL('../src/estilos/movil.css', import.meta.url), 'utf8');
+  const rule = (src: string, sel: string) => new RegExp(`${sel.replace(/[.]/g, '\\.')}[^{]*\\{[^}]*`).exec(src)?.[0] ?? '';
+  check(/border/.test(rule(css, '.escena-img')) && /box-shadow/.test(rule(css, '.escena-img')), 'la ilustración lleva marco y sombra');
+  check(/max-height:[^;]*vh/.test(css.split('.escena-img')[1] ?? '') || /max-height:[^;]*(vh|dvh)/.test(rule(css, '.escena-img')), 'la ilustración limita su alto a la pantalla');
+  check(/@media[^{]*max-height[^{]*\{[\s\S]*escena-img/.test(movil) && /escena-img/.test(movil),
+    'en móvil apaisado y vertical la ilustración se encoge para no empujar los botones');
+} catch (err) {
+  check(false, `las escenas ilustradas se cargan (${(err as Error).message})`);
+}
+
+// ── Epic hero death: slow motion, class burst, soul, tombstone ───────────────
+console.log('\n☠️ Muerte épica del héroe');
+try {
+  const hd = await import('../src/fx/hero-death.ts');
+  const sfx = await import('../src/fx/spell-fx.ts');
+  const ep = await import('../src/core/epitafio.ts');
+  const lp = await import('../src/ui/lapida.ts');
+  const { desenlaceCampana } = await import('../src/core/escena-final.ts');
+  const fs = await import('node:fs');
+
+  // sequence and timings
+  const seq = hd.heroDeathSequence(false);
+  const at = (s: typeof seq, id: string) => s.cues.find((c) => c.id === id)?.at ?? NaN;
+  check(seq.total >= 2500 && seq.total <= 3500, `la muerte dura entre 2,5 y 3,5 s antes de la derrota (${seq.total} ms)`);
+  const pasos = ['golpe', 'caida', 'estallido', 'alma', 'vineta', 'risa', 'gong', 'fin'];
+  check(pasos.every((p) => seq.cues.some((c) => c.id === p)), 'la secuencia tiene golpe, caída, estallido, alma, viñeta, risa, gong y fin');
+  check(seq.cues.every((c, i) => i === 0 || c.at >= seq.cues[i - 1].at), 'los pasos van en orden de tiempo');
+  check(at(seq, 'golpe') === 0 && at(seq, 'fin') === seq.total, 'empieza con el golpe y acaba con el fin');
+  check(at(seq, 'caida') <= at(seq, 'estallido') && at(seq, 'estallido') < at(seq, 'alma') && at(seq, 'alma') < seq.total,
+    'el héroe cae, estalla su efecto y después sube el alma');
+  check(seq.cues.every((c) => c.at >= 0 && c.at <= seq.total), 'ningún paso se sale de la duración total');
+  check(!!seq.slowMotion && seq.slowMotion.scale >= 0.2 && seq.slowMotion.scale <= 0.5, 'hay cámara lenta (factor entre 0,2 y 0,5)');
+  const escalas = Array.from({ length: 80 }, (_, i) => hd.deathTimeScale(seq, (i / 79) * (seq.total + 500)));
+  check(escalas.every((k) => k > 0 && k <= 1), 'el factor de tiempo siempre está entre 0 y 1');
+  check(Math.min(...escalas) === seq.slowMotion!.scale, 'el reloj llega a la cámara lenta');
+  check(hd.deathTimeScale(seq, seq.total) === 1 && hd.deathTimeScale(seq, seq.total + 100) === 1, 'al pasar a la derrota el reloj vuelve a velocidad normal');
+  check(seq.shake === 3 && seq.flash, 'golpe mortal con sacudida fuerte y destello rojo');
+  check(seq.vignette.from >= 0 && seq.vignette.from + seq.vignette.ms <= seq.total, 'el viñeteado se cierra antes del final');
+  check(hd.realEnd(seq, at(seq, 'caida'), ACTION_DURATION.death) <= seq.total, 'la animación de muerte termina entera, a cámara lenta, antes del final');
+  const temas = CLASES.map((c) => hd.heroDeathFx(c));
+  for (const [k, desde] of [...temas.map((t) => [t.spell, 'estallido'] as const), [hd.SOUL_SPELL, 'alma'] as const]) {
+    check(hd.realEnd(seq, at(seq, desde), sfx.SPELLS[k]?.duration ?? 99) <= seq.total, `«${k}» termina antes de la pantalla de derrota`);
+  }
+
+  // reduced motion: short version, no slow motion, no shake
+  const red = hd.heroDeathSequence(true);
+  check(red.slowMotion === null && red.shake === 0, 'con movimiento reducido no hay cámara lenta ni sacudida');
+  check(red.total >= 1000 && red.total < seq.total, `con movimiento reducido es más corta (${red.total} ms)`);
+  check(Array.from({ length: 30 }, (_, i) => hd.deathTimeScale(red, i * 100)).every((k) => k === 1), 'con movimiento reducido el reloj no se frena');
+  check(red.cues.every((c) => c.at <= red.total) && red.vignette.from + red.vignette.ms <= red.total, 'la versión corta también cierra a tiempo');
+  check(pasos.every((p) => red.cues.some((c) => c.id === p)), 'la versión corta conserva todos los pasos');
+
+  // class-themed burst
+  check(new Set(temas.map((t) => t.spell)).size === CLASES.length, 'cada clase tiene su propio estallido de muerte');
+  check(new Set(temas.map((t) => sfx.SPELLS[t.spell]?.build)).size === CLASES.length, 'cada estallido se compone con su propia función');
+  const cajaH = { x: 120, y: 160, w: 140, h: 170 };
+  const ctxH = { box: cajaH, facing: 1 as const, seed: 5 };
+  const todas = (k: string) => {
+    const d = sfx.SPELLS[k];
+    const frames: Sprite2[] = [];
+    let maximo = 0, roto = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) {
+      const fr = sfx.spellFrame(k, ctxH, t);
+      maximo = Math.max(maximo, fr.length);
+      for (const s of fr) {
+        const a = s.alpha ?? 1;
+        if (![s.x, s.y, s.size, s.angle, a].every(Number.isFinite) || a < 0 || a > 1 || s.size <= 0) roto++;
+        frames.push(s);
+      }
+    }
+    return { frames, maximo, roto, d };
+  };
+  type Sprite2 = ReturnType<typeof sfx.spellFrame>[number];
+  const esperado: Record<string, (fr: Sprite2[]) => boolean> = {
+    barbaro: (fr) => fr.some((s) => s.shape === 'chispa' && /^#ff[89ab]/i.test(s.colour)),
+    druida: (fr) => fr.some((s) => s.shape === 'hoja') && fr.some((s) => /#[0-9a-f]{2}[c-f][0-9a-f]/i.test(s.colour) && s.shape === 'disco'),
+    mago: (fr) => fr.filter((s) => s.shape === 'runa').length >= 3,
+    picaro: (fr) => fr.filter((s) => s.shape === 'colmillo').length >= 3,
+    brujo: (fr) => fr.some((s) => /^#(b4|8a|9b|6c|c9)/i.test(s.colour)) && fr.some((s) => s.shape === 'gota' || s.shape === 'capsula'),
+  };
+  const motivo: Record<string, string> = {
+    barbaro: 'brasas', druida: 'hojas y espíritu', mago: 'runas', picaro: 'dagas que caen', brujo: 'llamas violetas',
+  };
+  CLASES.forEach((c, i) => {
+    const k = temas[i].spell;
+    const { frames, maximo, roto, d } = todas(k);
+    check(!!d && d.duration >= 0.4 && d.duration <= 1.4, `${c}: su estallido dura entre 0,4 y 1,4 s`);
+    check(roto === 0 && maximo > 0 && maximo <= sfx.MAX_SPELL_SPRITES, `${c}: elementos válidos y bajo el tope (${maximo})`);
+    check(esperado[c](frames), `${c}: el estallido muestra ${motivo[c]}`);
+    check(sfx.spellFrame(k, ctxH, d.duration + 0.01).length === 0, `${c}: el estallido desaparece al terminar`);
+    check(temas[i].colours.length >= 2, `${c}: el tema de muerte tiene su paleta`);
+  });
+  check(hd.heroDeathFx('desconocido').spell === temas[0].spell || !!sfx.SPELLS[hd.heroDeathFx('desconocido').spell], 'una clase desconocida tiene un estallido por defecto');
+  check(temas.some((t, i) => t.spell !== temas[(i + 1) % temas.length].spell && sfx.spellSignature(t.spell) !== sfx.spellSignature(temas[(i + 1) % temas.length].spell)),
+    'los estallidos de clase se ven distintos entre sí');
+  // the soul rises
+  const alma = sfx.SPELLS[hd.SOUL_SPELL];
+  check(!!alma && alma.duration >= 0.4 && alma.duration <= 1.4, 'el alma del héroe tiene su efecto');
+  const cy = (t: number) => { const fr = sfx.spellFrame(hd.SOUL_SPELL, ctxH, t); return fr.reduce((m, s) => m + s.y, 0) / Math.max(1, fr.length); };
+  check(cy(alma.duration * 0.85) < cy(alma.duration * 0.2) - 30, 'el alma sube desde el cuerpo');
+  check(todas(hd.SOUL_SPELL).maximo <= sfx.MAX_SPELL_SPRITES, 'el alma respeta el tope de elementos');
+  const reducido = sfx.spellFrame(temas[0].spell, { ...ctxH, reduced: true }, sfx.SPELLS[temas[0].spell].duration * 0.4).length;
+  const completo = sfx.spellFrame(temas[0].spell, ctxH, sfx.SPELLS[temas[0].spell].duration * 0.4).length;
+  check(reducido < completo, 'con movimiento reducido el estallido lleva menos partículas');
+
+  // the Dungeon Master's ray is a victory: no defeat sequence
+  const DMdef = (ENEMIGOS as unknown as Record<string, EnemigoDef>).DUNGEON_MASTER;
+  check(hd.playsDefeatSequence('derrota', [GOBLIN_CORTADOR]), 'morir contra un enemigo normal lanza la secuencia de derrota');
+  check(!hd.playsDefeatSequence('derrota', [DMdef]), 'el rayo del Dungeon Master no lanza la secuencia de derrota');
+  check(!hd.playsDefeatSequence('victoria', [GOBLIN_CORTADOR]) && !hd.playsDefeatSequence('victoria', [DMdef]), 'ganar un combate no lanza la secuencia de derrota');
+  check(desenlaceCampana(true, 'derrota').victoria, 'el rayo del DM sigue contando como victoria');
+
+  // epitaph
+  const datos = {
+    clase: 'barbaro', capitulo: 1, subtitulo: 'Capítulo II', escenario: 'La Cripta', asesino: 'Ogro <Joven>', salas: 7, turnos: 4, semilla: 1234,
+  };
+  const l = ep.lapida(datos);
+  check(/Bárbaro/.test(l.clase), 'la lápida nombra la clase');
+  check(/La Cripta/.test(l.lugar) && /Capítulo II/.test(l.lugar), 'la lápida dice el acto y el escenario donde cayó');
+  check(!!l.asesino && /Ogro <Joven>/.test(l.asesino), 'la lápida dice quién lo mató');
+  check(/7 salas/.test(l.cuenta) && /4 turnos/.test(l.cuenta), 'la lápida cuenta salas y turnos');
+  check(ep.EPITAFIOS.length >= 12 && ep.EPITAFIOS.includes('Tiró un 1 en el momento menos oportuno.'), `hay una lista de epitafios con humor negro (${ep.EPITAFIOS.length})`);
+  check(ep.lapida(datos).epitafio === l.epitafio, 'el epitafio es estable para la misma partida');
+  const distintos = new Set(Array.from({ length: 40 }, (_, i) => ep.lapida({ ...datos, semilla: i * 7919 + 3 }).epitafio));
+  check(distintos.size >= 6, `el epitafio cambia de una partida a otra (${distintos.size} distintos)`);
+  const sinAsesino = ep.lapida({ ...datos, asesino: null, salas: 1, turnos: 1 });
+  check(sinAsesino.asesino === null && /1 sala\b/.test(sinAsesino.cuenta) && /1 turno\b/.test(sinAsesino.cuenta), 'sin asesino no hay línea de asesino, y el singular es correcto');
+  check(Array.from({ length: 40 }, (_, i) => ep.lapida({ ...datos, asesino: null, semilla: i }).epitafio).every((e) => !/[{}]/.test(e)),
+    'ningún epitafio deja huecos sin rellenar');
+  check(Array.from({ length: 40 }, (_, i) => ep.lapida({ ...datos, semilla: i }).epitafio).every((e) => !/[{}]/.test(e)), 'los epitafios con asesino se rellenan');
+  check(ep.lapida({ ...datos, turnos: null }).cuenta === '7 salas', 'sin turnos solo cuenta las salas');
+
+  // defeat screen
+  const html = lp.htmlDerrota(l);
+  const texto = html.replace(/<[^>]+>/g, '');
+  check(/class="lapida[" ]/.test(html), 'la pantalla de derrota muestra la lápida');
+  check(/HAS CAÍDO/.test(texto) && (html.match(/class="letra"/g) ?? []).length >= 8, 'el título «HAS CAÍDO» va letra a letra para su entrada');
+  check(/btn-reintentar[^>]*>[^<]*Volver a intentarlo/.test(html), 'hay botón «Volver a intentarlo»');
+  check(/btn-titulo/.test(html), 'se conserva el botón de volver al título');
+  check(texto.includes(l.epitafio) && texto.includes('7 salas'), 'la lápida lleva el epitafio y la cuenta');
+  check(/caido-silueta/.test(html), 'hay hueco para la silueta del héroe caído');
+  check(!/<Joven>/.test(html) && /&lt;Joven&gt;/.test(html), 'los nombres se escapan en el HTML');
+
+  // mobile: only transform/opacity animate, and reduced motion is honoured
+  const css = fs.readFileSync(new URL('../src/estilos/muerte.css', import.meta.url), 'utf8');
+  const malas: string[] = [];
+  for (const m of css.matchAll(/@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^}]*\})*)\s*\}/g)) {
+    const props = [...m[2].matchAll(/([a-z-]+)\s*:/g)].map((x) => x[1]).filter((x) => !['transform', 'opacity', 'animation-timing-function'].includes(x));
+    if (props.length) malas.push(`${m[1]} (${[...new Set(props)].join(', ')})`);
+  }
+  check(malas.length === 0, `las animaciones de la muerte solo mueven transform/opacity ${malas.join('; ')}`);
+  check(/transition[^;]*(box-shadow|filter)/.test(css) === false, 'ninguna transición anima box-shadow ni filter');
+  check(/prefers-reduced-motion/.test(css), 'la hoja de la muerte respeta prefers-reduced-motion');
+  check(!!EFFECTS.ceniza && EFFECTS.ceniza.gravity > 0 && EFFECTS.ceniza.count <= 2, 'la ceniza cae poco a poco en la pantalla de derrota');
+} catch (err) {
+  check(false, `la muerte épica se carga (${(err as Error).message})`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

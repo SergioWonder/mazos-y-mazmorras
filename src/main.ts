@@ -11,9 +11,9 @@ import { desenlaceCampana } from './core/escena-final.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
 import { audio } from './fx/audio.ts';
-import { pantallaTitulo } from './ui/titulo.ts';
+import { pantallaTitulo, type EleccionTitulo } from './ui/titulo.ts';
 import { pantallaMapa } from './ui/mapa.ts';
-import { pantallaCombate } from './ui/combate.ts';
+import { pantallaCombate, caidaDelHeroe } from './ui/combate.ts';
 import { pantallaCapitulo } from './ui/capitulo.ts';
 import { pantallaBendicion } from './ui/bendicion.ts';
 import { avisoInstalacion } from './ui/instalar.ts';
@@ -41,11 +41,14 @@ window.addEventListener('pointerdown', arrancarAudio, { once: true });
 window.addEventListener('keydown', arrancarAudio, { once: true });
 
 async function juego() {
+  // «Try again» on the defeat screen starts a new run with the same class, skipping the title
+  let reintento: EleccionTitulo | null = null;
   for (;;) {
     document.body.dataset.capitulo = '0';
     fx.estiloAmbiente = 'brasas';
     audio.menu(); // música del menú principal
-    const eleccion = await pantallaTitulo(hayGuardado());
+    const eleccion = reintento ?? await pantallaTitulo(hayGuardado());
+    reintento = null;
 
     let run;
     if (eleccion.tipo === 'continuar') {
@@ -156,7 +159,16 @@ async function juego() {
     const actoFinal = ACTOS[ACTOS.length - 1][run.escenario];
     // the secret: the DM fell to a natural 20 on Seduce, and the table finds a date
     if (desenlace.finalVerdadero) await pantallaFinalVerdadero(run.clase);
-    else await pantallaFin(desenlace.victoria, run.clase, actoFinal.jefe[0].id, desenlace.epilogoDM);
+    else {
+      // the tombstone: where, against whom and how far the hero got
+      const caida = desenlace.victoria ? null : {
+        clase: run.clase, capitulo: run.capitulo, subtitulo: ACTOS[run.capitulo][run.escenario].subtitulo,
+        escenario: ACTOS[run.capitulo][run.escenario].nombre, asesino: caidaDelHeroe()?.asesino ?? null,
+        salas: run.piso, turnos: caidaDelHeroe()?.turnos ?? null, semilla: run.semilla + run.piso,
+      };
+      const eleccionFin = await pantallaFin(desenlace.victoria, run.clase, actoFinal.jefe[0].id, desenlace.epilogoDM, caida);
+      if (eleccionFin === 'reintentar' && !desenlace.victoria) reintento = { tipo: 'nueva', clase: run.clase };
+    }
   }
 }
 

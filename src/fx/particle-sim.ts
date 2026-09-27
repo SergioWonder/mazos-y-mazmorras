@@ -82,6 +82,8 @@ export const EFFECTS: Record<string, EffectPreset> = {
   // full-art cards: motes drifting up and twinkles (colour given by the card)
   mota: { count: 1, colours: ['#ffffff'], speed: [0.15, 0.5], life: [1.4, 2.4], size: [0.8, 1.8], shape: 'circulo', gravity: -0.004, direction: [-2.0, -1.1], glow: true },
   destelloCarta: { count: 1, colours: ['#fff8e0'], speed: [0, 0.05], life: [0.5, 0.9], size: [1.2, 2.2], shape: 'estrella', gravity: 0, glow: true },
+  // defeat screen: ash flakes drifting down from the top
+  ceniza: { count: 1, colours: ['rgba(150,140,134,0.7)', 'rgba(110,100,96,0.65)', '#ff8c3b'], speed: [0.2, 0.6], life: [5, 8], size: [1, 2.6], shape: 'circulo', gravity: 0.002, direction: [1.2, 1.95] },
   rayo: { count: 14, colours: ['#ff5ad8', '#ffd75a', '#6bd8ff', '#ffffff'], speed: [3, 9], life: [0.25, 0.5], size: [1.5, 3], shape: 'chispa', gravity: 0, direction: [Math.PI - 0.5, Math.PI + 0.5], glow: true },
 };
 

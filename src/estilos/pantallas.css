@@ -671,6 +671,61 @@ body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
   text-shadow: 0 0 40px rgba(176, 107, 255, 0.7);
 }
 
+/* ── Illustrated scenes (src/arte/escenas): framed NPC portraits and vignettes ── */
+.evento-arte.escena, .hoguera.escena, .bendicion-arte.escena, .capitulo-arte.escena {
+  display: flex;
+  justify-content: center;
+  margin: 0.2rem auto 0.7rem;
+  font-size: 0;
+  line-height: 0;
+  animation: none;
+  filter: none;
+  --escena-brillo: rgba(255, 190, 110, 0.22);
+}
+.escena-img {
+  display: block;
+  width: auto;
+  max-width: 86vw;
+  max-height: 34vh;
+  object-fit: cover;
+  border: 2px solid rgba(217, 169, 63, 0.6);
+  border-radius: 6px;
+  background: #140d0a;
+  box-shadow:
+    0 0 0 3px #140d0a,
+    0 0 0 4px rgba(217, 169, 63, 0.28),
+    0 10px 26px rgba(0, 0, 0, 0.75),
+    0 0 34px var(--escena-brillo);
+  animation: escena-entrar 0.7s ease-out backwards;
+  user-select: none;
+}
+.escena-vineta .escena-img { aspect-ratio: 16 / 9; height: min(236px, 28vh); }
+.escena-retrato .escena-img { aspect-ratio: 4 / 5; height: min(280px, 32vh); border-radius: 48% 48% 6px 6px / 22% 22% 6px 6px; }
+.capitulo-arte .escena-img { height: min(300px, 36vh); }
+.panel-descanso .hoguera.escena { --escena-brillo: rgba(255, 140, 59, 0.4); }
+.taberna-arte.escena { --escena-brillo: rgba(255, 170, 70, 0.35); }
+.evento-negativo .escena-img { border-color: rgba(179, 38, 30, 0.6); }
+.pantalla-bendicion:not(.bendicion-inicial) .bendicion-arte.escena { --escena-brillo: rgba(184, 255, 217, 0.35); }
+/* on wide screens the NPC stands beside their words, so the choices stay in view */
+@media (min-width: 900px) and (min-height: 541px) {
+  .pantalla-bendicion .fin:has(> .escena) {
+    display: grid;
+    grid-template-columns: auto minmax(0, 540px);
+    justify-content: center;
+    align-content: safe center;
+    column-gap: 2.6rem;
+    row-gap: 0.8rem;
+  }
+  .pantalla-bendicion .fin > .escena { grid-column: 1; grid-row: 1 / span 6; align-self: center; margin: 0; }
+  .pantalla-bendicion .fin:has(> .escena) > :not(.escena) { grid-column: 2; justify-self: center; }
+  .pantalla-bendicion .fin > .escena .escena-img { height: min(400px, 56vh); }
+  .pantalla-bendicion .fin:has(> .escena) .fin-titulo { font-size: clamp(1.8rem, 3vw, 2.6rem); }
+}
+@keyframes escena-entrar {
+  from { opacity: 0; transform: translateY(8px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
 /* ── Compendio de cartas ────────────────────────────────────────────────── */
 .compendio-fondo {
   position: fixed;

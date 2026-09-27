@@ -1917,17 +1917,16 @@ export const MAGO: CartaDef[] = [
     subclase: 'Adivinación',
     fx: 'estrellas',
     animRara: 'anim-abjuracion',
-    texto: 'Poder: ganas 1 de energía\nal inicio de cada turno.',
+    texto: 'Poder: a partir del siguiente turno,\nganas 1 de energía al inicio\nde cada turno.',
+    // the extra energy only arrives with the next turn's refill (no instant refund)
     jugar: async (c) => {
       c.jugador.energiaMax += 1;
-      c.ganarEnergia(1);
     },
     mejora: {
       innato: true,
-      texto: 'Innata: empiezas cada combate con ella.\nPoder: ganas 1 de energía\nal inicio de cada turno.',
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: a partir del siguiente turno,\nganas 1 de energía al inicio de cada turno.',
       jugar: async (c) => {
         c.jugador.energiaMax += 1;
-        c.ganarEnergia(1);
       },
     },
   },

@@ -2,6 +2,7 @@ import type { EstadoRun } from '../core/types.ts';
 import { elegirEvento } from '../core/eventos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import { sceneArt, eventSceneId } from './scene-art.ts';
 
 /** Pantalla de evento narrativo con elecciones. */
 export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void> {
@@ -16,7 +17,7 @@ export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void>
     const panel = el('div', `panel-recompensa panel-evento evento-${evento.tono}`);
     panel.innerHTML = `
       <p class="evento-tono">${evento.tono === 'positivo' ? '✦ Encuentro' : '☠ Percance'}</p>
-      <div class="evento-arte">${evento.arte}</div>
+      ${sceneArt(eventSceneId(evento.id), evento.arte, 'evento-arte', evento.titulo)}
       <h2>${evento.titulo}</h2>
       <p class="evento-texto">${evento.texto}</p>
       <div class="evento-opciones"></div>

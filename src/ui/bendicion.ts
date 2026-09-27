@@ -5,6 +5,7 @@ import {
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { relicIcon } from './relic-art.ts';
+import { sceneArt } from './scene-art.ts';
 
 /** When the Seer shows up: at the start of the run or between two acts. */
 export type MomentoBendicion = 'inicial' | 'entreActos';
@@ -50,7 +51,7 @@ export function pantallaBendicion(
     raiz.innerHTML = inicial
       ? `
       <p class="titulo-sub">El encargo</p>
-      <div class="bendicion-arte">🧓</div>
+      ${sceneArt('aldric', '🧓', 'bendicion-arte', 'Aldric, Senescal del Valle')}
       <h1 class="fin-titulo capitulo-nombre">Aldric, Senescal del Valle</h1>
       <p class="fin-texto">«Los goblins de Gorzug queman nuestras granjas, y bajo sus ruinas
       algo peor remueve a los muertos. Acaba con ambos y el valle no lo olvidará. El
@@ -59,7 +60,7 @@ export function pantallaBendicion(
     `
       : `
       <p class="titulo-sub">Encuentro especial</p>
-      <div class="bendicion-arte">🧝‍♀️</div>
+      ${sceneArt('sibila', '🧝‍♀️', 'bendicion-arte', 'Síbila, la Vidente del Manantial')}
       <h1 class="fin-titulo capitulo-nombre">Síbila, la Vidente del Manantial</h1>
       <p class="fin-texto">La encuentras donde el agua nace de la roca, como si llevara
       siglos esperándote. «Has hecho retroceder a la oscuridad, peregrino. Descansa:

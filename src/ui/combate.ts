@@ -23,6 +23,15 @@ import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts'
 import { playDestination, drawDelays, type Point } from './card-motion.ts';
 import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
+import {
+  deathTimeScale, heroDeathFx, heroDeathSequence, playsDefeatSequence, SOUL_SPELL, type DeathCueId,
+} from '../fx/hero-death.ts';
+import { setSpriteTimeScale } from './puppet-sprite.ts';
+import '../estilos/muerte.css';
+
+/** How the hero fell in the last lost combat (for the tombstone). */
+let ultimaCaida: { asesino: string | null; turnos: number } | null = null;
+export const caidaDelHeroe = () => ultimaCaida;
 
 /** Player actions go through a FIFO queue: one resolves at a time, the rest wait. */
 type AccionJugador =
@@ -56,6 +65,7 @@ export function pantallaCombate(
   esElite = false,
 ): Promise<'victoria' | 'derrota'> {
   return new Promise((resolver) => {
+    ultimaCaida = null;
     const app = document.getElementById('app')!;
     app.innerHTML = '';
     app.className = `pantalla-combate ${esJefe ? 'combate-jefe' : ''}`;
@@ -1256,12 +1266,17 @@ export function pantallaCombate(
 
     // ── Final del combate ────────────────────────────────────────────────────
     let resuelto = false;
+    /** Length of the running death sequence (ms), null when there is none. */
+    let muerteMs: number | null = null;
     function comprobarFinal() {
       if (!combate.terminado || resuelto) return;
       resuelto = true;
       cola.close(); // whatever was still queued is dropped
       window.removeEventListener('keydown', alTeclar);
+      // a real defeat plays the hero's death (the Dungeon Master's ray has its own scene)
+      const muerte = playsDefeatSequence(combate.terminado, defs) ? muerteHeroe() : null;
       setTimeout(() => {
+        muerte?.();
         run.pv = Math.max(0, combate.jugador.pv);
         if (combate.terminado === 'victoria') {
           for (const r of run.reliquias) r.finCombate?.(run);
@@ -1273,7 +1288,74 @@ export function pantallaCombate(
         stage?.destroy();
         medirEscenario.disconnect();
         resolver(combate.terminado!);
-      }, defs.some((d) => d.dungeonMaster) ? 1800 : 700); // time to read the DM's last line
+      }, muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700)); // time to read the DM's last line
+    }
+
+    /**
+     * The hero's last moments (fx/hero-death.ts): red heartbeat and shake, slow motion
+     * of sprites and particles, the full death animation, the class burst, the soul
+     * rising, a vignette closing in and the killer's gloat. Returns the cleanup.
+     */
+    function muerteHeroe(): () => void {
+      const seq = heroDeathSequence(reducedMotion());
+      muerteMs = seq.total;
+      ultimaCaida = { asesino: actor?.e.nombre ?? null, turnos: combate.turno };
+      const asesino = actor && actor.e.vivo ? actor.e : null;
+      const heroe = spriteActual();
+      const caja = cajaDe(elemDe(combate.jugador));
+      const tema = heroDeathFx(run.clase);
+      raiz.classList.add('heroe-muriendo');
+
+      const velo = el('div', 'muerte-velo');
+      velo.setAttribute('aria-hidden', 'true');
+      const cx = ((caja.x + caja.w / 2) / window.innerWidth) * 100, cy = ((caja.y + caja.h / 2) / window.innerHeight) * 100;
+      velo.style.cssText = `--mx:${cx.toFixed(1)}%;--my:${cy.toFixed(1)}%;--vineta-ms:${seq.vignette.ms}ms;--vineta-desde:${seq.vignette.from}ms`;
+      velo.innerHTML = `${seq.flash ? '<div class="muerte-destello"></div>' : ''}<div class="muerte-vineta"></div>`;
+      document.body.appendChild(velo);
+
+      // slow motion: one global factor for the sprite clock and the fx canvas
+      const t0 = performance.now();
+      let reloj = 0;
+      const escala = (k: number) => { fx.escalaTiempo = k; setSpriteTimeScale(k); };
+      if (seq.slowMotion) {
+        const paso = () => {
+          const ms = performance.now() - t0;
+          escala(deathTimeScale(seq, ms));
+          if (ms < seq.total) reloj = requestAnimationFrame(paso);
+        };
+        reloj = requestAnimationFrame(paso);
+      }
+
+      const pasos: Record<DeathCueId, () => void> = {
+        golpe: () => {
+          if (seq.shake) sacudir(seq.shake);
+          audio.sfx('muerte');
+          audio.sfx('impacto', 0.7);
+          audio.fundirMusica(seq.music.level, seq.music.seconds);
+        },
+        caida: () => heroe.play('death'),
+        estallido: () => { fx.hechizo(tema.spell, caja, { mirando: 1 }); },
+        vineta: () => {}, // CSS: the vignette starts on its own delay
+        gong: () => audio.gongFunebre(),
+        alma: () => { fx.hechizo(SOUL_SPELL, caja, { mirando: 1 }); },
+        risa: () => {
+          if (!asesino) return;
+          const s = spriteEnemigo(asesino);
+          if (s) { s.play('spell'); return; }
+          const elem = elemDe(asesino);
+          elem?.classList.add('actuando');
+          setTimeout(() => elem?.classList.remove('actuando'), 450);
+        },
+        fin: () => {},
+      };
+      const temporizadores = seq.cues.map((c) => setTimeout(pasos[c.id], c.at));
+
+      return () => {
+        for (const t of temporizadores) clearTimeout(t);
+        cancelAnimationFrame(reloj);
+        escala(1);
+        velo.remove();
+      };
     }
 
     // ¡Empieza el combate!

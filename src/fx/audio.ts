@@ -151,6 +151,9 @@ const TEMAS: Record<string, TemaChip> = {
   },
 };
 
+/** Normal level of the music bus. */
+const VOLUMEN_MUSICA = 0.5;
+
 class MotorAudio {
   private ctx: AudioContext | null = null;
   private maestro!: GainNode;   // ganancia global (silencio)
@@ -185,7 +188,7 @@ class MotorAudio {
       this.busSfx.gain.value = 0.9;
       this.busSfx.connect(this.maestro);
       this.busMusica = this.ctx.createGain();
-      this.busMusica.gain.value = 0.5;
+      this.busMusica.gain.value = VOLUMEN_MUSICA;
       this.busMusica.connect(this.maestro);
       this.cargarSfx();
     }
@@ -342,6 +345,9 @@ class MotorAudio {
     const ctx = this.ctx;
     if (!ctx) return;
     this.sonando = true;
+    // a new theme undoes a previous fade (the hero's death)
+    this.busMusica.gain.cancelScheduledValues(ctx.currentTime);
+    this.busMusica.gain.setValueAtTime(VOLUMEN_MUSICA, ctx.currentTime);
     const tema = TEMAS[id] ?? TEMAS.menu;
     const pista = MUSIC_TRACKS[id];
     if (!pista) { this.chiptune(tema); return; }
@@ -479,6 +485,56 @@ class MotorAudio {
     this.pausada = false;
     if (!this.ctx) return;
     void this.ctx.resume().then(() => this.refrescarMusica());
+  }
+
+  /** Fades the music down to `nivel` (0..1 of its normal level) over `segundos`;
+   *  the next theme that starts brings it back. */
+  fundirMusica(nivel: number, segundos: number) {
+    if (!this.ctx) return;
+    const g = this.busMusica.gain, t = this.ctx.currentTime;
+    g.cancelScheduledValues(t);
+    g.setValueAtTime(g.value, t);
+    g.linearRampToValueAtTime(VOLUMEN_MUSICA * Math.max(0, Math.min(1, nivel)), t + Math.max(0.05, segundos));
+  }
+
+  /** Funeral toll for the fallen hero: a deep inharmonic gong and a low minor choir. */
+  gongFunebre() {
+    this.desbloquear();
+    const ctx = this.ctx;
+    if (!ctx) return;
+    const t0 = ctx.currentTime;
+    // gong: detuned partials that ring and decay slowly, plus a soft mallet thump
+    for (const [freq, vol, dur] of [[55, 0.32, 3.2], [82.6, 0.16, 2.6], [151.8, 0.1, 2.0], [233, 0.05, 1.4]] as const) {
+      const osc = ctx.createOscillator();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq * 1.02, t0);
+      osc.frequency.exponentialRampToValueAtTime(freq, t0 + 0.4);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + 0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(g).connect(this.busSfx);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.05);
+    }
+    // choir: a D minor chord that swells in and dies away
+    for (const [i, nota] of [50, 53, 57, 62].entries()) {
+      const osc = ctx.createOscillator();
+      osc.type = 'triangle';
+      osc.frequency.value = 440 * Math.pow(2, (nota - 69) / 12);
+      osc.detune.value = (i % 2 ? 1 : -1) * 6;
+      const f = ctx.createBiquadFilter();
+      f.type = 'lowpass';
+      f.frequency.value = 900;
+      const g = ctx.createGain();
+      const t = t0 + 0.12;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.045, t + 0.7);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 3.0);
+      osc.connect(f).connect(g).connect(this.busSfx);
+      osc.start(t);
+      osc.stop(t + 3.05);
+    }
   }
 
   // ── SFX elaborados para cartas raras ─────────────────────────────────────────

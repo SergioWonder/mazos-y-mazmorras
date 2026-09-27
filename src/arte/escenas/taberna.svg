@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" width="320" height="180">
+  <defs>
+    <linearGradient id="sala" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a3418"/>
+      <stop offset="1" stop-color="#1e0f06"/>
+    </linearGradient>
+    <radialGradient id="fuego" cx="0.12" cy="0.62" r="0.42">
+      <stop offset="0" stop-color="#ff9a50" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ff9a50" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.52" cy="0.36" r="0.36">
+      <stop offset="0" stop-color="#ffc070" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffc070" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+    <filter id="humo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+  </defs>
+
+  <!-- plank wall -->
+  <rect width="320" height="180" fill="url(#sala)"/>
+  <path d="M24 0 L24 128 M52 0 L52 128 M104 0 L104 128 M132 0 L132 128 M188 0 L188 128 M216 0 L216 128 M268 0 L268 128 M296 0 L296 128" stroke="#2e1a0c" stroke-width="1.2"/>
+  <!-- ceiling beam -->
+  <path d="M0 10 L320 10 L320 22 L0 22 Z" fill="#3a2212" stroke="#140d0a" stroke-width="2"/>
+  <path d="M0 12 L320 12" stroke="#6a4424" stroke-width="1"/>
+
+  <!-- hearth on the left -->
+  <path d="M6 128 L6 70 Q40 52 74 70 L74 128 Z" fill="#4a3a30" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M60 64 Q70 66 74 70 L74 128 L64 128 Z" fill="#33271f"/>
+  <path d="M8 84 L18 84 M62 84 L72 84 M8 104 L16 104 M64 104 L72 104 M24 64 L24 72 M50 62 L50 70" stroke="#140d0a" stroke-width="1"/>
+  <path d="M16 128 L16 88 Q40 72 64 88 L64 128 Z" fill="#1a0c06" stroke="#140d0a" stroke-width="2"/>
+  <path d="M20 128 Q24 104 32 112 Q36 92 42 108 Q48 96 52 112 Q58 106 60 128 Z" fill="#ff9a50" opacity="0.9" filter="url(#brillo)"/>
+  <path d="M22 128 Q26 110 32 116 Q36 100 42 112 Q48 102 52 116 Q58 112 58 128 Z" fill="#e0602a" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M28 128 Q32 118 36 122 Q40 110 44 120 Q48 114 52 128 Z" fill="#ffc070"/>
+  <path d="M34 124 Q38 118 42 124" fill="none" stroke="#fff0c0" stroke-width="1.2"/>
+  <rect width="320" height="180" fill="url(#fuego)"/>
+  <rect width="320" height="180" fill="url(#halo)"/>
+
+  <!-- hanging tankards on the beam -->
+  <g stroke="#140d0a" stroke-linejoin="round">
+    <path d="M88 22 L88 30 M120 22 L120 28 M244 22 L244 30 M284 22 L284 28" stroke-width="1"/>
+    <path d="M82 30 L94 30 L93 44 L83 44 Z M114 28 L126 28 L125 42 L115 42 Z M238 30 L250 30 L249 44 L239 44 Z M278 28 L290 28 L289 42 L279 42 Z" fill="#6a4424" stroke-width="1.6"/>
+    <path d="M94 33 Q99 37 93 41 M126 31 Q131 35 125 39 M250 33 Q255 37 249 41 M290 31 Q295 35 289 39" fill="none" stroke-width="1.4"/>
+    <path d="M83 34 L93 34 M83 40 L93 40 M115 32 L125 32 M115 38 L125 38 M239 34 L249 34 M239 40 L249 40 M279 32 L289 32 M279 38 L289 38" stroke="#a08050" stroke-width="1"/>
+  </g>
+
+  <!-- shelf with bottles -->
+  <path d="M222 70 L300 70 L300 74 L222 74 Z" fill="#3a2212" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M228 70 L228 56 L231 52 L231 46 L235 46 L235 52 L238 56 L238 70 Z M246 70 L246 58 Q246 54 250 54 L250 48 L253 48 L253 54 Q258 54 258 58 L258 70 Z M266 70 L266 60 L270 56 L274 56 L278 60 L278 70 Z M284 70 L284 54 L287 50 L287 44 L290 44 L290 50 L293 54 L293 70 Z" fill="#2a4a32" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M234 58 L237 58 L237 68 L234 68 Z M254 60 L257 60 L257 68 L254 68 Z M274 62 L277 62 L277 68 L274 68 Z M290 58 L292 58 L292 68 L290 68 Z" fill="#1a2e20"/>
+  <path d="M248 70 L248 58" stroke="#6a9a70" stroke-width="1" fill="none"/>
+  <path d="M266 70 L266 60 L270 56 L274 56 L278 60 L278 70 Z" fill="#6a2a22" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+
+  <!-- barrels on the right -->
+  <path d="M240 128 Q236 106 240 86 L276 86 Q280 106 276 128 Z M278 128 Q274 106 278 86 L314 86 Q318 106 314 128 Z" fill="#7a4e2a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M266 86 L276 86 Q280 106 276 128 L266 128 Q270 106 266 86 Z M304 86 L314 86 Q318 106 314 128 L304 128 Q308 106 304 86 Z" fill="#5a3820"/>
+  <path d="M239 94 L277 94 M238 120 L277 120 M277 94 L315 94 M276 120 L316 120" stroke="#3a3a40" stroke-width="2.4"/>
+  <path d="M242 90 Q240 106 242 124 M280 90 Q278 106 280 124" fill="none" stroke="#a87a4a" stroke-width="1.2"/>
+  <path d="M254 86 L254 128 M296 86 L296 128" stroke="#140d0a" stroke-width="0.8"/>
+  <path d="M256 106 L264 106 L264 110 L260 110 L260 114" fill="none" stroke="#b08040" stroke-width="2"/>
+
+  <!-- keeper: resting arm (behind torso) -->
+  <path d="M130 92 Q112 104 114 120" fill="none" stroke="#140d0a" stroke-width="17" stroke-linecap="round"/>
+  <path d="M130 92 Q112 104 114 120" fill="none" stroke="#6a2a1e" stroke-width="13.4" stroke-linecap="round"/>
+  <!-- keeper: torso in a red-brown tunic -->
+  <path d="M112 134 Q108 98 126 86 Q160 76 194 86 Q212 98 208 134 Z" fill="#8a3a2a" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M176 80 Q194 84 202 94 Q212 104 208 134 L186 134 Q194 104 176 80 Z" fill="#62281c"/>
+  <path d="M116 110 Q116 94 128 88" fill="none" stroke="#b05a44" stroke-width="1.6"/>
+  <!-- apron -->
+  <path d="M134 96 L186 96 L192 134 L128 134 Z" fill="#c8b894" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M170 96 L186 96 L192 134 L174 134 Z" fill="#9c8c6c"/>
+  <path d="M136 96 Q146 84 150 78 M184 96 Q174 84 170 78" fill="none" stroke="#c8b894" stroke-width="2.4"/>
+  <path d="M146 112 Q148 124 146 132 M160 110 Q162 122 160 134" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M130 118 L190 118" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M170 104 a3 3 0 1 0 0.1 0 Z" fill="#8a6a44" stroke="#140d0a" stroke-width="0.8"/>
+
+  <!-- keeper: raised arm with the tankard -->
+  <path d="M192 90 Q214 90 218 72 L220 58" fill="none" stroke="#140d0a" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M192 90 Q214 90 218 72" fill="none" stroke="#6a2a1e" stroke-width="13.4" stroke-linecap="round"/>
+  <path d="M218 74 L220 58" fill="none" stroke="#c08a62" stroke-width="12" stroke-linecap="round"/>
+  <path d="M223 72 L224 60" fill="none" stroke="#9a6644" stroke-width="4" stroke-linecap="round"/>
+  <path d="M212 74 L226 76" stroke="#140d0a" stroke-width="2"/>
+  <!-- fist -->
+  <path d="M211 56 Q210 48 218 48 Q228 48 228 56 Q228 62 220 62 Q212 62 211 56 Z" fill="#c08a62" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M214 52 L226 52 M214 56 L226 56" stroke="#140d0a" stroke-width="0.8"/>
+  <!-- tankard -->
+  <path d="M206 24 L232 24 L230 52 L208 52 Z" fill="#7a4e2a" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M222 24 L232 24 L230 52 L222 52 Z" fill="#5a3820"/>
+  <path d="M207 30 L231 30 M208 46 L230 46" stroke="#8a8a90" stroke-width="2.4"/>
+  <path d="M209 28 L209 50" stroke="#a87a4a" stroke-width="1.2"/>
+  <path d="M206 30 Q196 32 198 40 Q200 46 208 46" fill="none" stroke="#140d0a" stroke-width="4"/>
+  <path d="M206 30 Q196 32 198 40 Q200 46 208 46" fill="none" stroke="#7a4e2a" stroke-width="2"/>
+  <!-- foam overflowing -->
+  <path d="M204 24 Q202 16 210 16 Q212 10 220 12 Q226 8 232 14 Q238 16 234 24 Q236 30 232 32 L232 26 L228 28 L226 24 L216 26 L212 24 L208 30 Q204 28 204 24 Z" fill="#f4ecd8" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M226 14 Q234 16 234 24 L230 22 Q230 16 226 14 Z" fill="#d0c4a8"/>
+  <path d="M209 18 Q212 14 216 15" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <path d="M236 30 Q238 36 236 40" fill="none" stroke="#f4ecd8" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M200 14h0.1M240 10h0.1M196 22h0.1" stroke="#f4ecd8" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- keeper: head -->
+  <path d="M150 80 L170 80 L172 90 L148 90 Z" fill="#a87050" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M140 58 Q139 34 160 32 Q181 34 180 58 Q180 76 160 82 Q140 76 140 58 Z" fill="#d09a70" stroke="#140d0a" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M168 34 Q181 38 180 58 Q180 76 160 82 Q176 66 168 34 Z" fill="#a87050"/>
+  <path d="M146 44 Q150 36 158 34" fill="none" stroke="#f0c8a0" stroke-width="1.6"/>
+  <!-- ears and side hair -->
+  <path d="M140 54 Q134 54 135 60 Q136 66 141 64 Z M180 54 Q186 54 185 60 Q184 66 179 64 Z" fill="#c08a62" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M140 50 Q134 48 136 58 L140 60 Z M180 50 Q186 48 184 58 L180 60 Z" fill="#8a4a22" stroke="#140d0a" stroke-width="1.2"/>
+  <!-- heavy brows -->
+  <path d="M146 50 Q151 46 157 49 M163 49 Q169 45 175 49" fill="none" stroke="#6a3418" stroke-width="3" stroke-linecap="round"/>
+  <!-- eye patch and strap -->
+  <path d="M140 52 L147 55 M155 53 Q164 44 174 36" fill="none" stroke="#140d0a" stroke-width="2"/>
+  <path d="M146 53 Q151 51 156 53 Q157 59 151 60 Q146 59 146 53 Z" fill="#1a1210" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M148 54 Q151 53 153 54" fill="none" stroke="#4a3a34" stroke-width="0.9"/>
+  <!-- the good eye -->
+  <path d="M164 55 Q169 52 174 55 Q169 58 164 55 Z" fill="#f0e4d0" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="169" cy="55" r="1.7" fill="#3a2a18"/>
+  <circle cx="169.6" cy="54.4" r="0.6" fill="#ffffff"/>
+  <path d="M175 58 L178 60" stroke="#8a5a3a" stroke-width="0.8"/>
+  <!-- bulbous nose -->
+  <path d="M157 58 Q156 66 154 67 Q157 71 161 69 Q166 71 167 66 Q164 64 163 58 Z" fill="#c07a5a" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M162 60 Q166 64 166 67 Q163 68 162 60 Z" fill="#9a5a40"/>
+  <!-- grin -->
+  <path d="M152 74 Q160 79 168 74 Q160 77 152 74 Z" fill="#5a2018" stroke="#140d0a" stroke-width="1"/>
+  <!-- handlebar moustache -->
+  <path d="M160 69 Q168 66 176 70 Q184 72 190 64 Q190 76 178 76 Q168 75 160 72 Q152 75 142 76 Q130 76 130 64 Q136 72 144 70 Q152 66 160 69 Z" fill="#8a4a22" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M160 72 Q168 75 178 76 Q188 76 190 64 Q186 74 176 73 Q168 72 160 72 Z" fill="#6a3418"/>
+  <path d="M146 71 Q152 68 158 70" fill="none" stroke="#b86a3a" stroke-width="1"/>
+
+  <!-- counter -->
+  <path d="M0 128 L320 128 L320 180 L0 180 Z" fill="#5a3a20" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M0 128 L320 128 L320 138 L0 138 Z" fill="#7a5230" stroke="#140d0a" stroke-width="2"/>
+  <path d="M0 130 L320 130" stroke="#b08050" stroke-width="1.2"/>
+  <path d="M0 152 L320 152 M40 138 L40 180 M120 138 L120 180 M200 138 L200 180 M280 138 L280 180" stroke="#3a2412" stroke-width="1.2"/>
+  <path d="M80 160 a3 2 0 1 0 0.1 0 Z M240 166 a3 2 0 1 0 0.1 0 Z" fill="#3a2412"/>
+  <!-- rag under the resting hand -->
+  <path d="M104 126 Q114 120 126 124 L128 132 Q116 134 102 132 Z" fill="#a89a80" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M106 118 Q104 126 112 128 Q122 128 122 120 Q120 112 112 112 Q106 114 106 118 Z" fill="#c08a62" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M110 122 L120 122" stroke="#140d0a" stroke-width="0.8"/>
+
+  <!-- second tankard on the counter -->
+  <path d="M254 110 L272 110 L271 130 L255 130 Z" fill="#7a4e2a" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M265 110 L272 110 L271 130 L265 130 Z" fill="#5a3820"/>
+  <path d="M255 115 L271 115 M255 126 L271 126" stroke="#8a8a90" stroke-width="1.8"/>
+  <path d="M272 114 Q279 120 271 126" fill="none" stroke="#140d0a" stroke-width="2.4"/>
+  <path d="M253 110 Q256 104 263 106 Q270 104 273 110 Z" fill="#f4ecd8" stroke="#140d0a" stroke-width="1.4"/>
+
+  <!-- pipe on the counter, smoke curling up -->
+  <path d="M58 128 L82 124" stroke="#140d0a" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M58 128 L82 124" stroke="#6a4424" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M80 118 L90 118 L89 128 Q85 131 81 128 Z" fill="#4a2a18" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M81 118 L89 118" stroke="#ff9a50" stroke-width="2" filter="url(#suave)"/>
+  <path d="M85 116 Q78 104 88 96 Q98 88 90 76 Q84 66 94 56 Q102 48 96 36" fill="none" stroke="#c8bca8" stroke-width="5" opacity="0.35" filter="url(#humo)"/>
+  <path d="M85 116 Q80 106 87 98 Q96 90 90 78 Q86 68 93 60" fill="none" stroke="#d8ccb8" stroke-width="1" opacity="0.6" stroke-linecap="round"/>
+
+  <!-- floating embers from the hearth -->
+  <path d="M40 60h0.1M52 46h0.1M30 40h0.1M66 52h0.1" stroke="#ff9a50" stroke-width="3.4" stroke-linecap="round" opacity="0.8" filter="url(#suave)"/>
+  <path d="M40 60h0.1M52 46h0.1M30 40h0.1M66 52h0.1" stroke="#ffe0b0" stroke-width="1.4" stroke-linecap="round"/>
+
+  <rect width="320" height="180" fill="url(#vineta)"/>
+</svg>

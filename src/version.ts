@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.1.1';
+export const VERSION = '6.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.2.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🖼️ Ilustraciones para el Senescal Aldric, la vidente Síbila, el tabernero, el campamento, el inicio de cada capítulo y cada evento del camino.',
+      '💀 La muerte del héroe es mucho más épica: cámara lenta, un estallido propio de su clase, su alma que sube y una nueva pantalla de derrota con lápida y epitafio.',
+      '🔮 Clarividencia ya no da la energía al jugarla: empiezas con 1 de energía más a partir del siguiente turno.',
+    ],
+  },
   {
     version: '6.1.1',
     fecha: '2026-09-27',
