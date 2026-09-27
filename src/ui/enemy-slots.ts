@@ -9,7 +9,9 @@
  */
 export function layoutSlots<T>(prev: readonly T[], enemies: readonly T[], alive: (e: T) => boolean): T[] {
   const slots = prev.filter((e) => enemies.includes(e));
-  const newcomers = enemies.filter((e) => !slots.includes(e));
+  // a dead enemy that has lost its slot (its gap went to a newcomer) never comes back:
+  // re-adding it pushed the creature that replaced it aside on the next render
+  const newcomers = enemies.filter((e) => !slots.includes(e) && (alive(e) || slots.length === 0));
   if (slots.length === 0) return [...newcomers];
   for (const e of newcomers) {
     const gap = slots.findIndex((s) => !alive(s));

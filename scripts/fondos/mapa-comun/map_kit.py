@@ -889,3 +889,233 @@ def massif(sk, box, n, hmin, hmax, op=1.0):
 def label(sk, x, y, w, op=0.75):
     """Small illegible place name."""
     scribble(sk, x - w / 2, y, w, 6, 0.8, op)
+
+
+# ---------------------------------------------------------------------------
+# shared pieces for the per-scenario maps (added for the second scenario of each act)
+# ---------------------------------------------------------------------------
+def group(sk, x, y, rot=0, s=1.0, sy=None):
+    """Open a transformed group in both the ink and the wash layers (close with ungroup)."""
+    g = '<g transform="translate(%.1f,%.1f) rotate(%.1f) scale(%.3f,%.3f)">' % (x, y, rot, s, s if sy is None else sy)
+    sk.add(g)
+    sk.wash.append(g)
+
+
+def ungroup(sk):
+    sk.add("</g>")
+    sk.wash.append("</g>")
+
+
+def densify(pts, step=8.0):
+    out = []
+    for a, b in zip(pts, pts[1:]):
+        n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / step))
+        out += [(a[0] + (b[0] - a[0]) * i / n, a[1] + (b[1] - a[1]) * i / n) for i in range(n)]
+    out.append(pts[-1])
+    return out
+
+
+class Plan:
+    """Dungeon-style floor plan: rooms and tunnels with solid walls, rock hatching outside,
+    white floors and a faint square grid. Overlapping pieces merge into clean junctions
+    because every wall is drawn before every floor."""
+
+    def __init__(self, sk, wall=3.0, depth=24, grid=12, grid_op=0.3, hatch_op=0.9):
+        self.sk, self.wall, self.depth, self.grid, self.grid_op, self.hatch_op = sk, wall, depth, grid, grid_op, hatch_op
+        self.items = []
+
+    def rect(self, x0, y0, x1, y1):
+        self.items.append(("rect", (min(x0, x1), min(y0, y1), max(x0, x1), max(y0, y1))))
+        return self
+
+    def circle(self, cx, cy, r):
+        self.items.append(("circle", (cx, cy, r)))
+        return self
+
+    def tunnel(self, pts, w):
+        self.items.append(("tunnel", (densify(pts, 6), w)))
+        return self
+
+    def _samples(self):
+        """Wall points with outward normals."""
+        out = []
+        for kind, g in self.items:
+            if kind == "rect":
+                x0, y0, x1, y1 = g
+                for (ax, ay, bx, by, nx, ny) in ((x0, y0, x1, y0, 0, -1), (x1, y0, x1, y1, 1, 0),
+                                                 (x1, y1, x0, y1, 0, 1), (x0, y1, x0, y0, -1, 0)):
+                    n = max(1, int(math.hypot(bx - ax, by - ay) / 9))
+                    out += [(ax + (bx - ax) * i / n, ay + (by - ay) * i / n, nx, ny) for i in range(n)]
+            elif kind == "circle":
+                cx, cy, r = g
+                n = max(12, int(2 * math.pi * r / 9))
+                for i in range(n):
+                    a = 2 * math.pi * i / n
+                    out.append((cx + math.cos(a) * r, cy + math.sin(a) * r, math.cos(a), math.sin(a)))
+            else:
+                pts, w = g
+                for i in range(0, len(pts), 2):
+                    a, b = pts[max(0, i - 1)], pts[min(len(pts) - 1, i + 1)]
+                    L = math.hypot(b[0] - a[0], b[1] - a[1]) or 1
+                    nx, ny = -(b[1] - a[1]) / L, (b[0] - a[0]) / L
+                    for s in (1, -1):
+                        out.append((pts[i][0] + s * nx * w / 2, pts[i][1] + s * ny * w / 2, s * nx, s * ny))
+        return out
+
+    def _floor(self, grow, col):
+        """SVG elements for every floor piece grown by `grow` px, filled/stroked with col."""
+        k = self.sk.k
+        els = []
+        for kind, g in self.items:
+            if kind == "rect":
+                x0, y0, x1, y1 = g
+                els.append('<rect x="%.1f" y="%.1f" width="%.1f" height="%.1f" fill="%s"/>'
+                           % (x0 - grow, y0 - grow, x1 - x0 + 2 * grow, y1 - y0 + 2 * grow, col))
+            elif kind == "circle":
+                cx, cy, r = g
+                els.append('<circle cx="%.1f" cy="%.1f" r="%.1f" fill="%s"/>' % (cx, cy, r + grow, col))
+            else:
+                pts, w = g
+                els.append('<path d="%s" fill="none" stroke="%s" stroke-width="%.2f" stroke-linecap="butt" '
+                           'stroke-linejoin="round"/>' % (smooth_path(pts), col, w + 2 * grow))
+        return els
+
+    def render(self, wash=None, wash_op=0.3):
+        sk, r = self.sk, self.sk.rng
+        lines = []
+        for (px, py, nx, ny) in self._samples():
+            for _ in range(2):
+                o = self.wall + r.uniform(2, self.depth)
+                hx, hy = px + nx * o + r.uniform(-4, 4), py + ny * o + r.uniform(-4, 4)
+                a = r.uniform(0, math.pi)
+                ux, uy = math.cos(a), math.sin(a)
+                ln = r.uniform(8, 15) * (1.2 - o / (self.depth + self.wall) * 0.5)
+                for kk in range(r.randint(3, 4)):
+                    off = (kk - 1.5) * 2.9
+                    ax, ay = hx - uy * off, hy + ux * off
+                    lines.append("M%.1f,%.1f L%.1f,%.1f" % (ax - ux * ln / 2, ay - uy * ln / 2,
+                                                            ax + ux * ln / 2, ay + uy * ln / 2))
+        sk.stroke(" ".join(lines), 0.75, self.hatch_op)
+        sk.add("".join(self._floor(self.wall, sk.ink_col)))
+        sk.add("".join(self._floor(0, "#fff")))
+        if wash:
+            for e in self._floor(0, hexc(wash)):
+                sk.wash.append(e.replace("/>", ' fill-opacity="%.2f" stroke-opacity="%.2f"/>' % (wash_op, wash_op), 1)
+                               if 'fill="none"' not in e else e.replace("/>", ' stroke-opacity="%.2f"/>' % wash_op))
+        if self.grid_op > 0:
+            xs, ys = [], []
+            for kind, g in self.items:
+                if kind == "rect":
+                    xs += [g[0], g[2]]; ys += [g[1], g[3]]
+                elif kind == "circle":
+                    xs += [g[0] - g[2], g[0] + g[2]]; ys += [g[1] - g[2], g[1] + g[2]]
+                else:
+                    xs += [p[0] - g[1] for p in g[0]] + [p[0] + g[1] for p in g[0]]
+                    ys += [p[1] - g[1] for p in g[0]] + [p[1] + g[1] for p in g[0]]
+            mid = sk.uid("m")
+            sk.defs.append('<mask id="%s" maskUnits="userSpaceOnUse" x="-4000" y="-4000" width="10000" '
+                           'height="10000">%s</mask>' % (mid, "".join(self._floor(-0.5, "#fff"))))
+            gl = []
+            x = min(xs) - (min(xs) % self.grid)
+            while x <= max(xs):
+                gl.append("M%.1f,%.1f V%.1f" % (x, min(ys), max(ys)))
+                x += self.grid
+            y = min(ys) - (min(ys) % self.grid)
+            while y <= max(ys):
+                gl.append("M%.1f,%.1f H%.1f" % (min(xs), y, max(xs)))
+                y += self.grid
+            sk.add('<g mask="url(#%s)"><path d="%s" fill="none" stroke="%s" stroke-width="0.5" '
+                   'stroke-opacity="%.2f"/></g>' % (mid, " ".join(gl), sk.ink_col, self.grid_op))
+
+
+def dagger(sk, x, y, ang, L, op=1.0, fancy=True, wf=1.0):
+    """A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length L;
+    wf widens the blade and grip."""
+    group(sk, x, y, ang)
+    w = L * 0.065 * wf
+    b0 = L * 0.33
+    blade = "M%.1f,%.1f L%.1f,%.1f Q%.1f,%.1f %.1f,0 Q%.1f,%.1f %.1f,%.1f L%.1f,%.1f Z" % (
+        b0, -w, L * 0.8, -w * 0.75, L * 0.95, -w * 0.4, L, L * 0.95, w * 0.4, L * 0.8, w * 0.75, b0, w)
+    sk.white(blade)
+    lower = "M%.1f,0 L%.1f,0 Q%.1f,%.1f %.1f,%.1f L%.1f,%.1f Z" % (b0, L, L * 0.95, w * 0.4, L * 0.8, w * 0.75, b0, w)
+    sk.hatch(lower, (b0, 0, L, w), angle=12, spacing=2.2, w=0.55, op=0.75 * op)
+    sk.stroke(blade, 1.3, op)
+    sk.line((b0 + L * 0.03, 0), (L * 0.78, 0), 0.8, 0.9 * op)  # fuller
+    # crossguard with curled quillons
+    gw = L * 0.15
+    g = "M%.1f,%.1f h%.1f v%.1f h-%.1f Z" % (b0 - L * 0.03, -gw, L * 0.03, 2 * gw, L * 0.03)
+    sk.white(g)
+    sk.stroke(g, 1.2, op)
+    if fancy:
+        for s in (-1, 1):
+            sk.stroke("M%.1f,%.1f q%.1f,%.1f %.1f,%.1f q%.1f,%.1f %.1f,%.1f" % (
+                b0 - L * 0.015, s * gw, L * 0.05, s * L * 0.02, L * 0.04, s * L * 0.06, -L * 0.02, s * L * 0.02,
+                -L * 0.035, -s * L * 0.005), 1.0, op)
+        sk.circle(b0 - L * 0.015, 0, w * 0.45, 0.8, op, fill="#fff")
+    # grip with wraps and a pommel
+    gh = w * 0.75
+    grip = "M%.1f,%.1f h%.1f v%.1f h-%.1f Z" % (L * 0.1, -gh, b0 - L * 0.13, 2 * gh, b0 - L * 0.13)
+    sk.white(grip)
+    sk.stroke(grip, 1.1, op)
+    n = 7
+    for i in range(1, n):
+        xx = L * 0.1 + (b0 - L * 0.13) * i / n
+        sk.line((xx - 2, -gh), (xx + 2, gh), 0.7, 0.9 * op)
+    sk.circle(L * 0.06, 0, w * 1.15, 1.2, op, fill="#fff")
+    sk.dot(L * 0.06, 0, w * 0.4, op)
+    ungroup(sk)
+
+
+def spiral(sk, x, y, r, turns=4.0, w=0.9, op=0.7, squash=1.0):
+    pts = []
+    n = int(turns * 36)
+    ph = sk.rng.uniform(0, 6.28)
+    for i in range(n + 1):
+        t = i / n
+        a = ph + t * turns * 2 * math.pi
+        rr = r * t * (1 + 0.06 * math.sin(a * 3.1))
+        pts.append((x + math.cos(a) * rr, y + math.sin(a) * rr * squash))
+    sk.stroke(smooth_path(pts), w, op)
+
+
+def eye_glyph(sk, x, y, s, op=1.0, slit=True, lashes=True, look=(0.0, 0.0)):
+    """A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."""
+    ew, eh = s, s * 0.5
+    alm = "M%.1f,%.1f Q%.1f,%.1f %.1f,%.1f Q%.1f,%.1f %.1f,%.1f Z" % (x - ew, y, x, y - eh * 1.9, x + ew, y, x,
+                                                                    y + eh * 1.9, x - ew, y)
+    sk.white(alm)
+    sk.stroke(alm, 1.3, op)
+    ir = eh * 0.95
+    ix, iy = x + look[0] * ir * 0.5, y + look[1] * ir * 0.3
+    cid = sk.uid()
+    sk.defs.append('<clipPath id="%s"><path d="%s"/></clipPath>' % (cid, alm))
+    rays = []
+    for i in range(28):
+        a = 2 * math.pi * i / 28
+        rays.append("M%.1f,%.1f L%.1f,%.1f" % (ix + math.cos(a) * ir * 0.35, iy + math.sin(a) * ir * 0.35,
+                                               ix + math.cos(a) * ir, iy + math.sin(a) * ir))
+    sk.add('<g clip-path="url(#%s)"><path d="%s" stroke="%s" stroke-width="%.2f" stroke-opacity="%.2f" fill="none"/>'
+           '<circle cx="%.1f" cy="%.1f" r="%.1f" fill="none" stroke="%s" stroke-width="%.2f" stroke-opacity="%.2f"/>'
+           '</g>' % (cid, " ".join(rays), sk.ink_col, 0.55 * sk.k, op, ix, iy, ir, sk.ink_col, 1.1 * sk.k, op))
+    if slit:
+        sk.fill("M%.1f,%.1f Q%.1f,%.1f %.1f,%.1f Q%.1f,%.1f %.1f,%.1f Z" % (
+            ix, iy - ir * 0.9, ix + ir * 0.3, iy, ix, iy + ir * 0.9, ix - ir * 0.3, iy, ix, iy - ir * 0.9), op=0.95 * op)
+    else:
+        sk.dot(ix, iy, ir * 0.42, 0.95 * op)
+    sk.circle(ix + ir * 0.3, iy - ir * 0.3, ir * 0.13, 0.5, op, fill="#fff")
+    if lashes:
+        for i in range(7):
+            a = math.pi + math.pi * (i + 0.5) / 7
+            px, py = x + math.cos(a) * ew * 0.9, y - abs(math.sin(a)) * eh * 0.95
+            sk.line((px, py), (px + math.cos(a) * s * 0.2, py - s * 0.18), 0.8, op)
+
+
+def rune(sk, x, y, s, op=0.9, w=1.0):
+    """A random angular rune glyph inside an s x 1.4s cell centred on (x, y)."""
+    r = sk.rng
+    pts = [(x + (i - 1) * s * 0.5, y + (j - 1) * s * 0.7) for i in range(3) for j in range(3)]
+    d = "M%.1f,%.1f L%.1f,%.1f" % (pts[1] + pts[7])  # stave
+    for _ in range(r.randint(2, 3)):
+        a, b = r.sample(pts, 2)
+        d += " M%.1f,%.1f L%.1f,%.1f" % (a + b)
+    sk.stroke(d, w, op)

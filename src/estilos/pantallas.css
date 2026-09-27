@@ -150,6 +150,25 @@
   --perg-borde: #2a160a;
   --perg-mancha: rgba(70, 20, 5, 0.28);
 }
+/* each act's second scenario tints the CSS parchment its own way */
+.pantalla-mapa .mapa-escenario-contrabandistas {
+  --perg-claro: #dccfb0;
+  --perg-medio: #b3a07a;
+  --perg-borde: #4a3b2a;
+  --perg-mancha: rgba(40, 45, 50, 0.22);
+}
+.pantalla-mapa .mapa-escenario-templo {
+  --perg-claro: #dcd0bc;
+  --perg-medio: #ae9a8c;
+  --perg-borde: #3e2436;
+  --perg-mancha: rgba(70, 20, 50, 0.22);
+}
+.pantalla-mapa .mapa-escenario-contemplador {
+  --perg-claro: #d8d2c0;
+  --perg-medio: #a8a08e;
+  --perg-borde: #2c2640;
+  --perg-mancha: rgba(40, 30, 80, 0.24);
+}
 
 /* cartouche with the act name */
 .mapa-cartela {

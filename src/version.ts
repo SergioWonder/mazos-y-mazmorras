@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.0.0';
+export const VERSION = '6.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.1.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🗺️ Cada escenario tiene su propio mapa: la Guarida de los Contrabandistas, el Templo Oscuro y el Laberinto del Contemplador estrenan el suyo.',
+      '✒️ Las localizaciones de cada escenario tienen su propio dibujo a tinta: cultistas, sarcófagos, huevos de dragón, barriles de contrabando…',
+      '😈 Arreglado: Abaddon ya no se desplaza al alzarse de las entrañas de Malachar.',
+    ],
+  },
   {
     version: '6.0.0',
     fecha: '2026-09-27',

@@ -5,7 +5,7 @@ import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { relicIcon } from './relic-art.ts';
 import { cardArtBitmap } from './card-svgs.ts';
-import { mapIconFor, mapIconUrl, mapBackground } from './map-icons.ts';
+import { mapIconFor, mapIconUrl, hasMapIcon, mapBackground, mapScenarioKey } from './map-icons.ts';
 
 const NODE_NAME: Record<TipoNodo, string> = {
   combate: 'Combate', elite: 'Élite', descanso: 'Campamento', cofre: 'Cofre',
@@ -64,7 +64,8 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
     const act = run.capitulo + 1;
     const scenario = ACTOS[run.capitulo]?.[run.escenario];
     const disponibles = nodosDisponibles(run.mapa, run.nodoActual);
-    const raiz = el('div', `mapa mapa-acto-${act}`);
+    const scenarioKey = mapScenarioKey(run.capitulo, run.escenario);
+    const raiz = el('div', `mapa mapa-acto-${act}${scenarioKey ? ` mapa-escenario-${scenarioKey}` : ''}`);
     raiz.innerHTML = `
       <div class="barra-superior">
         <span class="bs-clase">${
@@ -90,8 +91,9 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
     `;
     app.appendChild(raiz);
 
-    // painted parchment for this act, when it exists (CSS parchment otherwise)
-    const bg = mapBackground(run.capitulo);
+    // painted parchment for this scenario (the act's one while it is missing;
+    // the CSS parchment when neither exists)
+    const bg = mapBackground(run.capitulo, run.escenario);
     const lienzoEl = raiz.querySelector('.mapa-lienzo') as HTMLElement;
     if (bg.tall) lienzoEl.style.setProperty('--mapa-fondo', `url("${bg.tall}")`);
     if (bg.wide) raiz.style.setProperty('--mapa-fondo-ancho', `url("${bg.wide}")`);
@@ -145,7 +147,7 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
       const place = n.tipo === 'jefe' && scenario ? scenario.jefe[0].nombre : NODE_NAME[n.tipo];
       let label = n.tipo === 'jefe' ? `Jefe: ${place}` : place;
       b.dataset.tip = `<strong>${place}</strong><br><em>${NODE_HINT[n.tipo]}</em>`;
-      let html = inkImg(mapIconFor(n.tipo, run.capitulo, run.escenario), 'nodo-icono');
+      let html = inkImg(mapIconFor(n.tipo, run.capitulo, run.escenario, hasMapIcon), 'nodo-icono');
       if (run.mision?.nodo === n.id) {
         // tavern quest target: sealed «X» marker and the rumour in the tooltip
         b.classList.add('nodo-mision');

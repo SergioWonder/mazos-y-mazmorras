@@ -235,8 +235,8 @@ def combate():
     s.save()
 
 
-def combate_acto1():
-    s = Svg('combate-acto1', seed=11)
+def combate_acto1(name='combate-acto1'):
+    s = Svg(name, seed=11)
     # spear behind the head (only the visible pieces are drawn)
     s.stroke([(5, 63), (13, 55), (21, 47)], 2.2, taper=False)
     s.stroke([(43, 22), (48, 16), (51, 13)], 2.2, taper=False)
@@ -269,8 +269,8 @@ def combate_acto1():
     s.save()
 
 
-def combate_acto2():
-    s = Svg('combate-acto2', seed=21)
+def combate_acto2(name='combate-acto2'):
+    s = Svg(name, seed=21)
 
     def bone(p, q):
         s.line(along(p, q, 0.1, 2.0), along(p, q, 0.9, 2.0), 1.1)
@@ -309,8 +309,8 @@ def talon(s, base, bend, tip, bw=3.2):
     s.stroke(inner, 1.1, taper=False)
 
 
-def combate_acto3():
-    s = Svg('combate-acto3', seed=31)
+def combate_acto3(name='combate-acto3'):
+    s = Svg(name, seed=31)
     # three claw slashes torn across the parchment
     for i, dx in enumerate((-13, 0, 13)):
         top, mid, bot = (22 + dx, 5 + abs(dx) * 0.3), (31 + dx, 30), (38 + dx, 58 - abs(dx) * 0.3)
@@ -372,8 +372,8 @@ def evento():
     s.save()
 
 
-def descanso():
-    s = Svg('descanso', seed=61)
+def descanso(name='descanso'):
+    s = Svg(name, seed=61)
     # stones
     for i in range(7):
         a = math.pi * (0.05 + 0.9 * i / 6)
@@ -421,8 +421,8 @@ def cofre():
     s.save()
 
 
-def taberna():
-    s = Svg('taberna', seed=81)
+def taberna(name='taberna'):
+    s = Svg(name, seed=81)
     body = [(16, 20), (42, 20), (40, 56), (18, 56)]
     s.wash(body, '#a0661e', 0.15)
     s.hatch([(34, 20), (42, 20), (40, 56), (33, 56)], angle=75, gap=1.3, w=0.45)
@@ -744,6 +744,10 @@ def jefe_contemplador():
     s.save()
 
 
-for fn in [combate, combate_acto1, combate_acto2, combate_acto3, elite, evento, descanso, cofre, taberna, mision, heroe,
-           aro, tachado, jefe_ogro, jefe_embaucador, jefe_senor_cripta, jefe_heraldo, jefe_ignifax, jefe_contemplador]:
-    fn()
+ALL = [combate, combate_acto1, combate_acto2, combate_acto3, elite, evento, descanso, cofre, taberna, mision, heroe,
+       aro, tachado, jefe_ogro, jefe_embaucador, jefe_senor_cripta, jefe_heraldo, jefe_ignifax, jefe_contemplador]
+
+if __name__ == '__main__':
+    # the per-scenario variants live in gen_scenario_icons.py (which imports these helpers)
+    for fn in ALL:
+        fn()

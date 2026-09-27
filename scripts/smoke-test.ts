@@ -4581,10 +4581,57 @@ try {
   check(bosses.every((b) => b.icon === bossIconFor(b.id) && has(b.icon)), 'el icono del jefe sale del jefe del escenario');
   check(bossIconFor('jefe-ogro') === 'jefe-ogro' && bossIconFor('ignifax') === 'jefe-ignifax', 'el nombre del icono del jefe es jefe-<id> sin repetir «jefe»');
   check(['mision', 'heroe'].every((n) => MAP_EXTRA_ICONS.includes(n) && has(n)), 'están el marcador de misión y la chincheta del héroe');
-  check(mapIconFor('combate', 0, 0) === 'combate-acto1' && mapIconFor('combate', 1, 1) === 'combate-acto2' && mapIconFor('combate', 2, 0) === 'combate-acto3',
-    'el combate cambia de dibujo en cada acto');
-  check(mapIconFor('combate', 7, 0) === 'combate' && mapIconFor('jefe', 7, 0) === 'jefe' && mapIconFor('elite', 0, 0) === 'elite',
+  // — every scenario draws its own locations, not only its boss —
+  const MI: any = await import('../src/ui/map-icons.ts');
+  const scenarioKeys: string[][] = MI.MAP_SCENARIOS ?? [];
+  check(scenarioKeys.length === ACTOS.length && scenarioKeys.every((k, c) => k.length === ACTOS[c].length && k.every(Boolean)),
+    `cada escenario de cada acto tiene clave de mapa (${scenarioKeys.flat().join(', ')})`);
+  const themed = ['combate', 'elite', 'evento', 'descanso', 'cofre', 'taberna'];
+  const read = (name: string) => (has(name) ? fs.readFileSync(new URL(`${name}.svg`, dir), 'utf8') : `missing:${name}`);
+  const notOwn: string[] = [];
+  const clashes: string[] = [];
+  for (let c = 0; c < ACTOS.length; c++) for (let e = 0; e < ACTOS[c].length; e++) {
+    const key = scenarioKeys[c]?.[e];
+    const names = themed.map((t) => mapIconFor(t as never, c, e));
+    names.forEach((n, i) => { if (n !== `${themed[i]}-${key}` || !has(n)) notOwn.push(`${themed[i]}@${key}→${n}`); });
+    if (new Set(names.map(read)).size !== names.length) clashes.push(`dentro de ${key}`);
+  }
+  check(notOwn.length === 0, `cada escenario tiene icono propio de combate, élite, evento, descanso, cofre y taberna ${notOwn.slice(0, 6).join(', ')}`);
+  for (const t of themed) {
+    const all = ACTOS.flatMap((acto, c) => acto.map((_, e) => mapIconFor(t as never, c, e)));
+    if (new Set(all).size !== all.length || new Set(all.map(read)).size !== all.length) clashes.push(t);
+  }
+  check(clashes.length === 0, `los iconos temáticos son distintos entre escenarios y dentro de cada uno ${clashes.join(', ')}`);
+  const only = (...names: string[]) => (n: string) => names.includes(n);
+  check(mapIconFor('combate', 0, 1) === 'combate-contrabandistas' && mapIconFor('taberna', 2, 1) === 'taberna-contemplador',
+    'mapIconFor elige el icono del escenario');
+  check(mapIconFor('combate', 1, 1, only('combate-acto2', 'combate')) === 'combate-acto2' && mapIconFor('combate', 1, 1, only('combate')) === 'combate',
+    'si falta el del escenario, el combate cae al del acto y después al genérico');
+  check(mapIconFor('evento', 1, 0, only('evento')) === 'evento' && mapIconFor('cofre', 2, 0, () => false) === 'cofre',
+    'los demás tipos caen al genérico (y el genérico es el último recurso)');
+  check(mapIconFor('combate', 1, 5) === 'combate-acto2' && mapIconFor('elite', 1, 5) === 'elite',
+    'un escenario desconocido usa el icono del acto o el genérico');
+  check(mapIconFor('combate', 7, 0) === 'combate' && mapIconFor('jefe', 7, 0) === 'jefe' && mapIconFor('elite', 7, 0) === 'elite',
     'fuera de los actos conocidos se usa el icono genérico');
+  // — every scenario points to its own painted parchment, falling back to the act's —
+  const bgNames = ACTOS.flatMap((acto, c) => acto.map((_, e) => MI.mapBackgroundName?.(c, e)));
+  check(bgNames.length === 6 && new Set(bgNames).size === 6 && ACTOS.every((_, c) => MI.mapBackgroundName?.(c, 0) === `mapa-acto${c + 1}`),
+    `cada escenario apunta a su fondo propio; el escenario 0 conserva el del acto (${bgNames.join(', ')})`);
+  check(['mapa-contrabandistas', 'mapa-templo', 'mapa-contemplador'].every((n, c) => MI.mapBackgroundName?.(c, 1) === n),
+    'los escenarios 1 usan mapa-contrabandistas, mapa-templo y mapa-contemplador');
+  const bgTable = {
+    '../arte/mapa/mapa-acto2.webp': '/a2.webp', '../arte/mapa/mapa-acto2-ancho.webp': '/a2w.webp',
+    '../arte/mapa/mapa-contrabandistas.webp': '/c.webp', '../arte/mapa/mapa-contrabandistas-ancho.webp': '/cw.webp',
+  };
+  const bgA = MI.pickMapBackground?.(bgTable, 0, 1);
+  const bgB = MI.pickMapBackground?.(bgTable, 1, 1);
+  check(bgA?.tall === '/c.webp' && bgA?.wide === '/cw.webp', 'el mapa usa el fondo pintado de su escenario');
+  check(bgB?.tall === '/a2.webp' && bgB?.wide === '/a2w.webp', 'si el fondo del escenario aún no existe, usa el del acto');
+  const mapUi = fs.readFileSync(new URL('../src/ui/mapa.ts', import.meta.url), 'utf8');
+  check(/mapBackground\(run\.capitulo,\s*run\.escenario\)/.test(mapUi) && /mapa-escenario-/.test(mapUi),
+    'la pantalla del mapa pide el fondo del escenario y marca su clase para teñir el pergamino');
+  const mainSrc = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  check(/pantallaMapa\(run,[^)]*cap\.nombre/.test(mainSrc), 'el título del mapa lleva el nombre del escenario');
   const table = { '../arte/mapa/iconos/cofre.svg': '/a/cofre.svg' };
   check(pickMapIcon(table, 'cofre') === '/a/cofre.svg' && pickMapIcon(table, 'evento') === null, 'el icono se busca por nombre en la tabla de Vite');
   const bad: string[] = [];
@@ -5148,6 +5195,21 @@ console.log('\n🐉 Nombre del juego');
   const leer = (f: string) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
   const sitios = ['index.html', 'vite.config.ts', 'src/ui/titulo.ts', 'src/ui/actualizacion.ts', 'public/sw-avisos.js'];
   check(sitios.every((f) => /Dracs/.test(leer(f)) && !/Mazo y Mazmorra|<span>Mazo<\/span>/.test(leer(f))), 'el juego se llama «Dracs & Rogues» en la portada, la pestaña, el manifest y los avisos');
+}
+
+// ── A creature released on death keeps its place (Malachar → Abaddon) ────────
+console.log('\n😈 Abaddon no se desplaza');
+{
+  const { layoutSlots } = await import('../src/ui/enemy-slots.ts');
+  const heraldo = { id: 'heraldo', vivo: true }, abaddon = { id: 'abaddon', vivo: true };
+  const vivo = (e: { vivo: boolean }) => e.vivo;
+  let huecos = layoutSlots([], [heraldo], vivo);
+  heraldo.vivo = false;
+  huecos = layoutSlots(huecos, [heraldo, abaddon], vivo);
+  const tras = huecos.map((e) => e.id).join();
+  let estable = true;
+  for (let i = 0; i < 5; i++) { const n = layoutSlots(huecos, [heraldo, abaddon], vivo); estable &&= n.map((e) => e.id).join() === tras; huecos = n; }
+  check(tras === 'abaddon' && estable, `Abaddon ocupa el sitio del Heraldo y no se mueve en los siguientes renders (${tras})`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
