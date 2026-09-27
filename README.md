@@ -1,4 +1,4 @@
-# Mazo y Mazmorra
+# Dracs & Rogues
 
 Roguelike de construcción de mazos al estilo *Slay the Spire* con ambientación de
 fantasía medieval tipo D&D. Cinco clases jugables (Druida, Bárbaro, Mago, Pícaro y Brujo). Tres actos, cada uno con **dos escenarios posibles**

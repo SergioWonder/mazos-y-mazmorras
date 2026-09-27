@@ -1,4 +1,4 @@
-"""Extensions for the Act II tracks of "Mazo y Mazmorra".
+"""Extensions for the Act II tracks of "Dracs & Rogues".
 
 Builds on local copies of the Act I library (synth_lib: event rendering, plucks,
 reeds, FM bells, mastering) and the boss library (synth: formant choir, multiband

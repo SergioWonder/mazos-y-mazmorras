@@ -22,7 +22,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     const raiz = el('div', 'titulo');
     raiz.innerHTML = `
       <div class="titulo-marco">
-        <h1 class="titulo-juego"><span>Mazo</span> <em>&</em> <span>Mazmorra</span></h1>
+        <h1 class="titulo-juego"><span>Dracs</span> <em>&</em> <span>Rogues</span></h1>
         <p class="titulo-sub">Cinco clases, tres actos y dos caminos posibles en cada uno</p>
         <p class="titulo-intro">
           Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio

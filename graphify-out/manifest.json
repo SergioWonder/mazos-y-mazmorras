@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790531600.5027168,
-    "ast_hash": "f4155d0e79b8f135bc662ad0bcb6ce08",
+    "mtime": 1790533133.344269,
+    "ast_hash": "6b3ec6a35303eb5d04ae9d7f20ad2d5b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790531511.5246997,
-    "ast_hash": "5561988f28d327a859b30154635318c7",
+    "mtime": 1790532932.4957306,
+    "ast_hash": "e8cabe6996e8d6fcc98acc58b9b84100",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
-    "mtime": 1790345564.2874477,
-    "ast_hash": "45b81fa81605b03861648a40b1cbc0df",
+    "mtime": 1790532959.4209597,
+    "ast_hash": "8b4c3a4a75720a6335135a869155f74f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/bendicion.ts": {
@@ -155,8 +155,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/titulo.ts": {
-    "mtime": 1790460371.495666,
-    "ast_hash": "af031e1ace1be0e04dfe8e40f18cbca4",
+    "mtime": 1790532959.4204588,
+    "ast_hash": "a804fca58b25bf10df2fdaf4c35e1ac8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790531600.5023656,
-    "ast_hash": "6251778b320598935beb506563814aea",
+    "mtime": 1790533133.343951,
+    "ast_hash": "deba6ac76cbd59793904010bdf082fce",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -180,8 +180,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/vite.config.ts": {
-    "mtime": 1790363956.0840728,
-    "ast_hash": "31fff33068c2273c420e6def828cbf4c",
+    "mtime": 1790532984.8816466,
+    "ast_hash": "8686e20ba2c3e3b982fef6733c89127c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/skills/editar-carta/SKILL.md": {
@@ -200,33 +200,33 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790515103.7717724,
-    "ast_hash": "a2fc64d68e356364a3876b70d9f6ada4",
+    "mtime": 1790532959.4226382,
+    "ast_hash": "0576711c01fd89dcbb759e3e0a3a33e7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
-    "mtime": 1781273882.1237957,
-    "ast_hash": "0a03de0ffebba38bca9b9ebab0b0fa3c",
+    "mtime": 1790532984.8819594,
+    "ast_hash": "366115142d08809e831d71f989e2f970",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/apple-touch-icon.png": {
-    "mtime": 1781273852.589825,
-    "ast_hash": "5365037f344852669d3d116c5e2e41ba",
+    "mtime": 1790533033.1597872,
+    "ast_hash": "3a9b6039e4c15a4e45d56d80c2534535",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/icono-192.png": {
-    "mtime": 1781273852.5747035,
-    "ast_hash": "97c4cc4df950a4a51ca000bfb8eaf611",
+    "mtime": 1790533033.0489776,
+    "ast_hash": "8efc851f70303d8d3d8119ef26b931be",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/icono-512.png": {
-    "mtime": 1781273852.5409985,
-    "ast_hash": "b327edb3d34dc64311bfbea55c15c9d6",
+    "mtime": 1790533032.919596,
+    "ast_hash": "48ddeaae334c5acc605ba22d7374f56d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/icono.svg": {
-    "mtime": 1781273843.8315003,
-    "ast_hash": "9726ced5c6fe856e7f99392a639e2fd6",
+    "mtime": 1790533024.4398184,
+    "ast_hash": "a766e5cca7e2bf8609af0f9d4c6704a6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/enemy-rigs.ts": {
@@ -275,8 +275,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/sw-avisos.js": {
-    "mtime": 1790345538.2841196,
-    "ast_hash": "9f0d20cd33e8d17ab1921d28d3fbb4c3",
+    "mtime": 1790532959.4214728,
+    "ast_hash": "ae54175ae22f986234deca24fe22a381",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/versions.ts": {
@@ -1155,8 +1155,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto1/synth_lib.py": {
-    "mtime": 1790356758.1921244,
-    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "mtime": 1790532959.4234724,
+    "ast_hash": "c3e10904d1c1111914f62c7ff187030e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/cap2.py": {
@@ -1175,13 +1175,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/synth_ext.py": {
-    "mtime": 1790356758.2080472,
-    "ast_hash": "94a395c6a315e41ca2391bbed91cc534",
+    "mtime": 1790532959.4238594,
+    "ast_hash": "d051f3057b43ec09a8dea923db64aaa4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2/synth_lib.py": {
-    "mtime": 1790356758.2084258,
-    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "mtime": 1790532959.4241138,
+    "ast_hash": "c3e10904d1c1111914f62c7ff187030e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/cap3.py": {
@@ -1205,8 +1205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto3/synth_lib.py": {
-    "mtime": 1790356758.2258315,
-    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "mtime": 1790532959.4245288,
+    "ast_hash": "c3e10904d1c1111914f62c7ff187030e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/jefe/jefe_a.py": {
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/synth_lib.py": {
-    "mtime": 1790356758.1711388,
-    "ast_hash": "bda5ae8a28cfd95083ac889ebe0aad69",
+    "mtime": 1790532959.425634,
+    "ast_hash": "c3e10904d1c1111914f62c7ff187030e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/music-tracks.ts": {
@@ -1255,13 +1255,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/compositor-musical.md": {
-    "mtime": 1790354173.191122,
-    "ast_hash": "3f8785ffa47daddc5176db474240836b",
+    "mtime": 1790532959.4289443,
+    "ast_hash": "e8289b2ae36c8c5d8b4c45c16eef7df4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/pintor-fondos.md": {
-    "mtime": 1790364002.9192286,
-    "ast_hash": "045e8f49cbcfbd68abac9ad68a480bf5",
+    "mtime": 1790532959.4309325,
+    "ast_hash": "466338f7ff284da8813fb4c7b082b6d9",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/audio/LEEME.md": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/make_sfx.py": {
-    "mtime": 1790422584.7386506,
-    "ast_hash": "6816cf23009441a5f1a0c79ceaca9431",
+    "mtime": 1790532959.426912,
+    "ast_hash": "f18dcf98078cf8475e969f3243c2c074",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/sfxlib.py": {
@@ -1385,13 +1385,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/artista-particulas.md": {
-    "mtime": 1790421952.2314389,
-    "ast_hash": "2a6e2a9d3c65b07836d7b5c08b53b2e9",
+    "mtime": 1790532980.2419434,
+    "ast_hash": "716f3b25536fc71319437e1d19ac4eee",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/disenador-sfx.md": {
-    "mtime": 1790421936.736193,
-    "ast_hash": "e20fa2d0a6d05fd5fdb3270fc1611c3c",
+    "mtime": 1790532980.2420623,
+    "ast_hash": "c9b02cbc59ec90f60fbfbd9ce8427b4f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/abisal.mp3": {
@@ -2417,6 +2417,21 @@
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {
     "mtime": 1790525826.5925932,
     "ast_hash": "138dc11161e54abdcc59e92adfb47e39",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/icono/generate_icon.py": {
+    "mtime": 1790533024.2491589,
+    "ast_hash": "e1d62f7abe7868fa53304f254f7e1c3e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/public/favicon.png": {
+    "mtime": 1790533046.958756,
+    "ast_hash": "4b98f8cfd6de521613079da9d7693414",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/public/icono-maskable-512.png": {
+    "mtime": 1790533041.8512676,
+    "ast_hash": "38bc11765a25ad8865b9ebdb268a8a1b",
     "semantic_hash": ""
   }
 }

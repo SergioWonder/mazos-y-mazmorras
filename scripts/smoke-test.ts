@@ -5141,5 +5141,14 @@ console.log('\n🎞️ Animaciones continuas sin repintado');
   check(malas.length === 0, `las animaciones que no paran solo mueven transform/opacity (repintaban la mano en cada fotograma) ${malas.join('; ')}`);
 }
 
+// ── Game name ────────────────────────────────────────────────────────────────
+console.log('\n🐉 Nombre del juego');
+{
+  const fs = await import('node:fs');
+  const leer = (f: string) => fs.readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
+  const sitios = ['index.html', 'vite.config.ts', 'src/ui/titulo.ts', 'src/ui/actualizacion.ts', 'public/sw-avisos.js'];
+  check(sitios.every((f) => /Dracs/.test(leer(f)) && !/Mazo y Mazmorra|<span>Mazo<\/span>/.test(leer(f))), 'el juego se llama «Dracs & Rogues» en la portada, la pestaña, el manifest y los avisos');
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

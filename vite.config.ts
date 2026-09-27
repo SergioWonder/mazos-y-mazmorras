@@ -25,12 +25,12 @@ export default defineConfig({
     versionJson(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['icono.svg', 'apple-touch-icon.png'],
+      includeAssets: ['icono.svg', 'apple-touch-icon.png', 'favicon.png'],
       manifest: {
-        name: 'Mazo y Mazmorra',
-        short_name: 'MazoMazmorra',
+        name: 'Dracs & Rogues',
+        short_name: 'Dracs & Rogues',
         description:
-          'Roguelike de construcción de mazos con sabor a D&D: druida, bárbaro y mago contra el Asentamiento Ogro y la Cripta.',
+          'Roguelike de construcción de mazos con sabor a D&D: cinco clases, tres actos y un Dungeon Master que siempre tiene la última palabra.',
         lang: 'es',
         display: 'fullscreen',
         orientation: 'landscape',
@@ -39,7 +39,7 @@ export default defineConfig({
         icons: [
           { src: 'icono-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icono-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'icono-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icono-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-09-27)
 
 ## Corpus Check
-- 133 files · ~705,322 words
+- 134 files · ~725,108 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2828 nodes · 6861 edges · 89 communities (78 shown, 11 thin omitted)
+- 2853 nodes · 6927 edges · 84 communities (74 shown, 10 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 359 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a1726c0e`
+- Built from commit: `543bd356`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -73,7 +73,6 @@
 - [[_COMMUNITY_Community 56|Community 56]]
 - [[_COMMUNITY_Community 57|Community 57]]
 - [[_COMMUNITY_Community 58|Community 58]]
-- [[_COMMUNITY_Community 59|Community 59]]
 - [[_COMMUNITY_Community 60|Community 60]]
 - [[_COMMUNITY_Community 61|Community 61]]
 - [[_COMMUNITY_Community 62|Community 62]]
@@ -92,16 +91,12 @@
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
-- [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
-- [[_COMMUNITY_Community 83|Community 83]]
-- [[_COMMUNITY_Community 84|Community 84]]
 - [[_COMMUNITY_Community 85|Community 85]]
 - [[_COMMUNITY_Community 86|Community 86]]
-- [[_COMMUNITY_Community 87|Community 87]]
 - [[_COMMUNITY_Community 88|Community 88]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -117,8 +112,6 @@
 10. `reverb()` - 31 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `EstadoId` --implements--> `Rayos del Contemplador (cartas que se agotan, sobrecarga, etéreas)`  [INFERRED]
-  src/core/types.ts → README.md
 - `uiSilenciosa` --implements--> `Arquitectura: núcleo sin DOM + interfaz Presentador`  [INFERRED]
   scripts/smoke-test.ts → README.md
 - `recompensaCartas()` --conceptually_related_to--> `Mejora de cartas en campamentos`  [INFERRED]
@@ -127,6 +120,8 @@
   src/core/guardado.ts → README.md
 - `generarMapa()` --implements--> `Mapa de 10 filas por capítulo`  [INFERRED]
   src/core/mapa.ts → README.md
+- `SELLO_PACTO` --implements--> `Condena (ejecuta al igualar los PV actuales)`  [INFERRED]
+  src/core/reliquias.ts → README.md
 
 ## Import Cycles
 - None detected.
@@ -138,11 +133,11 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (89 total, 11 thin omitted)
+## Communities (84 total, 10 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
-Cohesion: 0.04
-Nodes (50): ACOLITO_VELADO, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, CEREBRO_ANCIANO, CONTEMPLADOR (+42 more)
+Cohesion: 0.03
+Nodes (64): ACOLITO_VELADO, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, Capitulo, CEREBRO_ANCIANO (+56 more)
 
 ### Community 1 - "Persistencia y partículas"
 Cohesion: 0.05
@@ -154,15 +149,19 @@ Nodes (64): banner(), bone_pile(), bonfire(), box_mean(), brazier(), build_svg()
 
 ### Community 3 - "Actos, mapa y guardado"
 Cohesion: 0.06
-Nodes (135): almaCuchillas(), ARCANE, bendicionCelestial(), BLOOD, bolt(), burst(), BurstOpts, CARD_FX (+127 more)
+Nodes (131): almaCuchillas(), ARCANE, bendicionCelestial(), BLOOD, bolt(), burst(), BurstOpts, CARD_FX (+123 more)
+
+### Community 4 - "Audio y música"
+Cohesion: 0.08
+Nodes (18): Loop chiptune procedural de respaldo, Efectos de sonido sintetizados (Web Audio API, sin ficheros), audio, Capa, MotorAudio, RECETAS, SFX_FILES, TemaChip (+10 more)
 
 ### Community 5 - "Combate: turnos e invocaciones"
 Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 6 - "Renderizado de cartas"
-Cohesion: 0.07
-Nodes (44): Action, ACTION_DURATION, ActionProgress, ActionType, activeAction(), applyMatrix(), BONE_ORDER, BoneId (+36 more)
+Cohesion: 0.06
+Nodes (51): Action, ACTION_DURATION, ActionProgress, ActionType, activeAction(), applyMatrix(), BONE_ORDER, BoneId (+43 more)
 
 ### Community 7 - "Dado 3D en WebGL"
 Cohesion: 0.14
@@ -177,8 +176,8 @@ Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, module, moduleDetection, moduleResolution, noEmit (+8 more)
 
 ### Community 10 - "Cartas: registro y Explosión"
-Cohesion: 0.08
-Nodes (35): angleBetween(), CHAIN_DEFAULTS, constrain(), Pt, rigidJoints(), RigidSampler, stepChains(), stepRun() (+27 more)
+Cohesion: 0.07
+Nodes (41): angleBetween(), CHAIN_DEFAULTS, ChainRun, constrain(), Pt, rigidJoints(), RigidSampler, stepChains() (+33 more)
 
 ### Community 11 - "Dependencias y scripts npm"
 Cohesion: 0.15
@@ -189,12 +188,12 @@ Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, module, moduleDetection, moduleResolution, noEmit (+8 more)
 
 ### Community 13 - "Community 13"
-Cohesion: 0.08
-Nodes (21): ENEMY_RIGS, INVOCATION_RIGS, Action, ActionType, activeAction(), captureAction(), CaptureOptions, post() (+13 more)
+Cohesion: 0.10
+Nodes (18): INVOCATION_RIGS, Action, ActionType, captureAction(), CaptureOptions, post(), rasterSvg(), GalleryCard (+10 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.11
-Nodes (24): bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion, ofrecerBendicionEntreActos() (+16 more)
+Cohesion: 0.21
+Nodes (23): bool, float, background(), build_svg(), card(), d20(), defs(), dm() (+15 more)
 
 ### Community 15 - "Community 15"
 Cohesion: 0.06
@@ -205,16 +204,16 @@ Cohesion: 0.08
 Nodes (50): additive(), analyze(), bell(), brass_note(), celesta_note(), choir_note(), cymbal(), db() (+42 more)
 
 ### Community 17 - "Motor de partículas"
-Cohesion: 0.09
-Nodes (17): ParticleRendererGL, SHAPE_CODE, AmbientPreset, AMBIENTS, AmbientStyle, between(), EffectPreset, EFFECTS (+9 more)
+Cohesion: 0.06
+Nodes (28): cardShake(), ParticleRendererGL, SHAPE_CODE, AmbientPreset, AMBIENTS, AmbientStyle, between(), EffectPreset (+20 more)
 
 ### Community 18 - "Community 18"
 Cohesion: 0.15
 Nodes (40): bear(), beholder(), biped(), BipedOpts, BONE, BOSSES, brain(), Build (+32 more)
 
 ### Community 19 - "Community 19"
-Cohesion: 0.08
-Nodes (34): Convención: el texto de la carta debe cuadrar con su efecto, CARD_GLOW, CLASS_GLOW, FULL_ART, hasFullArt(), lookOf(), bitmaps, cardArtBitmap() (+26 more)
+Cohesion: 0.04
+Nodes (65): Convención: el texto de la carta debe cuadrar con su efecto, BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, cardSpellKey(), hitSpell() (+57 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -229,12 +228,12 @@ Cohesion: 0.33
 Nodes (4): Cambiar o ampliar pistas, Efectos de sonido, Música y sonido, Pistas usadas (todas CC0 / dominio público)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.07
-Nodes (26): BRUJO, defDe(), Combate, esDungeonMaster(), crearEnemigo(), GOBLIN_FAMELICO, SELLO_PACTO, CartaInstancia (+18 more)
+Cohesion: 0.09
+Nodes (12): defDe(), Combate, esDungeonMaster(), crearEnemigo(), CartaInstancia, ContextoEfecto, EnemigoCombate, JugadorCombate (+4 more)
 
 ### Community 26 - "Configuración de Vite y PWA"
-Cohesion: 0.13
-Nodes (21): ChangelogEntry, isMajorUpgrade(), majorChangelog(), majorOf(), shouldNotifyMajor(), Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG, CHANGELOG (+13 more)
+Cohesion: 0.10
+Nodes (29): finalVerdaderoDesbloqueado(), ChangelogEntry, isMajorUpgrade(), majorChangelog(), majorOf(), shouldNotifyMajor(), Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG (+21 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.05
@@ -305,12 +304,12 @@ Cohesion: 0.10
 Nodes (94): abisal(), aliento(), aullido(), bell_modes(), bloqueo(), bubble(), carta(), click() (+86 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.07
-Nodes (46): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), BackdropTheme, ChainState, createChainState() (+38 more)
+Cohesion: 0.10
+Nodes (40): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), ChainState, createChainState(), BoneId (+32 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.06
-Nodes (54): AlmacenSimple, desenlaceCampana, DiaAgenda, DIAS_AGENDA, finalVerdaderoDesbloqueado(), GUION_AGENDA, INTENCION_DM, LineaAgenda (+46 more)
+Nodes (56): cartaPorId(), desenlaceCampana, borrarGuardado(), cargarRun(), Guardado, guardarRun(), hayGuardado(), rehidratarRun() (+48 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.10
@@ -333,16 +332,16 @@ Cohesion: 0.10
 Nodes (20): bloom(), blur(), _box_mean(), brush_texture(), fractal_noise(), kuwahara(), mockup(), painterly_warp() (+12 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.08
-Nodes (35): ACTOS, alcanzablesDesde(), candidatosMision(), colocarTabernas(), DISTANCIA_MISION, esAlcanzable(), generarMapa(), nodosDisponibles() (+27 more)
+Cohesion: 0.12
+Nodes (21): ACTOS, contenidoOpcion(), bossIconFor(), MAP_EXTRA_ICONS, mapBackground(), mapIconFor(), mapIconUrl(), PER_ACT (+13 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.12
 Nodes (19): bass_clarinet(), bone_xylo(), choir_ooh(), finish(), marimba(), _modal(), muffled_tamb(), organ() (+11 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.08
-Nodes (29): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, cardSpellKey(), hitSpell(), preludeKey() (+21 more)
+Cohesion: 0.21
+Nodes (5): BackdropTheme, PuppetOptions, compile(), forceSvg(), PuppetStage
 
 ### Community 55 - "Community 55"
 Cohesion: 0.27
@@ -357,12 +356,8 @@ Cohesion: 0.06
 Nodes (67): box(), build(), composite(), long_bone(), main(), Combat background «La Cripta» (Act II): the crypt of Vol'guth under the ruined s, Blue will-o'-the-wisp: soft halo, flame tongue and bright core (emissive)., Fills a planar region with staggered ashlar blocks. quad_fn maps (u, v) to scree (+59 more)
 
 ### Community 58 - "Community 58"
-Cohesion: 0.12
-Nodes (15): Actualizaciones y avisos, Ambientación fantasía medieval D&D, Arte de las cartas, Controles, Roguelike de construcción de mazos, Diseño, Ejecutar, Estructura (+7 more)
-
-### Community 59 - "Community 59"
-Cohesion: 0.17
-Nodes (11): DUNGEON_MASTER, IMAGEN_ILUSORIA, OBSERVADOR, FormId, FormId, BOSS_SUMMONS, FORMS, galleryCatalogue() (+3 more)
+Cohesion: 0.15
+Nodes (12): strandShapes(), wolfChains(), wolfShapes(), BEARD, DISCHARGE, HAT, MAGO_RIG, RAISE (+4 more)
 
 ### Community 60 - "Community 60"
 Cohesion: 0.09
@@ -370,7 +365,7 @@ Nodes (24): cymbal_roll(), dark_bell(), drone(), harmonics(), lib_note(), muffle
 
 ### Community 64 - "Community 64"
 Cohesion: 0.05
-Nodes (44): strandShapes(), AGUILA_RIG, ANTLER_BEADS, BEAR_CHAINS, BEAR_FALLEN, BELT_CHARM, CAPE_BACK, CAPE_BONES (+36 more)
+Nodes (41): AGUILA_RIG, ANTLER_BEADS, BEAR_CHAINS, BEAR_FALLEN, BELT_CHARM, CAPE_BACK, CAPE_BONES, CAPE_INNER (+33 more)
 
 ### Community 65 - "Community 65"
 Cohesion: 0.48
@@ -381,8 +376,8 @@ Cohesion: 0.60
 Nodes (5): bar_t(), build_parts(), melody_events(), Act II normal combat: "Marcha de los huesos" (La Cripta / El Templo Oscuro).  Sp, section()
 
 ### Community 67 - "Community 67"
-Cohesion: 0.06
-Nodes (39): BARBARO, BASICAS, CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DRUIDA, INICIALES_DE_CLASE, lanzarExplosion() (+31 more)
+Cohesion: 0.04
+Nodes (69): Música 8-bit con pistas CC0 de OpenGameArt, BARBARO, BASICAS, BRUJO, CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DRUIDA (+61 more)
 
 ### Community 68 - "Community 68"
 Cohesion: 0.40
@@ -397,76 +392,60 @@ Cohesion: 0.23
 Nodes (12): build(), hamlet(), Campaign map «El Valle» (Act I): an adventure map in sepia ink on aged parchment, Ruined stone watchtower with a broken crown., Little grass tufts and field marks scattered over the valley floor., Ogre settlement: ring of sharpened stakes with huts, bonfire and a skull totem., River cliff with a cave mouth, a moored boat and crates., smugglers_cove() (+4 more)
 
 ### Community 74 - "Community 74"
-Cohesion: 0.08
-Nodes (36): poolDeClase(), recompensaCartas(), Presentador, reliquiaInicial(), crearRng(), nuevaRun(), FORM_RIGS, shapeBBox() (+28 more)
+Cohesion: 0.07
+Nodes (40): poolDeClase(), recompensaCartas(), Presentador, CONTEMPLADOR, GOBLIN_ARQUERO, GOBLIN_CORTADOR, HERALDO_CULTO, IGNIFAX (+32 more)
 
 ### Community 75 - "Community 75"
-Cohesion: 0.05
-Nodes (53): aplicarBendicion(), instanciar(), nuevaMaldicion(), cartaAleatoria(), curar(), defNombre(), elegirEvento(), EventoDef (+45 more)
+Cohesion: 0.04
+Nodes (73): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion (+65 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.14
-Nodes (32): cardClone(), flyDiscard(), flyDraw(), flyPlay(), flyShowcase(), flyShuffle(), HAND_CLASSES, pileCenter() (+24 more)
+Cohesion: 0.15
+Nodes (31): cardClone(), flyDiscard(), flyDraw(), flyPlay(), flyShowcase(), flyShuffle(), HAND_CLASSES, pileCenter() (+23 more)
 
 ### Community 77 - "Community 77"
-Cohesion: 0.08
-Nodes (28): ChainRun, Ease, strikeKeys(), StrikeSpec, ChainBone, ChainSpec, Keyframe, PartialPose (+20 more)
-
-### Community 78 - "Community 78"
-Cohesion: 0.13
-Nodes (16): Efectos de sonido sintetizados (Web Audio API, sin ficheros), audio, Capa, RECETAS, SFX_FILES, TemaChip, TRACK_URLS, loopWindow() (+8 more)
+Cohesion: 0.17
+Nodes (11): ACTIONS, CAPE, CAPE_BACK, CORE, FALLEN, HOOD_PEAK, PICARO_RIG, SASH (+3 more)
 
 ### Community 79 - "Community 79"
-Cohesion: 0.09
-Nodes (34): cartaPorId(), crearEspacios(), ORDEN_NIVELES, piramideConjuros(), Capitulo, FRASES_DM, Guardado, guardarRun() (+26 more)
+Cohesion: 0.08
+Nodes (31): crearEspacios(), ORDEN_NIVELES, piramideConjuros(), AlmacenSimple, DiaAgenda, DIAS_AGENDA, FRASES_DM, GUION_AGENDA (+23 more)
 
 ### Community 80 - "Community 80"
-Cohesion: 0.10
-Nodes (20): pulse(), shake(), ActionScript, AMULET, ATTACK, BLAST, BRUJO_RIG, CAPE_FRONT (+12 more)
+Cohesion: 0.11
+Nodes (17): ActionScript, AMULET, ATTACK, BLAST, BRUJO_RIG, CAPE_FRONT, CAPE_IN, CAPE_OUT (+9 more)
 
 ### Community 81 - "Community 81"
-Cohesion: 0.12
-Nodes (15): ATTACK, BARBARO_RIG, BEARD, CHOP, DEATH, HIT, KNEEL, LOCK_BACK (+7 more)
+Cohesion: 0.10
+Nodes (23): Ease, pulse(), shake(), strikeKeys(), StrikeSpec, Keyframe, PartialPose, ATTACK (+15 more)
 
 ### Community 82 - "Community 82"
 Cohesion: 0.29
 Nodes (6): Action timelines (`fx/motion.ts`), Budget (mobile WebGL), Hero sprites: one file per character, Secondary motion: spring chains (`fx/chains.ts`), Tests (`scripts/hero-tests/<class>.ts`, run by the smoke test), Visual check and frame captures
 
-### Community 83 - "Community 83"
-Cohesion: 0.29
-Nodes (4): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de OpenGameArt, TEMAS, Tres actos con dos escenarios cada uno
-
-### Community 84 - "Community 84"
-Cohesion: 0.67
-Nodes (4): C(), E(), swarmShapes(), wolfShapes()
-
 ### Community 85 - "Community 85"
 Cohesion: 0.33
 Nodes (6): d20Numbering(), faceOfNumber(), oppositeFace(), settledRoll(), simulateRoll(), numberAtlas()
 
-### Community 87 - "Community 87"
-Cohesion: 0.67
-Nodes (3): JEFE_OGRO, SENOR_CRIPTA, Jefes únicos con rasgo propio
-
 ## Knowledge Gaps
-- **442 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+437 more)
+- **438 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+433 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `PuppetStage` connect `Community 45` to `Community 46`, `Community 13`, `Community 54`, `Renderizado de cartas`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `SpellSystem` connect `Actos, mapa y guardado` to `Community 46`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `ActionQueue` connect `Community 61` to `Community 54`?**
+- **Why does `Mazo y Mazmorra` connect `Community 67` to `Configuración de Vite y PWA`, `Community 75`?**
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
+- **Why does `Combate` connect `Community 23` to `Community 19`, `Community 74`, `Community 75`, `Community 79`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **What connects `version`, `configurations`, `name` to the rest of the system?**
-  _818 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _816 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bestiario de enemigos` be split into smaller, more focused modules?**
-  _Cohesion score 0.03773584905660377 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.03292361720807726 - nodes in this community are weakly interconnected._
 - **Should `Persistencia y partículas` be split into smaller, more focused modules?**
   _Cohesion score 0.05254901960784314 - nodes in this community are weakly interconnected._
 - **Should `Motor de combate` be split into smaller, more focused modules?**
   _Cohesion score 0.05456095481670929 - nodes in this community are weakly interconnected._
+- **Should `Actos, mapa y guardado` be split into smaller, more focused modules?**
+  _Cohesion score 0.06137303556658395 - nodes in this community are weakly interconnected._

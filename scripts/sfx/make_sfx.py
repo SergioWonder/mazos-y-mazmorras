@@ -1,4 +1,4 @@
-"""Synthesises every sound effect of «Mazo y Mazmorra» and writes the MP3 bank.
+"""Synthesises every sound effect of «Dracs & Rogues» and writes the MP3 bank.
 
 Usage:  python3 scripts/sfx/make_sfx.py [name ...]
 Writes  src/audio/sfx/<name>.mp3 or <name>-<n>.mp3 (variations) and prints, for each

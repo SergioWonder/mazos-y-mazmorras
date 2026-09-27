@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.6.1';
+export const VERSION = '5.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.7.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🐉 El juego estrena nombre: Dracs & Rogues.',
+      '🎴 Nuevo icono de la app: el Dungeon Master, encapuchado y con los ojos en llamas, alza una carta junto a su d20.',
+    ],
+  },
   {
     version: '5.6.1',
     fecha: '2026-09-27',

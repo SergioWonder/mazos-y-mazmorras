@@ -1,4 +1,4 @@
-"""Tiny numpy synthesizer shared by the Act I tracks of "Mazo y Mazmorra".
+"""Tiny numpy synthesizer shared by the Act I tracks of "Dracs & Rogues".
 
 Instruments: Karplus-Strong plucks (pizzicato, harp, lute), flute, FM bells
 (celesta, glockenspiel), additive reeds (bassoon, clarinet), string pad and soft

@@ -101,7 +101,7 @@ async function comprobarVersionMayor() {
     const { version, headline } = await res.json() as { version: string; headline?: string };
     if (!shouldNotifyMajor(VERSION, version, await leerMeta('avisada'))) return;
     await guardarMeta('avisada', version);
-    await registro.showNotification(`Mazo y Mazmorra ${version}`, {
+    await registro.showNotification(`Dracs & Rogues ${version}`, {
       body: headline || '¡Hay una nueva versión mayor del juego!',
       icon: `${import.meta.env.BASE_URL}icono-192.png`,
       badge: `${import.meta.env.BASE_URL}icono-192.png`,

@@ -5402,6 +5402,222 @@
       "norm_label": "testpicaro()"
     },
     {
+      "label": "generate_icon.py",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L1",
+      "id": "icono_generate_icon",
+      "community": 14,
+      "norm_label": "generate_icon.py"
+    },
+    {
+      "label": "pts()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L46",
+      "id": "icono_generate_icon_pts",
+      "community": 14,
+      "norm_label": "pts()"
+    },
+    {
+      "label": "sparkle()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L50",
+      "id": "icono_generate_icon_sparkle",
+      "community": 14,
+      "norm_label": "sparkle()"
+    },
+    {
+      "label": "defs()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "id": "icono_generate_icon_defs",
+      "community": 14,
+      "norm_label": "defs()"
+    },
+    {
+      "label": "bool",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "id": "bool",
+      "community": 14,
+      "norm_label": "bool"
+    },
+    {
+      "label": "str",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "id": "str",
+      "community": 14,
+      "norm_label": "str"
+    },
+    {
+      "label": "background()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L169",
+      "id": "icono_generate_icon_background",
+      "community": 14,
+      "norm_label": "background()"
+    },
+    {
+      "label": "moon()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L183",
+      "id": "icono_generate_icon_moon",
+      "community": 14,
+      "norm_label": "moon()"
+    },
+    {
+      "label": "dm()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L192",
+      "id": "icono_generate_icon_dm",
+      "community": 14,
+      "norm_label": "dm()"
+    },
+    {
+      "label": "eyes()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L220",
+      "id": "icono_generate_icon_eyes",
+      "community": 14,
+      "norm_label": "eyes()"
+    },
+    {
+      "label": "card()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L244",
+      "id": "icono_generate_icon_card",
+      "community": 14,
+      "norm_label": "card()"
+    },
+    {
+      "label": "hand_back()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L291",
+      "id": "icono_generate_icon_hand_back",
+      "community": 14,
+      "norm_label": "hand_back()"
+    },
+    {
+      "label": "hand_front()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L307",
+      "id": "icono_generate_icon_hand_front",
+      "community": 14,
+      "norm_label": "hand_front()"
+    },
+    {
+      "label": "d20()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L319",
+      "id": "icono_generate_icon_d20",
+      "community": 14,
+      "norm_label": "d20()"
+    },
+    {
+      "label": "build_svg()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "id": "icono_generate_icon_build_svg",
+      "community": 14,
+      "norm_label": "build_svg()"
+    },
+    {
+      "label": "float",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "id": "float",
+      "community": 14,
+      "norm_label": "float"
+    },
+    {
+      "label": "int",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "id": "int",
+      "community": 14,
+      "norm_label": "int"
+    },
+    {
+      "label": "render()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "id": "icono_generate_icon_render",
+      "community": 14,
+      "norm_label": "render()"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "id": "path",
+      "community": 14,
+      "norm_label": "path"
+    },
+    {
+      "label": "Image",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "id": "image",
+      "community": 14,
+      "norm_label": "image"
+    },
+    {
+      "label": "post()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L388",
+      "id": "icono_generate_icon_post",
+      "community": 14,
+      "norm_label": "post()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L402",
+      "id": "icono_generate_icon_main",
+      "community": 14,
+      "norm_label": "main()"
+    },
+    {
+      "label": "Four-pointed twinkle, as the game draws its stars.",
+      "file_type": "rationale",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L51",
+      "id": "icono_generate_icon_rationale_51",
+      "community": 14,
+      "norm_label": "four-pointed twinkle, as the game draws its stars."
+    },
+    {
+      "label": "mask_scale shrinks the motif around the centre while the background keeps bleedi",
+      "file_type": "rationale",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L354",
+      "id": "icono_generate_icon_rationale_354",
+      "community": 14,
+      "norm_label": "mask_scale shrinks the motif around the centre while the background keeps bleedi"
+    },
+    {
       "label": "gen_icons.py",
       "file_type": "code",
       "source_file": "scripts/mapa/gen_icons.py",
@@ -6221,13 +6437,13 @@
       "norm_label": "finish()"
     },
     {
-      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Mazo y Mazmorra\".  Instrum",
+      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Dracs & Rogues\".  Instrume",
       "file_type": "rationale",
       "source_file": "scripts/musica/acto1/synth_lib.py",
       "source_location": "L1",
       "id": "acto1_synth_lib_rationale_1",
       "community": 36,
-      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"mazo y mazmorra\".  instrum"
+      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"dracs & rogues\".  instrume"
     },
     {
       "label": "F#4' -> MIDI number. Integers pass through.",
@@ -6896,13 +7112,13 @@
       "norm_label": "finish()"
     },
     {
-      "label": "Extensions for the Act II tracks of \"Mazo y Mazmorra\".  Builds on local copies o",
+      "label": "Extensions for the Act II tracks of \"Dracs & Rogues\".  Builds on local copies of",
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2/synth_ext.py",
       "source_location": "L1",
       "id": "acto2_synth_ext_rationale_1",
       "community": 53,
-      "norm_label": "extensions for the act ii tracks of \"mazo y mazmorra\".  builds on local copies o"
+      "norm_label": "extensions for the act ii tracks of \"dracs & rogues\".  builds on local copies of"
     },
     {
       "label": "Single reed: odd harmonics dominate, dark roll-off, woody breath.",
@@ -7274,13 +7490,13 @@
       "norm_label": "finish()"
     },
     {
-      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Mazo y Mazmorra\".  Instrum",
+      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Dracs & Rogues\".  Instrume",
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2/synth_lib.py",
       "source_location": "L1",
       "id": "acto2_synth_lib_rationale_1",
       "community": 38,
-      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"mazo y mazmorra\".  instrum"
+      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"dracs & rogues\".  instrume"
     },
     {
       "label": "F#4' -> MIDI number. Integers pass through.",
@@ -8552,13 +8768,13 @@
       "norm_label": "finish()"
     },
     {
-      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Mazo y Mazmorra\".  Instrum",
+      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Dracs & Rogues\".  Instrume",
       "file_type": "rationale",
       "source_file": "scripts/musica/acto3/synth_lib.py",
       "source_location": "L1",
       "id": "acto3_synth_lib_rationale_1",
       "community": 41,
-      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"mazo y mazmorra\".  instrum"
+      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"dracs & rogues\".  instrume"
     },
     {
       "label": "F#4' -> MIDI number. Integers pass through.",
@@ -11018,13 +11234,13 @@
       "norm_label": "finish()"
     },
     {
-      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Mazo y Mazmorra\".  Instrum",
+      "label": "Tiny numpy synthesizer shared by the Act I tracks of \"Dracs & Rogues\".  Instrume",
       "file_type": "rationale",
       "source_file": "scripts/musica/menu/synth_lib.py",
       "source_location": "L1",
       "id": "menu_synth_lib_rationale_1",
       "community": 43,
-      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"mazo y mazmorra\".  instrum"
+      "norm_label": "tiny numpy synthesizer shared by the act i tracks of \"dracs & rogues\".  instrume"
     },
     {
       "label": "F#4' -> MIDI number. Integers pass through.",
@@ -11504,13 +11720,13 @@
       "norm_label": "main()"
     },
     {
-      "label": "Synthesises every sound effect of \u00abMazo y Mazmorra\u00bb and writes the MP3 bank.  Us",
+      "label": "Synthesises every sound effect of \u00abDracs & Rogues\u00bb and writes the MP3 bank.  Usa",
       "file_type": "rationale",
       "source_file": "scripts/sfx/make_sfx.py",
       "source_location": "L1",
       "id": "sfx_make_sfx_rationale_1",
       "community": 44,
-      "norm_label": "synthesises every sound effect of \u00abmazo y mazmorra\u00bb and writes the mp3 bank.  us"
+      "norm_label": "synthesises every sound effect of \u00abdracs & rogues\u00bb and writes the mp3 bank.  usa"
     },
     {
       "label": "Air displaced by a moving object: band-passed noise sweeping in pitch and level.",
@@ -12265,7 +12481,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L1",
       "id": "core_bendiciones",
-      "community": 14,
+      "community": 75,
       "norm_label": "bendiciones.ts"
     },
     {
@@ -12274,7 +12490,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L9",
       "id": "core_bendiciones_ofertabendicion",
-      "community": 14,
+      "community": 75,
       "norm_label": "ofertabendicion"
     },
     {
@@ -12283,7 +12499,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L12",
       "id": "core_bendiciones_dones_por_acto",
-      "community": 14,
+      "community": 75,
       "norm_label": "dones_por_acto"
     },
     {
@@ -12292,7 +12508,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L19",
       "id": "core_bendiciones_donesdecartaunica",
-      "community": 14,
+      "community": 75,
       "norm_label": "donesdecartaunica()"
     },
     {
@@ -12301,7 +12517,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L28",
       "id": "core_bendiciones_bendicionesdisponibles",
-      "community": 14,
+      "community": 75,
       "norm_label": "bendicionesdisponibles()"
     },
     {
@@ -12310,7 +12526,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L38",
       "id": "core_bendiciones_elegirporhuecos",
-      "community": 14,
+      "community": 75,
       "norm_label": "elegirporhuecos()"
     },
     {
@@ -12319,7 +12535,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L53",
       "id": "core_bendiciones_comooferta",
-      "community": 14,
+      "community": 75,
       "norm_label": "comooferta()"
     },
     {
@@ -12328,7 +12544,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L56",
       "id": "core_bendiciones_ofrecerbendicioninicial",
-      "community": 14,
+      "community": 75,
       "norm_label": "ofrecerbendicioninicial()"
     },
     {
@@ -12337,7 +12553,7 @@
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L61",
       "id": "core_bendiciones_ofrecerbendicionentreactos",
-      "community": 14,
+      "community": 75,
       "norm_label": "ofrecerbendicionentreactos()"
     },
     {
@@ -12499,7 +12715,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L2806",
       "id": "core_cartas_brujo",
-      "community": 23,
+      "community": 67,
       "norm_label": "brujo"
     },
     {
@@ -12598,7 +12814,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3900",
       "id": "core_cartas_cartaunicadeclase",
-      "community": 14,
+      "community": 75,
       "norm_label": "cartaunicadeclase()"
     },
     {
@@ -12607,7 +12823,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3905",
       "id": "core_cartas_cartaporid",
-      "community": 79,
+      "community": 46,
       "norm_label": "cartaporid()"
     },
     {
@@ -12661,7 +12877,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L78",
       "id": "core_combate_combate_constructor",
-      "community": 14,
+      "community": 75,
       "norm_label": ".constructor()"
     },
     {
@@ -12922,7 +13138,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L847",
       "id": "core_combate_combate_invocar",
-      "community": 23,
+      "community": 79,
       "norm_label": ".invocar()"
     },
     {
@@ -12931,7 +13147,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L868",
       "id": "core_combate_combate_invocarefimero",
-      "community": 23,
+      "community": 79,
       "norm_label": ".invocarefimero()"
     },
     {
@@ -13165,7 +13381,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L13",
       "id": "core_enemigos_goblin_cortador",
-      "community": 0,
+      "community": 74,
       "norm_label": "goblin_cortador"
     },
     {
@@ -13174,7 +13390,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L21",
       "id": "core_enemigos_goblin_arquero",
-      "community": 0,
+      "community": 74,
       "norm_label": "goblin_arquero"
     },
     {
@@ -13219,7 +13435,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L65",
       "id": "core_enemigos_goblin_famelico",
-      "community": 23,
+      "community": 0,
       "norm_label": "goblin_famelico"
     },
     {
@@ -13228,7 +13444,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L70",
       "id": "core_enemigos_jefe_ogro",
-      "community": 87,
+      "community": 0,
       "norm_label": "jefe_ogro"
     },
     {
@@ -13300,7 +13516,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L176",
       "id": "core_enemigos_senor_cripta",
-      "community": 87,
+      "community": 0,
       "norm_label": "senor_cripta"
     },
     {
@@ -13372,7 +13588,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L286",
       "id": "core_enemigos_ignifax",
-      "community": 0,
+      "community": 74,
       "norm_label": "ignifax"
     },
     {
@@ -13453,7 +13669,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L384",
       "id": "core_enemigos_imagen_ilusoria",
-      "community": 59,
+      "community": 0,
       "norm_label": "imagen_ilusoria"
     },
     {
@@ -13552,7 +13768,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L498",
       "id": "core_enemigos_heraldo_culto",
-      "community": 0,
+      "community": 74,
       "norm_label": "heraldo_culto"
     },
     {
@@ -13633,7 +13849,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L587",
       "id": "core_enemigos_observador",
-      "community": 59,
+      "community": 0,
       "norm_label": "observador"
     },
     {
@@ -13651,7 +13867,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L604",
       "id": "core_enemigos_contemplador",
-      "community": 0,
+      "community": 74,
       "norm_label": "contemplador"
     },
     {
@@ -13660,7 +13876,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L631",
       "id": "core_enemigos_dungeon_master",
-      "community": 59,
+      "community": 0,
       "norm_label": "dungeon_master"
     },
     {
@@ -13669,7 +13885,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L646",
       "id": "core_enemigos_capitulo",
-      "community": 79,
+      "community": 0,
       "norm_label": "capitulo"
     },
     {
@@ -13696,7 +13912,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 46,
+      "community": 79,
       "norm_label": "escena-final.ts"
     },
     {
@@ -13714,7 +13930,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 46,
+      "community": 79,
       "norm_label": "intencion_dm"
     },
     {
@@ -13732,7 +13948,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 46,
+      "community": 79,
       "norm_label": "dias_agenda"
     },
     {
@@ -13741,7 +13957,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 46,
+      "community": 79,
       "norm_label": "diaagenda"
     },
     {
@@ -13750,7 +13966,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 46,
+      "community": 79,
       "norm_label": "lineaagenda"
     },
     {
@@ -13759,7 +13975,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 46,
+      "community": 79,
       "norm_label": "guion_agenda"
     },
     {
@@ -13768,7 +13984,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L97",
       "id": "core_escena_final_almacensimple",
-      "community": 46,
+      "community": 79,
       "norm_label": "almacensimple"
     },
     {
@@ -13777,7 +13993,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L102",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 46,
+      "community": 79,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -13786,7 +14002,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L111",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 46,
+      "community": 79,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -13795,7 +14011,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L120",
       "id": "core_escena_final_finalverdaderodesbloqueado",
-      "community": 46,
+      "community": 26,
       "norm_label": "finalverdaderodesbloqueado()"
     },
     {
@@ -13939,7 +14155,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardado.ts"
     },
     {
@@ -13948,7 +14164,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L9",
       "id": "core_guardado_guardado",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardado"
     },
     {
@@ -13957,7 +14173,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L30",
       "id": "core_guardado_serializarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "serializarrun()"
     },
     {
@@ -13966,7 +14182,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L51",
       "id": "core_guardado_rehidratarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "rehidratarrun()"
     },
     {
@@ -13975,7 +14191,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L90",
       "id": "core_guardado_guardarrun",
-      "community": 79,
+      "community": 46,
       "norm_label": "guardarrun()"
     },
     {
@@ -14011,7 +14227,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 52,
+      "community": 46,
       "norm_label": "mapa.ts"
     },
     {
@@ -14020,7 +14236,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L8",
       "id": "core_mapa_generarmapa",
-      "community": 52,
+      "community": 46,
       "norm_label": "generarmapa()"
     },
     {
@@ -14029,7 +14245,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L94",
       "id": "core_mapa_tipos_mision",
-      "community": 52,
+      "community": 46,
       "norm_label": "tipos_mision"
     },
     {
@@ -14038,7 +14254,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L96",
       "id": "core_mapa_distancia_mision",
-      "community": 52,
+      "community": 46,
       "norm_label": "distancia_mision"
     },
     {
@@ -14047,7 +14263,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L99",
       "id": "core_mapa_alcanzablesdesde",
-      "community": 52,
+      "community": 46,
       "norm_label": "alcanzablesdesde()"
     },
     {
@@ -14056,7 +14272,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L115",
       "id": "core_mapa_esalcanzable",
-      "community": 52,
+      "community": 46,
       "norm_label": "esalcanzable()"
     },
     {
@@ -14065,7 +14281,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L121",
       "id": "core_mapa_candidatosmision",
-      "community": 52,
+      "community": 46,
       "norm_label": "candidatosmision()"
     },
     {
@@ -14074,7 +14290,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L135",
       "id": "core_mapa_colocartabernas",
-      "community": 52,
+      "community": 46,
       "norm_label": "colocartabernas()"
     },
     {
@@ -14083,7 +14299,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L157",
       "id": "core_mapa_nodosdisponibles",
-      "community": 52,
+      "community": 46,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -14173,7 +14389,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L255",
       "id": "core_reliquias_bendicion_dondecarta",
-      "community": 14,
+      "community": 75,
       "norm_label": "dondecarta()"
     },
     {
@@ -14191,7 +14407,7 @@
       "source_file": "src/core/reliquias-bendicion.ts",
       "source_location": "L308",
       "id": "core_reliquias_bendicion_bendiciones",
-      "community": 14,
+      "community": 75,
       "norm_label": "bendiciones"
     },
     {
@@ -14272,7 +14488,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L58",
       "id": "core_reliquias_sello_pacto",
-      "community": 23,
+      "community": 67,
       "norm_label": "sello_pacto"
     },
     {
@@ -14362,7 +14578,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L552",
       "id": "core_reliquias_reliquiaporid",
-      "community": 79,
+      "community": 46,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -14416,7 +14632,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L611",
       "id": "core_reliquias_nombre_rareza_reliquia",
-      "community": 75,
+      "community": 46,
       "norm_label": "nombre_rareza_reliquia"
     },
     {
@@ -14461,7 +14677,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L21",
       "id": "core_rng_barajar",
-      "community": 14,
+      "community": 75,
       "norm_label": "barajar()"
     },
     {
@@ -14596,7 +14812,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L1",
       "id": "core_taberna",
-      "community": 52,
+      "community": 46,
       "norm_label": "taberna.ts"
     },
     {
@@ -14605,7 +14821,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L9",
       "id": "core_taberna_plantillarumor",
-      "community": 52,
+      "community": 46,
       "norm_label": "plantillarumor"
     },
     {
@@ -14614,7 +14830,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L17",
       "id": "core_taberna_rumortaberna",
-      "community": 52,
+      "community": 46,
       "norm_label": "rumortaberna"
     },
     {
@@ -14623,7 +14839,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L25",
       "id": "core_taberna_rumores",
-      "community": 52,
+      "community": 46,
       "norm_label": "rumores"
     },
     {
@@ -14632,7 +14848,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L60",
       "id": "core_taberna_distancias",
-      "community": 52,
+      "community": 46,
       "norm_label": "distancias"
     },
     {
@@ -14641,7 +14857,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L62",
       "id": "core_taberna_barajar",
-      "community": 52,
+      "community": 46,
       "norm_label": "barajar()"
     },
     {
@@ -14650,7 +14866,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L73",
       "id": "core_taberna_rumorestaberna",
-      "community": 52,
+      "community": 46,
       "norm_label": "rumorestaberna()"
     },
     {
@@ -14659,7 +14875,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L106",
       "id": "core_taberna_aceptarrumor",
-      "community": 52,
+      "community": 46,
       "norm_label": "aceptarrumor()"
     },
     {
@@ -14686,7 +14902,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L135",
       "id": "core_taberna_curajarra",
-      "community": 52,
+      "community": 46,
       "norm_label": "curajarra()"
     },
     {
@@ -14695,7 +14911,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L140",
       "id": "core_taberna_beberjarra",
-      "community": 52,
+      "community": 46,
       "norm_label": "beberjarra()"
     },
     {
@@ -14713,7 +14929,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 79,
+      "community": 46,
       "norm_label": "claseid"
     },
     {
@@ -14731,7 +14947,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_rareza",
-      "community": 67,
+      "community": 75,
       "norm_label": "rareza"
     },
     {
@@ -14749,7 +14965,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L10",
       "id": "core_types_estadoid",
-      "community": 79,
+      "community": 67,
       "norm_label": "estadoid"
     },
     {
@@ -14767,7 +14983,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L71",
       "id": "core_types_formainvocacion",
-      "community": 23,
+      "community": 79,
       "norm_label": "formainvocacion"
     },
     {
@@ -14785,7 +15001,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L80",
       "id": "core_types_invocacion",
-      "community": 23,
+      "community": 79,
       "norm_label": "invocacion"
     },
     {
@@ -14821,7 +15037,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L115",
       "id": "core_types_movimiento",
-      "community": 79,
+      "community": 0,
       "norm_label": "movimiento"
     },
     {
@@ -14830,7 +15046,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L141",
       "id": "core_types_enemigodef",
-      "community": 79,
+      "community": 0,
       "norm_label": "enemigodef"
     },
     {
@@ -14893,7 +15109,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L277",
       "id": "core_types_contextoefecto",
-      "community": 79,
+      "community": 23,
       "norm_label": "contextoefecto"
     },
     {
@@ -14902,7 +15118,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L409",
       "id": "core_types_tiponodo",
-      "community": 52,
+      "community": 46,
       "norm_label": "tiponodo"
     },
     {
@@ -14911,7 +15127,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L412",
       "id": "core_types_misiontaberna",
-      "community": 79,
+      "community": 46,
       "norm_label": "misiontaberna"
     },
     {
@@ -14920,7 +15136,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L418",
       "id": "core_types_nodomapa",
-      "community": 79,
+      "community": 46,
       "norm_label": "nodomapa"
     },
     {
@@ -14938,7 +15154,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L433",
       "id": "core_types_tipobendicion",
-      "community": 14,
+      "community": 75,
       "norm_label": "tipobendicion"
     },
     {
@@ -14947,7 +15163,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L436",
       "id": "core_types_origenreliquia",
-      "community": 79,
+      "community": 75,
       "norm_label": "origenreliquia"
     },
     {
@@ -15136,7 +15352,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "id": "fx_audio",
-      "community": 78,
+      "community": 4,
       "norm_label": "audio.ts"
     },
     {
@@ -15145,7 +15361,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L19",
       "id": "fx_audio_track_urls",
-      "community": 78,
+      "community": 4,
       "norm_label": "track_urls"
     },
     {
@@ -15154,7 +15370,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L22",
       "id": "fx_audio_sfx_files",
-      "community": 78,
+      "community": 4,
       "norm_label": "sfx_files"
     },
     {
@@ -15163,7 +15379,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L29",
       "id": "fx_audio_capa",
-      "community": 78,
+      "community": 4,
       "norm_label": "capa"
     },
     {
@@ -15172,7 +15388,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L40",
       "id": "fx_audio_recetas",
-      "community": 78,
+      "community": 4,
       "norm_label": "recetas"
     },
     {
@@ -15181,7 +15397,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L102",
       "id": "fx_audio_temachip",
-      "community": 78,
+      "community": 4,
       "norm_label": "temachip"
     },
     {
@@ -15190,7 +15406,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L112",
       "id": "fx_audio_temas",
-      "community": 83,
+      "community": 67,
       "norm_label": "temas"
     },
     {
@@ -15226,7 +15442,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L212",
       "id": "fx_audio_motoraudio_reproducirarchivo",
-      "community": 78,
+      "community": 4,
       "norm_label": ".reproducirarchivo()"
     },
     {
@@ -15307,7 +15523,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L341",
       "id": "fx_audio_motoraudio_arrancartema",
-      "community": 83,
+      "community": 4,
       "norm_label": ".arrancartema()"
     },
     {
@@ -15316,7 +15532,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L371",
       "id": "fx_audio_motoraudio_cargarpista",
-      "community": 83,
+      "community": 4,
       "norm_label": ".cargarpista()"
     },
     {
@@ -15325,7 +15541,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L385",
       "id": "fx_audio_motoraudio_chiptune",
-      "community": 83,
+      "community": 4,
       "norm_label": ".chiptune()"
     },
     {
@@ -15433,7 +15649,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L572",
       "id": "fx_audio_leermusicaapagada",
-      "community": 78,
+      "community": 4,
       "norm_label": "leermusicaapagada()"
     },
     {
@@ -15442,7 +15658,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L581",
       "id": "fx_audio_audio",
-      "community": 78,
+      "community": 4,
       "norm_label": "audio"
     },
     {
@@ -15451,7 +15667,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L1",
       "id": "fx_background",
-      "community": 54,
+      "community": 19,
       "norm_label": "background.ts"
     },
     {
@@ -15460,7 +15676,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L17",
       "id": "fx_background_scenebackground",
-      "community": 54,
+      "community": 19,
       "norm_label": "scenebackground"
     },
     {
@@ -15469,7 +15685,7 @@
       "source_file": "src/fx/background.ts",
       "source_location": "L11",
       "id": "fx_background_scenes",
-      "community": 54,
+      "community": 19,
       "norm_label": "scenes"
     },
     {
@@ -16198,7 +16414,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1464",
       "id": "fx_card_spells_cardspellkey",
-      "community": 54,
+      "community": 19,
       "norm_label": "cardspellkey()"
     },
     {
@@ -16207,7 +16423,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1469",
       "id": "fx_card_spells_preludekey",
-      "community": 54,
+      "community": 19,
       "norm_label": "preludekey()"
     },
     {
@@ -16216,7 +16432,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1475",
       "id": "fx_card_spells_hitspell",
-      "community": 54,
+      "community": 19,
       "norm_label": "hitspell()"
     },
     {
@@ -16225,7 +16441,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1480",
       "id": "fx_card_spells_cardshake",
-      "community": 3,
+      "community": 17,
       "norm_label": "cardshake()"
     },
     {
@@ -16270,7 +16486,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L59",
       "id": "fx_chains_chainrun",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainrun"
     },
     {
@@ -16369,7 +16585,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L234",
       "id": "fx_chains_strandshapes",
-      "community": 64,
+      "community": 58,
       "norm_label": "strandshapes()"
     },
     {
@@ -17242,7 +17458,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1086",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 13,
+      "community": 0,
       "norm_label": "enemy_rigs"
     },
     {
@@ -17305,7 +17521,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L36",
       "id": "fx_hero_rig_formfromlabel",
-      "community": 54,
+      "community": 6,
       "norm_label": "formfromlabel()"
     },
     {
@@ -17314,7 +17530,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L42",
       "id": "fx_hero_rig_currentform",
-      "community": 54,
+      "community": 6,
       "norm_label": "currentform()"
     },
     {
@@ -17782,7 +17998,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L164",
       "id": "heroes_druida_formid",
-      "community": 59,
+      "community": 0,
       "norm_label": "formid"
     },
     {
@@ -17809,7 +18025,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L176",
       "id": "heroes_druida_wolfchains",
-      "community": 64,
+      "community": 58,
       "norm_label": "wolfchains()"
     },
     {
@@ -17818,7 +18034,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L194",
       "id": "heroes_druida_wolfshapes",
-      "community": 64,
+      "community": 58,
       "norm_label": "wolfshapes()"
     },
     {
@@ -17863,7 +18079,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L255",
       "id": "heroes_druida_howlvibrato",
-      "community": 80,
+      "community": 81,
       "norm_label": "howlvibrato()"
     },
     {
@@ -18097,7 +18313,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L1",
       "id": "heroes_mago",
-      "community": 77,
+      "community": 58,
       "norm_label": "mago.ts"
     },
     {
@@ -18106,7 +18322,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L19",
       "id": "heroes_mago_hat",
-      "community": 77,
+      "community": 58,
       "norm_label": "hat"
     },
     {
@@ -18115,7 +18331,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L24",
       "id": "heroes_mago_beard",
-      "community": 77,
+      "community": 58,
       "norm_label": "beard"
     },
     {
@@ -18124,7 +18340,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L30",
       "id": "heroes_mago_sleeve_b",
-      "community": 77,
+      "community": 58,
       "norm_label": "sleeve_b"
     },
     {
@@ -18133,7 +18349,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L35",
       "id": "heroes_mago_sleeve_f",
-      "community": 77,
+      "community": 58,
       "norm_label": "sleeve_f"
     },
     {
@@ -18142,7 +18358,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L41",
       "id": "heroes_mago_robe",
-      "community": 77,
+      "community": 58,
       "norm_label": "robe"
     },
     {
@@ -18151,7 +18367,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L47",
       "id": "heroes_mago_tome",
-      "community": 77,
+      "community": 58,
       "norm_label": "tome"
     },
     {
@@ -18160,7 +18376,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L55",
       "id": "heroes_mago_raise",
-      "community": 77,
+      "community": 58,
       "norm_label": "raise"
     },
     {
@@ -18169,7 +18385,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L61",
       "id": "heroes_mago_discharge",
-      "community": 77,
+      "community": 58,
       "norm_label": "discharge"
     },
     {
@@ -18178,7 +18394,7 @@
       "source_file": "src/fx/heroes/mago.ts",
       "source_location": "L67",
       "id": "heroes_mago_mago_rig",
-      "community": 77,
+      "community": 58,
       "norm_label": "mago_rig"
     },
     {
@@ -18295,7 +18511,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L1",
       "id": "fx_motion",
-      "community": 77,
+      "community": 81,
       "norm_label": "motion.ts"
     },
     {
@@ -18304,7 +18520,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L8",
       "id": "fx_motion_ease",
-      "community": 77,
+      "community": 81,
       "norm_label": "ease"
     },
     {
@@ -18313,7 +18529,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L37",
       "id": "fx_motion_strikespec",
-      "community": 77,
+      "community": 81,
       "norm_label": "strikespec"
     },
     {
@@ -18322,7 +18538,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L64",
       "id": "fx_motion_strikekeys",
-      "community": 77,
+      "community": 81,
       "norm_label": "strikekeys()"
     },
     {
@@ -18331,7 +18547,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L81",
       "id": "fx_motion_shake",
-      "community": 80,
+      "community": 81,
       "norm_label": "shake()"
     },
     {
@@ -18340,7 +18556,7 @@
       "source_file": "src/fx/motion.ts",
       "source_location": "L86",
       "id": "fx_motion_pulse",
-      "community": 80,
+      "community": 81,
       "norm_label": "pulse()"
     },
     {
@@ -18349,7 +18565,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L1",
       "id": "fx_music_tracks",
-      "community": 78,
+      "community": 4,
       "norm_label": "music-tracks.ts"
     },
     {
@@ -18358,7 +18574,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L5",
       "id": "fx_music_tracks_musictrack",
-      "community": 78,
+      "community": 4,
       "norm_label": "musictrack"
     },
     {
@@ -18367,7 +18583,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L15",
       "id": "fx_music_tracks_music_tracks",
-      "community": 78,
+      "community": 4,
       "norm_label": "music_tracks"
     },
     {
@@ -18376,7 +18592,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L30",
       "id": "fx_music_tracks_loopwindow",
-      "community": 78,
+      "community": 4,
       "norm_label": "loopwindow()"
     },
     {
@@ -18583,7 +18799,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L1",
       "id": "fx_particulas",
-      "community": 46,
+      "community": 17,
       "norm_label": "particulas.ts"
     },
     {
@@ -18592,7 +18808,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L14",
       "id": "fx_particulas_movimientoreducido",
-      "community": 3,
+      "community": 17,
       "norm_label": "movimientoreducido()"
     },
     {
@@ -18601,7 +18817,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L17",
       "id": "fx_particulas_estiloambiente",
-      "community": 46,
+      "community": 17,
       "norm_label": "estiloambiente"
     },
     {
@@ -18700,7 +18916,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L117",
       "id": "fx_particulas_motorparticulas_sacudidahechizo",
-      "community": 3,
+      "community": 17,
       "norm_label": ".sacudidahechizo()"
     },
     {
@@ -18709,7 +18925,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L123",
       "id": "fx_particulas_motorparticulas_hechizo",
-      "community": 3,
+      "community": 17,
       "norm_label": ".hechizo()"
     },
     {
@@ -18898,7 +19114,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L11",
       "id": "fx_puppet_chain_slots",
-      "community": 45,
+      "community": 10,
       "norm_label": "chain_slots"
     },
     {
@@ -18916,7 +19132,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L14",
       "id": "fx_puppet_chainbone",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainbone"
     },
     {
@@ -18970,7 +19186,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L43",
       "id": "fx_puppet_partialpose",
-      "community": 77,
+      "community": 81,
       "norm_label": "partialpose"
     },
     {
@@ -19015,7 +19231,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L77",
       "id": "fx_puppet_chainspec",
-      "community": 77,
+      "community": 10,
       "norm_label": "chainspec"
     },
     {
@@ -19312,7 +19528,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L301",
       "id": "fx_puppet_keyframe",
-      "community": 77,
+      "community": 81,
       "norm_label": "keyframe"
     },
     {
@@ -19393,7 +19609,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L435",
       "id": "fx_puppet_activeaction",
-      "community": 13,
+      "community": 10,
       "norm_label": "activeaction()"
     },
     {
@@ -19411,7 +19627,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L1",
       "id": "fx_sfx_bank",
-      "community": 78,
+      "community": 4,
       "norm_label": "sfx-bank.ts"
     },
     {
@@ -19420,7 +19636,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L9",
       "id": "fx_sfx_bank_sfx_names",
-      "community": 78,
+      "community": 4,
       "norm_label": "sfx_names"
     },
     {
@@ -19429,7 +19645,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L21",
       "id": "fx_sfx_bank_frequent_sfx",
-      "community": 78,
+      "community": 4,
       "norm_label": "frequent_sfx"
     },
     {
@@ -19438,7 +19654,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L27",
       "id": "fx_sfx_bank_resolvesfx",
-      "community": 78,
+      "community": 4,
       "norm_label": "resolvesfx()"
     },
     {
@@ -19447,7 +19663,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L32",
       "id": "fx_sfx_bank_groupsfxfiles",
-      "community": 78,
+      "community": 4,
       "norm_label": "groupsfxfiles()"
     },
     {
@@ -19456,7 +19672,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L45",
       "id": "fx_sfx_bank_pickvariant",
-      "community": 78,
+      "community": 4,
       "norm_label": "pickvariant()"
     },
     {
@@ -19465,7 +19681,7 @@
       "source_file": "src/fx/sfx-bank.ts",
       "source_location": "L52",
       "id": "fx_sfx_bank_playbackjitter",
-      "community": 78,
+      "community": 4,
       "norm_label": "playbackjitter()"
     },
     {
@@ -19483,7 +19699,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L9",
       "id": "fx_spell_fx_box",
-      "community": 3,
+      "community": 17,
       "norm_label": "box"
     },
     {
@@ -20158,7 +20374,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L990",
       "id": "fx_spell_fx_spellsystem",
-      "community": 3,
+      "community": 17,
       "norm_label": "spellsystem"
     },
     {
@@ -20167,7 +20383,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L993",
       "id": "fx_spell_fx_spellsystem_active",
-      "community": 3,
+      "community": 17,
       "norm_label": ".active()"
     },
     {
@@ -20176,7 +20392,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L994",
       "id": "fx_spell_fx_spellsystem_add",
-      "community": 3,
+      "community": 17,
       "norm_label": ".add()"
     },
     {
@@ -20185,7 +20401,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L1000",
       "id": "fx_spell_fx_spellsystem_frame",
-      "community": 3,
+      "community": 17,
       "norm_label": ".frame()"
     },
     {
@@ -20392,7 +20608,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L1",
       "id": "ui_action_queue",
-      "community": 54,
+      "community": 19,
       "norm_label": "action-queue.ts"
     },
     {
@@ -20401,7 +20617,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L10",
       "id": "ui_action_queue_verdict",
-      "community": 54,
+      "community": 19,
       "norm_label": "verdict"
     },
     {
@@ -20410,7 +20626,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L12",
       "id": "ui_action_queue_actionqueuehooks",
-      "community": 54,
+      "community": 19,
       "norm_label": "actionqueuehooks"
     },
     {
@@ -20545,7 +20761,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L134",
       "id": "ui_action_queue_forecastenergy",
-      "community": 54,
+      "community": 19,
       "norm_label": "forecastenergy()"
     },
     {
@@ -20554,7 +20770,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L138",
       "id": "ui_action_queue_cardaction",
-      "community": 54,
+      "community": 19,
       "norm_label": "cardaction"
     },
     {
@@ -20563,7 +20779,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L143",
       "id": "ui_action_queue_cardcheckenv",
-      "community": 54,
+      "community": 19,
       "norm_label": "cardcheckenv"
     },
     {
@@ -20572,7 +20788,7 @@
       "source_file": "src/ui/action-queue.ts",
       "source_location": "L158",
       "id": "ui_action_queue_checkcardaction",
-      "community": 54,
+      "community": 19,
       "norm_label": "checkcardaction()"
     },
     {
@@ -20680,7 +20896,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L1",
       "id": "ui_bendicion",
-      "community": 14,
+      "community": 75,
       "norm_label": "bendicion.ts"
     },
     {
@@ -20689,7 +20905,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L10",
       "id": "ui_bendicion_momentobendicion",
-      "community": 14,
+      "community": 75,
       "norm_label": "momentobendicion"
     },
     {
@@ -20698,7 +20914,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L13",
       "id": "ui_bendicion_etiqueta_tipo",
-      "community": 14,
+      "community": 75,
       "norm_label": "etiqueta_tipo"
     },
     {
@@ -20707,7 +20923,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L19",
       "id": "ui_bendicion_contenidoopcion",
-      "community": 14,
+      "community": 52,
       "norm_label": "contenidoopcion()"
     },
     {
@@ -21013,7 +21229,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L74",
       "id": "ui_card_motion_drawdelays",
-      "community": 76,
+      "community": 19,
       "norm_label": "drawdelays()"
     },
     {
@@ -21355,7 +21571,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1",
       "id": "ui_combate",
-      "community": 54,
+      "community": 19,
       "norm_label": "combate.ts"
     },
     {
@@ -21364,7 +21580,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L28",
       "id": "ui_combate_accionjugador",
-      "community": 54,
+      "community": 19,
       "norm_label": "accionjugador"
     },
     {
@@ -21373,7 +21589,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L32",
       "id": "ui_combate_accioncarta",
-      "community": 54,
+      "community": 19,
       "norm_label": "accioncarta"
     },
     {
@@ -21382,7 +21598,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L34",
       "id": "ui_combate_nombre_clase",
-      "community": 54,
+      "community": 19,
       "norm_label": "nombre_clase"
     },
     {
@@ -21391,7 +21607,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L38",
       "id": "ui_combate_sprite_invocacion",
-      "community": 54,
+      "community": 19,
       "norm_label": "sprite_invocacion"
     },
     {
@@ -21400,7 +21616,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L42",
       "id": "ui_combate_pasiva_invocacion",
-      "community": 54,
+      "community": 19,
       "norm_label": "pasiva_invocacion"
     },
     {
@@ -21418,7 +21634,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1290",
       "id": "ui_combate_background_urls",
-      "community": 54,
+      "community": 19,
       "norm_label": "background_urls"
     },
     {
@@ -21427,7 +21643,7 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L1298",
       "id": "ui_combate_montarfondo",
-      "community": 54,
+      "community": 19,
       "norm_label": "montarfondo()"
     },
     {
@@ -21490,7 +21706,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L49",
       "id": "ui_compendio_pantallacompendio",
-      "community": 67,
+      "community": 26,
       "norm_label": "pantallacompendio()"
     },
     {
@@ -21499,7 +21715,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L139",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 67,
+      "community": 26,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -21508,7 +21724,7 @@
       "source_file": "src/ui/enemy-slots.ts",
       "source_location": "L1",
       "id": "ui_enemy_slots",
-      "community": 54,
+      "community": 19,
       "norm_label": "enemy-slots.ts"
     },
     {
@@ -21517,7 +21733,7 @@
       "source_file": "src/ui/enemy-slots.ts",
       "source_location": "L10",
       "id": "ui_enemy_slots_layoutslots",
-      "community": 54,
+      "community": 19,
       "norm_label": "layoutslots()"
     },
     {
@@ -21571,7 +21787,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 46,
+      "community": 79,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -21580,7 +21796,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 46,
+      "community": 79,
       "norm_label": "nombre_clase"
     },
     {
@@ -21589,7 +21805,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 46,
+      "community": 79,
       "norm_label": "izquierda"
     },
     {
@@ -21598,7 +21814,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 46,
+      "community": 79,
       "norm_label": "derecha"
     },
     {
@@ -21607,7 +21823,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L26",
       "id": "ui_final_verdadero_pantallafinalverdadero",
-      "community": 46,
+      "community": 79,
       "norm_label": "pantallafinalverdadero()"
     },
     {
@@ -21616,7 +21832,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L1",
       "id": "ui_gallery_catalogue",
-      "community": 59,
+      "community": 0,
       "norm_label": "gallery-catalogue.ts"
     },
     {
@@ -21634,7 +21850,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L18",
       "id": "ui_gallery_catalogue_gallerysection",
-      "community": 59,
+      "community": 0,
       "norm_label": "gallerysection"
     },
     {
@@ -21643,7 +21859,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L26",
       "id": "ui_gallery_catalogue_heroes",
-      "community": 59,
+      "community": 0,
       "norm_label": "heroes"
     },
     {
@@ -21652,7 +21868,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L29",
       "id": "ui_gallery_catalogue_forms",
-      "community": 59,
+      "community": 0,
       "norm_label": "forms"
     },
     {
@@ -21661,7 +21877,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L33",
       "id": "ui_gallery_catalogue_invocations",
-      "community": 59,
+      "community": 0,
       "norm_label": "invocations"
     },
     {
@@ -21670,7 +21886,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L39",
       "id": "ui_gallery_catalogue_boss_summons",
-      "community": 59,
+      "community": 0,
       "norm_label": "boss_summons"
     },
     {
@@ -21679,7 +21895,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L43",
       "id": "ui_gallery_catalogue_gallerycatalogue",
-      "community": 59,
+      "community": 13,
       "norm_label": "gallerycatalogue()"
     },
     {
@@ -21751,7 +21967,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L35",
       "id": "ui_gallery_showgallery",
-      "community": 13,
+      "community": 26,
       "norm_label": "showgallery()"
     },
     {
@@ -21787,7 +22003,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L1",
       "id": "ui_instalar",
-      "community": 46,
+      "community": 26,
       "norm_label": "instalar.ts"
     },
     {
@@ -21796,7 +22012,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L10",
       "id": "ui_instalar_avisoinstalacion",
-      "community": 46,
+      "community": 26,
       "norm_label": "avisoinstalacion()"
     },
     {
@@ -21967,7 +22183,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L29",
       "id": "ui_puppet_sprite_puppetoptions",
-      "community": 45,
+      "community": 54,
       "norm_label": "puppetoptions"
     },
     {
@@ -22084,7 +22300,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L265",
       "id": "ui_puppet_sprite_loop",
-      "community": 13,
+      "community": 10,
       "norm_label": "loop()"
     },
     {
@@ -22165,7 +22381,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L360",
       "id": "ui_puppet_sprite_puppetsprite_tick",
-      "community": 13,
+      "community": 10,
       "norm_label": ".tick()"
     },
     {
@@ -22192,7 +22408,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L199",
       "id": "ui_puppet_stage_compile",
-      "community": 45,
+      "community": 54,
       "norm_label": "compile()"
     },
     {
@@ -22228,7 +22444,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L242",
       "id": "ui_puppet_stage_puppetstage",
-      "community": 45,
+      "community": 54,
       "norm_label": "puppetstage"
     },
     {
@@ -22237,7 +22453,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L257",
       "id": "ui_puppet_stage_puppetstage_create",
-      "community": 45,
+      "community": 54,
       "norm_label": ".create()"
     },
     {
@@ -22246,7 +22462,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L275",
       "id": "ui_puppet_stage_puppetstage_constructor",
-      "community": 45,
+      "community": 54,
       "norm_label": ".constructor()"
     },
     {
@@ -22255,7 +22471,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L297",
       "id": "ui_puppet_stage_puppetstage_add",
-      "community": 45,
+      "community": 54,
       "norm_label": ".add()"
     },
     {
@@ -22264,7 +22480,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L298",
       "id": "ui_puppet_stage_puppetstage_remove",
-      "community": 45,
+      "community": 54,
       "norm_label": ".remove()"
     },
     {
@@ -22273,7 +22489,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L300",
       "id": "ui_puppet_stage_puppetstage_destroy",
-      "community": 45,
+      "community": 54,
       "norm_label": ".destroy()"
     },
     {
@@ -22291,7 +22507,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L324",
       "id": "ui_puppet_stage_puppetstage_draw",
-      "community": 45,
+      "community": 54,
       "norm_label": ".draw()"
     },
     {
@@ -22327,7 +22543,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L479",
       "id": "ui_puppet_stage_forcesvg",
-      "community": 45,
+      "community": 54,
       "norm_label": "forcesvg()"
     },
     {
@@ -22381,7 +22597,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L1",
       "id": "ui_relic_art",
-      "community": 14,
+      "community": 52,
       "norm_label": "relic-art.ts"
     },
     {
@@ -22390,7 +22606,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L4",
       "id": "ui_relic_art_svgtable",
-      "community": 14,
+      "community": 52,
       "norm_label": "svgtable"
     },
     {
@@ -22399,7 +22615,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L11",
       "id": "ui_relic_art_pickrelicsvg",
-      "community": 14,
+      "community": 52,
       "norm_label": "pickrelicsvg()"
     },
     {
@@ -22408,7 +22624,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L15",
       "id": "ui_relic_art_reliclike",
-      "community": 14,
+      "community": 52,
       "norm_label": "reliclike"
     },
     {
@@ -22417,7 +22633,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L19",
       "id": "ui_relic_art_relicicon",
-      "community": 14,
+      "community": 52,
       "norm_label": "relicicon()"
     },
     {
@@ -22462,7 +22678,7 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L1",
       "id": "ui_titulo",
-      "community": 46,
+      "community": 26,
       "norm_label": "titulo.ts"
     },
     {
@@ -22471,7 +22687,7 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L13",
       "id": "ui_titulo_elecciontitulo",
-      "community": 46,
+      "community": 26,
       "norm_label": "elecciontitulo"
     },
     {
@@ -22489,7 +22705,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L1",
       "id": "ui_util",
-      "community": 46,
+      "community": 19,
       "norm_label": "util.ts"
     },
     {
@@ -22498,7 +22714,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L3",
       "id": "ui_util_el",
-      "community": 46,
+      "community": 26,
       "norm_label": "el()"
     },
     {
@@ -22507,7 +22723,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L14",
       "id": "ui_util_espera",
-      "community": 46,
+      "community": 19,
       "norm_label": "espera()"
     },
     {
@@ -22516,7 +22732,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L18",
       "id": "ui_util_centrode",
-      "community": 46,
+      "community": 19,
       "norm_label": "centrode()"
     },
     {
@@ -22525,7 +22741,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L25",
       "id": "ui_util_numeroflotante",
-      "community": 46,
+      "community": 19,
       "norm_label": "numeroflotante()"
     },
     {
@@ -22534,7 +22750,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L39",
       "id": "ui_util_sacudir",
-      "community": 54,
+      "community": 19,
       "norm_label": "sacudir()"
     },
     {
@@ -22552,7 +22768,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L58",
       "id": "ui_util_iniciartooltips",
-      "community": 46,
+      "community": 26,
       "norm_label": "iniciartooltips()"
     },
     {
@@ -22579,7 +22795,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L140",
       "id": "ui_util_descripcion_estado",
-      "community": 23,
+      "community": 67,
       "norm_label": "descripcion_estado"
     },
     {
@@ -22588,7 +22804,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L203",
       "id": "ui_util_tipestado",
-      "community": 54,
+      "community": 19,
       "norm_label": "tipestado()"
     },
     {
@@ -22811,7 +23027,7 @@
       "label": "Motor existente (l\u00e9elo antes de tocar nada)",
       "file_type": "document",
       "source_file": ".claude/agents/artista-particulas.md",
-      "source_location": "L18",
+      "source_location": "L17",
       "id": "agents_artista_particulas_motor_existente_l\u00e9elo_antes_de_tocar_nada",
       "community": 62,
       "norm_label": "motor existente (leelo antes de tocar nada)"
@@ -22820,7 +23036,7 @@
       "label": "C\u00f3mo trabajar",
       "file_type": "document",
       "source_file": ".claude/agents/artista-particulas.md",
-      "source_location": "L30",
+      "source_location": "L29",
       "id": "agents_artista_particulas_c\u00f3mo_trabajar",
       "community": 62,
       "norm_label": "como trabajar"
@@ -22874,7 +23090,7 @@
       "label": "T\u00e9cnicas de s\u00edntesis",
       "file_type": "document",
       "source_file": ".claude/agents/disenador-sfx.md",
-      "source_location": "L12",
+      "source_location": "L11",
       "id": "agents_disenador_sfx_t\u00e9cnicas_de_s\u00edntesis",
       "community": 63,
       "norm_label": "tecnicas de sintesis"
@@ -22883,7 +23099,7 @@
       "label": "Reglas",
       "file_type": "document",
       "source_file": ".claude/agents/disenador-sfx.md",
-      "source_location": "L33",
+      "source_location": "L32",
       "id": "agents_disenador_sfx_reglas",
       "community": 63,
       "norm_label": "reglas"
@@ -23029,17 +23245,17 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme",
-      "community": 58,
+      "community": 67,
       "norm_label": "readme.md"
     },
     {
-      "label": "Mazo y Mazmorra",
+      "label": "Dracs & Rogues",
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
-      "id": "readme_mazo_y_mazmorra",
-      "community": 58,
-      "norm_label": "mazo y mazmorra"
+      "id": "readme_dracs_rogues",
+      "community": 67,
+      "norm_label": "dracs & rogues"
     },
     {
       "label": "Ejecutar",
@@ -23047,7 +23263,7 @@
       "source_file": "README.md",
       "source_location": "L11",
       "id": "readme_ejecutar",
-      "community": 58,
+      "community": 67,
       "norm_label": "ejecutar"
     },
     {
@@ -23056,7 +23272,7 @@
       "source_file": "README.md",
       "source_location": "L19",
       "id": "readme_tests_del_motor_sin_navegador",
-      "community": 58,
+      "community": 67,
       "norm_label": "tests del motor (sin navegador)"
     },
     {
@@ -23065,7 +23281,7 @@
       "source_file": "README.md",
       "source_location": "L37",
       "id": "readme_controles",
-      "community": 58,
+      "community": 67,
       "norm_label": "controles"
     },
     {
@@ -23074,7 +23290,7 @@
       "source_file": "README.md",
       "source_location": "L47",
       "id": "readme_dise\u00f1o",
-      "community": 58,
+      "community": 67,
       "norm_label": "diseno"
     },
     {
@@ -23101,7 +23317,7 @@
       "source_file": "README.md",
       "source_location": "L393",
       "id": "readme_estructura",
-      "community": 58,
+      "community": 67,
       "norm_label": "estructura"
     },
     {
@@ -23110,7 +23326,7 @@
       "source_file": "README.md",
       "source_location": "L440",
       "id": "readme_arte_de_las_cartas",
-      "community": 58,
+      "community": 67,
       "norm_label": "arte de las cartas"
     },
     {
@@ -23119,7 +23335,7 @@
       "source_file": "README.md",
       "source_location": "L451",
       "id": "readme_mapa_a_tinta",
-      "community": 58,
+      "community": 67,
       "norm_label": "mapa a tinta"
     },
     {
@@ -23128,7 +23344,7 @@
       "source_file": "README.md",
       "source_location": "L476",
       "id": "readme_actualizaciones_y_avisos",
-      "community": 58,
+      "community": 67,
       "norm_label": "actualizaciones y avisos"
     },
     {
@@ -23137,7 +23353,7 @@
       "source_file": "README.md",
       "source_location": "L486",
       "id": "readme_motor_gr\u00e1fico_webgl2",
-      "community": 58,
+      "community": 67,
       "norm_label": "motor grafico (webgl2)"
     },
     {
@@ -23303,6 +23519,15 @@
       "norm_label": "visual check and frame captures"
     },
     {
+      "label": "Mazo y Mazmorra",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "community": 67,
+      "norm_label": "mazo y mazmorra",
+      "id": "readme_mazo_y_mazmorra"
+    },
+    {
       "label": "DRUIDA_RIG",
       "file_type": "code",
       "source_file": "src/fx/heroes/druida.ts",
@@ -23316,7 +23541,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L177",
-      "community": 59,
+      "community": 0,
       "norm_label": "formid",
       "id": "fx_hero_rig_formid"
     },
@@ -23325,7 +23550,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L201",
-      "community": 84,
+      "community": 6,
       "norm_label": "wolfshapes()",
       "id": "fx_hero_rig_wolfshapes"
     },
@@ -23334,7 +23559,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L226",
-      "community": 84,
+      "community": 6,
       "norm_label": "swarmshapes()",
       "id": "fx_hero_rig_swarmshapes"
     },
@@ -23343,7 +23568,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L245",
-      "community": 74,
+      "community": 6,
       "norm_label": "form_rigs",
       "id": "fx_hero_rig_form_rigs"
     },
@@ -24000,7 +24225,7 @@
       "file_type": "code",
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L14",
-      "community": 14,
+      "community": 75,
       "norm_label": "especial()",
       "id": "core_bendiciones_especial"
     },
@@ -24009,7 +24234,7 @@
       "file_type": "code",
       "source_file": "src/core/bendiciones.ts",
       "source_location": "L17",
-      "community": 14,
+      "community": 75,
       "norm_label": "cartasunicas()",
       "id": "core_bendiciones_cartasunicas"
     },
@@ -24018,7 +24243,7 @@
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
-      "community": 14,
+      "community": 75,
       "norm_label": "don",
       "id": "ui_bendicion_don"
     },
@@ -24027,7 +24252,7 @@
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L15",
-      "community": 14,
+      "community": 75,
       "norm_label": "dones",
       "id": "ui_bendicion_dones"
     },
@@ -24036,7 +24261,7 @@
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L66",
-      "community": 14,
+      "community": 75,
       "norm_label": "don_carta",
       "id": "ui_bendicion_don_carta"
     },
@@ -24243,7 +24468,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L6",
-      "community": 54,
+      "community": 19,
       "norm_label": "backdropshape",
       "id": "fx_background_backdropshape"
     },
@@ -24252,7 +24477,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L8",
-      "community": 45,
+      "community": 54,
       "norm_label": "backdroptheme",
       "id": "fx_background_backdroptheme"
     },
@@ -24261,7 +24486,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L15",
-      "community": 54,
+      "community": 19,
       "norm_label": "themes",
       "id": "fx_background_themes"
     },
@@ -24270,7 +24495,7 @@
       "file_type": "code",
       "source_file": "src/fx/background.ts",
       "source_location": "L33",
-      "community": 54,
+      "community": 19,
       "norm_label": "backgroundtheme()",
       "id": "fx_background_backgroundtheme"
     },
@@ -24279,7 +24504,7 @@
       "file_type": "code",
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L372",
-      "community": 45,
+      "community": 54,
       "norm_label": ".setbackdrop()",
       "id": "ui_puppet_stage_puppetstage_setbackdrop"
     },
@@ -24288,7 +24513,7 @@
       "file_type": "code",
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L388",
-      "community": 45,
+      "community": 54,
       "norm_label": ".drawbackdrop()",
       "id": "ui_puppet_stage_puppetstage_drawbackdrop"
     },
@@ -24324,7 +24549,7 @@
       "file_type": "code",
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L371",
-      "community": 45,
+      "community": 54,
       "norm_label": ".offscreen()",
       "id": "ui_puppet_stage_puppetstage_offscreen"
     },
@@ -24351,7 +24576,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L4",
-      "community": 46,
+      "community": 17,
       "norm_label": "forma",
       "id": "fx_particulas_forma"
     },
@@ -24360,7 +24585,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L6",
-      "community": 46,
+      "community": 17,
       "norm_label": "particula",
       "id": "fx_particulas_particula"
     },
@@ -24369,7 +24594,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L14",
-      "community": 46,
+      "community": 17,
       "norm_label": "configefecto",
       "id": "fx_particulas_configefecto"
     },
@@ -24378,7 +24603,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L26",
-      "community": 46,
+      "community": 17,
       "norm_label": "efectos",
       "id": "fx_particulas_efectos"
     },
@@ -24387,7 +24612,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L56",
-      "community": 46,
+      "community": 17,
       "norm_label": "configambiente",
       "id": "fx_particulas_configambiente"
     },
@@ -24396,7 +24621,7 @@
       "file_type": "code",
       "source_file": "src/fx/particulas.ts",
       "source_location": "L60",
-      "community": 46,
+      "community": 17,
       "norm_label": "ambientes",
       "id": "fx_particulas_ambientes"
     },
@@ -24450,7 +24675,7 @@
       "file_type": "code",
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L286",
-      "community": 13,
+      "community": 10,
       "norm_label": ".show()",
       "id": "ui_puppet_sprite_puppetsprite_show"
     },
@@ -24576,7 +24801,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L72",
-      "community": 84,
+      "community": 6,
       "norm_label": "c()",
       "id": "fx_hero_rig_c"
     },
@@ -24585,7 +24810,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L73",
-      "community": 84,
+      "community": 6,
       "norm_label": "e()",
       "id": "fx_hero_rig_e"
     },
@@ -24864,7 +25089,7 @@
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
       "source_location": "L19",
-      "community": 54,
+      "community": 19,
       "norm_label": "sprite_forma",
       "id": "ui_combate_sprite_forma"
     },
@@ -24873,7 +25098,7 @@
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
       "source_location": "L14",
-      "community": 54,
+      "community": 19,
       "norm_label": "sprite_jugador",
       "id": "ui_combate_sprite_jugador"
     },
@@ -25048,7 +25273,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 58,
+      "community": 67,
       "norm_label": "roguelike de construccion de mazos",
       "id": "readme_deckbuilder_roguelike"
     },
@@ -25061,7 +25286,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 58,
+      "community": 67,
       "norm_label": "slay the spire (referencia de diseno)",
       "id": "readme_slay_the_spire"
     },
@@ -25074,7 +25299,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 58,
+      "community": 67,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -25087,7 +25312,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 83,
+      "community": 67,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -25165,7 +25390,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "raices (druida)",
       "id": "readme_raices"
     },
@@ -25178,7 +25403,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 79,
       "norm_label": "invocacion del druida",
       "id": "readme_invocacion"
     },
@@ -25256,7 +25481,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "veneno",
       "id": "readme_veneno"
     },
@@ -25295,7 +25520,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 0,
       "norm_label": "intencion enemiga",
       "id": "readme_intencion_enemiga"
     },
@@ -25321,7 +25546,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 58,
+      "community": 67,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -25412,7 +25637,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 79,
+      "community": 67,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -25425,7 +25650,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 52,
+      "community": 46,
       "norm_label": "mapa de 10 filas por capitulo",
       "id": "readme_mapa_capitulo"
     },
@@ -25438,7 +25663,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 0,
       "norm_label": "jefes unicos con rasgo propio",
       "id": "readme_jefes_unicos"
     },
@@ -25451,7 +25676,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 79,
+      "community": 67,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -25464,7 +25689,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -25477,7 +25702,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 54,
+      "community": 19,
       "norm_label": "controles de raton y modo mando por teclado",
       "id": "readme_controles_mando"
     },
@@ -25529,7 +25754,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 46,
+      "community": 67,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -25542,7 +25767,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 83,
+      "community": 67,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -25555,7 +25780,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 83,
+      "community": 4,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -25568,7 +25793,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 78,
+      "community": 4,
       "norm_label": "efectos de sonido sintetizados (web audio api, sin ficheros)",
       "id": "audio_leeme_sfx_sintetizados"
     },
@@ -25633,7 +25858,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 79,
+      "community": 67,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -25672,7 +25897,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "clase brujo (64 pv)",
       "id": "readme_clase_brujo"
     },
@@ -25698,7 +25923,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "condena (ejecuta al igualar los pv actuales)",
       "id": "readme_condena"
     },
@@ -25711,7 +25936,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 79,
       "norm_label": "invocaciones efimeras (brujo)",
       "id": "readme_invocacion_efimera"
     },
@@ -25737,7 +25962,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 67,
       "norm_label": "oscuridad (baja el ataque de todos)",
       "id": "readme_oscuridad"
     },
@@ -25750,7 +25975,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 58,
+      "community": 67,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -38488,6 +38713,638 @@
       "weight": 1.0,
       "source": "hero_tests_picaro_testpicaro",
       "target": "fx_puppet_puppetpose"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_background",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_build_svg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_d20",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_defs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_dm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_eyes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L291",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_hand_back",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_hand_front",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L402",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_moon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_post",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_pts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_render",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "icono_generate_icon",
+      "target": "icono_generate_icon_sparkle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L334",
+      "weight": 1.0,
+      "source": "icono_generate_icon_d20",
+      "target": "icono_generate_icon_pts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L177",
+      "weight": 1.0,
+      "source": "icono_generate_icon_background",
+      "target": "icono_generate_icon_sparkle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L246",
+      "weight": 1.0,
+      "source": "icono_generate_icon_card",
+      "target": "icono_generate_icon_sparkle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "icono_generate_icon_rationale_51",
+      "target": "icono_generate_icon_sparkle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L368",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_defs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "icono_generate_icon_defs",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "icono_generate_icon_defs",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "icono_generate_icon_background",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "icono_generate_icon_card",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "icono_generate_icon_d20",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "icono_generate_icon_dm",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "icono_generate_icon_eyes",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "icono_generate_icon_moon",
+      "target": "bool",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L169",
+      "weight": 1.0,
+      "source": "icono_generate_icon_background",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L244",
+      "weight": 1.0,
+      "source": "icono_generate_icon_card",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L319",
+      "weight": 1.0,
+      "source": "icono_generate_icon_d20",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "icono_generate_icon_dm",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L220",
+      "weight": 1.0,
+      "source": "icono_generate_icon_eyes",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L291",
+      "weight": 1.0,
+      "source": "icono_generate_icon_hand_back",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "icono_generate_icon_hand_front",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "icono_generate_icon_moon",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "weight": 1.0,
+      "source": "icono_generate_icon_render",
+      "target": "str",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L369",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_background",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L356",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_moon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L357",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_dm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "icono_generate_icon_dm",
+      "target": "icono_generate_icon_eyes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L359",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "icono_generate_icon_card",
+      "target": "icono_generate_icon_hand_back",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "icono_generate_icon_card",
+      "target": "icono_generate_icon_hand_front",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L358",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "icono_generate_icon_d20",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "float",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L353",
+      "weight": 1.0,
+      "source": "icono_generate_icon_build_svg",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L406",
+      "weight": 1.0,
+      "source": "icono_generate_icon_main",
+      "target": "icono_generate_icon_build_svg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L354",
+      "weight": 1.0,
+      "source": "icono_generate_icon_rationale_354",
+      "target": "icono_generate_icon_build_svg",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "icono_generate_icon_post",
+      "target": "float",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "weight": 1.0,
+      "source": "icono_generate_icon_render",
+      "target": "int",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L409",
+      "weight": 1.0,
+      "source": "icono_generate_icon_main",
+      "target": "icono_generate_icon_render",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "weight": 1.0,
+      "source": "icono_generate_icon_render",
+      "target": "image",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L377",
+      "weight": 1.0,
+      "source": "icono_generate_icon_render",
+      "target": "path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L403",
+      "weight": 1.0,
+      "source": "icono_generate_icon_main",
+      "target": "path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L388",
+      "weight": 1.0,
+      "source": "icono_generate_icon_post",
+      "target": "image",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/icono/generate_icon.py",
+      "source_location": "L409",
+      "weight": 1.0,
+      "source": "icono_generate_icon_main",
+      "target": "icono_generate_icon_post",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -96010,99 +96867,79 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "source": "readme",
+      "target": "readme_dracs_rogues",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "readme",
       "target": "readme_mazo_y_mazmorra"
     },
     {
-      "relation": "references",
+      "relation": "contains",
       "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "README.md",
-      "source_location": "L4",
+      "source_location": "L37",
       "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_ambientacion_dnd"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L46",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_clase_barbaro"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L74",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_clase_brujo"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L41",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_clase_druida"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L49",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_clase_mago"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L58",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_clase_picaro"
+      "source": "readme_dracs_rogues",
+      "target": "readme_controles",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L29",
+      "source_location": "L47",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_controles"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L3",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_deckbuilder_roguelike"
+      "source": "readme_dracs_rogues",
+      "target": "readme_dise\u00f1o",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L39",
+      "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_dise\u00f1o"
+      "source": "readme_dracs_rogues",
+      "target": "readme_ejecutar",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "readme_dracs_rogues",
+      "target": "readme_estructura",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L254",
+      "weight": 1.0,
+      "source": "readme_dracs_rogues",
+      "target": "readme_reliquias",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "readme_dracs_rogues",
+      "target": "readme_tests_del_motor_sin_navegador",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -96118,11 +96955,31 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
-      "source_location": "L138",
+      "source_location": "L19",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "readme_mazo_y_mazmorra",
-      "target": "readme_estructura"
+      "target": "readme_tests_del_motor_sin_navegador"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_controles"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_dise\u00f1o"
     },
     {
       "relation": "contains",
@@ -96133,36 +96990,6 @@
       "confidence_score": 1.0,
       "source": "readme_mazo_y_mazmorra",
       "target": "readme_reliquias"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "README.md",
-      "source_location": "L19",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_tests_del_motor_sin_navegador"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "README.md",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "readme_mazo_y_mazmorra",
-      "target": "readme_tres_actos"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": ".claude/skills/release/SKILL.md",
-      "source_location": "L78",
-      "weight": 1.0,
-      "source": "release_skill_flujo_release",
-      "target": "readme_mazo_y_mazmorra"
     },
     {
       "relation": "contains",
@@ -96213,6 +97040,16 @@
       "confidence_score": 1.0,
       "source": "readme_estructura",
       "target": "readme_motor_gr\u00e1fico_webgl2"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L138",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_estructura"
     },
     {
       "relation": "contains",
@@ -96393,6 +97230,96 @@
       "confidence_score": 1.0,
       "source": "heroes_readme_hero_sprites_one_file_per_character",
       "target": "heroes_readme_visual_check_and_frame_captures"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_ambientacion_dnd"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_clase_barbaro"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_clase_brujo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_clase_druida"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L49",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_clase_mago"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_clase_picaro"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_deckbuilder_roguelike"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "README.md",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "readme_mazo_y_mazmorra",
+      "target": "readme_tres_actos"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/skills/release/SKILL.md",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "release_skill_flujo_release",
+      "target": "readme_mazo_y_mazmorra"
     },
     {
       "relation": "calls",
@@ -98539,5 +99466,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "a1726c0e01889d35f4cd0b285a41bd59b89b666a"
+  "built_at_commit": "543bd356c24ac6eb8137a7b71a8572de22bd2f4d"
 }
