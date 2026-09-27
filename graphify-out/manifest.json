@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790461314.9865036,
-    "ast_hash": "d5846335543a79abf7e3651bef149cb6",
+    "mtime": 1790501681.089643,
+    "ast_hash": "fe10f5ec5c3ab34ecfffa51d18edc62a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790461172.521824,
-    "ast_hash": "7d93857bd4cf7852e4b06d9c3ffeaa0e",
+    "mtime": 1790499979.3663423,
+    "ast_hash": "14fc6504de6ae32cf3052ae62a19f6d4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/mapa.ts": {
-    "mtime": 1790458392.5708954,
-    "ast_hash": "b78fb61714330fcaa1d24a085e453bd2",
+    "mtime": 1790500491.8589926,
+    "ast_hash": "67754c19d6a756faef8311186f54c5e3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/recompensa.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790461314.9860322,
-    "ast_hash": "164f02862b5143965bff1aae17c16245",
+    "mtime": 1790501681.0892315,
+    "ast_hash": "1f5b282267bb998b252aeb684d9ae6e2",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790461224.9040408,
-    "ast_hash": "ca92b2391965ea5e25f965b1242c4f24",
+    "mtime": 1790500814.64317,
+    "ast_hash": "748b67a01871d95f3a914d6ab993c0af",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -2127,6 +2127,161 @@
   "/Users/sergio/WonderBits/personal/videogame/src/ui/final-verdadero.ts": {
     "mtime": 1790461047.266011,
     "ast_hash": "1ab879189aaa782be6d74c046278d81d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-acto1/generate.py": {
+    "mtime": 1790500586.6035326,
+    "ast_hash": "fc14b87cf1889bb087de0fbdc0dfb7aa",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-acto2/generate.py": {
+    "mtime": 1790501315.68964,
+    "ast_hash": "b50bf8adec051d4cab93c6a341322d7f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-comun/map_kit.py": {
+    "mtime": 1790501056.7805343,
+    "ast_hash": "52f7f03a240e160e1acc08afeffa6c9e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/map-icons.ts": {
+    "mtime": 1790500426.0372293,
+    "ast_hash": "42416e75b0a3241b6b00ba512b9f0688",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/aro.svg": {
+    "mtime": 1790500402.0476863,
+    "ast_hash": "9ff50f73fb2d753129e3a965eaa16354",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/cofre.svg": {
+    "mtime": 1790500402.0255926,
+    "ast_hash": "0204f6fb6902c9503b997247c6b62413",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-acto1.svg": {
+    "mtime": 1790500401.9962492,
+    "ast_hash": "f2c70a9a6b5eb33d8516b14a34b6be42",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-acto2.svg": {
+    "mtime": 1790500401.9981217,
+    "ast_hash": "a44c8663192ddeda1bf5929f5ae0a7d4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate-acto3.svg": {
+    "mtime": 1790500401.9992366,
+    "ast_hash": "8da402270289e7f1b6783a8fc4f91856",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/combate.svg": {
+    "mtime": 1790500401.9942956,
+    "ast_hash": "42cbd7d9365f2acfea6c21a5ba3d8110",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/descanso.svg": {
+    "mtime": 1790500402.0042877,
+    "ast_hash": "8336d8dcbc427428a721c9e5ee8089c6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/elite.svg": {
+    "mtime": 1790500402.00116,
+    "ast_hash": "1c3da3e595e107ab7b80e3b55a240d40",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/evento.svg": {
+    "mtime": 1790500402.0022209,
+    "ast_hash": "f7127f1e3fa2f169947e1bd6ab29a806",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/heroe.svg": {
+    "mtime": 1790500402.0431843,
+    "ast_hash": "19b7bd6f1d6e37b5be8d14534f62092d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-contemplador.svg": {
+    "mtime": 1790500402.1665952,
+    "ast_hash": "63f05b8158c647291535ad8404be3648",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-embaucador-arcano.svg": {
+    "mtime": 1790500402.0565302,
+    "ast_hash": "1eb924284123d17cceb767f0531f5677",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-heraldo-culto.svg": {
+    "mtime": 1790500402.1608257,
+    "ast_hash": "0d3d6f32ecd7c485a798f6ab8b8f2386",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-ignifax.svg": {
+    "mtime": 1790500402.1638706,
+    "ast_hash": "49808d6246243a35e23745bc03d16f3a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-ogro.svg": {
+    "mtime": 1790500402.054021,
+    "ast_hash": "cbeaa638ee15fa4d776cab4c3a62a901",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/jefe-senor-cripta.svg": {
+    "mtime": 1790500402.114745,
+    "ast_hash": "29fee45c119604bed1eb4f0190855531",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/mision.svg": {
+    "mtime": 1790500402.031623,
+    "ast_hash": "7cc16d7441d773a34d7e4f86d67df9a4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/taberna.svg": {
+    "mtime": 1790500402.0308018,
+    "ast_hash": "1f568da41c777133d5e9050634d4bb92",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/iconos/tachado.svg": {
+    "mtime": 1790500402.048218,
+    "ast_hash": "f987950d099edf4a5a997634588db2d6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto1-ancho.webp": {
+    "mtime": 1790501282.0616064,
+    "ast_hash": "42d5e01518ab142276cbafbd1761b429",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto1.webp": {
+    "mtime": 1790501256.721021,
+    "ast_hash": "733f2ec4e8452a22ee86784f71e04ce7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto2-ancho.webp": {
+    "mtime": 1790501523.3042722,
+    "ast_hash": "70bfd4ee688e99f3eee02454178d3bd9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto2.webp": {
+    "mtime": 1790501498.0998304,
+    "ast_hash": "404d44409d75d75e92e4c5402a78f126",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-acto3/generate.py": {
+    "mtime": 1790501549.5818927,
+    "ast_hash": "37668d0496f4a29723b1d53a76d7c4f3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/mapa/gen_icons.py": {
+    "mtime": 1790500922.0222762,
+    "ast_hash": "a167be773a670e45f5d1f42d57bbb6d7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto3-ancho.webp": {
+    "mtime": 1790501600.0293803,
+    "ast_hash": "a7660e3869cbf193f5367e3a7dbe9927",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/mapa/mapa-acto3.webp": {
+    "mtime": 1790501574.9726639,
+    "ast_hash": "e5dd305c8b7f9cb05e7ee5f155ce20fd",
     "semantic_hash": ""
   }
 }

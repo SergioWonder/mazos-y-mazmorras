@@ -116,35 +116,116 @@
 .clase-desc { font-size: 0.88rem; line-height: 1.4; opacity: 0.75; font-style: italic; }
 
 /* ── Mapa ───────────────────────────────────────────────────────────────── */
+/* A paper adventure map: ink icons on parchment, themed per act. The painted
+   parchment (src/arte/mapa/mapa-actoN.webp) arrives through --mapa-fondo; until
+   it exists the CSS parchment below stands in. Only transform and opacity are
+   animated so phones keep a smooth scroll. */
 
 .pantalla-mapa .mapa {
+  --tinta: #2a1a0e;
+  --tinta-suave: #3a2616;
+  --tinta-roja: #8b1e12;
+  --perg-claro: #ecdcb0;
+  --perg-medio: #d9c08a;
+  --perg-borde: #9c7442;
+  --perg-mancha: rgba(120, 80, 30, 0.16);
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background:
+    linear-gradient(rgba(10, 6, 3, 0.55), rgba(10, 6, 3, 0.75)),
+    var(--mapa-fondo-ancho, radial-gradient(ellipse at 50% 40%, #2a1d12, #0d0906 75%));
+  background-size: cover;
+  background-position: center;
+}
+.pantalla-mapa .mapa-acto-2 {
+  --perg-claro: #e0d6b8;
+  --perg-medio: #bfb38e;
+  --perg-borde: #6f6750;
+  --perg-mancha: rgba(70, 80, 50, 0.18);
+}
+.pantalla-mapa .mapa-acto-3 {
+  --perg-claro: #d2b386;
+  --perg-medio: #a37a48;
+  --perg-borde: #2a160a;
+  --perg-mancha: rgba(70, 20, 5, 0.28);
 }
 
+/* cartouche with the act name */
+.mapa-cartela {
+  position: relative;
+  align-self: center;
+  margin: 0.5rem auto 0.3rem;
+  padding: 0.25rem 2.6rem;
+  background:
+    radial-gradient(ellipse at 50% 50%, var(--perg-claro) 40%, var(--perg-medio) 100%);
+  border: 2px solid var(--tinta);
+  outline: 1px solid var(--tinta-suave);
+  outline-offset: 3px;
+  border-radius: 3px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.55);
+  max-width: calc(100vw - 2.5rem);
+}
+.mapa-cartela::before,
+.mapa-cartela::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--tinta);
+  background: var(--perg-medio);
+  transform: translateY(-50%) rotate(45deg);
+}
+.mapa-cartela::before { left: 0.8rem; }
+.mapa-cartela::after { right: 0.8rem; }
 .mapa-titulo {
   font-family: var(--fuente-titulo);
   text-align: center;
-  font-size: 2rem;
-  padding: 0.6rem;
-  letter-spacing: 0.12em;
-  color: var(--pergamino);
-  text-shadow: 0 0 22px rgba(255, 140, 59, 0.35);
+  font-size: 1.7rem;
+  padding: 0.1rem 0;
+  letter-spacing: 0.08em;
+  color: var(--tinta);
+  text-shadow: 0 1px 0 rgba(255, 245, 220, 0.5);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mapa-scroll {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  padding: 0.4rem 0 1rem;
 }
 
 .mapa-lienzo {
   position: relative;
   margin: 0 auto;
-  width: min(680px, 92vw);
-  height: 960px;       /* el mapa respira y se recorre con scroll */
+  width: min(680px, 94vw);
+  height: 960px;       /* the map breathes and is travelled with the scroll */
   min-height: 100%;
+  border-radius: 6px 10px 5px 12px / 12px 5px 10px 6px;
+  background:
+    radial-gradient(ellipse at 22% 18%, var(--perg-mancha), transparent 32%),
+    radial-gradient(ellipse at 78% 64%, var(--perg-mancha), transparent 28%),
+    radial-gradient(ellipse at 40% 88%, var(--perg-mancha), transparent 22%),
+    repeating-linear-gradient(97deg, rgba(90, 60, 20, 0.035) 0 2px, transparent 2px 7px),
+    radial-gradient(ellipse at 50% 45%, var(--perg-claro) 30%, var(--perg-medio) 78%, var(--perg-borde) 100%);
+  box-shadow:
+    inset 0 0 40px rgba(60, 35, 10, 0.55),
+    inset 0 0 6px rgba(40, 20, 5, 0.6),
+    0 10px 30px rgba(0, 0, 0, 0.6);
+}
+.mapa-acto-3 .mapa-lienzo {
+  box-shadow:
+    inset 0 0 70px rgba(40, 12, 2, 0.75),
+    inset 0 0 8px rgba(30, 10, 2, 0.8),
+    0 10px 30px rgba(0, 0, 0, 0.7);
+}
+.mapa-lienzo.mapa-pintado {
+  background: var(--mapa-fondo) center / cover no-repeat, var(--perg-medio);
 }
 
 .mapa-svg {
@@ -152,13 +233,30 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  overflow: visible;
 }
+.mapa-svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+/* untaken roads: faint dotted ink, like footsteps pencilled in */
 .mapa-svg .camino {
-  stroke: rgba(232, 217, 176, 0.22);
-  stroke-width: 0.45;
-  stroke-dasharray: 1.6 1.6;
+  stroke: var(--tinta-suave);
+  stroke-opacity: 0.45;
+  stroke-width: 2.2;
+  stroke-dasharray: 0.5 7;
 }
-.mapa-svg .camino-visitado { stroke: rgba(217, 169, 63, 0.55); stroke-width: 0.5; stroke-dasharray: none; }
+/* roads leaving the hero: darker ink */
+.mapa-svg .camino-abierto {
+  stroke: var(--tinta);
+  stroke-opacity: 0.85;
+  stroke-width: 2.8;
+  stroke-dasharray: 0.5 6.5;
+}
+/* the journey so far, in red travel ink */
+.mapa-svg .camino-visitado {
+  stroke: var(--tinta-roja);
+  stroke-opacity: 0.9;
+  stroke-width: 2.8;
+  stroke-dasharray: 9 4 2 4;
+}
 
 .mapa-nodos { position: absolute; inset: 0; }
 
@@ -167,64 +265,76 @@
   transform: translate(-50%, -50%);
   width: 58px;
   height: 58px;
-  border-radius: 50%;
   display: grid;
   place-items: center;
-  font-size: 1.5rem;
-  border: 2px solid rgba(232, 217, 176, 0.25);
-  background: radial-gradient(circle at 35% 30%, #2c3625, #141a10);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.55);
-  opacity: 0.55;
-  transition: all 0.2s ease;
+  padding: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  opacity: 0.8;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.nodo-jefe { width: 84px; height: 84px; font-size: 2.4rem; border-color: rgba(179, 38, 30, 0.6); }
-.nodo-elite { border-color: rgba(214, 90, 58, 0.5); }
-.nodo-cofre { border-color: rgba(217, 169, 63, 0.45); }
-.nodo-evento { border-color: rgba(138, 122, 224, 0.5); }
-.nodo-taberna { border-color: rgba(201, 132, 62, 0.6); background: radial-gradient(circle at 35% 30%, #4a3320, #1e140b); }
-
-/* tavern quest target: scroll badge and a soft golden glow until completed */
-.nodo-mision {
-  opacity: 0.95;
-  border-color: rgba(255, 209, 102, 0.85);
-  animation: brillo-mision 2.4s ease-in-out infinite;
-}
-.nodo-mision.nodo-disponible { animation: pulso-nodo 1.6s ease-in-out infinite, brillo-mision 2.4s ease-in-out infinite; }
-.mision-insignia {
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  font-size: 1.05rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
-  animation: mecer-insignia 2.2s ease-in-out infinite;
+.nodo > img, .nodo > span { grid-area: 1 / 1; pointer-events: none; }
+/* soft patch of clean parchment so the ink reads over painted details */
+.nodo::before {
+  content: '';
+  grid-area: 1 / 1;
+  width: 118%;
+  height: 118%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236, 220, 176, 0.78) 35%, rgba(236, 220, 176, 0) 70%);
   pointer-events: none;
 }
-@keyframes mecer-insignia {
-  0%, 100% { transform: translateY(0) rotate(-8deg); }
-  50% { transform: translateY(-4px) rotate(8deg); }
+.nodo-icono { width: 100%; height: 100%; object-fit: contain; }
+.nodo-elite { width: 66px; height: 66px; }
+.nodo-jefe { width: 104px; height: 104px; }
+
+/* unreachable: faded into the parchment */
+.nodo-lejano { opacity: 0.5; }
+/* visited: crossed out in ink */
+.nodo-visitado { opacity: 0.6; }
+.nodo-tachado { width: 82%; height: 82%; opacity: 0.85; }
+
+/* available: a hand-drawn red ring that beats like fresh ink */
+.nodo-disponible { opacity: 1; cursor: pointer; }
+.nodo-aro {
+  width: 128%;
+  height: 128%;
+  animation: latido-tinta 1.8s ease-in-out infinite;
 }
-@keyframes brillo-mision {
-  0%, 100% { filter: drop-shadow(0 0 4px rgba(255, 209, 102, 0.35)); }
-  50% { filter: drop-shadow(0 0 14px rgba(255, 209, 102, 0.85)); }
+@keyframes latido-tinta {
+  0%, 100% { transform: scale(0.94) rotate(-4deg); opacity: 0.65; }
+  50% { transform: scale(1.06) rotate(3deg); opacity: 1; }
+}
+.nodo-disponible:hover, .nodo-foco { transform: translate(-50%, -50%) scale(1.14); }
+.nodo:focus-visible { outline: 2px dashed var(--tinta-roja); outline-offset: 6px; border-radius: 50%; }
+
+/* the hero: a small painted figurine standing on the node */
+.nodo-actual { opacity: 1; }
+.nodo-heroe {
+  width: 78%;
+  height: 78%;
+  transform: translate(34%, -48%);
+  animation: vaiven-heroe 2.6s ease-in-out infinite;
+}
+.nodo-heroe-img { width: 100%; height: 100%; }
+@keyframes vaiven-heroe {
+  0%, 100% { transform: translate(34%, -48%); }
+  50% { transform: translate(34%, -58%); }
 }
 
-.nodo-disponible {
-  opacity: 1;
-  cursor: pointer;
-  border-color: var(--brasa-viva);
-  animation: pulso-nodo 1.6s ease-in-out infinite;
-}
-.nodo-disponible:hover, .nodo-foco {
-  transform: translate(-50%, -50%) scale(1.22);
-  box-shadow: 0 0 26px rgba(255, 209, 102, 0.6);
-}
-@keyframes pulso-nodo {
-  0%, 100% { box-shadow: 0 0 8px rgba(255, 209, 102, 0.35); }
-  50% { box-shadow: 0 0 22px rgba(255, 209, 102, 0.7); }
+/* tavern quest target: sealed «X» over the node */
+.nodo-mision { opacity: 1; }
+.mision-insignia {
+  width: 58%;
+  height: 58%;
+  transform: translate(48%, -44%) rotate(-8deg);
 }
 
-.nodo-visitado { opacity: 0.85; border-color: var(--oro); filter: saturate(0.6); }
-.nodo-actual { opacity: 1; border-color: var(--oro); box-shadow: 0 0 18px rgba(217, 169, 63, 0.7); }
+@media (prefers-reduced-motion: reduce) {
+  .nodo-aro, .nodo-heroe { animation: none; }
+}
 
 /* ── Paneles de recompensa ──────────────────────────────────────────────── */
 

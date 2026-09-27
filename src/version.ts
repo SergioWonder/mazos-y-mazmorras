@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.1.0';
+export const VERSION = '5.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.2.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🗺️ El mapa es ahora un mapa de aventura en pergamino, distinto en cada acto: el Valle, las Profundidades y las Tierras Ardientes.',
+      '✒️ Las localizaciones están dibujadas a plumilla, con un dibujo propio para cada jefe, y los caminos van en tinta; tu viaje queda marcado en rojo.',
+    ],
+  },
   {
     version: '5.1.0',
     fecha: '2026-09-27',

@@ -162,15 +162,15 @@ descuelga de las demás en su mismo nivel.
 - **Compendio de cartas** (desde el menú): todas las cartas por clase (y las maldiciones), con opción de
   verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
 - **Mapa** de 10 filas por capítulo (`core/mapa.ts`) con ≥2 eventos, élites, descansos
-  y tabernas. Localizaciones: ⚔️ combate, 💀 élite, ❓ evento, 🏕️ campamento,
-  🧰 cofre, 🍺 taberna y 👹 jefe. Los **cofres** van todos en una sola fila, la
+  y tabernas. Se ve como un **mapa de aventura de papel** (ver [Mapa a tinta](#mapa-a-tinta)):
+  combate, élite, evento, campamento, cofre, taberna y jefe, dibujados a plumilla. Los **cofres** van todos en una sola fila, la
   central (fila 4), que es entera de cofres: no hay cofres en ninguna otra fila.
 - **Tabernas** (nodos 🍺, `core/taberna.ts` y `ui/taberna.ts`): 1–2 por capítulo,
   en las filas 1–5 (nunca en la primera ni junto al jefe). Dentro, dos parroquianos
   (tabernero, bardo, tabernera…) te cuentan un rumor cada uno (8 textos, según el
   tipo de lugar) y eliges uno, o pides una jarra que cura un 12 % de los PV. El
   rumor marca una **misión** en un nodo alcanzable a 2–4 filas (combate, élite,
-  evento o cofre), que se ve en el mapa con un pergamino 📜 y un brillo. Al
+  evento o cofre), que se ve en el mapa con una «X» roja y un sello de lacre. Al
   completarlo ganas **una reliquia** además de su recompensa normal. Si tomas otro
   camino y el nodo queda fuera de tu alcance, la misión se pierde con un aviso.
   La misión se guarda con la partida y se descarta al cambiar de capítulo.
@@ -422,6 +422,31 @@ para que la mano no las vuelva a pintar. Las **cartas únicas de clase**, junto 
 *Seducir* y *Deseo*, son **full art** (`full/<id>.svg`, vertical): la ilustración cubre
 toda la carta, el marco late con su color (`ui/card-looks.ts`) y suelta partículas por
 el sistema WebGL global. Si una carta no tuviera dibujo, se muestra su emoji.
+
+### Mapa a tinta
+
+El mapa de campaña (`ui/mapa.ts`) parece un mapa de D&D en pergamino. Cada localización
+es un **icono SVG dibujado a plumilla** (`src/arte/mapa/iconos/<nombre>.svg`, 64×64; los
+jefes 128×128): tinta sepia con trazo de grosor variable, tramas y alguna aguada suave.
+`ui/map-icons.ts` elige el dibujo con `mapIconFor(tipo, capitulo, escenario)`:
+
+- **combate:** goblin con lanza (Acto I), calavera con tibias (II) y zarpazos (III);
+  espadas cruzadas como respaldo;
+- **élite** (calavera con cuernos sobre un escudo roto), **evento** (interrogación
+  ornamentada), **campamento** (hoguera), **cofre** y **taberna** (jarra);
+- **jefe:** uno por escenario, `jefe-<id del jefe>`: Gorzug, Vexis, Vol'guth, Malachar,
+  Ignifax y el Contemplador;
+- **decoración:** `mision` (la «X» con lacre de la taberna), `heroe` (la figurilla del
+  héroe en el nodo actual), `aro` (el círculo que rodea los destinos posibles) y
+  `tachado` (la cruz sobre los lugares visitados).
+
+Los caminos son trazos de tinta punteados con temblor determinista; el viaje hecho va en
+tinta roja y los caminos que salen del héroe, en tinta más oscura. Los destinos posibles
+laten dentro de su círculo y los inalcanzables quedan desvaídos. El fondo es el pergamino
+pintado de cada acto (`src/arte/mapa/mapa-actoN.webp` y `-ancho.webp` para los lados en
+pantallas apaisadas); si falta, un pergamino CSS con el tono del acto. Los iconos se
+rasterizan una sola vez (`cardArtBitmap`) y las animaciones solo usan `transform` y
+`opacity`.
 
 ### Actualizaciones y avisos
 

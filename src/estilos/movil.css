@@ -37,9 +37,17 @@
   .reliquia { font-size: 1.05rem; margin-right: 0.2rem; }
 
   /* ── Mapa ── */
-  .mapa-titulo { font-size: 1.3rem; padding: 0.35rem; }
-  .nodo { width: 48px; height: 48px; font-size: 1.2rem; }
-  .nodo-jefe { width: 68px; height: 68px; font-size: 1.9rem; }
+  .mapa-cartela { margin: 0.3rem auto 0.1rem; padding: 0.05rem 2rem; }
+  .mapa-cartela::before, .mapa-cartela::after { width: 10px; height: 10px; }
+  .mapa-cartela::before { left: 0.55rem; }
+  .mapa-cartela::after { right: 0.55rem; }
+  .mapa-titulo { font-size: 1.1rem; }
+  @media (max-width: 480px) {
+    .mapa-titulo { white-space: normal; font-size: 1rem; line-height: 1.15; }
+  }
+  .nodo { width: 48px; height: 48px; }
+  .nodo-elite { width: 54px; height: 54px; }
+  .nodo-jefe { width: 84px; height: 84px; }
 
   /* ── Combate: luchadores y HUD ── */
   .sprite { font-size: 3.2rem; }

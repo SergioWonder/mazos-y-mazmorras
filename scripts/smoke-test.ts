@@ -4348,5 +4348,63 @@ console.log('\n🎵 Botón de música');
   check(/🎵/.test(src) && !/🔇|🔊/.test(src), 'el botón lleva un icono de música');
 }
 
+// ── Ink-drawn campaign map (src/arte/mapa/iconos) ────────────────────────────
+console.log('\n🗺️ Mapa de aventura a tinta');
+try {
+  const fs = await import('node:fs');
+  const { mapIconFor, bossIconFor, pickMapIcon, MAP_EXTRA_ICONS } = await import('../src/ui/map-icons.ts');
+  const dir = new URL('../src/arte/mapa/iconos/', import.meta.url);
+  const files: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.svg')) : [];
+  const has = (name: string) => files.includes(`${name}.svg`);
+  // node types read from the TipoNodo union itself, so a new type cannot slip through
+  const typesSrc = fs.readFileSync(new URL('../src/core/types.ts', import.meta.url), 'utf8');
+  const nodeTypes = [...(/export type TipoNodo\s*=([^;]+);/.exec(typesSrc)?.[1] ?? '').matchAll(/'([a-z]+)'/g)].map((m) => m[1]);
+  check(nodeTypes.length >= 7, `se leen los tipos de nodo (${nodeTypes.join(', ')})`);
+  const missing: string[] = [];
+  for (const tipo of nodeTypes) for (let c = 0; c < ACTOS.length; c++) for (let e = 0; e < ACTOS[c].length; e++) {
+    const name = mapIconFor(tipo as never, c, e);
+    if (!has(name)) missing.push(`${tipo}@${c}.${e}→${name}`);
+  }
+  check(missing.length === 0, `cada tipo de nodo tiene icono a tinta en cada acto y escenario ${missing.slice(0, 6).join(', ')}`);
+  check(nodeTypes.filter((t) => t !== 'jefe').every((t) => has(t)), 'cada tipo de nodo (salvo el jefe) tiene su icono genérico de respaldo');
+  const bosses = ACTOS.flatMap((acto, c) => acto.map((esc, e) => ({ c, e, id: esc.jefe[0].id, icon: mapIconFor('jefe', c, e) })));
+  check(bosses.length === 6 && new Set(bosses.map((b) => b.icon)).size === bosses.length, `un jefe dibujado distinto por escenario (${bosses.map((b) => b.icon).join(', ')})`);
+  check(bosses.every((b) => b.icon === bossIconFor(b.id) && has(b.icon)), 'el icono del jefe sale del jefe del escenario');
+  check(bossIconFor('jefe-ogro') === 'jefe-ogro' && bossIconFor('ignifax') === 'jefe-ignifax', 'el nombre del icono del jefe es jefe-<id> sin repetir «jefe»');
+  check(['mision', 'heroe'].every((n) => MAP_EXTRA_ICONS.includes(n) && has(n)), 'están el marcador de misión y la chincheta del héroe');
+  check(mapIconFor('combate', 0, 0) === 'combate-acto1' && mapIconFor('combate', 1, 1) === 'combate-acto2' && mapIconFor('combate', 2, 0) === 'combate-acto3',
+    'el combate cambia de dibujo en cada acto');
+  check(mapIconFor('combate', 7, 0) === 'combate' && mapIconFor('jefe', 7, 0) === 'jefe' && mapIconFor('elite', 0, 0) === 'elite',
+    'fuera de los actos conocidos se usa el icono genérico');
+  const table = { '../arte/mapa/iconos/cofre.svg': '/a/cofre.svg' };
+  check(pickMapIcon(table, 'cofre') === '/a/cofre.svg' && pickMapIcon(table, 'evento') === null, 'el icono se busca por nombre en la tabla de Vite');
+  const bad: string[] = [];
+  for (const f of files) {
+    const xml = fs.readFileSync(new URL(f, dir), 'utf8');
+    const big = f.startsWith('jefe');
+    const viewBoxOk = xml.includes('viewBox="0 0 64 64"') || (big && xml.includes('viewBox="0 0 128 128"'));
+    const stack: string[] = [];
+    let nested = true;
+    for (const m of xml.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<(\/?)([a-zA-Z][\w:-]*)[^>]*?(\/?)>/g)) {
+      const [, closing, tag, selfClosing] = m;
+      if (selfClosing) continue;
+      if (closing) { if (stack.pop() !== tag) nested = false; } else stack.push(tag);
+    }
+    if (!xml.trimStart().startsWith('<svg') || !viewBoxOk) bad.push(`${f}: formato`);
+    else if (/<(text|image|script)\b/.test(xml)) bad.push(`${f}: elemento prohibido`);
+    else if (xml.length > 8 * 1024) bad.push(`${f}: ${Math.round(xml.length / 1024)} KB`);
+    else if (!nested || stack.length > 0) bad.push(`${f}: XML mal formado`);
+  }
+  check(files.length > 0 && bad.length === 0, `${files.length} iconos del mapa con viewBox 64 (jefes 128), sin elementos prohibidos, ≤ 8 KB y bien formados ${bad.slice(0, 5).join(', ')}`);
+  const mapSrc = fs.readFileSync(new URL('../src/ui/mapa.ts', import.meta.url), 'utf8');
+  check(!/⚔️|💀|🏕️|🧰|❓|👹|🍺|📜/.test(mapSrc), 'el mapa ya no pinta los nodos con emojis');
+  check(/mapIconFor\(/.test(mapSrc) && /aria-label/.test(mapSrc) && /data-tip|dataset\.tip/.test(mapSrc), 'los nodos usan el icono a tinta, con aria-label y tooltip');
+  const mapCss = fs.readFileSync(new URL('../src/estilos/pantallas.css', import.meta.url), 'utf8').split('/* ── Mapa')[1]?.split('/* ── Paneles')[0] ?? '';
+  const frames = [...mapCss.matchAll(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*/g)].map((m) => m[0]);
+  check(mapCss.length > 0 && frames.length > 0 && frames.every((k) => !/filter|box-shadow/.test(k)), 'las animaciones del mapa solo tocan transform y opacity');
+} catch (e) {
+  check(false, `las pruebas del mapa a tinta revientan: ${(e as Error).stack ?? e}`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);
