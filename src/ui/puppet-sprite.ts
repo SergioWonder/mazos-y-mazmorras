@@ -10,9 +10,10 @@
 // restarting the animation. All sprites share one requestAnimationFrame loop.
 
 import {
-  EMISSIVE, EYES, puppetPose, puppetBones, puppetEffects, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
+  EMISSIVE, EYES, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
   type Action, type ActionType, type BoneId, type Burst, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
 } from '../fx/puppet.ts';
+import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
 import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
 import { fx as particles } from '../fx/particulas.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
@@ -86,6 +87,8 @@ class SvgView {
   private readonly rim: string;
   private readonly accent: string;
   private readonly groups: { g: SVGElement; bone: BoneId }[] = [];
+  /** Smear ghost layers (one per ghost), each grouped by bone. */
+  private readonly ghostLayers: { layer: SVGElement; groups: { g: SVGElement; bone: BoneId }[] }[] = [];
   private readonly eyes: SVGElement[] = [];
   private readonly shadow: SVGElement;
   private readonly slash: SVGElement;
@@ -119,6 +122,21 @@ class SvgView {
     svg.append(world);
     this.shadow = svgEl('ellipse', { cx: 58, cy: 129.5, rx: 22, ry: 4.2, fill: 'rgba(0,0,0,0.5)' });
     world.append(this.shadow);
+    if (rigSmears(rig)) {
+      // smear ghosts: flat copies of the weapon bones, behind the figure
+      const bones = new Set(smearBonesOf(rig)), tone = lighten(rig.accent, 0.35);
+      for (let i = 0; i < SMEAR_GHOSTS; i++) {
+        const layer = svgEl('g', { visibility: 'hidden' });
+        const groups = runs(rig.shapes.filter((s) => bones.has(s.b) && s.k !== 'ink'), (s, g) => {
+          const e = shapeElement(s);
+          e.setAttribute('fill', tone); e.setAttribute('stroke', tone); e.setAttribute('stroke-width', '1.4');
+          g.append(e);
+        });
+        for (const r of groups) layer.append(r.g);
+        world.append(layer);
+        this.ghostLayers.push({ layer, groups });
+      }
+    }
 
     if (opts.style === 'illustrated') {
       const lx = opts.mirrored ? 1 : -1, ly = -1, depth = 2.8;
@@ -186,8 +204,16 @@ class SvgView {
     this.element = svg;
   }
 
-  render(p: Pose, fx: Effects, bones: Record<BoneId, Matrix>, geo: EffectGeometry, gone: boolean) {
-    for (const { g, bone } of this.groups) g.setAttribute('transform', `matrix(${bones[bone].map((v) => v.toFixed(3)).join(',')})`);
+  render(p: Pose, fx: Effects, bones: Record<BoneId, Matrix>, geo: EffectGeometry, gone: boolean, ghosts: Ghost[]) {
+    const mat = (m: Matrix) => `matrix(${m.map((v) => v.toFixed(3)).join(',')})`;
+    for (const { g, bone } of this.groups) g.setAttribute('transform', mat(bones[bone]));
+    this.ghostLayers.forEach(({ layer, groups }, i) => {
+      const gh = ghosts[i];
+      if (!gh) { layer.setAttribute('visibility', 'hidden'); return; }
+      layer.setAttribute('visibility', 'visible');
+      layer.setAttribute('opacity', gh.alpha.toFixed(2));
+      for (const { g, bone } of groups) g.setAttribute('transform', mat(gh.bones[bone]));
+    });
     this.shadow.setAttribute('transform', `translate(${p.rootX.toFixed(2)} 0)`);
     for (const e of this.eyes) e.setAttribute('visibility', fx.blink ? 'hidden' : 'visible');
     this.show(this.slash, geo.slash, (g) => { this.slash.setAttribute('d', arcSector(g)); this.slash.setAttribute('opacity', g.alpha.toFixed(2)); });
@@ -233,6 +259,9 @@ let clock = 0;
 let last = 0;
 let running = false;
 
+/** Current time of the shared sprite clock (s); dev tools drive `tick` from it. */
+export const spriteClock = () => clock;
+
 function loop(now: number) {
   const dt = last ? Math.min(0.05, (now - last) / 1000) : 0;
   last = now;
@@ -250,6 +279,8 @@ export class PuppetSprite {
   /** Off-screen sprites (e.g. in the gallery) can be paused by the caller. */
   visible = true;
   private readonly rig: PuppetRig;
+  /** Pose, spring chains and ghosts: the same pipeline for both renderers. */
+  private readonly animator: PuppetAnimator;
   private readonly svg: SvgView | null = null;
   private readonly gpu: GpuView | null = null;
   private readonly stage: PuppetStage | null;
@@ -265,6 +296,7 @@ export class PuppetSprite {
   constructor(rig: PuppetRig, opts: PuppetOptions) {
     this.rig = rig;
     this.accent = rig.accent;
+    this.animator = new PuppetAnimator(rig);
     this.stage = opts.stage ?? null;
     this.mirrored = !!opts.mirrored;
     this.emitAcc = (rig.emitters ?? []).map(() => Math.random());
@@ -332,13 +364,11 @@ export class PuppetSprite {
       if (this.action?.type === 'death') this.gone = true;
       this.action = null;
     }
-    const { p, fx } = puppetPose(this.rig, t, act);
-    const bones = puppetBones(this.rig, p);
-    const geo = puppetEffects(this.rig, bones, fx);
+    const { p, fx, bones, geo, ghosts, smearBones } = this.animator.frame(t, act);
     if (this.gpu) {
       this.gpu.visible = this.visible;
-      this.gpu.frame = { pose: p, fx, bones, geo, gone: this.gone };
-    } else this.svg!.render(p, fx, bones, geo, this.gone);
+      this.gpu.frame = { pose: p, fx, bones, geo, gone: this.gone, ghosts, smearBones };
+    } else this.svg!.render(p, fx, bones, geo, this.gone, ghosts);
     this.emit(t, bones);
   }
 

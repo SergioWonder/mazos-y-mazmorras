@@ -22,6 +22,7 @@ import { relicIcon } from './relic-art.ts';
 import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
 import { playDestination, drawDelays, type Point } from './card-motion.ts';
 import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
+import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 
 /** Player actions go through a FIFO queue: one resolves at a time, the rest wait. */
 type AccionJugador =
@@ -163,7 +164,10 @@ export function pantallaCombate(
 
     // ── Spell VFX: each card fx key has its own composition (fx/spell-fx.ts) ─
     /** Effect of the card being played and who has already shown it. */
-    let hechizoCarta: { clave: string; modo: string; objetivo?: EnemigoCombate; hecho: Set<Luchador> } | null = null;
+    /** `clave` is the spell drawn (a rare card's own sequence, card-spells.ts); `fx` its generic key. */
+    let hechizoCarta: {
+      clave: string; id: string; fx: string; tipo: string; modo: string; objetivo?: EnemigoCombate; hecho: Set<Luchador>;
+    } | null = null;
     /** Enemy acting right now (source of breaths and eye rays) and its move. */
     let actor: { e: EnemigoCombate; movimiento: string } | null = null;
     const ESTADO_HECHIZO: Partial<Record<EstadoId, string>> = { veneno: 'veneno', raices: 'raices', condena: 'condena' };
@@ -180,16 +184,22 @@ export function pantallaCombate(
     /** Casts spell `clave` on a fighter (from the hero when the receiver is an enemy). */
     const lanzarHechizo = (clave: string, obj: Luchador, desde?: { x: number; y: number }, tinte?: string) => {
       const heroe = obj === combate.jugador;
-      return fx.hechizo(clave, cajaDe(elemDe(obj)), {
+      const ok = fx.hechizo(clave, cajaDe(elemDe(obj)), {
         desde: desde ?? (heroe ? undefined : centroDe(elemDe(combate.jugador))), mirando: heroe ? 1 : -1, tinte,
       });
+      // rare sequences may ask for a brief shake at their climax (never with reduced motion)
+      const sacudida = ok ? fx.sacudidaHechizo(clave) : null;
+      if (sacudida) setTimeout(() => sacudir(sacudida.level), sacudida.delayMs);
+      return ok;
     };
     const hechizoAlHeroe = (h: NonNullable<typeof hechizoCarta>) =>
-      fx.anclaHechizo(h.clave) === 'self' || h.modo === 'ninguno' || h.modo === 'propio';
+      fx.receptorHechizo(h.clave) !== 'enemies'
+      && (fx.anclaHechizo(h.clave) === 'self' || h.modo === 'ninguno' || h.modo === 'propio');
     /** Shows the card's effect on `obj` if it is one of its receivers and has not shown it yet. */
     const hechizoPara = (obj: Luchador): boolean => {
       const h = hechizoCarta;
       if (!h || h.hecho.has(obj) || !fx.tieneHechizo(h.clave)) return false;
+      if (obj === combate.jugador && fx.receptorHechizo(h.clave) === 'enemies') return false;
       if (h.hecho.size > 0 && (obj === combate.jugador || h.hecho.has(combate.jugador))) return false;
       if (h.modo === 'enemigo' && obj !== combate.jugador && h.objetivo && obj !== h.objetivo) return false;
       h.hecho.add(obj);
@@ -199,7 +209,9 @@ export function pantallaCombate(
     /** Card starts resolving: defences and buffs light up on the hero at once. */
     const abrirHechizoCarta = (def: CartaDef, objetivo?: EnemigoCombate) => {
       actor = null;
-      hechizoCarta = def.fx ? { clave: def.fx, modo: def.objetivo, objetivo, hecho: new Set() } : null;
+      hechizoCarta = def.fx
+        ? { clave: cardSpellKey(def.id, def.fx), id: def.id, fx: def.fx, tipo: def.tipo, modo: def.objetivo, objetivo, hecho: new Set() }
+        : null;
       if (hechizoCarta && fx.anclaHechizo(hechizoCarta.clave) === 'self') hechizoPara(combate.jugador);
     };
     /** Card resolved: if nothing showed its effect yet, show it on its natural receivers. */
@@ -253,10 +265,14 @@ export function pantallaCombate(
         return lanzarHechizo(rayo ? 'rayoOcular' : 'aliento', obj, desde, tinte);
       }
       // thorns also deal 'raices' damage: only real roots (the card, or roots crushing) coil
-      if (efecto === 'raices' && hechizoCarta?.clave !== 'raices' && !(actor && obj === actor.e)) return false;
-      if (!fx.tieneHechizo(efecto)) return false;
-      if (hechizoCarta && efecto === hechizoCarta.clave) hechizoCarta.hecho.add(obj);
-      return lanzarHechizo(efecto, obj, obj === combate.jugador && actor ? centroDe(elemDe(actor.e)) : undefined);
+      if (efecto === 'raices' && hechizoCarta?.fx !== 'raices' && !(actor && obj === actor.e)) return false;
+      // a rare card's hit draws its own sequence (one storm bolt per enemy hit…); only attacks
+      // repeat it on a receiver that already showed it (the poison a skill then triggers is plain)
+      const repetida = !!hechizoCarta?.hecho.has(obj) && hechizoCarta.tipo !== 'ataque';
+      const clave = hitSpell(actor || repetida ? null : hechizoCarta, efecto);
+      if (!fx.tieneHechizo(clave)) return false;
+      if (hechizoCarta && efecto === hechizoCarta.fx) hechizoCarta.hecho.add(obj);
+      return lanzarHechizo(clave, obj, obj === combate.jugador && actor ? centroDe(elemDe(actor.e)) : undefined);
     };
 
     const ui: Presentador = {
@@ -300,7 +316,7 @@ export function pantallaCombate(
         if (!hechizoPara(obj)) {
           // poison, roots and doom from other sources (relics, powers, enemies) show theirs too
           const clave = n > 0 ? ESTADO_HECHIZO[estado] : undefined;
-          if (clave && !(hechizoCarta?.clave === clave && hechizoCarta.hecho.has(obj))) lanzarHechizo(clave, obj);
+          if (clave && !(hechizoCarta?.fx === clave && hechizoCarta.hecho.has(obj))) lanzarHechizo(clave, obj);
         }
         audio.sfx('estado');
         numeroFlotante(elem, `${ICONO_ESTADO[estado]} ${signo}${n} ${NOMBRE_ESTADO[estado]}`, 'estado');
@@ -949,16 +965,32 @@ export function pantallaCombate(
     /** Where a played card flies: its enemy, the hero, the enemies' middle or straight up. */
     function destinoLanzamiento(def: CartaDef, objetivo: EnemigoCombate | undefined, desde: Point): Point {
       const caja = (elem: HTMLElement | null) => (elem ? cajaDe(elem) : null);
+      const clave = def.fx ? cardSpellKey(def.id, def.fx) : '';
+      // curses the card casts on every foe (Final Pact…) fly to the enemies, not the hero
+      const aLosEnemigos = !!clave && fx.receptorHechizo(clave) === 'enemies';
       return playDestination({
-        mode: def.objetivo,
+        mode: aLosEnemigos ? 'todos' : def.objetivo,
         kind: def.tipo === 'maldicion' ? 'habilidad' : def.tipo, // a paid-off curse flies like a skill
-        selfFx: !!def.fx && fx.anclaHechizo(def.fx) === 'self',
+        selfFx: !!clave && fx.anclaHechizo(clave) === 'self',
         target: objetivo ? caja(elemDe(objetivo)) : null,
         hero: caja(elemDe(combate.jugador)),
         enemies: combate.enemigos.filter((e) => e.vivo).map((e) => caja(elemDe(e))).filter((b) => b !== null),
         from: desde,
         viewport: { w: window.innerWidth, h: window.innerHeight },
       }).point;
+    }
+
+    /** Screen box around whoever will show a rare card's sequence (for its prelude). */
+    function cajaReceptores(def: CartaDef, objetivo: EnemigoCombate | undefined, clave: string) {
+      const alHeroe = fx.receptorHechizo(clave) !== 'enemies'
+        && (fx.anclaHechizo(clave) === 'self' || def.objetivo === 'ninguno' || def.objetivo === 'propio');
+      const quienes: Luchador[] = alHeroe ? [combate.jugador]
+        : def.objetivo === 'enemigo' && objetivo ? [objetivo] : combate.enemigos.filter((e) => e.vivo);
+      const cajas = quienes.map((q) => cajaDe(elemDe(q)));
+      if (!cajas.length) return cajaDe(null);
+      const x0 = Math.min(...cajas.map((b) => b.x)), y0 = Math.min(...cajas.map((b) => b.y));
+      const x1 = Math.max(...cajas.map((b) => b.x + b.w)), y1 = Math.max(...cajas.map((b) => b.y + b.h));
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
     }
 
     /** The card flies to its target and vanishes on arrival, when its effect goes off. */
@@ -973,7 +1005,14 @@ export function pantallaCombate(
         const grande = renderCarta(def);
         grande.classList.add('carta-showcase', def.animRara);
         document.body.appendChild(grande);
-        fx.estallido(def.fx ?? 'impacto');
+        // its own sequence starts gathering over its receivers (anticipation) while the showcase
+        // holds the stage; the climax goes off on the hit. Cards without one keep the burst.
+        const preludio = preludeKey(def.id);
+        if (preludio) {
+          fx.hechizo(preludio, cajaReceptores(def, objetivo, cardSpellKey(def.id, def.fx)), {
+            desde: centroDe(elemDe(combate.jugador)), mirando: fx.anclaHechizo(preludio) === 'self' ? 1 : -1,
+          });
+        } else fx.estallido(def.fx ?? 'impacto');
         audio.sfxRara(def.fx ?? 'divino');
         anuncio(def.subclase ? `✦ ${def.subclase} ✦` : def.nombre, 'anuncio-rara');
         // the showcase holds the stage, then dives onto the target like any other card

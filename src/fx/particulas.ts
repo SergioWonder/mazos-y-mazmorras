@@ -7,6 +7,11 @@ import {
 } from './particle-sim.ts';
 import { ParticleRendererGL } from './particle-gl.ts';
 import { SpellSystem, SPELLS, MAX_LIVE_SPRITES, type Box, type Point } from './spell-fx.ts';
+// registers the rare and unique cards' own sequences in SPELLS
+import { cardShake } from './card-spells.ts';
+
+/** prefers-reduced-motion: fewer particles and no screen shake. */
+const movimientoReducido = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Atmósferas ambientales: partículas que ascienden de fondo en cada escenario. */
 export type EstiloAmbiente = AmbientStyle;
@@ -103,10 +108,22 @@ class MotorParticulas {
     return SPELLS[nombre]?.anchor;
   }
 
+  /** Who shows a card's sequence when it has no natural receiver ('enemies' for curses on every foe). */
+  receptorHechizo(nombre: string): 'hero' | 'enemies' | undefined {
+    return SPELLS[nombre]?.receiver;
+  }
+
+  /** Brief screen shake the spell asks for (null with reduced motion or when it has none). */
+  sacudidaHechizo(nombre: string): { delayMs: number; level: 1 | 2 | 3 } | null {
+    return cardShake(nombre, movimientoReducido());
+  }
+
   /** Lanza el efecto de hechizo `nombre` sobre la caja de pantalla `caja`
    *  (origen opcional para alientos, rayos, aullidos…). */
   hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
-    return this.hechizos.add(nombre, { box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte }, performance.now() / 1000);
+    return this.hechizos.add(nombre, {
+      box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: movimientoReducido(),
+    }, performance.now() / 1000);
   }
 
   /** A full-art card sheds motes and twinkles in its colour while it is on screen. */

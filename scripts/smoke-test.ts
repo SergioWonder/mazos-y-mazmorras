@@ -1868,6 +1868,201 @@ console.log('\n🐺 Siluetas de las transformaciones');
   check(Math.abs(ala1 - ala2) > 5, 'el águila aletea en reposo');
 }
 
+// ── Secondary motion: spring chains, bones for hair/cloth and animation kit ──
+console.log('\n🧵 Física secundaria y kit de animación');
+try {
+  const ch = await import('../src/fx/chains.ts');
+  const mo = await import('../src/fx/motion.ts');
+  const an = await import('../src/fx/animator.ts');
+  const pz = await import('../src/fx/puppet.ts');
+  const pgpu = await import('../src/fx/puppet-gpu.ts');
+  type Rig = import('../src/fx/puppet.ts').PuppetRig;
+  type Spec = import('../src/fx/chains.ts').ChainSpec;
+  type Act = import('../src/fx/puppet.ts').ActionProgress | null;
+
+  // — bones: generic chain slots on top of the classic skeleton and the wings —
+  const idx = Object.values(pgpu.BONE_INDEX);
+  check(idx.length === pgpu.BONE_COUNT && new Set(idx).size === idx.length && Math.max(...idx) === pgpu.BONE_COUNT - 1,
+    `los ${pgpu.BONE_COUNT} huesos tienen un hueco propio en la GPU`);
+  const slots = ch.CHAIN_SLOTS;
+  check(slots.length >= 5 && slots.every((s) => ch.CHAIN_BONES[s].length === ch.CHAIN_SEGMENTS && ch.CHAIN_SEGMENTS >= 3),
+    `hay ${slots.length} cadenas genéricas de ${ch.CHAIN_SEGMENTS} huesos para pelo y tela`);
+  check(slots.every((s) => ch.CHAIN_BONES[s].every((b) => pgpu.BONE_INDEX[b] !== undefined)), 'todos los huesos de cadena llegan a la GPU');
+  check(pgpu.BONE_COUNT * 2 <= 128, 'el array de huesos cabe de sobra en los uniformes del shader de vértices');
+
+  // — a test rig: the barbarian with one three-segment lock hanging from the head —
+  const base = HERO_RIGS.barbaro;
+  const lock = (over: Partial<Spec> = {}): Spec => ({ slot: 'A', parent: 'head', joints: [[50, 58], [45, 70], [42, 82], [40, 94]], freq: 3, damping: 0.3, sway: 0, sag: 0, ...over });
+  const withLock = (over: Partial<Spec> = {}, extra: Partial<Rig> = {}): Rig => {
+    const spec = lock(over);
+    return { ...base, chains: [spec], shapes: [...base.shapes, ...ch.strandShapes(spec, 'hair', [5, 4, 3, 0.8])], ...extra };
+  };
+  const rig = withLock();
+  check(ch.validateChains(rig).length === 0, 'una cadena bien declarada pasa la validación');
+  check(ch.validateChains({ ...rig, chains: [lock({ joints: [[0, 0]] })] }).length > 0, 'una cadena sin segmentos no la pasa');
+  check(ch.validateChains({ ...rig, chains: [lock(), lock()] }).length > 0, 'ni dos cadenas en el mismo hueco');
+  const strand = rig.shapes.filter((s) => ch.CHAIN_BONES.A.includes(s.b as never));
+  check(new Set(strand.map((s) => s.b)).size === 3, 'el mechón reparte sus piezas entre los 3 huesos de la cadena');
+  // the chain hangs from its parent: turning the head moves the lock
+  const still = pz.puppetPose(rig, 0, null).p;
+  const tipAt = (p: typeof still) => pz.applyMatrix(pz.puppetBones(rig, p).chA3, 40, 94);
+  const tip0 = tipAt(still), tip1 = tipAt({ ...still, head: still.head + 25 });
+  check(Math.hypot(tip0[0] - tip1[0], tip0[1] - tip1[1]) > 5, 'la cadena cuelga de su hueso padre (la cabeza)');
+  // enemies do not use the chain bones
+  const gob = ENEMY_RIGS['goblin-cortador'];
+  check(ch.CHAIN_BONES.A.every((b) => pz.puppetPose(gob, 1, null).p[b] === 0), 'los enemigos no mueven los huesos de cadena');
+  const pk = pgpu.packRig(rig, 'silhouette');
+  const maxBone = Math.max(...rig.shapes.map((_, i) => pk.data[i * pgpu.PIECE_TEXELS * 4 + 1]));
+  check(maxBone < pgpu.BONE_COUNT && pk.data.every(Number.isFinite), 'el rig con cadenas se empaqueta para la GPU');
+
+  // — solver: runs a timeline at a given frame rate and samples every 1/6 s —
+  const run = (r: Rig, fps: number, secs: number, act: (t: number) => Act, jitter = 0) => {
+    const a = new an.PuppetAnimator(r);
+    const out: { t: number; f: ReturnType<typeof a.frame> }[] = [];
+    let seed = 3;
+    for (let i = 0, t = 0; t <= secs + 1e-9; i++) {
+      const f = a.frame(t, act(t));
+      if ((i * 6) % fps === 0) out.push({ t, f });
+      seed = (seed * 16807) % 2147483647;
+      t = (i + 1) / fps + (jitter ? ((seed / 2147483647) - 0.5) * jitter / fps : 0);
+    }
+    return out;
+  };
+  const attackAt = (t0: number) => (t: number): Act => {
+    const q = (t - t0) / ACTION_DURATION.attack;
+    return q >= 0 && q < 1 ? { type: 'attack', p: q } : null;
+  };
+  const off = (f: { p: Record<string, number> }) => [f.p.chA1, f.p.chA2, f.p.chA3];
+  const r1 = run(rig, 60, 3, attackAt(0.5)), r2 = run(rig, 60, 3, attackAt(0.5));
+  check(r1.every((s, i) => off(s.f).every((v, k) => v === off(r2[i].f)[k])), 'determinista: la misma secuencia da exactamente el mismo resultado');
+  // frame-rate independence within a tolerance
+  const fr = [30, 60, 144].map((fps) => run(rig, fps, 3, attackAt(0.5)));
+  let peor = 0;
+  for (let i = 0; i < fr[1].length; i++) {
+    for (const other of [fr[0], fr[2]]) {
+      const s = other.find((o) => Math.abs(o.t - fr[1][i].t) < 1e-6);
+      if (s) off(s.f).forEach((v, k) => { peor = Math.max(peor, Math.abs(v - off(fr[1][i].f)[k])); });
+    }
+  }
+  check(peor < 4, `independiente de los fps: a 30, 60 y 144 fps difiere como mucho ${peor.toFixed(2)}°`);
+  // stability: a very stiff, barely damped chain under jittery, huge time steps
+  const wild = withLock({ freq: 14, damping: 0.02, sway: 3, sag: 3 });
+  const hectic = (t: number): Act => ({ type: (['attack', 'hit', 'spell'] as const)[Math.floor(t * 1.3) % 3], p: (t * 1.3) % 1 });
+  let estable = true, maxAng = 0;
+  for (const fps of [8, 24, 240]) {
+    for (const s of run(wild, fps, 8, hectic, 0.9)) {
+      for (const v of off(s.f)) { if (!Number.isFinite(v)) estable = false; maxAng = Math.max(maxAng, Math.abs(v)); }
+    }
+  }
+  check(estable && maxAng <= ch.DEFAULT_LIMIT + 1e-6, `estable: rígida y sin amortiguar, con pasos enormes, no explota (máx. ${maxAng.toFixed(1)}°)`);
+  // damping: after the attack the lock wobbles less and less, and comes to rest
+  const calm = run(rig, 60, 4.5, attackAt(0));
+  const amp = (t0: number, t1: number) => Math.max(...calm.filter((s) => s.t >= t0 && s.t < t1).map((s) => Math.abs(s.f.p.chA3)));
+  const pronto = amp(0.8, 1.6), tarde = amp(3.5, 4.6);
+  check(pronto > 3 && tarde < pronto * 0.15, `amortiguado: el mechón se agita tras el golpe (${pronto.toFixed(1)}°) y se calma (${tarde.toFixed(2)}°)`);
+  // lag: while the body lunges forward the tip trails behind its rigid position
+  {
+    const a = new an.PuppetAnimator(rig);
+    let lagMax = 0;
+    for (let i = 0; i <= 60; i++) {
+      const t = i / 60, act = attackAt(0)(t);
+      const f = a.frame(t, act);
+      if (act && act.p > 0.3 && act.p < 0.42) {
+        const rigid = pz.applyMatrix(pz.puppetBones(rig, pz.puppetPose(rig, t, act).p).chA3, 40, 94);
+        const sim = pz.applyMatrix(f.bones.chA3, 40, 94);
+        lagMax = Math.max(lagMax, rigid[0] - sim[0]);
+      }
+    }
+    check(lagMax > 2, `inercia: al lanzarse hacia delante la punta se queda atrás (${lagMax.toFixed(1)} u)`);
+  }
+  // wind: a breeze sways the lock at rest; without wind or gravity it stays put
+  const breezy = run(withLock({ sway: 1.5 }), 60, 4, () => null).slice(6);
+  const sw = breezy.map((s) => s.f.p.chA3);
+  check(Math.max(...sw) - Math.min(...sw) > 1.5, 'en reposo, el viento mece el mechón');
+  const quiet = run(withLock({ sway: 0, sag: 0 }), 60, 3, () => null).slice(6);
+  check(quiet.every((s) => off(s.f).every((v) => Math.abs(v) < 1.5)), 'sin viento ni gravedad, el mechón no se mueve en reposo');
+  const heavy = run(withLock({ sway: 0, sag: 2, joints: [[50, 58], [58, 58], [66, 58], [74, 58]] }), 60, 3, () => null);
+  const last = heavy[heavy.length - 1].f;
+  const tipY = pz.applyMatrix(last.bones.chA3, 74, 58)[1], rigidY = pz.applyMatrix(pz.puppetBones(rig, pz.puppetPose(rig, 3, null).p).chA3, 74, 58)[1];
+  check(tipY > rigidY + 1, 'la gravedad hace caer un mechón horizontal');
+  // the physics is shared: renderers read the bones from the animator
+  check(Object.keys(pgpu.BONE_INDEX).every((b) => !!last.bones[b as keyof typeof last.bones]), 'el animador da matriz a todos los huesos (GPU y SVG)');
+  // cheap: a whole figure with the six chains in use costs little per frame
+  {
+    const six: Rig = { ...base, chains: slots.map((s, i) => ({ slot: s, parent: 'torso', joints: [[50 + i, 76], [46 + i, 88], [44 + i, 100], [43 + i, 112]] })) };
+    const a = new an.PuppetAnimator(six);
+    const t0 = performance.now();
+    for (let i = 0; i < 600; i++) a.frame(i / 60, attackAt(1)(i / 60));
+    const ms = (performance.now() - t0) / 600;
+    check(ms < 0.5, `barato: una figura con 6 cadenas cuesta ${ms.toFixed(3)} ms por fotograma`);
+  }
+
+  // — animation kit: easings, strike timelines, hit-stop, squash and smear —
+  const eases = Object.entries(mo.EASE);
+  check(eases.length >= 8 && eases.every(([, f]) => Math.abs(f(0)) < 1e-9 && Math.abs(f(1) - 1) < 1e-9), `${eases.length} curvas de easing que empiezan en 0 y acaban en 1`);
+  check(Math.min(...[0.1, 0.2, 0.3].map(mo.EASE.backIn)) < 0, 'backIn retrocede antes de arrancar (anticipación)');
+  check(Math.max(...[0.6, 0.7, 0.8, 0.9].map(mo.EASE.backOut)) > 1, 'backOut se pasa y vuelve (sobrepaso)');
+  check(mo.EASE.expoIn(0.5) < 0.1 && mo.EASE.expoOut(0.5) > 0.9, 'expoIn arranca lento y expoOut frena en seco');
+  const imp = 0.42;
+  const keys = mo.strikeKeys({
+    impact: imp, anticipation: { weapon: -60, armF: -80, rootX: -6 }, strike: { weapon: 120, armF: 90, rootX: 10 },
+    overshoot: { weapon: 140, armF: 105, rootX: 12 }, hitStop: 0.06,
+  });
+  const scripted: Rig = { ...rig, impact: imp, actions: { attack: { keys, smear: [imp - 0.1, imp + 0.02], slash: [imp - 0.06, imp + 0.2] } } };
+  check(pz.puppetImpact(scripted) === imp, 'el rig puede fijar su momento de impacto');
+  const at = (q: number) => pz.puppetPose(scripted, 0, { type: 'attack', p: q });
+  const restW = pz.puppetPose(scripted, 0, null).p.weapon;
+  const minW = Math.min(...[0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35].map((q) => at(q).p.weapon));
+  check(minW < restW - 40, 'anticipación: el arma va hacia atrás antes de golpear');
+  check(Math.abs(at(imp).p.weapon - 120 - 0) < 3 && Math.abs(at(imp).p.rootX - 10) < 1.5, 'en el impacto la pose es la del golpe');
+  check(Math.abs(at(imp + 0.03).p.weapon - at(imp).p.weapon) < 3, 'hit-stop: se congela un instante en el impacto');
+  check(at(imp + 0.14).p.weapon > at(imp).p.weapon + 5, 'sobrepaso: sigue de largo tras el impacto');
+  check(Math.abs(at(0.999).p.weapon - restW) < 6, 'y se asienta de vuelta en reposo');
+  check(at(imp - 0.03).fx.slash !== undefined && at(imp + 0.3).fx.slash === undefined, 'el guion decide cuándo se ve el tajo');
+  check(at(imp - 0.05).fx.smear !== undefined && at(0.9).fx.smear === undefined, 'y cuándo hay smear del arma');
+  const lastIn = (from: number) => mo.strikeKeys({ impact: from, anticipation: {}, strike: {} });
+  check([0.3, 0.4, 0.55].every((q) => lastIn(q).some((k) => Math.abs(k[0] - q) < 1e-9)), 'strikeKeys siempre pone una clave justo en el impacto');
+  // smear ghosts: earlier poses of the weapon, only while the smear is on
+  {
+    const a = new an.PuppetAnimator(scripted);
+    const g = a.frame(10, { type: 'attack', p: imp - 0.04 });
+    check(g.ghosts.length >= 2 && g.ghosts.every((h) => h.alpha > 0 && h.alpha <= 1), 'con smear, el animador da estelas del arma');
+    const moved = g.ghosts[0].bones.weapon.some((v, i) => Math.abs(v - g.bones.weapon[i]) > 1e-3);
+    check(moved, 'las estelas van por detrás del arma');
+    check(a.frame(11, null).ghosts.length === 0, 'y en reposo no hay estelas');
+    check(ch.CHAIN_BONES.A.every((b) => !(g.smearBones as string[]).includes(b)) && g.smearBones.every((b) => pgpu.BONE_INDEX[b] < 32), 'las estelas usan huesos que caben en la máscara de la GPU');
+  }
+  // squash & stretch around the feet
+  {
+    const p0 = pz.puppetPose(rig, 0, null).p;
+    const headY = (p: typeof p0) => pz.applyMatrix(pz.puppetBones(rig, p).head, 60, 56)[1];
+    const footY = (p: typeof p0) => pz.applyMatrix(pz.puppetBones(rig, p).legF, 70, 125)[1];
+    check(headY({ ...p0, squash: 0.2 }) > headY(p0) + 5, 'squash: la silueta se aplasta hacia los pies');
+    check(headY({ ...p0, squash: -0.15 }) < headY(p0) - 4, 'stretch: y se estira hacia arriba');
+    check(Math.abs(footY({ ...p0, squash: 0.2 }) - footY(p0)) < 1.5, 'los pies se quedan en el suelo');
+  }
+} catch (e) {
+  check(false, `las pruebas de física secundaria revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Sprites per character: one test file each in scripts/hero-tests/ ────────
+// (budget, GPU packing, chains, anticipation… — each class adds its own there)
+for (const [titulo, archivo, fn] of [
+  ['🪓 Sprite del bárbaro', 'barbaro', 'testBarbaro'],
+  ['🌿 Sprites del druida y sus formas', 'druida', 'testDruida'],
+  ['🔮 Sprite del mago', 'mago', 'testMago'],
+  ['🗡️ Sprite del pícaro', 'picaro', 'testPicaro'],
+  ['🔥 Sprite del brujo', 'brujo', 'testBrujo'],
+] as const) {
+  console.log(`\n${titulo}`);
+  try {
+    const mod = await import(`./hero-tests/${archivo}.ts`);
+    mod[fn](check);
+  } catch (e) {
+    check(false, `las pruebas de ${archivo} revientan: ${(e as Error).stack ?? e}`);
+  }
+}
+
 // ── Bestiario ilustrado: enemigos normales e invocaciones ────────────────────
 console.log('\n👹 Bestiario ilustrado');
 {
@@ -4776,6 +4971,148 @@ try {
   check([a7, d1, d2].every((p) => p.frames.every((f) => f.x[1] > 0.5)), 'el dado nunca atraviesa el suelo');
 } catch (e) {
   check(false, `las pruebas del d20 revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Rare and unique cards: each one plays its own VFX sequence ──────────────
+console.log('\n🌟 Secuencias propias de las cartas raras y únicas');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const cs = await import('../src/fx/card-spells.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, SpellSystem, MAX_CARD_SPRITES, MAX_LIVE_SPRITES } = sf;
+  const { CARD_FX, cardSpellKey, preludeKey, cardShake, hitSpell } = cs;
+  const raras = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES]
+    .filter((d) => d.rareza === 'rara' || d.rareza === 'especial');
+  check(raras.length >= 39, `hay al menos 39 cartas raras o únicas (${raras.length})`);
+  const box = { x: 600, y: 200, w: 160, h: 200 };
+  const ctx = { box, from: { x: 200, y: 300 }, facing: -1 as const, seed: 7 };
+  const firmasGen = new Set(Object.keys(SPELLS).filter((k) => !k.startsWith('carta:')).map((k) => spellSignature(k)));
+  const firmas = new Map<string, string>();
+  const muestra = (k: string, c: typeof ctx & { reduced?: boolean }) => {
+    const d = SPELLS[k];
+    let maximo = 0, roto = 0, enImpacto = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) {
+      const fr = spellFrame(k, c, t);
+      maximo = Math.max(maximo, fr.length);
+      if (t >= d.phases[0] * d.duration && t <= d.phases[1] * d.duration) enImpacto = Math.max(enImpacto, fr.length);
+      for (const s of fr) {
+        const a = s.alpha ?? 1;
+        if (![s.x, s.y, s.size, s.angle, a, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || a < 0 || a > 1 || s.size <= 0) roto++;
+      }
+    }
+    return { maximo, roto, enImpacto };
+  };
+  for (const d of raras) {
+    const k = cardSpellKey(d.id, d.fx);
+    const def = SPELLS[k];
+    check(!!CARD_FX[d.id] && !!def && k !== d.fx, `«${d.nombre}» tiene su secuencia propia`);
+    if (!def) continue;
+    check(!d.fx || def.build !== SPELLS[d.fx]?.build, `«${d.nombre}» no reutiliza el efecto genérico «${d.fx}»`);
+    const f = spellSignature(k);
+    const igual = [...firmas].find(([, v]) => v === f);
+    check(!firmasGen.has(f) && !igual, `«${d.nombre}» se ve distinta de ${igual ? `«${igual[0]}»` : 'las demás y de los efectos genéricos'}`);
+    firmas.set(d.nombre, f);
+    check(def.duration >= 0.4 && def.duration <= 1.4, `«${d.nombre}» dura entre 0,4 y 1,4 s (${def.duration})`);
+    check(def.phases[0] > 0 && def.phases[0] < def.phases[1] && def.phases[1] < 1, `«${d.nombre}»: anticipación < clímax e impacto < disipación`);
+    const m = muestra(k, ctx);
+    check(m.roto === 0, `«${d.nombre}»: elementos válidos (${m.roto} rotos)`);
+    check(m.maximo > 60 && m.maximo <= MAX_CARD_SPRITES && m.maximo <= (def.cap ?? 0), `«${d.nombre}»: más partículas, con tope (${m.maximo} ≤ ${def.cap})`);
+    check(m.enImpacto > 0, `«${d.nombre}» se ve en su impacto`);
+    check(spellFrame(k, ctx, def.duration + 0.01).length === 0, `«${d.nombre}» desaparece al terminar`);
+    // anticipation while the showcase holds the stage
+    const pk = preludeKey(d.id);
+    const pre = pk ? SPELLS[pk] : undefined;
+    check(!!pre && pre.duration >= 0.6 && pre.duration <= 1.4 && muestra(pk!, ctx).roto === 0 && muestra(pk!, ctx).maximo <= MAX_CARD_SPRITES,
+      `«${d.nombre}» anticipa su efecto durante el escaparate`);
+    // reduced motion: far fewer particles and no shake
+    const r = muestra(k, { ...ctx, reduced: true });
+    check(r.maximo < m.maximo * 0.75 && r.enImpacto > 0, `«${d.nombre}» con movimiento reducido dibuja menos (${r.maximo} < ${m.maximo})`);
+    check(cardShake(k, true) === null, `«${d.nombre}» no sacude la pantalla con movimiento reducido`);
+    // receiver: attacks and targeted skills hit the target, the rest light up the hero
+    if (d.objetivo === 'enemigo' || d.objetivo === 'todos') check(def.anchor === 'target', `«${d.nombre}» se dibuja sobre su objetivo`);
+    else check(def.anchor === 'self' || def.receiver === 'enemies', `«${d.nombre}» se dibuja sobre el héroe o sobre los enemigos`);
+    const sk = cardShake(k, false);
+    check(!sk || (sk.delayMs >= 0 && sk.delayMs <= def.duration * 1000 && sk.level >= 1 && sk.level <= 3), `«${d.nombre}»: sacudida breve y dentro del efecto`);
+    // attacks: the showcase prelude did the build-up, so the blow lands with the damage number
+    if (d.tipo === 'ataque') check(def.phases[0] * def.duration <= 0.2, `«${d.nombre}»: el impacto llega con el daño (${Math.round(def.phases[0] * def.duration * 1000)} ms)`);
+  }
+  const porId = (id: string) => raras.find((d) => d.id === id)!;
+  check(!!cardShake(cardSpellKey('furia-indomita', 'furia'), false), 'Furia Indómita sacude la pantalla');
+  check(SPELLS[cardSpellKey('pacto-final', 'condena')]?.receiver === 'enemies', 'Pacto Final ata a los enemigos, no al héroe');
+  check(hitSpell({ id: 'circulo-mar', fx: 'ola' }, 'ola') === cardSpellKey('circulo-mar', 'ola'), 'un golpe con la clave de la carta rara usa su secuencia');
+  check(hitSpell({ id: 'circulo-mar', fx: 'ola' }, 'tajo') === 'tajo' && hitSpell(null, 'ola') === 'ola' && hitSpell({ id: 'golpe', fx: 'tajo' }, 'tajo') === 'tajo',
+    'los demás golpes conservan su efecto');
+
+  // Vengeful Storm: one bolt per hit on every enemy it targets
+  const tormenta = porId('tormenta-venganza');
+  const golpes: { obj: unknown; fx?: string }[] = [];
+  const ui: Presentador = { ...uiSilenciosa, fxGolpe: async (obj, _n, fx) => { golpes.push({ obj, fx }); } };
+  const run = nuevaRun('druida', 2024);
+  const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO, GOBLIN_FAMELICO], crearRng(2024), ui);
+  await comb.iniciar();
+  const inst = instanciar(tormenta);
+  comb.jugador.mano.push(inst);
+  comb.jugador.energia = 9;
+  golpes.length = 0;
+  await comb.jugarCarta(inst);
+  const cajas = new Map(comb.enemigos.map((e, i) => [e as unknown, { x: 380 + i * 190, y: 180, w: 150, h: 190 }]));
+  const golpesEnemigo = golpes.filter((g) => cajas.has(g.obj));
+  check(golpesEnemigo.length === 3, `la tormenta golpea a los tres enemigos (${golpesEnemigo.length})`);
+  const kT = cardSpellKey(tormenta.id, tormenta.fx);
+  const dT = SPELLS[kT];
+  let rayosOk = 0;
+  for (const g of golpesEnemigo) {
+    const clave = hitSpell({ id: tormenta.id, fx: tormenta.fx }, g.fx ?? '');
+    const caja = cajas.get(g.obj)!;
+    const c = { box: caja, from: { x: 120, y: 300 }, facing: -1 as const, seed: 3 };
+    let rayos = 0, dentro = true;
+    for (let t = 0; t <= dT.duration; t += 1 / 60) {
+      const marcas = spellMarks(clave, c, t).filter((q) => q.kind === 'rayo');
+      if (marcas.length > 1) dentro = false;
+      if (marcas.length) {
+        rayos = Math.max(rayos, marcas.length);
+        dentro &&= marcas.every((q) => q.x >= caja.x && q.x <= caja.x + caja.w && q.y >= caja.y && q.y <= caja.y + caja.h);
+      }
+    }
+    if (clave === kT && rayos === 1 && dentro) rayosOk++;
+  }
+  check(rayosOk === 3, `un rayo por impacto, que cae dentro de cada enemigo (${rayosOk}/3)`);
+  const tRayo = [...Array(60).keys()].map((i) => (i / 60) * dT.duration).find((t) => spellMarks(kT, ctx, t).some((q) => q.kind === 'rayo'));
+  check(tRayo !== undefined && tRayo <= dT.phases[1] * dT.duration && tRayo >= dT.phases[0] * dT.duration * 0.5, 'el rayo cae en la fase de impacto, a la vez que el daño');
+  check(!!cardShake(kT, false), 'la tormenta sacude la pantalla al caer el rayo');
+
+  // live budget at the peak of a rare card: prelude + three bolts, a hit every 0.26 s
+  const sys = new SpellSystem();
+  sys.add(preludeKey(tormenta.id)!, { ...ctx, box: { x: 380, y: 180, w: 530, h: 190 } }, 0);
+  for (let i = 0; i < 3; i++) sys.add(kT, { ...ctx, box: { x: 380 + i * 190, y: 180, w: 150, h: 190 }, seed: i + 1 }, 0.9 + i * 0.26);
+  let pico = 0, bruto = 0;
+  for (let t = 0; t < 2.6; t += 1 / 30) {
+    pico = Math.max(pico, sys.frame(t, MAX_LIVE_SPRITES - 150).length);
+  }
+  for (let t = 0.9; t < 2.6; t += 1 / 30) {
+    let s = 0;
+    for (let i = 0; i < 3; i++) s += spellFrame(kT, { ...ctx, seed: i + 1 }, t - 0.9 - i * 0.26).length;
+    bruto = Math.max(bruto, s);
+  }
+  check(pico <= MAX_LIVE_SPRITES - 150, `el gestor limita el pico de la rara (${pico})`);
+  check(bruto <= MAX_LIVE_SPRITES, `la tormenta sobre tres enemigos cabe en ~${MAX_LIVE_SPRITES} elementos sin recortar (${bruto})`);
+  check(MAX_LIVE_SPRITES <= 900, 'el tope global de elementos vivos es de unos 900');
+} catch (e) {
+  check(false, `las pruebas de las secuencias raras revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Actions blend in and out of the idle breathing (no pop at the edges) ─────
+console.log('\n🫁 Transición suave entre reposo y acción');
+{
+  const { puppetPose } = await import('../src/fx/puppet.ts');
+  const { HERO_RIGS: H, FORM_RIGS: F } = await import('../src/fx/hero-rig.ts');
+  const salto = (rig: any, tipo: 'attack' | 'spell' | 'hit', q: number, t: number) => {
+    const a = puppetPose(rig, t, { type: tipo, p: q }).p as any, b = puppetPose(rig, t, null).p as any;
+    return Math.max(...['torso', 'head', 'armF', 'armB', 'weapon', 'torsoY'].map((k) => Math.abs((a[k] ?? 0) - (b[k] ?? 0))));
+  };
+  const figuras = [...Object.values(H), ...Object.values(F)];
+  const t = 0.6; // mid-breath, where the old damping jump was largest
+  check(figuras.every((r) => salto(r, 'attack', 0, t) < 0.5 && salto(r, 'spell', 0, t) < 0.5), 'al empezar una acción la pose no da un salto respecto al reposo');
+  check(figuras.every((r) => salto(r, 'attack', 0.999, t) < 0.8 && salto(r, 'hit', 0.999, t) < 0.8), 'al terminar una acción vuelve al reposo sin salto');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

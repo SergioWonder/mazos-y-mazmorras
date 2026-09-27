@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.4.0';
+export const VERSION = '5.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '5.5.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🪓 Los héroes ganan detalle y el bárbaro luce su melena salvaje, que ondea con físicas reales, igual que capas, bufandas, barbas y pelajes.',
+      '⚔️ Animaciones más agresivas y artísticas, cada una con su carga, su golpe y su final, para los cinco héroes y las seis formas del druida.',
+      '🌩️ Cada carta rara y cada carta única de clase tiene su propia animación: rayos en Tormenta de Venganza, una erupción en Furia Indómita, cadenas infernales en Pacto Final…',
+    ],
+  },
   {
     version: '5.4.0',
     fecha: '2026-09-27',

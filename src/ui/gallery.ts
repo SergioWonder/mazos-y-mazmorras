@@ -21,6 +21,10 @@ const SCRIPTS: Record<Exclude<Mode, 'idle'>, { period: number; steps: [number, A
 
 interface Entry { card: GalleryCard; sprite: PuppetSprite; offset: number; last: number }
 
+/** Live gallery sprites by `kind:id` (e.g. 'hero:barbaro', 'form:lobo'), for the
+ *  dev frame-capture tool (scripts/sprite-capture.ts). Empty while closed. */
+export const gallerySprites = new Map<string, PuppetSprite>();
+
 function spriteFor(card: GalleryCard, act: number, stage: PuppetStage | null): PuppetSprite {
   const rim = LUZ_LUNA[act] ?? LUZ_LUNA[0];
   if (card.kind === 'enemy') return new PuppetSprite(ENEMY_RIGS[card.id], { style: 'illustrated', mirrored: true, rim, stage });
@@ -85,6 +89,7 @@ export function showGallery(): Promise<void> {
         fig.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); attack(); } });
         strip.appendChild(fig);
         const entry = { card, sprite, offset: entries.length * 0.23, last: -1 };
+        gallerySprites.set(`${card.kind}:${card.id}`, sprite);
         entries.push(entry);
         byFigure.set(fig, entry);
         observer.observe(fig);
@@ -129,6 +134,7 @@ export function showGallery(): Promise<void> {
       window.clearInterval(timer);
       observer.disconnect();
       for (const e of entries) e.sprite.destroy();
+      gallerySprites.clear();
       stage?.destroy();
       if (particleCanvas) particleCanvas.style.zIndex = previousZ;
       backdrop.remove();

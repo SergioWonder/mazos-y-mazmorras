@@ -6,6 +6,7 @@
 // from the same few draw calls per sprite.
 
 import type { BoneId, EffectGeometry, Effects, Matrix, Pose, PuppetRig } from '../fx/puppet.ts';
+import type { Ghost } from '../fx/animator.ts';
 import {
   BONE_COUNT, BONE_INDEX, FLAG, PIECE_TEXELS, lighten, multiply, packRig, parseColour, spriteMatrix,
 } from '../fx/puppet-gpu.ts';
@@ -19,6 +20,7 @@ uniform vec4 uBones[${BONE_COUNT * 2}];
 uniform vec2 uCanvas;
 uniform vec2 uOffset;
 uniform float uMargin;
+uniform int uBoneMask;    // non-zero: only pieces on these bones (smear ghosts)
 out vec2 vLocal;
 flat out int vPiece;
 void main() {
@@ -26,6 +28,7 @@ void main() {
   vec4 t0 = texelFetch(uData, ivec2(0, i), 0);
   vec4 bb = texelFetch(uData, ivec2(2, i), 0);
   int bone = int(t0.y);
+  if (uBoneMask != 0 && (bone >= 32 || ((uBoneMask >> bone) & 1) == 0)) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); vLocal = vec2(0.0); vPiece = i; return; }
   vec2 local = mix(bb.xy - uMargin, bb.zw + uMargin, aCorner);
   vec4 r0 = uBones[bone * 2], r1 = uBones[bone * 2 + 1];
   vec2 px = vec2(dot(r0.xyz, vec3(local, 1.0)), dot(r1.xyz, vec3(local, 1.0))) + uOffset;
@@ -216,6 +219,9 @@ export interface GpuFrame {
   bones: Record<BoneId, Matrix>;
   geo: EffectGeometry;
   gone: boolean;
+  /** Smear ghosts (earlier poses of `smearBones`) while a fast blow is on. */
+  ghosts: Ghost[];
+  smearBones: BoneId[];
 }
 
 /** Per-sprite drawing state registered with a stage. */
@@ -271,7 +277,7 @@ export class PuppetStage {
     this.gl = gl;
     this.piece = compile(gl, PIECE_VS, PIECE_FS);
     this.effect = compile(gl, FX_VS, FX_FS);
-    for (const n of ['uData', 'uBones', 'uCanvas', 'uOffset', 'uMargin', 'uMode', 'uColour', 'uExpand', 'uGlow', 'uShift', 'uSkip', 'uOnly', 'uAlpha', 'uFlash', 'uTint', 'uGray', 'uBlink', 'uAdditive']) {
+    for (const n of ['uData', 'uBones', 'uCanvas', 'uOffset', 'uMargin', 'uMode', 'uColour', 'uExpand', 'uGlow', 'uShift', 'uSkip', 'uOnly', 'uAlpha', 'uFlash', 'uTint', 'uGray', 'uBlink', 'uAdditive', 'uBoneMask']) {
       this.u[n] = gl.getUniformLocation(this.piece, n);
     }
     for (const n of ['uM0', 'uM1', 'uBox', 'uCanvas', 'uType', 'uP', 'uQ', 'uColour', 'uColour2', 'uAlpha']) {
@@ -338,10 +344,7 @@ export class PuppetStage {
   private drawSprite(v: GpuView, rect: { x: number; y: number; w: number }, cw: number, ch: number) {
     const gl = this.gl, u = this.u, f = v.frame!, fx = f.fx;
     const S = spriteMatrix(rect, v.mirrored, v.rig.art ?? 1);
-    for (const b of BONES) {
-      const m = multiply(S, f.bones[b]), i = BONE_INDEX[b] * 8;
-      this.bonesBuf.set([m[0], m[2], m[4], 0, m[1], m[3], m[5], 0], i);
-    }
+    this.fillBones(S, f.bones);
     const { tex, count } = this.textureFor(v.rig, v.style);
     const accent = parseColour(v.rig.accent);
 
@@ -353,6 +356,7 @@ export class PuppetStage {
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.uniform1i(u.uData, 0);
     gl.uniform4fv(u.uBones, this.bonesBuf);
+    gl.uniform1i(u.uBoneMask, 0);
     gl.uniform2f(u.uCanvas, cw, ch);
     gl.uniform1f(u.uAlpha, fx.opacity);
     gl.uniform1f(u.uFlash, fx.flash ? 1 : 0);
@@ -383,6 +387,21 @@ export class PuppetStage {
       const e = [0.61, 0.7, 1, 0.42];
       // Mirror Image: ghostly copies either side, offsets in CSS px like the old drop-shadows
       for (const [dx, dy] of [[-26, 0], [26, 0], [-13, -4], [13, -4]] as const) pass(2, e, { offset: [dx * this.dpr, dy * this.dpr], skip: FLAG.ink });
+    }
+    if (f.ghosts.length) {
+      // smear: flat, fading copies of the weapon at earlier instants, behind the figure
+      let mask = 0;
+      for (const b of f.smearBones) if (BONE_INDEX[b] < 32) mask |= 1 << BONE_INDEX[b];
+      const tone = parseColour(lighten(v.rig.accent, 0.35));
+      gl.uniform1i(u.uBoneMask, mask);
+      for (const g of f.ghosts) {
+        this.fillBones(S, g.bones);
+        gl.uniform4fv(u.uBones, this.bonesBuf);
+        pass(2, [tone[0], tone[1], tone[2], g.alpha], { expand: 0.5 });
+      }
+      gl.uniform1i(u.uBoneMask, 0);
+      this.fillBones(S, f.bones);
+      gl.uniform4fv(u.uBones, this.bonesBuf);
     }
     if (v.style === 'silhouette') {
       const rimPx = Math.max(1.1, rect.w / this.dpr / 75) * this.dpr;
@@ -427,6 +446,14 @@ export class PuppetStage {
       } else {
         this.drawEffect(S, cw, ch, 3, [o.cx, o.cy, o.r, 0], [0, 0, 0, 0], soft, accent, o.alpha * fx.opacity, [o.cx - o.r - 9, o.cy - o.r - 9, o.cx + o.r + 9, o.cy + o.r + 9]);
       }
+    }
+  }
+
+  /** Bone matrices (sprite space) into the uniform buffer. */
+  private fillBones(S: Matrix, bones: Record<BoneId, Matrix>) {
+    for (const b of BONES) {
+      const m = multiply(S, bones[b]), i = BONE_INDEX[b] * 8;
+      this.bonesBuf.set([m[0], m[2], m[4], 0, m[1], m[3], m[5], 0], i);
     }
   }
 

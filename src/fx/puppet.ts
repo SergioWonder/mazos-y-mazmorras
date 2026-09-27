@@ -5,11 +5,25 @@
 
 import { articulateWings, WING_HZ } from './wing.ts';
 
+/** Generic secondary-motion chains (hair locks, capes, scarves, beards, tails…):
+ *  any rig may hang up to CHAIN_SLOTS.length chains of CHAIN_SEGMENTS bones each
+ *  from any bone, and the spring solver in fx/chains.ts moves them. */
+export const CHAIN_SLOTS = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
+export type ChainSlot = (typeof CHAIN_SLOTS)[number];
+export const CHAIN_SEGMENTS = 3;
+export type ChainBone = `ch${ChainSlot}${1 | 2 | 3}`;
+/** Bones of each chain slot, from the root segment to the tip. */
+export const CHAIN_BONES = Object.fromEntries(
+  CHAIN_SLOTS.map((s) => [s, [1, 2, 3].map((i) => `ch${s}${i}` as ChainBone)]),
+) as Record<ChainSlot, ChainBone[]>;
+const ALL_CHAIN_BONES: ChainBone[] = CHAIN_SLOTS.flatMap((s) => CHAIN_BONES[s]);
+
 export type BoneId =
   | 'root' | 'torso' | 'cape' | 'head' | 'armB' | 'offhand' | 'armF' | 'weapon' | 'legB' | 'legF'
   | 'wingB' | 'wingF'
   // articulated wings: forearm and fingers hang from each shoulder (fx/wing.ts)
-  | 'wingBArm' | 'wingBF1' | 'wingBF2' | 'wingBF3' | 'wingFArm' | 'wingFF1' | 'wingFF2' | 'wingFF3';
+  | 'wingBArm' | 'wingBF1' | 'wingBF2' | 'wingBF3' | 'wingFArm' | 'wingFF1' | 'wingFF2' | 'wingFF3'
+  | ChainBone;
 
 /** Shape in bind-pose coordinates (viewBox 140×135, facing right, feet at y≈128). */
 export type Shape =
@@ -18,7 +32,9 @@ export type Shape =
   | { t: 'p'; b: BoneId; k: string; pts: [number, number][] }
   | { t: 'l'; b: BoneId; k: string; x1: number; y1: number; x2: number; y2: number; w: number };
 
-export interface Pose {
+export interface Pose extends Record<ChainBone, number> {
+  /** Squash (> 0) or stretch (< 0) of the whole figure around its feet. */
+  squash: number;
   rootX: number; torsoY: number; torso: number; head: number; armF: number; armB: number;
   weapon: number; offhand: number; legF: number; legB: number; cape: number; wingB: number; wingF: number;
   wingBArm: number; wingBF1: number; wingBF2: number; wingBF3: number;
@@ -55,6 +71,41 @@ export interface WingJoints {
   fold: Partial<Record<BoneId, number>>;
   /** Finger tips, in their bone's bind coordinates. */
   tips: { bone: BoneId; at: [number, number] }[];
+}
+
+/** A spring chain hung from a bone (see fx/chains.ts for the solver). */
+export interface ChainSpec {
+  slot: ChainSlot;
+  /** Bone the chain hangs from (default 'torso'); may be a bone of an earlier chain slot. */
+  parent?: BoneId;
+  /** Root pivot followed by the end of each segment (2..CHAIN_SEGMENTS+1 points, bind coords). */
+  joints: [number, number][];
+  /** Natural frequency at the root in Hz: lower is floppier (default 3.2). */
+  freq?: number;
+  /** Damping ratio: 0 wobbles for ever, 1 settles without bouncing (default 0.32). */
+  damping?: number;
+  /** How much looser the tip is than the root, 0..0.9 (default 0.35). */
+  taper?: number;
+  /** Gravity: droop of the tip in viewBox units (default 0.8). */
+  sag?: number;
+  /** Idle breeze: sway of the tip in viewBox units (default 1). */
+  sway?: number;
+  /** Max bend of each joint against the animated pose, degrees (default 75). */
+  limit?: number;
+}
+
+/** Hand-authored timeline of one action, replacing the generic one. */
+export interface ActionScript {
+  /** [fraction 0..1, pose, easing into this key] — see fx/motion.ts (strikeKeys). */
+  keys: Keyframe[];
+  /** Windows [from, to] (action fractions) of each effect; omitted ones keep the generic timing. */
+  slash?: [number, number];
+  burst?: [number, number];
+  projectile?: [number, number];
+  /** Motion smear: ghosts of the weapon trailing behind it. */
+  smear?: [number, number];
+  /** Bones the smear ghosts copy (default: weapon and arms for melee, weapon for magic). */
+  smearBones?: BoneId[];
 }
 
 export interface PuppetRig {
@@ -96,6 +147,12 @@ export interface PuppetRig {
   /** Extra per-frame motion on top of the generic one (drumming fingers…). */
   animate?: (p: Pose, t: number, action: ActionProgress | null) => void;
   pivots: Partial<Record<BoneId, [number, number]>>;
+  /** Secondary-motion spring chains (hair, cloth, fur, tails). */
+  chains?: ChainSpec[];
+  /** Per-action timelines (anticipation, impact, hit-stop, overshoot…). */
+  actions?: Partial<Record<ActionType, ActionScript>>;
+  /** Fraction of the attack at which the blow lands (default 0.4 melee, 0.55 magic). */
+  impact?: number;
   rest: PartialPose;
   windup: PartialPose;
   strike: PartialPose;
@@ -117,6 +174,8 @@ export interface Effects {
   opacity: number;
   /** 0..1 desaturation while dying. */
   dying?: number;
+  /** 0..1 progress of the motion smear window (ghosts of the weapon). */
+  smear?: number;
 }
 export interface EffectGeometry {
   slash?: { cx: number; cy: number; r0: number; r1: number; a0: number; a1: number; alpha: number };
@@ -141,25 +200,48 @@ export const P = (b: BoneId, k: string, pts: [number, number][]): Shape => ({ t:
 export const L = (b: BoneId, k: string, x1: number, y1: number, x2: number, y2: number, w: number): Shape =>
   ({ t: 'l', b, k, x1, y1, x2, y2, w });
 
-const DEFAULT_PIVOTS: Record<BoneId, [number, number]> = {
+const DEFAULT_PIVOTS = {
   root: [58, 100], torso: [58, 100], cape: [56, 74], head: [60, 74],
   armB: [52, 78], armF: [65, 78], legB: [54, 100], legF: [63, 100],
   weapon: [68, 97], offhand: [49, 96], wingB: [56, 84], wingF: [62, 84],
   wingBArm: [50, 70], wingBF1: [44, 58], wingBF2: [44, 58], wingBF3: [44, 58],
   wingFArm: [60, 70], wingFF1: [60, 58], wingFF2: [60, 58], wingFF3: [60, 58],
-};
-const PARENT: Record<BoneId, BoneId | null> = {
+} as Record<BoneId, [number, number]>;
+const PARENT = {
   root: null, torso: 'root', cape: 'torso', head: 'torso', armB: 'torso', offhand: 'armB',
   armF: 'torso', weapon: 'armF', legB: 'root', legF: 'root', wingB: 'torso', wingF: 'torso',
   wingBArm: 'wingB', wingBF1: 'wingBArm', wingBF2: 'wingBArm', wingBF3: 'wingBArm',
   wingFArm: 'wingF', wingFF1: 'wingFArm', wingFF2: 'wingFArm', wingFF3: 'wingFArm',
-};
+} as Record<BoneId, BoneId | null>;
 const BONE_ORDER: BoneId[] = [
   'root', 'torso', 'cape', 'head', 'armB', 'offhand', 'armF', 'weapon', 'legB', 'legF', 'wingB', 'wingF',
   'wingBArm', 'wingBF1', 'wingBF2', 'wingBF3', 'wingFArm', 'wingFF1', 'wingFF2', 'wingFF3',
+  ...ALL_CHAIN_BONES,
 ];
-/** Parent of a bone in the skeleton (null for the root). */
-export const boneParent = (b: BoneId): BoneId | null => PARENT[b];
+for (const s of CHAIN_SLOTS) CHAIN_BONES[s].forEach((b, i) => { PARENT[b] = i ? CHAIN_BONES[s][i - 1] : 'torso'; DEFAULT_PIVOTS[b] = [0, 0]; });
+
+/** Parents and pivots of a rig's chain bones (declared chains only), cached per rig. */
+interface ChainLayout { parent: Partial<Record<BoneId, BoneId>>; pivot: Partial<Record<BoneId, [number, number]>> }
+const layouts = new WeakMap<PuppetRig, ChainLayout>();
+function chainLayout(rig: PuppetRig): ChainLayout {
+  let l = layouts.get(rig);
+  if (!l) {
+    l = { parent: {}, pivot: {} };
+    for (const c of rig.chains ?? []) {
+      const bones = CHAIN_BONES[c.slot];
+      if (!bones) continue;
+      for (let i = 0; i < c.joints.length - 1 && i < bones.length; i++) {
+        l.parent[bones[i]] = i ? bones[i - 1] : c.parent ?? 'torso';
+        l.pivot[bones[i]] = c.joints[i];
+      }
+    }
+    layouts.set(rig, l);
+  }
+  return l;
+}
+
+/** Parent of a bone in the skeleton (null for the root); chain roots follow the rig's declaration. */
+export const boneParent = (b: BoneId, rig?: PuppetRig): BoneId | null => (rig && chainLayout(rig).parent[b]) || PARENT[b];
 
 // ── 2D affine matrices [a b c d e f] (SVG convention) ────────────────────────
 export type Matrix = [number, number, number, number, number, number];
@@ -177,15 +259,27 @@ function rotateAbout(deg: number, px: number, py: number): Matrix {
 export const applyMatrix = (m: Matrix, x: number, y: number): [number, number] =>
   [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
 
-export const pivotOf = (rig: PuppetRig, b: BoneId) => rig.pivots[b] ?? DEFAULT_PIVOTS[b];
+export const pivotOf = (rig: PuppetRig, b: BoneId) => rig.pivots[b] ?? chainLayout(rig).pivot[b] ?? DEFAULT_PIVOTS[b];
+
+/** Height of the feet: squash and stretch happen around it. */
+const FEET_Y = 128;
 
 /** World matrix of every bone for a pose. */
 export function puppetBones(rig: PuppetRig, p: Pose): Record<BoneId, Matrix> {
   const out = {} as Record<BoneId, Matrix>;
+  const chain = chainLayout(rig).parent;
   for (const b of BONE_ORDER) {
-    if (b === 'root') { out.root = translate(p.rootX, 0); continue; }
+    if (b === 'root') {
+      out.root = translate(p.rootX, 0);
+      if (p.squash) {
+        // volume-preserving-ish: squashing widens, stretching narrows
+        const sy = 1 - p.squash, sx = 1 + p.squash * 0.6, fx = pivotOf(rig, 'root')[0];
+        out.root = mul(out.root, [sx, 0, 0, sy, fx - sx * fx, FEET_Y - sy * FEET_Y]);
+      }
+      continue;
+    }
     const [px, py] = pivotOf(rig, b);
-    let m = out[PARENT[b]!];
+    let m = out[chain[b] ?? PARENT[b]!];
     if (b === 'torso') m = mul(m, translate(0, p.torsoY));
     out[b] = mul(m, rotateAbout(p[b as keyof Pose] ?? 0, px, py));
     if (b === 'head' && rig.headScale) out[b] = mul(out[b], scaleAbout(rig.headScale, px, py));
@@ -195,14 +289,19 @@ export function puppetBones(rig: PuppetRig, p: Pose): Record<BoneId, Matrix> {
 
 // ── Animation ────────────────────────────────────────────────────────────────
 const ZERO: Pose = {
+  squash: 0,
   rootX: 0, torsoY: 0, torso: 0, head: 0, armF: 0, armB: 0, weapon: 0, offhand: 0, legF: 0, legB: 0, cape: 0, wingB: 0, wingF: 0,
   wingBArm: 0, wingBF1: 0, wingBF2: 0, wingBF3: 0, wingFArm: 0, wingFF1: 0, wingFF2: 0, wingFF3: 0,
+  ...(Object.fromEntries(ALL_CHAIN_BONES.map((b) => [b, 0])) as Record<ChainBone, number>),
 };
+const POSE_KEYS = Object.keys(ZERO) as (keyof Pose)[];
 const smooth = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 4);
-type Keyframe = [number, PartialPose, ((t: number) => number)?];
+/** [fraction of the action, pose, easing of the segment that arrives at this key]. */
+export type Keyframe = [number, PartialPose, ((t: number) => number)?];
 
-function interpolate(kfs: Keyframe[], q: number, base: Pose): Pose {
+/** Pose at fraction q of a keyframed timeline; missing values fall back to `base`. */
+export function interpolate(kfs: Keyframe[], q: number, base: Pose): Pose {
   let i = 0;
   while (i < kfs.length - 2 && q > kfs[i + 1][0]) i++;
   const [p0, a0] = kfs[i];
@@ -210,15 +309,31 @@ function interpolate(kfs: Keyframe[], q: number, base: Pose): Pose {
   const u = Math.max(0, Math.min(1, (q - p0) / (p1 - p0)));
   const e = (ease ?? smooth)(u);
   const out = { ...ZERO };
-  for (const k of Object.keys(ZERO) as (keyof Pose)[]) {
+  for (const k of POSE_KEYS) {
     const va = a0[k] ?? base[k], vb = a1[k] ?? base[k];
     out[k] = va + (vb - va) * e;
   }
   return out;
 }
 
+/** Default fraction of an attack at which the blow lands. */
+const defaultImpact = (rig: PuppetRig) => (rig.style === 'melee' ? 0.4 : 0.55);
 /** Fraction of an attack at which the blow lands (to sync damage numbers). */
-export const puppetImpact = (rig: PuppetRig) => (rig.style === 'melee' ? 0.4 : 0.55);
+export const puppetImpact = (rig: PuppetRig) => rig.impact ?? defaultImpact(rig);
+
+/** Progress 0..1 inside [a, b], or undefined outside it. */
+const windowOf = (q: number, w: [number, number]) => (q > w[0] && q < w[1] ? (q - w[0]) / (w[1] - w[0]) : undefined);
+
+const smoothstep = (x: number) => { const u = Math.min(1, Math.max(0, x)); return u * u * (3 - 2 * u); };
+
+/** How much an action suppresses idle motion: 0 at rest, eases to 1 over the first
+ *  12 % and back to 0 over the last 15 % (death keeps it, the body stays down). */
+export function actionHold(action: ActionProgress | null): number {
+  if (!action) return 0;
+  const q = action.p;
+  const enter = smoothstep(q / 0.12);
+  return action.type === 'death' ? enter : Math.min(enter, 1 - smoothstep((q - 0.85) / 0.15));
+}
 
 /** Pose and effects of a puppet at time t (seconds), optionally mid-action. */
 export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | null): { p: Pose; fx: Effects } {
@@ -271,15 +386,37 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
       fx.opacity = q < 0.35 ? 1 : q < 0.8 ? 1 - (q - 0.35) / 0.45 : 0;
       fx.dying = Math.min(1, q / 0.4);
     }
+    const script = rig.actions?.[action.type];
+    if (script) {
+      p = interpolate(script.keys, q, base);
+      // generic effect windows follow the rig's own impact
+      const shift = action.type === 'attack' ? puppetImpact(rig) - defaultImpact(rig) : 0;
+      const move = (v: number | undefined, w: [number, number] | undefined, g: [number, number]) =>
+        w ? windowOf(q, w) : v === undefined && !shift ? undefined : windowOf(q, [g[0] + shift, g[1] + shift]);
+      if (action.type === 'attack') {
+        if (rig.style === 'melee') fx.slash = move(fx.slash, script.slash, [0.3, 0.6]);
+        else {
+          fx.burst = move(fx.burst, script.burst, [0.43, 0.75]);
+          fx.projectile = move(fx.projectile, script.projectile, [0.46, 0.84]);
+        }
+      } else {
+        if (script.burst) fx.burst = windowOf(q, script.burst);
+        if (script.slash) fx.slash = windowOf(q, script.slash);
+      }
+      if (script.smear) fx.smear = windowOf(q, script.smear);
+    }
   }
-  // breathing on top of everything, damped during actions
-  const b = Math.sin((t * 2 * Math.PI) / 2.5 + rig.phase), calm = action ? 0.3 : 1;
+  // breathing on top of everything, damped during actions; the damping ramps in
+  // and out at the edges so actions start and end without a pop (which the
+  // physics chains would amplify)
+  const hold = actionHold(action);
+  const b = Math.sin((t * 2 * Math.PI) / 2.5 + rig.phase), calm = 1 - 0.7 * hold;
   p.torsoY += b * 0.9 * calm; p.torso += b * 1.2 * calm; p.head -= b * 1.5 * calm;
   p.armF += b * 2.5 * calm; p.armB -= b * 2.5 * calm; p.weapon -= b * 2 * calm;
   if (rig.hover) p.torsoY += Math.sin(t * 2 * Math.PI * 0.55 + rig.phase) * rig.hover;
   if (rig.wings) articulateWings(rig, p, t, action);
   else if (rig.flap) {
-    const w = Math.sin(t * 2 * Math.PI * (rig.flapBones === 'wings' ? WING_HZ : 1.6) + rig.phase) * rig.flap * (action ? 0.5 : 1);
+    const w = Math.sin(t * 2 * Math.PI * (rig.flapBones === 'wings' ? WING_HZ : 1.6) + rig.phase) * rig.flap * (1 - 0.5 * hold);
     if (rig.flapBones === 'wings') { p.wingF += w; p.wingB += w * 0.9; } else { p.armF += w; p.armB += w * 0.9; p.torsoY -= w * 0.08; }
   }
   // cape/scarf/tail hangs from its pivot and trails behind forward motion

@@ -1,18 +1,23 @@
 // Pure helpers for the WebGL puppet renderer (no DOM, testable in node): colour
 // maths, the per-piece data texture layout and the viewBox → pixel transform.
 
-import { EMISSIVE, EYES, type BoneId, type Matrix, type PuppetRig, type Shape } from './puppet.ts';
+import { CHAIN_BONES, CHAIN_SLOTS, EMISSIVE, EYES, type BoneId, type Matrix, type PuppetRig, type Shape } from './puppet.ts';
 
 /** Texels (RGBA32F) per piece row in the data texture. */
 export const PIECE_TEXELS = 14;
 /** Max polygon vertices the fragment shader walks. */
 export const MAX_POLY = 16;
-/** Bone slot order in the bones uniform array. */
-export const BONE_INDEX: Record<BoneId, number> = {
+/** Bone slot order in the bones uniform array: the classic skeleton and the
+ *  wings first (indices < 32 fit the smear bone mask), then the chain bones. */
+export const BONE_INDEX = {
   root: 0, torso: 1, cape: 2, head: 3, armB: 4, offhand: 5, armF: 6, weapon: 7, legB: 8, legF: 9, wingB: 10, wingF: 11,
   wingBArm: 12, wingBF1: 13, wingBF2: 14, wingBF3: 15, wingFArm: 16, wingFF1: 17, wingFF2: 18, wingFF3: 19,
-};
-export const BONE_COUNT = 20;
+  ...Object.fromEntries(CHAIN_SLOTS.flatMap((s) => CHAIN_BONES[s]).map((b, i) => [b, 20 + i])),
+} as Record<BoneId, number>;
+export const BONE_COUNT = 20 + CHAIN_SLOTS.length * CHAIN_BONES.A.length;
+/** Piece budget of a hero or druid form: every piece is an instanced quad drawn
+ *  in 4-5 passes, so keep figures lean for mobile GPUs. */
+export const MAX_FIGURE_PIECES = 96;
 
 export const SHAPE_CODE = { c: 0, e: 1, l: 2, p: 3 } as const;
 export const FLAG = { emissive: 1, ink: 2, eye: 4, backlit: 8 } as const;

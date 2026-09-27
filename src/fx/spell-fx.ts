@@ -18,9 +18,11 @@ export interface SpellCtx {
   /** Colour override (the Beholder's chromatic rays). */
   tint?: string;
   seed?: number;
+  /** prefers-reduced-motion: builders draw fewer particles. */
+  reduced?: boolean;
 }
 export type Anchor = 'self' | 'target';
-type Build = (g: Painter, u: number, c: SpellCtx, dur: number) => void;
+export type Build = (g: Painter, u: number, c: SpellCtx, dur: number) => void;
 export interface SpellDef {
   /** Seconds. */
   duration: number;
@@ -29,27 +31,38 @@ export interface SpellDef {
   /** Default receiver: the hero (defences, buffs) or the target (attacks, curses). */
   anchor: Anchor;
   build: Build;
+  /** Sprite cap of one frame (MAX_SPELL_SPRITES by default; the rare cards get more). */
+  cap?: number;
+  /** Optional brief screen shake at a fraction of the duration (skipped with reduced motion). */
+  shake?: { at: number; level: 1 | 2 | 3 };
+  /** Who shows it when the card has no natural receiver: the hero, or every enemy. */
+  receiver?: 'hero' | 'enemies';
 }
 
 export const MAX_SPELL_SPRITES = 220;
-export const MAX_LIVE_SPRITES = 600;
+/** Sprite cap of one frame of a rare or unique card's own sequence. */
+export const MAX_CARD_SPRITES = 420;
+/** Particles plus spell sprites alive at once (the peak of a rare card). */
+export const MAX_LIVE_SPRITES = 900;
+/** Share of the particles drawn with prefers-reduced-motion. */
+export const REDUCED_DENSITY = 0.4;
 
 // ── easing helpers ──────────────────────────────────────────────────────────
-const TAU = Math.PI * 2;
-const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
-const span = (u: number, a: number, b: number) => clamp01((u - a) / (b - a));
-const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-const easeOut = (v: number) => 1 - (1 - v) ** 3;
-const easeIn = (v: number) => v * v * v;
-const smooth = (v: number) => v * v * (3 - 2 * v);
-const easeInOut = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - (-2 * v + 2) ** 3 / 2);
-const easeOutBack = (v: number) => 1 + 2.70158 * (v - 1) ** 3 + 1.70158 * (v - 1) ** 2;
+export const TAU = Math.PI * 2;
+export const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
+export const span = (u: number, a: number, b: number) => clamp01((u - a) / (b - a));
+export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+export const easeOut = (v: number) => 1 - (1 - v) ** 3;
+export const easeIn = (v: number) => v * v * v;
+export const smooth = (v: number) => v * v * (3 - 2 * v);
+export const easeInOut = (v: number) => (v < 0.5 ? 4 * v * v * v : 1 - (-2 * v + 2) ** 3 / 2);
+export const easeOutBack = (v: number) => 1 + 2.70158 * (v - 1) ** 3 + 1.70158 * (v - 1) ** 2;
 /** 0 → 1 → 0 over [a, b]. */
-const bell = (u: number, a: number, b: number) => { const s = span(u, a, b); return s <= 0 || s >= 1 ? 0 : Math.sin(Math.PI * s); };
+export const bell = (u: number, a: number, b: number) => { const s = span(u, a, b); return s <= 0 || s >= 1 ? 0 : Math.sin(Math.PI * s); };
 /** Rotation for a 'gota' (tip up at angle 0) so its tip trails behind the velocity. */
-const dropAngle = (vx: number, vy: number) => Math.atan2(-vx, vy);
+export const dropAngle = (vx: number, vy: number) => Math.atan2(-vx, vy);
 
-function hash01(seed: number, n: number): number {
+export function hash01(seed: number, n: number): number {
   let h = (Math.imul(seed | 0, 374761393) + Math.imul(n | 0, 668265263)) | 0;
   h = Math.imul(h ^ (h >>> 13), 1274126177);
   h ^= h >>> 16;
@@ -57,15 +70,22 @@ function hash01(seed: number, n: number): number {
 }
 
 /** Collects the sprites of one frame, with drawing helpers in screen pixels. */
-class Painter {
+export class Painter {
   readonly out: Sprite[] = [];
+  /** Semantic events of the frame (a bolt landing…), for tests and sync. */
+  readonly marks: { kind: string; x: number; y: number }[] = [];
   private readonly seed: number;
-  constructor(seed: number) { this.seed = seed; }
+  private readonly cap: number;
+  private readonly density: number;
+  constructor(seed: number, cap = MAX_SPELL_SPRITES, density = 1) { this.seed = seed; this.cap = cap; this.density = density; }
   /** Stable random in [0, 1) for element n. */
   r(n: number) { return hash01(this.seed, n); }
+  /** How many of `count` particles to draw (fewer with reduced motion). */
+  n(count: number) { return Math.max(1, Math.round(count * this.density)); }
+  mark(kind: string, x: number, y: number) { this.marks.push({ kind, x, y }); }
   put(x: number, y: number, size: number, shape: ParticleShape, colour: string, alpha: number,
     angle = 0, glow = true, stretch?: number, param?: number) {
-    if (this.out.length >= MAX_SPELL_SPRITES || !(alpha > 0.004) || !(size > 0.05)) return;
+    if (this.out.length >= this.cap || !(alpha > 0.004) || !(size > 0.05) || !Number.isFinite(x + y + angle)) return;
     // param -1 flags the particle shapes as spell sprites (pixel-sized glow)
     this.out.push({ x, y, size, shape, colour, alpha: Math.min(1, alpha), angle, glow, stretch, param: param ?? -1 });
   }
@@ -112,7 +132,7 @@ class Painter {
 }
 
 /** Shared geometry of the receiver's box. */
-function geo(c: SpellCtx) {
+export function geo(c: SpellCtx) {
   const b = c.box;
   const cx = b.x + b.w / 2, cy = b.y + b.h / 2;
   return {
@@ -126,7 +146,7 @@ function geo(c: SpellCtx) {
 }
 
 /** Ballistic point: start + v·τ + ½·g·τ² (px, px/s, seconds). */
-const fly = (x: number, y: number, vx: number, vy: number, tau: number, grav: number) =>
+export const fly = (x: number, y: number, vx: number, vy: number, tau: number, grav: number) =>
   ({ x: x + vx * tau, y: y + vy * tau + 0.5 * grav * tau * tau });
 
 /** Path of vine i (of n) growing from the ground and coiling around the box.
@@ -845,7 +865,7 @@ const rayoOcular: Build = (g, u, c, D) => {
 };
 
 /** Jagged path from a to b; the offsets change `fps` times a second. */
-function zigzag(a: Point, b: Point, n: number, amp: number, frame: number, salt: number): Point[] {
+export function zigzag(a: Point, b: Point, n: number, amp: number, frame: number, salt: number): Point[] {
   const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
   const pts: Point[] = [];
   for (let j = 0; j <= n; j++) {
@@ -938,11 +958,20 @@ export const SPELLS: Record<string, SpellDef> = {
 
 /** Sprites of spell `key` at `t` seconds after it was cast ([] once it is over). */
 export function spellFrame(key: string, ctx: SpellCtx, t: number): Sprite[] {
+  return paint(key, ctx, t)?.out ?? [];
+}
+
+/** Semantic marks of spell `key` at `t` (where each bolt lands…). */
+export function spellMarks(key: string, ctx: SpellCtx, t: number): { kind: string; x: number; y: number }[] {
+  return paint(key, ctx, t)?.marks ?? [];
+}
+
+function paint(key: string, ctx: SpellCtx, t: number): Painter | null {
   const def = SPELLS[key];
-  if (!def || t < 0 || t > def.duration) return [];
-  const g = new Painter(ctx.seed ?? 1);
+  if (!def || t < 0 || t > def.duration) return null;
+  const g = new Painter(ctx.seed ?? 1, def.cap ?? MAX_SPELL_SPRITES, ctx.reduced ? REDUCED_DENSITY : 1);
   def.build(g, t / def.duration, ctx, def.duration);
-  return g.out;
+  return g;
 }
 
 /** Coarse visual fingerprint (shapes and layout over time) to tell effects apart. */

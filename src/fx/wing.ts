@@ -5,6 +5,7 @@
 // to the tip, spreads the wing on the downstroke and folds it on the upstroke.
 
 import type { ActionProgress, BoneId, Matrix, Pose, PuppetRig, Shape, WingJoints, WingSide } from './puppet.ts';
+import { actionHold } from './puppet.ts';
 
 type Pt = [number, number];
 
@@ -140,7 +141,7 @@ function plateau(q: number, a: number, b: number, c: number, d: number): number 
 export function articulateWings(rig: PuppetRig, p: Pose, t: number, action: ActionProgress | null): void {
   const wings = rig.wings;
   if (!wings) return;
-  const amp = (rig.flap ?? 0) * (action ? 0.5 : 1);
+  const amp = (rig.flap ?? 0) * (1 - 0.5 * actionHold(action));
   let open = 0, tuck = 0, slump = 0, spread = 0;
   if (action) {
     const q = action.p;
