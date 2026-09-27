@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '5.7.0';
+export const VERSION = '6.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,20 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.0.0',
+    fecha: '2026-09-27',
+    cambios: [
+      '🐉 Bienvenido a Dracs & Rogues 6.0: nuevo nombre y nuevo icono, el Dungeon Master como jefe final, un final secreto y héroes con melenas y capas que se mueven de verdad.',
+      '🎲 Tras el Acto III espera el Dungeon Master, con su pantalla invencible… Dicen que un 20 natural en el momento justo desbloquea el final verdadero.',
+      '🪓 Los héroes y las formas del druida tienen más detalle, físicas de pelo y tela, y animaciones de ataque mucho más brutales.',
+      '🌩️ Cada carta rara y cada única de clase tiene su propia animación, y todas las cartas vuelan al robarlas y hacia su objetivo al jugarlas.',
+      '☠️ Llegan las maldiciones, cartas que estorban en tu mano. El brujo aprende a sacarles partido y su Explosión Sobrenatural pega más fuerte.',
+      '🗺️ Nuevo mapa de aventura en pergamino dibujado a tinta, con tabernas que marcan misiones y una fila central de cofres.',
+      '🎲 Nuevo d20 de resina con físicas reales, que se detiene justo en el número que sale.',
+      '⚡ El combate va mucho más fluido en el móvil: los personajes no se mueven de su sitio y se acabó el repintado continuo.',
+    ],
+  },
   {
     version: '5.7.0',
     fecha: '2026-09-27',
