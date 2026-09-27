@@ -1996,10 +1996,16 @@ try {
   // cheap: a whole figure with the six chains in use costs little per frame
   {
     const six: Rig = { ...base, chains: slots.map((s, i) => ({ slot: s, parent: 'torso', joints: [[50 + i, 76], [46 + i, 88], [44 + i, 100], [43 + i, 112]] })) };
+    // warm the JIT up, then keep the best of three runs: a single cold run also
+    // measured whatever else the machine was doing and failed now and then
     const a = new an.PuppetAnimator(six);
-    const t0 = performance.now();
-    for (let i = 0; i < 600; i++) a.frame(i / 60, attackAt(1)(i / 60));
-    const ms = (performance.now() - t0) / 600;
+    for (let i = 0; i < 120; i++) a.frame(i / 60, attackAt(1)(i / 60));
+    let ms = Infinity;
+    for (let intento = 0; intento < 3; intento++) {
+      const t0 = performance.now();
+      for (let i = 0; i < 300; i++) a.frame(2 + i / 60, attackAt(3)(2 + i / 60));
+      ms = Math.min(ms, (performance.now() - t0) / 300);
+    }
     check(ms < 0.5, `barato: una figura con 6 cadenas cuesta ${ms.toFixed(3)} ms por fotograma`);
   }
 
