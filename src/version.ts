@@ -14,7 +14,8 @@ export const CHANGELOG: EntradaCambios[] = [
     version: '6.0.0',
     fecha: '2026-09-27',
     cambios: [
-      '🐉 Bienvenido a Dracs & Rogues 6.0: nuevo nombre y nuevo icono, el Dungeon Master como jefe final, un final secreto y héroes con melenas y capas que se mueven de verdad.',
+      '🐉 Dracs & Rogues 6.0: nuevo nombre, el Dungeon Master como jefe final y un final secreto por descubrir.',
+      '🎴 Nuevo icono de la app: el Dungeon Master encapuchado alza una carta junto a su d20.',
       '🎲 Tras el Acto III espera el Dungeon Master, con su pantalla invencible… Dicen que un 20 natural en el momento justo desbloquea el final verdadero.',
       '🪓 Los héroes y las formas del druida tienen más detalle, físicas de pelo y tela, y animaciones de ataque mucho más brutales.',
       '🌩️ Cada carta rara y cada única de clase tiene su propia animación, y todas las cartas vuelan al robarlas y hacia su objetivo al jugarlas.',
