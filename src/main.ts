@@ -135,6 +135,7 @@ async function juego() {
             campanaCompleta = true;
             borrarGuardado();
             escenaDM = await pantallaCombate(run, [DUNGEON_MASTER], rng, true, 'Detrás de la pantalla');
+            audio.menu(); // the DM's metal gives way to the main theme for the closing screens
           }
           break;
         }

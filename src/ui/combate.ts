@@ -5,6 +5,7 @@ import type {
 } from '../core/types.ts';
 import { fx } from '../fx/particulas.ts';
 import { audio } from '../fx/audio.ts';
+import { combatTheme } from '../fx/music-tracks.ts';
 import { rodarDado, rodarDados } from '../fx/dado.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
@@ -70,7 +71,7 @@ export function pantallaCombate(
     app.innerHTML = '';
     app.className = `pantalla-combate ${esJefe ? 'combate-jefe' : ''}`;
     fx.ambiente(true);
-    audio.musica(run.capitulo, esJefe); // tema normal del acto, o épico si es jefe
+    audio.reproducirTema(combatTheme(run.capitulo, esJefe, defs)); // act theme, boss theme or the DM's own track
 
     // ── Estructura ──────────────────────────────────────────────────────────
     const raiz = el('div', 'combate');

@@ -149,6 +149,12 @@ const TEMAS: Record<string, TemaChip> = {
     bajo:    [40, 40, 47, 40, 35, 35, 42, 35, 43, 43, 50, 43, 38, 38, 45, 38],
     melodia: [76, 71, 67, 71, 72, 67, 64, 67, 79, 74, 71, 74, 71, 67, 64, 71],
   },
+  // Dungeon Master (G phrygian): fast, relentless chugs on the low G with a tritone stab
+  'dm': {
+    bpm: 172, bateria: true, epico: true,
+    bajo:    [43, 43, 0, 43, 43, 44, 0, 43, 43, 43, 0, 49, 43, 0, 46, 44],
+    melodia: [67, 0, 70, 67, 68, 0, 67, 74, 73, 0, 70, 67, 68, 67, 62, 0],
+  },
 };
 
 /** Normal level of the music bus. */
@@ -354,7 +360,7 @@ class MotorAudio {
     const gen = this.generacion;
     this.cargarPista(pista.file).then((buf) => {
       if (gen !== this.generacion || !this.ctx) return;
-      const { start, end } = loopWindow(buf.duration, pista.loopSamples);
+      const { start, end, begin } = loopWindow(buf.duration, pista.loopSamples, pista.introSamples);
       const fuente = this.ctx.createBufferSource();
       fuente.buffer = buf;
       fuente.loop = true;
@@ -365,7 +371,7 @@ class MotorAudio {
       vol.gain.setValueAtTime(0, t);
       vol.gain.linearRampToValueAtTime(1.2, t + 0.6);
       fuente.connect(vol).connect(this.busMusica);
-      fuente.start(t, start);
+      fuente.start(t, begin); // the intro (if any) plays once, then the loop repeats
       this.fuente = fuente;
       this.volPista = vol;
     }).catch(() => {

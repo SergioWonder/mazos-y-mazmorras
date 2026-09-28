@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.3.0';
+export const VERSION = '6.4.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.4.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '🎸 El combate contra el Dungeon Master tiene su propia música: «Behind the Screen», metalcore progresivo instrumental con guitaras graves, breakdowns y un estribillo enorme.',
+    ],
+  },
   {
     version: '6.3.0',
     fecha: '2026-09-28',

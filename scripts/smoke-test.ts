@@ -5496,6 +5496,44 @@ console.log('\n🗑️ Descartes obligatorios');
   check(/cancelable/.test(ui), 'la ventana de elegir carta oculta «Cancelar» cuando no se puede cancelar');
 }
 
+// ── Dungeon Master: an exclusive metalcore track ─────────────────────────────
+console.log('\n🎸 Música del DM');
+{
+  const fs = await import('node:fs');
+  const mt = await import('../src/fx/music-tracks.ts') as unknown as Record<string, any>;
+  const tracks = mt.MUSIC_TRACKS as Record<string, { file: string; loopSamples: number; introSamples?: number }>;
+  const dm = tracks['dm'];
+  const ruta = (t: string) => new URL(`../src/audio/${tracks[t].file}`, import.meta.url);
+  check(!!dm && dm.file === 'dm.mp3' && fs.existsSync(ruta('dm')), 'existe la pista exclusiva del Dungeon Master (dm.mp3)');
+  const otros = ['menu', 'cap1', 'cap1-jefe', 'cap2', 'cap2-jefe', 'cap3', 'cap3-jefe'];
+  const segundos = (t: string) => (tracks[t].loopSamples + (tracks[t].introSamples ?? 0)) / 44100;
+  const bytesPorSegundo = (t: string) => fs.statSync(ruta(t)).size / segundos(t);
+  const maxOtros = Math.max(...otros.map(bytesPorSegundo));
+  check(!!dm && fs.existsSync(ruta('dm')) && fs.statSync(ruta('dm')).size > 2_000_000 && bytesPorSegundo('dm') <= maxOtros * 1.03,
+    'la pista del DM pesa más de 2 MB y no más que las otras a la misma tasa de bits');
+  check(!!dm && segundos('dm') >= 120 && segundos('dm') <= 180, 'la pista del DM dura entre 2 y 3 minutos');
+  const combatTheme = mt.combatTheme as ((c: number, jefe: boolean, defs: EnemigoDef[]) => string) | undefined;
+  const DMdef = (ENEMIGOS as unknown as Record<string, EnemigoDef>).DUNGEON_MASTER;
+  check(typeof combatTheme === 'function' && combatTheme(2, true, [DMdef]) === 'dm', 'el combate contra el Dungeon Master suena con su propia pista');
+  check(typeof combatTheme === 'function' && combatTheme(0, true, [ENEMIGOS.JEFE_OGRO]) === 'cap1-jefe'
+    && combatTheme(2, true, [ENEMIGOS.JEFE_OGRO]) === 'cap3-jefe' && combatTheme(1, false, [ENEMIGOS.JEFE_OGRO]) === 'cap2',
+    'los jefes normales y los combates de cada acto siguen con su pista');
+  if (dm) {
+    const intro = (dm.introSamples ?? 0) / 44100, bucle = dm.loopSamples / 44100;
+    const w = loopWindow(intro + bucle + (MP3_DELAY_SAMPLES + 900) / 44100, dm.loopSamples, dm.introSamples ?? 0) as { start: number; end: number; begin?: number };
+    check(intro > 0 && Math.abs(w.start - (MP3_DELAY_SAMPLES / 44100 + intro)) < 1e-9 && Math.abs(w.end - w.start - bucle) < 1e-9
+      && Math.abs((w.begin ?? -1) - MP3_DELAY_SAMPLES / 44100) < 1e-9, 'la intro atmosférica del DM suena una vez y queda fuera del bucle');
+  } else check(false, 'la intro atmosférica del DM suena una vez y queda fuera del bucle');
+  const audioSrc = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
+  const chip = /'dm':\s*\{([^}]*)\}/.exec(audioSrc)?.[1] ?? '';
+  const bpmChip = Number(/bpm:\s*(\d+)/.exec(chip)?.[1] ?? 0);
+  check(bpmChip >= 150 && /bateria:\s*true/.test(chip) && /epico:\s*true/.test(chip), 'hay chiptune agresivo de respaldo para el DM si falla el archivo');
+  const combateSrc = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/audio\.reproducirTema\(combatTheme\(run\.capitulo, esJefe, defs\)\)/.test(combateSrc), 'la pantalla de combate elige la música con combatTheme');
+  const mainSrc = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  check(/escenaDM = await pantallaCombate\([^\n]*\n[^\n]*audio\.menu\(\)/.test(mainSrc), 'tras el combate del DM vuelve la música del tema principal');
+}
+
 // ── Parchment / cracked-rock card textures (WebGL, rendered once) ────────────
 console.log('\n📜 Textura de pergamino');
 try {

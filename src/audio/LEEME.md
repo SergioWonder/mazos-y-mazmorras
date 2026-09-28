@@ -4,7 +4,7 @@ El juego usa **efectos de sonido realistas** (MP3 en `sfx/`) y una
 **banda sonora original**, compuesta para el juego y sintetizada por código (Python +
 numpy, sin samples) por el agente `compositor-musical` (`.claude/agents/`).
 
-Hay un tema principal y, para cada acto, un tema de combate y un tema de jefe. Todos
+Hay un tema principal y, para cada acto, un tema de combate y un tema de jefe; el Dungeon Master tiene una pista propia que rompe con el resto (metalcore). Todos
 comparten un **leitmotiv** del héroe (re mayor: D A | B A F# | G F# E | D). Cada pista
 es un **bucle exacto**. `src/fx/music-tracks.ts` guarda cuántas muestras dura cada bucle,
 y el juego lo reproduce con Web Audio sin cortes, saltándose el relleno del MP3 si el
@@ -20,6 +20,7 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 | `jefe2.mp3` | Jefes del acto II | «Presagio», tensión ritual en mi frigio |
 | `cap3.mp3`  | Acto III: Guarida del Dragón y Laberinto | «Brasas y locura», amenaza sombría en mi frigio a 90 BPM, con el leitmotiv como eco lúgubre |
 | `jefe3.mp3` | Jefes del acto III | Combate final, la pista más épica |
+| `dm.mp3`    | El Dungeon Master | «Behind the Screen», metalcore progresivo instrumental en sol menor a 140 BPM; su intro suena una vez y queda fuera del bucle |
 
 Todas las pistas son MP3 a 160 kbps, 44,1 kHz y estéreo. Los scripts que las generan
 están en `scripts/musica/<pista>/` y solo necesitan Python 3, numpy y ffmpeg: por

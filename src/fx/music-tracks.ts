@@ -5,6 +5,7 @@
 export interface MusicTrack {
   file: string;        // file name inside src/audio/
   loopSamples: number; // exact loop length in samples at 44.1 kHz
+  introSamples?: number; // intro played once before the loop starts (samples at 44.1 kHz)
 }
 
 const SOURCE_RATE = 44100;
@@ -20,16 +21,29 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
   'cap3': { file: 'cap3.mp3', loopSamples: 3528000 },      // «Brasas y locura», E phrygian, 90 BPM
   'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor
+  'dm': { file: 'dm.mp3', loopSamples: 5065200, introSamples: 604800 }, // «Behind the Screen», G minor metalcore, 140 BPM
 };
+
+/** Theme of a combat: the Dungeon Master has his own track; the rest use the act's theme. */
+export function combatTheme(chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean }[]): string {
+  if (enemies.some((e) => e.dungeonMaster)) return 'dm';
+  return `cap${chapter + 1}${boss ? '-jefe' : ''}`;
+}
 
 /**
  * Loop points (seconds) inside a decoded track. Browsers that honour the LAME gapless
- * header return exactly the loop; others keep the codec delay at the start and some
- * padding at the end, so the loop starts after the delay.
+ * header return exactly the intro plus the loop; others keep the codec delay at the start
+ * and some padding at the end, so everything shifts by that delay. `begin` is where
+ * playback starts (the intro, if any) and the loop runs from `start` to `end`.
  */
-export function loopWindow(bufferDuration: number, loopSamples: number): { start: number; end: number } {
+export function loopWindow(bufferDuration: number, loopSamples: number, introSamples = 0): { start: number; end: number; begin: number } {
   const loop = loopSamples / SOURCE_RATE;
-  if (bufferDuration <= loop) return { start: 0, end: bufferDuration };
-  const start = bufferDuration - loop > 0.01 ? Math.min(MP3_DELAY_SAMPLES / SOURCE_RATE, bufferDuration - loop) : 0;
-  return { start, end: start + loop };
+  const intro = introSamples / SOURCE_RATE;
+  if (bufferDuration <= intro + loop) {
+    const start = Math.max(0, Math.min(intro, bufferDuration - loop));
+    return { start, end: bufferDuration, begin: 0 };
+  }
+  const extra = bufferDuration - intro - loop;
+  const begin = extra > 0.01 ? Math.min(MP3_DELAY_SAMPLES / SOURCE_RATE, extra) : 0;
+  return { start: begin + intro, end: begin + intro + loop, begin };
 }
