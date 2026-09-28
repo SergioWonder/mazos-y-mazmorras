@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790600897.327018,
-    "ast_hash": "289db563f2b8394d956e6a04ad8ca61e",
+    "mtime": 1790618405.8491952,
+    "ast_hash": "a466f0d2c65e4f5701e3d691ce4596c0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790600483.4545693,
-    "ast_hash": "722b4c9d0b951e2ffe364f930e9620bf",
+    "mtime": 1790618356.0051558,
+    "ast_hash": "092d297ee806775c1cb3e50673ecb739",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790600483.4563105,
-    "ast_hash": "87acb7fd76ade74775d3d6b6af857a4f",
+    "mtime": 1790618309.5168617,
+    "ast_hash": "4767e0ee8cdd709e0129394069e03d65",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790600897.3264868,
-    "ast_hash": "97cc519dbd82d6cda80831ff51a367a8",
+    "mtime": 1790618405.8486075,
+    "ast_hash": "afdc52f5712b8247e94657ad1614d5f1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -205,8 +205,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
-    "mtime": 1790532984.8819594,
-    "ast_hash": "366115142d08809e831d71f989e2f970",
+    "mtime": 1790618309.5164201,
+    "ast_hash": "0800de3b5417229d6508e7960b19a72b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/apple-touch-icon.png": {
@@ -2837,6 +2837,11 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/cuerno-manada.svg": {
     "mtime": 1790600811.2009227,
     "ast_hash": "737cb22fbf874625f59eeac89520ca26",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/carta-texto.ts": {
+    "mtime": 1790618357.572183,
+    "ast_hash": "1354599f8d61b4a6db6d7840f742c3b1",
     "semantic_hash": ""
   }
 }

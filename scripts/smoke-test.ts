@@ -5745,5 +5745,30 @@ console.log('\n🐺 Invocaciones del druida');
   check(300 - e.pv === 5, 'el bonus del Alma de la Manada y del Collar no se aplica a las efímeras del brujo');
 }
 
+// ── Typography: incised body face, sans-serif for small multi-line text ──────
+console.log('\n🔤 Tipografía');
+{
+  const fs = await import('node:fs');
+  const leer = (r: string) => fs.readFileSync(new URL(r, import.meta.url), 'utf8');
+  const base = leer('../src/estilos/base.css');
+  const cartasCss = leer('../src/estilos/cartas.css');
+  const html = leer('../index.html');
+  check(/--fuente-cuerpo:\s*'Marcellus'/.test(base) && !/Alegreya/.test(base), 'el cuerpo de texto usa una incisa (Marcellus), ya no Alegreya');
+  check(/--fuente-pequena:\s*'Fira Sans'[^;]*sans-serif/.test(base), 'hay una palo seco (Fira Sans) para los textos pequeños');
+  check(/family=Marcellus/.test(html) && /family=Fira\+Sans/.test(html) && !/Alegreya/.test(html), 'index.html carga Marcellus y Fira Sans (y no Alegreya)');
+  check(!/Alegreya/.test(fs.readdirSync(new URL('../src/estilos/', import.meta.url)).map((f: string) => leer(`../src/estilos/${f}`)).join('\n')),
+    'ningún estilo sigue pidiendo Alegreya');
+  const { textoDenso } = await import('../src/ui/carta-texto.ts');
+  check(textoDenso('Inflige 6 de daño.') === false && textoDenso('Inflige 8 de daño.\nRecibes 2 de daño.') === false, 'hasta dos líneas cortas: incisa');
+  check(textoDenso('Poder: tus Transformaciones duran\n1 turno más y, al lanzarlas,\nganas 6 de bloqueo.') === true, 'más de dos líneas: palo seco');
+  check(textoDenso('Gasta un conjuro: inflige 8 de daño (+4 por nivel) a TODOS los enemigos y los deja Vulnerables.') === true,
+    'un texto largo que se parte en más de dos líneas también cuenta');
+  check(textoDenso('Aplica 6 de Raíces a TODOS\nlos enemigos durante 1 turno.') === true, 'dos saltos de línea que en la carta ocupan tres también cuentan');
+  check(textoDenso('Inflige 3 de daño tres veces.') === false && textoDenso('Inflige 5 de daño.\nAplica 2 de Vulnerable.') === false, 'dos líneas que caben siguen en incisa');
+  check(/\.carta\.texto-denso \.carta-texto\s*\{[^}]*var\(--fuente-pequena\)/.test(cartasCss), 'las cartas con texto denso usan la palo seco');
+  check(/\.tooltip-global\s*\{[^}]*var\(--fuente-pequena\)/.test(base), 'los tooltips usan la palo seco');
+  check(/texto-denso/.test(leer('../src/ui/carta.ts')), 'renderCarta marca las cartas con texto denso');
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

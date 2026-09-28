@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.6.0';
+export const VERSION = '6.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.7.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '🔤 Nueva tipografía: el texto usa Marcellus, una incisa de inspiración romana, y los textos pequeños de más de dos líneas (cartas densas y ayudas) pasan a Fira Sans, una palo seco más legible en tamaño pequeño.',
+    ],
+  },
   {
     version: '6.6.0',
     fecha: '2026-09-28',

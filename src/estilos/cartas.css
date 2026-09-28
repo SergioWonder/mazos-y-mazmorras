@@ -195,6 +195,9 @@
 .carta-texto .val-arriba { color: #1c7c1f; font-weight: 700; }
 .carta-texto .val-abajo { color: #b3261e; font-weight: 700; }
 
+/* dense text (more than two lines): the sans-serif reads better at this size */
+.carta.texto-denso .carta-texto { font-family: var(--fuente-pequena); }
+
 /* textos largos: fuente progresivamente menor y arte más pequeño */
 .carta.texto-largo .carta-texto { font-size: 0.65rem; line-height: 1.16; }
 .carta.texto-largo .carta-arte { font-size: 2.3rem; }

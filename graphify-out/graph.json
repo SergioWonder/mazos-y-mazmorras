@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 96,
+      "community": 93,
       "norm_label": ".uid()"
     },
     {
@@ -3787,7 +3787,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L77",
       "id": "mapa_comun_map_kit_sketch_line",
-      "community": 96,
+      "community": 107,
       "norm_label": ".line()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 96,
+      "community": 93,
       "norm_label": ".dot()"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L360",
       "id": "mapa_comun_map_kit_mockup",
-      "community": 96,
+      "community": 107,
       "norm_label": "mockup()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 93,
+      "community": 108,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 93,
+      "community": 108,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 96,
+      "community": 93,
       "norm_label": "broadleaf()"
     },
     {
@@ -4156,7 +4156,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L772",
       "id": "mapa_comun_map_kit_offset_line",
-      "community": 87,
+      "community": 107,
       "norm_label": "offset_line()"
     },
     {
@@ -4165,7 +4165,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L784",
       "id": "mapa_comun_map_kit_river",
-      "community": 87,
+      "community": 107,
       "norm_label": "river()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 93,
+      "community": 108,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 96,
+      "community": 93,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4426,7 +4426,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L361",
       "id": "mapa_comun_map_kit_rationale_361",
-      "community": 96,
+      "community": 107,
       "norm_label": "review mock-up with node markers where the ui draws them (not delivered).      t"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 93,
+      "community": 108,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4480,7 +4480,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L785",
       "id": "mapa_comun_map_kit_rationale_785",
-      "community": 87,
+      "community": 107,
       "norm_label": "double-banked river along pts; width may be a function of t."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 93,
+      "community": 108,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 96,
+      "community": 93,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -6163,7 +6163,7 @@
       "source_file": "scripts/hero-tests/common.ts",
       "source_location": "L111",
       "id": "hero_tests_common_hsv",
-      "community": 97,
+      "community": 45,
       "norm_label": "hsv()"
     },
     {
@@ -15172,7 +15172,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L4",
       "id": "core_cartas_instanciar",
-      "community": 75,
+      "community": 67,
       "norm_label": "instanciar()"
     },
     {
@@ -15361,7 +15361,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3896",
       "id": "core_cartas_nuevamaldicion",
-      "community": 75,
+      "community": 97,
       "norm_label": "nuevamaldicion()"
     },
     {
@@ -15415,7 +15415,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L3946",
       "id": "core_cartas_cartaporid",
-      "community": 101,
+      "community": 46,
       "norm_label": "cartaporid()"
     },
     {
@@ -15469,7 +15469,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L79",
       "id": "core_combate_combate_constructor",
-      "community": 75,
+      "community": 86,
       "norm_label": ".constructor()"
     },
     {
@@ -15973,7 +15973,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L13",
       "id": "core_enemigos_goblin_cortador",
-      "community": 67,
+      "community": 0,
       "norm_label": "goblin_cortador"
     },
     {
@@ -15982,7 +15982,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L21",
       "id": "core_enemigos_goblin_arquero",
-      "community": 67,
+      "community": 0,
       "norm_label": "goblin_arquero"
     },
     {
@@ -16027,7 +16027,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L65",
       "id": "core_enemigos_goblin_famelico",
-      "community": 0,
+      "community": 23,
       "norm_label": "goblin_famelico"
     },
     {
@@ -16036,7 +16036,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L70",
       "id": "core_enemigos_jefe_ogro",
-      "community": 67,
+      "community": 109,
       "norm_label": "jefe_ogro"
     },
     {
@@ -16108,7 +16108,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L176",
       "id": "core_enemigos_senor_cripta",
-      "community": 67,
+      "community": 109,
       "norm_label": "senor_cripta"
     },
     {
@@ -16261,7 +16261,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L384",
       "id": "core_enemigos_imagen_ilusoria",
-      "community": 0,
+      "community": 104,
       "norm_label": "imagen_ilusoria"
     },
     {
@@ -16441,7 +16441,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L587",
       "id": "core_enemigos_observador",
-      "community": 0,
+      "community": 104,
       "norm_label": "observador"
     },
     {
@@ -16468,7 +16468,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L631",
       "id": "core_enemigos_dungeon_master",
-      "community": 0,
+      "community": 104,
       "norm_label": "dungeon_master"
     },
     {
@@ -16477,7 +16477,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L646",
       "id": "core_enemigos_capitulo",
-      "community": 0,
+      "community": 103,
       "norm_label": "capitulo"
     },
     {
@@ -16486,7 +16486,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L660",
       "id": "core_enemigos_actos",
-      "community": 46,
+      "community": 52,
       "norm_label": "actos"
     },
     {
@@ -16495,7 +16495,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L784",
       "id": "core_enemigos_crearenemigo",
-      "community": 86,
+      "community": 23,
       "norm_label": "crearenemigo()"
     },
     {
@@ -16576,7 +16576,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 26,
+      "community": 101,
       "norm_label": "escena-final.ts"
     },
     {
@@ -16585,7 +16585,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L8",
       "id": "core_escena_final_frases_dm",
-      "community": 26,
+      "community": 101,
       "norm_label": "frases_dm"
     },
     {
@@ -16594,7 +16594,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 26,
+      "community": 101,
       "norm_label": "intencion_dm"
     },
     {
@@ -16612,7 +16612,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 26,
+      "community": 101,
       "norm_label": "dias_agenda"
     },
     {
@@ -16621,7 +16621,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 26,
+      "community": 101,
       "norm_label": "diaagenda"
     },
     {
@@ -16630,7 +16630,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 26,
+      "community": 101,
       "norm_label": "lineaagenda"
     },
     {
@@ -16639,7 +16639,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 26,
+      "community": 101,
       "norm_label": "guion_agenda"
     },
     {
@@ -16648,7 +16648,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L97",
       "id": "core_escena_final_almacensimple",
-      "community": 26,
+      "community": 101,
       "norm_label": "almacensimple"
     },
     {
@@ -16657,7 +16657,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L102",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 26,
+      "community": 101,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -16666,7 +16666,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L111",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 26,
+      "community": 101,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -16675,7 +16675,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L120",
       "id": "core_escena_final_finalverdaderodesbloqueado",
-      "community": 26,
+      "community": 101,
       "norm_label": "finalverdaderodesbloqueado()"
     },
     {
@@ -16684,7 +16684,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L1",
       "id": "core_eventos",
-      "community": 75,
+      "community": 67,
       "norm_label": "eventos.ts"
     },
     {
@@ -16693,7 +16693,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L7",
       "id": "core_eventos_opcionevento",
-      "community": 75,
+      "community": 86,
       "norm_label": "opcionevento"
     },
     {
@@ -16702,7 +16702,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L13",
       "id": "core_eventos_eventodef",
-      "community": 75,
+      "community": 67,
       "norm_label": "eventodef"
     },
     {
@@ -16720,7 +16720,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L30",
       "id": "core_eventos_perderpv",
-      "community": 75,
+      "community": 67,
       "norm_label": "perderpv()"
     },
     {
@@ -16729,7 +16729,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L36",
       "id": "core_eventos_mejorables",
-      "community": 75,
+      "community": 67,
       "norm_label": "mejorables()"
     },
     {
@@ -16738,7 +16738,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L40",
       "id": "core_eventos_mejoraraleatorias",
-      "community": 75,
+      "community": 67,
       "norm_label": "mejoraraleatorias()"
     },
     {
@@ -16747,7 +16747,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L52",
       "id": "core_eventos_cartaaleatoria",
-      "community": 75,
+      "community": 67,
       "norm_label": "cartaaleatoria()"
     },
     {
@@ -16756,7 +16756,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L60",
       "id": "core_eventos_quitarcartabasica",
-      "community": 75,
+      "community": 67,
       "norm_label": "quitarcartabasica()"
     },
     {
@@ -16765,7 +16765,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L70",
       "id": "core_eventos_quitarcartaaleatoria",
-      "community": 75,
+      "community": 67,
       "norm_label": "quitarcartaaleatoria()"
     },
     {
@@ -16774,7 +16774,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L82",
       "id": "core_eventos_defnombre",
-      "community": 75,
+      "community": 67,
       "norm_label": "defnombre()"
     },
     {
@@ -16792,7 +16792,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L99",
       "id": "core_eventos_eventos_positivos",
-      "community": 75,
+      "community": 67,
       "norm_label": "eventos_positivos"
     },
     {
@@ -16801,7 +16801,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L296",
       "id": "core_eventos_eventos_negativos",
-      "community": 75,
+      "community": 67,
       "norm_label": "eventos_negativos"
     },
     {
@@ -16810,7 +16810,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L368",
       "id": "core_eventos_elegirevento",
-      "community": 46,
+      "community": 103,
       "norm_label": "elegirevento()"
     },
     {
@@ -16819,7 +16819,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 101,
+      "community": 46,
       "norm_label": "guardado.ts"
     },
     {
@@ -16828,7 +16828,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L9",
       "id": "core_guardado_guardado",
-      "community": 101,
+      "community": 86,
       "norm_label": "guardado"
     },
     {
@@ -16837,7 +16837,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L30",
       "id": "core_guardado_serializarrun",
-      "community": 101,
+      "community": 46,
       "norm_label": "serializarrun()"
     },
     {
@@ -16846,7 +16846,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L51",
       "id": "core_guardado_rehidratarrun",
-      "community": 101,
+      "community": 46,
       "norm_label": "rehidratarrun()"
     },
     {
@@ -16855,7 +16855,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L90",
       "id": "core_guardado_guardarrun",
-      "community": 101,
+      "community": 46,
       "norm_label": "guardarrun()"
     },
     {
@@ -16864,7 +16864,7 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L98",
       "id": "core_guardado_cargarrun",
-      "community": 101,
+      "community": 46,
       "norm_label": "cargarrun()"
     },
     {
@@ -16891,7 +16891,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 46,
+      "community": 100,
       "norm_label": "mapa.ts"
     },
     {
@@ -16900,7 +16900,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L8",
       "id": "core_mapa_generarmapa",
-      "community": 46,
+      "community": 100,
       "norm_label": "generarmapa()"
     },
     {
@@ -16909,7 +16909,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L94",
       "id": "core_mapa_tipos_mision",
-      "community": 46,
+      "community": 100,
       "norm_label": "tipos_mision"
     },
     {
@@ -16918,7 +16918,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L96",
       "id": "core_mapa_distancia_mision",
-      "community": 46,
+      "community": 100,
       "norm_label": "distancia_mision"
     },
     {
@@ -16927,7 +16927,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L99",
       "id": "core_mapa_alcanzablesdesde",
-      "community": 46,
+      "community": 100,
       "norm_label": "alcanzablesdesde()"
     },
     {
@@ -16936,7 +16936,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L115",
       "id": "core_mapa_esalcanzable",
-      "community": 46,
+      "community": 100,
       "norm_label": "esalcanzable()"
     },
     {
@@ -16945,7 +16945,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L121",
       "id": "core_mapa_candidatosmision",
-      "community": 46,
+      "community": 100,
       "norm_label": "candidatosmision()"
     },
     {
@@ -16954,7 +16954,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L135",
       "id": "core_mapa_colocartabernas",
-      "community": 46,
+      "community": 100,
       "norm_label": "colocartabernas()"
     },
     {
@@ -16963,7 +16963,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L157",
       "id": "core_mapa_nodosdisponibles",
-      "community": 52,
+      "community": 100,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -17080,7 +17080,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L1",
       "id": "core_reliquias",
-      "community": 75,
+      "community": 97,
       "norm_label": "reliquias.ts"
     },
     {
@@ -17098,7 +17098,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L14",
       "id": "core_reliquias_mejoraralazar",
-      "community": 75,
+      "community": 97,
       "norm_label": "mejoraralazar()"
     },
     {
@@ -17107,7 +17107,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L23",
       "id": "core_reliquias_primeravez",
-      "community": 75,
+      "community": 97,
       "norm_label": "primeravez()"
     },
     {
@@ -17116,7 +17116,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L31",
       "id": "core_reliquias_totem_roble",
-      "community": 75,
+      "community": 97,
       "norm_label": "totem_roble"
     },
     {
@@ -17125,7 +17125,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L37",
       "id": "core_reliquias_hacha_ancestro",
-      "community": 75,
+      "community": 97,
       "norm_label": "hacha_ancestro"
     },
     {
@@ -17134,7 +17134,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L43",
       "id": "core_reliquias_pendulo_ambar",
-      "community": 75,
+      "community": 97,
       "norm_label": "pendulo_ambar"
     },
     {
@@ -17143,7 +17143,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L49",
       "id": "core_reliquias_guante_ladron",
-      "community": 75,
+      "community": 97,
       "norm_label": "guante_ladron"
     },
     {
@@ -17161,7 +17161,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L66",
       "id": "core_reliquias_iniciales",
-      "community": 75,
+      "community": 97,
       "norm_label": "iniciales"
     },
     {
@@ -17170,7 +17170,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L71",
       "id": "core_reliquias_reliquiainicial",
-      "community": 75,
+      "community": 97,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -17179,7 +17179,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L77",
       "id": "core_reliquias_generales",
-      "community": 75,
+      "community": 97,
       "norm_label": "generales"
     },
     {
@@ -17188,7 +17188,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L336",
       "id": "core_reliquias_de_druida",
-      "community": 75,
+      "community": 97,
       "norm_label": "de_druida"
     },
     {
@@ -17197,7 +17197,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L375",
       "id": "core_reliquias_de_barbaro",
-      "community": 75,
+      "community": 97,
       "norm_label": "de_barbaro"
     },
     {
@@ -17206,7 +17206,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L409",
       "id": "core_reliquias_de_mago",
-      "community": 75,
+      "community": 97,
       "norm_label": "de_mago"
     },
     {
@@ -17215,7 +17215,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L449",
       "id": "core_reliquias_de_picaro",
-      "community": 75,
+      "community": 97,
       "norm_label": "de_picaro"
     },
     {
@@ -17224,7 +17224,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L477",
       "id": "core_reliquias_de_brujo",
-      "community": 75,
+      "community": 97,
       "norm_label": "de_brujo"
     },
     {
@@ -17242,7 +17242,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L562",
       "id": "core_reliquias_reliquiaporid",
-      "community": 101,
+      "community": 46,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -17251,7 +17251,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L568",
       "id": "core_reliquias_reliquiasdisponibles",
-      "community": 75,
+      "community": 97,
       "norm_label": "reliquiasdisponibles()"
     },
     {
@@ -17260,7 +17260,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L576",
       "id": "core_reliquias_peso_rareza",
-      "community": 75,
+      "community": 97,
       "norm_label": "peso_rareza"
     },
     {
@@ -17269,7 +17269,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L586",
       "id": "core_reliquias_elegirponderado",
-      "community": 75,
+      "community": 97,
       "norm_label": "elegirponderado()"
     },
     {
@@ -17278,7 +17278,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L598",
       "id": "core_reliquias_sortearreliquia",
-      "community": 75,
+      "community": 97,
       "norm_label": "sortearreliquia()"
     },
     {
@@ -17296,7 +17296,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L621",
       "id": "core_reliquias_nombre_rareza_reliquia",
-      "community": 75,
+      "community": 100,
       "norm_label": "nombre_rareza_reliquia"
     },
     {
@@ -17305,7 +17305,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L1",
       "id": "core_rng",
-      "community": 46,
+      "community": 100,
       "norm_label": "rng.ts"
     },
     {
@@ -17323,7 +17323,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L13",
       "id": "core_rng_entre",
-      "community": 46,
+      "community": 100,
       "norm_label": "entre()"
     },
     {
@@ -17332,7 +17332,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L17",
       "id": "core_rng_elegir",
-      "community": 46,
+      "community": 100,
       "norm_label": "elegir()"
     },
     {
@@ -17350,7 +17350,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L1",
       "id": "core_run",
-      "community": 75,
+      "community": 97,
       "norm_label": "run.ts"
     },
     {
@@ -17377,7 +17377,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L41",
       "id": "core_run_curadedescanso",
-      "community": 75,
+      "community": 97,
       "norm_label": "curadedescanso()"
     },
     {
@@ -17386,7 +17386,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L48",
       "id": "core_run_descansar",
-      "community": 75,
+      "community": 97,
       "norm_label": "descansar()"
     },
     {
@@ -17395,7 +17395,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L56",
       "id": "core_run_maldicionesde",
-      "community": 75,
+      "community": 97,
       "norm_label": "maldicionesde()"
     },
     {
@@ -17404,7 +17404,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L61",
       "id": "core_run_purificar",
-      "community": 75,
+      "community": 97,
       "norm_label": "purificar()"
     },
     {
@@ -17413,7 +17413,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L69",
       "id": "core_run_anadirmaldicion",
-      "community": 75,
+      "community": 97,
       "norm_label": "anadirmaldicion()"
     },
     {
@@ -17422,7 +17422,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L76",
       "id": "core_run_afilarcarta",
-      "community": 75,
+      "community": 97,
       "norm_label": "afilarcarta()"
     },
     {
@@ -17431,7 +17431,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L84",
       "id": "core_run_anadircarta",
-      "community": 75,
+      "community": 67,
       "norm_label": "anadircarta()"
     },
     {
@@ -17458,7 +17458,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L107",
       "id": "core_run_pesoraroefectivo",
-      "community": 75,
+      "community": 97,
       "norm_label": "pesoraroefectivo()"
     },
     {
@@ -17476,7 +17476,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L1",
       "id": "core_taberna",
-      "community": 46,
+      "community": 100,
       "norm_label": "taberna.ts"
     },
     {
@@ -17485,7 +17485,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L9",
       "id": "core_taberna_plantillarumor",
-      "community": 46,
+      "community": 100,
       "norm_label": "plantillarumor"
     },
     {
@@ -17494,7 +17494,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L17",
       "id": "core_taberna_rumortaberna",
-      "community": 46,
+      "community": 100,
       "norm_label": "rumortaberna"
     },
     {
@@ -17503,7 +17503,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L25",
       "id": "core_taberna_rumores",
-      "community": 46,
+      "community": 100,
       "norm_label": "rumores"
     },
     {
@@ -17512,7 +17512,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L60",
       "id": "core_taberna_distancias",
-      "community": 46,
+      "community": 100,
       "norm_label": "distancias"
     },
     {
@@ -17521,7 +17521,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L62",
       "id": "core_taberna_barajar",
-      "community": 46,
+      "community": 100,
       "norm_label": "barajar()"
     },
     {
@@ -17530,7 +17530,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L73",
       "id": "core_taberna_rumorestaberna",
-      "community": 46,
+      "community": 100,
       "norm_label": "rumorestaberna()"
     },
     {
@@ -17539,7 +17539,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L106",
       "id": "core_taberna_aceptarrumor",
-      "community": 46,
+      "community": 100,
       "norm_label": "aceptarrumor()"
     },
     {
@@ -17566,7 +17566,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L135",
       "id": "core_taberna_curajarra",
-      "community": 46,
+      "community": 100,
       "norm_label": "curajarra()"
     },
     {
@@ -17575,7 +17575,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L140",
       "id": "core_taberna_beberjarra",
-      "community": 46,
+      "community": 100,
       "norm_label": "beberjarra()"
     },
     {
@@ -17593,7 +17593,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 101,
+      "community": 86,
       "norm_label": "claseid"
     },
     {
@@ -17611,7 +17611,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L6",
       "id": "core_types_rareza",
-      "community": 75,
+      "community": 84,
       "norm_label": "rareza"
     },
     {
@@ -17683,7 +17683,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L106",
       "id": "core_types_luchador",
-      "community": 86,
+      "community": 23,
       "norm_label": "luchador"
     },
     {
@@ -17701,7 +17701,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L117",
       "id": "core_types_movimiento",
-      "community": 0,
+      "community": 23,
       "norm_label": "movimiento"
     },
     {
@@ -17710,7 +17710,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L143",
       "id": "core_types_enemigodef",
-      "community": 0,
+      "community": 86,
       "norm_label": "enemigodef"
     },
     {
@@ -17737,7 +17737,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L198",
       "id": "core_types_jugadorcombate",
-      "community": 86,
+      "community": 23,
       "norm_label": "jugadorcombate"
     },
     {
@@ -17746,7 +17746,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L223",
       "id": "core_types_cartadef",
-      "community": 75,
+      "community": 97,
       "norm_label": "cartadef"
     },
     {
@@ -17782,7 +17782,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L412",
       "id": "core_types_tiponodo",
-      "community": 46,
+      "community": 100,
       "norm_label": "tiponodo"
     },
     {
@@ -17791,7 +17791,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L415",
       "id": "core_types_misiontaberna",
-      "community": 101,
+      "community": 86,
       "norm_label": "misiontaberna"
     },
     {
@@ -17800,7 +17800,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L421",
       "id": "core_types_nodomapa",
-      "community": 101,
+      "community": 86,
       "norm_label": "nodomapa"
     },
     {
@@ -17827,7 +17827,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L439",
       "id": "core_types_origenreliquia",
-      "community": 75,
+      "community": 86,
       "norm_label": "origenreliquia"
     },
     {
@@ -17863,7 +17863,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L542",
       "id": "core_types_estadorun",
-      "community": 75,
+      "community": 86,
       "norm_label": "estadorun"
     },
     {
@@ -18070,7 +18070,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L112",
       "id": "fx_audio_temas",
-      "community": 101,
+      "community": 46,
       "norm_label": "temas"
     },
     {
@@ -20365,7 +20365,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1086",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 26,
+      "community": 101,
       "norm_label": "enemy_rigs"
     },
     {
@@ -20536,7 +20536,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L36",
       "id": "fx_hero_rig_formfromlabel",
-      "community": 19,
+      "community": 6,
       "norm_label": "formfromlabel()"
     },
     {
@@ -20545,7 +20545,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L42",
       "id": "fx_hero_rig_currentform",
-      "community": 19,
+      "community": 6,
       "norm_label": "currentform()"
     },
     {
@@ -21013,7 +21013,7 @@
       "source_file": "src/fx/heroes/druida.ts",
       "source_location": "L169",
       "id": "heroes_druida_formid",
-      "community": 0,
+      "community": 104,
       "norm_label": "formid"
     },
     {
@@ -21670,7 +21670,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L227",
       "id": "fx_particle_gl_particlerenderergl_colour",
-      "community": 97,
+      "community": 17,
       "norm_label": ".colour()"
     },
     {
@@ -22003,7 +22003,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L204",
       "id": "fx_particulas_fx",
-      "community": 46,
+      "community": 103,
       "norm_label": "fx"
     },
     {
@@ -22012,7 +22012,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L1",
       "id": "fx_puppet_gpu",
-      "community": 97,
+      "community": 45,
       "norm_label": "puppet-gpu.ts"
     },
     {
@@ -22021,7 +22021,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L12",
       "id": "fx_puppet_gpu_bone_index",
-      "community": 97,
+      "community": 45,
       "norm_label": "bone_index"
     },
     {
@@ -22030,7 +22030,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L22",
       "id": "fx_puppet_gpu_shape_code",
-      "community": 97,
+      "community": 45,
       "norm_label": "shape_code"
     },
     {
@@ -22039,7 +22039,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L23",
       "id": "fx_puppet_gpu_flag",
-      "community": 97,
+      "community": 45,
       "norm_label": "flag"
     },
     {
@@ -22048,7 +22048,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L26",
       "id": "fx_puppet_gpu_hexrgb",
-      "community": 97,
+      "community": 45,
       "norm_label": "hexrgb()"
     },
     {
@@ -22057,7 +22057,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L28",
       "id": "fx_puppet_gpu_rgbhex",
-      "community": 97,
+      "community": 45,
       "norm_label": "rgbhex()"
     },
     {
@@ -22066,7 +22066,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L29",
       "id": "fx_puppet_gpu_lighten",
-      "community": 97,
+      "community": 45,
       "norm_label": "lighten()"
     },
     {
@@ -22075,7 +22075,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L32",
       "id": "fx_puppet_gpu_shadowof",
-      "community": 97,
+      "community": 45,
       "norm_label": "shadowof()"
     },
     {
@@ -22084,7 +22084,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L50",
       "id": "fx_puppet_gpu_parsecolour",
-      "community": 97,
+      "community": 45,
       "norm_label": "parsecolour()"
     },
     {
@@ -22093,7 +22093,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L56",
       "id": "fx_puppet_gpu_shapebbox",
-      "community": 97,
+      "community": 45,
       "norm_label": "shapebbox()"
     },
     {
@@ -22102,7 +22102,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L73",
       "id": "fx_puppet_gpu_packrig",
-      "community": 97,
+      "community": 45,
       "norm_label": "packrig()"
     },
     {
@@ -22120,7 +22120,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L119",
       "id": "fx_puppet_gpu_multiply",
-      "community": 54,
+      "community": 45,
       "norm_label": "multiply()"
     },
     {
@@ -22138,7 +22138,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L11",
       "id": "fx_puppet_chain_slots",
-      "community": 97,
+      "community": 10,
       "norm_label": "chain_slots"
     },
     {
@@ -22336,7 +22336,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L193",
       "id": "fx_puppet_emissive",
-      "community": 97,
+      "community": 45,
       "norm_label": "emissive"
     },
     {
@@ -22345,7 +22345,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L198",
       "id": "fx_puppet_eyes",
-      "community": 97,
+      "community": 45,
       "norm_label": "eyes"
     },
     {
@@ -23956,7 +23956,7 @@
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L20",
       "id": "ui_bendicion_contenidoopcion",
-      "community": 52,
+      "community": 75,
       "norm_label": "contenidoopcion()"
     },
     {
@@ -23974,7 +23974,7 @@
       "source_file": "src/ui/capitulo.ts",
       "source_location": "L1",
       "id": "ui_capitulo",
-      "community": 46,
+      "community": 103,
       "norm_label": "capitulo.ts"
     },
     {
@@ -24352,7 +24352,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L1",
       "id": "ui_card_svgs",
-      "community": 59,
+      "community": 106,
       "norm_label": "card-svgs.ts"
     },
     {
@@ -24361,7 +24361,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L4",
       "id": "ui_card_svgs_svgtable",
-      "community": 59,
+      "community": 106,
       "norm_label": "svgtable"
     },
     {
@@ -24370,7 +24370,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L14",
       "id": "ui_card_svgs_picksvg",
-      "community": 59,
+      "community": 106,
       "norm_label": "picksvg()"
     },
     {
@@ -24379,7 +24379,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L19",
       "id": "ui_card_svgs_cardsvgurl",
-      "community": 59,
+      "community": 106,
       "norm_label": "cardsvgurl()"
     },
     {
@@ -24388,7 +24388,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L25",
       "id": "ui_card_svgs_bitmaps",
-      "community": 59,
+      "community": 106,
       "norm_label": "bitmaps"
     },
     {
@@ -24397,7 +24397,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L26",
       "id": "ui_card_svgs_pending",
-      "community": 59,
+      "community": 106,
       "norm_label": "pending"
     },
     {
@@ -24406,7 +24406,7 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L28",
       "id": "ui_card_svgs_rasterise",
-      "community": 59,
+      "community": 106,
       "norm_label": "rasterise()"
     },
     {
@@ -24415,8 +24415,26 @@
       "source_file": "src/ui/card-svgs.ts",
       "source_location": "L43",
       "id": "ui_card_svgs_cardartbitmap",
-      "community": 59,
+      "community": 106,
       "norm_label": "cardartbitmap()"
+    },
+    {
+      "label": "carta-texto.ts",
+      "file_type": "code",
+      "source_file": "src/ui/carta-texto.ts",
+      "source_location": "L1",
+      "id": "ui_carta_texto",
+      "community": 59,
+      "norm_label": "carta-texto.ts"
+    },
+    {
+      "label": "textoDenso()",
+      "file_type": "code",
+      "source_file": "src/ui/carta-texto.ts",
+      "source_location": "L9",
+      "id": "ui_carta_texto_textodenso",
+      "community": 59,
+      "norm_label": "textodenso()"
     },
     {
       "label": "carta.ts",
@@ -24431,7 +24449,7 @@
       "label": "NOMBRE_TIPO",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L11",
+      "source_location": "L12",
       "id": "ui_carta_nombre_tipo",
       "community": 59,
       "norm_label": "nombre_tipo"
@@ -24440,7 +24458,7 @@
       "label": "norm()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "ui_carta_norm",
       "community": 59,
       "norm_label": "norm()"
@@ -24449,7 +24467,7 @@
       "label": "Clave",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "ui_carta_clave",
       "community": 59,
       "norm_label": "clave"
@@ -24458,7 +24476,7 @@
       "label": "DESC_TIPO",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L21",
+      "source_location": "L22",
       "id": "ui_carta_desc_tipo",
       "community": 59,
       "norm_label": "desc_tipo"
@@ -24467,7 +24485,7 @@
       "label": "ESTADOS_CLAVE",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L29",
+      "source_location": "L30",
       "id": "ui_carta_estados_clave",
       "community": 59,
       "norm_label": "estados_clave"
@@ -24476,7 +24494,7 @@
       "label": "CLAVES_EXTRA",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L36",
+      "source_location": "L37",
       "id": "ui_carta_claves_extra",
       "community": 59,
       "norm_label": "claves_extra"
@@ -24485,7 +24503,7 @@
       "label": "palabrasClaveDe()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L74",
+      "source_location": "L75",
       "id": "ui_carta_palabrasclavede",
       "community": 59,
       "norm_label": "palabrasclavede()"
@@ -24494,7 +24512,7 @@
       "label": "cuadroPalabrasClave()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L91",
+      "source_location": "L92",
       "id": "ui_carta_cuadropalabrasclave",
       "community": 59,
       "norm_label": "cuadropalabrasclave()"
@@ -24503,7 +24521,7 @@
       "label": "ICONO_CLASE",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L101",
+      "source_location": "L102",
       "id": "ui_carta_icono_clase",
       "community": 59,
       "norm_label": "icono_clase"
@@ -24512,7 +24530,7 @@
       "label": "EFECTO_CONJURO",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L106",
+      "source_location": "L107",
       "id": "ui_carta_efecto_conjuro",
       "community": 59,
       "norm_label": "efecto_conjuro"
@@ -24521,7 +24539,7 @@
       "label": "ModsCarta",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L114",
+      "source_location": "L115",
       "id": "ui_carta_modscarta",
       "community": 59,
       "norm_label": "modscarta"
@@ -24530,7 +24548,7 @@
       "label": "formatearTexto()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L128",
+      "source_location": "L129",
       "id": "ui_carta_formateartexto",
       "community": 59,
       "norm_label": "formateartexto()"
@@ -24539,7 +24557,7 @@
       "label": "valorMod()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L143",
+      "source_location": "L144",
       "id": "ui_carta_valormod",
       "community": 59,
       "norm_label": "valormod()"
@@ -24548,7 +24566,7 @@
       "label": "tamAjustado",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L154",
+      "source_location": "L155",
       "id": "ui_carta_tamajustado",
       "community": 59,
       "norm_label": "tamajustado"
@@ -24557,7 +24575,7 @@
       "label": "ajustarTexto()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L156",
+      "source_location": "L157",
       "id": "ui_carta_ajustartexto",
       "community": 59,
       "norm_label": "ajustartexto()"
@@ -24566,7 +24584,7 @@
       "label": "renderCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L180",
+      "source_location": "L181",
       "id": "ui_carta_rendercarta",
       "community": 59,
       "norm_label": "rendercarta()"
@@ -24575,7 +24593,7 @@
       "label": "actualizarTextoCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L252",
+      "source_location": "L254",
       "id": "ui_carta_actualizartextocarta",
       "community": 59,
       "norm_label": "actualizartextocarta()"
@@ -24584,7 +24602,7 @@
       "label": "ARTE_CARTA",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L259",
+      "source_location": "L261",
       "id": "ui_carta_arte_carta",
       "community": 59,
       "norm_label": "arte_carta"
@@ -24593,7 +24611,7 @@
       "label": "arteDeCarta()",
       "file_type": "code",
       "source_file": "src/ui/carta.ts",
-      "source_location": "L329",
+      "source_location": "L331",
       "id": "ui_carta_artedecarta",
       "community": 59,
       "norm_label": "artedecarta()"
@@ -24748,7 +24766,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L49",
       "id": "ui_compendio_pantallacompendio",
-      "community": 84,
+      "community": 26,
       "norm_label": "pantallacompendio()"
     },
     {
@@ -24757,7 +24775,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L139",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 26,
+      "community": 84,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -24784,7 +24802,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L1",
       "id": "ui_evento",
-      "community": 46,
+      "community": 103,
       "norm_label": "evento.ts"
     },
     {
@@ -24802,7 +24820,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L1",
       "id": "ui_fin",
-      "community": 26,
+      "community": 81,
       "norm_label": "fin.ts"
     },
     {
@@ -24811,7 +24829,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L14",
       "id": "ui_fin_eleccionfin",
-      "community": 26,
+      "community": 81,
       "norm_label": "eleccionfin"
     },
     {
@@ -24820,7 +24838,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L17",
       "id": "ui_fin_siluetacaida",
-      "community": 26,
+      "community": 81,
       "norm_label": "siluetacaida()"
     },
     {
@@ -24829,7 +24847,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L31",
       "id": "ui_fin_epilogo",
-      "community": 26,
+      "community": 81,
       "norm_label": "epilogo"
     },
     {
@@ -24847,7 +24865,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 26,
+      "community": 101,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -24856,7 +24874,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 26,
+      "community": 101,
       "norm_label": "nombre_clase"
     },
     {
@@ -24865,7 +24883,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 26,
+      "community": 101,
       "norm_label": "izquierda"
     },
     {
@@ -24874,7 +24892,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 26,
+      "community": 101,
       "norm_label": "derecha"
     },
     {
@@ -24883,7 +24901,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L26",
       "id": "ui_final_verdadero_pantallafinalverdadero",
-      "community": 26,
+      "community": 101,
       "norm_label": "pantallafinalverdadero()"
     },
     {
@@ -24892,7 +24910,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L1",
       "id": "ui_gallery_catalogue",
-      "community": 0,
+      "community": 104,
       "norm_label": "gallery-catalogue.ts"
     },
     {
@@ -24910,7 +24928,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L18",
       "id": "ui_gallery_catalogue_gallerysection",
-      "community": 0,
+      "community": 104,
       "norm_label": "gallerysection"
     },
     {
@@ -24919,7 +24937,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L26",
       "id": "ui_gallery_catalogue_heroes",
-      "community": 0,
+      "community": 104,
       "norm_label": "heroes"
     },
     {
@@ -24928,7 +24946,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L29",
       "id": "ui_gallery_catalogue_forms",
-      "community": 0,
+      "community": 104,
       "norm_label": "forms"
     },
     {
@@ -24937,7 +24955,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L33",
       "id": "ui_gallery_catalogue_invocations",
-      "community": 0,
+      "community": 104,
       "norm_label": "invocations"
     },
     {
@@ -24946,7 +24964,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L39",
       "id": "ui_gallery_catalogue_boss_summons",
-      "community": 0,
+      "community": 104,
       "norm_label": "boss_summons"
     },
     {
@@ -24955,7 +24973,7 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L43",
       "id": "ui_gallery_catalogue_gallerycatalogue",
-      "community": 13,
+      "community": 104,
       "norm_label": "gallerycatalogue()"
     },
     {
@@ -25063,7 +25081,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L1",
       "id": "ui_instalar",
-      "community": 26,
+      "community": 105,
       "norm_label": "instalar.ts"
     },
     {
@@ -25072,7 +25090,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L10",
       "id": "ui_instalar_avisoinstalacion",
-      "community": 26,
+      "community": 105,
       "norm_label": "avisoinstalacion()"
     },
     {
@@ -25279,7 +25297,7 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L25",
       "id": "ui_mapa_inkimg",
-      "community": 52,
+      "community": 106,
       "norm_label": "inkimg()"
     },
     {
@@ -25441,7 +25459,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L265",
       "id": "ui_puppet_sprite_setspritetimescale",
-      "community": 19,
+      "community": 45,
       "norm_label": "setspritetimescale()"
     },
     {
@@ -25450,7 +25468,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L270",
       "id": "ui_puppet_sprite_spriteclock",
-      "community": 13,
+      "community": 81,
       "norm_label": "spriteclock()"
     },
     {
@@ -25684,7 +25702,7 @@
       "source_file": "src/ui/puppet-stage.ts",
       "source_location": "L453",
       "id": "ui_puppet_stage_puppetstage_fillbones",
-      "community": 54,
+      "community": 45,
       "norm_label": ".fillbones()"
     },
     {
@@ -25720,7 +25738,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L1",
       "id": "ui_recompensa",
-      "community": 75,
+      "community": 97,
       "norm_label": "recompensa.ts"
     },
     {
@@ -25756,7 +25774,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L1",
       "id": "ui_relic_art",
-      "community": 52,
+      "community": 75,
       "norm_label": "relic-art.ts"
     },
     {
@@ -25765,7 +25783,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L4",
       "id": "ui_relic_art_svgtable",
-      "community": 52,
+      "community": 75,
       "norm_label": "svgtable"
     },
     {
@@ -25774,7 +25792,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L11",
       "id": "ui_relic_art_pickrelicsvg",
-      "community": 52,
+      "community": 75,
       "norm_label": "pickrelicsvg()"
     },
     {
@@ -25783,7 +25801,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L15",
       "id": "ui_relic_art_reliclike",
-      "community": 52,
+      "community": 75,
       "norm_label": "reliclike"
     },
     {
@@ -25792,7 +25810,7 @@
       "source_file": "src/ui/relic-art.ts",
       "source_location": "L19",
       "id": "ui_relic_art_relicicon",
-      "community": 52,
+      "community": 75,
       "norm_label": "relicicon()"
     },
     {
@@ -25801,7 +25819,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L1",
       "id": "ui_scene_art",
-      "community": 46,
+      "community": 103,
       "norm_label": "scene-art.ts"
     },
     {
@@ -25810,7 +25828,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L9",
       "id": "ui_scene_art_urltable",
-      "community": 46,
+      "community": 103,
       "norm_label": "urltable"
     },
     {
@@ -25819,7 +25837,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L16",
       "id": "ui_scene_art_portrait_scenes",
-      "community": 46,
+      "community": 103,
       "norm_label": "portrait_scenes"
     },
     {
@@ -25828,7 +25846,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L19",
       "id": "ui_scene_art_chaptersceneid",
-      "community": 46,
+      "community": 103,
       "norm_label": "chaptersceneid()"
     },
     {
@@ -25837,7 +25855,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L28",
       "id": "ui_scene_art_eventsceneid",
-      "community": 46,
+      "community": 103,
       "norm_label": "eventsceneid()"
     },
     {
@@ -25846,7 +25864,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L31",
       "id": "ui_scene_art_picksceneart",
-      "community": 46,
+      "community": 103,
       "norm_label": "picksceneart()"
     },
     {
@@ -25855,7 +25873,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L36",
       "id": "ui_scene_art_scenefigure",
-      "community": 46,
+      "community": 103,
       "norm_label": "scenefigure()"
     },
     {
@@ -25864,7 +25882,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L43",
       "id": "ui_scene_art_sceneart",
-      "community": 46,
+      "community": 103,
       "norm_label": "sceneart()"
     },
     {
@@ -25873,7 +25891,7 @@
       "source_file": "src/ui/taberna.ts",
       "source_location": "L1",
       "id": "ui_taberna",
-      "community": 46,
+      "community": 100,
       "norm_label": "taberna.ts"
     },
     {
@@ -25882,7 +25900,7 @@
       "source_file": "src/ui/taberna.ts",
       "source_location": "L9",
       "id": "ui_taberna_lugar_mision",
-      "community": 46,
+      "community": 100,
       "norm_label": "lugar_mision"
     },
     {
@@ -25936,7 +25954,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L1",
       "id": "ui_util",
-      "community": 26,
+      "community": 105,
       "norm_label": "util.ts"
     },
     {
@@ -25945,7 +25963,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L3",
       "id": "ui_util_el",
-      "community": 26,
+      "community": 105,
       "norm_label": "el()"
     },
     {
@@ -25954,7 +25972,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L14",
       "id": "ui_util_espera",
-      "community": 26,
+      "community": 101,
       "norm_label": "espera()"
     },
     {
@@ -25963,7 +25981,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L18",
       "id": "ui_util_centrode",
-      "community": 26,
+      "community": 105,
       "norm_label": "centrode()"
     },
     {
@@ -25972,7 +25990,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L25",
       "id": "ui_util_numeroflotante",
-      "community": 26,
+      "community": 105,
       "norm_label": "numeroflotante()"
     },
     {
@@ -25981,7 +25999,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L39",
       "id": "ui_util_sacudir",
-      "community": 26,
+      "community": 105,
       "norm_label": "sacudir()"
     },
     {
@@ -25990,7 +26008,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L47",
       "id": "ui_util_anuncio",
-      "community": 46,
+      "community": 105,
       "norm_label": "anuncio()"
     },
     {
@@ -25999,7 +26017,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L58",
       "id": "ui_util_iniciartooltips",
-      "community": 26,
+      "community": 105,
       "norm_label": "iniciartooltips()"
     },
     {
@@ -26008,7 +26026,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L91",
       "id": "ui_util_icono_estado",
-      "community": 26,
+      "community": 105,
       "norm_label": "icono_estado"
     },
     {
@@ -26017,7 +26035,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L111",
       "id": "ui_util_nombre_estado",
-      "community": 26,
+      "community": 105,
       "norm_label": "nombre_estado"
     },
     {
@@ -26035,7 +26053,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L206",
       "id": "ui_util_tipestado",
-      "community": 26,
+      "community": 105,
       "norm_label": "tipestado()"
     },
     {
@@ -26772,7 +26790,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L177",
-      "community": 0,
+      "community": 104,
       "norm_label": "formid",
       "id": "fx_hero_rig_formid"
     },
@@ -27474,7 +27492,7 @@
       "file_type": "code",
       "source_file": "src/ui/bendicion.ts",
       "source_location": "L8",
-      "community": 75,
+      "community": 86,
       "norm_label": "don",
       "id": "ui_bendicion_don"
     },
@@ -28005,7 +28023,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L66",
-      "community": 26,
+      "community": 81,
       "norm_label": "action_duration",
       "id": "fx_hero_rig_action_duration"
     },
@@ -28543,7 +28561,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 46,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -28751,7 +28769,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 0,
+      "community": 23,
       "norm_label": "intencion enemiga",
       "id": "readme_intencion_enemiga"
     },
@@ -28855,7 +28873,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 46,
+      "community": 103,
       "norm_label": "eventos narrativos",
       "id": "readme_eventos_narrativos"
     },
@@ -28881,7 +28899,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 46,
+      "community": 100,
       "norm_label": "mapa de 10 filas por capitulo",
       "id": "readme_mapa_capitulo"
     },
@@ -28894,7 +28912,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 67,
+      "community": 109,
       "norm_label": "jefes unicos con rasgo propio",
       "id": "readme_jefes_unicos"
     },
@@ -28985,7 +29003,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 46,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -28998,7 +29016,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 46,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -103665,6 +103683,49 @@
       "target": "ui_card_svgs_cardartbitmap"
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "ui_carta",
+      "target": "ui_carta_texto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/carta-texto.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "ui_carta_texto",
+      "target": "ui_carta_texto_textodenso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "ui_carta",
+      "target": "ui_carta_texto_textodenso",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/carta.ts",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "ui_carta_rendercarta",
+      "target": "ui_carta_texto_textodenso"
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/carta.ts",
@@ -110854,5 +110915,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "39ba5d8c10b1cf291bc0af8277b1a2df551292ba"
+  "built_at_commit": "dd77b17df6607064ce36153d54ed90407586c30e"
 }
