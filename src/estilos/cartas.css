@@ -11,9 +11,15 @@
   flex-direction: column;
   padding: 8px 9px 7px;
   color: #2b2316;
+  /* parchment: a static texture painted once by fx/card-textures.ts (multiplied
+     over the base tones, so without WebGL the plain gradient stays), plus a faint
+     class-coloured vignette so each class keeps its identity */
   background:
-    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(255, 248, 220, 0.65), transparent 55%),
-    linear-gradient(165deg, #efe2bd 0%, #e3d2a4 55%, #d4bf8b 100%);
+    radial-gradient(ellipse 120% 60% at 50% -10%, rgba(255, 248, 220, 0.6), transparent 55%),
+    radial-gradient(ellipse 78% 72% at 50% 50%, transparent 58%, var(--tinte, transparent) 100%),
+    var(--tex-carta, none) center / 100% 100% no-repeat,
+    linear-gradient(165deg, #f1e5c2 0%, #e6d6aa 55%, #d8c492 100%);
+  background-blend-mode: normal, multiply, multiply, normal;
   border: 3px solid var(--marco);
   box-shadow:
     inset 0 0 0 1px rgba(255, 250, 230, 0.5),
@@ -21,12 +27,18 @@
   transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
 
-/* marcos por clase */
-.carta-druida { --marco: #4e7a35; }
-.carta-barbaro { --marco: #9e4530; }
-.carta-mago { --marco: #5e50b0; }
-.carta-picaro { --marco: #2f7a70; }
-.carta-neutral { --marco: #6e6356; }
+/* marcos por clase (y el tinte de los bordes del pergamino) */
+.carta-druida { --marco: #4e7a35; --tinte: rgba(96, 150, 70, 0.38); }
+.carta-barbaro { --marco: #9e4530; --tinte: rgba(190, 90, 60, 0.36); }
+.carta-mago { --marco: #5e50b0; --tinte: rgba(120, 105, 210, 0.36); }
+.carta-picaro { --marco: #2f7a70; --tinte: rgba(60, 150, 138, 0.36); }
+.carta-brujo { --tinte: rgba(140, 80, 170, 0.34); }
+.carta-neutral { --marco: #6e6356; --tinte: rgba(120, 108, 92, 0.3); }
+
+/* parchment variant picked per card id (one texture each, shared by every card) */
+.tex-perg-0 { --tex-carta: var(--tex-pergamino, none); }
+.tex-perg-1 { --tex-carta: var(--tex-pergamino-1, none); }
+.tex-perg-2 { --tex-carta: var(--tex-pergamino-2, none); }
 
 /* marcos por rareza */
 .rareza-infrecuente { --marco: #5a7d9e; }
@@ -422,10 +434,13 @@
 .carta.carta-maldicion {
   --marco: #2a1733;
   color: #d9ccd6;
+  /* cracked rock painted once by fx/card-textures.ts; the plain gradient is the fallback */
   background:
     radial-gradient(ellipse 120% 60% at 50% -10%, rgba(140, 80, 150, 0.28), transparent 55%),
     radial-gradient(ellipse 80% 50% at 50% 115%, rgba(120, 20, 30, 0.35), transparent 60%),
+    var(--tex-roca, none) center / 100% 100% no-repeat,
     linear-gradient(165deg, #231a29 0%, #1a1220 55%, #110b15 100%);
+  background-blend-mode: normal;
   border-color: #1b0e22;
   /* cheap to paint: a hand full of curses used to redraw heavy blurs and filters */
   box-shadow:

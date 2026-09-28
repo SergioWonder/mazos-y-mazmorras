@@ -3,6 +3,10 @@ import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardSvgUrl, cardArtBitmap } from './card-svgs.ts';
 import { fx } from '../fx/particulas.ts';
 import { hasFullArt, lookOf } from './card-looks.ts';
+import { ensureCardTextures, textureClassFor } from '../fx/card-textures.ts';
+
+// start painting the shared card materials as soon as the UI loads (idle time)
+void ensureCardTextures();
 
 const NOMBRE_TIPO: Record<string, string> = {
   ataque: 'Ataque', habilidad: 'Habilidad', poder: 'Poder', maldicion: 'Maldición',
@@ -174,7 +178,9 @@ function ajustarTexto(carta: HTMLElement) {
 
 /** Crea el elemento DOM de una carta. */
 export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
-  const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo}`);
+  // material textures are painted once for the whole page, on the first card
+  void ensureCardTextures();
+  const carta = el('div', `carta carta-${def.clase} rareza-${def.rareza} tipo-${def.tipo} ${textureClassFor(def)}`);
   const esMaldicion = def.tipo === 'maldicion';
   const coste = mods?.coste ? mods.coste(def.coste) : def.coste;
   if (esMaldicion) carta.classList.add('carta-maldicion');

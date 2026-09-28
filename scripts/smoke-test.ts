@@ -5496,5 +5496,114 @@ console.log('\n🗑️ Descartes obligatorios');
   check(/cancelable/.test(ui), 'la ventana de elegir carta oculta «Cancelar» cuando no se puede cancelar');
 }
 
+// ── Parchment / cracked-rock card textures (WebGL, rendered once) ────────────
+console.log('\n📜 Textura de pergamino');
+try {
+  const fs = await import('node:fs');
+  const T = await import('../src/fx/card-textures.ts');
+  const todas = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...BASICAS];
+
+  // pure part: variant choice and texture size
+  const clases = todas.map((d) => T.textureClassFor(d));
+  check(clases.every((c) => /^tex-perg-\d$/.test(c)) && new Set(clases).size === T.PARCHMENT_VARIANTS && T.PARCHMENT_VARIANTS >= 2 && T.PARCHMENT_VARIANTS <= 3,
+    `las cartas normales usan pergamino y se reparten entre sus ${T.PARCHMENT_VARIANTS} variantes`);
+  check(todas.every((d) => T.textureClassFor(d) === T.textureClassFor({ ...d })), 'la variante de cada carta es siempre la misma (depende de su id)');
+  check(MALDICIONES.every((d) => T.textureClassFor(d) === 'tex-roca'), 'las maldiciones usan la textura de roca agrietada');
+  const s1 = T.textureSize(1), s3 = T.textureSize(3);
+  check(s1.w >= 140 && s3.w === T.textureSize(2).w && s3.w <= 512 && s3.h <= 768 && Math.abs(s3.w / s3.h - 148 / 208) < 0.02,
+    `la textura tiene la proporción de la carta y se acota (dpr ≤ 2, ${s3.w}×${s3.h} como máximo)`);
+
+  // generator: one context, one render per variant, cached
+  const cuenta = { canvas: 0, ctx: 0, draws: 0, lost: 0, blobs: 0 };
+  const vars: Record<string, string> = {};
+  const gl = new Proxy({}, {
+    get: (_t, k: string) => {
+      if (k === 'drawArrays') return () => { cuenta.draws++; };
+      if (k === 'getExtension') return (n: string) => (n === 'WEBGL_lose_context' ? { loseContext: () => { cuenta.lost++; } } : null);
+      if (k === 'getShaderParameter' || k === 'getProgramParameter') return () => true;
+      if (k === 'isContextLost') return () => false;
+      if (/^[A-Z_0-9]+$/.test(k)) return 1;
+      return () => ({});
+    },
+  });
+  const entorno = (conGl: boolean) => ({
+    dpr: 2,
+    createCanvas: () => {
+      cuenta.canvas++;
+      return {
+        width: 0, height: 0,
+        getContext: () => { cuenta.ctx++; return conGl ? gl : null; },
+        toBlob: (cb: (b: Blob | null) => void) => { cuenta.blobs++; cb(new Blob(['x'])); },
+      } as unknown as HTMLCanvasElement;
+    },
+    setVar: (n: string, v: string) => { vars[n] = v; },
+    toURL: () => `blob:fake/${cuenta.blobs}`,
+  });
+  const gen = T.createCardTextureGenerator(entorno(true));
+  const r1 = await gen.ensure();
+  const r2 = await gen.ensure();
+  await gen.ensure();
+  check(r1.ok && r1 === r2 && cuenta.canvas === 1 && cuenta.ctx === 1, 'el generador crea un único contexto WebGL y las llamadas repetidas reutilizan el resultado');
+  check(cuenta.draws === T.PARCHMENT_VARIANTS + 1 && cuenta.blobs === T.PARCHMENT_VARIANTS + 1, 'se renderiza una sola vez cada variante (pergaminos + roca)');
+  check(cuenta.lost === 1, 'libera el contexto WebGL al terminar (WEBGL_lose_context)');
+  check(T.TEXTURE_VARS.every((n) => /^url\("blob:fake\/\d+"\)$/.test(vars[n] ?? '')), 'publica cada textura como variable CSS en :root');
+
+  // fallback: no WebGL, and no DOM at all (node)
+  for (const k of Object.keys(vars)) delete vars[k];
+  const sinGl = await T.createCardTextureGenerator(entorno(false)).ensure();
+  check(!sinGl.ok && Object.keys(vars).length === 0, 'sin WebGL no publica texturas: queda el CSS de siempre');
+  let sinDom: { ok: boolean } | null = null;
+  try { sinDom = await T.ensureCardTextures(); } catch { sinDom = null; }
+  check(sinDom !== null && !sinDom.ok, 'sin DOM (tests de node) el generador no revienta');
+
+  // renderCarta never creates a canvas
+  const g = globalThis as Record<string, unknown>;
+  const previo = { document: g.document, requestAnimationFrame: g.requestAnimationFrame };
+  const creados: string[] = [];
+  const nodo = (): Record<string, unknown> => {
+    const n: Record<string, unknown> = {
+      className: '', innerHTML: '', dataset: {}, style: { setProperty: () => {} },
+      prepend: () => {}, append: () => {}, querySelector: () => null,
+    };
+    n.classList = { add: (...c: string[]) => { n.className = `${n.className} ${c.join(' ')}`; } };
+    return n;
+  };
+  g.document = {
+    createElement: (tag: string) => { creados.push(tag); return tag === 'canvas' ? { getContext: () => null } : nodo(); },
+    documentElement: { style: { setProperty: () => {} } },
+    querySelectorAll: () => [],
+  };
+  g.requestAnimationFrame = () => 0;
+  try {
+    const { renderCarta } = await import('../src/ui/carta.ts');
+    const primera = renderCarta(DRUIDA[0]) as unknown as { className: string };
+    const trasPrimera = creados.filter((t) => t === 'canvas').length;
+    creados.length = 0;
+    const hechas = [...todas.slice(0, 30), ...MALDICIONES].map((d) => renderCarta(d) as unknown as { className: string });
+    check(trasPrimera <= 1 && !creados.includes('canvas'), 'renderCarta no crea ningún canvas por carta');
+    check(/\btex-perg-\d\b/.test(primera.className) && hechas.slice(30).every((c) => /\btex-roca\b/.test(c.className)),
+      'renderCarta marca cada carta con su textura (pergamino o roca)');
+  } finally {
+    g.document = previo.document;
+    g.requestAnimationFrame = previo.requestAnimationFrame;
+  }
+
+  // CSS: textures wired through variables, nothing animated in a loop
+  const css = fs.readFileSync(new URL('../src/estilos/cartas.css', import.meta.url), 'utf8');
+  const regla = (sel: string) => new RegExp(`(^|\\}|\\*\\/)\\s*${sel.replace(/\./g, '\\.')}\\s*\\{([^}]*)\\}`).exec(css)?.[2] ?? '';
+  check(/var\(--tex-carta/.test(regla('.carta')) && /background-blend-mode/.test(regla('.carta')), 'las cartas mezclan su textura de pergamino con su color');
+  check([...Array(T.PARCHMENT_VARIANTS).keys()].every((i) => new RegExp(`\\.tex-perg-${i}\\s*\\{[^}]*--tex-carta:\\s*var\\(${T.TEXTURE_VARS[i]}[,)]`).test(css)),
+    'cada variante de pergamino apunta a su variable CSS');
+  check(/var\(--tex-roca/.test(regla('.carta.carta-maldicion')) && !/--tex-carta/.test(regla('.carta.carta-maldicion')), 'las maldiciones pintan la roca, no el pergamino');
+  const infinitas = new Set([...css.matchAll(/animation:\s*([\w-]+)[^;]*infinite/g)].map((m) => m[1]));
+  const bucles = [...css.matchAll(/@keyframes\s+([\w-]+)\s*\{((?:[^{}]*\{[^}]*\})*)\s*\}/g)].filter((m) => infinitas.has(m[1]));
+  check(bucles.every((m) => !/(filter|box-shadow|background)[\w-]*\s*:/.test(m[2])) && !/transition[^;]*background/.test(css),
+    'ninguna animación en bucle de las cartas toca filter, box-shadow ni background');
+  const cartaSrc = fs.readFileSync(new URL('../src/ui/carta.ts', import.meta.url), 'utf8');
+  check(!/createElement\(\s*'canvas'|el\(\s*'canvas'|<canvas|OffscreenCanvas/.test(cartaSrc), 'el render de carta no crea canvas en su código');
+} catch (e) {
+  check(false, `las pruebas de la textura de pergamino revientan: ${(e as Error).stack ?? e}`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

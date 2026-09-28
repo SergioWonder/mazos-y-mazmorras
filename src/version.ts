@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.2.3';
+export const VERSION = '6.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.3.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '📜 Las cartas tienen textura de pergamino, con fibras, manchas y bordes quemados, y las maldiciones, de roca agrietada. Se pintan una sola vez al arrancar, así que no restan rendimiento.',
+    ],
+  },
   {
     version: '6.2.3',
     fecha: '2026-09-28',
