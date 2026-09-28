@@ -1,4 +1,4 @@
-import type { CartaDef } from '../core/types.ts';
+import type { CartaDef, ValorMostrado } from '../core/types.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardSvgUrl, cardArtBitmap } from './card-svgs.ts';
 import { fx } from '../fx/particulas.ts';
@@ -110,34 +110,37 @@ export const EFECTO_CONJURO: Record<string, string> = {
   perforante: 'Ignora y destruye el bloqueo',
 };
 
-/** Modificadores en vivo para los valores del texto (los aporta el combate). */
+/** Live modifiers for the card (supplied by the combat). */
 export interface ModsCarta {
-  /** daño final de un ataque con base `b` (Fuerza, Débil, Vulnerable del objetivo…) */
-  dano?: (base: number) => number;
-  /** bloqueo final de una carta con base `b` (Destreza, Frágil…) */
-  bloqueo?: (base: number) => number;
+  /** Live numbers of the text for the current state (Combate.valoresDeCarta). */
+  valores?: ValorMostrado[];
   /** coste real este turno (Sobrecarga del Contemplador lo encarece) */
   coste?: (base: number) => number;
 }
 
 /**
- * Reescribe los valores del texto con los modificadores actuales.
- * Patrones reconocidos: «Inflige N …» (daño) y «Gana N de bloqueo».
- * Verde si el valor mejora el base, rojo si empeora.
+ * Rewrites the live numbers of the text: the n-th integer of the text takes
+ * its effective value (green if it beats the printed one, red if worse), and a
+ * text without a number gets its value in brackets after its anchor words.
+ * Without values (outside combat) the base text is shown.
  */
-function formatearTexto(texto: string, mods?: ModsCarta): string {
-  let html = texto.replaceAll('\n', '<br>');
-  if (mods?.dano) {
-    html = html.replace(/([Ii]nflige )(\d+)/g, (_, pre: string, n: string) =>
-      pre + valorMod(Number(n), mods.dano!(Number(n))),
-    );
+export function formatearTexto(texto: string, mods?: ModsCarta): string {
+  const valores = mods?.valores ?? [];
+  const porIndice = new Map<number, number>();
+  for (const v of valores) if (v.indice !== undefined) porIndice.set(v.indice, v.real);
+  let i = 0;
+  let html = texto.replace(/\d+/g, (n) => {
+    const real = porIndice.get(i++);
+    return real === undefined ? n : valorMod(Number(n), real);
+  });
+  for (const v of valores) {
+    if (v.indice !== undefined || !v.tras) continue;
+    const pos = html.indexOf(v.tras);
+    if (pos < 0) continue;
+    const fin = pos + v.tras.length;
+    html = `${html.slice(0, fin)} <span class="val-calc">(${v.prefijo ?? ''}${v.real})</span>${html.slice(fin)}`;
   }
-  if (mods?.bloqueo) {
-    html = html.replace(/([Gg]ana )(\d+)( de bloqueo)/g, (_, pre: string, n: string, post: string) =>
-      pre + valorMod(Number(n), mods.bloqueo!(Number(n))) + post,
-    );
-  }
-  return html;
+  return html.replaceAll('\n', '<br>');
 }
 
 function valorMod(base: number, real: number): string {
@@ -227,7 +230,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
     <div class="carta-tipo">${esMaldicion ? '☠️' : ICONO_CLASE[def.clase]} ${NOMBRE_TIPO[def.tipo]}${
       def.subclase ? ` · <em>${def.subclase}</em>` : ''
     }${unUso}${innata}${retencion}</div>
-    <div class="carta-texto">${formatearTexto(def.texto, mods)}</div>
+    <div class="carta-texto"><span class="carta-texto-cuerpo">${formatearTexto(def.texto, mods)}</span></div>
   `;
   if (fullUrl) {
     carta.classList.add('carta-full-art');
@@ -251,7 +254,7 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
 /** Reescribe solo el texto de una carta ya renderizada (drag sobre un objetivo). */
 export function actualizarTextoCarta(carta: HTMLElement, def: CartaDef, mods?: ModsCarta) {
   const texto = carta.querySelector('.carta-texto') as HTMLElement | null;
-  if (texto) texto.innerHTML = formatearTexto(def.texto, mods);
+  if (texto) texto.innerHTML = `<span class="carta-texto-cuerpo">${formatearTexto(def.texto, mods)}</span>`;
 }
 
 /** Glifo grande de cada carta. Exportado para que el smoke-test compruebe que

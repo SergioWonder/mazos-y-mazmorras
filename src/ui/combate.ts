@@ -1,4 +1,4 @@
-import { Combate, esDungeonMaster, type Presentador } from '../core/combate.ts';
+import { Combate, esDungeonMaster, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
 import { FRASES_DM } from '../core/escena-final.ts';
 import type {
   CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
@@ -485,7 +485,7 @@ export function pantallaCombate(
             resolver(elegida);
           };
           cartas.forEach((inst, i) => {
-            const c = renderCarta(defDe(inst), modsEnCombate());
+            const c = renderCarta(defDe(inst), modsEnCombate(null, defDe(inst)));
             if (inst.mejorada) c.classList.add('carta-mejorada');
             c.classList.add('carta-recompensa');
             c.style.setProperty('--retraso', `${Math.min(i * 0.04, 0.5)}s`);
@@ -730,7 +730,7 @@ export function pantallaCombate(
       }
     }
 
-    function textoIntencion(e: EnemigoCombate): string {
+    function textoIntencion(e: EnemigoCombate, p?: PrevisionAtaque): string {
       const m = e.intencion;
       // the Dungeon Master's ray: nobody knows what is coming… or everybody does
       if (m.cita) return `<span class="int-ataque int-dm">${m.mataAlInstante ? '⚡' : '📜'} ??? <small>· ${m.cita}</small></span>`;
@@ -742,7 +742,11 @@ export function pantallaCombate(
         // verde si lo hemos reducido (Débil/Raíces); rojo si Vulnerable lo amplifica
         const mod = d < natural ? 'int-mod-baja' : d > natural ? 'int-mod-alta' : '';
         const veces = m.veces && m.veces > 1 ? `×${m.veces}` : '';
-        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}</span>`;
+        // what will really reach your HP once Mirror Image, block and summon soak it
+        const neto = !p ? ''
+          : p.aplastado ? ' <small class="int-neto">🌿</small>'
+          : p.pv < p.porGolpe * p.veces ? ` <small class="int-neto">→ ❤️${p.pv}</small>` : '';
+        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${neto}</span>`;
       }
       if (m.invocar) return `<span class="int-mejora">👥</span>`;
       if (m.devorar) return `<span class="int-mejora">🍖</span>`;
@@ -752,10 +756,40 @@ export function pantallaCombate(
       return '<span>?</span>';
     }
 
+    /** Tooltip lines that break an attack intent down: how each hit is worked
+     *  out and what will soak it before it reaches your HP. */
+    function desgloseIntencion(e: EnemigoCombate, p?: PrevisionAtaque): string {
+      const m = e.intencion;
+      if (!p || m.dano === undefined || m.cita) return '';
+      const st = e.estados;
+      const partes = [`${m.dano} base`];
+      if (st.fuerza) partes.push(`${st.fuerza > 0 ? '+' : '−'}${Math.abs(st.fuerza)} Fuerza`);
+      if (st.raices) partes.push(`−${st.raices} Raíces`);
+      if (st.oscuridad) partes.push(`−${st.oscuridad} Oscuridad`);
+      if ((st.debil ?? 0) > 0) partes.push('Débil −25 %');
+      if (combate.vulnerableAlGolpe() > 0) partes.push('tu Vulnerable +50 %');
+      const lineas: string[] = [];
+      if (partes.length > 1) lineas.push(`Cada golpe: ${partes.join(' · ')} = ${p.porGolpe}`);
+      if (p.veces > 1) lineas.push(`${p.porGolpe} × ${p.veces} = ${p.porGolpe * p.veces} en total`);
+      if ((combate.jugador.estados.vulnerable ?? 0) > 0 && combate.vulnerableAlGolpe() === 0) {
+        lineas.push('🎯 Tu Vulnerable se acaba al terminar tu turno: no llega a este golpe');
+      }
+      if (p.aplastado) {
+        lineas.push('🌿 Las raíces lo aplastan: no llegará a atacarte');
+      } else if (p.pv < p.porGolpe * p.veces) {
+        if (p.prevenidos) lineas.push(`🪞 Espejismo previene ${p.prevenidos} golpe${p.prevenidos > 1 ? 's' : ''}`);
+        if (p.bloqueado) lineas.push(`🛡️ Tu bloqueo absorbe ${p.bloqueado}`);
+        if (p.invocacion) lineas.push(`🐾 Tu invocación absorbe ${p.invocacion}`);
+        lineas.push(`❤️ Perderás ${p.pv} PV`);
+      }
+      return lineas.map((l) => `<br>${l}`).join('');
+    }
+
     function renderEnemigos() {
       const cont = $('.lado-enemigos');
       cont.innerHTML = '';
       huecosEnemigos = layoutSlots(huecosEnemigos, combate.enemigos, (e) => e.vivo);
+      const prevision = combate.previsionAtaques();
       for (const e of huecosEnemigos) {
         const idx = combate.enemigos.indexOf(e);
         if (!e.vivo) {
@@ -775,7 +809,7 @@ export function pantallaCombate(
         div.innerHTML = `
           <div class="intencion" data-tip="<strong>${e.intencion.nombre}</strong><br>${
             tipInt[e.intencion.intencion]
-          }.${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}">${textoIntencion(e)}</div>
+          }.${desgloseIntencion(e, prevision.get(e))}${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}">${textoIntencion(e, prevision.get(e))}</div>
           ${esDungeonMaster(e)
             ? '<div class="bloqueo-ficha bloqueo-dm" data-tip="<strong>🛡️ Pantalla del DM</strong><br>Bloqueo infinito: nada de lo que hagas le llega.">🛡️∞ <small>Pantalla del DM</small></div>'
             : e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
@@ -861,18 +895,13 @@ export function pantallaCombate(
         </div>${conjuros}`;
     }
 
-    /** Modificadores en vivo para el texto de las cartas (Fuerza, Débil,
-     *  Destreza, Frágil… y Vulnerable del objetivo si se conoce). */
-    function modsEnCombate(objetivo?: EnemigoCombate | null, def?: CartaDef): ModsCarta {
-      // El Conjuro Prodigioso muestra su daño acumulado (10 base + lo escrito).
-      const extra = def?.id === 'conjuro-prodigioso' ? (combate.jugador.conjuroEscrito ?? 0) : 0;
+    /** Live modifiers for a card's text: every state-dependent number (Strength,
+     *  Dexterity, Weak, Frail, relics, Fury, Doom… and the target's Vulnerable
+     *  when the target is known) and the real cost. Hand and zoom share it. */
+    function modsEnCombate(objetivo: EnemigoCombate | null | undefined, def: CartaDef): ModsCarta {
       return {
-        dano: (base) => {
-          const d = combate.danoDeAtaque(combate.jugador, base + extra);
-          return objetivo?.vivo ? combate.danoRecibido(objetivo, d) : d;
-        },
-        bloqueo: (base) => combate.bloqueoDeCarta(base),
-        coste: (base) => (def ? combate.costeEfectivo(def) : base),
+        valores: combate.valoresDeCarta(def, objetivo?.vivo ? objetivo : undefined),
+        coste: () => combate.costeEfectivo(def),
       };
     }
 
@@ -1058,7 +1087,9 @@ export function pantallaCombate(
     function ampliarCarta(inst: CartaInstancia) {
       const zoom = el('div', 'zoom-carta');
       const fila = el('div', 'zoom-fila');
-      const grande = renderCarta(defDe(inst));
+      // same live numbers as the card in the hand (and its target, if it has one)
+      const objetivo = cartaPendiente === inst ? combate.enemigos[objetivoIdxValido()] : undefined;
+      const grande = renderCarta(defDe(inst), modsEnCombate(objetivo, defDe(inst)));
       if (inst.mejorada) grande.classList.add('carta-mejorada');
       fila.appendChild(grande);
       fila.appendChild(cuadroPalabrasClave(defDe(inst)));

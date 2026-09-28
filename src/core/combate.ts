@@ -7,7 +7,8 @@ import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
-import type { DiceTheme, EfectoConjuro, EfectoInvocacion, FormaInvocacion } from './types.ts';
+import type { DiceTheme, EfectoConjuro, EfectoInvocacion, FormaInvocacion, ValorMostrado } from './types.ts';
+import { calcularValores } from './valores.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -47,6 +48,23 @@ export interface Presentador {
 export const esDungeonMaster = (l: Luchador): boolean =>
   (l as EnemigoCombate).def?.dungeonMaster === true;
 
+/** How one enemy attack will land this round (see `previsionAtaques`). */
+export interface PrevisionAtaque {
+  /** Damage per hit: exactly what the intent shows. */
+  porGolpe: number;
+  veces: number;
+  /** Hits that Mirror Image will prevent. */
+  prevenidos: number;
+  /** Damage soaked by the hero's block. */
+  bloqueado: number;
+  /** Damage soaked by the summon. */
+  invocacion: number;
+  /** Damage that reaches the hero's HP. */
+  pv: number;
+  /** The roots crush the attacker: it will not attack at all. */
+  aplastado: boolean;
+}
+
 export class Combate {
   jugador: JugadorCombate;
   enemigos: EnemigoCombate[];
@@ -59,6 +77,8 @@ export class Combate {
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero = false;
   enResolucion = false;
+  /** The hero's end-of-turn countdown already ran: the enemies are about to act. */
+  private faseEnemiga = false;
   /** Cards played this turn / this combat (relic rhythm hooks). */
   jugadasTurno = 0;
   jugadasCombate = 0;
@@ -116,8 +136,8 @@ export class Combate {
     return Math.max(0, dano);
   }
 
-  danoRecibido(objetivo: Luchador, dano: number): number {
-    if ((objetivo.estados.vulnerable ?? 0) > 0) dano = Math.floor(dano * 1.5);
+  danoRecibido(objetivo: Luchador, dano: number, vulnerable = objetivo.estados.vulnerable ?? 0): number {
+    if (vulnerable > 0) dano = Math.floor(dano * 1.5);
     return Math.max(0, dano);
   }
 
@@ -125,6 +145,30 @@ export class Combate {
     let b = base + (this.jugador.estados.destreza ?? 0);
     if ((this.jugador.estados.fragil ?? 0) > 0) b = Math.floor(b * 0.75);
     return Math.max(0, b);
+  }
+
+  /** One hit of a player attack, exactly as atacar() and atacarTodos() deal it:
+   *  sneak and relic bonuses per hit, Strength (plus the `fuerzaExtra` a card
+   *  grants itself first), Weak and the target's Vulnerable. With no target,
+   *  only the hero's own modifiers. */
+  danoGolpe(obj: EnemigoCombate | undefined, base: number, fuerzaExtra = 0): number {
+    const j = this.jugador;
+    const atacante = fuerzaExtra
+      ? { ...j, estados: { ...j.estados, fuerza: (j.estados.fuerza ?? 0) + fuerzaExtra } }
+      : j;
+    if (!obj) return this.danoDeAtaque(atacante, base);
+    const extra = this.ventajaFurtivaContra(obj) + this.bonoAtaqueReliquias(obj);
+    return this.danoRecibido(obj, this.danoDeAtaque(atacante, base + extra));
+  }
+
+  /** Live numbers of a card's text for the current state (see core/valores.ts). */
+  valoresDeCarta(def: CartaDef, objetivo?: EnemigoCombate): ValorMostrado[] {
+    return calcularValores(def, objetivo, {
+      contexto: (o) => this.contexto(o),
+      danoGolpe: (o, base, fuerzaExtra) => this.danoGolpe(o, base, fuerzaExtra),
+      bloqueo: (base) => this.bloqueoDeCarta(base),
+      enemigosVivos: this.enemigos.filter((e) => e.vivo),
+    });
   }
 
   /** Coste real de una carta este turno: el Don del Patrón deja la Explosión
@@ -138,10 +182,66 @@ export class Combate {
     return base + ((this.jugador.estados.cartasSobrecoste ?? 0) > 0 ? 1 : 0);
   }
 
-  /** Daño que hará la intención actual de un enemigo (para mostrar y para Raíces). */
+  /** Daño que hará la intención actual de un enemigo (para mostrar y para Raíces).
+   *  Uses the Vulnerable the hero will have when the enemy strikes, not now. */
   danoIntencion(e: EnemigoCombate): number {
     if (e.intencion.dano === undefined) return 0;
-    return this.danoRecibido(this.jugador, this.danoDeAtaque(e, e.intencion.dano));
+    return this.danoRecibido(this.jugador, this.danoDeAtaque(e, e.intencion.dano), this.vulnerableAlGolpe());
+  }
+
+  /** The hero's Vulnerable when the enemies strike. During the hero's turn it
+   *  is not the current one: the countdown at the end of the turn runs before
+   *  the enemies act, and each Mark of the Doomed in hand adds 1 right after. */
+  vulnerableAlGolpe(): number {
+    const v = this.jugador.estados.vulnerable ?? 0;
+    if (this.faseEnemiga) return v;
+    const marcas = this.jugador.mano.filter((c) => defDe(c).id === 'marca-condenado').length;
+    return Math.max(0, v - 1) + marcas;
+  }
+
+  /** Forecast of every enemy attack this round, in the order they act, spent
+   *  against the hero's current Mirror Image charges, block and summon. The UI
+   *  uses it to explain how much of each intent will reach the hero's HP. */
+  previsionAtaques(): Map<EnemigoCombate, PrevisionAtaque> {
+    const j = this.jugador;
+    const out = new Map<EnemigoCombate, PrevisionAtaque>();
+    let espejismo = j.estados.espejismo ?? 0;
+    let bloqueo = j.bloqueo;
+    let invocacion = j.invocacion && j.invocacion.vida > 0 ? j.invocacion.vida : 0;
+    for (const e of this.enemigos) {
+      const m = e.intencion;
+      if (!e.vivo || m.dano === undefined || m.mataAlInstante || e.saltaAccion) continue;
+      const p: PrevisionAtaque = {
+        porGolpe: this.danoIntencion(e), veces: m.veces ?? 1,
+        prevenidos: 0, bloqueado: 0, invocacion: 0, pv: 0,
+        aplastado: this.dolorRaices(e) !== null,
+      };
+      for (let i = 0; i < p.veces && !p.aplastado; i++) {
+        if (espejismo > 0) { espejismo--; p.prevenidos++; continue; }
+        const b = Math.min(bloqueo, p.porGolpe);
+        bloqueo -= b;
+        const s = Math.min(invocacion, p.porGolpe - b);
+        invocacion -= s;
+        p.bloqueado += b;
+        p.invocacion += s;
+        p.pv += p.porGolpe - b - s;
+      }
+      out.set(e, p);
+    }
+    return out;
+  }
+
+  /** Roots crush an attack they bring to 0 or less: the HP the attacker loses
+   *  instead of attacking (only the excess of roots over the attack), or null
+   *  when it does attack. */
+  private dolorRaices(e: EnemigoCombate): number | null {
+    const m = e.intencion;
+    const raices = e.estados.raices ?? 0;
+    if (m.dano === undefined || raices <= 0) return null;
+    // Darkness lowers the attack too, so it counts towards the crush
+    let efectivo = m.dano + (e.estados.fuerza ?? 0) - raices - (e.estados.oscuridad ?? 0);
+    if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
+    return efectivo > 0 ? null : Math.min(raices, -efectivo);
   }
 
   /** Ataque anulado: SOLO si el enemigo pretende atacar este turno y ese ataque,
@@ -296,11 +396,10 @@ export class Combate {
       rng: self.rng,
       async atacar(obj, base, veces = 1, fx) {
         let total = 0;
-        // Oportunista (pícaro): más daño por golpe si el objetivo no pretende atacar
-        const furtivo = self.ventajaFurtivaContra(obj) + self.bonoAtaqueReliquias(obj);
         for (let i = 0; i < veces; i++) {
           if (!obj.vivo) break;
-          const dano = self.danoRecibido(obj, self.danoDeAtaque(self.jugador, base + furtivo));
+          // same sum the card text shows (sneak and relic bonuses per hit included)
+          const dano = self.danoGolpe(obj, base);
           total += await self.infligir(obj, dano, fx);
           // Espinas del enemigo (Escamas Ígneas, etc.): devuelven daño al atacante
           const espinas = obj.estados.espinas ?? 0;
@@ -328,9 +427,7 @@ export class Combate {
         const filo = self.jugador.estados.filoVenenoso ?? 0;
         const cond = self.jugador.estados.condenaPorAtaque ?? 0;
         for (const e of self.enemigos.filter((x) => x.vivo)) {
-          const extra = self.ventajaFurtivaContra(e) + self.bonoAtaqueReliquias(e);
-          const dano = self.danoRecibido(e, self.danoDeAtaque(self.jugador, base + extra));
-          const real = await self.infligir(e, dano, fx);
+          const real = await self.infligir(e, self.danoGolpe(e, base), fx);
           if (!e.vivo) {
             if (!self.terminado) await self.ganchos((r, c) => r.alAtacar?.(c, e, real));
             continue;
@@ -1059,6 +1156,7 @@ export class Combate {
 
   async inicioTurnoJugador(primero = false) {
     this.turno++;
+    this.faseEnemiga = false;
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
@@ -1341,6 +1439,7 @@ export class Combate {
     }
 
     this.decrementarEstados(j);
+    this.faseEnemiga = true;
 
     // Curses held in the hand hurt now, before the discard (after the status
     // countdown, so a Weak or Vulnerable they give lasts into the next round).
@@ -1495,11 +1594,8 @@ export class Combate {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
       // atacar el enemigo pierde PV igual a la DIFERENCIA (cuánto superan las
       // raíces a su ataque), ignorando el bloqueo. Sin daño base extra.
-      const raices = e.estados.raices ?? 0;
-      let efectivo = m.dano + (e.estados.fuerza ?? 0) - raices;
-      if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
-      if (raices > 0 && efectivo <= 0) {
-        const dolor = -efectivo; // solo el exceso de raíces sobre el ataque
+      const dolor = this.dolorRaices(e);
+      if (dolor !== null) {
         await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
         if (dolor > 0) await this.infligir(e, dolor, 'raices');
         if (!this.terminado) await this.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));

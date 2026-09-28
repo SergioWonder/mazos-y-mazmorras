@@ -257,8 +257,52 @@ export interface CartaDef {
   /** (curses) Fires right after the card is drawn. */
   alRobar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
+  /** Live numbers of the text that depend on the combat state. `n` holds the
+   *  integers of the (effective) text in order, so one function serves the card
+   *  and its upgrade. Without it, «Inflige N de daño» and «Gana N de bloqueo»
+   *  are read from the text as plain attacks and block. */
+  valores?: (ctx: ContextoEfecto, n: number[]) => ValorCarta[];
   /** Versión mejorada (hogueras): sobreescribe texto/coste/efecto. */
   mejora?: MejoraCarta;
+}
+
+/** How a live number of a card is worked out. */
+export type TipoValorCarta =
+  /** a player attack hit: Strength, Weak, relic bonuses, sneak bonus, target Vulnerable */
+  | 'ataque'
+  /** card block: Dexterity and Frail */
+  | 'bloqueo'
+  /** fixed damage that skips the attack modifiers (piercing, poison, sacrifice) */
+  | 'directo'
+  /** a status the card applies to the target */
+  | 'estado'
+  /** any other state-dependent amount (shown only) */
+  | 'otro';
+
+/** A number of the card text that depends on the combat state. */
+export interface ValorCarta {
+  tipo: TipoValorCarta;
+  /** Which integer of the text shows it (0-based)… */
+  indice?: number;
+  /** …or, for texts without a number, the words it is written after, in brackets. */
+  tras?: string;
+  /** Prefix of a bracketed value («+» for «doubles X»). */
+  prefijo?: string;
+  /** Value before the modifiers: what the card passes to atacar/ganarBloqueo. */
+  base: number;
+  /** Hits or applications of that value (default 1). */
+  veces?: number;
+  /** false when it is the branch that does not apply right now. */
+  aplica?: boolean;
+  /** Strength the card itself grants before hitting (Transformation, Fury). */
+  fuerzaPrevia?: number;
+  /** (tipo 'estado') the status applied. */
+  estado?: EstadoId;
+}
+
+/** A live number already worked out for the current state. */
+export interface ValorMostrado extends ValorCarta {
+  real: number;
 }
 
 export interface MejoraCarta {
@@ -267,6 +311,8 @@ export interface MejoraCarta {
   requiereConjuro?: number;
   innato?: boolean;
   jugar?: (ctx: ContextoEfecto) => Promise<void>;
+  /** Live numbers, when the upgrade computes them differently from the card. */
+  valores?: (ctx: ContextoEfecto, n: number[]) => ValorCarta[];
 }
 
 export interface CartaInstancia {

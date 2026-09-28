@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.7.1';
+export const VERSION = '6.8.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.8.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '🔢 Las cartas muestran el número real que van a hacer, también ampliadas: Fuerza, Destreza, Débil, Vulnerable del objetivo, reliquias y casos especiales como 3× Fuerza, Fuerza sumada al bloqueo, daño por golpe, Veneno, Condena o conjuros por nivel.',
+      '🎯 La intención de los enemigos muestra el daño que harán de verdad: ya no cuenta un Vulnerable tuyo que se acaba antes del golpe, y avisa con «→ ❤️» de los PV que perderás tras tu bloqueo, tu invocación o tu Espejismo, con el desglose en la ayuda.',
+      '🌿 Arreglado: con Raíces y Oscuridad a la vez, un ataque reducido a 0 ya aplasta al enemigo en lugar de gastar tu Espejismo.',
+      '🔨 Arreglado: Golpe Demoledor+ hacía 6 de daño base en lugar de los 8 que indica.',
+    ],
+  },
   {
     version: '6.7.1',
     fecha: '2026-09-28',

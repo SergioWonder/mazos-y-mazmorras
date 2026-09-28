@@ -5764,5 +5764,429 @@ console.log('\n🔤 Tipografía');
   check(/\.carta-tipo\s*\{[^}]*var\(--fuente-cuerpo\)/.test(cartasCss), 'el tipo de carta usa la fuente de párrafo');
 }
 
+console.log('\n🎯 Intención = daño real');
+{
+  const { reliquiaPorId } = await import('../src/core/reliquias.ts');
+  const CTI = await import('../src/core/cartas.ts');
+  type Mov = EnemigoCombate['intencion'];
+  // Every enemy of the game with at least one attack intent (the DM's ray is not damage)
+  const defs = (Object.values(ENEMIGOS) as unknown[]).filter(
+    (d): d is EnemigoDef => !!d && typeof d === 'object' && typeof (d as EnemigoDef).ia === 'function'
+      && !(d as EnemigoDef).dungeonMaster,
+  );
+  /** Distinct attack intents an enemy can show (a few turns, both boss phases). */
+  const ataquesDe = (def: EnemigoDef): Mov[] => {
+    const vistos = new Map<string, Mov>();
+    for (const seed of [1, 2, 3]) {
+      for (const fase of [false, true]) {
+        const rng = crearRng(seed);
+        const self = ENEMIGOS.crearEnemigo(def, rng);
+        if (fase) { self.filacteriaUsada = true; self.pv = 1; }
+        for (let t = 0; t < 10; t++) {
+          const m = def.ia(t, rng, self, []);
+          if (m.dano === undefined || m.mataAlInstante) continue;
+          vistos.set(`${m.nombre}|${m.dano}|${m.veces ?? 1}`, { ...m });
+        }
+      }
+    }
+    return [...vistos.values()].slice(0, 4);
+  };
+  type Escenario = {
+    nombre: string; clase?: ClaseId; reliquias?: string[];
+    /** true when a relic can move damage between block and PV mid-attack */
+    soloTotal?: boolean;
+    prep?: (c: Combate, e: EnemigoCombate) => Promise<void> | void;
+  };
+  const raices = (e: EnemigoCombate, n: number) => {
+    e.raicesInstancias = [{ cantidad: n, turnos: 1 }];
+    e.estados.raices = n;
+  };
+  const ESC: Escenario[] = [
+    { nombre: 'sin nada' },
+    { nombre: 'jugador con 1 de Vulnerable', prep: (c) => { c.jugador.estados.vulnerable = 1; } },
+    { nombre: 'jugador con 2 de Vulnerable', prep: (c) => { c.jugador.estados.vulnerable = 2; } },
+    { nombre: 'jugador con 3 de Vulnerable y bloqueo 5', prep: (c) => { c.jugador.estados.vulnerable = 3; c.jugador.bloqueo = 5; } },
+    {
+      nombre: 'Marca del Condenado en la mano',
+      prep: (c) => { c.jugador.mano.push(instanciar(CTI.cartaPorId('marca-condenado'))); },
+    },
+    {
+      nombre: '1 de Vulnerable y Marca del Condenado en la mano',
+      prep: (c) => { c.jugador.estados.vulnerable = 1; c.jugador.mano.push(instanciar(CTI.cartaPorId('marca-condenado'))); },
+    },
+    { nombre: 'jugador con Débil y Frágil', prep: (c) => { c.jugador.estados.debil = 2; c.jugador.estados.fragil = 2; } },
+    { nombre: 'enemigo con 1 de Débil', prep: (_c, e) => { e.estados.debil = 1; } },
+    { nombre: 'enemigo con 3 de Fuerza', prep: (_c, e) => { e.estados.fuerza = 3; } },
+    { nombre: 'enemigo con 3 de Fuerza y 2 de Débil', prep: (_c, e) => { e.estados.fuerza = 3; e.estados.debil = 2; } },
+    { nombre: 'enemigo con 2 de Raíces', prep: (_c, e) => raices(e, 2) },
+    { nombre: 'enemigo aplastado por 40 de Raíces', prep: (_c, e) => raices(e, 40) },
+    { nombre: 'enemigo con 2 de Oscuridad', prep: (_c, e) => { e.estados.oscuridad = 2; } },
+    { nombre: 'enemigo con 40 de Oscuridad', prep: (_c, e) => { e.estados.oscuridad = 40; } },
+    {
+      nombre: 'Raíces y Oscuridad que juntas anulan el ataque (con Espejismo)',
+      prep: (c, e) => {
+        const n = e.intencion.dano! - 1;
+        raices(e, Math.max(1, Math.floor(n / 2)));
+        e.estados.oscuridad = Math.max(1, n - Math.floor(n / 2)) + 1;
+        c.jugador.estados.espejismo = 1;
+      },
+    },
+    { nombre: 'bloqueo 7', prep: (c) => { c.jugador.bloqueo = 7; } },
+    { nombre: 'bloqueo 999', prep: (c) => { c.jugador.bloqueo = 999; } },
+    {
+      nombre: 'bloqueo 6, Vulnerable 2 y Fuerza 2 del enemigo',
+      prep: (c, e) => { c.jugador.bloqueo = 6; c.jugador.estados.vulnerable = 2; e.estados.fuerza = 2; },
+    },
+    { nombre: 'invocación del druida (10)', prep: (c) => c.invocar('oso', 10) },
+    { nombre: 'bloqueo 4 e invocación (5)', prep: async (c) => { c.jugador.bloqueo = 4; await c.invocar('lobo', 5); } },
+    { nombre: 'invocación efímera del brujo (8)', clase: 'brujo', prep: (c) => c.invocarEfimero('sabueso', 8, 4) },
+    { nombre: 'Espejismo 1', prep: (c) => { c.jugador.estados.espejismo = 1; } },
+    { nombre: 'Espejismo 2 y bloqueo 3', prep: (c) => { c.jugador.estados.espejismo = 2; c.jugador.bloqueo = 3; } },
+    { nombre: 'Espinas 3', prep: (c) => { c.jugador.estados.espinas = 3; } },
+    { nombre: 'Armadura de Agathys y bloqueo 10', clase: 'brujo', prep: (c) => { c.jugador.estados.agathys = 1; c.jugador.bloqueo = 10; } },
+    // its block arrives at the end of the turn, after the forecast: only the total is exact
+    { nombre: 'Brazales de Defensa (bloqueo al acabar el turno)', reliquias: ['brazales-defensa'], soloTotal: true },
+    { nombre: 'Escudo Centinela y bloqueo 30', reliquias: ['escudo-centinela'], prep: (c) => { c.jugador.bloqueo = 30; } },
+    { nombre: 'Colgante de Escarcha y bloqueo 4', clase: 'brujo', reliquias: ['colgante-escarcha'], prep: (c) => { c.jugador.bloqueo = 4; } },
+    { nombre: 'Amuleto de Salud', reliquias: ['amuleto-salud'] },
+    { nombre: 'Aureola del Mártir', reliquias: ['aureola-martir'], soloTotal: true },
+  ];
+
+  let casos = 0;
+  const fallosI: string[] = [];
+  for (const def of defs) {
+    for (const mov of ataquesDe(def)) {
+      for (const esc of ESC) {
+        casos++;
+        let soakInv = 0;
+        const ui: Presentador = { ...uiSilenciosa, fxInvocacionGolpe: async (n: number) => { soakInv += n; } };
+        const run = nuevaRun(esc.clase ?? 'druida', 4242);
+        run.reliquias = (esc.reliquias ?? []).map((id) => reliquiaPorId(id)!);
+        run.pvMax = run.pv = 5000;
+        const comb = new Combate(run, [def], crearRng(4242), ui);
+        await comb.iniciar();
+        const j = comb.jugador;
+        j.descarte.push(...j.mano);
+        j.mano = [];
+        j.estados = {};
+        j.bloqueo = 0;
+        const e = comb.enemigos[0];
+        e.pv = e.pvMax = 5000;
+        e.estados = {};
+        e.raicesInstancias = [];
+        e.bloqueo = 0;
+        e.saltaAccion = false;
+        e.intencion = { ...mov };
+        await esc.prep?.(comb, e);
+        // What the player is shown during their turn
+        const mostrado = comb.danoIntencion(e);
+        const prev = comb.previsionAtaques().get(e);
+        // What really happens when this enemy acts
+        let medido: { bloqueado: number; pv: number; inv: number; prevenidos: number } | undefined;
+        const orig = comb.ejecutarMovimiento.bind(comb);
+        comb.ejecutarMovimiento = async (x: EnemigoCombate) => {
+          if (x !== e) return orig(x);
+          const b0 = comb.danoBloqueadoEsteTurno, r0 = comb.danoRecibidoEsteTurno;
+          const esp0 = j.estados.espejismo ?? 0;
+          soakInv = 0;
+          await orig(x);
+          medido = {
+            bloqueado: comb.danoBloqueadoEsteTurno - b0,
+            pv: comb.danoRecibidoEsteTurno - r0,
+            inv: soakInv,
+            prevenidos: esp0 - (j.estados.espejismo ?? 0),
+          };
+        };
+        await comb.terminarTurno();
+        const veces = mov.veces ?? 1;
+        const donde = `${def.nombre} · ${mov.nombre} (${mov.dano}×${veces}) · ${esc.nombre}`;
+        if (!medido) { fallosI.push(`${donde}: no llegó a actuar`); continue; }
+        const golpes = veces - medido.prevenidos;
+        const llega = medido.bloqueado + medido.pv + medido.inv;
+        if (mostrado * golpes !== llega) {
+          fallosI.push(`${donde}: muestra ${mostrado}×${golpes}, llega ${llega} (bloqueo ${medido.bloqueado}, PV ${medido.pv}, invocación ${medido.inv})`);
+          continue;
+        }
+        if (!prev) { fallosI.push(`${donde}: sin previsión del ataque`); continue; }
+        const cuadra = prev.porGolpe === mostrado && prev.veces === veces && prev.prevenidos === medido.prevenidos
+          && (esc.soloTotal
+            ? prev.bloqueado + prev.pv + prev.invocacion === llega
+            : prev.bloqueado === medido.bloqueado && prev.pv === medido.pv && prev.invocacion === medido.inv);
+        if (!cuadra) {
+          fallosI.push(`${donde}: previsión ${JSON.stringify(prev)} ≠ real ${JSON.stringify(medido)}`);
+        }
+      }
+    }
+  }
+  for (const f of fallosI.slice(0, 12)) console.error(`    · ${f}`);
+  check(fallosI.length === 0,
+    `la intención y su desglose coinciden con el golpe real (${casos - fallosI.length}/${casos} casos, ${defs.length} enemigos, ${ESC.length} escenarios)`);
+
+  // Vol'guth's Eternal Curse leaves 1 Vulnerable, which runs out before his Life Drain lands
+  {
+    const run = nuevaRun('druida', 12);
+    run.reliquias = [];
+    const comb = new Combate(run, [SENOR_CRIPTA], crearRng(12), uiSilenciosa);
+    await comb.iniciar();
+    const v = comb.enemigos[0];
+    v.intencion = { nombre: 'Drenar Vida', intencion: 'ataque', dano: 15, cura: 9 };
+    comb.jugador.estados.vulnerable = 1;
+    check(comb.danoIntencion(v) === 15 && comb.vulnerableAlGolpe() === 0,
+      'con 1 de Vulnerable la intención no lo cuenta: caduca al acabar tu turno, antes del golpe');
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv - 15, 'y el Drenar Vida hace 15, lo anunciado');
+  }
+
+  // Roots plus Darkness that bring the attack to 0 crush it: no 0-damage hit eats a Mirror Image
+  {
+    const run = nuevaRun('druida', 13);
+    run.reliquias = [];
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(13), uiSilenciosa);
+    await comb.iniciar();
+    const g = comb.enemigos[0];
+    g.estados = {};
+    g.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 6 };
+    g.raicesInstancias = [{ cantidad: 3, turnos: 1 }];
+    g.estados.raices = 3;
+    g.estados.oscuridad = 5;
+    comb.jugador.estados.espejismo = 1;
+    check(comb.danoIntencion(g) === 0 && comb.previsionAtaques().get(g)?.aplastado === true,
+      'Raíces 3 y Oscuridad 5 contra un ataque de 6: la intención anuncia que las raíces lo aplastan');
+    const pv = g.pv;
+    await comb.terminarTurno();
+    check(g.pv === pv - 2 && comb.jugador.estados.espejismo === 1,
+      'y lo aplastan: pierde 2 (6 − 3 − 5) y tu Espejismo sigue intacto');
+  }
+
+  // Two attackers share the same block: the forecast spends it in turn order
+  {
+    const golpe = (dano: number): EnemigoDef => ({
+      id: 'muneco-intencion', nombre: 'Muñeco', arte: '🎯', pv: [500, 500],
+      ia: () => ({ nombre: 'Golpe', intencion: 'ataque', dano }),
+    });
+    const run = nuevaRun('druida', 11);
+    run.reliquias = [];
+    const comb = new Combate(run, [golpe(6), golpe(8)], crearRng(11), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.bloqueo = 10;
+    const [a, b] = comb.enemigos;
+    const p = comb.previsionAtaques();
+    check(p.get(a)?.bloqueado === 6 && p.get(a)?.pv === 0 && p.get(b)?.bloqueado === 4 && p.get(b)?.pv === 4,
+      'el bloqueo se reparte entre los atacantes en el orden en que actúan');
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv - 4, 'y el golpe real coincide: 6 + 8 contra 10 de bloqueo son 4 PV');
+  }
+}
+
+// ── Live card numbers: what the card shows is exactly what it does ─────────
+console.log('\n🔢 Números calculados');
+{
+  const { reliquiaPorId } = await import('../src/core/reliquias.ts');
+  const { cartaPorId } = await import('../src/core/cartas.ts');
+  const { crearEspacios } = await import('../src/core/conjuros.ts');
+  const { formatearTexto } = await import('../src/ui/carta.ts');
+  const fs = await import('node:fs');
+  type Mov = ReturnType<EnemigoDef['ia']>;
+  const esperar: Mov = { nombre: 'Esperar', intencion: 'desconocido' };
+  const golpear: Mov = { nombre: 'Golpe', intencion: 'ataque', dano: 5 };
+  const muneco = (mov: Mov = esperar): EnemigoDef => ({
+    id: 'muneco-numeros', nombre: 'Muñeco', arte: '🎯', pv: [500, 500], ia: () => ({ ...mov }),
+  });
+
+  /** Combat states the cards are checked in. */
+  interface Escenario {
+    nombre: string;
+    reliquias?: string[];
+    mov?: Mov;
+    preparar(comb: Combate, e: EnemigoCombate): void | Promise<void>;
+  }
+  const ESCENARIOS: Escenario[] = [
+    { nombre: 'sin modificadores', preparar: () => {} },
+    {
+      nombre: 'Fuerza 3, Destreza 2 y objetivo Vulnerable',
+      preparar: (comb, e) => {
+        Object.assign(comb.jugador.estados, { fuerza: 3, destreza: 2 });
+        e.estados.vulnerable = 2;
+      },
+    },
+    {
+      nombre: 'Débil y Frágil, Fuerza 2 y Destreza -1',
+      preparar: (comb) => Object.assign(comb.jugador.estados, { debil: 2, fragil: 2, fuerza: 2, destreza: -1 }),
+    },
+    {
+      nombre: 'reliquias de daño, Furia, Condena, Veneno, invocación y mejoras de clase',
+      reliquias: ['corazon-cristal', 'hoja-sedienta'],
+      preparar: async (comb, e) => {
+        const j = comb.jugador;
+        j.pv = j.pvMax - 25; // Hoja Sedienta: +2 per hit
+        j.furiaFuerza = 2;
+        Object.assign(j.estados, {
+          fuerza: 2, destreza: 2, ventajaFurtiva: 3, dagasFuerza: 3, dagasDestreza: 1,
+          explosionFuerza: 3, explosionTurno: 2, explosionCrece: 1, explosionVeces: 1,
+          formaPotenciada: 1,
+        });
+        j.conjuroEscrito = 7;
+        Object.assign(e.estados, { veneno: 5, condena: 4, hemorragia: 6, vulnerable: 1 });
+        comb.descartadasEsteTurno = 2;
+        await comb.contexto().invocarEfimero('sabueso', 9, 5);
+        j.mano.push(instanciar(cartaPorId('grilletes')!)); // a curse to offer
+      },
+    },
+    {
+      nombre: 'enemigo que va a atacar y bloqueo previo',
+      mov: golpear,
+      preparar: (comb) => {
+        comb.jugador.bloqueo = 4;
+        comb.jugador.estados.fuerza = 1;
+      },
+    },
+  ];
+
+  // Cards whose play does not come from their text numbers (dice, summon attacks)
+  const SIN_COMPARAR = new Set(['seducir', 'deseo', 'vinculo-feroz', 'estampida']);
+  const todas: CartaDef[] = [
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, CONJURO_PRODIGIOSO, DAGA,
+  ].filter((d) => !SIN_COMPARAR.has(d.id));
+
+  async function montarNumeros(def: CartaDef, esc: Escenario) {
+    const clase = (def.clase === 'neutral' ? 'druida' : def.clase) as ClaseId;
+    const run = nuevaRun(clase, 4242);
+    run.reliquias = (esc.reliquias ?? []).map((id) => reliquiaPorId(id)!);
+    const comb = new Combate(run, [muneco(esc.mov)], crearRng(4242), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    e.bloqueo = 0;
+    comb.jugador.conjuros = crearEspacios(6); // every spell level is free
+    await esc.preparar(comb, e);
+    return { comb, e };
+  }
+
+  const errores: string[] = [];
+  let comprobadas = 0;
+  for (const esc of ESCENARIOS) {
+    for (const base of todas) {
+      for (const mejorada of [false, true]) {
+        if (mejorada && !base.mejora) continue;
+        const { comb, e } = await montarNumeros(base, esc);
+        const inst = instanciar(base);
+        inst.mejorada = mejorada;
+        const def = defDe(inst);
+        const valores = comb.valoresDeCarta(def, e);
+        const aplican = valores.filter((v) => v.aplica !== false);
+        const suma = (tipos: string[]) =>
+          aplican.filter((v) => tipos.includes(v.tipo)).reduce((s, v) => s + v.real * (v.veces ?? 1), 0);
+        const danoEsperado = suma(['ataque', 'directo']);
+        const bloqueoEsperado = suma(['bloqueo']);
+        const estadosAntes = { ...e.estados };
+        const pv0 = e.pv, bloqueo0 = comb.jugador.bloqueo;
+        comb.jugador.mano.push(inst);
+        comb.jugador.energia = 10;
+        await comb.jugarCarta(inst, e);
+        const hecho = pv0 - e.pv;
+        const ganado = comb.jugador.bloqueo - bloqueo0;
+        const nombre = `${def.nombre} [${esc.nombre}]`;
+        if (hecho !== danoEsperado) errores.push(`${nombre}: muestra ${danoEsperado} de daño y hace ${hecho}`);
+        if (ganado !== bloqueoEsperado) errores.push(`${nombre}: muestra ${bloqueoEsperado} de bloqueo y da ${ganado}`);
+        for (const v of aplican.filter((x) => x.tipo === 'estado')) {
+          const delta = (e.estados[v.estado!] ?? 0) - (estadosAntes[v.estado!] ?? 0);
+          if (delta !== v.real) errores.push(`${nombre}: muestra ${v.real} de ${v.estado} y aplica ${delta}`);
+        }
+        // every live number points at a real number of the text (or at its anchor)
+        const numeros = def.texto.match(/\d+/g) ?? [];
+        for (const v of valores) {
+          const bien = v.indice !== undefined ? v.indice < numeros.length : !!v.tras && def.texto.includes(v.tras);
+          if (!bien) errores.push(`${nombre}: un valor no encaja con el texto`);
+        }
+        comprobadas++;
+      }
+    }
+  }
+  for (const err of errores.slice(0, 25)) console.error(`    · ${err}`);
+  check(errores.length === 0,
+    `en ${comprobadas} jugadas (cada carta y su mejora en ${ESCENARIOS.length} estados) el número mostrado es el efecto real (${errores.length} discrepancias)`);
+
+  // — Special cases, one by one —
+  const valor = async (id: string, esc: Escenario, i = 0, mejorada = false) => {
+    const d = id === 'daga' ? DAGA : id === 'conjuro-prodigioso' ? CONJURO_PRODIGIOSO : cartaPorId(id)!;
+    const { comb, e } = await montarNumeros(d, esc);
+    const inst = instanciar(d);
+    inst.mejorada = mejorada;
+    return comb.valoresDeCarta(defDe(inst), e).filter((v) => v.aplica !== false)[i]?.real;
+  };
+  const [, fuerte, debil, reliquias, atacante] = ESCENARIOS;
+  check(await valor('golpe-demoledor', fuerte) === 22, 'Golpe Demoledor: 6 + 3× Fuerza (3) contra un Vulnerable muestra 22');
+  check(await valor('golpe-demoledor', fuerte, 0, true) === 30, 'Golpe Demoledor+: 8 + 4× Fuerza (3) contra un Vulnerable muestra 30');
+  check(await valor('postura-firme', fuerte) === 10, 'Postura Firme: 5 + Fuerza (3) + Destreza (2) de bloqueo');
+  check(await valor('reflejos-acero', fuerte) === 9, 'Reflejos de Acero: 3 + 3× Destreza (2) de bloqueo');
+  check(await valor('reflejos-acero', debil) === 1, 'Reflejos de Acero con Destreza negativa y Frágil no suma el triple de nada');
+  check(await valor('zarpa-doble', fuerte) === 9, 'Tormenta de Zarpas: el daño es por golpe (3 + 3 Fuerza, ×1,5)');
+  check(await valor('golpe', debil) === 6, 'Golpe con Débil y Fuerza 2: (6 + 2) × 0,75 = 6');
+  check(await valor('defender', debil) === 3, 'Defender con Frágil y Destreza -1: (5 - 1) × 0,75 = 3');
+  check(await valor('golpe', reliquias) === 24, 'Golpe con Corazón de Cristal, Hoja Sedienta, Oportunista y Fuerza 2 contra un Vulnerable: 24');
+  check(await valor('punalada-trapera', reliquias) === 30 && await valor('punalada-trapera', atacante) === 7,
+    'Puñalada Trapera suma su extra solo si el enemigo no pretende atacar');
+  check(await valor('golpe-septico', reliquias) === 30, 'Golpe Séptico suma el Veneno del objetivo');
+  check(await valor('tempestad-acero', reliquias) === 33, 'Tempestad de Acero suma 3 por cada descarte del turno');
+  check(await valor('sangre-caliente', reliquias) === 30 && await valor('sangre-caliente', fuerte) === 10,
+    'Sangre Caliente muestra como vigente la rama de Furia solo con Furia activa');
+  check(await valor('senda-fanatico', reliquias, 1) === 14, 'Senda del Fanático: el bloqueo suma el doble de la Furia');
+  check(await valor('forma-lobo', fuerte) === 16, 'Forma de Lobo cuenta la Fuerza que da antes de golpear');
+  check(await valor('furia-sanguinaria', fuerte) === 13, 'Furia Sanguinaria cuenta la Fuerza de su Furia');
+  check(await valor('conjuro-prodigioso', reliquias) === 40, 'Conjuro Prodigioso: 10 + lo escrito (7), con reliquias y Vulnerable');
+  check(await valor('daga', reliquias) === 28, 'Daga: Maestría con Cuchillas y Danza Mortal se suman');
+  check(await valor('explosion-sobrenatural', reliquias) === 34, 'Explosión Sobrenatural: mejoras de poder, del turno y la carga que crece al lanzarla');
+  check(await valor('ofrenda-maldita', reliquias) === 42 && await valor('ofrenda-maldita', fuerte) === 13,
+    'Ofrenda Maldita: con maldición en mano vale la rama grande; sin ella, la pequeña');
+  check(await valor('sacrificio-familiar', reliquias) === 18, 'Sacrificio del Familiar: el doble de la vida de la invocación');
+  check(await valor('festin-carmesi', reliquias) === 12, 'Festín Carmesí: el doble de la Hemorragia del objetivo');
+  check(await valor('verbo-aniquilacion', reliquias) === 166, 'Verbo de Aniquilación: Condena de un tercio de los PV actuales');
+  check(await valor('nube-nauseabunda', reliquias) === 9, 'Nube Nauseabunda: el Veneno que detona (el que había más el nuevo)');
+  check(await valor('reabrir-heridas', reliquias, 1) === 6, 'Reabrir Heridas: la Hemorragia que añade al duplicarla');
+  check(await valor('escudo-arcano', fuerte) === 26, 'Escudo Arcano: 4 + 2 por cada nivel libre (10) + Destreza');
+  check(await valor('proyectil-magico', fuerte) === 2, 'Proyectil Mágico ignora Fuerza y Vulnerable (daño directo)');
+  check(await valor('bola-fuego', ESCENARIOS[0]) === 20, 'Bola de Fuego suma su bonus por el nivel del espacio que gastará (3)');
+
+  // — Several enemies: Vulnerable counts only when it is known who takes the hit —
+  {
+    const run = nuevaRun('druida', 4242);
+    const comb = new Combate(run, [muneco(), muneco()], crearRng(4242), uiSilenciosa);
+    await comb.iniciar();
+    const golpe = cartaPorId('golpe')!;
+    comb.enemigos[0].estados.vulnerable = 2;
+    check(comb.valoresDeCarta(golpe)[0].real === 6, 'sin objetivo y con enemigos distintos, el daño no supone Vulnerable');
+    check(comb.valoresDeCarta(golpe, comb.enemigos[0])[0].real === 9, 'sobre el enemigo Vulnerable, el daño lo incluye');
+    comb.enemigos[1].estados.vulnerable = 1;
+    check(comb.valoresDeCarta(golpe)[0].real === 9, 'si todos son Vulnerables, se muestra aunque no haya objetivo');
+  }
+
+  // — Text: coloured live values, base text outside combat —
+  {
+    const { comb, e } = await montarNumeros(cartaPorId('golpe-demoledor')!, fuerte);
+    const def = cartaPorId('golpe-demoledor')!;
+    const html = formatearTexto(def.texto, { valores: comb.valoresDeCarta(def, e) });
+    check(html.includes('<span class="val-arriba">22</span>') && html.includes('3×'),
+      'el texto pinta 22 en verde y deja el «3×» del texto');
+    const { comb: c2 } = await montarNumeros(cartaPorId('golpe')!, debil);
+    c2.jugador.estados.fuerza = 0;
+    check(formatearTexto('Inflige 6 de daño.', { valores: c2.valoresDeCarta(cartaPorId('golpe')!) }).includes('<span class="val-abajo">4</span>'),
+      'un valor que empeora sale en rojo');
+    const { comb: c3, e: e3 } = await montarNumeros(cartaPorId('festin-carmesi')!, reliquias);
+    const fest = cartaPorId('festin-carmesi')!;
+    check(formatearTexto(fest.texto, { valores: c3.valoresDeCarta(fest, e3) }).includes('(12)'),
+      'una carta sin número en el texto muestra su valor calculado entre paréntesis');
+    check(formatearTexto('Inflige 6 de daño.') === 'Inflige 6 de daño.', 'fuera de combate se ve el valor base');
+    const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+    const zoom = ui.slice(ui.indexOf('function ampliarCarta'), ui.indexOf('function ampliarCarta') + 600);
+    check(/renderCarta\(def, modsEnCombate\(/.test(zoom) || /renderCarta\(defDe\(inst\), modsEnCombate\(/.test(zoom),
+      'la carta ampliada del combate usa los mismos modificadores que la de la mano');
+    // .carta-texto is a grid: without a single wrapper each coloured number would sit on its own row
+    const cartaUi = fs.readFileSync(new URL('../src/ui/carta.ts', import.meta.url), 'utf8');
+    check((cartaUi.match(/<span class="carta-texto-cuerpo">\$\{formatearTexto\(/g) ?? []).length === 2,
+      'el número coloreado sigue en su línea: el texto va envuelto en un solo bloque (al pintar y al apuntar)');
+  }
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);
