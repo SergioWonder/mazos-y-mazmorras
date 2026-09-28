@@ -1,14 +1,15 @@
-// Rare and unique card VFX: every rare or class-unique card plays its own
-// hand-authored sequence instead of the generic effect of its `fx` key (a storm
-// whose bolts strike each enemy, a whirlwind of phantom daggers, an infernal
-// circle with chains…). Each card also gets a prelude that gathers over its
+// Rare and unique card VFX: every rare or class-unique card (and a few signature
+// commons, like Magic Missile's volley of darts) plays its own hand-authored
+// sequence instead of the generic effect of its `fx` key (a storm whose bolts
+// strike each enemy, a whirlwind of phantom daggers, an infernal circle with
+// chains…). Each card also gets a prelude that gathers over its
 // receivers while the rare showcase holds the stage (anticipation); the main
 // sequence goes off on the hit, in sync with the damage (climax and impact),
 // and then dissipates. Pure like spell-fx.ts: deterministic and testable in node.
 
 import {
   Painter, SPELLS, MAX_CARD_SPRITES, geo, span, lerp, easeOut, easeIn, easeInOut, easeOutBack, bell, dropAngle,
-  zigzag, TAU, type Build, type Point, type SpellDef,
+  zigzag, smooth, clamp01, TAU, type Build, type Point, type SpellDef,
 } from './spell-fx.ts';
 
 // ── palettes ────────────────────────────────────────────────────────────────
@@ -1308,6 +1309,102 @@ const pactoFinal: Build = (g, u, c, D) => {
   rise(g, u, { x: cx, y: ground, w: rx * 2, h: H * 1.2, u0: 0.3, u1: 1, n: 40, cols: ['#c21f3a', '#b46bff', '#ff5a2a'], salt: 60, size: 7 * k });
 };
 
+/** Seconds a Magic Missile dart flies before it strikes. */
+const DART_FLIGHT = 0.36;
+/** Seconds its impact burst lingers after the strike. */
+const DART_FADE = 0.26;
+/** Seconds between two darts of the same volley (almost a burst). */
+const DART_GAP = 0.09;
+
+/** Magic Missile: one glowing force dart per hit. It leaves the staff, weaves
+ *  in a damped wobble (its own amplitude, frequency and phase per seed), curves
+ *  over into an arc and dives onto the target, shedding sparkles, and bursts in
+ *  a violet flash. Few sprites: a whole volley fits a phone's budget. */
+const proyectilMagico: Build = (g, u, c, D) => {
+  const { b, cx, cy, k, W, H, dir } = geo(c);
+  const t = u * D;
+  const src = c.from ?? { x: b.x - dir * W * 2.5, y: cy };
+  // born at the staff tip: ahead of and above the caster's centre
+  const S = { x: src.x + dir * 26 * k, y: src.y - 22 * k };
+  const E = { x: cx + (g.r(1) - 0.5) * W * 0.36, y: cy + (g.r(2) - 0.6) * H * 0.3 };
+  const dx = E.x - S.x, dy = E.y - S.y, L = Math.hypot(dx, dy) || 1, tx = dx / L, ty = dy / L;
+  // chord normal pointing up the screen: the arc bulges over the chord
+  const up = tx >= 0 ? 1 : -1, nx = ty * up, ny = -tx * up;
+  const lift = L * (0.3 + 0.3 * g.r(3)), launch = (g.r(4) - 0.35) * 1.6;
+  const C1 = { x: S.x + tx * L * (0.22 + 0.12 * g.r(5)) + nx * lift * launch, y: S.y + ty * L * (0.22 + 0.12 * g.r(5)) + ny * lift * launch };
+  const C2 = { x: E.x - tx * L * (0.02 + 0.12 * g.r(6)) + nx * lift * 1.4, y: E.y - ty * L * (0.02 + 0.12 * g.r(6)) + ny * lift * 1.4 };
+  const bez = (s: number) => {
+    const m = 1 - s, a = m * m * m, b1 = 3 * m * m * s, b2 = 3 * m * s * s, d = s * s * s;
+    return { x: a * S.x + b1 * C1.x + b2 * C2.x + d * E.x, y: a * S.y + b1 * C1.y + b2 * C2.y + d * E.y };
+  };
+  // serpentine wobble across the path, fading out before the final arc
+  const amp = (13 + 11 * g.r(7)) * k, freq = 2.2 + 1.0 * g.r(8), ph = g.r(9) * TAU;
+  const at = (s: number): Point => {
+    const p = bez(s), q = bez(Math.min(1, s + 0.01)), p0 = bez(Math.max(0, s - 0.01));
+    const vx = q.x - p0.x, vy = q.y - p0.y, vl = Math.hypot(vx, vy) || 1;
+    const env = smooth(clamp01(s / 0.08)) * (1 - smooth(clamp01((s - 0.25) / 0.52)));
+    const w = amp * Math.sin(TAU * freq * s + ph) * env;
+    return { x: p.x - (vy / vl) * w, y: p.y + (vx / vl) * w };
+  };
+  const uf = Math.min(1, t / DART_FLIGHT), head = uf * (0.75 + 0.25 * uf), hit = t >= DART_FLIGHT;
+  const tailLen = 0.28, tail = hit ? lerp(Math.max(0, 1 - tailLen), 1, easeOut(span(t, DART_FLIGHT, DART_FLIGHT + 0.12))) : Math.max(0, head - tailLen);
+  // launch flash at the staff tip
+  const lf = bell(t, 0, 0.12);
+  if (lf > 0) {
+    g.dot(S.x, S.y, 9 * k * lf, '#7a5cff', 0.35 * lf);
+    g.ring(S.x, S.y, (4 + 14 * span(t, 0, 0.12)) * k, (4 + 14 * span(t, 0, 0.12)) * k, 1.4 * k, '#9fd8ff', 0.8 * lf);
+  }
+  // glowing trail: violet halo, blue body, white core, tapering to the tail
+  const n = Math.max(4, g.n(12));
+  if (head - tail > 0.004) {
+    const pts: Point[] = [];
+    for (let j = 0; j <= n; j++) pts.push(at(lerp(tail, head, j / n)));
+    const fade = hit ? 1 - span(t, DART_FLIGHT, DART_FLIGHT + 0.12) : 1;
+    const w = (i: number) => (i / n) ** 1.3;
+    g.strip(pts, (i) => 9 * k * w(i) + 1, '#6c3cff', 0.2 * fade);
+    g.strip(pts, (i) => 4 * k * w(i) + 0.6, '#5fb0ff', 0.55 * fade);
+    g.strip(pts, (i) => 1.6 * k * w(i) + 0.4, '#f0f8ff', 0.9 * fade, false);
+  }
+  // the dart itself: a bright arrowhead with a twinkle
+  if (!hit) {
+    const h = at(head), a2 = at(Math.max(0, head - 0.02));
+    const hx = h.x - a2.x, hy = h.y - a2.y, hl = Math.hypot(hx, hy) || 1, ux = hx / hl, uy = hy / hl;
+    g.dot(h.x, h.y, 9 * k, '#7a5cff', 0.3);
+    g.fang(h.x - ux * 13 * k, h.y - uy * 13 * k, h.x + ux * 6 * k, h.y + uy * 6 * k, 6 * k, '#9fd8ff', 0.9);
+    g.dot(h.x, h.y, 2.4 * k, '#ffffff', 1, false);
+    g.star(h.x, h.y, 9 * k * (0.75 + 0.35 * Math.sin(t * 60 + g.r(10) * 9)), '#d9c8ff', 0.7, t * 14);
+    g.mark('dardo', h.x, h.y);
+  }
+  // sparkles shed along the way, drifting and fading
+  each(g, 7, (i) => {
+    const s0 = 0.08 + 0.8 * ((i + g.r(20 + i) * 0.8) / 7), born = DART_FLIGHT * (Math.sqrt(0.5625 + s0) - 0.75) / 0.5;
+    const q = span(t, born, born + 0.2);
+    if (q <= 0 || q >= 1) return;
+    const p = at(s0), dr = (g.r(30 + i) - 0.5) * 20 * k;
+    mote(g, i % 2 ? 'star' : 'dot', p.x + dr * q, p.y + dr * 0.5 * q + 14 * k * q * q, 6 * k * (1 - q) + 1, t * 8 + i,
+      ['#b46bff', '#6fc8ff', '#e8d0ff', '#ffffff'][i % 4], 1 - q);
+  });
+  // impact: violet flash, a four-point spark, a ring and a splash of force sparks
+  if (hit) {
+    const T = DART_FLIGHT, fl = bell(t, T - 0.01, T + 0.14);
+    if (t <= T + 0.05) g.mark('impacto', E.x, E.y);
+    const a1 = at(0.97), inAng = Math.atan2(E.y - a1.y, E.x - a1.x);
+    g.dot(E.x, E.y, 20 * k * fl + 1, '#6c3cff', 0.22 * fl);
+    const st = easeOutBack(span(t, T, T + 0.1)) * (1 - span(t, T + 0.08, T + 0.22));
+    g.star(E.x, E.y, 22 * k * st, '#8f6bff', 0.4 * st, inAng + Math.PI / 4);
+    g.star(E.x, E.y, 14 * k * st, '#e6f4ff', st, inAng + Math.PI / 4);
+    g.dot(E.x, E.y, 4 * k * fl + 0.5, '#ffffff', fl, false);
+    const rs = span(t, T, T + 0.24);
+    if (rs > 0 && rs < 1) g.ring(E.x, E.y, (6 + 34 * easeOut(rs)) * k, (6 + 26 * easeOut(rs)) * k, 3 * k * (1 - rs) + 0.6, '#9d7bff', 1 - rs);
+    each(g, 10, (i) => {
+      const q = span(t, T, T + 0.16 + 0.08 * g.r(40 + i));
+      if (q <= 0 || q >= 1) return;
+      const a = inAng + Math.PI + (g.r(50 + i) - 0.5) * 3.4, d = easeOut(q) * (20 + 32 * g.r(60 + i)) * k;
+      g.spark(E.x + Math.cos(a) * d, E.y + Math.sin(a) * d, 9 * k * (1 - q) + 2, a, i % 3 ? '#b8ecff' : '#c9a8ff', 1 - q);
+    });
+  }
+};
+
 // ── Neutral ─────────────────────────────────────────────────────────────────
 
 /** Seduce: hearts spiral in round the enemy, a d20 spins over it, a big heart
@@ -1437,6 +1534,11 @@ export const CARD_FX: Record<string, Entry> = {
   'tratado-prohibido': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: tratadoProhibido }, [VOID, 'rune', '#b46bff']),
   'palabra-de-poder': entry({ duration: 0.9, phases: [0.3, 0.62], anchor: 'self', shake: { at: 0.36, level: 1 }, build: palabraPoder }, [ARCANE, 'rune', '#3b6bff']),
   'maestria-conjuros': entry({ duration: 1.4, phases: [0.3, 0.7], anchor: 'self', build: maestriaConjuros }, [ARCANE, 'star', '#ffd166']),
+  // a common card with its own effect: one weaving dart per hit, cast in a quick volley
+  'proyectil-magico': entry({
+    duration: DART_FLIGHT + DART_FADE, phases: [DART_FLIGHT / (DART_FLIGHT + DART_FADE), (DART_FLIGHT + 0.14) / (DART_FLIGHT + DART_FADE)],
+    anchor: 'target', cap: 120, volley: { gap: DART_GAP }, build: proyectilMagico,
+  }, [ARCANE, 'star', '#8a6bff']),
   // rogue
   asesino: entry({ duration: 1.0, phases: [0.3, 0.7], anchor: 'self', build: golpeAsesino }, [TOXIC, 'drop', '#5bd13a']),
   psionico: entry({ duration: 1.2, phases: [0.35, 0.7], anchor: 'self', build: almaCuchillas }, [PSI, 'spark', '#c86bff']),
@@ -1474,6 +1576,15 @@ export function preludeKey(id: string): string | undefined {
  *  sequence replaces the generic effect of its fx key. */
 export function hitSpell(card: { id: string; fx?: string } | null, efecto: string): string {
   return card && card.fx === efecto && CARD_FX[card.id] ? cardSpellKey(card.id, card.fx) : efecto;
+}
+
+/** Volley rhythm of spell `key`: its hits are cast `gapMs` apart and each one's
+ *  feedback (number, hit, shake) waits `impactMs` for its dart to land. Reduced
+ *  motion spaces the darts out so every number reads. Null for ordinary hits. */
+export function volleyTiming(key: string, reduced: boolean): { impactMs: number; gapMs: number } | null {
+  const d = SPELLS[key];
+  if (!d?.volley) return null;
+  return { impactMs: Math.round(d.phases[0] * d.duration * 1000), gapMs: Math.round(d.volley.gap * (reduced ? 2 : 1) * 1000) };
 }
 
 /** Screen shake of spell `key` (delay since it was cast), or null with reduced motion. */

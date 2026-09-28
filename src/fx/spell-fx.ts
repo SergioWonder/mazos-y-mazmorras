@@ -37,6 +37,9 @@ export interface SpellDef {
   shake?: { at: number; level: 1 | 2 | 3 };
   /** Who shows it when the card has no natural receiver: the hero, or every enemy. */
   receiver?: 'hero' | 'enemies';
+  /** Its hits come in a quick volley (Magic Missile's darts): the next hit is cast `gap`
+   *  seconds later and each hit's feedback waits for the impact at `phases[0]`. */
+  volley?: { gap: number };
 }
 
 export const MAX_SPELL_SPRITES = 220;

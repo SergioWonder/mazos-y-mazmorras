@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.9.1';
+export const VERSION = '6.10.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.10.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '💫 Proyectil Mágico se carga: cada vez que lo lanzas, todos tus Proyectiles Mágicos hacen +1 de daño por proyectil durante el combate.',
+      '✨ Maestría de Conjuros: además de darte un Proyectil Mágico cada turno, tus Proyectiles Mágicos lanzan 1 proyectil más.',
+      '🌀 Nueva animación de Proyectil Mágico: los dardos salen en ráfaga, serpentean y caen en arco sobre el enemigo, y cada número aparece al impactar.',
+    ],
+  },
   {
     version: '6.9.1',
     fecha: '2026-09-28',

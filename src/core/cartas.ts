@@ -1486,6 +1486,18 @@ export const DAGA: CartaDef = {
   },
 };
 
+/** Magic Missile: extra damage per missile, stacked by every cast this combat. */
+const cargaProyectil = (c: ContextoEfecto) => c.jugador.estados.proyectilCarga ?? 0;
+/** Spell Mastery adds one missile to every Magic Missile. */
+const proyectilesExtra = (c: ContextoEfecto) => ((c.jugador.estados.maestria ?? 0) > 0 ? 1 : 0);
+/** Fires the missiles (2 + charge each, piercing) and then charges every Magic Missile by +1. */
+async function lanzarProyectiles(c: ContextoEfecto, base: number) {
+  const dano = 2 + cargaProyectil(c);
+  const veces = base + proyectilesExtra(c);
+  for (let i = 0; i < veces; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, dano, 'estrellas');
+  await c.aplicarEstado(c.jugador, 'proyectilCarga', 1);
+}
+
 export const MAGO: CartaDef[] = [
   {
     id: 'manos-ardientes',
@@ -1541,17 +1553,16 @@ export const MAGO: CartaDef[] = [
     rareza: 'comun',
     coste: 0,
     objetivo: 'enemigo',
-    texto: 'Inflige 2 de daño 3 veces.\nIgnora el bloqueo.',
-    valores: (_c, n) => [{ tipo: 'directo', indice: 0, base: n[0], veces: n[1] }],
+    texto: 'Inflige 2 de daño 3 veces. Ignora\nel bloqueo. Cada lanzamiento da +1\nde daño a tus Proyectiles Mágicos.',
+    valores: (c, n) => [
+      { tipo: 'directo', indice: 0, base: n[0] + cargaProyectil(c), veces: n[1] + proyectilesExtra(c) },
+      { tipo: 'otro', indice: 1, base: n[1] + proyectilesExtra(c) },
+    ],
     fx: 'estrellas',
-    jugar: async (c) => {
-      for (let i = 0; i < 3; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
-    },
+    jugar: async (c) => { await lanzarProyectiles(c, 3); },
     mejora: {
-      texto: 'Inflige 2 de daño 4 veces.\nIgnora el bloqueo.',
-      jugar: async (c) => {
-        for (let i = 0; i < 4; i++) if (c.objetivo!.vivo) await c.danarPerforante(c.objetivo!, 2, 'estrellas');
-      },
+      texto: 'Inflige 2 de daño 4 veces. Ignora\nel bloqueo. Cada lanzamiento da +1\nde daño a tus Proyectiles Mágicos.',
+      jugar: async (c) => { await lanzarProyectiles(c, 4); },
     },
   },
   {
@@ -2116,13 +2127,13 @@ export const MAGO: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'estrellas',
     animRara: 'anim-evocacion',
-    texto: 'Poder: al inicio de cada turno\nañades un Proyectil Mágico a tu mano.',
+    texto: 'Poder: al inicio de cada turno\nañades un Proyectil Mágico a tu mano.\nTus Proyectiles Mágicos lanzan\n1 proyectil más.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'maestria', 1);
     },
     mejora: {
       innato: true,
-      texto: 'Innata: empiezas cada combate con ella.\nPoder: al inicio de cada turno añades\nun Proyectil Mágico+ a tu mano.',
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: al inicio de cada turno añades\nun Proyectil Mágico+ a tu mano. Tus\nProyectiles Mágicos lanzan 1 proyectil más.',
       jugar: async (c) => {
         // valor 2 = añade la versión mejorada del Proyectil Mágico
         await c.aplicarEstado(c.jugador, 'maestria', 2);

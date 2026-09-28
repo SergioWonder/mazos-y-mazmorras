@@ -24,6 +24,7 @@ import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts'
 import { playDestination, drawDelays, type Point } from './card-motion.ts';
 import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
+import { ImpactQueue } from './impact-queue.ts';
 import {
   deathTimeScale, heroDeathFx, heroDeathSequence, playsDefeatSequence, SOUL_SPELL, type DeathCueId,
 } from '../fx/hero-death.ts';
@@ -259,6 +260,12 @@ export function pantallaCombate(
       setTimeout(() => b.classList.add('saliendo'), 2300);
       setTimeout(() => b.remove(), 2700);
     };
+    /** Feedback of volley darts still in flight (Magic Missile): each hit's runs when its dart lands. */
+    const impactos = new ImpactQueue();
+    /** Health each fighter shows while darts fly at it, and its value after each pending dart. */
+    const vidaEnVuelo = new Map<Luchador, { shown: number; queue: number[] }>();
+    /** Health last drawn on each bar (where a volley's bar starts from). */
+    const pvPintado = new WeakMap<Luchador, number>();
     /** Hit effect: its own spell when there is one. Returns false to fall back to particles. */
     const hechizoGolpe = (obj: Luchador, efecto: string): boolean => {
       if (actor && obj === combate.jugador && actor.e.intencion.mataAlInstante) {
@@ -290,28 +297,52 @@ export function pantallaCombate(
       render,
       espera,
       async fxGolpe(obj, dano, efecto = 'tajo') {
-        const elem = elemDe(obj);
-        const { x, y } = centroDe(elem);
-        if (!hechizoGolpe(obj, efecto)) fx.emitir(efecto, x, y);
-        audio.sfx(dano > 0 ? efecto : 'bloqueo');
-        if (dano > 0) {
-          if (obj === combate.jugador) spriteActual().play('hit');
-          else spriteEnemigo(obj as EnemigoCombate)?.play('hit');
-          numeroFlotante(elem, `${dano}`, 'dano');
-          elem?.classList.add('golpeado');
-          setTimeout(() => elem?.classList.remove('golpeado'), 350);
-          sacudir(dano >= 12 ? 3 : dano >= 7 ? 2 : 1);
-        } else if (esDungeonMaster(obj)) {
-          // the screen takes the blow and shakes; the DM does not even blink
-          spriteEnemigo(obj as EnemigoCombate)?.play('hit');
-          numeroFlotante(elem, '🛡️ ∞', 'bloqueo');
-        } else {
-          numeroFlotante(elem, 'Bloqueado', 'bloqueo');
+        // volley darts (Magic Missile) fly one right after another: each one's number, hit and
+        // shake wait for it to land. Any other hit first lets the pending darts land.
+        let rafaga = actor ? null : fx.rafagaHechizo(hitSpell(hechizoCarta, efecto));
+        if (!rafaga) await impactos.settle();
+        if (!hechizoGolpe(obj, efecto)) {
+          const { x, y } = centroDe(elemDe(obj));
+          fx.emitir(efecto, x, y);
+          rafaga = null; // no dart to wait for
         }
-        render();
+        const alImpactar = () => {
+          const vuelo = vidaEnVuelo.get(obj);
+          if (rafaga && vuelo) {
+            vuelo.shown = vuelo.queue.shift() ?? obj.pv;
+            if (!vuelo.queue.length) vidaEnVuelo.delete(obj);
+          }
+          const elem = elemDe(obj);
+          audio.sfx(dano > 0 ? efecto : 'bloqueo');
+          if (dano > 0) {
+            if (obj === combate.jugador) spriteActual().play('hit');
+            else spriteEnemigo(obj as EnemigoCombate)?.play('hit');
+            numeroFlotante(elem, `${dano}`, 'dano');
+            elem?.classList.add('golpeado');
+            setTimeout(() => elem?.classList.remove('golpeado'), 350);
+            sacudir(dano >= 12 ? 3 : dano >= 7 ? 2 : 1);
+          } else if (esDungeonMaster(obj)) {
+            // the screen takes the blow and shakes; the DM does not even blink
+            spriteEnemigo(obj as EnemigoCombate)?.play('hit');
+            numeroFlotante(elem, '🛡️ ∞', 'bloqueo');
+          } else {
+            numeroFlotante(elem, 'Bloqueado', 'bloqueo');
+          }
+          render();
+        };
+        if (rafaga) {
+          const vuelo = vidaEnVuelo.get(obj) ?? { shown: pvPintado.get(obj) ?? obj.pv, queue: [] };
+          vuelo.queue.push(obj.pv);
+          vidaEnVuelo.set(obj, vuelo);
+          impactos.schedule(rafaga.impactMs, alImpactar);
+          await espera(rafaga.gapMs);
+          return;
+        }
+        alImpactar();
         await espera(260);
       },
       async fxBloqueo(obj, n) {
+        await impactos.settle();
         const elem = elemDe(obj);
         // the card's own effect (a shield, bark, moonlight…) stands for the block it grants
         const yaMostrado = obj === combate.jugador && !!hechizoCarta?.hecho.has(obj);
@@ -322,6 +353,7 @@ export function pantallaCombate(
         await espera(200);
       },
       async fxEstado(obj, estado, n) {
+        await impactos.settle();
         const elem = elemDe(obj);
         const signo = n > 0 ? '+' : '';
         if (!hechizoPara(obj)) {
@@ -335,6 +367,7 @@ export function pantallaCombate(
         await espera(260);
       },
       async fxCura(obj, n) {
+        await impactos.settle();
         const elem = elemDe(obj);
         const { x, y } = centroDe(elem);
         hechizoPara(obj);
@@ -345,6 +378,8 @@ export function pantallaCombate(
         await espera(220);
       },
       async fxMuerte(e) {
+        // the darts already cast land (and show their numbers) before it falls
+        await impactos.settle();
         const elem = elemDe(e);
         const { x, y } = centroDe(elem);
         fx.emitir('muerte', x, y);
@@ -362,6 +397,7 @@ export function pantallaCombate(
         render();
       },
       async fxMensaje(txt) {
+        await impactos.settle();
         anuncio(txt);
         await espera(350);
       },
@@ -398,6 +434,7 @@ export function pantallaCombate(
         await espera(500);
       },
       async fxParticulas(obj, efecto) {
+        await impactos.settle();
         const { x, y } = centroDe(elemDe(obj));
         if (!hechizoGolpe(obj, efecto)) fx.emitir(efecto, x, y);
         render();
@@ -624,11 +661,14 @@ export function pantallaCombate(
     }
 
     function barraVida(l: Luchador): string {
-      const pct = Math.max(0, (l.pv / l.pvMax) * 100);
+      // while volley darts fly, the bar keeps the health they have not taken yet
+      const pv = vidaEnVuelo.get(l)?.shown ?? l.pv;
+      pvPintado.set(l, pv);
+      const pct = Math.max(0, (pv / l.pvMax) * 100);
       return `
         <div class="vida">
           <div class="vida-relleno" style="width:${pct}%"></div>
-          <span class="vida-texto">${l.pv}/${l.pvMax}</span>
+          <span class="vida-texto">${pv}/${l.pvMax}</span>
         </div>`;
     }
 
@@ -1064,6 +1104,9 @@ export function pantallaCombate(
       try {
         await combate.jugarCarta(inst, objetivo);
       } finally {
+        // the last darts of a volley land before the next card (or the end of the turn)
+        await impactos.settle();
+        vidaEnVuelo.clear();
         cerrarHechizoCarta();
         // still in hand (the play did not go through): it may be discarded later
         if (combate.jugador.mano.includes(inst)) lanzadas.delete(inst);

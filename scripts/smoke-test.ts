@@ -900,6 +900,36 @@ console.log('— Cartas únicas de clase (Acto III) —');
     'Maestría: añade un Proyectil Mágico a la mano cada turno',
   );
 
+  // Magic Missile: every cast makes every Magic Missile deal +1 damage per missile
+  {
+    const run = nuevaRun('mago', 73);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(73), uiSilenciosa);
+    await comb.iniciar();
+    const e = comb.enemigos[0];
+    const pm = MAGO.find((c) => c.id === 'proyectil-magico')!;
+    const lanzar = async (mejorada = false) => {
+      const inst = instanciar(pm);
+      inst.mejorada = mejorada;
+      comb.jugador.mano.push(inst);
+      comb.jugador.energia = 10;
+      e.pv = 500; e.pvMax = 500; e.bloqueo = 5;
+      const pv0 = e.pv;
+      await comb.jugarCarta(inst, e);
+      return pv0 - e.pv;
+    };
+    check(await lanzar() === 6, 'Proyectil Mágico: 3 proyectiles de 2 que ignoran el bloqueo');
+    check((comb.jugador.estados.proyectilCarga ?? 0) === 1, 'Proyectil Mágico: cada lanzamiento suma +1 de daño a los proyectiles');
+    check(await lanzar() === 9, 'Proyectil Mágico: el segundo lanzamiento (otra copia) hace 3 de daño por proyectil');
+    const vals = comb.valoresDeCarta(pm, e);
+    check(vals[0]?.real === 4 && vals[0]?.veces === 3, 'Proyectil Mágico: la carta muestra el daño acumulado (4) por proyectil');
+    comb.jugador.estados.maestria = 1;
+    const valsM = comb.valoresDeCarta(pm, e);
+    check(valsM[0]?.veces === 4 && valsM.find((v) => v.indice === 1)?.real === 4,
+      'Maestría de Conjuros: los Proyectiles Mágicos muestran 1 proyectil más');
+    check(await lanzar() === 16, 'Maestría de Conjuros: el Proyectil Mágico lanza 4 proyectiles (de 4)');
+    check(await lanzar(true) === 25, 'Maestría de Conjuros: el Proyectil Mágico+ lanza 5 proyectiles (de 5)');
+  }
+
   // Acelerar: poder que roba +1 al inicio del turno y se cae al quedarte sin mano
   const acel = MAGO.find((c) => c.id === 'acelerar')!;
   check(acel.tipo === 'poder' && acel.mejora?.innato === true, 'Acelerar es un poder; su mejora es innata');
@@ -5183,6 +5213,117 @@ try {
   check(MAX_LIVE_SPRITES <= 900, 'el tope global de elementos vivos es de unos 900');
 } catch (e) {
   check(false, `las pruebas de las secuencias raras revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Magic Missile: one weaving dart per hit, in a quick volley ──────────────
+console.log('\n🔮 Proyectil Mágico: dardos que serpentean y caen en arco');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const cs = await import('../src/fx/card-spells.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, MAX_LIVE_SPRITES } = sf;
+  const { CARD_FX, cardSpellKey, hitSpell, volleyTiming } = cs;
+  const carta = MAGO.find((d) => d.id === 'proyectil-magico')!;
+  const k = cardSpellKey(carta.id, carta.fx);
+  const def = SPELLS[k];
+  check(!!CARD_FX[carta.id] && !!def && k !== carta.fx, 'Proyectil Mágico tiene su propio efecto');
+  check(hitSpell({ id: carta.id, fx: carta.fx }, carta.fx ?? '') === k, 'cada golpe de Proyectil Mágico lanza su dardo');
+  check(!!def && def.anchor === 'target' && def.build !== SPELLS[carta.fx ?? '']?.build, 'el dardo se dibuja sobre el objetivo y no reutiliza «estrellas»');
+  const firmasOtras = new Set(Object.keys(SPELLS).filter((x) => x !== k).map((x) => spellSignature(x)));
+  check(!firmasOtras.has(spellSignature(k)), 'el dardo se ve distinto de los demás efectos');
+  check(def.duration >= 0.4 && def.duration <= 1.4, `el dardo dura entre 0,4 y 1,4 s (${def.duration})`);
+  const vuelo = def.phases[0] * def.duration;
+  check(vuelo >= 0.28 && vuelo <= 0.42, `vuelo corto: el dardo impacta a los ${Math.round(vuelo * 1000)} ms`);
+  check(def.phases[0] < def.phases[1] && def.phases[1] < 1, 'vuelo < impacto < disipación');
+  // volley timing: quick, and the feedback waits for the impact
+  const r = volleyTiming(k, false)!, rr = volleyTiming(k, true)!;
+  check(!!r && r.gapMs >= 70 && r.gapMs <= 110, `los dardos salen casi en ráfaga (${r?.gapMs} ms entre ellos)`);
+  check(!!r && r.impactMs === Math.round(vuelo * 1000), 'el daño de cada dardo se muestra cuando impacta');
+  check(!!rr && rr.gapMs > r.gapMs && rr.impactMs === r.impactMs, 'con movimiento reducido los dardos se espacian para leer cada número');
+  check(['estrellas', 'tajo', 'impacto', cardSpellKey('tormenta-venganza', 'raices'), ''].every((x) => volleyTiming(x, false) === null),
+    'los demás golpes conservan su ritmo');
+  // geometry: born at the caster, weaving, ends in an arc inside the target
+  const box = { x: 620, y: 180, w: 150, h: 200 };
+  const from = { x: 180, y: 330 };
+  const ctx = (seed: number, b = box) => ({ box: b, from, facing: -1 as const, seed });
+  const cabeza = (seed: number, b = box) => {
+    const pts: { x: number; y: number }[] = [];
+    for (let t = 0; t <= vuelo; t += 1 / 240) {
+      const m = spellMarks(k, ctx(seed, b), t).find((q) => q.kind === 'dardo');
+      if (m) pts.push(m);
+    }
+    return pts;
+  };
+  const rumbo = (pts: { x: number; y: number }[]) => pts.slice(1).map((p, i) => Math.atan2(p.y - pts[i].y, p.x - pts[i].x));
+  const giros = (a: number[]) => a.slice(1).map((v, i) => { let d = v - a[i]; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; });
+  let dentro = 0, serpentea = 0, arco = 0, nace = 0, unImpacto = 0;
+  const semillas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  for (const s of semillas) {
+    const pts = cabeza(s);
+    if (pts.length && Math.hypot(pts[0].x - from.x, pts[0].y - from.y) < 90) nace++;
+    const gi = giros(rumbo(pts));
+    const n = gi.length, ida = gi.slice(Math.round(n * 0.05), Math.round(n * 0.6));
+    let cambios = 0;
+    for (let i = 1; i < ida.length; i++) if (Math.sign(ida[i]) !== Math.sign(ida[i - 1]) && Math.abs(ida[i]) > 1e-4) cambios++;
+    if (cambios >= 2) serpentea++;
+    const final = gi.slice(Math.round(n * 0.78));
+    const total = final.reduce((a, b) => a + b, 0);
+    if (Math.abs(total) > 0.25 && final.every((d) => Math.sign(d) === Math.sign(total) || Math.abs(d) < 1e-3)) arco++;
+    const impactos: { x: number; y: number; t: number }[] = [];
+    for (let t = 0; t <= def.duration; t += 1 / 120) {
+      for (const m of spellMarks(k, ctx(s), t)) if (m.kind === 'impacto') impactos.push({ ...m, t });
+    }
+    if (impactos.length && impactos.every((m) => m.x >= box.x && m.x <= box.x + box.w && m.y >= box.y && m.y <= box.y + box.h)) dentro++;
+    if (impactos.length && Math.abs(impactos[0].t - vuelo) < 0.02) unImpacto++;
+  }
+  check(nace === semillas.length, `los dardos salen del héroe (${nace}/${semillas.length})`);
+  check(serpentea === semillas.length, `los dardos serpentean durante el vuelo (${serpentea}/${semillas.length})`);
+  check(arco === semillas.length, `los dardos acaban en un arco hacia el enemigo (${arco}/${semillas.length})`);
+  check(dentro === semillas.length, `el impacto cae dentro de la caja del objetivo (${dentro}/${semillas.length})`);
+  check(unImpacto === semillas.length, `el destello de impacto llega al final del vuelo (${unImpacto}/${semillas.length})`);
+  const otraCaja = { x: 900, y: 60, w: 90, h: 120 };
+  check(spellMarks(k, ctx(3, otraCaja), vuelo + 0.01).some((m) => m.kind === 'impacto' && m.x >= otraCaja.x && m.x <= otraCaja.x + otraCaja.w && m.y >= otraCaja.y && m.y <= otraCaja.y + otraCaja.h),
+    'también acierta a un enemigo pequeño y lejano');
+  // deterministic by seed, and each dart flies its own way
+  check(JSON.stringify(spellFrame(k, ctx(5), 0.2)) === JSON.stringify(spellFrame(k, ctx(5), 0.2)), 'el dardo es determinista por semilla');
+  const a1 = cabeza(1), a2 = cabeza(2);
+  const mitad = Math.floor(Math.min(a1.length, a2.length) / 2);
+  check(a1.length > 10 && Math.hypot(a1[mitad].x - a2[mitad].x, a1[mitad].y - a2[mitad].y) > 8, 'dos dardos siguen trayectorias distintas');
+  // budget: few sprites per dart, a five-dart volley fits the live cap
+  let maximo = 0, roto = 0, rafaga = 0, reducido = 0;
+  for (let t = 0; t <= def.duration; t += 1 / 60) {
+    const fr = spellFrame(k, ctx(4), t);
+    maximo = Math.max(maximo, fr.length);
+    reducido = Math.max(reducido, spellFrame(k, { ...ctx(4), reduced: true }, t).length);
+    for (const s of fr) if (![s.x, s.y, s.size, s.angle, s.alpha ?? 1].every(Number.isFinite) || s.size <= 0) roto++;
+  }
+  for (let t = 0; t <= def.duration + 5 * 0.1; t += 1 / 60) {
+    let s = 0;
+    for (let i = 0; i < 5; i++) s += spellFrame(k, ctx(i + 1), t - (i * r.gapMs) / 1000).length;
+    rafaga = Math.max(rafaga, s);
+  }
+  check(roto === 0, `el dardo solo dibuja elementos válidos (${roto} rotos)`);
+  check(maximo > 12 && maximo <= 90 && maximo <= (def.cap ?? 0), `pocas partículas por dardo (${maximo})`);
+  check(reducido < maximo, `con movimiento reducido el dardo dibuja menos (${reducido} < ${maximo})`);
+  check(rafaga <= MAX_LIVE_SPRITES / 2, `una ráfaga de cinco dardos cabe de sobra en el tope (${rafaga})`);
+  check(spellFrame(k, ctx(4), def.duration + 0.01).length === 0, 'el dardo desaparece al terminar');
+  // the feedback of each dart waits for its impact; settle() waits for them all
+  const { ImpactQueue } = await import('../src/ui/impact-queue.ts');
+  const q = new ImpactQueue(() => {});
+  const orden: string[] = [];
+  const t0 = performance.now();
+  q.schedule(40, () => orden.push('a'));
+  q.schedule(20, () => orden.push('b'));
+  check(q.size === 2 && orden.length === 0, 'el feedback del dardo espera a su impacto');
+  await q.settle();
+  check(orden.join('') === 'ba' && q.size === 0 && performance.now() - t0 >= 38, 'asentar espera a que lleguen todos los dardos pendientes');
+  q.schedule(10, () => { throw new Error('boom'); });
+  q.schedule(15, () => orden.push('c'));
+  await q.settle();
+  check(orden.join('') === 'bac' && q.size === 0, 'un fallo en un impacto no deja la cola colgada');
+  await q.settle();
+  check(true, 'asentar sin dardos pendientes termina al instante');
+} catch (e) {
+  check(false, `las pruebas de Proyectil Mágico revientan: ${(e as Error).stack ?? e}`);
 }
 
 // ── Actions blend in and out of the idle breathing (no pop at the edges) ─────

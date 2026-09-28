@@ -8,7 +8,7 @@ import {
 import { ParticleRendererGL } from './particle-gl.ts';
 import { SpellSystem, SPELLS, MAX_LIVE_SPRITES, type Box, type Point } from './spell-fx.ts';
 // registers the rare and unique cards' own sequences in SPELLS
-import { cardShake } from './card-spells.ts';
+import { cardShake, volleyTiming } from './card-spells.ts';
 
 /** prefers-reduced-motion: fewer particles and no screen shake. */
 const movimientoReducido = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -120,6 +120,11 @@ class MotorParticulas {
   /** Brief screen shake the spell asks for (null with reduced motion or when it has none). */
   sacudidaHechizo(nombre: string): { delayMs: number; level: 1 | 2 | 3 } | null {
     return cardShake(nombre, movimientoReducido());
+  }
+
+  /** Volley rhythm of the spell (Magic Missile's darts): ms between casts and until each impact. */
+  rafagaHechizo(nombre: string): { impactMs: number; gapMs: number } | null {
+    return volleyTiming(nombre, movimientoReducido());
   }
 
   /** Lanza el efecto de hechizo `nombre` sobre la caja de pantalla `caja`

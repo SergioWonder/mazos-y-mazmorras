@@ -94,7 +94,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   espejismo: '🪞', invulnerable: '🌟', raizProlongada: '🌳', formaProlongada: '🦎', formaPotenciada: '🐾', formaBloqueo: '🛡️', invocacionFuerza: '🐺',
   fuerzaPorTurno: '🌕', destrezaPorTurno: '🌘',
   quemadura: '🔥',
-  furiaIndomita: '🛡️', maestria: '✨', roboAcelerado: '💨',
+  furiaIndomita: '🛡️', maestria: '✨', proyectilCarga: '💫', roboAcelerado: '💨',
   hemorragia: '🩸', sedSangre: '🧛', escribania: '📜',
   veneno: '🧪', cartasAgotan: '🔥', cartasSobrecoste: '⚡', cartasEtereas: '👻',
   acrobacias: '🤸', filoVenenoso: '🗡️', preparacion: '🎒',
@@ -117,6 +117,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   formaBloqueo: 'Corazón del Cambiante (bloqueo)', invocacionFuerza: 'Alma de la Manada',
   fuerzaPorTurno: 'Forma Lunar (Fuerza)', destrezaPorTurno: 'Forma Lunar (Destreza)',
   quemadura: 'Quemadura', furiaIndomita: 'Furia Indómita', maestria: 'Maestría de Conjuros',
+  proyectilCarga: 'Proyectiles Cargados',
   roboAcelerado: 'Acelerar', hemorragia: 'Hemorragia', sedSangre: 'Sed de Sangre',
   escribania: 'Escribanía',
   veneno: 'Veneno', cartasAgotan: 'Cartas que se Agotan', cartasSobrecoste: 'Sobrecarga',
@@ -162,7 +163,8 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   quemadura: 'Cada carta que juegues te hace perder 3 PV. Baja 1 por turno.',
   furiaIndomita:
     'Mientras estés en Furia, al inicio de tu turno ganas bloqueo igual a tu Fuerza. La Furia no se rompe si bloqueaste daño y te queda menos de 10 de bloqueo.',
-  maestria: 'Al inicio de cada turno añades un Proyectil Mágico a tu mano.',
+  maestria: 'Al inicio de cada turno añades un Proyectil Mágico a tu mano. Tus Proyectiles Mágicos lanzan 1 proyectil más.',
+  proyectilCarga: 'Cada proyectil de tus Proyectiles Mágicos inflige esa cantidad de daño adicional. Sube 1 cada vez que lanzas uno.',
   roboAcelerado: 'Robas 1 carta adicional al inicio de tus turnos. Desaparece si te quedas sin cartas en la mano.',
   hemorragia:
     'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',

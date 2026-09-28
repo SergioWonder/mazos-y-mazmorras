@@ -32,7 +32,8 @@ export type EstadoId =
   | 'hemorragia'    // (enemigo) pierde esta cantidad de PV al inicio de su turno (ignora bloqueo)
   | 'sedSangre'     // (bárbaro) ganas este bloqueo cada vez que un enemigo sangra
   | 'escribania'    // (mago) Escribe esta cantidad en el Conjuro Prodigioso al inicio del turno
-  | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +)
+  | 'maestria'      // (mago) añade un Proyectil Mágico a la mano cada turno (2 = la versión +) y +1 proyectil
+  | 'proyectilCarga' // (mago) daño extra por proyectil de tus Proyectiles Mágicos (+1 por lanzamiento)
   | 'roboAcelerado' // (mago) roba +1 carta al inicio del turno; se cae si te quedas sin mano
   | 'veneno'         // pierde esta cantidad de PV al inicio de su turno (ignora bloqueo); baja 1 cada turno
   | 'acrobacias'     // (pícaro) bloqueo aplazado total pendiente de reaplicarse el próximo turno (solo indicador)
