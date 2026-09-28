@@ -759,7 +759,7 @@ body.arrastre-activo { cursor: grabbing; }
   border-radius: 14px;
   background: var(--pergamino);
   color: #2a1a10;
-  font-family: var(--fuente-titulo);
+  font-family: var(--fuente-cuerpo);
   font-size: 1.05rem;
   line-height: 1.25;
   text-align: center;

@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 93,
+      "community": 96,
       "norm_label": ".uid()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 93,
+      "community": 96,
       "norm_label": ".dot()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 104,
+      "community": 93,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 104,
+      "community": 93,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 93,
+      "community": 96,
       "norm_label": "broadleaf()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 104,
+      "community": 93,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 93,
+      "community": 96,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 104,
+      "community": 93,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 104,
+      "community": 93,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 93,
+      "community": 96,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -15026,7 +15026,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5795",
+      "source_location": "L5802",
       "id": "scripts_smoke_test_escenario",
       "community": 67,
       "norm_label": "escenario"
@@ -15035,7 +15035,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6055",
+      "source_location": "L6062",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 67,
       "norm_label": "montarnumeros()"
@@ -111726,5 +111726,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "c32845117faa94dfad381a6a65354d7dad6b2b23"
+  "built_at_commit": "d700f564dae7de4ff479a739617109a72efe5ffc"
 }

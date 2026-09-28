@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.9.0';
+export const VERSION = '6.9.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.9.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '🔤 Todos los párrafos usan Philosopher: descripciones de los héroes y de las opciones, subtítulos, el bocadillo del Dungeon Master y la lápida. Almendra queda solo para títulos.',
+      '🌵 Arreglado: un enemigo que muere por Espinas a mitad de un ataque múltiple deja de golpear.',
+    ],
+  },
   {
     version: '6.9.0',
     fecha: '2026-09-28',

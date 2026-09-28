@@ -491,3 +491,9 @@ body[data-capitulo='2'] .mapa-titulo,
 body[data-capitulo='2'] .titulo-juego {
   text-shadow: 0 0 26px rgba(255, 110, 30, 0.6);
 }
+
+/* Paragraphs that sit inside a button or a title block would inherit Almendra:
+   every paragraph is set in the text face (Almendra is only for titles). */
+.clase-desc, .op-detalle, .lapida-lugar, .lapida-asesino, .lapida-cuenta, .lapida-epitafio {
+  font-family: var(--fuente-cuerpo);
+}

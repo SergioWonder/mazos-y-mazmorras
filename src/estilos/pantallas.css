@@ -46,7 +46,7 @@
 }
 
 .titulo-sub {
-  font-family: var(--fuente-display);
+  font-family: var(--fuente-cuerpo);
   font-style: italic;
   font-size: 1.25rem;
   color: var(--oro);
@@ -596,7 +596,7 @@
 }
 .bendicion-cura {
   color: #a7f3a0;
-  font-family: var(--fuente-display);
+  font-family: var(--fuente-cuerpo);
   font-size: 1.1rem;
   text-shadow: 0 0 14px rgba(125, 230, 120, 0.6);
 }

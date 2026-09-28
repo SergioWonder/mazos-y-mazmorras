@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-09-28)
 
 ## Corpus Check
-- 148 files · ~879,668 words
+- 148 files · ~879,915 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3237 nodes · 7761 edges · 106 communities (95 shown, 11 thin omitted)
+- 3237 nodes · 7761 edges · 105 communities (94 shown, 11 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 365 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c3284511`
+- Built from commit: `d700f564`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -118,7 +118,6 @@
 - [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
 - [[_COMMUNITY_Community 103|Community 103]]
-- [[_COMMUNITY_Community 104|Community 104]]
 - [[_COMMUNITY_Community 107|Community 107]]
 
 ## God Nodes (most connected - your core abstractions)
@@ -155,7 +154,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (106 total, 11 thin omitted)
+## Communities (105 total, 11 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.03
@@ -490,8 +489,8 @@ Cohesion: 0.08
 Nodes (28): Ease, pulse(), shake(), strikeKeys(), StrikeSpec, Keyframe, PartialPose, howlVibrato() (+20 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.24
-Nodes (7): broadleaf(), cartouche(), compass_rose(), crossbones(), eye_glyph(), A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Ornamental scroll cartouche with illegible lettering.
+Cohesion: 0.22
+Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
 
 ### Community 94 - "Community 94"
 Cohesion: 0.22
@@ -502,8 +501,8 @@ Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.40
-Nodes (5): dagger(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+Cohesion: 0.22
+Nodes (8): broadleaf(), dagger(), eye_glyph(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 97 - "Community 97"
 Cohesion: 0.14
@@ -524,10 +523,6 @@ Nodes (4): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de
 ### Community 103 - "Community 103"
 Cohesion: 0.67
 Nodes (3): qHaciaCamara(), qNorm(), qSlerp()
-
-### Community 104 - "Community 104"
-Cohesion: 0.40
-Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
 
 ### Community 107 - "Community 107"
 Cohesion: 0.33

@@ -5763,6 +5763,13 @@ console.log('\n🔤 Tipografía');
   check(!fs.existsSync(new URL('../src/ui/carta-texto.ts', import.meta.url)) && !/texto-denso/.test(leer('../src/ui/carta.ts') + cartasCss),
     'el texto de todas las cartas usa la misma fuente, tenga una línea o veinticinco');
   check(/\.carta-tipo\s*\{[^}]*var\(--fuente-cuerpo\)/.test(cartasCss), 'el tipo de carta usa la fuente de párrafo');
+  // paragraphs that used to inherit Almendra (from a button or a title block)
+  const parrafos = ['clase-desc', 'op-detalle', 'titulo-sub', 'bendicion-cura', 'bocadillo-dm',
+    'lapida-lugar', 'lapida-asesino', 'lapida-cuenta', 'lapida-epitafio'];
+  const reglaCuerpo = (clase: string) => new RegExp(`\\.${clase}\\b[^{]*\\{[^}]*font-family:\\s*var\\(--fuente-cuerpo\\)`).test(estilos)
+    || new RegExp(`\\.${clase}\\b[^{]*\\{`).test(estilos) && new RegExp(`[,\\s]\\.${clase}\\b[^{]*\\{[^}]*--fuente-cuerpo`).test(estilos);
+  const sinCuerpo = parrafos.filter((c) => !reglaCuerpo(c));
+  check(sinCuerpo.length === 0, `todos los párrafos usan Philosopher: descripciones de héroe, de opciones, subtítulos, bocadillos y lápida (faltan: ${sinCuerpo.join(', ') || '—'})`);
 }
 
 console.log('\n🎯 Intención = daño real');
