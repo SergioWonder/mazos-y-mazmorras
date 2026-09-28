@@ -265,7 +265,7 @@ export const ARTE_CARTA: Record<string, string> = {
   'luna-creciente': '🌙', 'circulo-tierra': '⛰️', 'circulo-luna': '🌕',
   'circulo-mar': '🌊', 'circulo-estrellas': '✨', 'pacto-bosque': '🍃',
   'comunion-salvaje': '🕊️', 'oso-espiritual': '🧸', 'elemental-agua': '💧',
-  'elemental-fuego': '🔥', 'elemental-aire': '🌪️', 'vinculo-feroz': '🫂',
+  'elemental-fuego': '🔥', 'elemental-aire': '🌪️', 'vinculo-feroz': '🫂', 'alma-manada': '👻', 'estampida': '🦬',
   'guardian-roble': '🌲', 'elemental-tierra': '🪨', 'tormenta-venganza': '⛈️',
   'forma-enjambre': '🦟', 'corazon-cambiante': '🦎',
   // ── Bárbaro ──

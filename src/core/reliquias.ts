@@ -360,6 +360,16 @@ const DE_DRUIDA: ReliquiaDef[] = [
     texto: 'Cuando termina una Transformación, el espíritu de la forma se queda contigo: Invoca 6.',
     alTerminarTransformacion: async (ctx) => { await ctx.invocar('lobo', 6); },
   },
+  {
+    id: 'collar-alfa', nombre: 'Collar del Alfa', icono: '📿', rareza: 'comun', soloClase: 'druida',
+    texto: 'Cada ataque de tu invocación inflige 2 de daño adicional.',
+    bonoInvocacion: 2,
+  },
+  {
+    id: 'cuerno-manada', nombre: 'Cuerno de la Manada', icono: '📯', rareza: 'rara', soloClase: 'druida',
+    texto: 'Cada vez que Invocas, tu invocación gana 3 de vida adicional.',
+    vidaInvocacion: 3,
+  },
 ];
 
 const DE_BARBARO: ReliquiaDef[] = [

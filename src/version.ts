@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.5.0';
+export const VERSION = '6.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.6.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '⚖️ Druida: las Transformaciones duran 3 turnos (antes 4) y la Forma Estelar, 2 (3 mejorada).',
+      '⚖️ Corazón del Cambiante: tus Transformaciones duran 1 turno más y al lanzarlas ganas 6 de bloqueo (8 mejorada).',
+      '🐺 Nuevas cartas del druida para las invocaciones: Alma de la Manada (cada ataque de tu invocación inflige +3) y Estampida (tu invocación ataca 3 veces).',
+      '📿 Nuevas reliquias del druida: Collar del Alfa (+2 de daño en cada ataque de tu invocación) y Cuerno de la Manada (+3 de vida cada vez que Invocas).',
+    ],
+  },
   {
     version: '6.5.0',
     fecha: '2026-09-28',

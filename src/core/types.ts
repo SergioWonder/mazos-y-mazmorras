@@ -13,6 +13,8 @@ export type EstadoId =
   | 'raizProlongada' // (jugador) cada carta de Raíces que apliques dura +N turnos
   | 'formaProlongada'// (druida) tus Transformaciones duran +N turnos
   | 'formaPotenciada'// (druida) tus Transformaciones otorgan +N de Fuerza/Destreza
+  | 'formaBloqueo'   // (druida) each Transformation grants N block when cast
+  | 'invocacionFuerza' // (druida) each attack of your summon deals +N damage
   | 'fuerzaPorTurno' // (druida/Forma Lunar) ganas esta Fuerza al inicio de cada turno
   | 'destrezaPorTurno'// (druida/Forma Lunar) ganas esta Destreza al inicio de cada turno
   | 'destreza'      // +bloqueo por carta
@@ -464,6 +466,10 @@ export interface ReliquiaDef {
   rareza: RarezaReliquia;
   /** Solo puede aparecer para esta clase. */
   soloClase?: ClaseId;
+  /** Druid summons (not the warlock's ephemeral ones): +N damage on each of their attacks. */
+  bonoInvocacion?: number;
+  /** Druid summons: every invocation adds this much extra life. */
+  vidaInvocacion?: number;
   /** Blessing relics only: which slot of the blessing offer it fills. */
   tipoBendicion?: TipoBendicion;
 

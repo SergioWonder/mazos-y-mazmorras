@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+<defs>
+<linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1e3420"/><stop offset="0.55" stop-color="#34502c"/><stop offset="1" stop-color="#131f11"/></linearGradient>
+<radialGradient id="halo" cx="0.55" cy="0.38" r="0.42"><stop offset="0" stop-color="#a8e070" stop-opacity="0.45"/><stop offset="1" stop-color="#a8e070" stop-opacity="0"/></radialGradient>
+<radialGradient id="vineta" cx="0.5" cy="0.5" r="0.8"><stop offset="0.6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.6"/></radialGradient>
+<filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.4"/></filter>
+<path id="espiritu" d="M-26 0 Q-34 -24 -24 -46 Q-16 -60 -6 -64 L-10 -82 L2 -72 L6 -86 L12 -74 Q16 -78 20 -84 L34 -106 Q37 -105 35 -98 L26 -86 L38 -94 Q39 -90 36 -87 Q30 -80 22 -74 Q18 -64 16 -56 Q22 -40 22 -26 Q24 -12 30 0 Z"/>
+</defs>
+<rect width="280" height="160" fill="url(#cielo)"/>
+<circle cx="52" cy="30" r="22" fill="#e4f4c8" opacity="0.4" filter="url(#brillo)"/><circle cx="52" cy="30" r="12" fill="#eef8dc"/><circle cx="48" cy="27" r="2.4" fill="#cfe0b0"/><circle cx="56" cy="34" r="1.6" fill="#cfe0b0"/>
+<path d="M0 126 L0 70 L8 78 L14 60 L22 76 L30 64 L38 84 L46 72 L56 96 L70 90 L84 108 L100 104 L116 120 Z M190 120 L206 100 L218 108 L230 86 L242 96 L252 70 L262 82 L270 62 L280 74 L280 126 Z" fill="#1a2c17"/>
+<path d="M14 60 L20 72 M252 70 L258 80 M270 62 L274 70" fill="none" stroke="#2e4628" stroke-width="1"/>
+<rect width="280" height="160" fill="url(#halo)"/>
+<path d="M0 124 Q70 114 140 120 Q210 126 280 116 L280 160 L0 160 Z" fill="#23341c"/>
+<path d="M0 140 Q60 132 130 138 Q200 144 280 134 L280 160 L0 160 Z" fill="#162212"/>
+<path d="M92 126 Q104 122 120 125 M170 130 Q186 126 200 129 M40 134 L62 132" fill="none" stroke="#3a5030" stroke-width="1.2"/>
+<!-- spirit wolf howling -->
+<g transform="translate(150 112) scale(0.95)">
+<use href="#espiritu" fill="#a8e070" opacity="0.55" filter="url(#brillo)"/>
+<use href="#espiritu" fill="#a8e070" opacity="0.28" stroke="#d8f8a8" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M-18 -40 Q-6 -46 6 -40 M-16 -24 Q-4 -30 10 -24 M-2 -60 Q6 -54 12 -58" fill="none" stroke="#e8ffd0" stroke-width="1" opacity="0.7"/>
+
+<circle cx="14" cy="-76" r="3.4" fill="#e4ffc0" filter="url(#suave)"/><circle cx="14" cy="-76" r="1.4" fill="#fff"/>
+<path d="M42 -108 Q50 -104 48 -94 M48 -116 Q62 -108 58 -90 M54 -124 Q74 -112 68 -86" fill="none" stroke="#d8f8a8" stroke-width="1.4" stroke-linecap="round" opacity="0.7"/>
+</g>
+<!-- energy bond -->
+<path d="M150 120 Q128 104 146 92 Q164 80 144 66" fill="none" stroke="#a8e070" stroke-width="5" stroke-linecap="round" opacity="0.6" filter="url(#brillo)"/>
+<path d="M150 120 Q128 104 146 92 Q164 80 144 66" fill="none" stroke="#e8ffd0" stroke-width="1.4" stroke-linecap="round"/>
+<circle cx="138" cy="100" r="1.4" fill="#e8ffd0"/><circle cx="160" cy="84" r="1.2" fill="#e8ffd0"/><circle cx="130" cy="78" r="1" fill="#e8ffd0"/>
+<!-- summoned grey wolf -->
+<g transform="translate(140 146)">
+<path d="M-34 -30 Q-48 -30 -54 -14 Q-44 -20 -34 -24 Z" fill="#6e6c66" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+<path d="M-28 -26 L-32 -12 L-30 0 L-23 0 L-23 -12 L-16 -24 Z M14 -26 L16 -12 L15 0 L22 0 L22 -14 L24 -28 Z" fill="#54524e" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+<path d="M-34 -28 Q-32 -42 -12 -42 Q8 -42 18 -46 Q28 -40 26 -26 Q10 -20 -8 -22 Q-26 -20 -34 -28 Z" fill="#7a7872" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+<path d="M-30 -26 Q-12 -30 8 -28 Q20 -28 26 -32 Q26 -26 24 -26 Q10 -20 -8 -22 Q-26 -20 -30 -26 Z" fill="#56544f"/>
+<path d="M-28 -36 Q-18 -41 -6 -40" fill="none" stroke="#a6a49c" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M-18 -30 L-14 -34 M-6 -30 L-2 -35 M6 -32 L10 -37" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+<path d="M14 -44 Q16 -56 24 -58 L27 -67 L32 -58 Q36 -58 38 -54 L50 -50 Q52 -45 47 -43 L36 -41 Q28 -35 18 -38 Z" fill="#7a7872" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+<path d="M22 -40 Q32 -38 36 -41 L47 -43 L44 -39 Q30 -34 20 -38 Z" fill="#56544f"/>
+<path d="M18 -54 Q22 -58 26 -58" fill="none" stroke="#a6a49c" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M28 -64 L30 -59" stroke="#3a3834" stroke-width="1.6"/>
+<circle cx="50" cy="-48" r="1.8" fill="#140d0a"/>
+<path d="M40 -44 L44 -41" stroke="#e6dcc0" stroke-width="1.2"/>
+<circle cx="34" cy="-52" r="3" fill="#a8e070" opacity="0.8" filter="url(#suave)"/><circle cx="34" cy="-52" r="1.2" fill="#f0ffd8"/>
+<path d="M-32 0 L-22 0 M13 0 L24 0" stroke="#140d0a" stroke-width="2" stroke-linecap="round"/>
+</g>
+<path d="M92 142 Q110 148 130 146 M160 147 Q180 150 196 144" fill="none" stroke="#a8e070" stroke-width="1.2" opacity="0.5"/>
+<rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

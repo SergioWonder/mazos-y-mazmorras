@@ -206,15 +206,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'transformacion',
-    texto: 'Transformación: +2 de Fuerza durante 4 turnos.\nInflige 6 de daño.',
+    texto: 'Transformación: +2 de Fuerza durante 3 turnos.\nInflige 6 de daño.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma de Lobo', turnos: 4, fuerza: 2, destreza: 0 });
+      await c.efectoTemporal({ etiqueta: 'Forma de Lobo', turnos: 3, fuerza: 2, destreza: 0 });
       await c.atacar(c.objetivo!, 6, 1, 'zarpa');
     },
     mejora: {
-      texto: 'Transformación: +3 de Fuerza durante 4 turnos.\nInflige 8 de daño.',
+      texto: 'Transformación: +3 de Fuerza durante 3 turnos.\nInflige 8 de daño.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma de Lobo', turnos: 4, fuerza: 3, destreza: 0 });
+        await c.efectoTemporal({ etiqueta: 'Forma de Lobo', turnos: 3, fuerza: 3, destreza: 0 });
         await c.atacar(c.objetivo!, 8, 1, 'zarpa');
       },
     },
@@ -228,15 +228,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'ninguno',
     fx: 'transformacion',
-    texto: 'Transformación: +3 de Fuerza durante 4 turnos.\nGana 10 de bloqueo.',
+    texto: 'Transformación: +3 de Fuerza durante 3 turnos.\nGana 10 de bloqueo.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma de Oso', turnos: 4, fuerza: 3, destreza: 0 });
+      await c.efectoTemporal({ etiqueta: 'Forma de Oso', turnos: 3, fuerza: 3, destreza: 0 });
       await c.ganarBloqueo(10);
     },
     mejora: {
-      texto: 'Transformación: +4 de Fuerza durante 4 turnos.\nGana 13 de bloqueo.',
+      texto: 'Transformación: +4 de Fuerza durante 3 turnos.\nGana 13 de bloqueo.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma de Oso', turnos: 4, fuerza: 4, destreza: 0 });
+        await c.efectoTemporal({ etiqueta: 'Forma de Oso', turnos: 3, fuerza: 4, destreza: 0 });
         await c.ganarBloqueo(13);
       },
     },
@@ -250,15 +250,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'transformacion',
-    texto: 'Transformación: +2 de Destreza durante 4 turnos.\nRoba 2 cartas.',
+    texto: 'Transformación: +2 de Destreza durante 3 turnos.\nRoba 2 cartas.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 2 });
+      await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 3, fuerza: 0, destreza: 2 });
       await c.robar(2);
     },
     mejora: {
-      texto: 'Transformación: +3 de Destreza durante 4 turnos.\nRoba 3 cartas.',
+      texto: 'Transformación: +3 de Destreza durante 3 turnos.\nRoba 3 cartas.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 4, fuerza: 0, destreza: 3 });
+        await c.efectoTemporal({ etiqueta: 'Forma de Águila', turnos: 3, fuerza: 0, destreza: 3 });
         await c.robar(3);
       },
     },
@@ -272,15 +272,15 @@ export const DRUIDA: CartaDef[] = [
     coste: 2,
     objetivo: 'todos',
     fx: 'transformacion',
-    texto: 'Transformación: +2 de Destreza durante 4 turnos.\nInflige 6 de daño a TODOS los enemigos.',
+    texto: 'Transformación: +2 de Destreza durante 3 turnos.\nInflige 6 de daño a TODOS los enemigos.',
     jugar: async (c) => {
-      await c.efectoTemporal({ etiqueta: 'Forma de Enjambre', turnos: 4, fuerza: 0, destreza: 2 });
+      await c.efectoTemporal({ etiqueta: 'Forma de Enjambre', turnos: 3, fuerza: 0, destreza: 2 });
       await c.atacarTodos(6, 'hojas');
     },
     mejora: {
-      texto: 'Transformación: +3 de Destreza durante 4 turnos.\nInflige 9 de daño a TODOS los enemigos.',
+      texto: 'Transformación: +3 de Destreza durante 3 turnos.\nInflige 9 de daño a TODOS los enemigos.',
       jugar: async (c) => {
-        await c.efectoTemporal({ etiqueta: 'Forma de Enjambre', turnos: 4, fuerza: 0, destreza: 3 });
+        await c.efectoTemporal({ etiqueta: 'Forma de Enjambre', turnos: 3, fuerza: 0, destreza: 3 });
         await c.atacarTodos(9, 'hojas');
       },
     },
@@ -499,6 +499,48 @@ export const DRUIDA: CartaDef[] = [
       },
     },
   },
+  {
+    id: 'alma-manada',
+    nombre: 'Alma de la Manada',
+    clase: 'druida',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'zarpa',
+    texto: 'Poder: cada ataque de tu invocación\ninflige 3 de daño adicional.',
+    jugar: async (c) => {
+      await c.aplicarEstado(c.jugador, 'invocacionFuerza', 3);
+    },
+    mejora: {
+      texto: 'Poder: cada ataque de tu invocación\ninflige 5 de daño adicional.',
+      jugar: async (c) => {
+        await c.aplicarEstado(c.jugador, 'invocacionFuerza', 5);
+      },
+    },
+  },
+  {
+    id: 'estampida',
+    nombre: 'Estampida',
+    clase: 'druida',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'zarpa',
+    texto: 'Tu invocación ataca 3 veces.',
+    jugar: async (c) => {
+      if (!c.hayInvocacion()) return c.mensaje('No tienes ninguna invocación…');
+      for (let i = 0; i < 3 && c.hayInvocacion(); i++) await c.atacarInvocacion();
+    },
+    mejora: {
+      texto: 'Tu invocación ataca 4 veces.',
+      jugar: async (c) => {
+        if (!c.hayInvocacion()) return c.mensaje('No tienes ninguna invocación…');
+        for (let i = 0; i < 4 && c.hayInvocacion(); i++) await c.atacarInvocacion();
+      },
+    },
+  },
   // — Cartas raras: una por subclase de druida (D&D 2024) —
   {
     id: 'corazon-cambiante',
@@ -510,16 +552,16 @@ export const DRUIDA: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'transformacion',
     animRara: 'anim-arbol',
-    texto: 'Poder: tus Transformaciones duran\n2 turnos más y otorgan +1 de\nFuerza (o de Destreza).',
+    texto: 'Poder: tus Transformaciones duran\n1 turno más y, al lanzarlas,\nganas 6 de bloqueo.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'formaProlongada', 2);
-      await c.aplicarEstado(c.jugador, 'formaPotenciada', 1);
+      await c.aplicarEstado(c.jugador, 'formaProlongada', 1);
+      await c.aplicarEstado(c.jugador, 'formaBloqueo', 6);
     },
     mejora: {
-      texto: 'Poder: tus Transformaciones duran\n4 turnos más y otorgan +1 de\nFuerza (o de Destreza).',
+      texto: 'Poder: tus Transformaciones duran\n1 turno más y, al lanzarlas,\nganas 8 de bloqueo.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'formaProlongada', 4);
-        await c.aplicarEstado(c.jugador, 'formaPotenciada', 1);
+        await c.aplicarEstado(c.jugador, 'formaProlongada', 1);
+        await c.aplicarEstado(c.jugador, 'formaBloqueo', 8);
       },
     },
   },
@@ -613,12 +655,12 @@ export const DRUIDA: CartaDef[] = [
     fx: 'estrellas',
     animRara: 'anim-estrellas',
     exhumar: true,
-    texto: 'Roba 2 cartas.\nDurante 3 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
+    texto: 'Roba 2 cartas.\nDurante 2 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
     jugar: async (c) => {
       await c.robar(2);
       await c.efectoTemporal({
         etiqueta: 'Forma Estelar',
-        turnos: 3,
+        turnos: 2,
         fuerza: 0,
         destreza: 0,
         robaExtra: 1,
@@ -626,12 +668,12 @@ export const DRUIDA: CartaDef[] = [
       });
     },
     mejora: {
-      texto: 'Roba 3 cartas.\nDurante 4 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
+      texto: 'Roba 3 cartas.\nDurante 3 turnos: roba 1 carta extra\ny cura 1 PV al inicio del turno.\nSe agota.',
       jugar: async (c) => {
         await c.robar(3);
         await c.efectoTemporal({
           etiqueta: 'Forma Estelar',
-          turnos: 4,
+          turnos: 3,
           fuerza: 0,
           destreza: 0,
           robaExtra: 1,

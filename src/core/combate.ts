@@ -419,6 +419,12 @@ export class Combate {
         if (destreza) self.jugador.estados.destreza = (self.jugador.estados.destreza ?? 0) + destreza;
         // Relics may stretch the live entry before it is announced.
         await self.ganchos((r, c) => r.alTransformarse?.(c, vivo));
+        // Corazón del Cambiante: every (non-permanent) transformation shields you
+        const escudo = e.permanente ? 0 : (self.jugador.estados.formaBloqueo ?? 0);
+        if (escudo > 0) {
+          self.jugador.bloqueo += escudo;
+          await self.ui.fxBloqueo(self.jugador, escudo);
+        }
         await self.ui.fxMensaje(
           e.permanente ? `✦ ${e.etiqueta} (permanente)` : `✦ ${e.etiqueta} (${vivo.turnos} turnos)`,
         );
@@ -851,6 +857,8 @@ export class Combate {
    *  La forma visual la fija la primera; las pasivas de todas se combinan. */
   async invocar(forma: FormaInvocacion, vida: number) {
     const j = this.jugador;
+    // Cuerno de la Manada: every invocation brings extra life
+    for (const r of this.run.reliquias) vida += r.vidaInvocacion ?? 0;
     // Solo las formas elementales del druida aportan pasiva (lobo, oso y las
     // formas efímeras del brujo no aportan ninguna).
     const PASIVAS: EfectoInvocacion[] = ['fuego', 'agua', 'aire', 'arbol', 'tierra'];
@@ -904,7 +912,10 @@ export class Combate {
   async atacarInvocacion(bono = 0) {
     const inv = this.jugador.invocacion;
     if (!inv || inv.vida <= 0) return;
-    const base = (inv.efimera ? (inv.dano ?? 0) : Math.max(1, Math.round(inv.vida * 0.3))) + bono;
+    // druid summons also add Alma de la Manada and the Collar del Alfa
+    const extra = inv.efimera ? 0
+      : (this.jugador.estados.invocacionFuerza ?? 0) + this.run.reliquias.reduce((s, r) => s + (r.bonoInvocacion ?? 0), 0);
+    const base = (inv.efimera ? (inv.dano ?? 0) : Math.max(1, Math.round(inv.vida * 0.3))) + bono + extra;
     const fuego = inv.efectos.includes('fuego');
     const arbol = inv.efectos.includes('arbol');
     const golpes = inv.efectos.includes('aire') ? 2 : 1; // Aire golpea dos veces

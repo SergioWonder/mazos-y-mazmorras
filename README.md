@@ -47,19 +47,20 @@ descuelga de las demás en su mismo nivel.
 ## Diseño
 
 - **Druida** (70 PV): las **Transformaciones** son su motor de daño (Fuerza o Destreza
-  durante 4-5 turnos, y empieza con la Forma de Lobo en el mazo inicial). Su valor está en
+  durante 3 turnos, y empieza con la Forma de Lobo en el mazo inicial). Su valor está en
   la duración, no en la cifra: +2 o +3 sostenidos multiplican todo lo que juegues encima.
   Un par de cartas pagan además por estar transformado —Mordisco Feroz devuelve energía,
   Luna Creciente añade Vulnerable— y la **Forma de Enjambre** golpea a todos los enemigos
   a la vez (da Destreza, así que no se autopotencia). **Corazón del Cambiante** hace que
-  cada forma dure 2 turnos más y otorgue +1 de Fuerza (o de Destreza), y la **Forma Lunar**
+  cada forma dure 1 turno más y te dé 6 de bloqueo al lanzarla (8 mejorado), y la **Forma Lunar**
   (rara, coste 3) es una transformación **permanente**: no hace daño, pero cada turno te da
   2 de Fuerza y 1 de Destreza que se acumulan sin techo — pierde en combates cortos y gana
   las peleas largas contra jefes. Su control son las **raíces**, que reducen el
   ataque del enemigo: cada carta es una instancia con su propia duración y se acumulan; si
   el ataque queda en 0 o menos, al intentar atacar el enemigo pierde PV igual a la
   diferencia (ignorando bloqueo). También tiene **invocaciones permanentes** que absorben
-  daño y atacan cada turno por el 30 % de su vida. Cartas raras: una por subclase de
+  daño y atacan cada turno por el 30 % de su vida; el **Alma de la Manada** les suma
+  daño a cada ataque y la **Estampida** las hace atacar 3 veces seguidas. Cartas raras: una por subclase de
   D&D 2024 (Tierra, Luna, Mar, Estrellas).
 - **Bárbaro** (80 PV): Furia que acumula Fuerza/Destreza de forma permanente, pero se
   pierde si terminas el turno sin hacer daño. Cartas que escalan con Fuerza/Destreza.
@@ -306,6 +307,8 @@ eventos y jefes (`sortearReliquia` en `core/reliquias.ts`):
 | Druida | 🌿 Muérdago Sagrado | común | Las Raíces que aplastan te curan 3 PV |
 | Druida | 🦷 Colmillo del Cambiaformas | rara | La primera forma del combate dura 3 turnos más y robas 2 |
 | Druida | 🌙 Luna en un Frasco | rara | Al terminar una forma, Invoca 6 |
+| Druida | 📿 Collar del Alfa | común | Cada ataque de tu invocación inflige +2 |
+| Druida | 📯 Cuerno de la Manada | rara | Cada vez que Invocas, +3 de vida adicional |
 | Bárbaro | 🎗️ Cinturón del Gigante | común | Ganar Furia da 4 de bloqueo |
 | Bárbaro | 🦴 Collar de Colmillos | común | El primer golpe que te hiere en cada ronda da Furia (+1 Fuerza) |
 | Bárbaro | 🍺 Jarra de Hidromiel | común | Perder la Furia te cura 5 PV |

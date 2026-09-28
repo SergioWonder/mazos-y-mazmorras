@@ -1709,31 +1709,33 @@ console.log('— Druida: transformaciones reforzadas —');
     const base = comb.jugador.estados.fuerza ?? 0;
     await carta('forma-lobo').jugar(comb.contexto(e));
     check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'Forma de Lobo: +2 de Fuerza');
-    check(comb.jugador.efectosTemporales[0].turnos === 4, 'y dura 4 turnos');
+    check(comb.jugador.efectosTemporales[0].turnos === 3, 'y dura 3 turnos');
     check(comb.estaTransformadoPublico(), 'el druida queda transformado');
-    // 4 turnos: aguanta y al quinto se cae
-    for (let i = 0; i < 3; i++) { defender(comb); await comb.terminarTurno(); }
-    check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'la Fuerza sigue al cuarto turno');
+    // 3 turns: it holds, then drops on the fourth
+    for (let i = 0; i < 2; i++) { defender(comb); await comb.terminarTurno(); }
+    check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'la Fuerza sigue al tercer turno');
     defender(comb); await comb.terminarTurno();
     check((comb.jugador.estados.fuerza ?? 0) === base, 'y se retira al expirar la forma');
   }
 
-  // Corazón del Cambiante: más turnos y más Fuerza por forma
-  {
+  // Corazón del Cambiante: one more turn and block on every transformation
+  for (const [mejorada, bloqueo] of [[false, 6], [true, 8]] as const) {
     const run = nuevaRun('druida', 6002);
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(6002), uiSilenciosa);
     await comb.iniciar();
     const base = comb.jugador.estados.fuerza ?? 0;
-    await carta('corazon-cambiante').jugar(comb.contexto());
-    check((comb.jugador.estados.formaProlongada ?? 0) === 2, 'Corazón del Cambiante: +2 turnos');
-    check((comb.jugador.estados.formaPotenciada ?? 0) === 1, 'y +1 de Fuerza por forma');
+    const corazon = carta('corazon-cambiante');
+    await (mejorada ? corazon.mejora!.jugar! : corazon.jugar)(comb.contexto());
+    const n = mejorada ? '+' : '';
+    check((comb.jugador.estados.formaProlongada ?? 0) === 1, `Corazón del Cambiante${n}: +1 turno`);
+    check(!comb.jugador.estados.formaPotenciada, `Corazón del Cambiante${n}: ya no da Fuerza extra`);
+    comb.jugador.bloqueo = 0;
     await carta('forma-lobo').jugar(comb.contexto(comb.enemigos[0]));
-    check((comb.jugador.estados.fuerza ?? 0) === base + 3, 'Forma de Lobo pasa a dar +3 de Fuerza');
-    check(comb.jugador.efectosTemporales[0].turnos === 6, 'y a durar 6 turnos');
-    // el refuerzo va al atributo propio de la forma: Águila da Destreza
-    const dex = comb.jugador.estados.destreza ?? 0;
+    check((comb.jugador.estados.fuerza ?? 0) === base + 2, 'Forma de Lobo sigue dando +2 de Fuerza');
+    check(comb.jugador.efectosTemporales[0].turnos === 4, 'y dura 4 turnos (3 + 1)');
+    check(comb.jugador.bloqueo === bloqueo, `al transformarte ganas ${bloqueo} de bloqueo`);
     await carta('forma-aguila').jugar(comb.contexto());
-    check((comb.jugador.estados.destreza ?? 0) === dex + 3, 'Forma de Águila pasa a dar +3 de Destreza');
+    check(comb.jugador.bloqueo === bloqueo * 2, 'cada Transformación vuelve a dar el bloqueo');
   }
 
 
@@ -2935,10 +2937,10 @@ console.log('\n💍 Reliquias ampliadas');
     const { comb } = await montar('druida', ['colmillo-cambiaformas']);
     const mano = comb.jugador.mano.length;
     await jugarCon(comb, 'forma-lobo');
-    check(comb.jugador.efectosTemporales[0]?.turnos === 7 && comb.jugador.mano.length === mano + 2,
+    check(comb.jugador.efectosTemporales[0]?.turnos === 6 && comb.jugador.mano.length === mano + 2,
       'Colmillo del Cambiaformas: la primera forma dura 3 turnos más y robas 2');
     await jugarCon(comb, 'forma-lobo');
-    check(comb.jugador.efectosTemporales[1]?.turnos === 4, 'Colmillo del Cambiaformas: solo la primera de cada combate');
+    check(comb.jugador.efectosTemporales[1]?.turnos === 3, 'Colmillo del Cambiaformas: solo la primera de cada combate');
   }
   {
     const { comb, ctx } = await montar('druida', ['luna-frasco']);
@@ -3657,7 +3659,7 @@ console.log('\n🙏 Bendiciones');
   {
     const { comb } = await montar('druida', ['bendicion-manada']);
     await jugarCon(comb, 'forma-lobo');
-    check(comb.jugador.efectosTemporales[0]?.turnos === 5 && comb.jugador.invocacion?.vida === 4,
+    check(comb.jugador.efectosTemporales[0]?.turnos === 4 && comb.jugador.invocacion?.vida === 4,
       'Bendición de la Manada: la forma dura 1 turno más e Invocas 4');
   }
   {
@@ -5683,6 +5685,64 @@ try {
   check(!quieto, 'fuera de la muerte los ojos solo parpadean de vez en cuando');
 } catch (e) {
   check(false, `las pruebas de los ojos enfadados revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Druid summons hit harder: Alma de la Manada, Estampida and two relics ──────
+console.log('\n🐺 Invocaciones del druida');
+{
+  const { reliquiaPorId } = await import('../src/core/reliquias.ts');
+  const montar = async (clase: ClaseId, ids: string[] = []) => {
+    const run = nuevaRun(clase, 778);
+    run.reliquias = ids.map((id) => reliquiaPorId(id)).filter((r): r is NonNullable<typeof r> => !!r);
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(778), uiSilenciosa);
+    await comb.iniciar();
+    return { comb };
+  };
+  const todas = [...DRUIDA];
+  const vinculo = todas.find((c) => c.id === 'alma-manada');
+  const estampida = todas.find((c) => c.id === 'estampida');
+  check(!!vinculo && vinculo.tipo === 'poder' && vinculo.clase === 'druida', 'existe el poder Alma de la Manada');
+  check(!!estampida && estampida.tipo === 'ataque' && estampida.clase === 'druida', 'existe el ataque Estampida');
+  const golpe = async (reliquias: string[], prep: (comb: Combate) => Promise<void>) => {
+    const { comb } = await montar('druida', reliquias);
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 300; e.bloqueo = 0;
+    await comb.contexto().invocar('lobo', 10); // 30 % of 10 = 3 per hit
+    await prep(comb);
+    const antes = e.pv;
+    await comb.contexto().atacarInvocacion();
+    return antes - e.pv;
+  };
+  if (vinculo && estampida) {
+    check(await golpe([], async () => {}) === 3, 'una invocación de 10 de vida pega 3');
+    check(await golpe([], async (c) => { await vinculo.jugar(c.contexto()); }) === 6, 'Alma de la Manada: +3 de daño en cada ataque de tu invocación');
+    check(await golpe([], async (c) => { await vinculo.mejora!.jugar!(c.contexto()); }) === 8, 'Alma de la Manada+: +5 de daño');
+    const { comb } = await montar('druida');
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 300; e.bloqueo = 0;
+    await estampida.jugar(comb.contexto(e));
+    check(e.pv === 300, 'Estampida sin invocación no hace nada');
+    await comb.contexto().invocar('lobo', 10);
+    await estampida.jugar(comb.contexto(e));
+    check(300 - e.pv === 9, 'Estampida: tu invocación ataca 3 veces (3 × 3)');
+    e.pv = 300;
+    await estampida.mejora!.jugar!(comb.contexto(e));
+    check(300 - e.pv === 12, 'Estampida+: ataca 4 veces');
+  }
+  const collar = reliquiaPorId('collar-alfa');
+  const cuerno = reliquiaPorId('cuerno-manada');
+  check(collar?.soloClase === 'druida' && cuerno?.soloClase === 'druida', 'Collar del Alfa y Cuerno de la Manada son reliquias del druida');
+  if (collar) check(await golpe(['collar-alfa'], async () => {}) === 5, 'Collar del Alfa: los ataques de tu invocación infligen +2');
+  if (cuerno) {
+    const { comb } = await montar('druida', ['cuerno-manada']);
+    await comb.contexto().invocar('lobo', 4);
+    check(comb.jugador.invocacion?.vida === 7 && comb.jugador.invocacion?.vidaMax === 7, 'Cuerno de la Manada: cada vez que invocas, +3 de vida');
+    await comb.contexto().invocar('oso', 8);
+    check(comb.jugador.invocacion?.vida === 18, 'también al hacerla crecer');
+  }
+  const { comb } = await montar('brujo', ['collar-alfa']);
+  const e = comb.enemigos[0]; e.pv = e.pvMax = 300; e.bloqueo = 0;
+  await comb.contexto().invocarEfimero('sabueso', 8, 5);
+  await comb.contexto().atacarInvocacion();
+  check(300 - e.pv === 5, 'el bonus del Alma de la Manada y del Collar no se aplica a las efímeras del brujo');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

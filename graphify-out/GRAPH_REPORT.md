@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-09-28)
 
 ## Corpus Check
-- 147 files · ~869,760 words
+- 147 files · ~873,046 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3212 nodes · 7700 edges · 103 communities (94 shown, 9 thin omitted)
+- 3212 nodes · 7700 edges · 102 communities (93 shown, 9 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 364 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d51f75dc`
+- Built from commit: `39ba5d8c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -114,7 +114,6 @@
 - [[_COMMUNITY_Community 97|Community 97]]
 - [[_COMMUNITY_Community 98|Community 98]]
 - [[_COMMUNITY_Community 99|Community 99]]
-- [[_COMMUNITY_Community 100|Community 100]]
 - [[_COMMUNITY_Community 101|Community 101]]
 - [[_COMMUNITY_Community 102|Community 102]]
 
@@ -152,7 +151,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (103 total, 9 thin omitted)
+## Communities (102 total, 9 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.03
@@ -471,8 +470,8 @@ Cohesion: 0.11
 Nodes (23): crearEspacios(), ORDEN_NIVELES, piramideConjuros(), crearEnemigo(), CartaJugada, DiceTheme, EfectoConjuro, EfectoInvocacion (+15 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.15
-Nodes (17): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), pine(), A random angular rune glyph inside an s x 1.4s cell centred on (x, y). (+9 more)
+Cohesion: 0.13
+Nodes (20): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), offset_line(), pine() (+12 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.07
@@ -503,8 +502,8 @@ Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.22
-Nodes (8): broadleaf(), dagger(), eye_glyph(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+Cohesion: 0.18
+Nodes (10): broadleaf(), dagger(), eye_glyph(), group(), mockup(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Review mock-up with node markers where the UI draws them (not delivered).      t (+2 more)
 
 ### Community 97 - "Community 97"
 Cohesion: 0.17
@@ -517,10 +516,6 @@ Nodes (4): C(), E(), swarmShapes(), wolfShapes()
 ### Community 99 - "Community 99"
 Cohesion: 0.08
 Nodes (27): ChainRun, Ease, strikeKeys(), StrikeSpec, ChainSpec, Keyframe, PartialPose, BEARD (+19 more)
-
-### Community 100 - "Community 100"
-Cohesion: 0.33
-Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
 
 ### Community 101 - "Community 101"
 Cohesion: 0.20
