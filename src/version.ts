@@ -14,7 +14,7 @@ export const CHANGELOG: EntradaCambios[] = [
     version: '6.4.0',
     fecha: '2026-09-28',
     cambios: [
-      '🎸 El combate contra el Dungeon Master tiene su propia música: «Behind the Screen», metalcore progresivo instrumental con guitaras graves, breakdowns y un estribillo enorme.',
+      '🎸 El combate contra el Dungeon Master tiene su propia música: «Behind the Screen», metalcore progresivo instrumental con guitarras graves, breakdowns y un estribillo enorme.',
     ],
   },
   {
