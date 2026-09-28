@@ -18,7 +18,7 @@
 // backflip for tricks; a curled roll back when hit; a slide to the floor on
 // death with the scarf floating down after the body.
 
-import { C, E, P, L, type PartialPose, type PuppetRig } from '../puppet.ts';
+import { C, E, P, L, slitEye, type PartialPose, type PuppetRig } from '../puppet.ts';
 import { strandShapes, type ChainSpec } from '../chains.ts';
 import { EASE, shake } from '../motion.ts';
 
@@ -124,7 +124,7 @@ export const PICARO_RIG: PuppetRig = {
   impact: IMPACT,
   palette: {
     scarf: '#4fb0a0', hood: '#2f4d49', hoodD: '#1f3431', leather: '#5a4636', leatherD: '#3a2d24', boots: '#2a2320',
-    belt: '#8a6a44', glove: '#2a2320', knife: '#cfd8de', steel: '#cfd8de', sparkle: '#d8f3ee',
+    belt: '#8a6a44', glove: '#2a2320', knife: '#cfd8de', steel: '#cfd8de', sparkle: '#d8f3ee', eyeGlow: '#7ff0da',
   },
   pivots: {
     root: CORE, torso: CORE, legB: CORE, legF: CORE,
@@ -173,6 +173,8 @@ export const PICARO_RIG: PuppetRig = {
     P('head', 'hoodD', [[52, 76], [49, 66], [51, 57], [57, 50], [65, 47], [73, 50], [79, 55], [85, 61.5], [77.5, 62], [75.5, 66], [75, 72], [68, 78]]),
     ...strandShapes(HOOD_PEAK, 'hoodD', [7, 4.5, 1]),
     P('head', 'scarf', [[66, 69], [76.5, 68.5], [78, 74], [71, 80], [63, 80]]),
+    // angry mint slits between the brim and the scarf (danza-mortal)
+    slitEye('head', 'eyeGlow', [66.8, 63.6], [72.6, 65.5], 1.4), slitEye('head', 'eyeGlow', [77.3, 64.1], [74.1, 65.2], 1.2),
     // front arm and the main dagger (forward grip)
     L('armF', 'hood', 66, 81, 70, 96.5, 7), L('armF', 'leatherD', 69.3, 92.5, 70, 97.5, 7.6),
     L('weapon', 'leatherD', 66, 99, 70.5, 99, 2.6), L('weapon', 'belt', 72, 95.6, 72, 102.4, 1.8),

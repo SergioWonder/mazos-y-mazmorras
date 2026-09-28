@@ -5,7 +5,7 @@
 // Everything is painted black with a green rim, so every detail has to live in
 // the outline: ragged hems, leaves sticking out, antler tines, bristling fur.
 
-import { C, E, P, L, type Keyframe, type PartialPose, type PuppetRig, type BoneId, type Shape } from '../puppet.ts';
+import { C, E, P, L, slitEye, type Keyframe, type PartialPose, type PuppetRig, type BoneId, type Shape } from '../puppet.ts';
 import { strandShapes, type ChainSpec } from '../chains.ts';
 import { EASE, pulse, shake } from '../motion.ts';
 
@@ -51,7 +51,7 @@ const CAPE_BONES = ['chA1', 'chA2', 'chA3', 'chB1', 'chB2', 'chB3'];
 
 export const DRUIDA_RIG: PuppetRig = ({
   accent: '#7dba4e', style: 'magic', phase: 0.0, focus: [71.5, 33.5], impact: 0.5,
-  palette: { hoodD: '#2f4f27', hood: '#4f7d35', leaf: '#8cc152', moss: '#5f8a3a', robe: '#7a5634', boots: '#4a3322', glove: '#5a3d25', antler: '#c9a77a', wood: '#7b5530', bone: '#d8cbb0', gem: '#b6ff7a' },
+  palette: { hoodD: '#2f4f27', hood: '#4f7d35', leaf: '#8cc152', moss: '#5f8a3a', robe: '#7a5634', boots: '#4a3322', glove: '#5a3d25', antler: '#c9a77a', wood: '#7b5530', bone: '#d8cbb0', gem: '#b6ff7a', eyeGlow: '#b8f07a' },
   pivots: { weapon: [68, 97] },
   headScale: 0.82,
   chains: [CAPE_BACK, CAPE_INNER, STAFF_VINE, STAFF_CHARM, BELT_CHARM, ANTLER_BEADS],
@@ -130,6 +130,8 @@ export const DRUIDA_RIG: PuppetRig = ({
     // faceless cowl, pointed hood tail, leaves and antlers
     P('head', 'hoodD', [[42, 64], [40, 52], [44, 42], [52, 36], [62, 34], [72, 37], [79, 45], [81, 53], [76, 57], [75, 63], [78, 68], [70, 72], [58, 74], [48, 72]]),
     P('head', 'hood', [[45, 44], [37, 46], [30, 53], [34, 52], [38, 51], [43, 55]]),
+    // angry green slits glowing in the dark of the cowl
+    slitEye('head', 'eyeGlow', [63.6, 58.52], [69.9, 60.48], 1.56), slitEye('head', 'eyeGlow', [75.38, 58.9], [71.32, 60.3], 1.3),
     leaf('head', 'leaf', 48, 39, -140, 8, 3.4), leaf('head', 'leaf', 42, 49, 185, 8, 3.4),
     leaf('head', 'leaf', 57, 35, -105, 7, 3), leaf('head', 'leaf', 72, 38, -50, 6, 3),
     L('head', 'antler', 52, 38, 46, 24, 3.2), L('head', 'antler', 48, 29, 40, 26, 2.4),
@@ -159,6 +161,9 @@ export const DRUIDA_RIG: PuppetRig = ({
     C('armF', 'glove', 68.5, 97, 4.2),
   ],
 });
+
+/** Angry glow of the druid's eyes, shared by the beast forms (forma-lobo, forma-oso…). */
+const FORM_EYE = '#b8f07a';
 
 /** Wild Shape forms of the druid. */
 export type FormId = 'lobo' | 'oso' | 'aguila' | 'enjambre' | 'lunar' | 'estelar';
@@ -207,7 +212,7 @@ function wolfShapes(lunar: boolean): Shape[] {
       : [[82, 98], [88, 96], [92, 102], [88, 101], [86, 106], [84, 101], [80, 104]]),
     E('legF', 'fur', 47, 100, 9, 10), L('legF', 'fur', 47, 106, 51, 116, 6), L('legF', 'fur', 51, 116, 46, 125, 5), E('legF', 'fur', 47, 126.5, 5, 2.6),
     L('armF', 'fur', 80, 100, 81, 113, 6.5), L('armF', 'fur', 81, 113, 83, 125, 5.5), E('armF', 'fur', 85, 126.5, 5.2, 2.7),
-    // head: skull, long snout, ears, fang, glowing eye
+    // head: skull, long snout, ears, fang, angry glowing eye (profile)
     E('head', 'fur', 89, 78, 10, 8.5),
     P('head', 'fur', [[94, 72], [113, 78], [114, 82], [108, 83], [96, 85]]),
     P('head', 'fur', [[82, 73], [84, 57], [91, 69]]), P('head', 'fur', [[88, 70], [94, 58], [97, 71]]),
@@ -215,7 +220,7 @@ function wolfShapes(lunar: boolean): Shape[] {
     // lower jaw (opens for the bite and the howl)
     P('chF1', 'fur', [[90, 83], [110, 84.5], [109, 87.5], [100, 89], [92, 90]]),
     P('chF1', 'fur', [[102.5, 85], [105, 85], [104, 81.5]]),
-    C('head', 'eye', 97, 76, 1.9),
+    slitEye('head', 'eyeGlow', [93.64, 74.16], [100.36, 76.54], 1.56),
   ];
   if (lunar) {
     // mane over the head, silver strands and a crescent on the brow
@@ -261,7 +266,7 @@ const howlVibrato = (p: PartialPose & { head: number; chF1: number }, t: number,
 const WOLF_RIG: PuppetRig = {
   accent: '#7dba4e', style: 'melee', phase: 0.4, focus: [110, 81], focusBone: 'head', slash: [16, 30], slashAt: ['head', [100, 82]],
   impact: 0.42,
-  palette: { fur: '#3a3a3a', eye: '#1b140f' },
+  palette: { fur: '#3a3a3a', eyeGlow: FORM_EYE },
   pivots: { torso: [42, 100], head: [82, 86], cape: [37, 93], armF: [80, 100], armB: [76, 100], legF: [46, 100], legB: [42, 100] },
   chains: wolfChains(false),
   rest: { head: 10, torso: 2 },
@@ -294,7 +299,7 @@ const WOLF_RIG: PuppetRig = {
 const LUNAR_RIG: PuppetRig = {
   ...WOLF_RIG,
   accent: '#b9c8ff', phase: 3.3, slash: [20, 36], impact: 0.45,
-  palette: { fur: '#2a2c38', eye: '#1b140f', moonGlow: '#e6ecff' },
+  palette: { fur: '#2a2c38', eyeGlow: '#a9c0ff', moonGlow: '#e6ecff' },
   chains: wolfChains(true),
   rest: { head: 8, torso: 2 },
   windup: { rootX: -6, torso: -10, head: -22, armF: -25, legF: 10 },
@@ -338,7 +343,7 @@ const BEAR_FALLEN: PartialPose = { rootX: -4, torsoY: 12, torso: 12, head: 30, a
 
 const OSO_RIG: PuppetRig = {
   accent: '#7dba4e', style: 'melee', phase: 1.2, focus: [112, 88], focusBone: 'head', slash: [24, 40], impact: 0.45,
-  palette: { fur: '#3a2a20', claw: '#d8cbb0', eye: '#1b140f' },
+  palette: { fur: '#3a2a20', claw: '#d8cbb0', eyeGlow: FORM_EYE },
   pivots: { torso: [40, 104], head: [86, 84], cape: [26, 88], armF: [82, 98], armB: [78, 98], legF: [44, 100], legB: [40, 100] },
   chains: BEAR_CHAINS,
   rest: { head: 9 },
@@ -411,7 +416,7 @@ const OSO_RIG: PuppetRig = {
     ...strandShapes(BEAR_CHAINS[3], 'fur', [8, 6, 2], { tip: 'tattered', teeth: 2 }),
     P('chF1', 'fur', [[98, 89], [114, 90], [113, 93], [100, 95]]),
     P('head', 'claw', [[109, 89], [111, 89], [110, 92.5]]),
-    C('head', 'eye', 102, 79, 1.9),
+    slitEye('head', 'eyeGlow', [98.64, 77.26], [105.36, 79.64], 1.56),
   ],
 };
 
@@ -430,7 +435,7 @@ const EAGLE_FALLEN: PartialPose = { rootX: -4, torsoY: 30, torso: 80, head: 55, 
 const AGUILA_RIG: PuppetRig = {
   accent: '#7dba4e', style: 'melee', phase: 2.0, focus: [91, 70], focusBone: 'head', slash: [16, 30], flap: 22, impact: 0.45,
   slashAt: ['chF2', [64, 108]],
-  palette: { feather: '#4a3a2a', claw: '#d8cbb0', eye: '#1b140f' },
+  palette: { feather: '#4a3a2a', claw: '#d8cbb0', eyeGlow: FORM_EYE },
   pivots: { torso: [60, 82], head: [70, 76], cape: [46, 86], armF: [62, 76], armB: [56, 74] },
   chains: [EAGLE_TAIL, ...EAGLE_FEATHERS, TALONS],
   rest: {},
@@ -502,7 +507,7 @@ const AGUILA_RIG: PuppetRig = {
     P('head', 'feather', [[81, 66], [91, 68], [93.5, 73], [90.5, 77.5], [88.5, 73.5], [82, 75.5]]),
     P('head', 'feather', [[72, 65], [85, 63.5], [83, 67]]),
     P('head', 'feather', [[71, 66], [61, 62], [65, 67], [60, 70], [66, 71], [62, 75], [71, 74]]),
-    C('head', 'eye', 80, 69, 1.7),
+    slitEye('head', 'eyeGlow', [77.2, 67.62], [82.8, 69.58], 1.3),
     // near wing with its primaries
     P('armF', 'feather', [[62, 76], [56, 58], [51, 42], [48, 28], [54, 32], [56, 26], [60, 34], [63, 29], [65, 40], [69, 36], [71, 54], [72, 78]]),
     ...strandShapes(EAGLE_FEATHERS[0], 'feather', [4.5, 3, 0.5]), ...strandShapes(EAGLE_FEATHERS[1], 'feather', [4, 3, 0.5]),
@@ -537,7 +542,10 @@ function swarmShapes(): Shape[] {
       const a = rnd() * Math.PI * 2, d = Math.sqrt(rnd());
       out.push(E(bone, 'bug', r2(cx + Math.cos(a) * rx * d), r2(cy + Math.sin(a) * ry * d), 3, 2));
     }
-    out.push(C(bone, 'eye', r2(cx + (rnd() - 0.5) * rx), r2(cy + (rnd() - 0.5) * ry), 0.9));
+    const gx = r2(cx + (rnd() - 0.5) * rx), gy = r2(cy + (rnd() - 0.5) * ry);
+    // the leading cluster glares with two angry eyes; the core keeps a glint
+    if (bone === 'head') out.push(slitEye('head', 'eyeGlow', [79.4, 77.6], [83.4, 79.2], 1.3), slitEye('head', 'eyeGlow', [89.6, 77.6], [85.8, 79.2], 1.3));
+    else out.push(C(bone, 'sparkle', gx, gy, 0.9));
   }
   // streams: three insects per segment, smaller towards the tip, one glint each
   for (const s of SWARM_STREAMS) {
@@ -550,14 +558,14 @@ function swarmShapes(): Shape[] {
       }
     }
     const [tx, ty] = s.joints[3];
-    out.push(C(bones[2], 'eye', tx, ty, 0.9));
+    out.push(C(bones[2], 'sparkle', tx, ty, 0.9));
   }
   return out;
 }
 
 const ENJAMBRE_RIG: PuppetRig = {
   accent: '#7dba4e', style: 'melee', phase: 2.7, focus: [86, 78], focusBone: 'head', slash: [16, 30], slashAt: ['head', [84, 80]], flap: 10, impact: 0.42,
-  palette: { bug: '#2a2a2a', eye: '#1b140f' },
+  palette: { bug: '#2a2a2a', eyeGlow: FORM_EYE, sparkle: '#c4e0af' },
   pivots: { torso: [62, 96], head: [80, 84], cape: [52, 96], armF: [70, 90], armB: [56, 88], legF: [64, 104], legB: [54, 104] },
   chains: SWARM_STREAMS,
   rest: {},
@@ -631,7 +639,7 @@ const STAG_FALLEN: PartialPose = { rootX: -5, torsoY: 14, torso: 10, head: 30, a
 
 const ESTELAR_RIG: PuppetRig = {
   accent: '#ffe39a', style: 'melee', phase: 4.1, focus: [93, 28], focusBone: 'head', slash: [20, 36], slashAt: ['head', [96, 50]], impact: 0.42,
-  palette: { hide: '#4a3a2c', eye: '#1b140f', starGlow: '#fff4c8' },
+  palette: { hide: '#4a3a2c', eyeGlow: '#ffe07a', starGlow: '#fff4c8' },
   pivots: { torso: [44, 96], head: [78, 84], cape: [34, 84], armF: [78, 94], armB: [74, 94], legF: [46, 94], legB: [42, 94] },
   chains: STAG_CHAINS,
   rest: {},
@@ -711,7 +719,7 @@ const ESTELAR_RIG: PuppetRig = {
     C('head', 'starGlow', 86, 46, 1.1),
     // a thread of starlight hanging from a tine
     ...strandShapes(STAG_CHAINS[4], 'starGlow', [0.6, 0.5, 0.4], { tip: 'flat' }), star('chE2', 'starGlow', 103, 51, 2.4),
-    C('head', 'eye', 90, 63, 1.5),
+    slitEye('head', 'eyeGlow', [87, 61.52], [92.6, 63.48], 1.3),
   ],
 };
 

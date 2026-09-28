@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790597224.2477453,
-    "ast_hash": "5180e106a5b74e1f3e46f95a749b53d0",
+    "mtime": 1790599467.386445,
+    "ast_hash": "cf4832a5e77c4cead362416b1a95341f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790597202.1034036,
-    "ast_hash": "c52718acc9a2c64ecd7c8a70530a72b2",
+    "mtime": 1790598715.7285411,
+    "ast_hash": "5a6d25845c01332e2278a25bd678b52f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790597224.2472863,
-    "ast_hash": "8dfb8a269cbf07f5e01698a0c160eb09",
+    "mtime": 1790599467.3853884,
+    "ast_hash": "59d38f6deea5c82fb8974d42ec46a3cb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -235,8 +235,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet.ts": {
-    "mtime": 1790526167.0439646,
-    "ast_hash": "7f2b171ba65fcf046a5e6e74cf851548",
+    "mtime": 1790598949.187869,
+    "ast_hash": "5d69324f0a7b245b7378be9a75c6f041",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
@@ -2335,33 +2335,33 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/barbaro.ts": {
-    "mtime": 1790525801.7658737,
-    "ast_hash": "e5e39f680b7c4a03c5ecda7fb40ff0a1",
+    "mtime": 1790598668.4595747,
+    "ast_hash": "f516a5a5902da67e186d71e5b85b8223",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/brujo.ts": {
-    "mtime": 1790524879.8501527,
-    "ast_hash": "b15bc83fecbe75b5a89df92d50d7e302",
+    "mtime": 1790599053.7844484,
+    "ast_hash": "998baa9a345c3854982bdbb5ce25597b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/common.ts": {
-    "mtime": 1790524069.3949397,
-    "ast_hash": "ec79a69f47ed4ede45227f0eeaca1073",
+    "mtime": 1790599053.7849772,
+    "ast_hash": "eef03fcf5a2c931196f73d3302792cfc",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/druida.ts": {
-    "mtime": 1790525719.0942297,
-    "ast_hash": "b6584bd3bb9f27d73e3f1e4b60146b61",
+    "mtime": 1790598668.459782,
+    "ast_hash": "f66684282f9cc614fe5b85b3100b38dd",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/mago.ts": {
-    "mtime": 1790524893.7363982,
-    "ast_hash": "444c2c50396c3d6b55a441e350df4f66",
+    "mtime": 1790598668.4605043,
+    "ast_hash": "e71655ed39334514998381626a7a5e8e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/picaro.ts": {
-    "mtime": 1790526186.4766557,
-    "ast_hash": "8f2968d24bde7ac6e88c7bf4b62f7eda",
+    "mtime": 1790598668.460248,
+    "ast_hash": "c7293b3e5afdb02bbdd6606ed9187541",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sprite-capture.ts": {
@@ -2380,28 +2380,28 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/barbaro.ts": {
-    "mtime": 1790525931.1811457,
-    "ast_hash": "3fe5c7dd85e364c25c1285c7dc06f378",
+    "mtime": 1790599289.3479924,
+    "ast_hash": "4156166f5f4714c1e40f6b3e8900341c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/brujo.ts": {
-    "mtime": 1790525039.4875996,
-    "ast_hash": "661dcb27227ca0d4b787ddb135485be7",
+    "mtime": 1790599289.3464344,
+    "ast_hash": "9834a9de9c094313fca36c3106b0380e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/druida.ts": {
-    "mtime": 1790526101.486794,
-    "ast_hash": "66482401e3659f9b95c8450edb62f1a6",
+    "mtime": 1790599304.5489943,
+    "ast_hash": "32fc63b59c1619b090feac362b9b111b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/mago.ts": {
-    "mtime": 1790525194.7528155,
-    "ast_hash": "3959cbfd368eb3350bd0386f28a9d6f4",
+    "mtime": 1790599289.34885,
+    "ast_hash": "b00b7e50dea51d970ad2295b3379d19e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/picaro.ts": {
-    "mtime": 1790525679.5492668,
-    "ast_hash": "7b09f39530fb6f891576b72a1a1f512b",
+    "mtime": 1790599304.5465717,
+    "ast_hash": "a7107ef86410c245a7ce5834c2f3956a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/motion.ts": {
@@ -2410,8 +2410,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/README.md": {
-    "mtime": 1790524435.4566703,
-    "ast_hash": "4f685df3cb7aa732ec3a24f401293efe",
+    "mtime": 1790599397.131041,
+    "ast_hash": "c8714592db39042b2f02e565445100f7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {

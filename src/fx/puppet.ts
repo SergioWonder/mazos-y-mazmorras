@@ -183,6 +183,9 @@ export interface EffectGeometry {
   orb?: { cx: number; cy: number; r: number; alpha: number; angle: number };
 }
 
+/** Fraction of the death at which the glowing eyes go out (the body is still fading). */
+export const EYES_OUT = 0.7;
+
 /** Seconds each action lasts. */
 export const ACTION_DURATION: Record<ActionType, number> = { attack: 0.8, spell: 0.8, hit: 0.6, death: 0.9 };
 
@@ -199,6 +202,22 @@ export const E = (b: BoneId, k: string, x: number, y: number, rx: number, ry: nu
 export const P = (b: BoneId, k: string, pts: [number, number][]): Shape => ({ t: 'p', b, k, pts });
 export const L = (b: BoneId, k: string, x1: number, y1: number, x2: number, y2: number, w: number): Shape =>
   ({ t: 'l', b, k, x1, y1, x2, y2, w });
+
+/**
+ * Angry glowing slit eye, as the card art draws them: a small almond from its
+ * outer end to its inner end (put the inner end lower for the frown). The top
+ * edge stays almost straight, as if cut by the brow, and the bottom bulges by `h`.
+ * Paint it with an emissive eye key ('eyeGlow') so it glows, blinks and dies out.
+ */
+export function slitEye(b: BoneId, k: string, outer: [number, number], inner: [number, number], h = 1.2): Shape {
+  const [ox, oy] = outer, dx = inner[0] - ox, dy = inner[1] - oy, len = Math.hypot(dx, dy) || 1;
+  // unit normal pointing down the screen (towards the cheek)
+  let nx = -dy / len, ny = dx / len;
+  if (ny < 0) { nx = -nx; ny = -ny; }
+  const at = (f: number, off: number): [number, number] =>
+    [Math.round((ox + dx * f + nx * off) * 100) / 100, Math.round((oy + dy * f + ny * off) * 100) / 100];
+  return P(b, k, [outer, at(0.45, -h * 0.18), inner, at(0.62, h), at(0.25, h * 0.8)]);
+}
 
 const DEFAULT_PIVOTS = {
   root: [58, 100], torso: [58, 100], cape: [56, 74], head: [60, 74],
@@ -421,7 +440,8 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   }
   // cape/scarf/tail hangs from its pivot and trails behind forward motion
   p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
-  fx.blink = ((t + rig.phase) % 3.7) < 0.13;
+  // blink now and then; the eyes go out for good near the end of the death
+  fx.blink = (action?.type === 'death' && action.p >= EYES_OUT) || ((t + rig.phase) % 3.7) < 0.13;
   rig.animate?.(p, t, action);
   return { p, fx };
 }

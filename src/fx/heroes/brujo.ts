@@ -12,7 +12,7 @@
 // cape wrapped around the body and snaps the arm open, the cape spreading like
 // wings and the amulets leaping.
 
-import { C, E, P, L, type ActionScript, type PuppetRig } from '../puppet.ts';
+import { C, E, P, L, slitEye, type ActionScript, type PuppetRig } from '../puppet.ts';
 import { strandShapes, type ChainSpec } from '../chains.ts';
 import { EASE, pulse, shake } from '../motion.ts';
 
@@ -125,7 +125,7 @@ export const BRUJO_RIG: PuppetRig = {
   palette: {
     cloak: '#2e1b48', cloakD: '#1d1130', collar: '#24163a', lining: '#7a2f9a', boots: '#231a2c', skin: '#cdbfd9',
     hood: '#1c1424', horn: '#5a4a62', tome: '#6b2130', tomeD: '#3e1220', gold: '#b9924a', chain: '#8a8196',
-    belt: '#3a2a20', gem: '#c98bff', flame: '#b46bff', flameCore: '#f6e6ff',
+    belt: '#3a2a20', gem: '#c98bff', flame: '#b46bff', flameCore: '#f6e6ff', eyeGlow: '#d49aff',
   },
   pivots: { weapon: [69, 97] },
   headScale: 0.84,
@@ -161,9 +161,11 @@ export const BRUJO_RIG: PuppetRig = {
     P('torso', 'collar', [[47, 81], [42, 67], [42, 52], [47, 58], [51, 66], [56, 73], [58, 75]]),
     P('torso', 'collar', [[64, 75], [70, 69], [74, 58], [77, 62], [75, 72], [71, 81]]),
     P('torso', 'cloak', [[46, 80], [56, 74], [68, 74], [74, 79], [70, 86], [60, 84], [50, 86]]),
-    // hooded head (no face) and curved horns
+    // hooded head (only the eyes glow) and curved horns
     P('head', 'hood', [[46, 58], [49, 48], [58, 43], [68, 45], [74, 52], [76, 58], [73, 64], [68, 70], [56, 71], [48, 66]]),
     P('head', 'hood', [[72, 51], [78, 56], [74, 60]]),
+    // angry violet slits burning inside the hood (pacto-final)
+    slitEye('head', 'eyeGlow', [61.12, 55.9], [67.28, 58], 1.56), slitEye('head', 'eyeGlow', [73.38, 56.4], [69.32, 57.8], 1.3),
     P('head', 'horn', [[51, 50], [46, 41], [41, 34], [36, 30], [32, 24], [37, 26], [42, 29], [48, 33], [54, 40], [59, 46]]),
     P('head', 'horn', [[61, 45], [63, 37], [67, 30], [72, 26], [78, 23], [74, 28], [70, 32], [68, 38], [68, 44], [67, 47]]),
     // pact amulets and the chained grimoire

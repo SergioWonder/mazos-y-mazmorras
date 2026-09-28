@@ -3,13 +3,14 @@
 // cloth), action timelines and the piece budget.
 //
 // Card reference: furia-indomita / furia-creciente — a hulking V-shaped
-// silhouette with a wild spiky mane and a double-bitted greataxe, never a face.
+// silhouette with a wild spiky mane and a double-bitted greataxe; of the face
+// only the two angry glowing eyes show.
 // Bones: armF is the whole front arm (slightly bent) and the weapon bone pivots
 // on its fist, so the wrist cocks and snaps the axe; the back arm has a real
 // elbow (armB = upper arm, offhand = forearm). Six spring chains: four mane
 // locks (A–D), the beard (E) and the front loincloth (F).
 
-import { C, E, P, L, type Keyframe, type PuppetRig } from '../puppet.ts';
+import { C, E, P, L, slitEye, type Keyframe, type PuppetRig } from '../puppet.ts';
 import { strandShapes, type ChainSpec } from '../chains.ts';
 import { EASE, shake } from '../motion.ts';
 
@@ -111,7 +112,7 @@ const DEATH: Keyframe[] = [
 
 export const BARBARO_RIG: PuppetRig = {
   accent: '#e0622e', style: 'melee', phase: 1.1, focus: [78, 64], focusBone: 'head', slash: [38, 58],
-  palette: { hair: '#c4532b', skin: '#c98a5e', fur: '#9b7b55', pants: '#5b3b26', boots: '#3e2a1d', steel: '#c3ced6', wood: '#6e4a2c', belt: '#8a5a2e', strap: '#6b3f22' },
+  palette: { hair: '#c4532b', skin: '#c98a5e', fur: '#9b7b55', pants: '#5b3b26', boots: '#3e2a1d', steel: '#c3ced6', wood: '#6e4a2c', belt: '#8a5a2e', strap: '#6b3f22', eyeGlow: '#ffbe55' },
   pivots: { armF: [68, 78], armB: [52, 78], offhand: [48, 90], weapon: [74, 99], cape: [50, 100] },
   headScale: 0.84,
   impact: IMPACT,
@@ -163,6 +164,8 @@ export const BARBARO_RIG: PuppetRig = {
     C('head', 'skin', 61, 58, 13),
     P('head', 'skin', [[64, 54], [75, 53], [76, 57], [79, 61], [76, 63], [76, 68], [71, 73], [63, 72]]),
     P('head', 'hair', [[48, 62], [40, 56], [49, 53], [43, 42], [53, 46], [52, 34], [59, 43], [66, 33], [67, 45], [76, 40], [72, 50], [62, 52], [54, 58]]),
+    // angry amber slits under the brow, as in furia-indomita (near eye, foreshortened far eye)
+    slitEye('head', 'eyeGlow', [64.6, 56.9], [70.9, 59], 1.56), slitEye('head', 'eyeGlow', [77.2, 57.4], [73, 58.8], 1.3),
     ...strandShapes(LOCK_CROWN, 'hair', [7, 5, 3, 1]),
     ...strandShapes(BEARD, 'hair', [8, 6.5, 4, 1]),
     // — front arm: deltoid, bent arm, bracer —

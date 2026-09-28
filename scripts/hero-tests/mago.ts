@@ -36,7 +36,7 @@ export function testMago(check: Check) {
 
   // detail within the budget
   check(rig.shapes.length >= 40 && rig.shapes.length <= MAX_FIGURE_PIECES, `mago: ${rig.shapes.length} piezas, con detalle y dentro del tope de ${MAX_FIGURE_PIECES}`);
-  check(!rig.shapes.some((s) => s.k === 'eye' || s.k === 'eyeGlow' || s.k === 'skin'), 'mago: nunca se le ve la cara (ni ojos ni piel)');
+  check(!rig.shapes.some((s) => s.k === 'eye' || s.k === 'skin') && rig.shapes.filter((s) => s.k === 'eyeGlow').length === 2, 'mago: bajo el sombrero solo se le ven dos ojos brillantes (sin piel)');
   check(rig.shapes.some((s) => s.k === 'orb'), 'mago: el báculo lleva un orbe que brilla');
 
   // physics chains: hat, beard, sleeves and robe

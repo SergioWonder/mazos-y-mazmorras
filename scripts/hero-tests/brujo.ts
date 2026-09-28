@@ -34,7 +34,7 @@ export function testBrujo(check: Check) {
     'brujo: cuernos curvos');
   check(rig.shapes.some((s) => s.k === 'collar' && s.b === 'torso'), 'brujo: cuello alto de la capa, rígido');
   check(rig.shapes.filter((s) => s.b === 'weapon' && (s.k === 'flame' || s.k === 'flameCore')).length >= 3, 'brujo: llama violeta en la mano');
-  check(!rig.shapes.some((s) => s.k === 'eyeGlow' || s.k === 'eye'), 'brujo: nunca se le ve la cara');
+  check(!rig.shapes.some((s) => s.k === 'eye') && rig.shapes.filter((s) => s.k === 'eyeGlow').length === 2, 'brujo: bajo la capucha solo se le ven dos ojos brillantes');
   check(rig.shapes.length >= 40 && rig.shapes.length <= Math.min(80, MAX_FIGURE_PIECES), `brujo: ${rig.shapes.length} piezas, entre 40 y 80`);
 
   // — the Eldritch Blast: long tense gathering, then the flame bursts out —

@@ -40,7 +40,7 @@ export function testBarbaro(check: Check) {
   check(chains.some((c) => (c.parent ?? 'torso') !== 'head' && rig.shapes.some((s) => s.k === 'fur' && s.b.startsWith(`ch${c.slot}`))),
     'bárbaro: taparrabos de pieles con física');
   check(rig.shapes.filter((s) => s.k === 'hair' && s.b === 'head' && s.t === 'p' && s.pts.length >= 9).length >= 1, 'bárbaro: cresta puntiaguda fija sobre la cabeza');
-  check(!rig.shapes.some((s) => s.k === 'eye' || s.k === 'eyeGlow'), 'bárbaro: nunca se le ve la cara');
+  check(!rig.shapes.some((s) => s.k === 'eye') && rig.shapes.filter((s) => s.k === 'eyeGlow').length === 2, 'bárbaro: de la cara solo se ven dos ojos brillantes');
   check(rig.shapes.some((s) => s.b === 'offhand') && !!rig.pivots.offhand, 'bárbaro: el brazo de atrás tiene codo y antebrazo');
   check(rig.shapes.filter((s) => s.b === 'weapon' && s.k === 'steel' && s.t === 'p').length >= 2, 'bárbaro: hacha de doble filo');
   const torso = rig.shapes.find((s) => s.b === 'torso' && s.k === 'skin' && s.t === 'p');

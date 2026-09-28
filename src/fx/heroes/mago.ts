@@ -7,7 +7,7 @@
 // sleeves (C, D), a robe tail flowing behind (E) and a tome tied to the sash (F).
 // The face is never seen: it stays in the shadow of the brim.
 
-import { C, E, P, L, type PuppetRig, type ChainSpec, type PartialPose } from '../puppet.ts';
+import { C, E, P, L, type PuppetRig, type ChainSpec, type PartialPose, slitEye } from '../puppet.ts';
 import { strandShapes } from '../chains.ts';
 import { EASE, strikeKeys } from '../motion.ts';
 
@@ -68,7 +68,7 @@ export const MAGO_RIG: PuppetRig = {
   accent: '#8a7ae0', style: 'magic', phase: 2.3, focus: [70, 55],
   palette: {
     robe: '#5d4bc9', robeD: '#3d3190', hat: '#4a3cae', hatD: '#3a2e8c', beard: '#eef0f5', wood: '#8a5a32',
-    orb: '#cbbcff', starGlow: '#b9a8ff', sash: '#d9a93f', boots: '#4a3450', tome: '#6b3d2a', page: '#e8dcc0', shade: '#1a1530',
+    orb: '#cbbcff', starGlow: '#b9a8ff', eyeGlow: '#b3a4ff', sash: '#d9a93f', boots: '#4a3450', tome: '#6b3d2a', page: '#e8dcc0', shade: '#1a1530',
   },
   pivots: { weapon: [68, 97] },
   headScale: 0.84,
@@ -153,9 +153,11 @@ export const MAGO_RIG: PuppetRig = {
     P('chF2', 'page', [[70.5, 109], [72, 109], [73, 119], [71.6, 119]]),
     L('chF2', 'tome', 61.5, 110, 71.5, 110, 1.4),
     C('chF2', 'starGlow', 67, 114, 1.3),
-    // head in shadow (no face), beard over the chest
+    // head in shadow (only the eyes glow), beard over the chest
     C('head', 'shade', 62, 60, 12.5),
     E('head', 'beard', 69, 65, 7, 4),
+    // angry violet slits glowing under the brim
+    slitEye('head', 'eyeGlow', [62.12, 56.1], [68.28, 58.2], 1.56), slitEye('head', 'eyeGlow', [74.16, 56.6], [70.24, 58], 1.3),
     ...strandShapes(BEARD, 'beard', [10, 10, 7, 1.5], { tip: 'point' }),
     L('chB2', 'shade', 71, 80, 70, 88, 0.9),
     // front sleeve, arm and hand

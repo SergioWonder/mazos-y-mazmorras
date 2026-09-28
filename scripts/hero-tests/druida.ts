@@ -108,7 +108,7 @@ export function testDruida(check: Check) {
     let spin = 0;
     for (let q = 0.02; q < puppetImpact(rig); q += 0.02) spin = Math.max(spin, Math.abs(puppetPose(rig, 0, { type: 'attack', p: q }).p.weapon));
     check(spin >= 180, `druida: el bastón gira en el ataque (${spin.toFixed(0)}°)`);
-    check(!rig.shapes.some((s) => s.k === 'eye' || s.k === 'skin'), 'druida: nunca se le ve la cara');
+    check(!rig.shapes.some((s) => s.k === 'eye' || s.k === 'skin') && rig.shapes.filter((s) => s.k === 'eyeGlow').length === 2, 'druida: bajo la capucha solo se le ven dos ojos brillantes');
   }
 
   // each form attacks with its own timeline

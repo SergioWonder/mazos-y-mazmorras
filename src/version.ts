@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.4.1';
+export const VERSION = '6.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.5.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '👁️ Los héroes y las formas del druida tienen ojos brillantes y enfadados del color de su clase, como en las ilustraciones de las cartas. Se apagan al caer.',
+    ],
+  },
   {
     version: '6.4.1',
     fecha: '2026-09-28',

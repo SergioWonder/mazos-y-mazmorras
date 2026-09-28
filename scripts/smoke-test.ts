@@ -5658,5 +5658,32 @@ try {
   check(false, `las pruebas de la textura de pergamino revientan: ${(e as Error).stack ?? e}`);
 }
 
+// ── Angry glowing eyes on every hero and druid form, as in the card art ─────
+console.log('\n👁️ Ojos enfadados');
+try {
+  const { angryEyeChecks } = await import('./hero-tests/common.ts');
+  const { MAX_FIGURE_PIECES } = await import('../src/fx/puppet-gpu.ts');
+  // pieces before the eyes: at most 4 more per figure, always under the cap
+  const antes: Record<string, number> = {
+    druida: 74, barbaro: 52, mago: 51, picaro: 50, brujo: 50,
+    lobo: 33, oso: 31, aguila: 25, enjambre: 84, lunar: 41, estelar: 50,
+  };
+  const ojos: Record<string, 1 | 2> = {
+    druida: 2, barbaro: 2, mago: 2, picaro: 2, brujo: 2,
+    lobo: 1, oso: 1, aguila: 1, enjambre: 2, lunar: 1, estelar: 1,
+  };
+  const rigs = { ...HERO_RIGS, ...FORM_RIGS } as Record<string, { shapes: unknown[] }>;
+  check(Object.keys(rigs).every((id) => id in ojos), 'se revisan los ojos de todos los héroes y formas');
+  for (const id of Object.keys(ojos)) {
+    angryEyeChecks(check, id as ClaseId, ojos[id]);
+    const n = rigs[id].shapes.length;
+    check(n <= antes[id] + 4 && n <= MAX_FIGURE_PIECES, `${id}: ${n} piezas con los ojos (antes ${antes[id]}, tope ${MAX_FIGURE_PIECES})`);
+  }
+  const quieto = heroPose('barbaro', 0.5, null).fx.blink;
+  check(!quieto, 'fuera de la muerte los ojos solo parpadean de vez en cuando');
+} catch (e) {
+  check(false, `las pruebas de los ojos enfadados revientan: ${(e as Error).stack ?? e}`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

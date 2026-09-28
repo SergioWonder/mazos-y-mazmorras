@@ -36,7 +36,7 @@ export function testPicaro(check: Check) {
 
   // budget and the silhouette of the card art
   check(r.shapes.length >= 40 && r.shapes.length <= 80, `picaro: ${r.shapes.length} piezas (entre 40 y 80, tope ${96})`);
-  check(!r.shapes.some((s) => s.k === 'eye' || s.k === 'skin'), 'picaro: nunca se le ve la cara');
+  check(!r.shapes.some((s) => s.k === 'eye' || s.k === 'skin') && r.shapes.filter((s) => s.k === 'eyeGlow').length === 2, 'picaro: bajo la capucha solo se le ven dos ojos brillantes');
   check(r.shapes.filter((s) => s.b === 'weapon').length >= 3 && r.shapes.filter((s) => s.b === 'offhand').length >= 3, 'picaro: lleva dos dagas');
   check(r.shapes.filter((s) => s.k === 'knife').length >= 3, 'picaro: correas con cuchillos arrojadizos');
   check(r.shapes.filter((s) => s.k === 'boots').length >= 2, 'picaro: botas ligeras');

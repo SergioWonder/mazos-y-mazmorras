@@ -16,6 +16,11 @@ Style: backlit silhouettes. Every piece is painted near-black, with a rim light
 in `accent`. Only the `EMISSIVE` keys (gem, orb, flame, violetFire…) and eyes
 glow. Bind-pose coordinates: viewBox 140×135, facing right, feet at y≈128.
 
+Eyes: angry glowing slits as in the card art, drawn with `slitEye(bone, 'eyeGlow',
+outer, inner, h)` (`fx/puppet.ts`) on the `head` bone, with the inner end lower.
+`eyeGlow` is emissive (halo) and an eye key (blinks, and goes out at
+`EYES_OUT` of the death). Put its bright, saturated colour in the palette.
+
 ## Budget (mobile WebGL)
 
 - Keep each figure at or under `MAX_FIGURE_PIECES` (96) pieces (`fx/puppet-gpu.ts`).

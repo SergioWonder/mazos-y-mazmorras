@@ -1,10 +1,10 @@
 // Shared helpers for the per-character sprite tests (scripts/hero-tests/*.ts),
 // run from scripts/smoke-test.ts. Pure: node --experimental-strip-types.
 
-import { ACTION_DURATION, applyMatrix, puppetBones, puppetImpact, puppetPose, type ActionType, type BoneId, type Matrix, type PuppetRig } from '../../src/fx/puppet.ts';
+import { ACTION_DURATION, EMISSIVE, EYES, applyMatrix, puppetBones, puppetImpact, puppetPose, type ActionType, type BoneId, type Matrix, type PuppetRig } from '../../src/fx/puppet.ts';
 import { PuppetAnimator, type AnimFrame } from '../../src/fx/animator.ts';
 import { CHAIN_BONES, validateChains, type ChainSlot } from '../../src/fx/chains.ts';
-import { BONE_COUNT, MAX_FIGURE_PIECES, MAX_POLY, PIECE_TEXELS, packRig } from '../../src/fx/puppet-gpu.ts';
+import { BONE_COUNT, MAX_FIGURE_PIECES, MAX_POLY, PIECE_TEXELS, hexRgb, packRig, shapeBBox } from '../../src/fx/puppet-gpu.ts';
 import { rigOf, type RigId } from '../../src/fx/hero-rig.ts';
 
 export type Check = (cond: boolean, msg: string) => void;
@@ -105,4 +105,72 @@ export function figureChecks(check: Check, id: RigId) {
     }
   }
   check(finite, `${id}: ataque, conjuro, golpe y muerte se animan sin valores rotos`);
+}
+
+/** HSV saturation and value (0..1) of a '#rrggbb' colour. */
+export function hsv(hex: string): { s: number; v: number } {
+  const c = hexRgb(hex).map((x) => x / 255), mx = Math.max(...c), mn = Math.min(...c);
+  return { s: mx ? (mx - mn) / mx : 0, v: mx };
+}
+
+/** Vertices at the outer ends (min and max x) of a polygon. */
+function ends(pts: Pt[]): { left: Pt; right: Pt } {
+  const byX = [...pts].sort((a, b) => a[0] - b[0]);
+  return { left: byX[0], right: byX[byX.length - 1] };
+}
+
+/**
+ * Angry glowing eyes as in the card art: 1-2 slanted slits on the head, painted
+ * with an emissive key in a bright, saturated colour. The inner end of each slit
+ * (towards the other eye, or the snout when there is only one) sits lower than
+ * the outer end. They follow the head bone and go out at the end of the death.
+ */
+export function angryEyeChecks(check: Check, id: RigId, expected: 1 | 2) {
+  const rig = rigOf(id);
+  const eyes = rig.shapes.filter((s) => EYES.has(s.k));
+  check(eyes.length === expected, `${id}: tiene ${expected === 2 ? 'dos ojos' : 'un ojo de perfil'} (${eyes.length})`);
+  if (!eyes.length) return;
+  check(eyes.every((s) => EMISSIVE.has(s.k)), `${id}: los ojos son emisivos (brillan con halo)`);
+  const colours = [...new Set(eyes.map((s) => rig.palette[s.k] ?? ''))];
+  check(colours.every((c) => /^#[0-9a-f]{6}$/i.test(c) && hsv(c).v >= 0.85 && hsv(c).s >= 0.3),
+    `${id}: ojos de color claro y saturado (${colours.join(', ')})`);
+  check(eyes.every((s) => s.b === 'head'), `${id}: los ojos cuelgan del hueso de la cabeza`);
+  const slits = eyes.filter((s): s is Extract<typeof s, { t: 'p' }> => s.t === 'p' && s.pts.length >= 3 && s.pts.length <= Math.min(8, MAX_POLY));
+  check(slits.length === eyes.length, `${id}: cada ojo es un polígono pequeño, no un círculo`);
+  if (slits.length !== eyes.length) return;
+  const cx = (s: (typeof slits)[number]) => s.pts.reduce((a, p) => a + p[0], 0) / s.pts.length;
+  const sorted = [...slits].sort((a, b) => cx(a) - cx(b));
+  const slanted = sorted.every((s, i) => {
+    const { left, right } = ends(s.pts);
+    // the inner end is the right one for the left (or only) eye, the left one for the right eye
+    const innerRight = sorted.length === 1 || i === 0;
+    return innerRight ? right[1] - left[1] >= 0.4 : left[1] - right[1] >= 0.4;
+  });
+  check(slanted, `${id}: rendijas inclinadas con el ceño fruncido (extremo interior más bajo)`);
+  const slim = slits.every((s) => {
+    const xs = s.pts.map((p) => p[0]), ys = s.pts.map((p) => p[1]);
+    const w = Math.max(...xs) - Math.min(...xs), h = Math.max(...ys) - Math.min(...ys);
+    return w >= 1.4 * h && w <= 8;
+  });
+  check(slim, `${id}: los ojos son rendijas finas y pequeñas`);
+  // they sit on the head and ride on it through every action (with the physics)
+  const head = rig.shapes.filter((s) => s.b === 'head' && !EYES.has(s.k) && s.t !== 'l').map(shapeBBox);
+  const hb = [Math.min(...head.map((b) => b[0])), Math.min(...head.map((b) => b[1])), Math.max(...head.map((b) => b[2])), Math.max(...head.map((b) => b[3]))];
+  const headC: Pt = [(hb[0] + hb[2]) / 2, (hb[1] + hb[3]) / 2], reach = Math.hypot(hb[2] - hb[0], hb[3] - hb[1]) / 2;
+  const centre = (s: (typeof slits)[number]): Pt => [cx(s), s.pts.reduce((a, p) => a + p[1], 0) / s.pts.length];
+  const inside = slits.every((s) => { const [x, y] = centre(s); return x > hb[0] && x < hb[2] && y > hb[1] && y < hb[3]; });
+  let follows = inside;
+  for (const type of ACTIONS) {
+    for (const { f } of simulate(id, 20, 1.1, { type, t0: 0.1 })) {
+      const [hx, hy] = worldPoint(f.bones, 'head', headC);
+      for (const s of slits) {
+        const [ex, ey] = worldPoint(f.bones, 'head', centre(s));
+        if (!Number.isFinite(ex + ey) || Math.hypot(ex - hx, ey - hy) > reach * 1.3) follows = false;
+      }
+    }
+  }
+  check(follows, `${id}: los ojos están en la cara y siguen a la cabeza en reposo, ataque, conjuro, golpe y muerte`);
+  const lit = [0.1, 0.3, 0.5].some((q) => [0.5, 1.7].some((t) => !puppetPose(rig, t, { type: 'death', p: q }).fx.blink));
+  const out = [0.8, 0.9, 0.99].every((q) => [0.5, 1.7, 2.9].every((t) => puppetPose(rig, t, { type: 'death', p: q }).fx.blink));
+  check(lit && out, `${id}: al morir los ojos siguen encendidos al principio y se apagan al final`);
 }
