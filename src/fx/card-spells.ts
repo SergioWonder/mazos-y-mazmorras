@@ -1316,35 +1316,63 @@ const DART_FADE = 0.26;
 /** Seconds between two darts of the same volley (almost a burst). */
 const DART_GAP = 0.09;
 
-/** Magic Missile: one glowing force dart per hit. It leaves the staff, weaves
- *  in a damped wobble (its own amplitude, frequency and phase per seed), curves
- *  over into an arc and dives onto the target, shedding sparkles, and bursts in
- *  a violet flash. Few sprites: a whole volley fits a phone's budget. */
+/** Which side of the caster→target line dart `seed` weaves on (+1 above, -1 below):
+ *  consecutive seeds (the darts of one volley) never go three in a row on one side. */
+const DART_SIDES = [1, -1, 1, 1, -1, -1];
+
+/** Magic Missile: one glowing force dart per hit. It leaves the staff and weaves
+ *  above or below the line to the target (alternating along a volley) in a damped
+ *  wobble with its own amplitude, frequency and phase; now and then one loops the
+ *  loop halfway. Every dart ends in an arc diving onto the target, shedding
+ *  sparkles, and bursts in a violet flash. Few sprites: a whole volley fits a
+ *  phone's budget. */
 const proyectilMagico: Build = (g, u, c, D) => {
-  const { b, cx, cy, k, W, H, dir } = geo(c);
+  const { b, cx, cy, k, W, H, dir, ground } = geo(c);
   const t = u * D;
   const src = c.from ?? { x: b.x - dir * W * 2.5, y: cy };
   // born at the staff tip: ahead of and above the caster's centre
   const S = { x: src.x + dir * 26 * k, y: src.y - 22 * k };
   const E = { x: cx + (g.r(1) - 0.5) * W * 0.36, y: cy + (g.r(2) - 0.6) * H * 0.3 };
   const dx = E.x - S.x, dy = E.y - S.y, L = Math.hypot(dx, dy) || 1, tx = dx / L, ty = dy / L;
-  // chord normal pointing up the screen: the arc bulges over the chord
+  // chord normal pointing up the screen
   const up = tx >= 0 ? 1 : -1, nx = ty * up, ny = -tx * up;
-  const lift = L * (0.3 + 0.3 * g.r(3)), launch = (g.r(4) - 0.35) * 1.6;
-  const C1 = { x: S.x + tx * L * (0.22 + 0.12 * g.r(5)) + nx * lift * launch, y: S.y + ty * L * (0.22 + 0.12 * g.r(5)) + ny * lift * launch };
-  const C2 = { x: E.x - tx * L * (0.02 + 0.12 * g.r(6)) + nx * lift * 1.4, y: E.y - ty * L * (0.02 + 0.12 * g.r(6)) + ny * lift * 1.4 };
+  const seed = Math.abs(Math.round(c.seed ?? 1));
+  const side = DART_SIDES[seed % DART_SIDES.length];
+  // above: an arc over the line; below: a lower, flatter swing that hooks up at the end.
+  // Either way the last control point sits over the target, so every dart dives onto it.
+  const out1 = side > 0 ? L * (0.3 + 0.3 * g.r(3)) * (g.r(4) - 0.2) * 1.4 : -L * (0.2 + 0.1 * g.r(3));
+  const out2 = side > 0 ? L * (0.3 + 0.3 * g.r(3)) * 1.4 : L * (0.15 + 0.1 * g.r(4));
+  const f1 = 0.22 + 0.12 * g.r(5), f2 = 0.02 + 0.12 * g.r(6);
+  const C1 = { x: S.x + tx * L * f1 + nx * out1, y: S.y + ty * L * f1 + ny * out1 };
+  const C2 = { x: E.x - tx * L * f2 + nx * out2, y: E.y - ty * L * f2 + ny * out2 };
   const bez = (s: number) => {
     const m = 1 - s, a = m * m * m, b1 = 3 * m * m * s, b2 = 3 * m * s * s, d = s * s * s;
     return { x: a * S.x + b1 * C1.x + b2 * C2.x + d * E.x, y: a * S.y + b1 * C1.y + b2 * C2.y + d * E.y };
   };
-  // serpentine wobble across the path, fading out before the final arc
-  const amp = (13 + 11 * g.r(7)) * k, freq = 2.2 + 1.0 * g.r(8), ph = g.r(9) * TAU;
+  // about one dart in three loops the loop halfway: the path stalls while it circles
+  const loops = g.r(11) < 0.3, l0 = 0.3 + 0.14 * g.r(12), lw = 0.2;
+  const rho = (side > 0 ? 20 + 8 * g.r(13) : 15 + 5 * g.r(13)) * k;
+  const base = (s: number) => (!loops || s <= l0 ? s : s < l0 + lw ? l0 + (s - l0) * 0.15 : s - lw * 0.85) / (loops ? 1 - lw * 0.85 : 1);
+  // serpentine wobble across the path (smaller below the line), fading out before the final arc
+  const amp = (13 + 11 * g.r(7)) * k * (side > 0 ? 1 : 0.7), freq = 2.2 + 1.0 * g.r(8), ph = g.r(9) * TAU;
   const at = (s: number): Point => {
-    const p = bez(s), q = bez(Math.min(1, s + 0.01)), p0 = bez(Math.max(0, s - 0.01));
-    const vx = q.x - p0.x, vy = q.y - p0.y, vl = Math.hypot(vx, vy) || 1;
-    const env = smooth(clamp01(s / 0.08)) * (1 - smooth(clamp01((s - 0.25) / 0.52)));
-    const w = amp * Math.sin(TAU * freq * s + ph) * env;
-    return { x: p.x - (vy / vl) * w, y: p.y + (vx / vl) * w };
+    const sb = base(s), p = bez(sb), q = bez(Math.min(1, sb + 0.01)), p0 = bez(Math.max(0, sb - 0.01));
+    const vx = q.x - p0.x, vy = q.y - p0.y, vl = Math.hypot(vx, vy) || 1, ux = vx / vl, uy = vy / vl;
+    const inLoop = loops ? span(s, l0, l0 + lw) : 0;
+    const env = smooth(clamp01(sb / 0.08)) * (1 - smooth(clamp01((sb - 0.2) / 0.45))) * (1 - bell(s, l0 - 0.04, l0 + lw + 0.04));
+    const w = amp * Math.sin(TAU * freq * sb + ph) * env;
+    let x = p.x - uy * w, y = p.y + ux * w;
+    if (inLoop > 0 && inLoop < 1) {
+      // a full circle tangent to the path, bulging to the dart's own side
+      const th = TAU * smooth(inLoop), o = (uy * nx - ux * ny) * side > 0 ? 1 : -1;
+      const lnx = uy * o, lny = -ux * o;
+      x += rho * (Math.sin(th) * ux + (1 - Math.cos(th)) * lnx);
+      y += rho * (Math.sin(th) * uy + (1 - Math.cos(th)) * lny);
+    }
+    // never below the target's floor (the hand and the ground stay clear)
+    const floor = ground - 8 * k;
+    if (y > floor) y = floor + (y - floor) * 0.2;
+    return { x, y };
   };
   const uf = Math.min(1, t / DART_FLIGHT), head = uf * (0.75 + 0.25 * uf), hit = t >= DART_FLIGHT;
   const tailLen = 0.28, tail = hit ? lerp(Math.max(0, 1 - tailLen), 1, easeOut(span(t, DART_FLIGHT, DART_FLIGHT + 0.12))) : Math.max(0, head - tailLen);
@@ -1355,7 +1383,8 @@ const proyectilMagico: Build = (g, u, c, D) => {
     g.ring(S.x, S.y, (4 + 14 * span(t, 0, 0.12)) * k, (4 + 14 * span(t, 0, 0.12)) * k, 1.4 * k, '#9fd8ff', 0.8 * lf);
   }
   // glowing trail: violet halo, blue body, white core, tapering to the tail
-  const n = Math.max(4, g.n(12));
+  // a trail running through the loop gets more samples, so it stays round
+  const n = Math.max(4, g.n(loops && tail < l0 + lw && head > l0 ? 20 : 12));
   if (head - tail > 0.004) {
     const pts: Point[] = [];
     for (let j = 0; j <= n; j++) pts.push(at(lerp(tail, head, j / n)));

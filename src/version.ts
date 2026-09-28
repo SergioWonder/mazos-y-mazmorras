@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.10.0';
+export const VERSION = '6.10.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.10.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '🌀 Proyectil Mágico: los dardos siguen rutas más variadas, unos por arriba y otros por abajo, y alguno riza el rizo antes de caer sobre el enemigo.',
+    ],
+  },
   {
     version: '6.10.0',
     fecha: '2026-09-28',

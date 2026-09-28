@@ -5256,7 +5256,7 @@ try {
   const rumbo = (pts: { x: number; y: number }[]) => pts.slice(1).map((p, i) => Math.atan2(p.y - pts[i].y, p.x - pts[i].x));
   const giros = (a: number[]) => a.slice(1).map((v, i) => { let d = v - a[i]; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; });
   let dentro = 0, serpentea = 0, arco = 0, nace = 0, unImpacto = 0;
-  const semillas = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const semillas = [...Array(24).keys()].map((i) => i + 1);
   for (const s of semillas) {
     const pts = cabeza(s);
     if (pts.length && Math.hypot(pts[0].x - from.x, pts[0].y - from.y) < 90) nace++;
@@ -5288,6 +5288,33 @@ try {
   const a1 = cabeza(1), a2 = cabeza(2);
   const mitad = Math.floor(Math.min(a1.length, a2.length) / 2);
   check(a1.length > 10 && Math.hypot(a1[mitad].x - a2[mitad].x, a1[mitad].y - a2[mitad].y) > 8, 'dos dardos siguen trayectorias distintas');
+  // varied routes: some weave above the hero→enemy line and some below, now and then one loops
+  const lado = (pts: { x: number; y: number }[]) => {
+    const a = pts[0], z = pts[pts.length - 1], dx = z.x - a.x, dy = z.y - a.y, d = Math.hypot(dx, dy) || 1;
+    const medio = pts.slice(Math.round(pts.length * 0.15), Math.round(pts.length * 0.6));
+    // signed distance to the chord: positive = above it on screen (for a rightward throw)
+    const m = medio.reduce((acc, p) => acc + ((p.x - a.x) * dy - (p.y - a.y) * dx) / d, 0) / Math.max(1, medio.length);
+    return m > 0 ? 'arriba' : 'abajo';
+  };
+  const cruza = (pts: { x: number; y: number }[]) => {
+    const seg = (p: { x: number; y: number }, q: { x: number; y: number }, r2: { x: number; y: number }, s2: { x: number; y: number }) => {
+      const o = (a: typeof p, b: typeof p, c: typeof p) => Math.sign((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x));
+      return o(p, q, r2) * o(p, q, s2) < 0 && o(r2, s2, p) * o(r2, s2, q) < 0;
+    };
+    for (let i = 0; i + 1 < pts.length; i++) for (let j = i + 2; j + 1 < pts.length; j++) if (seg(pts[i], pts[i + 1], pts[j], pts[j + 1])) return true;
+    return false;
+  };
+  const rutas = [...Array(24).keys()].map((i) => cabeza(i + 1));
+  const lados = rutas.map(lado);
+  check(lados.includes('arriba') && lados.includes('abajo'), `hay dardos por arriba y por abajo de la recta (${lados.filter((l) => l === 'arriba').length} arriba, ${lados.filter((l) => l === 'abajo').length} abajo)`);
+  const mezcladas = [...Array(22).keys()].every((i) => new Set(lados.slice(i, i + 3)).size === 2);
+  check(mezcladas, 'en cualquier ráfaga de tres dardos seguidos se mezclan los dos lados');
+  const bucles = rutas.filter(cruza).length;
+  check(bucles >= 3 && bucles <= 12, `alguno que otro dardo hace un bucle, no todos (${bucles}/24)`);
+  const conBucle = rutas.findIndex(cruza);
+  check(conBucle >= 0 && JSON.stringify(cabeza(conBucle + 1)) === JSON.stringify(rutas[conBucle]), 'el bucle es determinista por semilla');
+  const bajo = Math.max(...rutas.map((pts) => Math.max(...pts.map((p) => p.y))));
+  check(bajo <= box.y + box.h, `las rutas por abajo no bajan del suelo del objetivo (${Math.round(bajo)} ≤ ${box.y + box.h})`);
   // budget: few sprites per dart, a five-dart volley fits the live cap
   let maximo = 0, roto = 0, rafaga = 0, reducido = 0;
   for (let t = 0; t <= def.duration; t += 1 / 60) {
