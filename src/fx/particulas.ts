@@ -132,6 +132,7 @@ class MotorParticulas {
   hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
     return this.hechizos.add(nombre, {
       box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: movimientoReducido(),
+      view: { w: window.innerWidth, h: window.innerHeight },
     }, this.reloj);
   }
 

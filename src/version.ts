@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.10.1';
+export const VERSION = '6.11.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.11.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '📜 El Conjuro Prodigioso se luce: cada lanzamiento muestra un hechizo al azar, y cuanto más daño hace, más espectacular (raros desde 30, únicos desde 50 y, desde 80, el rayo del Dungeon Master).',
+      '🌀 Proyectil Mágico: los dardos serpentean más, vuelan un poco más, se reparten el espacio en carriles propios y ya no se salen de la pantalla.',
+    ],
+  },
   {
     version: '6.10.1',
     fecha: '2026-09-28',

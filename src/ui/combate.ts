@@ -25,6 +25,7 @@ import { playDestination, drawDelays, type Point } from './card-motion.ts';
 import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
+import { prodigiousSpell } from './prodigious-fx.ts';
 import {
   deathTimeScale, heroDeathFx, heroDeathSequence, playsDefeatSequence, SOUL_SPELL, type DeathCueId,
 } from '../fx/hero-death.ts';
@@ -182,6 +183,8 @@ export function pantallaCombate(
     } | null = null;
     /** Enemy acting right now (source of breaths and eye rays) and its move. */
     let actor: { e: EnemigoCombate; movimiento: string } | null = null;
+    /** Spell effect the Prodigious Spell being cast shows on each enemy it hits. */
+    let hechizoProdigio: string | null = null;
     const ESTADO_HECHIZO: Partial<Record<EstadoId, string>> = { veneno: 'veneno', raices: 'raices', condena: 'condena' };
     const TINTE_RAYO: [RegExp, string][] = [
       [/carmes/i, '#ff3b3b'], [/áureo|aureo/i, '#ffd75a'], [/espectral/i, '#6bd8ff'],
@@ -225,11 +228,14 @@ export function pantallaCombate(
         ? { clave: cardSpellKey(def.id, def.fx), id: def.id, fx: def.fx, tipo: def.tipo, modo: def.objetivo, objetivo, hecho: new Set() }
         : null;
       if (hechizoCarta && fx.anclaHechizo(hechizoCarta.clave) === 'self') hechizoPara(combate.jugador);
+      // the Prodigious Spell looks like a random spell, grander the more it deals
+      hechizoProdigio = def.id === 'conjuro-prodigioso' ? prodigiousSpell(10 + combate.jugador.conjuroEscrito) : null;
     };
     /** Card resolved: if nothing showed its effect yet, show it on its natural receivers. */
     const cerrarHechizoCarta = () => {
       const h = hechizoCarta;
       hechizoCarta = null;
+      hechizoProdigio = null;
       if (!h || h.hecho.size > 0 || !fx.tieneHechizo(h.clave)) return;
       if (hechizoAlHeroe(h)) lanzarHechizo(h.clave, combate.jugador);
       else if (h.modo === 'enemigo' && h.objetivo) lanzarHechizo(h.clave, h.objetivo);
@@ -281,6 +287,11 @@ export function pantallaCombate(
         const desde = r ? { x: r.left + r.width * (rayo ? 0.4 : 0.22), y: r.top + r.height * (rayo ? 0.3 : 0.32) } : undefined;
         const tinte = rayo ? TINTE_RAYO.find(([re]) => re.test(actor!.movimiento))?.[1] ?? '#ff5ad8' : undefined;
         return lanzarHechizo(rayo ? 'rayoOcular' : 'aliento', obj, desde, tinte);
+      }
+      if (hechizoProdigio && !actor && obj !== combate.jugador) {
+        hechizoCarta?.hecho.add(obj);
+        if (hechizoProdigio === 'rayoDM') destelloPantalla();
+        return lanzarHechizo(hechizoProdigio, obj);
       }
       // thorns also deal 'raices' damage: only real roots (the card, or roots crushing) coil
       if (efecto === 'raices' && hechizoCarta?.fx !== 'raices' && !(actor && obj === actor.e)) return false;

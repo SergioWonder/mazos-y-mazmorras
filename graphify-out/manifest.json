@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790628406.3722389,
-    "ast_hash": "9dce7b156fadc349c58c7d63c7b7a2dd",
+    "mtime": 1790629546.3453214,
+    "ast_hash": "e984ffba4c909fcf14d195adf5503b50",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790629362.2833965,
-    "ast_hash": "b2edad57e590db74f640390c7a81b0f7",
+    "mtime": 1790630304.990532,
+    "ast_hash": "df7af99daacf3be0f1ae2ffb7c8ee809",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -85,8 +85,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
-    "mtime": 1790627799.9614563,
-    "ast_hash": "76381e37253df391a15f3dfd6a7dad48",
+    "mtime": 1790630321.8210938,
+    "ast_hash": "7a7a87d81ef57fa4b65cfd52d29ed108",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790628256.914939,
-    "ast_hash": "5ad72e2e09f067302db4d37b095b342c",
+    "mtime": 1790630325.4239836,
+    "ast_hash": "da7dd0d7f790224fce600f8bf621fbd7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790628406.3719285,
-    "ast_hash": "80989b9615275cc83e5f114ceb029112",
+    "mtime": 1790629546.3450017,
+    "ast_hash": "50e448e34ef5cd2b91e774567117ea3a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -1590,8 +1590,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/spell-fx.ts": {
-    "mtime": 1790627690.719236,
-    "ast_hash": "e043f3c1b24014cd87b6607b5482a747",
+    "mtime": 1790630321.8206198,
+    "ast_hash": "c05cb32d9d71d9b2a58d07a52be08500",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/enemy-slots.ts": {
@@ -2415,8 +2415,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {
-    "mtime": 1790629489.8778956,
-    "ast_hash": "5fe63e2935cdd82757800a0801286449",
+    "mtime": 1790630599.7725556,
+    "ast_hash": "a7d04717df57d8a960bb01c4e4f1091a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/icono/generate_icon.py": {
@@ -2847,6 +2847,11 @@
   "/Users/sergio/WonderBits/personal/videogame/src/ui/impact-queue.ts": {
     "mtime": 1790627759.8685608,
     "ast_hash": "d4696aa19ddbf4a285cc65960e5d4d60",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/prodigious-fx.ts": {
+    "mtime": 1790630303.1728966,
+    "ast_hash": "425d9fba895811cb2785ab547cee5831",
     "semantic_hash": ""
   }
 }

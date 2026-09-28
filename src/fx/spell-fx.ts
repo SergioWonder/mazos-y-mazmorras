@@ -20,6 +20,10 @@ export interface SpellCtx {
   seed?: number;
   /** prefers-reduced-motion: builders draw fewer particles. */
   reduced?: boolean;
+  /** Viewport size: effects that travel far (volley darts) keep inside it. */
+  view?: { w: number; h: number };
+  /** Index of this cast within a volley (0, 1, 2…), so each dart takes its own lane. */
+  lane?: number;
 }
 export type Anchor = 'self' | 'target';
 export type Build = (g: Painter, u: number, c: SpellCtx, dur: number) => void;
@@ -993,10 +997,20 @@ export function spellSignature(key: string): string {
 export class SpellSystem {
   private list: { key: string; ctx: SpellCtx; start: number }[] = [];
   private seeds = 1;
+  /** Last volley cast: casts of the same key in quick succession take lanes 0, 1, 2… */
+  private volley: { key: string; at: number; lane: number } | null = null;
   get active() { return this.list.length; }
   add(key: string, ctx: SpellCtx, now: number): boolean {
-    if (!SPELLS[key]) return false;
-    this.list.push({ key, ctx: { ...ctx, seed: ctx.seed ?? this.seeds++ }, start: now });
+    const def = SPELLS[key];
+    if (!def) return false;
+    let lane = ctx.lane;
+    if (def.volley && lane === undefined) {
+      // a pause longer than a few gaps (reduced motion doubles them) starts a new volley
+      const v = this.volley;
+      lane = v && v.key === key && now - v.at >= 0 && now - v.at <= def.volley.gap * 4 ? v.lane + 1 : 0;
+      this.volley = { key, at: now, lane };
+    }
+    this.list.push({ key, ctx: { ...ctx, seed: ctx.seed ?? this.seeds++, lane }, start: now });
     if (this.list.length > 10) this.list.shift();
     return true;
   }

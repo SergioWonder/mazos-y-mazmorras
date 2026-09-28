@@ -1310,22 +1310,23 @@ const pactoFinal: Build = (g, u, c, D) => {
 };
 
 /** Seconds a Magic Missile dart flies before it strikes. */
-const DART_FLIGHT = 0.36;
+const DART_FLIGHT = 0.45;
 /** Seconds its impact burst lingers after the strike. */
 const DART_FADE = 0.26;
 /** Seconds between two darts of the same volley (almost a burst). */
 const DART_GAP = 0.09;
 
-/** Which side of the caster→target line dart `seed` weaves on (+1 above, -1 below):
- *  consecutive seeds (the darts of one volley) never go three in a row on one side. */
-const DART_SIDES = [1, -1, 1, 1, -1, -1];
+/** Lane of the i-th dart of a volley: how high it flies over the caster→target line
+ *  (+1 the highest arc, -1 the lowest swing below it). Any first 3, 4 or 5 darts
+ *  spread over both sides and keep apart. */
+const DART_LANES = [0.5, -0.45, 1, -1, 0.05];
 
-/** Magic Missile: one glowing force dart per hit. It leaves the staff and weaves
- *  above or below the line to the target (alternating along a volley) in a damped
+/** Magic Missile: one glowing force dart per hit. Each dart of a volley takes its
+ *  own lane above or below the line to the target and weaves along it in a damped
  *  wobble with its own amplitude, frequency and phase; now and then one loops the
  *  loop halfway. Every dart ends in an arc diving onto the target, shedding
- *  sparkles, and bursts in a violet flash. Few sprites: a whole volley fits a
- *  phone's budget. */
+ *  sparkles, and bursts in a violet flash. Routes stay inside the viewport and
+ *  over the floor. Few sprites: a whole volley fits a phone's budget. */
 const proyectilMagico: Build = (g, u, c, D) => {
   const { b, cx, cy, k, W, H, dir, ground } = geo(c);
   const t = u * D;
@@ -1336,25 +1337,63 @@ const proyectilMagico: Build = (g, u, c, D) => {
   const dx = E.x - S.x, dy = E.y - S.y, L = Math.hypot(dx, dy) || 1, tx = dx / L, ty = dy / L;
   // chord normal pointing up the screen
   const up = tx >= 0 ? 1 : -1, nx = ty * up, ny = -tx * up;
-  const seed = Math.abs(Math.round(c.seed ?? 1));
-  const side = DART_SIDES[seed % DART_SIDES.length];
-  // above: an arc over the line; below: a lower, flatter swing that hooks up at the end.
-  // Either way the last control point sits over the target, so every dart dives onto it.
-  const out1 = side > 0 ? L * (0.3 + 0.3 * g.r(3)) * (g.r(4) - 0.2) * 1.4 : -L * (0.2 + 0.1 * g.r(3));
-  const out2 = side > 0 ? L * (0.3 + 0.3 * g.r(3)) * 1.4 : L * (0.15 + 0.1 * g.r(4));
+  const lane = Math.abs(Math.round(c.lane ?? c.seed ?? 1)) % DART_LANES.length;
+  const h = DART_LANES[lane] + (g.r(3) - 0.5) * 0.16, side = h >= 0 ? 1 : -1;
+  // above: an arc over the line, higher for higher lanes; below: a lower swing (kept
+  // shallower, the floor is near) that hooks up at the end. Either way the last
+  // control point sits over the target, so every dart dives onto it.
+  let out1 = h >= 0 ? L * h * 0.55 * (0.75 + 0.5 * g.r(4)) : L * h * 0.6;
+  let out2 = L * (0.16 + 0.5 * Math.max(0, h));
   const f1 = 0.22 + 0.12 * g.r(5), f2 = 0.02 + 0.12 * g.r(6);
+  // about one dart in three loops the loop halfway: the path stalls while it circles
+  const loops = g.r(11) < 0.3, l0 = 0.3 + 0.14 * g.r(12), lw = 0.2;
+  let rho = (side > 0 ? 20 + 8 * g.r(13) : 16 + 6 * g.r(13)) * k;
+  // serpentine wobble across the path (smaller below the line), fading out before the final arc
+  let amp = (18 + 12 * g.r(7)) * k * (side > 0 ? 1 : 0.75);
+  const freq = 2.6 + 1.0 * g.r(8), ph = g.r(9) * TAU;
+  // the floor under the route: from the caster's feet down (or up) to the target's ground
+  const floorAt = (s: number) => lerp(c.from ? src.y + 40 * k : ground, ground, smooth(clamp01(s))) - 8 * k;
+  // fit inside the viewport: shrink the bulge (and the wobble and loop) until it clears the edges
+  const view = c.view, m = 10;
+  if (view) {
+    /** Largest share (0..1) of a bulge (o1, o2) that keeps the route `top` px off the top
+     *  and sides and `low` px over the floor. */
+    const fit = (o1: number, o2: number, g1: number, g2: number, top: number, low: number) => {
+      let f = 1;
+      for (let j = 1; j < 16; j++) {
+        const sj = j / 16, mm = 1 - sj, b1 = 3 * mm * mm * sj, b2 = 3 * mm * sj * sj;
+        const bx = mm * mm * mm * S.x + b1 * (S.x + tx * L * g1) + b2 * (E.x - tx * L * g2) + sj * sj * sj * E.x;
+        const by = mm * mm * mm * S.y + b1 * (S.y + ty * L * g1) + b2 * (E.y - ty * L * g2) + sj * sj * sj * E.y;
+        const dev = b1 * o1 + b2 * o2;
+        const lims: [number, number, number, number][] = [
+          [bx, nx * dev, m + top, view.w - m - top], [by, ny * dev, m + top, Math.min(view.h - m, floorAt(sj)) - low]];
+        for (const [p0, nd, l, hh] of lims) {
+          if (p0 < l || p0 > hh) continue; // the straight line itself is already there: nothing to shrink
+          if (nd > 0.01) f = Math.min(f, (hh - p0) / nd);
+          else if (nd < -0.01) f = Math.min(f, (l - p0) / nd);
+        }
+      }
+      return Math.max(0, f);
+    };
+    // one shared squeeze per side, taken from its outermost lane, so the lanes of a volley
+    // shrink together and stay apart; then this dart's own route, for its random shape
+    const top = 18 * k, low = 8 * k;
+    const shared = side > 0 ? fit(L * 1.08 * 0.55 * 1.25, L * (0.16 + 0.54), 0.28, 0.08, top, low) : fit(-L * 1.08 * 0.6, L * 0.16, 0.28, 0.08, top, low);
+    const f = Math.min(shared, fit(out1, out2, f1, f2, top * 0.5, low));
+    out1 *= f; out2 *= f;
+    // a bulge squeezed by the edges also calms the wobble and tightens the loop
+    const calm = 0.5 + 0.5 * f;
+    amp *= calm; rho *= calm;
+  }
   const C1 = { x: S.x + tx * L * f1 + nx * out1, y: S.y + ty * L * f1 + ny * out1 };
   const C2 = { x: E.x - tx * L * f2 + nx * out2, y: E.y - ty * L * f2 + ny * out2 };
   const bez = (s: number) => {
-    const m = 1 - s, a = m * m * m, b1 = 3 * m * m * s, b2 = 3 * m * s * s, d = s * s * s;
+    const mm = 1 - s, a = mm * mm * mm, b1 = 3 * mm * mm * s, b2 = 3 * mm * s * s, d = s * s * s;
     return { x: a * S.x + b1 * C1.x + b2 * C2.x + d * E.x, y: a * S.y + b1 * C1.y + b2 * C2.y + d * E.y };
   };
-  // about one dart in three loops the loop halfway: the path stalls while it circles
-  const loops = g.r(11) < 0.3, l0 = 0.3 + 0.14 * g.r(12), lw = 0.2;
-  const rho = (side > 0 ? 20 + 8 * g.r(13) : 15 + 5 * g.r(13)) * k;
   const base = (s: number) => (!loops || s <= l0 ? s : s < l0 + lw ? l0 + (s - l0) * 0.15 : s - lw * 0.85) / (loops ? 1 - lw * 0.85 : 1);
-  // serpentine wobble across the path (smaller below the line), fading out before the final arc
-  const amp = (13 + 11 * g.r(7)) * k * (side > 0 ? 1 : 0.7), freq = 2.2 + 1.0 * g.r(8), ph = g.r(9) * TAU;
+  // a loop near the top edge gets tighter, never cut off
+  if (loops && view) rho = Math.max(4 * k, Math.min(rho, (bez(base(l0)).y - m - 6 * k) / 2.2));
   const at = (s: number): Point => {
     const sb = base(s), p = bez(sb), q = bez(Math.min(1, sb + 0.01)), p0 = bez(Math.max(0, sb - 0.01));
     const vx = q.x - p0.x, vy = q.y - p0.y, vl = Math.hypot(vx, vy) || 1, ux = vx / vl, uy = vy / vl;
@@ -1363,15 +1402,17 @@ const proyectilMagico: Build = (g, u, c, D) => {
     const w = amp * Math.sin(TAU * freq * sb + ph) * env;
     let x = p.x - uy * w, y = p.y + ux * w;
     if (inLoop > 0 && inLoop < 1) {
-      // a full circle tangent to the path, bulging to the dart's own side
-      const th = TAU * smooth(inLoop), o = (uy * nx - ux * ny) * side > 0 ? 1 : -1;
+      // a full circle tangent to the path, bulging upwards (into the open air, off the floor)
+      const th = TAU * smooth(inLoop), o = (uy * nx - ux * ny) > 0 ? 1 : -1;
       const lnx = uy * o, lny = -ux * o;
       x += rho * (Math.sin(th) * ux + (1 - Math.cos(th)) * lnx);
       y += rho * (Math.sin(th) * uy + (1 - Math.cos(th)) * lny);
     }
-    // never below the target's floor (the hand and the ground stay clear)
-    const floor = ground - 8 * k;
-    if (y > floor) y = floor + (y - floor) * 0.2;
+    // never below the floor (the hand and the ground stay clear): eases onto it, never past it
+    const floor = floorAt(sb);
+    if (y > floor) y = floor + 8 * k * (1 - Math.exp(-(y - floor) / (8 * k)));
+    // last resort: never off screen
+    if (view) { x = Math.min(view.w - m, Math.max(m, x)); y = Math.min(view.h - m, Math.max(m, y)); }
     return { x, y };
   };
   const uf = Math.min(1, t / DART_FLIGHT), head = uf * (0.75 + 0.25 * uf), hit = t >= DART_FLIGHT;

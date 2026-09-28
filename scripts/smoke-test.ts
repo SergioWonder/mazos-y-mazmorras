@@ -5220,7 +5220,7 @@ console.log('\n🔮 Proyectil Mágico: dardos que serpentean y caen en arco');
 try {
   const sf = await import('../src/fx/spell-fx.ts');
   const cs = await import('../src/fx/card-spells.ts');
-  const { SPELLS, spellFrame, spellMarks, spellSignature, MAX_LIVE_SPRITES } = sf;
+  const { SPELLS, spellFrame, spellMarks, spellSignature, MAX_LIVE_SPRITES, SpellSystem } = sf;
   const { CARD_FX, cardSpellKey, hitSpell, volleyTiming } = cs;
   const carta = MAGO.find((d) => d.id === 'proyectil-magico')!;
   const k = cardSpellKey(carta.id, carta.fx);
@@ -5232,7 +5232,7 @@ try {
   check(!firmasOtras.has(spellSignature(k)), 'el dardo se ve distinto de los demás efectos');
   check(def.duration >= 0.4 && def.duration <= 1.4, `el dardo dura entre 0,4 y 1,4 s (${def.duration})`);
   const vuelo = def.phases[0] * def.duration;
-  check(vuelo >= 0.28 && vuelo <= 0.42, `vuelo corto: el dardo impacta a los ${Math.round(vuelo * 1000)} ms`);
+  check(vuelo >= 0.42 && vuelo <= 0.5, `vuelo corto pero visible: el dardo impacta a los ${Math.round(vuelo * 1000)} ms`);
   check(def.phases[0] < def.phases[1] && def.phases[1] < 1, 'vuelo < impacto < disipación');
   // volley timing: quick, and the feedback waits for the impact
   const r = volleyTiming(k, false)!, rr = volleyTiming(k, true)!;
@@ -5313,6 +5313,56 @@ try {
   check(bucles >= 3 && bucles <= 12, `alguno que otro dardo hace un bucle, no todos (${bucles}/24)`);
   const conBucle = rutas.findIndex(cruza);
   check(conBucle >= 0 && JSON.stringify(cabeza(conBucle + 1)) === JSON.stringify(rutas[conBucle]), 'el bucle es determinista por semilla');
+  // on screen: high arcs and loops stay inside the viewport, also near its edges and on phones
+  const escenas = [
+    { nombre: 'escritorio', view: { w: 800, h: 450 }, from, box },
+    { nombre: 'móvil apaisado', view: { w: 640, h: 300 }, from: { x: 80, y: 200 }, box: { x: 520, y: 40, w: 100, h: 130 } },
+    { nombre: 'móvil vertical', view: { w: 390, h: 760 }, from: { x: 70, y: 470 }, box: { x: 250, y: 300, w: 120, h: 160 } },
+  ];
+  for (const e of escenas) {
+    let fuera = 0;
+    for (let sd = 1; sd <= 30; sd++) {
+      for (let t = 0; t <= def.duration; t += 1 / 120) {
+        for (const sp of spellFrame(k, { box: e.box, from: e.from, facing: -1, seed: sd, lane: sd % 5, view: e.view }, t)) {
+          if (sp.shape === 'disco' && sp.size > 10) continue; // soft glows may bleed over the edge
+          if (sp.x < 0 || sp.x > e.view.w || sp.y < 0 || sp.y > e.view.h) fuera++;
+        }
+      }
+    }
+    check(fuera === 0, `los dardos no se salen de la pantalla (${e.nombre}: ${fuera} fuera)`);
+  }
+  // each dart of a volley takes its own lane: the routes spread out instead of bunching up
+  const ruta = (seed: number, lane: number) => {
+    const pts: { x: number; y: number }[] = [];
+    for (let t = vuelo * 0.2; t <= vuelo * 0.75; t += vuelo / 40) {
+      const m = spellMarks(k, { box, from, facing: -1, seed, lane, view: { w: 800, h: 450 } }, t).find((q) => q.kind === 'dardo');
+      if (m) pts.push(m);
+    }
+    return pts;
+  };
+  let peorSeparacion = Infinity;
+  for (const n of [3, 4, 5]) {
+    for (const base of [1, 17, 40]) {
+      const rs = [...Array(n).keys()].map((i) => ruta(base + i, i));
+      for (let a = 0; a < n; a++) for (let b2 = a + 1; b2 < n; b2++) {
+        const m = Math.min(rs[a].length, rs[b2].length);
+        let d = 0;
+        for (let i = 0; i < m; i++) d += Math.hypot(rs[a][i].x - rs[b2][i].x, rs[a][i].y - rs[b2][i].y);
+        peorSeparacion = Math.min(peorSeparacion, d / Math.max(1, m));
+      }
+    }
+  }
+  check(peorSeparacion >= 25, `cada dardo de la ráfaga va por su propio carril (separación media mínima ${Math.round(peorSeparacion)} px)`);
+  // the fx system numbers the darts of one volley (lanes 0, 1, 2…) and starts over after a pause
+  const sysR = new SpellSystem();
+  const cR = { box, from, facing: -1 as const, view: { w: 800, h: 450 } };
+  [0, 0.09, 0.18, 2, 2.09].forEach((at, i) => sysR.add(k, { ...cR, seed: 50 + i }, at));
+  const esperado = (tt: number) => [[4, 1, 2.09], [3, 0, 2]].flatMap(([i, lane, at]) => spellFrame(k, { ...cR, seed: 50 + i, lane }, tt - at));
+  check(JSON.stringify(sysR.frame(2.2)) === JSON.stringify(esperado(2.2)), 'el gestor reparte carriles a los dardos seguidos y reinicia tras una pausa');
+  const sysP = new SpellSystem();
+  [0, 0.09, 0.18].forEach((at, i) => sysP.add(k, { ...cR, seed: 60 + i }, at));
+  const esperadoP = [[2, 2, 0.18], [1, 1, 0.09], [0, 0, 0]].flatMap(([i, lane, at]) => spellFrame(k, { ...cR, seed: 60 + i, lane }, 0.3 - at));
+  check(JSON.stringify(sysP.frame(0.3)) === JSON.stringify(esperadoP), 'los tres dardos de una ráfaga toman los carriles 0, 1 y 2');
   const bajo = Math.max(...rutas.map((pts) => Math.max(...pts.map((p) => p.y))));
   check(bajo <= box.y + box.h, `las rutas por abajo no bajan del suelo del objetivo (${Math.round(bajo)} ≤ ${box.y + box.h})`);
   // budget: few sprites per dart, a five-dart volley fits the live cap
@@ -6452,6 +6502,32 @@ console.log('\n🌵 Espinas en un multigolpe');
   await comb.ejecutarMovimiento(e);
   check(!e.vivo, 'las Espinas matan al atacante a mitad de su ráfaga');
   check(pv - comb.jugador.pv === 6, `su ataque se corta al morir: solo llegan los 2 golpes previos (${pv - comb.jugador.pv} de daño)`);
+}
+
+// ── Prodigious Spell: a random spell effect whose grandeur follows its power ─
+console.log('\n📜 Efecto del Conjuro Prodigioso');
+{
+  const { prodigiousTier, prodigiousPool, prodigiousSpell } = await import('../src/ui/prodigious-fx.ts');
+  const { SPELLS } = await import('../src/fx/spell-fx.ts');
+  const { cartaPorId: porId } = await import('../src/core/cartas.ts');
+  check(prodigiousTier(10) === 'basic' && prodigiousTier(29) === 'basic', 'Conjuro Prodigioso: por debajo de 30, efecto de conjuro normal');
+  check(prodigiousTier(30) === 'rare' && prodigiousTier(49) === 'rare', 'Conjuro Prodigioso: de 30 a 49, efecto de carta rara');
+  check(prodigiousTier(50) === 'unique' && prodigiousTier(79) === 'unique', 'Conjuro Prodigioso: de 50 a 79, efecto de carta única');
+  check(prodigiousTier(80) === 'dm' && prodigiousTier(200) === 'dm', 'Conjuro Prodigioso: desde 80, el rayo del Dungeon Master');
+  for (const tier of ['basic', 'rare', 'unique', 'dm'] as const) {
+    const pool = prodigiousPool(tier);
+    check(pool.length > 0 && pool.every((k) => !!SPELLS[k]), `Conjuro Prodigioso: el repertorio «${tier}» existe y son efectos registrados`);
+    check(pool.every((k) => SPELLS[k].anchor === 'target'), `Conjuro Prodigioso: el repertorio «${tier}» solo tiene efectos que caen sobre el objetivo`);
+  }
+  check(prodigiousPool('rare').every((k) => porId(k.replace(/^carta:/, ''))?.rareza === 'rara'),
+    'Conjuro Prodigioso: el repertorio raro sale de secuencias de cartas raras');
+  check(prodigiousPool('unique').every((k) => porId(k.replace(/^carta:/, ''))?.rareza === 'especial'),
+    'Conjuro Prodigioso: el repertorio único sale de secuencias de cartas únicas');
+  check(prodigiousPool('dm').length === 1 && prodigiousPool('dm')[0] === 'rayoDM', 'Conjuro Prodigioso: el rayo del DM es el único efecto desde 80');
+  const vistos = new Set<string>();
+  for (let i = 0; i < 40; i++) vistos.add(prodigiousSpell(12, () => i / 40));
+  check(vistos.size === prodigiousPool('basic').length, 'Conjuro Prodigioso: el efecto se elige al azar entre todo el repertorio');
+  check(prodigiousPool('basic').includes(prodigiousSpell(12, () => 0.999)), 'Conjuro Prodigioso: el azar nunca se sale del repertorio');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
