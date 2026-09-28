@@ -169,7 +169,7 @@ descuelga de las demás en su mismo nivel.
   | ❔ Duda | Al final del turno, en la mano: 1 de Débil |
   | 😱 Pesadilla | Al robarla, descartas una carta al azar de tu mano |
   | 🧾 Deuda de Sangre | Al final del turno, en la mano: pierdes 3 PV. **Se puede saldar pagando 2 de energía** (sale del mazo para siempre) |
-  | 🏴 Marca del Condenado | Al final del turno, en la mano: 1 de Vulnerable |
+  | 🏴 Marca del Condenado | Al robarla: 1 de Vulnerable (hasta el final del turno enemigo) |
   | 🧻 Maldición de la Momia | Innata. Al final del turno, en la mano: 1 de Frágil |
   | 💔 Remordimiento | Al final del turno, en la mano: pierdes 1 PV por carta en la mano |
   | 🧊 Parálisis | Al robarla, pierdes 1 de energía |
