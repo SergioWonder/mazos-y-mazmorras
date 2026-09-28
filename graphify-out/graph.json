@@ -3787,7 +3787,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L77",
       "id": "mapa_comun_map_kit_sketch_line",
-      "community": 96,
+      "community": 100,
       "norm_label": ".line()"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L360",
       "id": "mapa_comun_map_kit_mockup",
-      "community": 96,
+      "community": 100,
       "norm_label": "mockup()"
     },
     {
@@ -4156,7 +4156,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L772",
       "id": "mapa_comun_map_kit_offset_line",
-      "community": 87,
+      "community": 100,
       "norm_label": "offset_line()"
     },
     {
@@ -4165,7 +4165,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L784",
       "id": "mapa_comun_map_kit_river",
-      "community": 87,
+      "community": 100,
       "norm_label": "river()"
     },
     {
@@ -4426,7 +4426,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L361",
       "id": "mapa_comun_map_kit_rationale_361",
-      "community": 96,
+      "community": 100,
       "norm_label": "review mock-up with node markers where the ui draws them (not delivered).      t"
     },
     {
@@ -4480,7 +4480,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L785",
       "id": "mapa_comun_map_kit_rationale_785",
-      "community": 87,
+      "community": 100,
       "norm_label": "double-banked river along pts; width may be a function of t."
     },
     {
@@ -14882,7 +14882,7 @@
       "label": "Rig",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L1883",
+      "source_location": "L1898",
       "id": "scripts_smoke_test_rig",
       "community": 67,
       "norm_label": "rig"
@@ -14891,7 +14891,7 @@
       "label": "Spec",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L1884",
+      "source_location": "L1899",
       "id": "scripts_smoke_test_spec",
       "community": 67,
       "norm_label": "spec"
@@ -14900,7 +14900,7 @@
       "label": "Act",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L1885",
+      "source_location": "L1900",
       "id": "scripts_smoke_test_act",
       "community": 67,
       "norm_label": "act"
@@ -14909,7 +14909,7 @@
       "label": "E",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2319",
+      "source_location": "L2334",
       "id": "scripts_smoke_test_e",
       "community": 67,
       "norm_label": "e"
@@ -14918,7 +14918,7 @@
       "label": "RelicLike",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2576",
+      "source_location": "L2591",
       "id": "scripts_smoke_test_reliclike",
       "community": 67,
       "norm_label": "reliclike"
@@ -14927,7 +14927,7 @@
       "label": "Mov",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2631",
+      "source_location": "L2646",
       "id": "scripts_smoke_test_mov",
       "community": 67,
       "norm_label": "mov"
@@ -14936,7 +14936,7 @@
       "label": "Reliquia",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2632",
+      "source_location": "L2647",
       "id": "scripts_smoke_test_reliquia",
       "community": 67,
       "norm_label": "reliquia"
@@ -14945,7 +14945,7 @@
       "label": "montar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2647",
+      "source_location": "L2662",
       "id": "scripts_smoke_test_montar",
       "community": 67,
       "norm_label": "montar()"
@@ -14954,7 +14954,7 @@
       "label": "T",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3241",
+      "source_location": "L3256",
       "id": "scripts_smoke_test_t",
       "community": 67,
       "norm_label": "t"
@@ -14963,7 +14963,7 @@
       "label": "Accion",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3271",
+      "source_location": "L3286",
       "id": "scripts_smoke_test_accion",
       "community": 67,
       "norm_label": "accion"
@@ -14972,7 +14972,7 @@
       "label": "montarM()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4041",
+      "source_location": "L4056",
       "id": "scripts_smoke_test_montarm",
       "community": 67,
       "norm_label": "montarm()"
@@ -14981,7 +14981,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4693",
+      "source_location": "L4708",
       "id": "scripts_smoke_test_montarb",
       "community": 67,
       "norm_label": "montarb()"
@@ -14990,7 +14990,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5378",
+      "source_location": "L5393",
       "id": "scripts_smoke_test_sprite2",
       "community": 67,
       "norm_label": "sprite2"
@@ -15287,7 +15287,7 @@
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3632",
+      "source_location": "L3633",
       "id": "core_cartas_resolverseducir",
       "community": 84,
       "norm_label": "resolverseducir()"
@@ -15296,7 +15296,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3665",
+      "source_location": "L3666",
       "id": "core_cartas_resolverdeseo",
       "community": 84,
       "norm_label": "resolverdeseo()"
@@ -15305,7 +15305,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3702",
+      "source_location": "L3703",
       "id": "core_cartas_neutrales_especiales",
       "community": 84,
       "norm_label": "neutrales_especiales"
@@ -15314,7 +15314,7 @@
       "label": "maldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3758",
+      "source_location": "L3759",
       "id": "core_cartas_maldicion",
       "community": 84,
       "norm_label": "maldicion()"
@@ -15323,7 +15323,7 @@
       "label": "MALDICIONES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3766",
+      "source_location": "L3767",
       "id": "core_cartas_maldiciones",
       "community": 84,
       "norm_label": "maldiciones"
@@ -15332,7 +15332,7 @@
       "label": "nuevaMaldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3853",
+      "source_location": "L3854",
       "id": "core_cartas_nuevamaldicion",
       "community": 75,
       "norm_label": "nuevamaldicion()"
@@ -15341,7 +15341,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3862",
+      "source_location": "L3863",
       "id": "core_cartas_iniciales_de_clase",
       "community": 84,
       "norm_label": "iniciales_de_clase"
@@ -15350,7 +15350,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3876",
+      "source_location": "L3877",
       "id": "core_cartas_pools",
       "community": 84,
       "norm_label": "pools"
@@ -15359,7 +15359,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3880",
+      "source_location": "L3881",
       "id": "core_cartas_mazoinicial",
       "community": 84,
       "norm_label": "mazoinicial()"
@@ -15368,7 +15368,7 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3891",
+      "source_location": "L3892",
       "id": "core_cartas_pooldeclase",
       "community": 75,
       "norm_label": "pooldeclase()"
@@ -15377,7 +15377,7 @@
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3898",
+      "source_location": "L3899",
       "id": "core_cartas_cartaunicadeclase",
       "community": 75,
       "norm_label": "cartaunicadeclase()"
@@ -15386,7 +15386,7 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3903",
+      "source_location": "L3904",
       "id": "core_cartas_cartaporid",
       "community": 46,
       "norm_label": "cartaporid()"
@@ -15395,7 +15395,7 @@
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3913",
+      "source_location": "L3914",
       "id": "core_cartas_recompensacartas",
       "community": 75,
       "norm_label": "recompensacartas()"
@@ -26492,7 +26492,7 @@
       "label": "Reliquias",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L254",
+      "source_location": "L255",
       "id": "readme_reliquias",
       "community": 80,
       "norm_label": "reliquias"
@@ -26501,7 +26501,7 @@
       "label": "Bendiciones",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L331",
+      "source_location": "L332",
       "id": "readme_bendiciones",
       "community": 80,
       "norm_label": "bendiciones"
@@ -26510,7 +26510,7 @@
       "label": "Estructura",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L393",
+      "source_location": "L394",
       "id": "readme_estructura",
       "community": 80,
       "norm_label": "estructura"
@@ -26519,7 +26519,7 @@
       "label": "Arte de las cartas",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L440",
+      "source_location": "L441",
       "id": "readme_arte_de_las_cartas",
       "community": 80,
       "norm_label": "arte de las cartas"
@@ -26528,7 +26528,7 @@
       "label": "Mapa a tinta",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L451",
+      "source_location": "L452",
       "id": "readme_mapa_a_tinta",
       "community": 80,
       "norm_label": "mapa a tinta"
@@ -26537,7 +26537,7 @@
       "label": "Actualizaciones y avisos",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L476",
+      "source_location": "L477",
       "id": "readme_actualizaciones_y_avisos",
       "community": 80,
       "norm_label": "actualizaciones y avisos"
@@ -26546,7 +26546,7 @@
       "label": "Motor gr\u00e1fico (WebGL2)",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L486",
+      "source_location": "L487",
       "id": "readme_motor_gr\u00e1fico_webgl2",
       "community": 80,
       "norm_label": "motor grafico (webgl2)"
@@ -85245,9 +85245,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L293",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_browserenv",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_browserenv"
     },
     {
       "relation": "contains",
@@ -85255,9 +85255,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L213",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_compile",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_compile"
     },
     {
       "relation": "contains",
@@ -85265,9 +85265,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L279",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_createcardtexturegenerator",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_createcardtexturegenerator"
     },
     {
       "relation": "contains",
@@ -85275,9 +85275,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L309",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_ensurecardtextures",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_ensurecardtextures"
     },
     {
       "relation": "contains",
@@ -85285,9 +85285,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L210",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_failed",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_failed"
     },
     {
       "relation": "contains",
@@ -85295,9 +85295,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L221",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_generate",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_generate"
     },
     {
       "relation": "contains",
@@ -85305,9 +85305,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_hash",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_hash"
     },
     {
       "relation": "contains",
@@ -85315,9 +85315,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_now",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_now"
     },
     {
       "relation": "contains",
@@ -85325,9 +85325,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_parchmentvariant",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_parchmentvariant"
     },
     {
       "relation": "contains",
@@ -85335,9 +85335,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_texture_vars",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_texture_vars"
     },
     {
       "relation": "contains",
@@ -85345,9 +85345,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L39",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_textureclassfor",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureclassfor"
     },
     {
       "relation": "contains",
@@ -85355,9 +85355,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L191",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_textureenv",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureenv"
     },
     {
       "relation": "contains",
@@ -85365,9 +85365,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_textureparams",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureparams"
     },
     {
       "relation": "contains",
@@ -85375,9 +85375,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L198",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_textureresult",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureresult"
     },
     {
       "relation": "contains",
@@ -85385,9 +85385,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L44",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures",
-      "target": "fx_card_textures_texturesize",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_texturesize"
     },
     {
       "relation": "imports_from",
@@ -85396,9 +85396,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_textures",
-      "confidence_score": 1.0
+      "target": "fx_card_textures"
     },
     {
       "relation": "calls",
@@ -85407,9 +85407,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L40",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_textureclassfor",
-      "target": "fx_card_textures_parchmentvariant",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_parchmentvariant"
     },
     {
       "relation": "imports",
@@ -85418,9 +85418,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_textures_textureclassfor",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureclassfor"
     },
     {
       "relation": "calls",
@@ -85440,9 +85440,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L225",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_generate",
-      "target": "fx_card_textures_texturesize",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_texturesize"
     },
     {
       "relation": "calls",
@@ -85451,9 +85451,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L259",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_generate",
-      "target": "fx_card_textures_textureparams",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_textureparams"
     },
     {
       "relation": "calls",
@@ -85462,9 +85462,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L222",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_generate",
-      "target": "fx_card_textures_now",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_now"
     },
     {
       "relation": "calls",
@@ -85473,9 +85473,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L235",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_generate",
-      "target": "fx_card_textures_compile",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_compile"
     },
     {
       "relation": "calls",
@@ -85484,9 +85484,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L311",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_ensurecardtextures",
-      "target": "fx_card_textures_createcardtexturegenerator",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_createcardtexturegenerator"
     },
     {
       "relation": "calls",
@@ -85495,9 +85495,9 @@
       "source_file": "src/fx/card-textures.ts",
       "source_location": "L311",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_card_textures_ensurecardtextures",
-      "target": "fx_card_textures_browserenv",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_browserenv"
     },
     {
       "relation": "imports",
@@ -85506,9 +85506,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "fx_card_textures_ensurecardtextures",
-      "confidence_score": 1.0
+      "target": "fx_card_textures_ensurecardtextures"
     },
     {
       "relation": "calls",
@@ -110591,5 +110591,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "6d76a206b3c8d4b0d49b6e90b8a1ffce682a37bd"
+  "built_at_commit": "1fb5130304fa1f96eb14535cca81fa5486688575"
 }

@@ -120,14 +120,15 @@ descuelga de las demás en su mismo nivel.
   - **Condena**: puntos que se acumulan sobre el enemigo y **no decaen**. Al final de su
     turno, si su Condena iguala o supera sus PV **actuales**, muere — así que vale tanto
     subir la Condena como bajarle la vida. Brazos de Hadar la reparte con Débil a todos,
-    Palabra de Ruina la duplica, Verbo de Aniquilación planta de golpe la mitad de sus PV
+    Palabra de Ruina la duplica, Verbo de Aniquilación planta de golpe un tercio de sus PV (la
+    mitad, mejorado; se agota)
     y la Mente del Gran Antiguo condena con cada ataque. Funciona también sobre jefes: el
     umbral sube con su vida.
   - **Invocaciones efímeras**: a diferencia de las del druida, solo duran el turno en que
     las invocas — y justo por eso pegan un poco más. Absorben el daño enemigo y, si
     sobreviven al turno del enemigo, golpean y se desvanecen. El golpe del Demonio además
-    condena. El Sacrificio del Familiar convierte su vida restante en daño y te devuelve
-    energía (y aplica esa Condena, mejorado).
+    condena. El Sacrificio del Familiar convierte el doble de su vida restante en daño y te
+    devuelve energía (y aplica Condena igual a su vida, mejorado).
   - **Bloqueo que muerde**: la **Armadura de Agathys** da bloqueo y, ese turno, **todo el
     daño que bloquees se devuelve a TODOS los enemigos** — cuanto más bloqueo acumules y
     más te peguen, más devuelves. El Pacto Infernal te blinda con cada muerte enemiga y

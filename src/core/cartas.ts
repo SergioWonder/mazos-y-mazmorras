@@ -3199,25 +3199,25 @@ export const BRUJO: CartaDef[] = [
     coste: 0,
     objetivo: 'enemigo',
     fx: 'sangre',
-    texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante.\nGana 1 de energía.',
+    texto: 'Sacrifica tu invocación: inflige el doble\nde su vida restante como daño.\nGana 1 de energía.',
     jugar: async (c) => {
       if (!c.hayInvocacion()) {
         await c.mensaje('No tienes ninguna invocación…');
         return;
       }
       const vida = await c.sacrificarInvocacion();
-      await c.danar(c.objetivo!, vida, 'sangre');
+      await c.danar(c.objetivo!, vida * 2, 'sangre');
       c.ganarEnergia(1);
     },
     mejora: {
-      texto: 'Sacrifica tu invocación: inflige daño\nigual a su vida restante y aplica\nesa misma Condena. Gana 2 de energía.',
+      texto: 'Sacrifica tu invocación: inflige el doble\nde su vida restante como daño y aplica\nCondena igual a su vida. Gana 2 de energía.',
       jugar: async (c) => {
         if (!c.hayInvocacion()) {
           await c.mensaje('No tienes ninguna invocación…');
           return;
         }
         const vida = await c.sacrificarInvocacion();
-        await c.danar(c.objetivo!, vida, 'sangre');
+        await c.danar(c.objetivo!, vida * 2, 'sangre');
         if (c.objetivo!.vivo) await c.aplicarEstado(c.objetivo!, 'condena', vida);
         c.ganarEnergia(2);
       },
@@ -3590,14 +3590,15 @@ export const BRUJO: CartaDef[] = [
     objetivo: 'enemigo',
     fx: 'condena',
     animRara: 'anim-veneno',
-    texto: 'Aplica Condena igual a la mitad\nde los PV actuales del enemigo.',
+    unUso: true, // one shot per combat: it no longer chains against every enemy
+    texto: 'Aplica Condena igual a un tercio\nde los PV actuales del enemigo.\nSe agota.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.objetivo!, 'condena', Math.floor(c.objetivo!.pv / 2));
+      await c.aplicarEstado(c.objetivo!, 'condena', Math.floor(c.objetivo!.pv / 3));
     },
     mejora: {
-      texto: 'Aplica Condena igual a dos tercios\nde los PV actuales del enemigo.',
+      texto: 'Aplica Condena igual a la mitad\nde los PV actuales del enemigo.\nSe agota.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.objetivo!, 'condena', Math.floor((c.objetivo!.pv * 2) / 3));
+        await c.aplicarEstado(c.objetivo!, 'condena', Math.floor(c.objetivo!.pv / 2));
       },
     },
   },

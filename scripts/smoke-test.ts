@@ -1515,9 +1515,14 @@ console.log('— Brujo: mecánicas nuevas —');
     await carta('sabueso-sombra').jugar(comb.contexto()); // 8 de vida
     const energiaAntes = comb.jugador.energia;
     await carta('sacrificio-familiar').jugar(comb.contexto(e));
-    check(60 - e.pv === 8, 'Sacrificio del Familiar inflige los 8 de vida que quedaban');
+    check(60 - e.pv === 16, 'Sacrificio del Familiar inflige el doble de la vida que le quedaba (8 → 16)');
     check(comb.jugador.invocacion === undefined, 'la invocación desaparece');
     check(comb.jugador.energia === energiaAntes + 1, 'y devuelve 1 de energía');
+    e.pv = 60;
+    await carta('sabueso-sombra').jugar(comb.contexto());
+    await carta('sacrificio-familiar').mejora!.jugar!(comb.contexto(e));
+    check(60 - e.pv === 16 && (e.estados.condena ?? 0) >= 8, 'Sacrificio del Familiar+: el doble de daño y Condena igual a su vida');
+    check(/doble/.test(carta('sacrificio-familiar').texto) && /doble/.test(carta('sacrificio-familiar').mejora!.texto!), 'el texto dice que inflige el doble');
   }
 
   // Mente del Gran Antiguo: cada ataque condena
@@ -1664,7 +1669,17 @@ console.log('— Brujo: mecánicas nuevas —');
     check((e.estados.condena ?? 0) === 18, 'Palabra de Ruina duplica la Condena (9 → 18)');
     delete e.estados.condena;
     await carta('verbo-aniquilacion').jugar(comb.contexto(e));
-    check((e.estados.condena ?? 0) === 25, 'Verbo de Aniquilación: la mitad de sus 50 PV = 25');
+    check((e.estados.condena ?? 0) === 16, 'Verbo de Aniquilación: un tercio de sus 50 PV = 16');
+    delete e.estados.condena;
+    await carta('verbo-aniquilacion').mejora!.jugar!(comb.contexto(e));
+    check((e.estados.condena ?? 0) === 25, 'Verbo de Aniquilación+: la mitad de sus 50 PV = 25');
+    const verbo = carta('verbo-aniquilacion');
+    check(verbo.unUso === true && /se agota/i.test(verbo.texto) && /se agota/i.test(verbo.mejora!.texto!), 'Verbo de Aniquilación se agota (también mejorada)');
+    const inst = instanciar(verbo);
+    comb.jugador.mano.push(inst);
+    comb.jugador.energia = 5;
+    await comb.jugarCarta(inst, e);
+    check(comb.jugador.agotadas.includes(inst) && !comb.jugador.descarte.includes(inst), 'al jugarla queda agotada durante el combate');
   }
 }
 

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.4.0';
+export const VERSION = '6.4.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.4.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '⚖️ Brujo: Verbo de Aniquilación aplica Condena igual a un tercio de los PV actuales del enemigo (la mitad, mejorada) y se agota.',
+      '⚖️ Sacrificio del Familiar inflige el doble de la vida restante de tu invocación.',
+    ],
+  },
   {
     version: '6.4.0',
     fecha: '2026-09-28',
