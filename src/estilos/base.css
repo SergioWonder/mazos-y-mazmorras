@@ -25,8 +25,7 @@
 
   --fuente-titulo: 'Almendra SC', serif;
   --fuente-display: 'Almendra', serif;
-  --fuente-cuerpo: 'Marcellus', serif; /* incised/flared body face */
-  --fuente-pequena: 'Fira Sans', system-ui, sans-serif; /* small text over two lines */
+  --fuente-cuerpo: 'Philosopher', sans-serif; /* every paragraph, card text and card type */
 
   /* cielo del combate (Capítulo I: asentamiento en llamas) */
   --luna: #f1e2bd;
@@ -339,7 +338,7 @@ button {
 
 /* ── Tooltip global ─────────────────────────────────────────────────────── */
 .tooltip-global {
-  font-family: var(--fuente-pequena);
+  font-family: var(--fuente-cuerpo);
   position: fixed;
   z-index: 95;
   max-width: 280px;

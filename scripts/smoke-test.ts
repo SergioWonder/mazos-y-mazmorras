@@ -5745,29 +5745,23 @@ console.log('\n🐺 Invocaciones del druida');
   check(300 - e.pv === 5, 'el bonus del Alma de la Manada y del Collar no se aplica a las efímeras del brujo');
 }
 
-// ── Typography: incised body face, sans-serif for small multi-line text ──────
+// ── Typography: two families only (Almendra for titles, Philosopher for text) ─
 console.log('\n🔤 Tipografía');
 {
   const fs = await import('node:fs');
   const leer = (r: string) => fs.readFileSync(new URL(r, import.meta.url), 'utf8');
+  const estilos = fs.readdirSync(new URL('../src/estilos/', import.meta.url)).map((f: string) => leer(`../src/estilos/${f}`)).join('\n');
   const base = leer('../src/estilos/base.css');
   const cartasCss = leer('../src/estilos/cartas.css');
   const html = leer('../index.html');
-  check(/--fuente-cuerpo:\s*'Marcellus'/.test(base) && !/Alegreya/.test(base), 'el cuerpo de texto usa una incisa (Marcellus), ya no Alegreya');
-  check(/--fuente-pequena:\s*'Fira Sans'[^;]*sans-serif/.test(base), 'hay una palo seco (Fira Sans) para los textos pequeños');
-  check(/family=Marcellus/.test(html) && /family=Fira\+Sans/.test(html) && !/Alegreya/.test(html), 'index.html carga Marcellus y Fira Sans (y no Alegreya)');
-  check(!/Alegreya/.test(fs.readdirSync(new URL('../src/estilos/', import.meta.url)).map((f: string) => leer(`../src/estilos/${f}`)).join('\n')),
-    'ningún estilo sigue pidiendo Alegreya');
-  const { textoDenso } = await import('../src/ui/carta-texto.ts');
-  check(textoDenso('Inflige 6 de daño.') === false && textoDenso('Inflige 8 de daño.\nRecibes 2 de daño.') === false, 'hasta dos líneas cortas: incisa');
-  check(textoDenso('Poder: tus Transformaciones duran\n1 turno más y, al lanzarlas,\nganas 6 de bloqueo.') === true, 'más de dos líneas: palo seco');
-  check(textoDenso('Gasta un conjuro: inflige 8 de daño (+4 por nivel) a TODOS los enemigos y los deja Vulnerables.') === true,
-    'un texto largo que se parte en más de dos líneas también cuenta');
-  check(textoDenso('Aplica 6 de Raíces a TODOS\nlos enemigos durante 1 turno.') === true, 'dos saltos de línea que en la carta ocupan tres también cuentan');
-  check(textoDenso('Inflige 3 de daño tres veces.') === false && textoDenso('Inflige 5 de daño.\nAplica 2 de Vulnerable.') === false, 'dos líneas que caben siguen en incisa');
-  check(/\.carta\.texto-denso \.carta-texto\s*\{[^}]*var\(--fuente-pequena\)/.test(cartasCss), 'las cartas con texto denso usan la palo seco');
-  check(/\.tooltip-global\s*\{[^}]*var\(--fuente-pequena\)/.test(base), 'los tooltips usan la palo seco');
-  check(/texto-denso/.test(leer('../src/ui/carta.ts')), 'renderCarta marca las cartas con texto denso');
+  check(/--fuente-cuerpo:\s*'Philosopher'/.test(base), 'los párrafos usan Philosopher');
+  check(/--fuente-titulo:\s*'Almendra SC'/.test(base) && /--fuente-display:\s*'Almendra'/.test(base), 'los títulos siguen en Almendra');
+  const familias = new Set([...html.matchAll(/family=([A-Za-z+]+)/g)].map((m) => m[1].replace(/\+SC$/, '')));
+  check(familias.size === 2 && familias.has('Almendra') && familias.has('Philosopher'), `solo se cargan dos familias: Almendra y Philosopher (${[...familias].join(', ')})`);
+  check(!/Marcellus|Fira|Alegreya|--fuente-pequena/.test(estilos), 'ningún estilo pide otra tipografía (ni Marcellus, ni Fira, ni Alegreya)');
+  check(!fs.existsSync(new URL('../src/ui/carta-texto.ts', import.meta.url)) && !/texto-denso/.test(leer('../src/ui/carta.ts') + cartasCss),
+    'el texto de todas las cartas usa la misma fuente, tenga una línea o veinticinco');
+  check(/\.carta-tipo\s*\{[^}]*var\(--fuente-cuerpo\)/.test(cartasCss), 'el tipo de carta usa la fuente de párrafo');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

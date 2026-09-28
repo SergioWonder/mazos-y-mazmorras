@@ -1,5 +1,4 @@
 import type { CartaDef } from '../core/types.ts';
-import { textoDenso } from './carta-texto.ts';
 import { el, ICONO_ESTADO, NOMBRE_ESTADO, DESCRIPCION_ESTADO } from './util.ts';
 import { cardSvgUrl, cardArtBitmap } from './card-svgs.ts';
 import { fx } from '../fx/particulas.ts';
@@ -190,7 +189,6 @@ export function renderCarta(def: CartaDef, mods?: ModsCarta): HTMLElement {
   // Textos largos (frecuentes en el mago): reduce la fuente para que quepan
   const caracteres = def.texto.replaceAll('\n', ' ').length;
   const lineas = def.texto.split('\n').length;
-  if (textoDenso(def.texto)) carta.classList.add('texto-denso');
   if (caracteres > 120 || lineas > 4) carta.classList.add('texto-xl');
   else if (caracteres > 88 || lineas > 3) carta.classList.add('texto-largo');
 

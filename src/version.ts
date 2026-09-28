@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.7.0';
+export const VERSION = '6.7.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.7.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '🔤 Tipografía más sencilla: Almendra para los títulos y Philosopher para todos los textos, incluidos los de las cartas y su tipo.',
+    ],
+  },
   {
     version: '6.7.0',
     fecha: '2026-09-28',
