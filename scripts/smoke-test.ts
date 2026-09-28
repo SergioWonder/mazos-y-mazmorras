@@ -3029,10 +3029,16 @@ console.log('\n💍 Reliquias ampliadas');
   {
     const { comb, ctx } = await montar('mago', ['baculo-archimago']);
     comb.jugador.conjuros = crearEspacios(6);
-    await ctx.gastarConjuro(3);
-    check(ctx.conjurosLibres(3) === 1 && ctx.conjurosLibres() === 6, 'Báculo del Archimago: el primer nivel 3 recupera un espacio');
-    await ctx.gastarConjuro(3);
-    check(ctx.conjurosLibres(3) === 0, 'Báculo del Archimago: solo el primero de cada combate');
+    const fuerza = () => comb.jugador.estados.fuerza ?? 0;
+    const f0 = fuerza();
+    await ctx.gastarConjuro(1);
+    check(fuerza() === f0 + 1, 'Báculo del Archimago: gastar un espacio de nivel 3 da 1 de Fuerza');
+    await ctx.gastarConjuro(2);
+    await ctx.gastarConjuro(2);
+    check(fuerza() === f0 + 3, 'Báculo del Archimago: cada espacio de nivel 2 gastado da 1 de Fuerza, sin límite por combate');
+    await ctx.gastarConjuro(1);
+    check(fuerza() === f0 + 3, 'Báculo del Archimago: los espacios de nivel 1 no dan Fuerza');
+    check(ctx.conjurosLibres() === 2, 'Báculo del Archimago: ya no recupera espacios');
   }
   {
     const { comb, ctx } = await montar('mago', ['pluma-escriba']);

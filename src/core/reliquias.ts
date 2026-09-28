@@ -418,10 +418,9 @@ const DE_MAGO: ReliquiaDef[] = [
   },
   {
     id: 'baculo-archimago', nombre: 'Báculo del Archimago', icono: '🪄', rareza: 'rara', soloClase: 'mago',
-    texto: 'La primera vez en cada combate que gastas un espacio de nivel 3, recuperas el espacio gastado de menor nivel.',
+    texto: 'Cada vez que gastas un espacio de conjuro de nivel 2 o superior, ganas 1 de Fuerza.',
     alGastarConjuro: async (ctx, nivel) => {
-      if (nivel < 3 || !primeraVez(ctx, 'baculo-archimago')) return;
-      await ctx.recuperarConjuro();
+      if (nivel >= 2) await ctx.aplicarEstado(ctx.jugador, 'fuerza', 1);
     },
   },
   {

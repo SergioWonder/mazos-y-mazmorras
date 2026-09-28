@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.11.0';
+export const VERSION = '6.11.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.11.1',
+    fecha: '2026-09-28',
+    cambios: [
+      '🪄 Báculo del Archimago: ahora ganas 1 de Fuerza cada vez que gastas un espacio de conjuro de nivel 2 o superior (antes recuperaba un espacio al gastar uno de nivel 3).',
+    ],
+  },
   {
     version: '6.11.0',
     fecha: '2026-09-28',
