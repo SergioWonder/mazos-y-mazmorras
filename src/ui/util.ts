@@ -133,7 +133,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   bloqueoPorTurno: 'Bendición Celestial', bendicionOscura: 'Pacto Infernal',
   condenaPorBloqueo: 'Pacto Final',
   explosionCondena: 'Verbo Agonizante (Condena)', explosionCrece: 'Lanza Sobrenatural',
-  explosionCarga: 'Explosión Cargada', explosionBloqueo: 'Don del Patrón (bloqueo)',
+  explosionCarga: 'Explosión Cargada', explosionBloqueo: 'Don del Patrón',
   explosionMaldita: 'Hambre del Patrón', bloqueoPorMaldicion: 'Égida de la Aflicción',
 };
 

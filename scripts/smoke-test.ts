@@ -1591,7 +1591,7 @@ console.log('— Brujo: mecánicas nuevas —');
   }
 
 
-  // Don del Patrón: la Explosión pasa a costar 0
+  // Don del Patrón: only armour now, the Blast keeps its cost
   {
     const run = nuevaRun('brujo', 5019);
     const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5019), uiSilenciosa);
@@ -1599,18 +1599,16 @@ console.log('— Brujo: mecánicas nuevas —');
     const exp = instanciar(carta('explosion-sobrenatural'));
     check(comb.costeEfectivo(exp.def) === 1, 'la Explosión cuesta 1 de partida');
     await carta('don-del-patron').jugar(comb.contexto());
-    check(comb.costeEfectivo(exp.def) === 0, 'Don del Patrón: la Explosión cuesta 0');
-    check(comb.costeEfectivo(carta('sacudida-abisal')) === 1, 'y no abarata otras cartas');
-    // el Rayo Carmesí del Contemplador sigue encareciendo por encima
+    check(comb.costeEfectivo(exp.def) === 1, 'Don del Patrón: la Explosión sigue costando 1 (ya no la abarata)');
     comb.jugador.estados.cartasSobrecoste = 1;
-    check(comb.costeEfectivo(exp.def) === 1, 'con Sobrecarga vuelve a costar 1');
+    check(comb.costeEfectivo(exp.def) === 2, 'con Sobrecarga cuesta 2');
     delete comb.jugador.estados.cartasSobrecoste;
-    // y se puede lanzar sin gastar energía
+    // and it can no longer be cast without energy
     comb.jugador.mano = [exp];
     comb.jugador.energia = 0;
     const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
     await comb.jugarCarta(exp, e);
-    check(60 - e.pv === 7, 'se lanza con 0 de energía');
+    check(e.pv === 60, 'con 0 de energía ya no se puede lanzar');
   }
 
   // Llamada del Vacío: recupera la Explosión de donde esté
@@ -3706,7 +3704,7 @@ console.log('\n🙏 Bendiciones');
     const [a, b] = comb.enemigos;
     await jugarCon(comb, 'explosion-sobrenatural', 3, a);
     const pvB = b.pv;
-    check(pvB === 197, 'Eco Sobrenatural: la primera Explosión del turno inflige además 3 a todos');
+    check(pvB === 197, 'Eco Sobrenatural: la primera Explosión del turno inflige además 3 a los demás enemigos');
     await jugarCon(comb, 'explosion-sobrenatural', 3, a);
     check(b.pv === pvB, 'Eco Sobrenatural: solo la primera de cada turno');
   }
@@ -4756,16 +4754,21 @@ try {
     check(await lanzar(m.comb, exp(m.comb)) === 10, 'Lanza Sobrenatural+: crece 3 por lanzamiento');
     check(poolDeClase('brujo').some((c) => c.id === 'lanza-sobrenatural'), 'Lanza Sobrenatural sale en las recompensas del brujo');
   }
-  // — Don del Patrón: free and it shields you —
-  {
+  // — Don del Patrón: every Blast shields you —
+  for (const [mejorada, bloqueo] of [[false, 5], [true, 7]] as const) {
     const { comb } = await montarB();
-    await lanzar(comb, aMano(comb, 'don-del-patron'));
+    const don = aMano(comb, 'don-del-patron');
+    don.mejorada = mejorada;
+    await lanzar(comb, don);
     const e = exp(comb);
-    check(comb.costeEfectivo(defDe(e)) === 0, 'Don del Patrón: la Explosión sigue costando 0');
+    check(comb.costeEfectivo(defDe(e)) === 1, `Don del Patrón${mejorada ? '+' : ''}: la Explosión no pasa a costar 0`);
     comb.jugador.bloqueo = 0;
     comb.jugador.energia = 0;
     await comb.jugarCarta(e, comb.enemigos[0]);
-    check(comb.jugador.bloqueo === 3 && comb.enemigos[0].pv === 293, 'Don del Patrón: al lanzarla ganas 3 de bloqueo');
+    check(comb.enemigos[0].pv === 300, 'sin energía ya no se puede lanzar gratis');
+    comb.jugador.energia = 1;
+    await comb.jugarCarta(e, comb.enemigos[0]);
+    check(comb.jugador.bloqueo === bloqueo && comb.enemigos[0].pv === 293, `Don del Patrón${mejorada ? '+' : ''}: al lanzarla ganas ${bloqueo} de bloqueo`);
   }
   // — Cheaper blast powers —
   {
@@ -4910,9 +4913,9 @@ try {
     const [a, b] = comb.enemigos;
     comb.jugador.estados.explosionFuerza = 5;
     await lanzar(comb, exp(comb), a);
-    check(a.pv === 300 - 12 - 6 && b.pv === 300 - 6, 'Eco Sobrenatural: repite la mitad del daño a todos (12 → 6)');
+    check(a.pv === 300 - 12 && b.pv === 300 - 3, 'Eco Sobrenatural: 3 fijos a todos los demás, no la mitad del daño (12 → 3)');
     await lanzar(comb, exp(comb), a);
-    check(b.pv === 294, 'solo la primera Explosión de cada turno');
+    check(b.pv === 297, 'solo la primera Explosión de cada turno');
   }
   // — Relics: Libro de las Sombras —
   {

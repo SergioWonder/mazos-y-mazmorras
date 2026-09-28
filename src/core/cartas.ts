@@ -3298,17 +3298,15 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'abisal',
-    texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0 y, al lanzarla,\nganas 3 de bloqueo.',
+    // armour only: making the Blast free as well was too much
+    texto: 'Poder: cada vez que lanzas tu\nExplosión Sobrenatural,\nganas 5 de bloqueo.',
     jugar: async (c) => {
-      await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
-      await c.aplicarEstado(c.jugador, 'explosionBloqueo', 3);
+      await c.aplicarEstado(c.jugador, 'explosionBloqueo', 5);
     },
     mejora: {
-      coste: 0,
-      texto: 'Poder: tu Explosión Sobrenatural\ncuesta 0 y, al lanzarla,\nganas 3 de bloqueo.',
+      texto: 'Poder: cada vez que lanzas tu\nExplosión Sobrenatural,\nganas 7 de bloqueo.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'explosionGratis', 1);
-        await c.aplicarEstado(c.jugador, 'explosionBloqueo', 3);
+        await c.aplicarEstado(c.jugador, 'explosionBloqueo', 7);
       },
     },
   },

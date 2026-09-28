@@ -99,7 +99,7 @@ descuelga de las demás en su mismo nivel.
     | --- | --- | --- |
     | 😖 Verbo Agonizante | 1 | +3 de daño y 3 de Condena a cada enemigo que golpea (+5 y 4) |
     | ☄️ Lanza Sobrenatural | 1 | Crece +2 de daño cada vez que la lanzas, el resto del combate (+3) |
-    | 🤝 Don del Patrón | 1 (0) | Cuesta 0 y te da 3 de bloqueo al lanzarla |
+    | 🤝 Don del Patrón | 1 | Te da 5 de bloqueo cada vez que la lanzas (7) |
     | 🔀 Haz Desdoblado | 2 (1) | Golpea 1 vez más |
     | 🔱 Explosión Trifurcada | 1 (0) | Golpea a TODOS los enemigos |
     | 🍽️ Hambre del Patrón | 2 (1) | +2 de daño por cada maldición en tus cartas y mete una en tu descarte (+3) |
@@ -370,7 +370,7 @@ jugarla; nunca salen en los huecos normales ni en el sorteo de reliquias.
 | ✨ Constelación | mago | Cada 2 espacios gastados en un combate, +1 de energía |
 | ⚔️ Filo Consagrado | pícaro | Tus Dagas hacen 2 más; la primera de cada turno roba 1 |
 | 🌫️ Sombra Veloz | pícaro | Cada carta descartada aplica 2 de Veneno a un enemigo al azar |
-| 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno repite la mitad de su daño (mín. 3) a todos |
+| 🌀 Eco Sobrenatural | brujo | La primera Explosión Sobrenatural de cada turno inflige 3 a todos los demás enemigos |
 | 👹 Diablillo Guardián | brujo | Empiezas cada combate con un diablillo efímero (8 de vida, golpea por 6 y 2 de Condena) |
 | 💘 Dado del Encanto | carta única | Añade «Seducir»; la primera Seducir de cada combate te devuelve su energía |
 | 🌠 Dado de los Deseos | carta única | Añade «Deseo»; al jugarla robas 1 |
