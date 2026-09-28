@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.8.0';
+export const VERSION = '6.9.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.9.0',
+    fecha: '2026-09-28',
+    cambios: [
+      '🎯 Tu Vulnerable ahora dura hasta el final del turno del enemigo, así que sí amplifica sus golpes. El que te pone un enemigo llega a su siguiente ataque.',
+      '☠️ Marca del Condenado te da 1 de Vulnerable al robarla (dura hasta el final del turno enemigo), en lugar de al final de tu turno.',
+      '⚔️ La intención de los enemigos vuelve a mostrar el daño del golpe, sin descontar tu bloqueo ni tu invocación.',
+      '📝 Las cartas con daño o bloqueo calculado muestran el total y el extra entre paréntesis, como «Inflige 22 de daño (aplica 3× tu Fuerza)».',
+    ],
+  },
   {
     version: '6.8.0',
     fecha: '2026-09-28',

@@ -742,11 +742,9 @@ export function pantallaCombate(
         // verde si lo hemos reducido (Débil/Raíces); rojo si Vulnerable lo amplifica
         const mod = d < natural ? 'int-mod-baja' : d > natural ? 'int-mod-alta' : '';
         const veces = m.veces && m.veces > 1 ? `×${m.veces}` : '';
-        // what will really reach your HP once Mirror Image, block and summon soak it
-        const neto = !p ? ''
-          : p.aplastado ? ' <small class="int-neto">🌿</small>'
-          : p.pv < p.porGolpe * p.veces ? ` <small class="int-neto">→ ❤️${p.pv}</small>` : '';
-        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${neto}</span>`;
+        // the raw hit (block and summons are not taken off); 🌿 if the roots will crush it
+        const raices = p?.aplastado ? ' <small class="int-raices">🌿</small>' : '';
+        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${raices}</span>`;
       }
       if (m.invocar) return `<span class="int-mejora">👥</span>`;
       if (m.devorar) return `<span class="int-mejora">🍖</span>`;
@@ -756,8 +754,7 @@ export function pantallaCombate(
       return '<span>?</span>';
     }
 
-    /** Tooltip lines that break an attack intent down: how each hit is worked
-     *  out and what will soak it before it reaches your HP. */
+    /** Tooltip lines that break an attack intent down: how each hit is worked out. */
     function desgloseIntencion(e: EnemigoCombate, p?: PrevisionAtaque): string {
       const m = e.intencion;
       if (!p || m.dano === undefined || m.cita) return '';
@@ -771,17 +768,7 @@ export function pantallaCombate(
       const lineas: string[] = [];
       if (partes.length > 1) lineas.push(`Cada golpe: ${partes.join(' · ')} = ${p.porGolpe}`);
       if (p.veces > 1) lineas.push(`${p.porGolpe} × ${p.veces} = ${p.porGolpe * p.veces} en total`);
-      if ((combate.jugador.estados.vulnerable ?? 0) > 0 && combate.vulnerableAlGolpe() === 0) {
-        lineas.push('🎯 Tu Vulnerable se acaba al terminar tu turno: no llega a este golpe');
-      }
-      if (p.aplastado) {
-        lineas.push('🌿 Las raíces lo aplastan: no llegará a atacarte');
-      } else if (p.pv < p.porGolpe * p.veces) {
-        if (p.prevenidos) lineas.push(`🪞 Espejismo previene ${p.prevenidos} golpe${p.prevenidos > 1 ? 's' : ''}`);
-        if (p.bloqueado) lineas.push(`🛡️ Tu bloqueo absorbe ${p.bloqueado}`);
-        if (p.invocacion) lineas.push(`🐾 Tu invocación absorbe ${p.invocacion}`);
-        lineas.push(`❤️ Perderás ${p.pv} PV`);
-      }
+      if (p.aplastado) lineas.push('🌿 Las raíces lo aplastan: no llegará a atacarte');
       return lineas.map((l) => `<br>${l}`).join('');
     }
 

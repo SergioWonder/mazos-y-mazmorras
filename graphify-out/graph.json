@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 94,
+      "community": 93,
       "norm_label": ".uid()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 96,
+      "community": 93,
       "norm_label": ".dot()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 93,
+      "community": 104,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 93,
+      "community": 104,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 96,
+      "community": 93,
       "norm_label": "broadleaf()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 93,
+      "community": 104,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 96,
+      "community": 93,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 93,
+      "community": 104,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 93,
+      "community": 104,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 96,
+      "community": 93,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -15008,7 +15008,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4710",
+      "source_location": "L4711",
       "id": "scripts_smoke_test_montarb",
       "community": 67,
       "norm_label": "montarb()"
@@ -15017,7 +15017,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5395",
+      "source_location": "L5396",
       "id": "scripts_smoke_test_sprite2",
       "community": 67,
       "norm_label": "sprite2"
@@ -15026,7 +15026,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5794",
+      "source_location": "L5795",
       "id": "scripts_smoke_test_escenario",
       "community": 67,
       "norm_label": "escenario"
@@ -15035,7 +15035,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6053",
+      "source_location": "L6055",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 67,
       "norm_label": "montarnumeros()"
@@ -15602,7 +15602,7 @@
       "label": ".vulnerableAlGolpe()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L195",
+      "source_location": "L194",
       "id": "core_combate_combate_vulnerablealgolpe",
       "community": 23,
       "norm_label": ".vulnerablealgolpe()"
@@ -15611,7 +15611,7 @@
       "label": ".previsionAtaques()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L205",
+      "source_location": "L201",
       "id": "core_combate_combate_previsionataques",
       "community": 23,
       "norm_label": ".previsionataques()"
@@ -15620,7 +15620,7 @@
       "label": ".dolorRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L237",
+      "source_location": "L233",
       "id": "core_combate_combate_dolorraices",
       "community": 23,
       "norm_label": ".dolorraices()"
@@ -15629,7 +15629,7 @@
       "label": ".ataqueAnulado()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L250",
+      "source_location": "L246",
       "id": "core_combate_combate_ataqueanulado",
       "community": 23,
       "norm_label": ".ataqueanulado()"
@@ -15638,7 +15638,7 @@
       "label": ".estaTransformadoPublico()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L256",
+      "source_location": "L252",
       "id": "core_combate_combate_estatransformadopublico",
       "community": 23,
       "norm_label": ".estatransformadopublico()"
@@ -15647,7 +15647,7 @@
       "label": ".noPretendeAtacar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L262",
+      "source_location": "L258",
       "id": "core_combate_combate_nopretendeatacar",
       "community": 23,
       "norm_label": ".nopretendeatacar()"
@@ -15656,7 +15656,7 @@
       "label": ".condenaLetal()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L269",
+      "source_location": "L265",
       "id": "core_combate_combate_condenaletal",
       "community": 23,
       "norm_label": ".condenaletal()"
@@ -15665,7 +15665,7 @@
       "label": ".ventajaFurtivaContra()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L275",
+      "source_location": "L271",
       "id": "core_combate_combate_ventajafurtivacontra",
       "community": 23,
       "norm_label": ".ventajafurtivacontra()"
@@ -15674,7 +15674,7 @@
       "label": ".tickVeneno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L282",
+      "source_location": "L278",
       "id": "core_combate_combate_tickveneno",
       "community": 23,
       "norm_label": ".tickveneno()"
@@ -15683,7 +15683,7 @@
       "label": ".ganchos()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L291",
+      "source_location": "L287",
       "id": "core_combate_combate_ganchos",
       "community": 23,
       "norm_label": ".ganchos()"
@@ -15692,7 +15692,7 @@
       "label": ".bonoAtaqueReliquias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L296",
+      "source_location": "L292",
       "id": "core_combate_combate_bonoataquereliquias",
       "community": 23,
       "norm_label": ".bonoataquereliquias()"
@@ -15701,7 +15701,7 @@
       "label": ".dispararBarajados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L303",
+      "source_location": "L299",
       "id": "core_combate_combate_dispararbarajados",
       "community": 23,
       "norm_label": ".dispararbarajados()"
@@ -15710,7 +15710,7 @@
       "label": ".dispararAlRobar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L314",
+      "source_location": "L310",
       "id": "core_combate_combate_dispararalrobar",
       "community": 23,
       "norm_label": ".dispararalrobar()"
@@ -15719,7 +15719,7 @@
       "label": ".efectosMaldicionesEnMano()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L327",
+      "source_location": "L323",
       "id": "core_combate_combate_efectosmaldicionesenmano",
       "community": 23,
       "norm_label": ".efectosmaldicionesenmano()"
@@ -15728,7 +15728,7 @@
       "label": ".consumirMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L342",
+      "source_location": "L338",
       "id": "core_combate_combate_consumirmaldicion",
       "community": 23,
       "norm_label": ".consumirmaldicion()"
@@ -15737,7 +15737,7 @@
       "label": ".saldarMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L359",
+      "source_location": "L355",
       "id": "core_combate_combate_saldarmaldicion",
       "community": 23,
       "norm_label": ".saldarmaldicion()"
@@ -15746,7 +15746,7 @@
       "label": ".meterMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L373",
+      "source_location": "L369",
       "id": "core_combate_combate_metermaldicion",
       "community": 23,
       "norm_label": ".metermaldicion()"
@@ -15755,7 +15755,7 @@
       "label": ".contexto()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L390",
+      "source_location": "L386",
       "id": "core_combate_combate_contexto",
       "community": 23,
       "norm_label": ".contexto()"
@@ -15764,7 +15764,7 @@
       "label": ".pantallaDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L770",
+      "source_location": "L766",
       "id": "core_combate_combate_pantalladm",
       "community": 23,
       "norm_label": ".pantalladm()"
@@ -15773,7 +15773,7 @@
       "label": ".dialogoDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L778",
+      "source_location": "L774",
       "id": "core_combate_combate_dialogodm",
       "community": 23,
       "norm_label": ".dialogodm()"
@@ -15782,7 +15782,7 @@
       "label": ".seducirDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L785",
+      "source_location": "L781",
       "id": "core_combate_combate_seducirdm",
       "community": 23,
       "norm_label": ".seducirdm()"
@@ -15791,7 +15791,7 @@
       "label": ".rayoDelDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L805",
+      "source_location": "L801",
       "id": "core_combate_combate_rayodeldm",
       "community": 23,
       "norm_label": ".rayodeldm()"
@@ -15800,7 +15800,7 @@
       "label": ".infligir()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L824",
+      "source_location": "L820",
       "id": "core_combate_combate_infligir",
       "community": 23,
       "norm_label": ".infligir()"
@@ -15809,7 +15809,7 @@
       "label": ".rebotarAgathys()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L908",
+      "source_location": "L904",
       "id": "core_combate_combate_rebotaragathys",
       "community": 23,
       "norm_label": ".rebotaragathys()"
@@ -15818,7 +15818,7 @@
       "label": ".comprobarFin()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L922",
+      "source_location": "L918",
       "id": "core_combate_combate_comprobarfin",
       "community": 23,
       "norm_label": ".comprobarfin()"
@@ -15827,7 +15827,7 @@
       "label": ".escribirConjuro()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L934",
+      "source_location": "L930",
       "id": "core_combate_combate_escribirconjuro",
       "community": 23,
       "norm_label": ".escribirconjuro()"
@@ -15836,7 +15836,7 @@
       "label": ".invocar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L955",
+      "source_location": "L951",
       "id": "core_combate_combate_invocar",
       "community": 86,
       "norm_label": ".invocar()"
@@ -15845,7 +15845,7 @@
       "label": ".invocarEfimero()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L978",
+      "source_location": "L974",
       "id": "core_combate_combate_invocarefimero",
       "community": 86,
       "norm_label": ".invocarefimero()"
@@ -15854,7 +15854,7 @@
       "label": ".resolverInvocacionEfimera()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L994",
+      "source_location": "L990",
       "id": "core_combate_combate_resolverinvocacionefimera",
       "community": 23,
       "norm_label": ".resolverinvocacionefimera()"
@@ -15863,7 +15863,7 @@
       "label": ".atacarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1009",
+      "source_location": "L1005",
       "id": "core_combate_combate_atacarinvocacion",
       "community": 23,
       "norm_label": ".atacarinvocacion()"
@@ -15872,7 +15872,7 @@
       "label": ".curarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1041",
+      "source_location": "L1037",
       "id": "core_combate_combate_curarinvocacion",
       "community": 23,
       "norm_label": ".curarinvocacion()"
@@ -15881,7 +15881,7 @@
       "label": ".golpeInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1054",
+      "source_location": "L1050",
       "id": "core_combate_combate_golpeinvocacion",
       "community": 23,
       "norm_label": ".golpeinvocacion()"
@@ -15890,7 +15890,7 @@
       "label": ".robarCartas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1065",
+      "source_location": "L1061",
       "id": "core_combate_combate_robarcartas",
       "community": 23,
       "norm_label": ".robarcartas()"
@@ -15899,7 +15899,7 @@
       "label": ".descartarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1081",
+      "source_location": "L1077",
       "id": "core_combate_combate_descartarcarta",
       "community": 23,
       "norm_label": ".descartarcarta()"
@@ -15908,7 +15908,7 @@
       "label": ".avisarManoVacia()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1101",
+      "source_location": "L1097",
       "id": "core_combate_combate_avisarmanovacia",
       "community": 23,
       "norm_label": ".avisarmanovacia()"
@@ -15917,7 +15917,7 @@
       "label": ".crearDagas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1107",
+      "source_location": "L1103",
       "id": "core_combate_combate_creardagas",
       "community": 23,
       "norm_label": ".creardagas()"
@@ -15926,7 +15926,7 @@
       "label": ".actualizarIndicadorAcrobacias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1119",
+      "source_location": "L1115",
       "id": "core_combate_combate_actualizarindicadoracrobacias",
       "community": 23,
       "norm_label": ".actualizarindicadoracrobacias()"
@@ -15935,7 +15935,7 @@
       "label": ".iniciar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1125",
+      "source_location": "L1121",
       "id": "core_combate_combate_iniciar",
       "community": 23,
       "norm_label": ".iniciar()"
@@ -15944,7 +15944,7 @@
       "label": ".cartasPorTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1149",
+      "source_location": "L1145",
       "id": "core_combate_combate_cartasporturno",
       "community": 23,
       "norm_label": ".cartasporturno()"
@@ -15953,7 +15953,7 @@
       "label": ".inicioTurnoJugador()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1157",
+      "source_location": "L1153",
       "id": "core_combate_combate_inicioturnojugador",
       "community": 23,
       "norm_label": ".inicioturnojugador()"
@@ -15962,7 +15962,7 @@
       "label": ".puedeJugar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1298",
+      "source_location": "L1294",
       "id": "core_combate_combate_puedejugar",
       "community": 23,
       "norm_label": ".puedejugar()"
@@ -15971,7 +15971,7 @@
       "label": ".jugarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1313",
+      "source_location": "L1309",
       "id": "core_combate_combate_jugarcarta",
       "community": 23,
       "norm_label": ".jugarcarta()"
@@ -15980,7 +15980,7 @@
       "label": ".decrementarEstados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1377",
+      "source_location": "L1374",
       "id": "core_combate_combate_decrementarestados",
       "community": 23,
       "norm_label": ".decrementarestados()"
@@ -15989,7 +15989,7 @@
       "label": ".envejecerRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1387",
+      "source_location": "L1384",
       "id": "core_combate_combate_envejecerraices",
       "community": 23,
       "norm_label": ".envejecerraices()"
@@ -15998,7 +15998,7 @@
       "label": ".terminarTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1397",
+      "source_location": "L1394",
       "id": "core_combate_combate_terminarturno",
       "community": 23,
       "norm_label": ".terminarturno()"
@@ -16007,7 +16007,7 @@
       "label": ".ejecutarMovimiento()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1575",
+      "source_location": "L1577",
       "id": "core_combate_combate_ejecutarmovimiento",
       "community": 23,
       "norm_label": ".ejecutarmovimiento()"
@@ -24899,7 +24899,7 @@
       "label": "BACKGROUND_URLS",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1406",
+      "source_location": "L1393",
       "id": "ui_combate_background_urls",
       "community": 19,
       "norm_label": "background_urls"
@@ -24908,7 +24908,7 @@
       "label": "montarFondo()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1414",
+      "source_location": "L1401",
       "id": "ui_combate_montarfondo",
       "community": 19,
       "norm_label": "montarfondo()"
@@ -70853,9 +70853,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L37",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_nivelagastar",
-      "confidence_score": 1.0
+      "target": "core_cartas_nivelagastar"
     },
     {
       "relation": "contains",
@@ -70913,9 +70913,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L34",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_positivo",
-      "confidence_score": 1.0
+      "target": "core_cartas_positivo"
     },
     {
       "relation": "contains",
@@ -70953,9 +70953,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_valoresdeconjuro",
-      "confidence_score": 1.0
+      "target": "core_cartas_valoresdeconjuro"
     },
     {
       "relation": "contains",
@@ -70963,9 +70963,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_valoresfurtivos",
-      "confidence_score": 1.0
+      "target": "core_cartas_valoresfurtivos"
     },
     {
       "relation": "imports_from",
@@ -71051,9 +71051,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_types_valorcarta",
-      "confidence_score": 1.0
+      "target": "core_types_valorcarta"
     },
     {
       "relation": "imports_from",
@@ -72263,9 +72263,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_types_valormostrado",
-      "confidence_score": 1.0
+      "target": "core_types_valormostrado"
     },
     {
       "relation": "imports_from",
@@ -72274,9 +72274,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_valores",
-      "confidence_score": 1.0
+      "target": "core_valores"
     },
     {
       "relation": "imports",
@@ -72285,9 +72285,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_valores_calcularvalores",
-      "confidence_score": 1.0
+      "target": "core_valores_calcularvalores"
     },
     {
       "relation": "imports_from",
@@ -72531,9 +72531,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_danogolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_danogolpe"
     },
     {
       "relation": "method",
@@ -72881,9 +72881,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_valoresdecarta",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_valoresdecarta"
     },
     {
       "relation": "method",
@@ -73043,9 +73043,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L159",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danogolpe",
-      "target": "core_combate_combate_danodeataque",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_danodeataque"
     },
     {
       "relation": "calls",
@@ -73076,9 +73076,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danogolpe",
-      "target": "core_combate_combate_danorecibido",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_danorecibido"
     },
     {
       "relation": "calls",
@@ -73141,9 +73141,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danogolpe",
-      "target": "core_combate_combate_bonoataquereliquias",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_bonoataquereliquias"
     },
     {
       "relation": "calls",
@@ -73152,9 +73152,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L160",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danogolpe",
-      "target": "core_combate_combate_ventajafurtivacontra",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_ventajafurtivacontra"
     },
     {
       "relation": "references",
@@ -73163,9 +73163,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L154",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danogolpe",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "references",
@@ -73174,9 +73174,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_valoresdecarta",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "references",
@@ -73185,9 +73185,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_valoresdecarta",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "references",
@@ -73196,9 +73196,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_valoresdecarta",
-      "target": "core_types_valormostrado",
-      "confidence_score": 1.0
+      "target": "core_types_valormostrado"
     },
     {
       "relation": "calls",
@@ -78957,9 +78957,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types",
-      "confidence_score": 1.0
+      "target": "core_types"
     },
     {
       "relation": "imports_from",
@@ -79409,9 +79409,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "references",
@@ -79420,9 +79420,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores_entornovalores",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "imports",
@@ -79452,9 +79452,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types_cartadef",
-      "confidence_score": 1.0
+      "target": "core_types_cartadef"
     },
     {
       "relation": "imports",
@@ -79529,9 +79529,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types_valorcarta",
-      "confidence_score": 1.0
+      "target": "core_types_valorcarta"
     },
     {
       "relation": "imports",
@@ -79540,9 +79540,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types_valormostrado",
-      "confidence_score": 1.0
+      "target": "core_types_valormostrado"
     },
     {
       "relation": "imports",
@@ -79551,9 +79551,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta",
-      "target": "core_types_valormostrado",
-      "confidence_score": 1.0
+      "target": "core_types_valormostrado"
     },
     {
       "relation": "references",
@@ -79562,9 +79562,9 @@
       "source_file": "src/ui/carta.ts",
       "source_location": "L116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_carta_modscarta",
-      "target": "core_types_valormostrado",
-      "confidence_score": 1.0
+      "target": "core_types_valormostrado"
     },
     {
       "relation": "imports",
@@ -79594,9 +79594,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_types_contextoefecto",
-      "confidence_score": 1.0
+      "target": "core_types_contextoefecto"
     },
     {
       "relation": "references",
@@ -79800,9 +79800,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_cachetexto",
-      "confidence_score": 1.0
+      "target": "core_valores_cachetexto"
     },
     {
       "relation": "contains",
@@ -79810,9 +79810,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_calcularvalores",
-      "confidence_score": 1.0
+      "target": "core_valores_calcularvalores"
     },
     {
       "relation": "contains",
@@ -79820,9 +79820,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_clave",
-      "confidence_score": 1.0
+      "target": "core_valores_clave"
     },
     {
       "relation": "contains",
@@ -79830,9 +79830,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L50",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_entornovalores",
-      "confidence_score": 1.0
+      "target": "core_valores_entornovalores"
     },
     {
       "relation": "contains",
@@ -79840,9 +79840,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_numerosdeltexto",
-      "confidence_score": 1.0
+      "target": "core_valores_numerosdeltexto"
     },
     {
       "relation": "contains",
@@ -79850,9 +79850,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_realde",
-      "confidence_score": 1.0
+      "target": "core_valores_realde"
     },
     {
       "relation": "contains",
@@ -79860,9 +79860,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L62",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_valoresdeclarados",
-      "confidence_score": 1.0
+      "target": "core_valores_valoresdeclarados"
     },
     {
       "relation": "contains",
@@ -79870,9 +79870,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L24",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_valoresdeltexto",
-      "confidence_score": 1.0
+      "target": "core_valores_valoresdeltexto"
     },
     {
       "relation": "contains",
@@ -79880,9 +79880,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores",
-      "target": "core_valores_veces",
-      "confidence_score": 1.0
+      "target": "core_valores_veces"
     },
     {
       "relation": "calls",
@@ -79891,9 +79891,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores_valoresdeclarados",
-      "target": "core_valores_numerosdeltexto",
-      "confidence_score": 1.0
+      "target": "core_valores_numerosdeltexto"
     },
     {
       "relation": "calls",
@@ -79913,9 +79913,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L63",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores_valoresdeclarados",
-      "target": "core_valores_valoresdeltexto",
-      "confidence_score": 1.0
+      "target": "core_valores_valoresdeltexto"
     },
     {
       "relation": "calls",
@@ -79924,9 +79924,9 @@
       "source_file": "src/core/valores.ts",
       "source_location": "L93",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_valores_calcularvalores",
-      "target": "core_valores_clave",
-      "confidence_score": 1.0
+      "target": "core_valores_clave"
     },
     {
       "relation": "contains",
@@ -111726,5 +111726,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "6857113b60e94fb9bd3cea0a5099c92121d55cbe"
+  "built_at_commit": "c32845117faa94dfad381a6a65354d7dad6b2b23"
 }

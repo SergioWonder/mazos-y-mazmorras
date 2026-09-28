@@ -189,14 +189,10 @@ export class Combate {
     return this.danoRecibido(this.jugador, this.danoDeAtaque(e, e.intencion.dano), this.vulnerableAlGolpe());
   }
 
-  /** The hero's Vulnerable when the enemies strike. During the hero's turn it
-   *  is not the current one: the countdown at the end of the turn runs before
-   *  the enemies act, and each Mark of the Doomed in hand adds 1 right after. */
+  /** The hero's Vulnerable when the enemies strike: it lasts until the end of
+   *  the enemy turn, so it is simply the current one. */
   vulnerableAlGolpe(): number {
-    const v = this.jugador.estados.vulnerable ?? 0;
-    if (this.faseEnemiga) return v;
-    const marcas = this.jugador.mano.filter((c) => defDe(c).id === 'marca-condenado').length;
-    return Math.max(0, v - 1) + marcas;
+    return this.jugador.estados.vulnerable ?? 0;
   }
 
   /** Forecast of every enemy attack this round, in the order they act, spent
@@ -1373,10 +1369,11 @@ export class Combate {
     this.ui.render();
   }
 
-  /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador. */
+  /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador.
+   *  The hero's Vulnerable is left out here: it ticks at the end of the enemy turn. */
   private decrementarEstados(l: Luchador) {
     for (const k of [
-      'vulnerable', 'debil', 'fragil', 'invulnerable', 'quemadura', 'oscuridad',
+      ...(l === this.jugador ? [] : ['vulnerable']), 'debil', 'fragil', 'invulnerable', 'quemadura', 'oscuridad',
       'cartasAgotan', 'cartasSobrecoste', 'cartasEtereas',
     ] as EstadoId[]) {
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
@@ -1440,9 +1437,12 @@ export class Combate {
 
     this.decrementarEstados(j);
     this.faseEnemiga = true;
+    // Vulnerable the hero already had counts down once the enemies are done;
+    // any applied during the enemy turn survives to its next hit.
+    const vulnerableAntes = j.estados.vulnerable ?? 0;
 
     // Curses held in the hand hurt now, before the discard (after the status
-    // countdown, so a Weak or Vulnerable they give lasts into the next round).
+    // countdown, so a Weak or Frail they give lasts into the next round).
     await this.efectosMaldicionesEnMano();
 
     // Descartar mano (salvo las cartas con Retener, que se quedan). Con el Rayo
@@ -1507,6 +1507,8 @@ export class Combate {
       this.ui.render();
       await this.ui.espera(250);
     }
+
+    if (vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
 
     // Invocación efímera del brujo: si aguantó la ronda, golpea y se desvanece
     await this.resolverInvocacionEfimera();

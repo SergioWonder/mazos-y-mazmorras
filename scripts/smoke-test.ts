@@ -4135,9 +4135,10 @@ console.log('— Maldiciones —');
       }
       {
         const a = await finDeTurno('marca-condenado', true);
-        const b = await finDeTurno('marca-condenado', false);
-        check(a.comb.jugador.estados.vulnerable === 1 && !b.comb.jugador.estados.vulnerable,
-          'Marca del Condenado: 1 de Vulnerable solo si está en tu mano');
+        check(!a.comb.jugador.estados.vulnerable, 'Marca del Condenado: tenerla en la mano al acabar el turno ya no da Vulnerable');
+        const marca = CT.cartaPorId('marca-condenado')!;
+        check(/al robarla/i.test(marca.texto) && typeof marca.alRobar === 'function' && !marca.finTurnoEnMano,
+          'Marca del Condenado da el Vulnerable al robarla');
       }
       {
         const a = await finDeTurno('maldicion-momia', true);
@@ -5922,7 +5923,7 @@ console.log('\n🎯 Intención = daño real');
   check(fallosI.length === 0,
     `la intención y su desglose coinciden con el golpe real (${casos - fallosI.length}/${casos} casos, ${defs.length} enemigos, ${ESC.length} escenarios)`);
 
-  // Vol'guth's Eternal Curse leaves 1 Vulnerable, which runs out before his Life Drain lands
+  // Your Vulnerable lasts through the enemy turn: Vol'guth's Life Drain feels it
   {
     const run = nuevaRun('druida', 12);
     run.reliquias = [];
@@ -5931,11 +5932,12 @@ console.log('\n🎯 Intención = daño real');
     const v = comb.enemigos[0];
     v.intencion = { nombre: 'Drenar Vida', intencion: 'ataque', dano: 15, cura: 9 };
     comb.jugador.estados.vulnerable = 1;
-    check(comb.danoIntencion(v) === 15 && comb.vulnerableAlGolpe() === 0,
-      'con 1 de Vulnerable la intención no lo cuenta: caduca al acabar tu turno, antes del golpe');
+    comb.jugador.bloqueo = 0;
+    check(comb.danoIntencion(v) === 22, 'con 1 de Vulnerable la intención lo cuenta (15 × 1,5 = 22)');
     const pv = comb.jugador.pv;
     await comb.terminarTurno();
-    check(comb.jugador.pv === pv - 15, 'y el Drenar Vida hace 15, lo anunciado');
+    check(comb.jugador.pv === pv - 22, 'y el Drenar Vida hace 22, lo anunciado: tu Vulnerable dura hasta el final del turno enemigo');
+    check(!comb.jugador.estados.vulnerable, 'y se acaba al terminar el turno del enemigo');
   }
 
   // Roots plus Darkness that bring the attack to 0 crush it: no 0-damage hit eats a Mirror Image
@@ -6186,6 +6188,77 @@ console.log('\n🔢 Números calculados');
     check((cartaUi.match(/<span class="carta-texto-cuerpo">\$\{formatearTexto\(/g) ?? []).length === 2,
       'el número coloreado sigue en su línea: el texto va envuelto en un solo bloque (al pintar y al apuntar)');
   }
+}
+
+// ── Player Vulnerable lasts until the end of the enemy turn ──────────────────
+console.log('\n🎯 Vulnerable del jugador');
+{
+  const fs = await import('node:fs');
+  const CTV = await import('../src/core/cartas.ts');
+  const montarV = async () => {
+    const run = nuevaRun('barbaro', 44);
+    run.reliquias = [];
+    const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(44), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.bloqueo = 0;
+    comb.enemigos[0].intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 10 } as any;
+    return comb;
+  };
+  {
+    const comb = await montarV();
+    comb.jugador.estados.vulnerable = 2;
+    comb.jugador.estados.debil = 2;
+    await comb.terminarTurno();
+    check(comb.jugador.estados.vulnerable === 1, 'tu Vulnerable baja 1 al final del turno del enemigo (2 → 1)');
+    check(comb.jugador.estados.debil === 1, 'los demás estados siguen bajando al final de tu turno');
+  }
+  {
+    // an enemy that makes you Vulnerable during its turn: it must reach its next hit
+    const comb = await montarV();
+    const e = comb.enemigos[0];
+    e.intencion = { nombre: 'Marcar', intencion: 'perjuicio', aplicar: { estado: 'vulnerable', n: 1 } } as any;
+    const orig = (comb as any).ejecutarMovimiento.bind(comb);
+    (comb as any).ejecutarMovimiento = async (en: any) => { await orig(en); comb.jugador.estados.vulnerable = (comb.jugador.estados.vulnerable ?? 0) + 1; };
+    await comb.terminarTurno();
+    check(comb.jugador.estados.vulnerable === 1, 'el Vulnerable que te pone un enemigo en su turno sigue en el siguiente');
+    e.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 10 } as any;
+    (comb as any).ejecutarMovimiento = orig;
+    comb.jugador.bloqueo = 0;
+    check(comb.danoIntencion(e) === 15, 'y amplifica su próximo golpe (10 → 15)');
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv - 15 && !comb.jugador.estados.vulnerable, 'el golpe hace 15 y después el Vulnerable se acaba');
+  }
+  {
+    const comb = await montarV();
+    comb.jugador.mazo.push(instanciar(CTV.cartaPorId('marca-condenado')!));
+    await comb.contexto().robar(1);
+    check(comb.jugador.estados.vulnerable === 1, 'Marca del Condenado: al robarla recibes 1 de Vulnerable');
+    check(comb.danoIntencion(comb.enemigos[0]) === 15, 'la intención ya muestra el golpe amplificado');
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv - 15 && !comb.jugador.estados.vulnerable, 'dura el turno del enemigo y se acaba');
+  }
+  const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(!/int-neto|Perderás|absorbe/.test(ui), 'la intención muestra el daño del golpe, sin descontar bloqueo ni invocaciones');
+}
+
+// ── Card texts: the shown number is the total, the scaling goes in brackets ──
+console.log('\n📝 Textos con números calculados');
+{
+  const CTX = await import('../src/core/cartas.ts');
+  const ids = ['postura-firme', 'golpe-demoledor', 'reflejos-acero', 'ataque-sutil', 'golpe-septico', 'tempestad-acero',
+    'punalada-trapera', 'emboscada', 'diezmo-sangre', 'escudo-arcano', 'manos-ardientes', 'bola-fuego', 'rayo-abrasador',
+    'toque-vampirico', 'escuela-evocacion'];
+  for (const id of ids) {
+    const def = CTX.cartaPorId(id)!;
+    for (const [t, nombre] of [[def.texto, def.nombre], [def.mejora?.texto ?? def.texto, def.nombre + '+']] as const) {
+      check(/\(aplica [^)]+\)/.test(t) && !/\d+ más|más \d+×|más tu|\n\+\d+ por|\(\+\d+ por/.test(t),
+        `${nombre}: el número es el total y el extra va entre paréntesis «(aplica …)» (${t.replaceAll('\n', ' ')})`);
+    }
+  }
+  const dem = CTX.cartaPorId('golpe-demoledor')!;
+  check(/Inflige 6 de daño\s+\(aplica 3× tu Fuerza\)/.test(dem.texto), 'Golpe Demoledor: «Inflige 6 de daño (aplica 3× tu Fuerza)»');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
