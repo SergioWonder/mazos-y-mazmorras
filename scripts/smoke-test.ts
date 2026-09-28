@@ -6261,5 +6261,23 @@ console.log('\n📝 Textos con números calculados');
   check(/Inflige 6 de daño\s+\(aplica 3× tu Fuerza\)/.test(dem.texto), 'Golpe Demoledor: «Inflige 6 de daño (aplica 3× tu Fuerza)»');
 }
 
+// ── A multi-hit attacker killed by Thorns stops hitting ─────────────────────
+console.log('\n🌵 Espinas en un multigolpe');
+{
+  const run = nuevaRun('druida', 55);
+  run.reliquias = [];
+  const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_CORTADOR], crearRng(55), uiSilenciosa);
+  await comb.iniciar();
+  const [e] = comb.enemigos;
+  e.pv = 5; e.bloqueo = 0;
+  e.intencion = { nombre: 'Ráfaga', intencion: 'ataque', dano: 3, veces: 4, aplicar: undefined } as any;
+  comb.jugador.estados.espinas = 3;
+  comb.jugador.bloqueo = 0;
+  const pv = comb.jugador.pv;
+  await comb.ejecutarMovimiento(e);
+  check(!e.vivo, 'las Espinas matan al atacante a mitad de su ráfaga');
+  check(pv - comb.jugador.pv === 6, `su ataque se corta al morir: solo llegan los 2 golpes previos (${pv - comb.jugador.pv} de daño)`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

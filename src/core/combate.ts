@@ -1605,7 +1605,8 @@ export class Combate {
       }
       const veces = m.veces ?? 1;
       for (let i = 0; i < veces; i++) {
-        if (this.terminado) return;
+        // a dead attacker (Thorns, a relic) stops its flurry and does nothing else
+        if (this.terminado || !e.vivo) return;
         // Mirror Image: each charge prevents the next attack hit for sure (no roll)
         const cargas = this.jugador.estados.espejismo ?? 0;
         if (cargas > 0) {
