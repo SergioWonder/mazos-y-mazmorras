@@ -1,4 +1,4 @@
-import type { EstadoRun, NodoMapa, ReliquiaDef, TipoNodo } from './types.ts';
+import type { CartaInstancia, EstadoRun, NodoMapa, ReliquiaDef, TipoNodo } from './types.ts';
 import { candidatosMision, esAlcanzable } from './mapa.ts';
 import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
 
@@ -131,14 +131,57 @@ export function revisarMision(run: EstadoRun): boolean {
   return true;
 }
 
-/** PV a tankard of ale heals (instead of following a rumour). */
-export function curaJarra(run: EstadoRun): number {
-  return Math.max(5, Math.floor(run.pvMax * 0.12));
+/** A way the tavern takes one card off the deck (instead of following a rumour). */
+export interface OlvidoTaberna {
+  etiqueta: string;
+  detalle: string;
+  /** Title of the card picker. */
+  titulo: string;
+  /** Announcement once the card is gone; `{carta}` is its name. */
+  anuncio: string;
 }
 
-/** Drinks a tankard: small heal capped at max PV. Returns PV healed. */
-export function beberJarra(run: EstadoRun): number {
-  const curado = Math.min(curaJarra(run), run.pvMax - run.pv);
-  run.pv += curado;
-  return curado;
+export const OLVIDOS_TABERNA: OlvidoTaberna[] = [
+  {
+    etiqueta: '🎲 Jugar a los dados con un tahúr',
+    detalle: 'Te dejas ganar a propósito: elimina 1 carta de tu mazo, que el tahúr se lleva como premio. No sigues ningún rumor.',
+    titulo: 'Elige la carta que apuestas (y pierdes)',
+    anuncio: '🎲 El tahúr se guarda «{carta}» en la manga',
+  },
+  {
+    etiqueta: '🎻 Contarle una hazaña al bardo',
+    detalle: 'La historia se queda en su canción y tú la dejas atrás: elimina 1 carta de tu mazo. No sigues ningún rumor.',
+    titulo: 'Elige la hazaña que regalas al bardo',
+    anuncio: '🎻 «{carta}» ya solo vive en una balada',
+  },
+  {
+    etiqueta: '🔥 Quemar un viejo pergamino en la chimenea',
+    detalle: 'Hay técnicas que es mejor olvidar: elimina 1 carta de tu mazo. No sigues ningún rumor.',
+    titulo: 'Elige lo que arrojas al fuego',
+    anuncio: '🔥 «{carta}» se consume entre las brasas',
+  },
+  {
+    etiqueta: '🍻 Brindar por los caídos hasta el amanecer',
+    detalle: 'Entre jarra y jarra se te olvida una vieja costumbre: elimina 1 carta de tu mazo. No sigues ningún rumor.',
+    titulo: 'Elige lo que olvidas esta noche',
+    anuncio: '🍻 A la mañana siguiente no recuerdas «{carta}»',
+  },
+];
+
+/** How this tavern offers the card removal (a random scene each visit). */
+export function olvidoTaberna(rng: () => number): OlvidoTaberna {
+  return OLVIDOS_TABERNA[Math.min(OLVIDOS_TABERNA.length - 1, Math.floor(rng() * OLVIDOS_TABERNA.length))];
+}
+
+/** Cards the tavern can take: any card of the deck. */
+export function cartasEliminables(run: EstadoRun): CartaInstancia[] {
+  return [...run.mazo];
+}
+
+/** Removes one card from the deck. Returns false if it was not in it. */
+export function eliminarCarta(run: EstadoRun, carta: CartaInstancia): boolean {
+  const i = run.mazo.indexOf(carta);
+  if (i < 0) return false;
+  run.mazo.splice(i, 1);
+  return true;
 }

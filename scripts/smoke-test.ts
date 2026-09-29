@@ -3973,14 +3973,21 @@ console.log('— Taberna y misiones —');
       check(!run.mision, 'al cambiar de capítulo la misión antigua se descarta');
     }
 
-    // Optional tankard: small heal instead of a rumour, capped at max PV
+    // Last option: instead of a rumour, someone in the tavern takes a card off your deck
     {
       const run = nuevaRun('picaro', 8);
-      run.pv = run.pvMax - 3;
-      check(TB.beberJarra(run) === 3 && run.pv === run.pvMax, 'la jarra cura sin pasar del máximo');
-      run.pv = 10;
-      const curado = TB.beberJarra(run);
-      check(curado > 0 && run.pv === 10 + curado, 'la jarra cura unos PV');
+      const n = run.mazo.length;
+      check(TB.cartasEliminables(run).length === n, 'la taberna deja elegir cualquier carta del mazo para eliminarla');
+      const carta = run.mazo[0];
+      check(TB.eliminarCarta(run, carta) && run.mazo.length === n - 1 && !run.mazo.includes(carta),
+        'eliminar una carta en la taberna la quita del mazo');
+      check(!TB.eliminarCarta(run, carta) && run.mazo.length === n - 1, 'no se puede eliminar una carta que ya no está en el mazo');
+      check(TB.OLVIDOS_TABERNA.length >= 3, `la opción de eliminar tiene varias escenas distintas (${TB.OLVIDOS_TABERNA.length})`);
+      const vistos = new Set<string>();
+      for (let i = 0; i < 30; i++) vistos.add(TB.olvidoTaberna(crearRng(i)).etiqueta);
+      check(vistos.size === TB.OLVIDOS_TABERNA.length, 'cada taberna cuenta la opción de eliminar de una forma al azar');
+      check(TB.OLVIDOS_TABERNA.every((o) => /elimina/i.test(o.detalle)), 'todas las escenas dicen claramente que eliminas una carta');
+      check(!('beberJarra' in TB), 'la taberna ya no cura con una jarra');
     }
   }
 }

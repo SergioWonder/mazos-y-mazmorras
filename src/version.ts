@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.11.1';
+export const VERSION = '6.12.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.12.0',
+    fecha: '2026-09-29',
+    cambios: [
+      '🎲 En la taberna, la jarra que curaba deja paso a eliminar 1 carta de tu mazo: apostarla con un tahúr, regalársela al bardo, quemarla en la chimenea u olvidarla brindando hasta el amanecer.',
+    ],
+  },
   {
     version: '6.11.1',
     fecha: '2026-09-28',
