@@ -7,7 +7,9 @@ import { crearEnemigo } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
-import type { DiceTheme, EfectoConjuro, EfectoInvocacion, FormaInvocacion, ValorMostrado } from './types.ts';
+import type {
+  CastigoPreparado, DiceTheme, EfectoConjuro, EfectoInvocacion, ElementoCastigo, FormaInvocacion, ValorMostrado,
+} from './types.ts';
 import { calcularValores } from './valores.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
@@ -43,6 +45,12 @@ export interface Presentador {
   /** (optional) The hero falls for good (the Dungeon Master's ray). */
   fxMuerteHeroe?(): Promise<void>;
 }
+
+/** Effect drawn on the enemy when a Smite of each element lands. */
+const FX_CASTIGO: Record<ElementoCastigo, string> = {
+  divino: 'castigoDivino', trueno: 'castigoTrueno', cegador: 'castigoCegador',
+  fuego: 'castigoFuego', resplandor: 'castigoResplandor', destierro: 'castigoDestierro',
+};
 
 /** The Dungeon Master of the final scene (his screen absorbs everything). */
 export const esDungeonMaster = (l: Luchador): boolean =>
@@ -88,6 +96,10 @@ export class Combate {
   private robadasPendientes: CartaInstancia[] = [];
   /** Per-combat relic counters (see ContextoEfecto.marca). */
   private marcas: Record<string, number> = {};
+  /** (paladin) Smites the attack card being played is unleashing. */
+  private castigoEnCurso: {
+    lista: CastigoPreparado[]; veces: number; golpeados: Set<EnemigoCombate>;
+  } | null = null;
   /** Guards the alAplicarEstado hook against relics re-triggering themselves. */
   private enGanchoEstado = false;
   private victoriaNotificada = false;
@@ -108,7 +120,7 @@ export class Combate {
     this.ui = ui;
     this.eliteOJefe = eliteOJefe;
     const nombres = {
-      druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo',
+      druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo', paladin: 'Paladín',
     };
     const energiaMax =
       3 + run.permanentes.energia + (eliteOJefe ? run.permanentes.energiaElite : 0);
@@ -122,6 +134,7 @@ export class Combate {
       conjuros: crearEspacios(run.espaciosConjuro),
       conjuroEscrito: 0, conjuroEfectos: [], conjuroActivo: false,
       bloqueoAplazado: [],
+      castigos: [],
     };
     this.enemigos = defs.map((d) => crearEnemigo(d, rng));
   }
@@ -156,6 +169,8 @@ export class Combate {
     const atacante = fuerzaExtra
       ? { ...j, estados: { ...j.estados, fuerza: (j.estados.fuerza ?? 0) + fuerzaExtra } }
       : j;
+    // Oath of Devotion (paladin): every attack adds the current Fervor
+    if ((j.estados.armaSagrada ?? 0) > 0) base += Math.max(0, j.estados.fervor ?? 0);
     if (!obj) return this.danoDeAtaque(atacante, base);
     const extra = this.ventajaFurtivaContra(obj) + this.bonoAtaqueReliquias(obj);
     return this.danoRecibido(obj, this.danoDeAtaque(atacante, base + extra));
@@ -163,6 +178,78 @@ export class Combate {
 
   /** Live numbers of a card's text for the current state (see core/valores.ts). */
   valoresDeCarta(def: CartaDef, objetivo?: EnemigoCombate): ValorMostrado[] {
+    const valores = this.valoresSinCastigo(def, objetivo);
+    // Prepared Smites (paladin): the attack shows their damage on its first hit
+    const extra = def.tipo === 'ataque' ? this.danoDeCastigos(this.jugador.castigos, def) : 0;
+    const primero = extra > 0 ? valores.find((v) => v.tipo === 'ataque' && v.aplica !== false) : undefined;
+    if (primero) {
+      const obj = objetivo ?? (this.enemigos.filter((e) => e.vivo).length === 1 ? this.enemigos.find((e) => e.vivo) : undefined);
+      primero.real = this.danoGolpe(obj, primero.base + extra, primero.fuerzaPrevia ?? 0);
+    }
+    return valores;
+  }
+
+  /** Extra damage a list of Smites adds to the first hit of the attack `def`. */
+  private danoDeCastigos(lista: CastigoPreparado[], def?: CartaDef): number {
+    const veces = def?.id === 'martillo-juicio' ? 2 : 1;
+    return lista.reduce((s, k) => s + (k.dano ?? 0), 0) * veces;
+  }
+
+  /** (paladin) First hit on `obj` of an attack unleashing Smites: shows them
+   *  and returns their extra damage (0 if there are none or it was already hit). */
+  private async cargarCastigoEn(obj: EnemigoCombate): Promise<number> {
+    const c = this.castigoEnCurso;
+    if (!c || c.golpeados.has(obj)) return 0;
+    for (const k of c.lista) await this.ui.fxParticulas(obj, FX_CASTIGO[k.elemento]);
+    return c.lista.reduce((s, k) => s + (k.dano ?? 0), 0) * c.veces;
+  }
+
+  /** (paladin) After that first hit: the Smites' statuses, fire splash and banishment. */
+  private async descargarCastigoEn(obj: EnemigoCombate) {
+    const c = this.castigoEnCurso;
+    if (!c || c.golpeados.has(obj)) return;
+    c.golpeados.add(obj);
+    for (const k of c.lista) {
+      if (k.vulnerable && obj.vivo) {
+        obj.estados.vulnerable = (obj.estados.vulnerable ?? 0) + k.vulnerable * c.veces;
+        await this.ui.fxEstado(obj, 'vulnerable', k.vulnerable * c.veces);
+      }
+      if (k.debil && obj.vivo) {
+        obj.estados.debil = (obj.estados.debil ?? 0) + k.debil * c.veces;
+        await this.ui.fxEstado(obj, 'debil', k.debil * c.veces);
+      }
+      if (k.salpicadura) {
+        for (const e of this.enemigos.filter((x) => x.vivo)) await this.infligir(e, k.salpicadura * c.veces, 'castigoFuego');
+      }
+      if (k.destierro && obj.vivo) {
+        const umbral = k.destierro * c.veces;
+        // bosses cannot be banished: they take the threshold as damage instead
+        if (obj.def.esJefe) await this.infligir(obj, umbral, 'castigoDestierro', true);
+        else if (obj.pv <= umbral) await this.infligir(obj, obj.pv, 'castigoDestierro', true);
+      }
+    }
+  }
+
+  /** (paladin) The attack that unleashed the Smites has resolved (`dano` = damage it dealt). */
+  private async cerrarCastigo(dano: number) {
+    const c = this.castigoEnCurso;
+    this.castigoEnCurso = null;
+    if (!c || this.terminado) return;
+    const ctx = this.contexto();
+    if (dano > 0 && c.lista.some((k) => k.bloqueoPorDano)) {
+      this.jugador.bloqueo += dano * c.veces;
+      await this.ui.fxBloqueo(this.jugador, dano * c.veces);
+    }
+    // Oath of Glory: Strength for every Smite unleashed (and Fervor with its upgrade)
+    const gloria = this.jugador.estados.gloria ?? 0;
+    if (gloria > 0) {
+      await ctx.aplicarEstado(this.jugador, 'fuerza', c.lista.length);
+      if (gloria >= 2) await ctx.ganarFervor(c.lista.length);
+    }
+    await this.ganchos((r, x) => r.alDescargarCastigo?.(x, c.lista));
+  }
+
+  private valoresSinCastigo(def: CartaDef, objetivo?: EnemigoCombate): ValorMostrado[] {
     return calcularValores(def, objetivo, {
       contexto: (o) => this.contexto(o),
       danoGolpe: (o, base, fuerzaExtra) => this.danoGolpe(o, base, fuerzaExtra),
@@ -178,7 +265,8 @@ export class Combate {
     if (def.tipo === 'maldicion') return def.purgar ?? 0;
     const gratis =
       def.id === 'explosion-sobrenatural' && (this.jugador.estados.explosionGratis ?? 0) > 0;
-    const base = gratis ? 0 : def.coste;
+    const venganza = def.castigo === true && (this.jugador.estados.venganza ?? 0) > 0;
+    const base = gratis || venganza ? 0 : def.coste;
     return base + ((this.jugador.estados.cartasSobrecoste ?? 0) > 0 ? 1 : 0);
   }
 
@@ -395,8 +483,10 @@ export class Combate {
         for (let i = 0; i < veces; i++) {
           if (!obj.vivo) break;
           // same sum the card text shows (sneak and relic bonuses per hit included)
-          const dano = self.danoGolpe(obj, base);
+          const extra = i === 0 ? await self.cargarCastigoEn(obj) : 0;
+          const dano = self.danoGolpe(obj, base + extra);
           total += await self.infligir(obj, dano, fx);
+          if (i === 0) await self.descargarCastigoEn(obj);
           // Espinas del enemigo (Escamas Ígneas, etc.): devuelven daño al atacante
           const espinas = obj.estados.espinas ?? 0;
           if (espinas > 0 && self.jugador.vivo) await self.infligir(self.jugador, espinas, 'raices');
@@ -423,7 +513,9 @@ export class Combate {
         const filo = self.jugador.estados.filoVenenoso ?? 0;
         const cond = self.jugador.estados.condenaPorAtaque ?? 0;
         for (const e of self.enemigos.filter((x) => x.vivo)) {
-          const real = await self.infligir(e, self.danoGolpe(e, base), fx);
+          const extra = await self.cargarCastigoEn(e);
+          const real = await self.infligir(e, self.danoGolpe(e, base + extra), fx);
+          await self.descargarCastigoEn(e);
           if (!e.vivo) {
             if (!self.terminado) await self.ganchos((r, c) => r.alAtacar?.(c, e, real));
             continue;
@@ -742,6 +834,38 @@ export class Combate {
         }
       },
       esJefe: (e) => e.def.esJefe === true,
+      async ganarFervor(n) {
+        if (n <= 0) return;
+        self.jugador.estados.fervor = (self.jugador.estados.fervor ?? 0) + n;
+        await self.ui.fxEstado(self.jugador, 'fervor', n);
+      },
+      consumirFervor() {
+        const f = Math.max(0, self.jugador.estados.fervor ?? 0);
+        delete self.jugador.estados.fervor;
+        return f;
+      },
+      async prepararCastigo(c) {
+        self.jugador.castigos.push(c);
+        self.jugador.estados.castigo = self.jugador.castigos.length;
+        await self.ui.fxEstado(self.jugador, 'castigo', 1);
+      },
+      castigosPreparados: () => self.jugador.castigos.length,
+      async robarFamilia(familia) {
+        const mazo = self.jugador.mazo;
+        // pop() draws from the end: the top of the pile is searched first
+        for (let i = mazo.length - 1; i >= 0; i--) {
+          if (defDe(mazo[i]).familia !== familia) continue;
+          if (self.jugador.mano.length >= 10) return false;
+          const [carta] = mazo.splice(i, 1);
+          self.jugador.mano.push(carta);
+          if (carta.def.alRobar) self.robadasPendientes.push(carta);
+          self.ui.render();
+          await self.ui.espera(150);
+          await self.dispararAlRobar();
+          return true;
+        }
+        return false;
+      },
       manaCero() {
         self.jugador.energia = 0;
         self.jugador.energiaCero = true;
@@ -1161,7 +1285,8 @@ export class Combate {
     for (const e of this.enemigos) e.heridoEsteTurno = false; // reinicia el control de Hemorragia
     if (!primero) {
       // Block fades, except what relics such as the Ring of Protection keep
-      const conserva = this.run.reliquias.reduce((s, r) => s + (r.conservaBloqueo ?? 0), 0);
+      const conserva = this.run.reliquias.reduce((s, r) => s + (r.conservaBloqueo ?? 0), 0)
+        + (this.jugador.estados.bastion ?? 0); // Bastion of Faith (paladin)
       this.jugador.bloqueo = Math.min(this.jugador.bloqueo, conserva);
       // Piruetas (pícaro): reaplica el bloqueo aplazado de la carta jugada antes.
       const pendientes = this.jugador.bloqueoAplazado;
@@ -1252,6 +1377,15 @@ export class Combate {
     // Tratado Prohibido: escribe en el Conjuro Prodigioso al inicio de cada turno
     const escribania = this.jugador.estados.escribania ?? 0;
     if (escribania > 0) await this.escribirConjuro(escribania);
+    // Avenging Angel (paladin): a Smite ready and some Fervor every turn
+    const angel = this.jugador.estados.angelVengador ?? 0;
+    if (angel > 0) {
+      await this.contexto().prepararCastigo({ nombre: 'Ángel Vengador', elemento: 'divino', dano: angel });
+      await this.contexto().ganarFervor(1);
+    }
+    // Unwavering Zeal (paladin): Fervor every turn
+    const celo = this.jugador.estados.fervorPorTurno ?? 0;
+    if (celo > 0) await this.contexto().ganarFervor(celo);
     // Maestría de Conjuros: añade un Proyectil Mágico a la mano cada turno
     const maestria = this.jugador.estados.maestria ?? 0;
     if (maestria > 0 && this.jugador.mano.length < 10) {
@@ -1319,8 +1453,20 @@ export class Combate {
     this.jugador.energia -= this.costeEfectivo(def);
     this.jugadasTurno++;
     this.jugadasCombate++;
+    // Smites (paladin): the next attack card unleashes every prepared one
+    if (def.tipo === 'ataque' && this.jugador.castigos.length > 0) {
+      this.castigoEnCurso = {
+        lista: this.jugador.castigos, veces: def.id === 'martillo-juicio' ? 2 : 1, golpeados: new Set(),
+      };
+      this.jugador.castigos = [];
+      delete this.jugador.estados.castigo;
+    }
     this.ui.render();
+    const danoAntes = this.danoHechoEsteTurno;
     await def.jugar(this.contexto(objetivo));
+    if (this.castigoEnCurso) await this.cerrarCastigo(this.danoHechoEsteTurno - danoAntes);
+    // Fervor (paladin): every Strike and Defend played
+    if (def.familia && this.run.clase === 'paladin' && !this.terminado) await this.contexto().ganarFervor(1);
     // Guardia de Cuchillas (pícaro): cada Daga que juegas te da bloqueo
     const guardia = this.jugador.estados.dagasBloqueo ?? 0;
     if (guardia > 0 && carta.def.id === DAGA.id && !this.terminado) {
@@ -1409,6 +1555,12 @@ export class Combate {
       }
     }
 
+    // Oath of the Ancients (paladin): block for every point of Fervor
+    const antiguos = (j.estados.antiguos ?? 0) * Math.max(0, j.estados.fervor ?? 0);
+    if (antiguos > 0) {
+      j.bloqueo += antiguos;
+      await this.ui.fxBloqueo(j, antiguos);
+    }
     // Reliquias de fin de turno
     for (const r of this.run.reliquias) {
       if (r.finTurno) await r.finTurno(this.contexto());

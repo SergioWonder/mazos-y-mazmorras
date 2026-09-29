@@ -84,6 +84,25 @@ export const EFFECTS: Record<string, EffectPreset> = {
   destelloCarta: { count: 1, colours: ['#fff8e0'], speed: [0, 0.05], life: [0.5, 0.9], size: [1.2, 2.2], shape: 'estrella', gravity: 0, glow: true },
   // defeat screen: ash flakes drifting down from the top
   ceniza: { count: 1, colours: ['rgba(150,140,134,0.7)', 'rgba(110,100,96,0.65)', '#ff8c3b'], speed: [0.2, 0.6], life: [5, 8], size: [1, 2.6], shape: 'circulo', gravity: 0.002, direction: [1.2, 1.95] },
+  // paladin: fallbacks of the hammer, holy light and smites (their spells draw them normally)
+  martillo: { count: 22, colours: ['#ffd35a', '#fff6d8', '#ffb830'], speed: [3, 8], life: [0.25, 0.5], size: [2, 4], shape: 'chispa', gravity: 0.15, glow: true },
+  escudoSagrado: { count: 16, colours: ['#ffd35a', '#fff3c4', '#e0a82e'], speed: [1, 3], life: [0.4, 0.8], size: [2, 4], shape: 'estrella', gravity: -0.04, glow: true },
+  bendicion: { count: 18, colours: ['#ffd35a', '#fff3c4', '#ffffff'], speed: [0.5, 2], life: [0.6, 1.1], size: [2, 4], shape: 'estrella', gravity: -0.08, direction: [-2.4, -0.7], glow: true },
+  expulsar: { count: 24, colours: ['#fff3c4', '#ffd35a', '#4a3a5a'], speed: [2, 6], life: [0.4, 0.8], size: [2, 4], shape: 'chispa', gravity: -0.02, glow: true },
+  rayoSagrado: { count: 20, colours: ['#ffd35a', '#fff6d8', '#ffffff'], speed: [2, 7], life: [0.3, 0.6], size: [1.5, 3.5], shape: 'chispa', gravity: 0.05, glow: true },
+  cargaDivina: { count: 18, colours: ['#ffd35a', '#fff3c4', '#ffffff'], speed: [0.5, 2.5], life: [0.5, 0.9], size: [2, 4], shape: 'estrella', gravity: -0.05, glow: true },
+  cargaTrueno: { count: 18, colours: ['#9fd0ff', '#cfe6ff', '#ffffff'], speed: [2, 6], life: [0.2, 0.45], size: [1.5, 3], shape: 'chispa', gravity: 0, glow: true },
+  cargaCegadora: { count: 20, colours: ['#ffffff', '#fffbe8', '#fff0c0'], speed: [1, 5], life: [0.3, 0.6], size: [2, 4], shape: 'estrella', gravity: 0, glow: true },
+  cargaFuego: { count: 22, colours: ['#ffd35a', '#ffb347', '#ff7a2a'], speed: [1, 4], life: [0.4, 0.8], size: [2, 4], shape: 'chispa', gravity: -0.1, direction: [-2.4, -0.7], glow: true },
+  cargaResplandor: { count: 16, colours: ['#ffe7a0', '#fff3d0', '#f5c96a'], speed: [0.5, 2], life: [0.6, 1.1], size: [2, 4], shape: 'circulo', gravity: -0.04, glow: true },
+  cargaDestierro: { count: 18, colours: ['#b46bff', '#ffd35a', '#e8d0ff'], speed: [0.5, 2.5], life: [0.5, 1], size: [2, 4], shape: 'circulo', gravity: -0.06, glow: true },
+  castigoDivino: { count: 30, colours: ['#ffd35a', '#fff3c4', '#ffffff'], speed: [2, 7], life: [0.4, 0.9], size: [2, 5], shape: 'estrella', gravity: -0.05, glow: true },
+  castigoTrueno: { count: 26, colours: ['#9fd0ff', '#cfe6ff', '#ffffff', '#4f8fff'], speed: [3, 9], life: [0.2, 0.5], size: [1.5, 3.5], shape: 'chispa', gravity: 0.05, glow: true },
+  castigoCegador: { count: 28, colours: ['#ffffff', '#fffbe8', '#fff6c8'], speed: [2, 7], life: [0.3, 0.7], size: [2, 5], shape: 'estrella', gravity: 0, glow: true },
+  castigoFuego: { count: 32, colours: ['#ffd35a', '#ffb347', '#ff7a2a', '#ff4a1a'], speed: [2, 8], life: [0.4, 0.9], size: [2, 5], shape: 'chispa', gravity: 0.12, glow: true },
+  castigoResplandor: { count: 24, colours: ['#ffe7a0', '#fff3d0', '#ffffff'], speed: [1, 4], life: [0.5, 1], size: [2, 4], shape: 'circulo', gravity: -0.04, glow: true },
+  castigoDestierro: { count: 28, colours: ['#b46bff', '#6c2fb5', '#ffd35a', '#e8d0ff'], speed: [1, 5], life: [0.5, 1], size: [2, 5], shape: 'circulo', gravity: 0.06, glow: true },
+  muertePaladin: { count: 30, colours: ['#ffd35a', '#e0a82e', '#8a7a5a'], speed: [1, 5], life: [0.6, 1.2], size: [2, 4], shape: 'chispa', gravity: 0.1, glow: true },
   rayo: { count: 14, colours: ['#ff5ad8', '#ffd75a', '#6bd8ff', '#ffffff'], speed: [3, 9], life: [0.25, 0.5], size: [1.5, 3], shape: 'chispa', gravity: 0, direction: [Math.PI - 0.5, Math.PI + 0.5], glow: true },
 };
 

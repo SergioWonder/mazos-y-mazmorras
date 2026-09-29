@@ -17,10 +17,10 @@ import { PuppetSprite } from './puppet-sprite.ts';
 import { PuppetStage } from './puppet-stage.ts';
 
 const NOMBRE_CLASE: Record<ClaseId, string> = {
-  druida: 'Druida 🌿', barbaro: 'Bárbaro 🪓', mago: 'Mago 🔮', picaro: 'Pícaro 🗡️', brujo: 'Brujo 🕳️',
+  druida: 'Druida 🌿', barbaro: 'Bárbaro 🪓', mago: 'Mago 🔮', picaro: 'Pícaro 🗡️', brujo: 'Brujo 🕳️', paladin: 'Paladín 🔨',
 };
-/** Seats around the table: two heroes on the left, the DM behind it, three on the right. */
-const IZQUIERDA: ClaseId[] = ['druida', 'barbaro'];
+/** Seats around the table: three heroes on each side, the DM behind it. */
+const IZQUIERDA: ClaseId[] = ['druida', 'barbaro', 'paladin'];
 const DERECHA: ClaseId[] = ['mago', 'picaro', 'brujo'];
 
 export function pantallaFinalVerdadero(clase: ClaseId): Promise<void> {

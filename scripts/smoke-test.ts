@@ -11,8 +11,8 @@ import {
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
 import {
-  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
-  poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA, MALDICIONES,
+  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
+  poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA, MALDICIONES, GOLPE_SAGRADO, DEFENSA_SAGRADA,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
 import { EVENTOS_POSITIVOS, EVENTOS_NEGATIVOS, elegirEvento } from '../src/core/eventos.ts';
@@ -32,7 +32,7 @@ import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
 
-const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo'] as ClaseId[];
+const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as ClaseId[];
 
 let fallos = 0;
 function check(cond: boolean, msg: string) {
@@ -116,6 +116,12 @@ function puntuarCarta(comb: Combate, inst: CartaInstancia, turno: number): numbe
     p = 62;
   } else {
     p = 42; // utilidad (estados, control, robo)
+  }
+  if (def.castigo) {
+    // Smites (paladin): prepared right before an attack that can still be paid for
+    const resto = comb.jugador.energia - comb.costeEfectivo(def);
+    const ataque = comb.jugador.mano.some((c) => c !== inst && defDe(c).tipo === 'ataque' && comb.costeEfectivo(defDe(c)) <= resto);
+    p = ataque ? 66 : 30;
   }
   if (def.coste === 0) p += 14;                       // valor gratis: encadena
   if (t.includes('roba')) p += 7;                     // más opciones este turno
@@ -251,8 +257,8 @@ console.log('— Recompensas y pools —');
 console.log('— Arte de las cartas —');
 {
   const TODAS = [
-    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
-    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA,
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN,
+    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA, GOLPE_SAGRADO, DEFENSA_SAGRADA,
   ];
   const sinArte = TODAS.filter((c) => !ARTE_CARTA[c.id]);
   check(sinArte.length === 0, `todas las cartas tienen emoji propio (faltan: ${sinArte.map((c) => c.id).join(', ')})`);
@@ -2110,6 +2116,7 @@ for (const [titulo, archivo, fn] of [
   ['🔮 Sprite del mago', 'mago', 'testMago'],
   ['🗡️ Sprite del pícaro', 'picaro', 'testPicaro'],
   ['🔥 Sprite del brujo', 'brujo', 'testBrujo'],
+  ['🔨 Sprite del paladín', 'paladin', 'testPaladin'],
 ] as const) {
   console.log(`\n${titulo}`);
   try {
@@ -2179,7 +2186,7 @@ console.log('\n🎭 Galería de sprites');
   const secciones = galleryCatalogue();
   const todas = secciones.flatMap((s) => s.cards);
   const de = (kind: string) => todas.filter((f) => f.kind === kind);
-  check(de('hero').length === 5, 'la galería muestra los 5 héroes');
+  check(de('hero').length === 6, 'la galería muestra los 6 héroes');
   check(de('form').length === 6, 'y las 6 transformaciones del druida');
   check(de('invocation').length === 9, 'y las 9 invocaciones');
   const ids = de('enemy').map((f) => f.id);
@@ -2248,7 +2255,7 @@ console.log('\n🎨 Ilustraciones SVG de las cartas');
 {
   const fs = await import('node:fs');
   const dir = new URL('../src/arte/cartas/', import.meta.url);
-  const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA];
+  const todas = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA, GOLPE_SAGRADO, DEFENSA_SAGRADA];
   const ids = new Set(todas.map((c) => c.id));
   /** Minimal XML well-formedness: every opening tag closes, in order. */
   const bienFormado = (xml: string) => {
@@ -2284,8 +2291,8 @@ console.log('\n🎨 Ilustraciones SVG de las cartas');
   const sinDibujo = todas.filter((c) => !fs.existsSync(new URL(`${c.id}.svg`, dir))).map((c) => c.id);
   check(sinDibujo.length === 0, `todas las cartas tienen su ilustración dibujada ${sinDibujo.slice(0, 8).join(', ')}`);
   const fullArt = todas.filter(hasFullArt);
-  check(fullArt.length === 7 && fullArt.every((c) => fs.existsSync(new URL(`full/${c.id}.svg`, dir))),
-    'las 7 cartas full art (5 únicas de clase, Seducir y Deseo) tienen su versión vertical');
+  check(fullArt.length === 8 && fullArt.every((c) => fs.existsSync(new URL(`full/${c.id}.svg`, dir))),
+    'las 8 cartas full art (6 únicas de clase, Seducir y Deseo) tienen su versión vertical');
   const tabla = { '../arte/cartas/golpe.svg': '/a/golpe.svg', '../arte/cartas/full/deseo.svg': '/a/deseo-full.svg' };
   check(pickSvg(tabla, 'golpe', false) === '/a/golpe.svg', 'la carta usa su SVG si existe');
   check(pickSvg(tabla, 'deseo', true) === '/a/deseo-full.svg' && pickSvg(tabla, 'deseo', false) === null, 'la full art busca en su carpeta');
@@ -2420,10 +2427,21 @@ console.log('\n🔊 Efectos de sonido');
     const huerfanos = [...grupos.keys()].filter((n) => !SFX_NAMES.includes(n));
     check(huerfanos.length === 0, `no hay MP3 sin nombre en la tabla ${huerfanos.join(', ')}`);
     check(FREQUENT_SFX.every((n) => (grupos.get(n)?.length ?? 0) >= 2), 'los sonidos frecuentes tienen variaciones');
+    // Paladin fx keys (docs/clase-paladin.md): each one sounds with its own file
+    const delPaladin = ['martillo', 'escudoSagrado', 'bendicion', 'expulsar', 'rayoSagrado',
+      ...['Divino', 'Trueno', 'Cegador', 'Fuego', 'Resplandor', 'Destierro'].map((e) => `castigo${e}`),
+      ...['Divina', 'Trueno', 'Cegadora', 'Fuego', 'Resplandor', 'Destierro'].map((e) => `carga${e}`)];
+    const paladinMudo = delPaladin.filter((n) => !SFX_NAMES.includes(n) || !(grupos.get(n)?.length));
+    check(paladinMudo.length === 0, `cada efecto del paladín tiene su propio sonido ${paladinMudo.join(', ')}`);
+    check(FREQUENT_SFX.includes('martillo') && (grupos.get('martillo')?.length ?? 0) >= 2, 'el martillo del paladín alterna varias versiones');
+    const alias = bank.SFX_RECIPE_ALIAS ?? {};
+    check(delPaladin.every((n) => delJuego.includes(alias[n])),
+      'mientras cargan los MP3, los efectos del paladín suenan con una receta parecida');
     const peso = (f: string) => fs.statSync(new URL(f, carpeta)).size;
     const pesados = mp3.filter((f: string) => peso(f) > 32_000);
     const total = mp3.reduce((s: number, f: string) => s + peso(f), 0);
-    check(mp3.length > 0 && pesados.length === 0 && total < 700_000, `los MP3 pesan poco (${Math.round(total / 1024)} KB en total) ${pesados.join(', ')}`);
+    // budget grown with the paladin's 17 sounds (about 170 KB)
+    check(mp3.length > 0 && pesados.length === 0 && total < 800_000, `los MP3 pesan poco (${Math.round(total / 1024)} KB en total) ${pesados.join(', ')}`);
     check(resolveSfx('tajo') === 'tajo' && resolveSfx('noExiste') === SFX_FALLBACK && SFX_NAMES.includes(SFX_FALLBACK),
       'un nombre desconocido suena con el efecto de respaldo');
     check(pickVariant(3, 1, () => 0.4) !== 1 && pickVariant(1, 0, Math.random) === 0, 'las variaciones no repiten la anterior');
@@ -2512,7 +2530,7 @@ console.log('\n✨ Efectos de hechizos');
 {
   const sf = await import('../src/fx/spell-fx.ts');
   const { SPELLS, spellFrame, vinePath, SpellSystem, spellSignature, MAX_SPELL_SPRITES, MAX_LIVE_SPRITES } = sf;
-  const todas: CartaDef[] = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA];
+  const todas: CartaDef[] = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, ...NEUTRALES_ESPECIALES, CONJURO_PRODIGIOSO, DAGA, GOLPE_SAGRADO, DEFENSA_SAGRADA];
   const claves = new Set<string>(todas.map((d) => d.fx).filter((k): k is string => !!k));
   for (const k of ['estrellas', 'tajo', 'bloqueo', 'furia', 'impacto', 'sangre', 'abisal', 'luna', 'condena', 'tierra', 'veneno',
     'transformacion', 'ola', 'muerte', 'zarpa', 'oscuridad', 'hojas', 'aullido', 'raices', 'divino', 'corazones']) claves.add(k);
@@ -3493,8 +3511,9 @@ console.log('\n🙏 Bendiciones');
       'don-seducir': 'seducir', 'don-deseo': 'deseo',
       'don-tormenta-venganza': 'tormenta-venganza', 'don-furia-indomita': 'furia-indomita',
       'don-maestria-conjuros': 'maestria-conjuros', 'don-danza-mortal': 'danza-mortal', 'don-pacto-final': 'pacto-final',
+      'don-angel-vengador': 'angel-vengador',
     };
-    check(unicas.length === 7 && unicas.every((r) => cartaDe[r.id] !== undefined),
+    check(unicas.length === 8 && unicas.every((r) => cartaDe[r.id] !== undefined),
       `una bendición-reliquia por carta única: Seducir, Deseo y la de cada clase (${unicas.map((r) => r.id).join(', ')})`);
     for (const clase of CLASES) {
       const r = unicas.find((x) => x.soloClase === clase);
@@ -5108,7 +5127,7 @@ try {
   const cs = await import('../src/fx/card-spells.ts');
   const { SPELLS, spellFrame, spellMarks, spellSignature, SpellSystem, MAX_CARD_SPRITES, MAX_LIVE_SPRITES } = sf;
   const { CARD_FX, cardSpellKey, preludeKey, cardShake, hitSpell } = cs;
-  const raras = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...NEUTRALES_ESPECIALES]
+  const raras = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, ...NEUTRALES_ESPECIALES]
     .filter((d) => d.rareza === 'rara' || d.rareza === 'especial');
   check(raras.length >= 39, `hay al menos 39 cartas raras o únicas (${raras.length})`);
   const box = { x: 600, y: 200, w: 160, h: 200 };
@@ -5226,6 +5245,223 @@ try {
   check(MAX_LIVE_SPRITES <= 900, 'el tope global de elementos vivos es de unos 900');
 } catch (e) {
   check(false, `las pruebas de las secuencias raras revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Paladin VFX: hammers of light, holy rays and elemental smites ────────────
+console.log('\n🔨 Efectos del paladín');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const cs = await import('../src/fx/card-spells.ts');
+  const hdP = await import('../src/fx/hero-death.ts');
+  const psP = await import('../src/fx/particle-sim.ts');
+  const CTP: any = await import('../src/core/cartas.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, SpellSystem, MAX_SPELL_SPRITES, MAX_CARD_SPRITES, MAX_LIVE_SPRITES } = sf;
+  const { CARD_FX, cardSpellKey, preludeKey, cardShake } = cs;
+  const cargas = ['Divina', 'Trueno', 'Cegadora', 'Fuego', 'Resplandor', 'Destierro'].map((e) => `carga${e}`);
+  const castigos = ['Divino', 'Trueno', 'Cegador', 'Fuego', 'Resplandor', 'Destierro'].map((e) => `castigo${e}`);
+  const alHeroe = ['escudoSagrado', 'bendicion', ...cargas];
+  const alObjetivo = ['martillo', 'expulsar', 'rayoSagrado', ...castigos];
+  const claves = [...alObjetivo, ...alHeroe];
+  for (const k of claves) check(!!SPELLS[k], `paladín: «${k}» tiene su efecto propio`);
+  for (const k of alHeroe) check(SPELLS[k]?.anchor === 'self', `paladín: «${k}» se dibuja sobre el héroe`);
+  for (const k of alObjetivo) check(SPELLS[k]?.anchor === 'target', `paladín: «${k}» se dibuja sobre el objetivo`);
+  const hay = claves.filter((k) => SPELLS[k]);
+  const otras = Object.keys(SPELLS).filter((k) => !claves.includes(k) && !k.startsWith('carta:'));
+  check(new Set(hay.map((k) => SPELLS[k].build)).size === hay.length && hay.every((k) => otras.every((o) => SPELLS[o].build !== SPELLS[k].build)),
+    'paladín: cada efecto se compone con su propia función');
+  const firmasOtras = new Set(otras.map((k) => spellSignature(k)));
+  const firmasPal = new Map<string, string>();
+  for (const k of hay) {
+    const f = spellSignature(k);
+    const igual = [...firmasPal].find(([, v]) => v === f);
+    check(!igual && !firmasOtras.has(f), `paladín: «${k}» se ve distinto de ${igual ? `«${igual[0]}»` : 'los demás efectos'}`);
+    firmasPal.set(k, f);
+  }
+  const box = { x: 600, y: 200, w: 160, h: 200 };
+  const hero = { x: 100, y: 250, w: 140, h: 180 };
+  const ctxE = { box, from: { x: 170, y: 340 }, facing: -1 as const, seed: 7 };
+  const ctxH = { box: hero, facing: 1 as const, seed: 5 };
+  const ctxDe = (k: string) => (SPELLS[k]?.anchor === 'self' ? ctxH : ctxE);
+  const muestra = (k: string, c: { box: typeof box; reduced?: boolean; seed?: number }) => {
+    const d = SPELLS[k];
+    let maximo = 0, roto = 0, enImpacto = 0, total = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) {
+      const fr = spellFrame(k, c, t);
+      maximo = Math.max(maximo, fr.length);
+      total += fr.length;
+      if (t >= d.phases[0] * d.duration && t <= d.phases[1] * d.duration) enImpacto = Math.max(enImpacto, fr.length);
+      for (const s of fr) {
+        const a = s.alpha ?? 1;
+        if (![s.x, s.y, s.size, s.angle, a, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || a < 0 || a > 1 || s.size <= 0) roto++;
+      }
+    }
+    return { maximo, roto, enImpacto, total };
+  };
+  for (const k of hay) {
+    const d = SPELLS[k], c = ctxDe(k);
+    check(d.duration >= 0.4 && d.duration <= 1.4, `paladín: «${k}» dura entre 0,4 y 1,4 s (${d.duration})`);
+    check(d.phases[0] > 0 && d.phases[0] < d.phases[1] && d.phases[1] < 1, `paladín: «${k}»: anticipación < impacto < disipación`);
+    const m = muestra(k, c);
+    check(m.roto === 0, `paladín: «${k}»: elementos válidos (${m.roto} rotos)`);
+    check(m.maximo > 12 && m.maximo <= (d.cap ?? MAX_SPELL_SPRITES) && m.maximo <= MAX_SPELL_SPRITES, `paladín: «${k}» respeta el tope de ${MAX_SPELL_SPRITES} elementos (${m.maximo})`);
+    check(m.enImpacto > 0, `paladín: «${k}» se ve en su impacto`);
+    check(spellFrame(k, c, d.duration + 0.01).length === 0, `paladín: «${k}» desaparece al terminar`);
+    const t = d.duration * 0.4;
+    check(JSON.stringify(spellFrame(k, c, t)) === JSON.stringify(spellFrame(k, c, t)), `paladín: «${k}» es determinista`);
+    const r = muestra(k, { ...c, reduced: true });
+    check(r.total < m.total * 0.85 && r.enImpacto > 0, `paladín: «${k}» con movimiento reducido dibuja menos (${r.total} < ${m.total})`);
+    check(!!psP.EFFECTS[k], `paladín: «${k}» tiene partículas de respaldo`);
+  }
+  // the hammer: quick, lands with the damage number, from above, and never twice the same
+  const dM = SPELLS.martillo;
+  if (dM) {
+    check(dM.duration >= 0.45 && dM.duration <= 0.65, `el martillo es rápido (${dM.duration} s)`);
+    check(dM.phases[0] * dM.duration <= 0.12, `el martillo impacta con el número de daño (${Math.round(dM.phases[0] * dM.duration * 1000)} ms)`);
+    const cabeza = (t: number) => spellMarks('martillo', ctxE, t).find((q) => q.kind === 'martillo');
+    const golpe = [...Array(40).keys()].map((i) => (i / 40) * dM.duration).map((t) => spellMarks('martillo', ctxE, t).find((q) => q.kind === 'golpe')).find(Boolean);
+    check(!!cabeza(0.01) && !!golpe && cabeza(0.01)!.y < golpe.y - 20, 'el martillo cae desde arriba sobre el objetivo');
+    check(!!golpe && golpe.x >= box.x && golpe.x <= box.x + box.w && golpe.y >= box.y && golpe.y <= box.y + box.h, 'el martillo golpea dentro del objetivo');
+    const firmasM = new Set([1, 2, 3, 4, 5, 6].map((seed) => JSON.stringify(spellFrame('martillo', { ...ctxE, seed }, dM.duration * 0.15).map((s) => [Math.round(s.x), Math.round(s.y)]))));
+    check(firmasM.size >= 4, `cada martillazo varía su trazo (${firmasM.size} de 6 distintos)`);
+    const sombra = spellFrame('martillo', ctxE, dM.duration * 0.2);
+    check(sombra.some((s) => /^#ff[cde]/i.test(s.colour)) && sombra.some((s) => s.shape === 'capsula'), 'el martillo es de luz dorada');
+  }
+  // smites land with the attack's hit, in their element
+  const hex = (c: string) => { const n = parseInt(c.slice(1, 7), 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+  const tono = (c: string) => {
+    if (!/^#[0-9a-f]{6}$/i.test(c)) return { h: -1, s: 0, l: 0 };
+    const [r, g2, b2] = hex(c).map((v) => v / 255), mx = Math.max(r, g2, b2), mn = Math.min(r, g2, b2), l = (mx + mn) / 2, dd = mx - mn;
+    if (dd < 0.08) return { h: -1, s: 0, l };
+    const h = mx === r ? ((g2 - b2) / dd + 6) % 6 : mx === g2 ? (b2 - r) / dd + 2 : (r - g2) / dd + 4;
+    return { h: h * 60, s: dd / (1 - Math.abs(2 * l - 1) || 1), l };
+  };
+  const cuota = (k: string, pred: (t: { h: number; s: number; l: number }) => boolean, c = ctxDe(k)) => {
+    let n = 0, sum = 0;
+    const d = SPELLS[k];
+    for (let t = 0; t <= d.duration; t += d.duration / 12) for (const s of spellFrame(k, c, t)) { sum++; if (pred(tono(s.colour))) n++; }
+    return sum ? n / sum : 0;
+  };
+  const oro = (t: { h: number }) => t.h >= 30 && t.h <= 58;
+  const azul = (t: { h: number }) => t.h >= 190 && t.h <= 235;
+  const blanco = (t: { h: number; l: number }) => (t.h < 0 && t.l > 0.8) || t.l > 0.9;
+  const naranja = (t: { h: number }) => t.h >= 5 && t.h < 38;
+  const violeta = (t: { h: number }) => t.h >= 255 && t.h <= 300;
+  const elementos: [string, string, (t: { h: number; s: number; l: number }) => boolean][] = [
+    ['Divin', 'oro', oro], ['Trueno', 'azul', azul], ['Cegador', 'blanco', blanco], ['Fuego', 'naranja', naranja],
+    ['Resplandor', 'oro', oro], ['Destierro', 'violeta', violeta],
+  ];
+  for (const [el, nombre, pred] of elementos) {
+    for (const k of [...cargas, ...castigos].filter((x) => x.includes(el) && SPELLS[x])) {
+      const q = cuota(k, pred);
+      check(q >= 0.3, `paladín: «${k}» es de color ${nombre} (${Math.round(q * 100)} %)`);
+    }
+  }
+  check(!!SPELLS.castigoDestierro && cuota('castigoDestierro', oro) >= 0.1, 'el destierro mezcla violeta y oro');
+  for (const k of castigos.filter((x) => SPELLS[x])) {
+    const d = SPELLS[k];
+    check(d.phases[0] * d.duration <= 0.2, `«${k}» descarga con el golpe (${Math.round(d.phases[0] * d.duration * 1000)} ms)`);
+  }
+  if (SPELLS.castigoFuego) {
+    const d = SPELLS.castigoFuego;
+    let fuera = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) fuera = Math.max(fuera, spellFrame('castigoFuego', ctxE, t).filter((s) => s.x < box.x - box.w * 0.4 || s.x > box.x + box.w * 1.4).length);
+    check(fuera >= 4, `el castigo de fuego salpica alrededor del objetivo (${fuera})`);
+  }
+  if (SPELLS.castigoDestierro) {
+    const d = SPELLS.castigoDestierro;
+    const sello = spellFrame('castigoDestierro', ctxE, d.duration * (d.phases[0] + 0.05)).filter((s) => s.shape === 'anillo' && s.size * (s.stretch ?? 1) >= box.w * 0.35);
+    check(sello.length > 0 && sello.every((s) => s.y >= box.y + box.h * 0.8), 'el sello del destierro se abre bajo el enemigo');
+  }
+  if (SPELLS.castigoResplandor) {
+    const d = SPELLS.castigoResplandor;
+    const cerca = spellFrame('castigoResplandor', ctxE, d.duration * 0.75).filter((s) => Math.hypot(s.x - ctxE.from.x, s.y - ctxE.from.y) < 120);
+    check(cerca.length > 0, 'el resplandor vuelve hacia el paladín como escudo de luz');
+  }
+  if (SPELLS.rayoSagrado) {
+    const d = SPELLS.rayoSagrado;
+    check(spellFrame('rayoSagrado', ctxE, d.duration * (d.phases[0] + 0.03)).some((s) => s.y < box.y - box.h * 0.4), 'el rayo sagrado baja del cielo');
+  }
+  if (SPELLS.expulsar) {
+    const d = SPELLS.expulsar;
+    const frente = (t: number) => { const f = spellFrame('expulsar', ctxE, t).filter((s) => s.shape === 'chispa'); return f.reduce((m, s) => m + s.x, 0) / Math.max(1, f.length); };
+    check(frente(d.duration * 0.45) > frente(d.duration * 0.1) + 20 && spellFrame('expulsar', ctxE, d.duration * 0.3).some((s) => s.shape === 'arco'), 'la onda de luz barre al enemigo, desde el paladín');
+  }
+  if (SPELLS.escudoSagrado) {
+    const fr = spellFrame('escudoSagrado', ctxH, SPELLS.escudoSagrado.duration * 0.45);
+    const mx = fr.reduce((m, s) => m + s.x, 0) / Math.max(1, fr.length);
+    check(fr.length > 0 && mx > hero.x + hero.w / 2, 'el sello del escudo sagrado se alza delante del héroe');
+  }
+  for (const k of cargas.filter((x) => SPELLS[x])) {
+    const d = SPELLS[k];
+    let lejos = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 20) lejos += spellFrame(k, ctxH, t).filter((s) => s.x < hero.x - hero.w * 1.6 || s.x > hero.x + hero.w * 2.6 || s.y < hero.y - hero.h * 1.8).length;
+    check(lejos === 0, `«${k}» carga el arma del héroe sin salirse de su zona (${lejos})`);
+  }
+  // a triple hammer blow with smites on three enemies fits in the live budget
+  if (SPELLS.martillo && SPELLS.castigoFuego) {
+    let bruto = 0;
+    for (let t = 0; t < 1.6; t += 1 / 30) {
+      let s = 0;
+      for (let i = 0; i < 3; i++) for (let h = 0; h < 3; h++) {
+        const c = { ...ctxE, box: { ...box, x: 380 + i * 190 }, seed: i * 3 + h + 1 };
+        s += spellFrame('martillo', c, t - h * 0.26).length + (h === 0 ? spellFrame('castigoFuego', c, t - 0.05).length + spellFrame('castigoTrueno', c, t - 0.05).length : 0);
+      }
+      bruto = Math.max(bruto, s);
+    }
+    check(bruto <= MAX_LIVE_SPRITES, `tres martillazos con castigos sobre tres enemigos caben en el tope (${bruto} ≤ ${MAX_LIVE_SPRITES})`);
+  }
+
+  // rare and unique cards: their own sequences
+  const ids = ['juramento-devocion', 'juramento-gloria', 'juramento-antiguos', 'juramento-venganza', 'colera-celestial', 'angel-vengador'];
+  const firmasGen = new Set(Object.keys(SPELLS).filter((k) => !k.startsWith('carta:')).map((k) => spellSignature(k)));
+  const firmasR = new Map<string, string>();
+  const buildsGen = new Set(Object.keys(SPELLS).filter((k) => !k.startsWith('carta:')).map((k) => SPELLS[k].build));
+  const pico: Record<string, number> = {};
+  for (const id of ids) {
+    const k = `carta:${id}`, def = SPELLS[k];
+    check(!!CARD_FX[id] && !!def && cardSpellKey(id, 'martillo') === k, `«${id}» tiene su secuencia propia`);
+    if (!def) continue;
+    check(!buildsGen.has(def.build), `«${id}» no reutiliza un efecto genérico`);
+    const f = spellSignature(k), igual = [...firmasR].find(([, v]) => v === f);
+    check(!firmasGen.has(f) && !igual, `«${id}» se ve distinta de ${igual ? `«${igual[0]}»` : 'los efectos genéricos'}`);
+    firmasR.set(id, f);
+    const c = def.anchor === 'self' ? ctxH : ctxE;
+    check(def.duration >= 0.4 && def.duration <= 1.4 && def.phases[0] > 0 && def.phases[0] < def.phases[1] && def.phases[1] < 1, `«${id}»: duración y fases válidas`);
+    const m = muestra(k, c);
+    pico[id] = m.maximo;
+    check(m.roto === 0 && m.maximo > 60 && m.maximo <= (def.cap ?? 0) && m.maximo <= MAX_CARD_SPRITES, `«${id}»: más partículas, con tope (${m.maximo} ≤ ${def.cap})`);
+    check(spellFrame(k, c, def.duration + 0.01).length === 0, `«${id}» desaparece al terminar`);
+    const r = muestra(k, { ...c, reduced: true });
+    check(r.maximo < m.maximo * 0.75 && r.enImpacto > 0, `«${id}» con movimiento reducido dibuja menos (${r.maximo} < ${m.maximo})`);
+    check(cardShake(k, true) === null, `«${id}» no sacude con movimiento reducido`);
+    const pk = preludeKey(id), pre = pk ? SPELLS[pk] : undefined;
+    check(!!pre && muestra(pk!, c).roto === 0 && muestra(pk!, c).maximo <= MAX_CARD_SPRITES, `«${id}» anticipa su efecto durante el escaparate`);
+  }
+  for (const id of ids.filter((x) => x.startsWith('juramento') || x === 'angel-vengador')) check(SPELLS[`carta:${id}`]?.anchor === 'self', `«${id}» se dibuja sobre el héroe`);
+  const col = SPELLS['carta:colera-celestial'];
+  check(!!col && col.anchor === 'target' && (col.cap ?? 999) <= 280 && col.phases[0] * col.duration <= 0.2, 'Cólera Celestial cae sobre cada enemigo, ligera y con el daño');
+  check(!!cardShake('carta:colera-celestial', false), 'Cólera Celestial sacude la pantalla');
+  if (col) {
+    let bruto = 0;
+    for (let t = 0; t < 2.4; t += 1 / 30) {
+      let s = 0;
+      for (let h = 0; h < 3; h++) for (let i = 0; i < 3; i++) s += spellFrame('carta:colera-celestial', { ...ctxE, box: { ...box, x: 380 + i * 190 }, seed: h * 3 + i + 1 }, t - (h * 3 + i) * 0.26).length;
+      bruto = Math.max(bruto, s);
+    }
+    check(bruto <= MAX_LIVE_SPRITES, `Cólera Celestial ×3 sobre tres enemigos cabe en el tope (${bruto})`);
+  }
+  check(!!pico['angel-vengador'] && ids.slice(0, 4).every((id) => (pico[id] ?? 0) < pico['angel-vengador']), 'Ángel Vengador es la secuencia más épica del paladín');
+  const cartasPal: CartaDef[] = CTP.PALADIN ?? [];
+  const rarasPal = cartasPal.filter((d) => d.rareza === 'rara' || d.rareza === 'especial');
+  check(rarasPal.length >= 6 && rarasPal.every((d) => !!CARD_FX[d.id]), `las raras y la única del paladín tienen secuencia (${rarasPal.length})`);
+  const clavesPal = new Set(cartasPal.map((d) => d.fx).filter((k): k is string => !!k));
+  check(clavesPal.size > 0 && [...clavesPal].every((k) => !!SPELLS[k]), 'todas las claves fx de las cartas del paladín tienen efecto');
+
+  // death
+  const muerte = hdP.heroDeathFx('paladin');
+  check(muerte.spell === 'muertePaladin' && !!SPELLS.muertePaladin && SPELLS.muertePaladin.anchor === 'self', 'el paladín tiene su propia muerte');
+} catch (e) {
+  check(false, `las pruebas de los efectos del paladín revientan: ${(e as Error).stack ?? e}`);
 }
 
 // ── Magic Missile: one weaving dart per hit, in a quick volley ──────────────
@@ -5631,9 +5867,10 @@ try {
     mago: (fr) => fr.filter((s) => s.shape === 'runa').length >= 3,
     picaro: (fr) => fr.filter((s) => s.shape === 'colmillo').length >= 3,
     brujo: (fr) => fr.some((s) => /^#(b4|8a|9b|6c|c9)/i.test(s.colour)) && fr.some((s) => s.shape === 'gota' || s.shape === 'capsula'),
+    paladin: (fr) => fr.filter((s) => s.shape === 'colmillo' && /^#(ff[cde]|e0a|c9a)/i.test(s.colour)).length >= 3 && fr.some((s) => s.shape === 'anillo'),
   };
   const motivo: Record<string, string> = {
-    barbaro: 'brasas', druida: 'hojas y espíritu', mago: 'runas', picaro: 'dagas que caen', brujo: 'llamas violetas',
+    barbaro: 'brasas', druida: 'hojas y espíritu', mago: 'runas', picaro: 'dagas que caen', brujo: 'llamas violetas', paladin: 'el martillo de luz que se hace añicos',
   };
   CLASES.forEach((c, i) => {
     const k = temas[i].spell;
@@ -5714,7 +5951,7 @@ try {
 console.log('\n🗑️ Descartes obligatorios');
 {
   const fs = await import('node:fs');
-  const todas = [...PICARO, ...MAGO, ...DRUIDA, ...BARBARO, ...BRUJO, ...BASICAS];
+  const todas = [...PICARO, ...MAGO, ...DRUIDA, ...BARBARO, ...BRUJO, ...PALADIN, ...BASICAS];
   const probar = async (id: string) => {
     const def = todas.find((c) => c.id === id)!;
     const run = nuevaRun('picaro', 31);
@@ -5788,7 +6025,7 @@ console.log('\n📜 Textura de pergamino');
 try {
   const fs = await import('node:fs');
   const T = await import('../src/fx/card-textures.ts');
-  const todas = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...BASICAS];
+  const todas = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, ...BASICAS];
 
   // pure part: variant choice and texture size
   const clases = todas.map((d) => T.textureClassFor(d));
@@ -5899,11 +6136,11 @@ try {
   const { MAX_FIGURE_PIECES } = await import('../src/fx/puppet-gpu.ts');
   // pieces before the eyes: at most 4 more per figure, always under the cap
   const antes: Record<string, number> = {
-    druida: 74, barbaro: 52, mago: 51, picaro: 50, brujo: 50,
+    druida: 74, barbaro: 52, mago: 51, picaro: 50, brujo: 50, paladin: 52,
     lobo: 33, oso: 31, aguila: 25, enjambre: 84, lunar: 41, estelar: 50,
   };
   const ojos: Record<string, 1 | 2> = {
-    druida: 2, barbaro: 2, mago: 2, picaro: 2, brujo: 2,
+    druida: 2, barbaro: 2, mago: 2, picaro: 2, brujo: 2, paladin: 2,
     lobo: 1, oso: 1, aguila: 1, enjambre: 2, lunar: 1, estelar: 1,
   };
   const rigs = { ...HERO_RIGS, ...FORM_RIGS } as Record<string, { shapes: unknown[] }>;
@@ -6287,7 +6524,7 @@ console.log('\n🔢 Números calculados');
   // Cards whose play does not come from their text numbers (dice, summon attacks)
   const SIN_COMPARAR = new Set(['seducir', 'deseo', 'vinculo-feroz', 'estampida']);
   const todas: CartaDef[] = [
-    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, CONJURO_PRODIGIOSO, DAGA,
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, CONJURO_PRODIGIOSO, DAGA, GOLPE_SAGRADO, DEFENSA_SAGRADA,
   ].filter((d) => !SIN_COMPARAR.has(d.id));
 
   async function montarNumeros(def: CartaDef, esc: Escenario) {
@@ -6515,6 +6752,295 @@ console.log('\n🌵 Espinas en un multigolpe');
   await comb.ejecutarMovimiento(e);
   check(!e.vivo, 'las Espinas matan al atacante a mitad de su ráfaga');
   check(pv - comb.jugador.pv === 6, `su ataque se corta al morir: solo llegan los 2 golpes previos (${pv - comb.jugador.pv} de daño)`);
+}
+
+// ── Paladin: Fervor, Smites, holy Strikes and Defends ──────────────────────
+console.log('\n🔨 Paladín');
+{
+  const CT = await import('../src/core/cartas.ts');
+  const RQ = await import('../src/core/reliquias.ts');
+  const TBn = await import('../src/core/taberna.ts');
+  const esperarP: Mov = { nombre: 'Esperar', intencion: 'defensa', bloqueo: 0 } as Mov;
+  const dummy = (pv = 300, jefe = false): EnemigoDef => ({
+    id: 'muneco-pruebas', nombre: 'Muñeco', arte: '🎯', pv: [pv, pv], esJefe: jefe, ia: () => ({ ...esperarP }),
+  });
+  async function montarP(defs: EnemigoDef[] = [dummy()], reliquias: string[] = [], clase: ClaseId = 'paladin') {
+    const run = nuevaRun(clase, 909);
+    run.reliquias = reliquias.map((id) => RQ.reliquiaPorId(id)!);
+    const comb = new Combate(run, defs, crearRng(909), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.descarte.push(...comb.jugador.mano);
+    comb.jugador.mano = [];
+    comb.jugador.energia = 99;
+    return { run, comb, ctx: comb.contexto() };
+  }
+  const jugar = async (comb: Combate, id: string, obj?: any, mejorada = false) => {
+    const inst = instanciar(CT.cartaPorId(id)!);
+    inst.mejorada = mejorada;
+    comb.jugador.mano.push(inst);
+    comb.jugador.energia = 99;
+    await comb.jugarCarta(inst, obj ?? comb.enemigos.find((e) => e.vivo));
+    return inst;
+  };
+  const fervor = (comb: Combate) => comb.jugador.estados.fervor ?? 0;
+
+  // — new class basics —
+  {
+    const run = nuevaRun('paladin', 1);
+    check(run.pvMax === 76, `el paladín empieza con 76 PV (${run.pvMax})`);
+    const ids = run.mazo.map((c) => c.def.id);
+    check(run.mazo.length === 11 && ids.includes('castigo-divino') && ids.includes('escudo-fe'),
+      'mazo inicial del paladín: 5 Golpe, 4 Defender, Castigo Divino y Escudo de la Fe');
+    check(run.reliquias[0]?.id === 'simbolo-sagrado', 'la reliquia inicial del paladín es el Símbolo Sagrado');
+    check(CT.poolDeClase('paladin').length >= 25, `el paladín tiene su repertorio de cartas (${CT.poolDeClase('paladin').length})`);
+    check(CT.cartaUnicaDeClase('paladin')?.id === 'angel-vengador', 'la carta única del paladín es Ángel Vengador');
+    check(!CT.poolDeClase('paladin').some((c) => c.id === 'golpe-sagrado' || c.id === 'defensa-sagrada'),
+      'Golpe Sagrado y Defensa Sagrada no salen en las recompensas');
+  }
+
+  // — Fervor: every Strike and Defend played gives 1 —
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'golpe');
+    await jugar(comb, 'defender');
+    check(fervor(comb) === 2, `cada Golpe y Defensa que juega el paladín le da 1 de Fervor (${fervor(comb)})`);
+    await jugar(comb, 'golpe-sagrado');
+    await jugar(comb, 'defensa-sagrada');
+    check(fervor(comb) === 4, 'Golpe Sagrado y Defensa Sagrada también dan Fervor');
+    const otro = await montarP([dummy()], [], 'barbaro');
+    await jugar(otro.comb, 'golpe');
+    check(fervor(otro.comb) === 0, 'las demás clases no ganan Fervor');
+  }
+
+  // — Divine Smite: consumes Fervor, charges the next attack, not a skill —
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    comb.jugador.estados.fervor = 2;
+    const pv0 = e.pv;
+    await jugar(comb, 'castigo-divino');
+    check(fervor(comb) === 0, 'el Castigo consume todo el Fervor');
+    check((comb.jugador.estados.castigo ?? 0) === 1, 'el Castigo queda preparado (indicador)');
+    check(e.pv === pv0, 'preparar un Castigo no hace daño');
+    const golpe = CT.cartaPorId('golpe')!;
+    check(comb.valoresDeCarta(golpe, e)[0].real === 16, `el Golpe en la mano muestra el Castigo preparado (${comb.valoresDeCarta(golpe, e)[0].real})`);
+    await jugar(comb, 'defender');
+    check(comb.jugador.castigos.length === 1, 'una habilidad no descarga el Castigo');
+    const antes = e.pv;
+    await jugar(comb, 'golpe');
+    check(antes - e.pv === 16, `Castigo Divino con 2 de Fervor: el Golpe inflige 6 + 6 + 2×2 = 16 (${antes - e.pv})`);
+    check(comb.jugador.castigos.length === 0 && !(comb.jugador.estados.castigo), 'el ataque descarga y gasta el Castigo');
+    const d2 = e.pv;
+    await jugar(comb, 'golpe');
+    check(d2 - e.pv === 6, 'el siguiente ataque ya va sin Castigo');
+  }
+
+  // — elemental smites —
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    comb.jugador.estados.fervor = 4;
+    await jugar(comb, 'castigo-atronador');
+    await jugar(comb, 'castigo-cegador');
+    await jugar(comb, 'golpe');
+    check((e.estados.vulnerable ?? 0) === 4, `Castigo Atronador con 4 de Fervor aplica 2 + 2 de Vulnerable (${e.estados.vulnerable})`);
+    check((e.estados.debil ?? 0) === 2, 'Castigo Cegador aplica Débil (el Fervor ya lo gastó el primero); se encadenan en un mismo ataque');
+  }
+  {
+    const { comb } = await montarP([dummy(), dummy(), dummy()]);
+    const [a, b, c] = comb.enemigos;
+    await jugar(comb, 'castigo-abrasador');
+    await jugar(comb, 'golpe', a);
+    check(300 - a.pv === 10 && 300 - b.pv === 4 && 300 - c.pv === 4,
+      `Castigo Abrasador: el objetivo recibe el Golpe y la llamarada; los demás, la llamarada (${300 - a.pv}/${300 - b.pv}/${300 - c.pv})`);
+  }
+  {
+    const { comb } = await montarP([dummy(18), dummy(300, true)]);
+    const [debil, jefe] = comb.enemigos;
+    await jugar(comb, 'castigo-desterrador');
+    await jugar(comb, 'golpe', debil);
+    check(!debil.vivo, 'Castigo Desterrador: si el enemigo queda con 12 PV o menos, lo destierra');
+    delete comb.jugador.estados.fervor; // the first Strike gave 1
+    await jugar(comb, 'castigo-desterrador');
+    const pj = jefe.pv;
+    await jugar(comb, 'golpe', jefe);
+    check(jefe.vivo && pj - jefe.pv === 18, `contra un jefe, el Destierro inflige su umbral como daño (${pj - jefe.pv})`);
+  }
+  {
+    const { comb } = await montarP();
+    comb.jugador.bloqueo = 0;
+    await jugar(comb, 'castigo-resplandeciente');
+    await jugar(comb, 'golpe');
+    check(comb.jugador.bloqueo === 10, `Castigo Resplandeciente: +4 al Golpe y bloqueo igual al daño hecho (${comb.jugador.bloqueo})`);
+  }
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    await jugar(comb, 'castigo-atronador');
+    const pv0 = e.pv;
+    await jugar(comb, 'martillo-juicio');
+    check((e.estados.vulnerable ?? 0) === 4 && pv0 - e.pv === 14, 'Martillo del Juicio: los Castigos que descarga se aplican dos veces');
+  }
+
+  // — holy Strike and Defend —
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    let pv0 = e.pv;
+    await jugar(comb, 'golpe-sagrado');
+    check(pv0 - e.pv === 14, 'Golpe Sagrado inflige 14');
+    pv0 = e.pv;
+    await jugar(comb, 'golpe-sagrado', e, true);
+    check(pv0 - e.pv === 20, 'Golpe Sagrado+ inflige 20');
+    comb.jugador.bloqueo = 0;
+    await jugar(comb, 'defensa-sagrada');
+    check(comb.jugador.bloqueo === 11, 'Defensa Sagrada da 11 de bloqueo');
+    await jugar(comb, 'defensa-sagrada', undefined, true);
+    check(comb.jugador.bloqueo === 27, 'Defensa Sagrada+ da 16 de bloqueo');
+    check(CT.cartaPorId('golpe-sagrado')!.coste === 1 && CT.cartaPorId('defensa-sagrada')!.coste === 1, 'los dos cuestan 1');
+  }
+
+  // — Holy Symbol: removing a Strike or Defend turns it holy —
+  {
+    const run = nuevaRun('paladin', 3);
+    const golpe = run.mazo.find((c) => c.def.id === 'golpe')!;
+    golpe.mejorada = true;
+    const n = run.mazo.length;
+    const r = TBn.eliminarCarta(run, golpe);
+    const sagrado = run.mazo.find((c) => c.def.id === 'golpe-sagrado');
+    check(!!r && run.mazo.length === n && !!sagrado && !run.mazo.includes(golpe),
+      'Símbolo Sagrado: al eliminar un Golpe en la taberna, se convierte en Golpe Sagrado');
+    check(sagrado?.mejorada === true, 'la versión sagrada conserva la mejora');
+    const def = run.mazo.find((c) => c.def.id === 'defender')!;
+    TBn.eliminarCarta(run, def);
+    check(run.mazo.some((c) => c.def.id === 'defensa-sagrada'), 'al eliminar un Defender, se convierte en Defensa Sagrada');
+    const castigo = run.mazo.find((c) => c.def.id === 'castigo-divino')!;
+    TBn.eliminarCarta(run, castigo);
+    check(run.mazo.length === n - 1, 'las demás cartas se eliminan normalmente');
+    const sin = nuevaRun('barbaro', 3);
+    const m = sin.mazo.length;
+    TBn.eliminarCarta(sin, sin.mazo.find((c) => c.def.id === 'golpe')!);
+    check(sin.mazo.length === m - 1 && !sin.mazo.some((c) => c.def.id === 'golpe-sagrado'), 'sin el Símbolo, eliminar un Golpe lo quita');
+  }
+
+  // — powers —
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'juramento-venganza');
+    const cd = CT.cartaPorId('castigo-desterrador')!;
+    check(comb.costeEfectivo(cd) === 0, 'Juramento de Venganza: tus Castigos cuestan 0');
+    check(comb.costeEfectivo(CT.cartaPorId('golpe')!) === 1, 'Juramento de Venganza no abarata lo demás');
+  }
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    await jugar(comb, 'juramento-devocion');
+    comb.jugador.estados.fervor = 3;
+    const pv0 = e.pv;
+    await jugar(comb, 'martillo-luz');
+    check(pv0 - e.pv === 11 && fervor(comb) === 4, `Juramento de Devoción: los ataques suman tu Fervor sin gastarlo (${pv0 - e.pv})`);
+  }
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    await jugar(comb, 'arma-consagrada');
+    const pv0 = e.pv;
+    await jugar(comb, 'golpe');
+    check(pv0 - e.pv === 9, 'Arma Consagrada: tus Golpes infligen 3 más');
+    check(comb.valoresDeCarta(CT.cartaPorId('golpe')!, e)[0].real === 9, 'el Golpe lo muestra en su texto');
+    await jugar(comb, 'egida-divina');
+    comb.jugador.bloqueo = 0;
+    await jugar(comb, 'defender');
+    check(comb.jugador.bloqueo === 8, 'Égida Divina: tus Defensas dan 3 más');
+  }
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'bastion-fe');
+    comb.jugador.bloqueo = 25;
+    await comb.terminarTurno();
+    check(comb.jugador.bloqueo === 10, `Bastión de Fe: conservas hasta 10 de bloqueo (${comb.jugador.bloqueo})`);
+  }
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'celo-inquebrantable');
+    const f0 = fervor(comb);
+    await comb.terminarTurno();
+    check(fervor(comb) === f0 + 1, 'Celo Inquebrantable: +1 de Fervor al inicio de cada turno');
+  }
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'juramento-antiguos');
+    comb.jugador.estados.fervor = 3;
+    comb.jugador.bloqueo = 0;
+    comb.enemigos[0].intencion = { nombre: 'Golpe', intencion: 'ataque', dano: 4 };
+    const pv0 = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv0, 'Juramento de los Antiguos: al final del turno ganas 2 de bloqueo por Fervor (para el golpe enemigo)');
+  }
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'juramento-gloria');
+    const f0 = comb.jugador.estados.fuerza ?? 0;
+    await jugar(comb, 'castigo-divino');
+    await jugar(comb, 'golpe');
+    check((comb.jugador.estados.fuerza ?? 0) === f0 + 1, 'Juramento de Gloria: cada Castigo descargado da 1 de Fuerza');
+  }
+  {
+    const { comb } = await montarP([dummy(), dummy()]);
+    await jugar(comb, 'palabra-radiante');
+    check(fervor(comb) === 2 && comb.enemigos.every((e) => e.pv === 295), 'Palabra Radiante: 5 a todos y 1 de Fervor por enemigo');
+    await jugar(comb, 'expulsar-mal');
+    check(comb.enemigos.every((e) => e.pv === 285 && (e.estados.debil ?? 0) === 1), 'Expulsar el Mal: 10 a todos y 1 de Débil');
+  }
+  {
+    const { comb } = await montarP();
+    comb.jugador.mano = [instanciar(CT.cartaPorId('golpe')!), instanciar(CT.cartaPorId('defender')!), instanciar(CT.cartaPorId('castigo-divino')!)];
+    comb.jugador.bloqueo = 0;
+    await jugar(comb, 'muro-fe');
+    check(comb.jugador.bloqueo === 8, 'Muro de Fe: 4 de bloqueo por cada Golpe y Defensa en la mano');
+    await jugar(comb, 'voto-hierro');
+    check(fervor(comb) === 2, 'Voto de Hierro: 1 de Fervor por cada Golpe y Defensa en la mano');
+  }
+  {
+    const { comb } = await montarP();
+    comb.jugador.mazo = [instanciar(CT.cartaPorId('castigo-divino')!), instanciar(CT.cartaPorId('golpe')!), instanciar(CT.cartaPorId('defender')!), instanciar(CT.cartaPorId('plegaria-alba')!)];
+    await jugar(comb, 'instruccion-armas');
+    const ids = comb.jugador.mano.map((c) => c.def.id).sort();
+    check(ids.join() === 'defender,golpe', `Instrucción de Armas roba 1 Golpe y 1 Defensa (${ids.join()})`);
+  }
+  {
+    const { comb } = await montarP();
+    await jugar(comb, 'angel-vengador');
+    await comb.terminarTurno();
+    check(comb.jugador.castigos.length === 1 && fervor(comb) >= 1, 'Ángel Vengador: al inicio del turno preparas un Castigo y ganas Fervor');
+  }
+
+  // — relics —
+  {
+    const { comb } = await montarP([dummy()], ['guantelete-cruzado']);
+    check(fervor(comb) === 2, 'Guantelete del Cruzado: empiezas el combate con 2 de Fervor');
+  }
+  {
+    const { comb } = await montarP([dummy()], ['estandarte-sagrado']);
+    comb.jugador.bloqueo = 0;
+    await jugar(comb, 'castigo-divino');
+    await jugar(comb, 'golpe');
+    check(comb.jugador.bloqueo === 4, 'Estandarte Sagrado: 4 de bloqueo al descargar un Castigo');
+  }
+  {
+    const { comb } = await montarP([dummy()], ['rosario-plata']);
+    await jugar(comb, 'golpe');
+    await jugar(comb, 'golpe');
+    check(fervor(comb) === 3, 'Rosario de Plata: el primer Golpe o Defensa del turno da 1 de Fervor más');
+  }
+  {
+    const { comb } = await montarP([dummy()], ['yelmo-juramento']);
+    comb.jugador.mazo = [instanciar(CT.cartaPorId('plegaria-alba')!)];
+    await jugar(comb, 'golpe'); await jugar(comb, 'defender');
+    const m = comb.jugador.mano.length;
+    await jugar(comb, 'golpe');
+    check(comb.jugador.mano.length === m + 1, 'Yelmo del Juramento: al 3.er Golpe o Defensa del turno robas 1');
+  }
 }
 
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─

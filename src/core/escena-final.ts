@@ -68,7 +68,7 @@ export type DiaAgenda = (typeof DIAS_AGENDA)[number];
 /** One line of the scheduling scene: who speaks, what they say, and which days
  *  of the DM's diary it crosses out (or rings, for the chosen one). */
 export interface LineaAgenda {
-  quien: 'dm' | 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo';
+  quien: 'dm' | 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo' | 'paladin';
   texto: string;
   tacha?: DiaAgenda[];
   marca?: DiaAgenda;
@@ -82,6 +82,7 @@ export const GUION_AGENDA: LineaAgenda[] = [
   { quien: 'druida', texto: 'Los lunes, luna nueva. Y el domingo riego el bosque.', tacha: ['L', 'D'] },
   { quien: 'picaro', texto: 'Yo puedo cualquier día… que no sepáis cuál es.' },
   { quien: 'brujo', texto: 'El viernes tengo cena con mi patrón. Otra vez.', tacha: ['V'] },
+  { quien: 'paladin', texto: 'Juré no faltar nunca a una partida. …Salvo a misa del domingo.' },
   { quien: 'dm', texto: '…¿El sábado a las 17:00?' },
   { quien: 'barbaro', texto: '…¡Vale!', marca: 'S' },
   { quien: 'dm', texto: '¡El sábado a las 17:00, y trae dados!' },

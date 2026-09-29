@@ -56,7 +56,7 @@ export function pantallaFin(
     const raiz = el('div', 'fin');
     const nombreClase = {
     druida: 'Druida 🌿', barbaro: 'Bárbaro 🪓', mago: 'Mago 🔮',
-    picaro: 'Pícaro 🗡️', brujo: 'Brujo 🕳️',
+    picaro: 'Pícaro 🗡️', brujo: 'Brujo 🕳️', paladin: 'Paladín 🔨',
   }[clase] ?? clase;
     raiz.innerHTML = victoria
       ? `

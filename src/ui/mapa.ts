@@ -71,7 +71,7 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
         <span class="bs-clase">${
           {
             druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago',
-            picaro: '🗡️ Pícaro', brujo: '🕳️ Brujo',
+            picaro: '🗡️ Pícaro', brujo: '🕳️ Brujo', paladin: '🔨 Paladín',
           }[run.clase]
         }</span>
         <span class="bs-pv">❤️ ${run.pv}/${run.pvMax}</span>

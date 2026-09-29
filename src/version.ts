@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.12.1';
+export const VERSION = '6.13.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.13.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔨 Nueva clase: el Paladín. Martillo, escudo y 76 PV; cada Golpe y Defensa le da Fervor, y sus Castigos lo gastan para cargar el siguiente ataque de luz divina, trueno, fuego, ceguera, resplandor o destierro.',
+      '✝️ Su Símbolo Sagrado convierte los Golpes y Defender que eliminas en Golpes y Defensas Sagrados, y su mazo crece con juramentos de D&D (Devoción, Gloria, Antiguos y Venganza), hechizos de área y mucho bloqueo.',
+      '👼 Nueva carta única para el Acto III: Ángel Vengador. Además, reliquias y bendiciones propias, ilustraciones, efectos y sonidos del paladín.',
+    ],
+  },
   {
     version: '6.12.1',
     fecha: '2026-09-29',

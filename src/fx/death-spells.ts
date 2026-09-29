@@ -4,7 +4,7 @@
 // the global time scale (slow motion) stretches them for free.
 
 import {
-  SPELLS, TAU, bell, clamp01, dropAngle, easeIn, easeOut, fly, geo, lerp, smooth, span, type Build,
+  SPELLS, TAU, bell, clamp01, dropAngle, easeIn, easeOut, fly, geo, lerp, lightHammer, smooth, span, zigzag, type Build,
 } from './spell-fx.ts';
 
 const mix = (a: string, b: string, t: number) => {
@@ -166,6 +166,51 @@ const muerteBrujo: Build = (g, u, c, D) => {
   g.dot(cx, cy, 10 * k, '#e8d0ff', out);
 };
 
+/** Paladin: his hammer of light flickers, cracks and shatters into golden shards
+ *  that fall and dim; the halo over his head sinks and goes out as the last shaft
+ *  of light from above narrows to nothing. */
+const muertePaladin: Build = (g, u, c, D) => {
+  const { b, cx, cy, k, W, H, ground, face } = geo(c);
+  const sh = bell(u, 0, 0.75), bw = W * 0.7 * (1 - span(u, 0.1, 0.75)) + 1;
+  g.beam(cx, b.y - 1.8 * H, cx, ground, bw, '#ffd35a', 0.3 * sh);
+  g.beam(cx, b.y - 1.8 * H, cx, ground, bw * 0.3, '#fff3c4', 0.35 * sh);
+  const hx = cx + face * W * 0.3, hy = cy - 0.1 * H, s = 30 * k + 10, BREAK = 0.22;
+  const flick = u > 0.08 ? 0.55 + 0.45 * Math.sin(u * D * 50) : 1;
+  lightHammer(g, hx, hy, Math.PI / 2 + face * 0.35, s, span(u, 0, 0.04) * (1 - span(u, BREAK - 0.02, BREAK)) * flick);
+  const cr = span(u, 0.1, 0.16) * (1 - span(u, BREAK - 0.02, BREAK));
+  if (cr > 0) for (let j = 0; j < 2; j++) {
+    const a0 = { x: hx - face * s * 0.4, y: hy + (j - 0.5) * s * 0.3 }, a1 = { x: hx + face * s * 0.4, y: hy - (j - 0.5) * s * 0.2 };
+    g.strip(zigzag(a0, a1, 4, 4 * k, j, 3), () => 1.6 * k, '#ffffff', cr, false);
+  }
+  const fl = bell(u, BREAK, 0.4);
+  g.dot(hx, hy, s * 1.2 * fl + 1, '#fff3c4', 0.4 * fl);
+  g.dot(hx, hy, s * 0.35 * fl + 1, '#ffffff', 0.9 * fl);
+  // shards: thrown out of the break, they fall, bounce off the ground and dim to bronze
+  const n = g.n(18), G = 900 * k;
+  for (let i = 0; i < n; i++) {
+    const tau = (u - BREAK) * D * 0.8;
+    if (tau <= 0) break;
+    const a = -Math.PI / 2 + (g.r(i) - 0.5) * 3.4, sp = (120 + 200 * g.r(i + 1)) * k;
+    const p = fly(hx, hy, Math.cos(a) * sp, Math.sin(a) * sp, tau, G);
+    const y = Math.min(ground, p.y), q = span(u, BREAK, 1);
+    const col = q < 0.3 ? '#ffd35a' : q < 0.55 ? '#e0a82e' : mix('#c9a45a', '#5a5040', (q - 0.55) / 0.45);
+    const L = (7 + 6 * g.r(i + 2)) * k, spin = g.r(i + 3) * TAU + (y < ground ? tau * 9 : 0);
+    g.fang(p.x - Math.cos(spin) * L, y - Math.sin(spin) * L, p.x + Math.cos(spin) * L, y + Math.sin(spin) * L, 5 * k, col, 1 - span(q, 0.7, 1));
+  }
+  // the halo sinks and goes out
+  const hl = span(u, 0, 0.08) * (1 - span(u, 0.55, 0.85)) * (u > 0.4 ? 0.6 + 0.4 * Math.sin(u * D * 40) : 1);
+  const hyH = lerp(b.y - 0.04 * H, cy, easeIn(span(u, 0.2, 0.85)));
+  g.ring(cx, hyH, W * 0.24, W * 0.07, 4 * k, '#ffd35a', hl);
+  g.ring(cx, hyH, W * 0.24, W * 0.07, 1.4 * k, '#fff3c4', hl);
+  const m = g.n(14);
+  for (let i = 0; i < m; i++) {
+    const q = span(u, 0.25 + 0.4 * g.r(i + 30), 0.7 + 0.3 * g.r(i + 30));
+    if (q > 0 && q < 1) g.dot(cx + (g.r(i + 40) - 0.5) * W * 0.8 + Math.sin(q * 6 + i) * 5 * k, cy - q * H * 1.1, 2.4 * k, i % 2 ? '#ffd35a' : '#fff3c4', 1 - q);
+  }
+  const s0 = span(u, BREAK, 0.8);
+  if (s0 > 0 && s0 < 1) g.ring(cx, ground, W * (0.3 + 0.7 * s0), W * 0.1 * (0.3 + 0.7 * s0) + 2, 3 * k, '#e0a82e', 0.7 * (1 - s0));
+};
+
 /** The hero's soul: a pale wisp rises out of the body, swaying, and fades above. */
 const almaHeroe: Build = (g, u, c) => {
   const { cx, cy, k, H, W } = geo(c);
@@ -197,6 +242,7 @@ export const DEATH_SPELLS = {
   muerteMago: { duration: 1.3, phases: [0.3, 0.8], anchor: 'self', build: muerteMago },
   muertePicaro: { duration: 1.25, phases: [0.25, 0.6], anchor: 'self', build: muertePicaro },
   muerteBrujo: { duration: 1.35, phases: [0.3, 0.85], anchor: 'self', build: muerteBrujo },
+  muertePaladin: { duration: 1.35, phases: [0.22, 0.7], anchor: 'self', build: muertePaladin },
   almaHeroe: { duration: 1.4, phases: [0.15, 0.75], anchor: 'self', build: almaHeroe },
 } as const;
 

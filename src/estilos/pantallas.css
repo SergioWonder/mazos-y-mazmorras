@@ -107,6 +107,10 @@
   border-color: var(--brujo);
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(161, 92, 224, 0.45);
 }
+.clase-paladin:hover, .clase-paladin.clase-activa {
+  border-color: var(--paladin);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6), 0 0 26px rgba(255, 211, 90, 0.45);
+}
 
 .clase-icono { display: flex; justify-content: center; }
 /* the hero puppet (drawn by the title's WebGL stage over this box) */

@@ -98,13 +98,14 @@ export interface HeroDeathFx {
   colours: string[];
 }
 
-/** Class-themed burst: embers, withering leaves and spirit, dying runes, shadows and daggers, violet flames. */
+/** Class-themed burst: embers, withering leaves and spirit, dying runes, shadows and daggers, violet flames, a shattering hammer of light. */
 export const HERO_DEATH_FX: Record<string, HeroDeathFx> = {
   barbaro: { spell: 'muerteBarbaro', colours: ['#ff8c3b', '#ffb347', '#d62828', '#5a4a44'] },
   druida: { spell: 'muerteDruida', colours: ['#7dba4e', '#a8804f', '#b8ffd9'] },
   mago: { spell: 'muerteMago', colours: ['#c98bff', '#6bd8ff', '#4a4a5a'] },
   picaro: { spell: 'muertePicaro', colours: ['#2a2438', '#c3ced6', '#8d8db5'] },
   brujo: { spell: 'muerteBrujo', colours: ['#b46bff', '#6c2fb5', '#e8d0ff'] },
+  paladin: { spell: 'muertePaladin', colours: ['#ffd35a', '#e0a82e', '#8a7a5a'] },
 };
 
 export const heroDeathFx = (clase: string): HeroDeathFx => HERO_DEATH_FX[clase] ?? HERO_DEATH_FX.barbaro;

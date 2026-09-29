@@ -12,7 +12,7 @@ export type OfertaBendicion = { tipo: 'reliquia'; reliquia: ReliquiaDef };
 const DONES_POR_ACTO: string[][] = [
   ['don-seducir'],
   // Class card first: only the one of the class being played survives the filter
-  ['don-tormenta-venganza', 'don-furia-indomita', 'don-maestria-conjuros', 'don-danza-mortal', 'don-pacto-final', 'don-deseo'],
+  ['don-tormenta-venganza', 'don-furia-indomita', 'don-maestria-conjuros', 'don-danza-mortal', 'don-pacto-final', 'don-angel-vengador', 'don-deseo'],
 ];
 
 /** Unique-card relics offered by the Seer depending on the act you are about to start. */

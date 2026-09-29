@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="0.55" stop-color="#8a6424"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.68" cy="0.38" r="0.42">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6c8"/>
+      <stop offset="0.5" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#b8801a"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <path id="hoja" d="M0 0 Q4 -3.2 9 0 Q4 3.2 0 0 Z"/>
+    <!-- paladin, front view: hammer thrust up in triumph, shield at his side, cape in the wind -->
+    <g id="h">
+      <path d="M121 60 Q96 88 82 130 Q106 124 114 136 L162 136 Q168 100 159 60 Z"/>
+      <path d="M131 44 Q130 30 140 29 Q150 30 149 44 L148 54 L132 54 Z"/>
+      <path d="M138 30 Q134 18 124 14 Q138 14 143 30 Z"/>
+      <path d="M132 52 L148 52 L151 59 L129 59 Z"/>
+      <path d="M109 67 Q109 53 125 53 Q134 54 134 64 Q123 69 109 67 Z"/>
+      <path d="M171 67 Q171 53 155 53 Q146 54 146 64 Q157 69 171 67 Z"/>
+      <path d="M124 58 L156 58 Q160 74 154 92 L126 92 Q120 74 124 58 Z"/>
+      <path d="M113 62 Q103 70 104 90 L113 92 L118 66 Z"/>
+      <path d="M154 60 L166 67 L184 52 L202 36 L194 27 L175 42 Z"/>
+      <path d="M190 22 L205 27 L201 40 L186 35 Z"/>
+      <path d="M125 90 L155 90 L159 108 L149 112 L140 105 L131 112 L121 108 Z"/>
+      <path d="M126 104 L139 106 L131 132 L115 132 Z"/>
+      <path d="M154 104 L141 106 L150 132 L166 132 Z"/>
+      <path d="M110 137 L131 137 L131 129 L115 129 Z M170 137 L149 137 L149 129 L165 129 Z"/>
+      <path d="M90 84 L124 84 Q126 110 107 128 Q88 110 90 84 Z"/>
+    </g>
+  </defs>
+
+  <!-- sunset over the temple steps -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 40 Q40 30 80 38 Q120 30 150 40 L150 46 Q110 38 80 44 Q40 36 0 46 Z M160 24 Q210 14 280 22 L280 28 Q220 20 160 30 Z" fill="#b8883a" opacity="0.5"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <!-- colonnade and banners at the top of the stairs -->
+  <g fill="#2a200c">
+    <path d="M140 118 L140 20 L154 20 L154 118 Z M250 118 L250 20 L264 20 L264 118 Z"/>
+    <path d="M134 20 L160 20 L160 12 L134 12 Z M244 20 L270 20 L270 12 L244 12 Z"/>
+    <path d="M124 12 L280 12 L280 4 L124 4 Z"/>
+  </g>
+  <path d="M154 20 V118 M264 20 V118" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M142 22 V116 M252 22 V116" stroke="#8a6a30" stroke-width="1"/>
+  <path d="M156 16 L172 16 L172 58 L164 52 L156 58 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M164 16 L172 16 L172 58 L164 52 Z" fill="#bfae88"/>
+  <circle cx="164" cy="30" r="4" fill="#ffd35a" stroke="#140d0a" stroke-width="1"/>
+  <path d="M232 16 L248 16 L248 58 L240 52 L232 58 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M240 16 L248 16 L248 58 L240 52 Z" fill="#bfae88"/>
+  <circle cx="240" cy="30" r="4" fill="#ffd35a" stroke="#140d0a" stroke-width="1"/>
+
+  <!-- the staircase -->
+  <path d="M280 160 L280 118 L150 118 L150 125 L132 125 L132 132 L114 132 L114 139 L96 139 L96 146 L78 146 L78 153 L60 153 L60 160 Z" fill="#4a3c20" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M150 125 L280 125 M132 132 L280 132 M114 139 L280 139 M96 146 L280 146 M78 153 L280 153" stroke="#241a0c" stroke-width="3" opacity="0.55"/>
+  <path d="M150 118.8 H280 M132 125.8 H150 M114 132.8 H132 M96 139.8 H114 M78 146.8 H96 M60 153.8 H78" stroke="#c9a860" stroke-width="1.2"/>
+
+  <!-- cheering crowd below, spears and a pennant raised -->
+  <g fill="#120d06">
+    <path d="M0 160 L0 132 Q6 126 12 132 Q18 124 24 131 Q30 126 36 133 Q42 128 48 135 Q54 130 60 138 L66 160 Z"/>
+    <path d="M8 132 L4 100 M22 130 L26 96 M44 134 L50 104" stroke="#120d06" stroke-width="1.8"/>
+    <path d="M26 96 L38 99 L26 104 Z"/>
+    <path d="M4 100 L2 94 L6 94 Z M50 104 L49 98 L53 99 Z"/>
+    <path d="M14 130 L10 118 L16 118 L18 128 Z M36 132 L34 120 L40 121 L40 131 Z"/>
+  </g>
+  <path d="M26 96 L38 99 L26 104 Z" fill="#8a2e24" opacity="0.7"/>
+
+  <!-- laurel crown of light behind the hero -->
+  <circle cx="190" cy="60" r="30" fill="#ffd35a" opacity="0.5" filter="url(#fuerte)"/>
+  <g fill="#ffd35a" opacity="0.8" filter="url(#brillo)">
+    <path d="M183.7 85.2 A26 26 0 0 1 183.7 34.8 M196.3 85.2 A26 26 0 0 0 196.3 34.8" fill="none" stroke="#ffd35a" stroke-width="7"/>
+  </g>
+  <path d="M183.7 85.2 A26 26 0 0 1 183.7 34.8 M196.3 85.2 A26 26 0 0 0 196.3 34.8" fill="none" stroke="#fff4c8" stroke-width="1.4"/>
+  <g fill="#fff4c8" stroke="#c89020" stroke-width="0.6">
+    <use href="#hoja" transform="translate(175.5 86.3) rotate(-123)"/><use href="#hoja" transform="translate(179.4 79.3) rotate(-193)"/>
+    <use href="#hoja" transform="translate(167.7 80.1) rotate(-104)"/><use href="#hoja" transform="translate(173.7 74.8) rotate(-174)"/>
+    <use href="#hoja" transform="translate(162.4 71.8) rotate(-85)"/><use href="#hoja" transform="translate(169.8 68.6) rotate(-155)"/>
+    <use href="#hoja" transform="translate(160.1 62.2) rotate(-66)"/><use href="#hoja" transform="translate(168.1 61.6) rotate(-136)"/>
+    <use href="#hoja" transform="translate(161 52.3) rotate(-47)"/><use href="#hoja" transform="translate(168.7 54.4) rotate(-117)"/>
+    <use href="#hoja" transform="translate(165.1 43.3) rotate(-28)"/><use href="#hoja" transform="translate(171.7 47.7) rotate(-98)"/>
+    <use href="#hoja" transform="translate(171.9 36.1) rotate(-9)"/><use href="#hoja" transform="translate(176.7 42.5) rotate(-79)"/>
+    <use href="#hoja" transform="translate(180.7 31.5) rotate(10)"/><use href="#hoja" transform="translate(183.2 39.1) rotate(-60)"/>
+    <use href="#hoja" transform="translate(204.5 86.3) rotate(-57)"/><use href="#hoja" transform="translate(200.6 79.3) rotate(13)"/>
+    <use href="#hoja" transform="translate(212.3 80.1) rotate(-76)"/><use href="#hoja" transform="translate(206.3 74.8) rotate(-6)"/>
+    <use href="#hoja" transform="translate(217.6 71.8) rotate(-95)"/><use href="#hoja" transform="translate(210.2 68.6) rotate(-25)"/>
+    <use href="#hoja" transform="translate(219.9 62.2) rotate(-114)"/><use href="#hoja" transform="translate(211.9 61.6) rotate(-44)"/>
+    <use href="#hoja" transform="translate(219 52.3) rotate(-133)"/><use href="#hoja" transform="translate(211.3 54.4) rotate(-63)"/>
+    <use href="#hoja" transform="translate(214.9 43.3) rotate(-152)"/><use href="#hoja" transform="translate(208.3 47.7) rotate(-82)"/>
+    <use href="#hoja" transform="translate(208.1 36.1) rotate(-171)"/><use href="#hoja" transform="translate(203.3 42.5) rotate(-101)"/>
+    <use href="#hoja" transform="translate(199.3 31.5) rotate(-190)"/><use href="#hoja" transform="translate(196.8 39.1) rotate(-120)"/>
+  </g>
+
+  <!-- the hero on the top step -->
+  <g transform="translate(190 119) scale(0.6) translate(-140 -136)">
+    <!-- hammer haft behind the fist -->
+    <path d="M184 54 L222 -2" stroke="#140d0a" stroke-width="9" stroke-linecap="round"/>
+    <path d="M184 54 L222 -2" stroke="#6a4a26" stroke-width="5" stroke-linecap="round"/>
+    <use href="#h" transform="translate(2.4 -2.4)" fill="#ffd35a"/>
+    <use href="#h" fill="#0b0910"/>
+    <path d="M133 42 H147" stroke="#ffd35a" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M107 92 L109 102 L118 104 L109 106 L107 116 L105 106 L96 104 L105 102 Z" fill="none" stroke="#ffd35a" stroke-width="1.4" opacity="0.8"/>
+    <!-- golden hammer head raised to the sky -->
+    <g transform="translate(226 -8) rotate(34)">
+      <path d="M-28 -16 L28 -16 L30 0 L28 16 L-28 16 L-30 0 Z" fill="#ffd35a" opacity="0.9" filter="url(#brillo)"/>
+      <path d="M-22 -11 L22 -11 L25 -6 L25 6 L22 11 L-22 11 L-25 6 L-25 -6 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M0 -11 L22 -11 L25 -6 L25 6 L22 11 L0 11 Z" fill="#b8801a" opacity="0.6"/>
+      <path d="M-13 -11 V11 M13 -11 V11" stroke="#140d0a" stroke-width="1.6"/>
+      <path d="M-4 -24 L0 -11 L4 -24 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- rays and sparks of glory -->
+  <path d="M232 22 L262 4 M236 30 L276 26 M226 14 L236 0 M196 26 L186 10" stroke="#fff4c8" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
+  <path d="M150 50h.1M226 96h.1M140 94h.1M236 80h.1M170 20h.1M120 60h.1M98 30h.1" stroke="#fff4c8" stroke-width="2.4" stroke-linecap="round" opacity="0.85"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

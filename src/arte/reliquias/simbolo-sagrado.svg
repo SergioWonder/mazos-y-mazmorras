@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2"/></filter>
+    <clipPath id="c"><circle cx="32" cy="38" r="20"/></clipPath>
+  </defs>
+  <!-- chain -->
+  <path d="M10 2 Q19 16 28 19 M54 2 Q45 16 36 19" stroke="#140d0a" stroke-width="4.4" fill="none" stroke-linecap="round"/>
+  <path d="M10 2 Q19 16 28 19 M54 2 Q45 16 36 19" stroke="#ffd35a" stroke-width="2" fill="none" stroke-dasharray="3 2"/>
+  <circle cx="32" cy="18.5" r="3.6" fill="#e8b440" stroke="#140d0a" stroke-width="2.2"/>
+  <!-- golden medallion -->
+  <circle cx="32" cy="38" r="20" fill="#e8b440"/>
+  <g clip-path="url(#c)">
+    <path d="M56 20 Q52 54 14 60 L64 64 Z" fill="#a8761e"/>
+    <path d="M14 34 Q16 23 28 20 Q19 27 18 38 Z" fill="#ffeaa0"/>
+  </g>
+  <circle cx="32" cy="38" r="20" fill="none" stroke="#140d0a" stroke-width="3"/>
+  <circle cx="32" cy="38" r="13.5" fill="#2a3450" stroke="#140d0a" stroke-width="2"/>
+  <!-- holy sun -->
+  <circle cx="32" cy="38" r="10" fill="#ffd35a" filter="url(#g)"/>
+  <path d="M32 26 V50 M20 38 H44 M23.5 29.5 L40.5 46.5 M40.5 29.5 L23.5 46.5" stroke="#ffd35a" stroke-width="2.8" stroke-linecap="round"/>
+  <circle cx="32" cy="38" r="5.6" fill="#fff2b0" stroke="#140d0a" stroke-width="1.6"/>
+  <!-- silver hammer -->
+  <path d="M30.4 32 H33.6 V48.5 H30.4 Z" fill="#8a5a2e" stroke="#140d0a" stroke-width="1.5"/>
+  <path d="M25.5 27 H38.5 V32.5 H25.5 Z" fill="#dde3e8" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M32 27.6 H37.9 V31.9 H32 Z" fill="#8e98a2"/>
+  <path d="M27 28.8 H30.5" stroke="#ffffff" stroke-width="1.1" stroke-linecap="round"/>
+</svg>

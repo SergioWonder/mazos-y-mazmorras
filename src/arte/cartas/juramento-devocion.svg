@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.42" r="0.45">
+      <stop offset="0" stop-color="#fff4d0" stop-opacity="0.55"/>
+      <stop offset="0.5" stop-color="#ffd35a" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="aura" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.75"/>
+      <stop offset="0.75" stop-color="#fff4d0" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#fff4d0" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.64"/>
+    </radialGradient>
+    <linearGradient id="acero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c8c2b0"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <!-- paladin, front view: hammer held upright at his side, shield on the other arm -->
+    <g id="h">
+      <path d="M121 60 Q110 100 113 136 L167 136 Q170 100 159 60 Z"/>
+      <path d="M131 44 Q130 30 140 29 Q150 30 149 44 L148 54 L132 54 Z"/>
+      <path d="M138 30 Q136 20 130 15 Q140 16 143 30 Z"/>
+      <path d="M132 52 L148 52 L151 59 L129 59 Z"/>
+      <path d="M109 67 Q109 53 125 53 Q134 54 134 64 Q123 69 109 67 Z"/>
+      <path d="M171 67 Q171 53 155 53 Q146 54 146 64 Q157 69 171 67 Z"/>
+      <path d="M124 58 L156 58 Q160 74 154 92 L126 92 Q120 74 124 58 Z"/>
+      <path d="M113 62 Q103 70 104 86 L113 88 L118 66 Z"/>
+      <path d="M103 86 L114 87 L114 56 L102 56 Z"/>
+      <path d="M100 46 L115 46 L116 58 L101 59 Z"/>
+      <path d="M167 62 Q177 72 175 88 L164 88 L162 66 Z"/>
+      <path d="M125 90 L155 90 L159 108 L149 112 L140 105 L131 112 L121 108 Z"/>
+      <path d="M126 104 L139 106 L137 132 L122 132 Z"/>
+      <path d="M154 104 L141 106 L143 132 L158 132 Z"/>
+      <path d="M118 137 L138 137 L137 129 L122 129 Z M162 137 L142 137 L143 129 L158 129 Z"/>
+      <path d="M156 70 L190 70 Q192 96 173 114 Q154 96 156 70 Z"/>
+    </g>
+  </defs>
+
+  <!-- cathedral nave with a great rose window -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M84 118 L84 40 Q84 0 140 0 Q196 0 196 40 L196 118 Z" fill="#3a2e12"/>
+  <circle cx="140" cy="46" r="38" fill="#6a5424"/>
+  <circle cx="140" cy="46" r="34" fill="#f4e2a4"/>
+  <g stroke="#4a3a16" stroke-width="2.4" fill="none">
+    <circle cx="140" cy="46" r="12"/>
+    <circle cx="140" cy="46" r="24"/>
+    <path d="M140 12 V80 M106 46 H174 M116 22 L164 70 M164 22 L116 70"/>
+  </g>
+  <circle cx="140" cy="46" r="5" fill="#fffaf0" stroke="#4a3a16" stroke-width="1.6"/>
+  <g fill="#1f180a">
+    <path d="M0 0 H40 V118 H0 Z M240 0 H280 V118 H240 Z"/>
+    <path d="M50 10 H70 V118 H50 Z M210 10 H230 V118 H210 Z"/>
+    <path d="M40 0 Q46 30 60 34 Q74 30 80 0 Z M200 0 Q206 30 220 34 Q234 30 240 0 Z" fill="#171107"/>
+  </g>
+  <path d="M40 0 V118 M70 10 V118 M210 10 V118 M240 0 V118" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M40 30 H0 M40 70 H0 M280 30 H240 M280 70 H240" stroke="#140d0a" stroke-width="1"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <!-- floor with a long runner -->
+  <path d="M0 118 H280 V160 H0 Z" fill="#1a1409"/>
+  <path d="M118 118 L162 118 L200 160 L80 160 Z" fill="#5a1e14"/>
+  <path d="M122 118 L158 118 L190 160 L90 160 Z" fill="none" stroke="#c9a040" stroke-width="1.2"/>
+  <path d="M0 132 H280 M0 148 H280" stroke="#110c06" stroke-width="1"/>
+
+  <!-- the hero, grown smaller into the scene -->
+  <g transform="translate(140 139) scale(0.8) translate(-140 -136)">
+    <!-- white aura -->
+    <ellipse cx="140" cy="80" rx="66" ry="66" fill="url(#aura)"/>
+    <use href="#h" fill="#ffffff" filter="url(#brillo)" opacity="0.55"/>
+    <use href="#h" transform="translate(1.5 -1.5)" fill="#ffd35a"/>
+    <use href="#h" transform="translate(-1.2 -1)" fill="#fff4d0" opacity="0.6"/>
+    <use href="#h" fill="#0b0910"/>
+    <path d="M133 42 H147" stroke="#fff4d0" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M126 62 Q140 66 154 62 M140 60 V90 M130 96 L150 96" fill="none" stroke="#ffd35a" stroke-width="0.9" opacity="0.5"/>
+
+    <!-- sun on the shield, faintly lit -->
+    <path d="M173 78 L175 86 L183 88 L175 90 L173 98 L171 90 L163 88 L171 86 Z" fill="none" stroke="#ffd35a" stroke-width="1.1" opacity="0.8"/>
+    <path d="M158 72 L188 72" stroke="#ffd35a" stroke-width="0.9" opacity="0.6"/>
+    <!-- the hallowed hammer, wrapped in white light -->
+    <path d="M104 12 L112 12 L112 76 L104 76 Z" fill="#fffaf0" opacity="0.8" filter="url(#brillo)"/>
+    <path d="M105.6 22 L110.4 22 L110.4 72 L105.6 72 Z" fill="#5a3e20" stroke="#140d0a" stroke-width="1.6"/>
+    <path d="M108.5 22 L110.4 22 L110.4 72 L108.5 72 Z" fill="#3e2a14"/>
+    <path d="M104 70 L112 70 L111 76 L105 76 Z" fill="#c9a040" stroke="#140d0a" stroke-width="1.2"/>
+    <circle cx="108" cy="14" r="24" fill="#ffffff" opacity="0.75" filter="url(#fuerte)"/>
+    <path d="M90 8 Q84 -8 94 -18 Q94 -4 102 0 Q100 -14 108 -26 Q114 -12 114 0 Q120 -6 122 -18 Q132 -6 126 8 Z" fill="#fff4d0" opacity="0.85" filter="url(#brillo)"/>
+    <path d="M92 4 L124 4 L128 9 L128 21 L124 26 L92 26 L88 21 L88 9 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M108 4 L124 4 L128 9 L128 21 L124 26 L108 26 Z" fill="#d8d0b8"/>
+    <path d="M99 4 V26 M117 4 V26" stroke="#140d0a" stroke-width="1"/>
+    <path d="M108 8 L111 15 L108 22 L105 15 Z" fill="#ffd35a" stroke="#140d0a" stroke-width="0.9"/>
+    <path d="M105 4 L108 -4 L111 4 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M101 47 L114 47 L114 58 L101 58 Z" fill="#0b0910"/>
+    <path d="M101 50.5 H114 M101 54 H114" stroke="#ffd35a" stroke-width="0.7" opacity="0.6"/>
+  </g>
+
+  <!-- rays and motes around him -->
+  <path d="M140 60 L96 16 M140 60 L184 16 M140 60 L78 58 M140 60 L202 58" stroke="#fff4d0" stroke-width="2" opacity="0.35" stroke-linecap="round" filter="url(#brillo)"/>
+  <path d="M96 70h.1M184 76h.1M104 100h.1M178 104h.1M112 40h.1M170 36h.1M92 120h.1M190 122h.1" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.85"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

@@ -24,7 +24,7 @@ export interface GallerySection {
 }
 
 const HEROES: [ClaseId, string][] = [
-  ['druida', 'Druida'], ['barbaro', 'Bárbaro'], ['mago', 'Mago'], ['picaro', 'Pícaro'], ['brujo', 'Brujo'],
+  ['druida', 'Druida'], ['barbaro', 'Bárbaro'], ['mago', 'Mago'], ['picaro', 'Pícaro'], ['brujo', 'Brujo'], ['paladin', 'Paladín'],
 ];
 const FORMS: [FormId, string][] = [
   ['lobo', 'Forma de Lobo'], ['oso', 'Forma de Oso'], ['aguila', 'Forma de Águila'],

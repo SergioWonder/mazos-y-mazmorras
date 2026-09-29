@@ -173,7 +173,7 @@ export function vinePath(box: Box, i: number, n: number, growth: number, squeeze
   return pts;
 }
 /** Is vine i in front of the target at height s (0..1)? */
-const vineFront = (i: number, s: number) => Math.cos(i * 2.1 + 0.6 + s * (1.4 + 0.15 * (i % 2)) * TAU) > 0;
+export const vineFront = (i: number, s: number) => Math.cos(i * 2.1 + 0.6 + s * (1.4 + 0.15 * (i % 2)) * TAU) > 0;
 
 // ── the effects ─────────────────────────────────────────────────────────────
 
@@ -935,6 +935,709 @@ const rayoDM: Build = (g, u, c, D) => {
   }
 };
 
+// ── Paladin: hammers of light, holy rays and elemental smites ───────────────
+
+/** Paladin palettes: [halo, rim, core] of the hammer and the element's accents. */
+export const HOLY = { halo: '#ffb830', rim: '#ffd35a', core: '#fff6d8', pale: '#fff3c4', deep: '#e0a82e' };
+const THUNDER = { halo: '#4f8fff', rim: '#9fd0ff', core: '#ffffff', pale: '#cfe6ff', deep: '#3a6fe0' };
+const BLIND = { halo: '#fff8e6', rim: '#fffdf5', core: '#ffffff', pale: '#fffbe8', deep: '#fff0c0' };
+const SMITE_FIRE = { halo: '#ff7a2a', rim: '#ffb347', core: '#fff1c9', pale: '#ffd35a', deep: '#ff4a1a' };
+const RADIANT = { halo: '#f5c96a', rim: '#ffe7a0', core: '#fffaf0', pale: '#fff3d0', deep: '#e8b850' };
+const BANISH = { halo: '#6c2fb5', rim: '#b46bff', core: '#fff3c4', pale: '#e8d0ff', deep: '#ffd35a' };
+type HammerLook = { halo: string; rim: string; core: string };
+
+/** Warhammer of light: head centred on (hx, hy), handle along `ang` (from the head
+ *  towards the grip), size `s` ≈ the head's length in px. About ten sprites. */
+export function lightHammer(g: Painter, hx: number, hy: number, ang: number, s: number, a: number, look: HammerLook = HOLY) {
+  if (a <= 0.01) return;
+  const ca = Math.cos(ang), sa = Math.sin(ang), px = -sa, py = ca;
+  const half = 0.5 * s, th = 0.36 * s, L = 1.25 * s;
+  const gx = hx + ca * L, gy = hy + sa * L;
+  g.dot(hx, hy, 0.7 * s, look.halo, 0.14 * a);
+  // dark silhouette under the light so the shape reads on bright backgrounds
+  g.seg(hx - px * half * 1.08, hy - py * half * 1.08, hx + px * half * 1.08, hy + py * half * 1.08, th * 1.3, '#3a2a08', 0.55 * a, 0, false);
+  g.seg(hx, hy, gx, gy, 0.12 * s + 1, look.rim, 0.9 * a);
+  g.seg(hx, hy, gx, gy, 0.05 * s + 0.6, look.core, a, 0, false);
+  g.dot(gx, gy, 0.09 * s + 1, look.rim, a);
+  g.seg(hx - px * half, hy - py * half, hx + px * half, hy + py * half, th, look.rim, a, 0, false);
+  g.seg(hx - px * half * 0.85, hy - py * half * 0.85, hx + px * half * 0.85, hy + py * half * 0.85, th * 0.45, look.core, a, 0, false);
+  for (const e of [-1, 1]) {
+    const ex = hx + px * half * e, ey = hy + py * half * e, f = th * 0.72;
+    g.seg(ex - ca * f, ey - sa * f, ex + ca * f, ey + sa * f, 0.12 * s + 1, look.rim, a);
+  }
+}
+
+/** Where the paladin holds his hammer up while it charges (self spells). */
+function heldHammer(c: SpellCtx) {
+  const { b, cx, W, H, k, face } = geo(c);
+  return { x: cx + face * W * 0.3, y: b.y + 0.04 * H, ang: Math.PI / 2 + face * 0.35, s: 30 * k + 10 };
+}
+
+/** Flame tongue rising from (x, y): stacked teardrops that sway with `time`. */
+function tongue(g: Painter, x: number, y: number, h: number, w: number, time: number, salt: number, cols: string[], a: number) {
+  if (h < 2 || a <= 0.01) return;
+  const m = Math.max(3, Math.min(6, Math.round(h / (w * 0.55))));
+  for (let j = 0; j < m; j++) {
+    const f = j / m, sway = Math.sin(time * 13 + salt * 1.7 + j) * w * 0.35 * f;
+    g.drop(x + sway, y - f * h, w * (1 - f * 0.6) * 0.62 + 0.5, Math.sin(time * 9 + salt) * 0.2, cols[Math.min(cols.length - 1, Math.floor(f * cols.length))], a * (1 - f * 0.4));
+  }
+}
+
+/** Sun emblem: a ring with `n` triangular rays, rotated by `rot`. */
+function sunSigil(g: Painter, x: number, y: number, r: number, n: number, rot: number, thick: number, col: string, core: string, a: number) {
+  if (a <= 0.01 || r < 2) return;
+  g.ring(x, y, r, r, thick, col, a);
+  g.ring(x, y, r * 0.55, r * 0.55, thick * 0.6, core, 0.8 * a);
+  for (let i = 0; i < n; i++) {
+    const t = rot + (i / n) * TAU, ct = Math.cos(t), st = Math.sin(t);
+    g.fang(x + ct * r * 1.05, y + st * r * 1.05, x + ct * r * 1.55, y + st * r * 1.55, thick * 2.2, col, a);
+  }
+}
+
+/** Hammer of Light: a golden warhammer swings down onto the target and rings it
+ *  like a bell: flash, starburst, a shock ring and sparks. Each blow varies its swing. */
+const martillo: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, ground, dir } = geo(c);
+  const side = g.r(900) < 0.5;
+  const I = { x: cx + (g.r(901) - 0.5) * 0.24 * W, y: cy - 0.1 * H + (g.r(902) - 0.5) * 0.14 * H };
+  const s = 40 * k + 14, L = 1.25 * s;
+  const gv = side ? { x: -dir * 0.95, y: -0.3 } : { x: -dir * 0.8, y: -0.6 };
+  const gl = Math.hypot(gv.x, gv.y), G = { x: I.x + (gv.x / gl) * L * 1.6, y: I.y + (gv.y / gl) * L * 1.6 };
+  const rad = L * 1.6, thImp = Math.atan2(I.y - G.y, I.x - G.x), th0 = thImp - dir * ((side ? 1.5 : 2.0) + (g.r(903) - 0.5) * 0.4);
+  const HIT = 0.2, p = span(u, 0, HIT);
+  const th = u < HIT ? lerp(th0, thImp, p * p) : thImp - dir * 0.14 * bell(u, HIT, 0.5);
+  const vis = span(u, 0, 0.05) * (1 - span(u, 0.32, 0.58));
+  const head = (t: number) => ({ x: G.x + Math.cos(t) * rad, y: G.y + Math.sin(t) * rad - (u > HIT ? 16 * k * easeOut(span(u, 0.28, 0.58)) : 0) });
+  // motion trail while it swings
+  if (u < HIT + 0.08) {
+    const ta = th - dir * Math.min(Math.abs(th - th0), 1.1), tr = 1 - span(u, HIT, HIT + 0.08);
+    g.arc(G.x, G.y, rad, 0.45 * s, (ta + th) / 2, Math.abs(th - ta) / 2 + 0.01, HOLY.halo, 0.22 * tr * vis);
+    g.arc(G.x, G.y, rad, 0.12 * s, (ta + th) / 2, Math.abs(th - ta) / 2 + 0.01, HOLY.pale, 0.5 * tr * vis);
+  }
+  if (u >= HIT) {
+    // the blow rings out (painted under the hammer, which stays readable on top)
+    if (u < HIT + 0.05) g.mark('golpe', I.x, I.y);
+    const fl = 1 - span(u, HIT, 0.4);
+    g.dot(I.x, I.y, R * 0.4 * fl + 1, HOLY.pale, 0.22 * fl);
+    g.dot(I.x, I.y, 9 * k * (0.6 + 0.4 * fl), '#ffffff', 0.8 * fl);
+    const out = easeOut(span(u, HIT, 0.32)), fade = 1 - span(u, 0.36, 0.66), rot = g.r(904) * TAU;
+    for (let i = 0; i < 8; i++) {
+      const a = rot + (i / 8) * TAU, len = (0.4 + 0.3 * g.r(i + 910)) * R * out, r0 = 0.12 * R;
+      if (len > 2) g.fang(I.x + Math.cos(a) * r0, I.y + Math.sin(a) * r0, I.x + Math.cos(a) * (r0 + len), I.y + Math.sin(a) * (r0 + len), 5 * k, i % 2 ? HOLY.pale : HOLY.rim, fade);
+    }
+    const sr = span(u, HIT, 0.72);
+    if (sr < 1) g.ring(I.x, I.y, R * (0.2 + 0.95 * easeOut(sr)), R * (0.1 + 0.45 * easeOut(sr)), 6 * k * (1 - sr) + 1, HOLY.rim, 1 - sr);
+    const sg = span(u, HIT + 0.04, 0.8);
+    if (sg > 0 && sg < 1) g.ring(cx, ground, W * (0.3 + 0.5 * sg), W * 0.08 * (0.3 + 0.5 * sg) + 2, 3 * k, HOLY.deep, 0.7 * (1 - sg));
+    const n = g.n(14);
+    for (let i = 0; i < n; i++) {
+      const q = span(u, HIT, HIT + 0.35 + 0.3 * g.r(i + 920));
+      if (q <= 0 || q >= 1) continue;
+      const a = -Math.PI / 2 + dir * (0.2 + 1.2 * g.r(i + 930)) * (g.r(i + 940) < 0.75 ? 1 : -1), sp = (0.8 + 0.8 * g.r(i + 950)) * R;
+      const x = I.x + Math.cos(a) * sp * easeOut(q), y = I.y + Math.sin(a) * sp * easeOut(q) + 0.7 * R * q * q;
+      g.spark(x, y, 9 * k * (1 - 0.5 * q), Math.atan2(Math.sin(a) + 1.4 * q, Math.cos(a)), i % 3 ? HOLY.rim : '#ffffff', 1 - q);
+    }
+  } else {
+    const h2 = head(th - dir * 0.25 * p);
+    lightHammer(g, h2.x, h2.y, th - dir * 0.25 * p + Math.PI, s, 0.18 * vis);
+  }
+  const h = head(th);
+  lightHammer(g, h.x, h.y, th + Math.PI, s * (1 + 0.08 * bell(u, HIT, 0.3)), vis);
+  if (vis > 0.02) g.mark('martillo', h.x, h.y);
+};
+
+/** Sacred Shield: a sun seal draws itself in front of the paladin, a golden shield
+ *  lights inside it, a dome of light swells and the arrows glance off it. */
+const escudoSagrado: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, face } = geo(c);
+  const sx = cx + face * W * 0.42, sy = cy - 0.04 * H, sr = 0.36 * H;
+  const draw = easeOut(span(u, 0, 0.3)), out = 1 - span(u, 0.72, 1), rot = u * 1.6;
+  g.arc(sx, sy, sr, 3 * k, -Math.PI / 2, Math.PI * draw + 0.01, HOLY.rim, 0.8 * out * span(u, 0, 0.05));
+  g.arc(sx, sy, sr, 1.2 * k, -Math.PI / 2, Math.PI * draw + 0.01, '#ffffff', 0.8 * out * span(u, 0, 0.05));
+  const inner = span(u, 0.14, 0.3) * out;
+  g.ring(sx, sy, sr * 0.82, sr * 0.82, 2 * k, HOLY.pale, 0.8 * inner);
+  const glints = g.n(8);
+  for (let i = 0; i < glints; i++) {
+    const t = rot + (i / glints) * TAU;
+    g.star(sx + Math.cos(t) * sr * 0.91, sy + Math.sin(t) * sr * 0.91, 7 * k, HOLY.pale, inner);
+  }
+  const fill = span(u, 0.24, 0.34) * out, flash = bell(u, 0.26, 0.5);
+  g.dot(sx, sy, sr * 0.7, '#2a1e06', 0.45 * fill, false);
+  g.shield(sx, sy, sr * 0.64, 0.8, HOLY.deep, 0.6 * fill);
+  g.shield(sx, sy, sr * 0.64, 0.8, '#ffffff', 0.35 * flash);
+  const cr = span(u, 0.2, 0.34) * out;
+  g.seg(sx, sy - sr * 0.4 * cr, sx, sy + sr * 0.42 * cr, 3.5 * k, '#fff6d8', cr);
+  g.seg(sx - sr * 0.26 * cr, sy - sr * 0.1, sx + sr * 0.26 * cr, sy - sr * 0.1, 3.5 * k, '#fff6d8', cr);
+  // the dome of light in front of him
+  const dome = easeOutBack(span(u, 0.28, 0.5)) * out, dr = R * 1.6 * (0.7 + 0.3 * dome);
+  if (dome > 0.02) {
+    g.arc(cx, cy, dr, 10 * k, face > 0 ? 0 : Math.PI, 0.8, HOLY.halo, 0.2 * dome);
+    g.arc(cx, cy, dr, 2.5 * k, face > 0 ? 0 : Math.PI, 0.8, HOLY.pale, 0.75 * dome * (0.8 + 0.2 * Math.sin(u * 40)));
+  }
+  // arrows glance off the dome
+  for (let i = 0; i < 3; i++) {
+    const t0 = 0.3 + 0.08 * i, q = span(u, t0, t0 + 0.12), q2 = span(u, t0 + 0.12, t0 + 0.4);
+    const ay = (i - 1) * 0.28 * H, ang = face > 0 ? Math.PI : 0;
+    const hit = { x: cx + Math.cos(ay / dr) * dr * face, y: cy + ay };
+    if (q > 0 && q < 1) {
+      const x = lerp(hit.x + face * 1.4 * R, hit.x, q), y = hit.y;
+      g.spark(x, y, 16 * k, ang, '#fff3d6', 0.9);
+    } else if (q2 > 0 && q2 < 1) {
+      const a = (face > 0 ? 0 : Math.PI) - face * (0.6 + 0.4 * i) * 0.9;
+      g.spark(hit.x + Math.cos(a) * q2 * R, hit.y + Math.sin(a) * q2 * R + 0.6 * R * q2 * q2, 12 * k, a + q2 * 2, '#c9b58a', 1 - q2);
+      const f = bell(q2, 0, 0.35);
+      g.star(hit.x, hit.y, 16 * k * f + 0.1, '#ffffff', f);
+    }
+  }
+  const s2 = span(u, 0.7, 1);
+  if (s2 > 0 && s2 < 1) g.ring(sx, sy, sr * (1 + 0.5 * s2), sr * (1 + 0.5 * s2), 3 * k, HOLY.rim, 1 - s2);
+  const n = g.n(22);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, 0.4 + 0.35 * g.r(i), 1);
+    if (q <= 0 || q >= 1) continue;
+    const t = g.r(i + 20) * TAU;
+    g.dot(sx + Math.cos(t) * sr * 0.9, sy + Math.sin(t) * sr * 0.9 - q * 40 * k, 2.2 * k, i % 2 ? HOLY.pale : HOLY.rim, 1 - q);
+  }
+};
+
+/** Blessing: a column of dawn light rises from the ground, golden motes spiral
+ *  up round the paladin, a halo forms over his head and a glint crowns it. */
+const bendicion: Build = (g, u, c, D) => {
+  const { b, cx, k, W, H, ground } = geo(c);
+  const col = bell(u, 0, 1) * (1 - 0.3 * span(u, 0.6, 1));
+  g.beam(cx, ground + 6 * k, cx, b.y - 0.5 * H, W * 0.95, HOLY.rim, 0.28 * col);
+  g.beam(cx, ground + 6 * k, cx, b.y - 0.5 * H, W * 0.3, HOLY.pale, 0.35 * col);
+  const s0 = span(u, 0, 0.45);
+  if (s0 < 1) g.ring(cx, ground, W * (0.25 + 0.5 * easeOut(s0)), W * 0.09 * (0.25 + 0.5 * easeOut(s0)) + 2, 4 * k, HOLY.rim, 1 - s0);
+  const n = g.n(30);
+  for (let i = 0; i < n; i++) {
+    const ph = g.r(i) * TAU, h = (u * 1.25 + g.r(i + 30)) % 1;
+    const a = ph + u * D * 4 + h * 5, depth = Math.sin(a);
+    const x = cx + Math.cos(a) * W * (0.46 - 0.18 * h), y = ground - h * H * 1.25;
+    const al = span(u, 0, 0.15) * (1 - span(u, 0.75, 1)) * Math.sin(Math.PI * h) * (depth > 0 ? 1 : 0.45);
+    if (i % 3 === 0) g.star(x, y, 7 * k, '#ffffff', al, a);
+    else g.dot(x, y, (2.4 + 1.2 * g.r(i + 60)) * k, i % 2 ? HOLY.rim : HOLY.pale, al);
+  }
+  const hl = span(u, 0.25, 0.42) * (1 - span(u, 0.85, 1)), hy = b.y - 0.02 * H - 6 * k * span(u, 0.25, 0.5);
+  g.ring(cx, hy, W * 0.24, W * 0.07, 4 * k, HOLY.rim, hl);
+  g.ring(cx, hy, W * 0.24, W * 0.07, 1.5 * k, '#ffffff', hl);
+  const gl = bell(u, 0.3, 0.6);
+  g.star(cx, hy - 4 * k, 18 * k * gl + 0.1, '#ffffff', gl, u * 2);
+  g.dot(cx, hy, 14 * k * gl + 1, HOLY.pale, 0.3 * gl);
+};
+
+/** Turn the Wicked: a wall of light sweeps over the enemy from the paladin's side,
+ *  a holy sun flashes on it and dark wisps are driven out of its body. */
+const expulsar: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, dir } = geo(c);
+  const O = c.from ?? { x: cx - dir * 3 * W, y: cy };
+  const dist = Math.hypot(cx - O.x, cy - O.y) || 1, base = Math.atan2(cy - O.y, cx - O.x);
+  const front = lerp(dist - 1.4 * R, dist + 1.5 * R, easeOut(span(u, 0, 0.7)));
+  const vis = span(u, 0, 0.08) * (1 - span(u, 0.6, 0.85));
+  for (let i = 0; i < 3; i++) {
+    const r = front - i * 16 * k;
+    if (r <= 4) continue;
+    const half = Math.min(1.2, (0.85 * H) / r);
+    if (i === 0) g.arc(O.x, O.y, r, 22 * k, base, half, HOLY.halo, 0.25 * vis);
+    g.arc(O.x, O.y, r, (i ? 3 : 7) * k, base, half, i ? HOLY.rim : HOLY.pale, vis * (i ? 0.6 / i : 1));
+  }
+  // light motes carried on the front
+  const m = g.n(12);
+  for (let i = 0; i < m; i++) {
+    const a = base + (g.r(i) - 0.5) * 2 * Math.min(1.2, (0.85 * H) / Math.max(front, 1));
+    const r = front - g.r(i + 20) * 30 * k;
+    g.spark(O.x + Math.cos(a) * r, O.y + Math.sin(a) * r, 10 * k, a, '#ffffff', 0.8 * vis);
+  }
+  // the enemy lights up when the front passes
+  const pass = bell(u, 0.2, 0.55);
+  g.ring(cx, cy, W * 0.5, H * 0.5, 4 * k, HOLY.pale, 0.7 * pass);
+  sunSigil(g, cx, cy - 0.05 * H, 0.18 * Math.min(W, H) + 4, 8, u * 2, 3 * k, HOLY.rim, '#ffffff', bell(u, 0.24, 0.6));
+  // dark wisps driven out of the body, away from the paladin
+  const n = g.n(12);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, 0.26 + 0.12 * g.r(i + 40), 0.8 + 0.15 * g.r(i + 40));
+    if (q <= 0 || q >= 1) continue;
+    const x0 = cx + (g.r(i + 50) - 0.5) * W * 0.7, y0 = cy + (g.r(i + 60) - 0.5) * H * 0.7;
+    const x = x0 + dir * easeOut(q) * R * (0.8 + 0.6 * g.r(i + 70)), y = y0 - q * 30 * k + Math.sin(q * 8 + i) * 5 * k;
+    g.dot(x, y, (6 + 6 * q) * k, i % 2 ? '#2a1d38' : '#4a3a5a', 0.55 * (1 - q), false);
+    if (i % 3 === 0) g.dot(x, y, 2.2 * k, '#b46bff', 0.8 * (1 - q));
+  }
+};
+
+/** Holy Bolt: a sun sigil opens in the sky above the enemy, draws light in and
+ *  hurls a golden zigzag bolt down on it; a cross gleam and a ring at its feet. */
+const rayoSagrado: Build = (g, u, c, D) => {
+  const { b, cx, cy, R, k, W, H, ground } = geo(c);
+  const top = Math.max(34, b.y - 1.25 * H), open = easeOut(span(u, 0, 0.25)), out = 1 - span(u, 0.62, 0.9);
+  const sr = (0.16 * W + 6) * open;
+  sunSigil(g, cx, top, sr, 8, u * D * 1.5, 2.5 * k, HOLY.rim, '#ffffff', out);
+  g.ring(cx, top, sr * 2.1, sr * 0.6, 2 * k, HOLY.pale, 0.6 * out);
+  const n = g.n(14);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, g.r(i) * 0.12, 0.28);
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 10) * TAU, rad = (1 - easeIn(q)) * W * 0.7;
+    g.spark(cx + Math.cos(a) * rad, top + Math.sin(a) * rad * 0.4, 8 * k, a + Math.PI, HOLY.rim, q);
+  }
+  const tip = { x: cx + (g.r(30) - 0.5) * 0.2 * W, y: cy - 0.05 * H };
+  const on = span(u, 0.28, 0.31) * (1 - span(u, 0.5, 0.6)), frame = Math.floor(u * D * 22);
+  if (on > 0 && frame % 4 !== 3) {
+    const main = zigzag({ x: cx, y: top }, tip, 10, Math.min(22 * k, H * 0.12), frame, 3);
+    g.beam(cx, top, tip.x, tip.y, 26 * k, HOLY.rim, 0.35 * on);
+    g.strip(main, () => 10 * k, HOLY.halo, 0.45 * on);
+    g.strip(main, () => 4 * k, HOLY.pale, on);
+    g.strip(main, () => 1.6 * k, '#ffffff', on, false);
+    g.mark('rayo', tip.x, tip.y);
+  }
+  const fl = bell(u, 0.29, 0.55);
+  g.dot(tip.x, tip.y, R * 0.6 * fl + 1, HOLY.pale, 0.3 * fl);
+  g.seg(tip.x - 0.55 * W * fl, tip.y, tip.x + 0.55 * W * fl, tip.y, 5 * k, '#ffffff', fl, 1);
+  g.seg(tip.x, tip.y - 0.55 * H * fl, tip.x, tip.y + 0.45 * H * fl, 5 * k, '#ffffff', fl, 1);
+  const pil = span(u, 0.5, 0.95);
+  if (pil > 0 && pil < 1) g.beam(tip.x, top, tip.x, ground, 10 * k * (1 - pil) + 1, HOLY.pale, 0.4 * (1 - pil));
+  const s = span(u, 0.3, 0.8);
+  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.2 + 0.6 * s), W * 0.07 * (0.2 + 0.6 * s) + 2, 4 * k, HOLY.rim, 1 - s);
+  const m = g.n(12);
+  for (let i = 0; i < m; i++) {
+    const q = span(u, 0.3 + 0.1 * g.r(i + 40), 0.75 + 0.2 * g.r(i + 40));
+    if (q <= 0 || q >= 1) continue;
+    const a = -Math.PI / 2 + (g.r(i + 50) - 0.5) * 2.4, d = easeOut(q) * R * (0.6 + 0.6 * g.r(i + 60));
+    g.spark(tip.x + Math.cos(a) * d, tip.y + Math.sin(a) * d + 0.5 * R * q * q, 8 * k, a, i % 2 ? HOLY.rim : '#ffffff', 1 - q);
+  }
+};
+
+// ── Paladin charges: the raised hammer takes the element of the smite ──────
+
+/** Divine charge: golden light spirals into the raised hammer, which flares with a
+ *  cross gleam and a crown of spinning rays. */
+const cargaDivina: Build = (g, u, c) => {
+  const { cx, k, W, ground } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.18) * (1 - span(u, 0.82, 1));
+  const n = g.n(24);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, g.r(i) * 0.14, 0.32);
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 30) * TAU + q * 4, rad = (1 - easeIn(q)) * W * 0.9;
+    g.dot(hm.x + Math.cos(a) * rad, hm.y + Math.sin(a) * rad * 0.8, 2.4 * k, i % 2 ? HOLY.rim : HOLY.pale, q);
+  }
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s * (1 + 0.15 * bell(u, 0.3, 0.5)), vis);
+  const fl = bell(u, 0.3, 0.58);
+  g.star(hm.x, hm.y, 44 * k * fl + 0.1, '#ffffff', fl);
+  const rays = bell(u, 0.3, 0.9);
+  for (let i = 0; i < 10; i++) {
+    const a = u * 3 + (i / 10) * TAU;
+    g.fang(hm.x + Math.cos(a) * hm.s * 0.6, hm.y + Math.sin(a) * hm.s * 0.6, hm.x + Math.cos(a) * hm.s * 1.25, hm.y + Math.sin(a) * hm.s * 1.25, 5 * k, HOLY.rim, 0.8 * rays);
+  }
+  const s = span(u, 0.3, 0.8);
+  if (s > 0 && s < 1) g.ring(hm.x, hm.y, hm.s * (0.5 + 1.2 * s), hm.s * (0.5 + 1.2 * s), 3 * k, HOLY.pale, 1 - s);
+  const s2 = span(u, 0.3, 0.9);
+  if (s2 > 0 && s2 < 1) g.ring(cx, ground, W * (0.3 + 0.4 * s2), W * 0.08 * (0.3 + 0.4 * s2) + 2, 3 * k, HOLY.rim, 0.8 * (1 - s2));
+};
+
+/** Thunder charge: a bolt from the sky strikes the raised hammer; arcs of blue-white
+ *  electricity crackle round its head and crawl down the handle. */
+const cargaTrueno: Build = (g, u, c, D) => {
+  const { b, k, H } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.15) * (1 - span(u, 0.82, 1)), frame = Math.floor(u * D * 24);
+  const skyY = Math.max(10, b.y - 1.2 * H);
+  const on = span(u, 0.26, 0.29) * (1 - span(u, 0.42, 0.5));
+  if (on > 0 && frame % 4 !== 2) {
+    const main = zigzag({ x: hm.x + 10 * k, y: skyY }, { x: hm.x, y: hm.y }, 9, 16 * k, frame, 5);
+    g.strip(main, () => 9 * k, THUNDER.halo, 0.45 * on);
+    g.strip(main, () => 3.5 * k, THUNDER.pale, on);
+    g.strip(main, () => 1.4 * k, '#ffffff', on, false);
+  }
+  const fl = bell(u, 0.27, 0.5);
+  g.dot(hm.x, hm.y, hm.s * 0.9 * fl + 1, THUNDER.halo, 0.25 * fl);
+  g.dot(hm.x, hm.y, hm.s * 0.25 * fl + 1, '#ffffff', 0.8 * fl);
+  const crackle = span(u, 0.05, 0.2) * (1 - span(u, 0.8, 0.95)) * (0.6 + 0.4 * span(u, 0.27, 0.35));
+  const arcs = g.n(4);
+  if (crackle > 0) for (let j = 0; j < arcs; j++) {
+    const a = hash01(frame * 5 + j, 3) * TAU, r = hm.s * (0.7 + 0.6 * hash01(frame + j, 8));
+    const end = { x: hm.x + Math.cos(a) * r, y: hm.y + Math.sin(a) * r };
+    g.strip(zigzag({ x: hm.x, y: hm.y }, end, 4, 6 * k, frame, j + 11), () => 1.2 * k, j % 2 ? THUNDER.rim : THUNDER.pale, 0.75 * crackle);
+  }
+  const down = span(u, 0.3, 0.7);
+  if (down > 0 && down < 1 && frame % 2 === 0) {
+    const L = 1.25 * hm.s, f = down;
+    const a0 = { x: hm.x + Math.cos(hm.ang) * L * f * 0.6, y: hm.y + Math.sin(hm.ang) * L * f * 0.6 };
+    const a1 = { x: hm.x + Math.cos(hm.ang) * L * (f * 0.6 + 0.4), y: hm.y + Math.sin(hm.ang) * L * (f * 0.6 + 0.4) };
+    g.strip(zigzag(a0, a1, 3, 5 * k, frame, 21), () => 1.6 * k, THUNDER.pale, 1 - down);
+  }
+  const n = g.n(14);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, 0.28 + 0.3 * g.r(i), 0.6 + 0.3 * g.r(i));
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 20) * TAU, d = easeOut(q) * hm.s * 1.6;
+    g.spark(hm.x + Math.cos(a) * d, hm.y + Math.sin(a) * d + 20 * k * q * q, 7 * k, a, i % 2 ? THUNDER.rim : '#ffffff', 1 - q);
+  }
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s, vis, THUNDER);
+};
+
+/** Blinding charge: light condenses to a point on the hammer and bursts into a
+ *  white flare with spinning spokes and a long lens streak. */
+const cargaCegadora: Build = (g, u, c) => {
+  const { cx, cy, R, k, W } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.15) * (1 - span(u, 0.8, 1));
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s, vis, BLIND);
+  const n = g.n(20);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, g.r(i) * 0.12, 0.3);
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 20) * TAU, rad = (1 - easeIn(q)) * R * 1.1;
+    g.spark(hm.x + Math.cos(a) * rad, hm.y + Math.sin(a) * rad, 9 * k, a + Math.PI, BLIND.pale, q);
+  }
+  const pt = span(u, 0.1, 0.3) * (1 - span(u, 0.3, 0.36));
+  g.dot(hm.x, hm.y, 6 * k * pt + 0.5, '#ffffff', pt);
+  const fl = bell(u, 0.3, 0.62);
+  g.dot(hm.x, hm.y, R * 1.1 * fl + 1, BLIND.halo, 0.3 * fl);
+  g.dot(hm.x, hm.y, R * 0.35 * fl + 1, '#ffffff', 0.95 * fl);
+  const sp = bell(u, 0.3, 0.8);
+  for (let i = 0; i < 12; i++) {
+    const a = u * 2.4 + (i / 12) * TAU, L = R * (0.7 + 0.4 * (i % 2)) * (0.5 + 0.5 * sp);
+    g.beam(hm.x, hm.y, hm.x + Math.cos(a) * L, hm.y + Math.sin(a) * L, 6 * k, '#ffffff', 0.45 * sp);
+  }
+  const st = bell(u, 0.3, 0.7);
+  g.seg(hm.x - W * 0.9 * st, hm.y, hm.x + W * 0.9 * st, hm.y, 3 * k, '#ffffff', 0.8 * st, 1);
+  for (const f of [-0.6, 0.45, 0.8]) g.ring(hm.x + f * W * 0.8, hm.y + f * 4 * k, 6 * k, 6 * k, 1.4 * k, BLIND.deep, 0.6 * st);
+  const m = g.n(10);
+  for (let i = 0; i < m; i++) {
+    const tw = bell(u, 0.45 + 0.4 * g.r(i + 40), 1);
+    g.star(cx + (g.r(i + 50) - 0.3) * W, cy + (g.r(i + 60) - 0.7) * R, 8 * k * tw + 0.1, '#ffffff', tw);
+  }
+};
+
+/** Fire charge: golden-orange flames lick up the hammer head, a ring of fire runs
+ *  round the paladin's feet and embers rise. */
+const cargaFuego: Build = (g, u, c, D) => {
+  const { b, cx, k, W, H, ground } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.15) * (1 - span(u, 0.82, 1));
+  g.dot(hm.x, hm.y, hm.s * 1.1, SMITE_FIRE.deep, 0.18 * vis * (1 + 0.2 * Math.sin(u * D * 20)));
+  const fl = span(u, 0.12, 0.3) * (1 - span(u, 0.78, 0.95));
+  const cols = ['#fff1c9', '#ffd35a', '#ffb347', '#ff7a2a'];
+  const t = g.n(5);
+  for (let i = 0; i < t; i++) {
+    const off = (i / Math.max(1, t - 1) - 0.5) * hm.s * 0.9;
+    const px = -Math.sin(hm.ang), py = Math.cos(hm.ang);
+    tongue(g, hm.x + px * off, hm.y + py * off - 4 * k, hm.s * (0.8 + 0.5 * g.r(i)) * fl, 11 * k, u * D, i, cols, 0.75 * fl);
+  }
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s, vis, SMITE_FIRE);
+  const ring = easeOut(span(u, 0.2, 0.45)) * (1 - span(u, 0.8, 1));
+  if (ring > 0.02) {
+    g.ring(cx, ground, W * 0.6 * ring, W * 0.14 * ring + 1, 4 * k, SMITE_FIRE.halo, ring);
+    const m = g.n(8);
+    for (let i = 0; i < m; i++) {
+      const a = (i / m) * TAU + u * 2;
+      tongue(g, cx + Math.cos(a) * W * 0.6 * ring, ground + Math.sin(a) * W * 0.14 * ring, H * 0.22 * ring * (0.7 + 0.5 * g.r(i + 10)), 10 * k, u * D, i + 7, cols.slice(1), 0.8 * ring);
+    }
+  }
+  const e = g.n(16);
+  for (let i = 0; i < e; i++) {
+    const q = span(u, 0.2 + 0.5 * g.r(i + 30), 0.6 + 0.4 * g.r(i + 30));
+    if (q <= 0 || q >= 1) continue;
+    const x = (i % 2 ? hm.x : cx) + (g.r(i + 40) - 0.5) * W * 0.8 + Math.sin(q * 9 + i) * 5 * k;
+    const y = (i % 2 ? hm.y : ground) - q * H * 0.7;
+    if (y < b.y - 0.9 * H) continue;
+    g.spark(x, y, 6 * k, -Math.PI / 2, i % 3 ? '#ffb347' : '#ffd35a', 1 - q);
+  }
+};
+
+/** Radiant charge: soft golden rings breathe out of the hammer, a warm aura wraps
+ *  the paladin and a faint shield glints ahead of him. */
+const cargaResplandor: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, face } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.2) * (1 - span(u, 0.82, 1));
+  const aura = bell(u, 0, 1);
+  g.dot(cx, cy, R * 1.05, RADIANT.halo, 0.12 * aura);
+  g.dot(cx, cy, R * 0.6, RADIANT.pale, 0.1 * aura);
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s, vis, RADIANT);
+  for (let i = 0; i < 4; i++) {
+    const s = span(u, 0.1 + i * 0.15, 0.55 + i * 0.15);
+    if (s > 0 && s < 1) g.ring(hm.x, hm.y, hm.s * (0.4 + 1.8 * s), hm.s * (0.4 + 1.8 * s), 3 * k * (1 - s) + 0.8, i % 2 ? RADIANT.rim : RADIANT.pale, 0.8 * Math.sin(Math.PI * s));
+  }
+  const sh = bell(u, 0.4, 0.95), sx = cx + face * W * 0.5;
+  g.shield(sx, cy, H * 0.3, 0.55, RADIANT.rim, 0.45 * sh);
+  const n = g.n(18);
+  for (let i = 0; i < n; i++) {
+    const tw = bell(u, 0.15 + 0.6 * g.r(i), 0.5 + 0.5 * g.r(i) + 0.1);
+    const a = g.r(i + 20) * TAU, d = R * (0.4 + 0.7 * g.r(i + 30));
+    g.star(cx + Math.cos(a) * d, cy + Math.sin(a) * d * 0.9 - u * 20 * k, 7 * k * tw + 0.1, i % 3 ? RADIANT.pale : '#ffffff', 0.9 * tw);
+  }
+};
+
+/** Banishing charge: a violet seal with golden runes turns under the paladin's
+ *  feet, a small seal wheels behind the hammer head and violet-gold motes rise. */
+const cargaDestierro: Build = (g, u, c, D) => {
+  const { cx, k, W, H, ground } = geo(c);
+  const hm = heldHammer(c), vis = span(u, 0, 0.18) * (1 - span(u, 0.82, 1));
+  const open = easeOut(span(u, 0, 0.3)) * (1 - span(u, 0.82, 1)), rx = W * 0.62 * open, ry = W * 0.16 * open;
+  if (rx > 2) {
+    g.dot(cx, ground, rx * 0.8, '#1a0a2a', 0.3 * open, false);
+    g.ring(cx, ground, rx, ry, 4 * k, BANISH.rim, open);
+    g.ring(cx, ground, rx * 0.72, ry * 0.72, 2 * k, BANISH.deep, open);
+    for (let i = 0; i < 6; i++) {
+      const t = u * D * 1.2 + (i / 6) * TAU;
+      g.rune(cx + Math.cos(t) * rx * 0.86, ground + Math.sin(t) * ry * 0.86, 5 * k, t, i % 2 ? BANISH.deep : BANISH.pale, open);
+    }
+  }
+  g.rune(hm.x, hm.y, hm.s * 0.95 * span(u, 0.1, 0.35), -u * D * 2, BANISH.rim, 0.8 * vis);
+  lightHammer(g, hm.x, hm.y, hm.ang, hm.s, vis, BANISH);
+  const fl = bell(u, 0.3, 0.55);
+  g.dot(hm.x, hm.y, hm.s * 0.5 * fl + 1, BANISH.deep, 0.6 * fl);
+  const n = g.n(22);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, 0.1 + 0.6 * g.r(i), 0.45 + 0.55 * g.r(i));
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 20) * TAU;
+    g.dot(cx + Math.cos(a) * rx * 0.8 + Math.sin(q * 7 + i) * 4 * k, ground + Math.sin(a) * ry * 0.8 - q * H * 0.9, 2.4 * k, i % 3 ? BANISH.rim : BANISH.deep, 1 - q);
+  }
+};
+
+// ── Paladin smites: the element discharges on the enemy with the attack ─────
+
+/** Divine Smite: a golden sun emblem stamps onto the enemy, spokes of holy light
+ *  wheel out of it and embers drift up. */
+const castigoDivino: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, ground } = geo(c);
+  const HIT = 0.16, n = g.n(14);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, g.r(i) * 0.06, HIT);
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 10) * TAU, rad = (1 - easeIn(q)) * R * 1.3;
+    g.spark(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 10 * k, a + Math.PI, HOLY.rim, q);
+  }
+  if (u < HIT) return;
+  const fl = 1 - span(u, HIT, 0.45);
+  g.dot(cx, cy, R * 0.9 * fl + 1, HOLY.pale, 0.3 * fl);
+  g.dot(cx, cy, 20 * k * fl + 1, '#ffffff', fl);
+  const st = easeOutBack(span(u, HIT, 0.3)), out = 1 - span(u, 0.55, 0.9);
+  sunSigil(g, cx, cy, (0.28 * Math.min(W, H) + 6) * st * (1 + 0.4 * span(u, 0.55, 0.9)), 8, u * 1.5, 4 * k, HOLY.rim, '#ffffff', out);
+  const sp = bell(u, HIT, 0.8);
+  for (let i = 0; i < 12; i++) {
+    const a = u * 2 + (i / 12) * TAU, L = R * (1.1 + 0.35 * (i % 3));
+    g.beam(cx + Math.cos(a) * R * 0.3, cy + Math.sin(a) * R * 0.3, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 12 * k, HOLY.rim, 0.35 * sp);
+  }
+  for (let i = 0; i < 2; i++) {
+    const s = span(u, HIT + i * 0.08, 0.7 + i * 0.1);
+    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + 1.0 * easeOut(s)), R * (0.3 + 1.0 * easeOut(s)), 5 * k * (1 - s) + 1, i ? HOLY.pale : HOLY.deep, 1 - s);
+  }
+  const m = g.n(20);
+  for (let i = 0; i < m; i++) {
+    const q = span(u, HIT + 0.3 * g.r(i + 30), 0.6 + 0.4 * g.r(i + 30));
+    if (q <= 0 || q >= 1) continue;
+    g.dot(cx + (g.r(i + 40) - 0.5) * W * 1.1 + Math.sin(q * 6 + i) * 6 * k, ground - q * H * 1.2, 2.4 * k, i % 2 ? HOLY.rim : HOLY.pale, 1 - q);
+  }
+};
+
+/** Thundering Smite: blue-white bolts fork out of the blow to the ground, a
+ *  thunderclap rolls out in waves and sparks crackle over the body. */
+const castigoTrueno: Build = (g, u, c, D) => {
+  const { cx, cy, R, k, W, H, ground } = geo(c);
+  const HIT = 0.14, frame = Math.floor(u * D * 24);
+  const ch = span(u, 0, HIT);
+  if (u < HIT) { g.dot(cx, cy, 10 * k * ch + 1, THUNDER.pale, ch); g.dot(cx, cy, 30 * k * ch + 1, THUNDER.halo, 0.3 * ch); return; }
+  const on = 1 - span(u, 0.4, 0.55);
+  if (on > 0 && frame % 5 !== 4) {
+    const bolts = g.n(4);
+    for (let j = 0; j < bolts; j++) {
+      const a = Math.PI / 2 + (j / Math.max(1, bolts - 1) - 0.5) * 2.6 + (g.r(j) - 0.5) * 0.3;
+      const end = { x: cx + Math.cos(a) * W * 1.25, y: Math.min(ground, cy + Math.sin(a) * H * 0.9) };
+      const pts = zigzag({ x: cx + Math.cos(a) * R * 0.2, y: cy - 0.1 * H + Math.sin(a) * R * 0.12 }, end, 8, 18 * k, frame, j + 3);
+      g.strip(pts, () => 5 * k, THUNDER.halo, 0.3 * on);
+      g.strip(pts, () => 2 * k, THUNDER.pale, on);
+      g.strip(pts, () => 1 * k, '#ffffff', on, false);
+    }
+  }
+  const fl = bell(u, HIT, 0.4);
+  g.dot(cx, cy, R * 0.8 * fl + 1, THUNDER.halo, 0.22 * fl);
+  g.dot(cx, cy, 12 * k * fl + 1, '#ffffff', 0.85 * fl);
+  for (let i = 0; i < 3; i++) {
+    const s = span(u, HIT + i * 0.07, 0.62 + i * 0.1);
+    if (s <= 0 || s >= 1) continue;
+    const r = R * (0.35 + 1.1 * easeOut(s));
+    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, 0, 0.7, THUNDER.rim, 0.9 * (1 - s));
+    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, Math.PI, 0.7, THUNDER.rim, 0.9 * (1 - s));
+  }
+  const s = span(u, HIT, 0.7);
+  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + 0.8 * s), W * 0.09 * (0.3 + 0.8 * s) + 2, 4 * k, THUNDER.halo, 1 - s);
+  const cr = span(u, 0.3, 0.36) * (1 - span(u, 0.7, 0.9));
+  if (cr > 0) for (let j = 0; j < g.n(3); j++) {
+    const a0 = { x: cx + (hash01(frame, j + 40) - 0.5) * W * 0.8, y: cy + (hash01(frame, j + 50) - 0.5) * H * 0.8 };
+    const a1 = { x: a0.x + (hash01(frame, j + 60) - 0.5) * 40 * k, y: a0.y + (hash01(frame, j + 70) - 0.5) * 40 * k };
+    g.strip(zigzag(a0, a1, 4, 7 * k, frame, j + 30), () => 1.2 * k, THUNDER.rim, 0.8 * cr, false);
+  }
+  const m = g.n(16);
+  for (let i = 0; i < m; i++) {
+    const q = span(u, HIT + 0.05 * g.r(i + 80), 0.55 + 0.2 * g.r(i + 80));
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 90) * TAU, d = easeOut(q) * R * (0.7 + 0.7 * g.r(i + 95));
+    g.spark(cx + Math.cos(a) * d, cy + Math.sin(a) * d, 10 * k, a, i % 2 ? THUNDER.rim : '#ffffff', 1 - q);
+  }
+};
+
+/** Blinding Smite: a white flash bursts on the blow with a lens streak and spokes,
+ *  then little stars reel round the dazzled enemy's head. */
+const castigoCegador: Build = (g, u, c) => {
+  const { b, cx, cy, R, k, W, H } = geo(c);
+  const HIT = 0.14;
+  const pre = span(u, 0, HIT);
+  if (u < HIT) { g.dot(cx, cy, 8 * k * pre + 0.5, '#ffffff', pre); return; }
+  const fl = 1 - span(u, HIT, 0.5);
+  g.dot(cx, cy, R * 1.4 * fl + 1, BLIND.halo, 0.35 * fl);
+  g.dot(cx, cy, R * 0.5 * fl + 1, '#ffffff', 0.95 * fl);
+  const st = bell(u, HIT, 0.55);
+  g.seg(cx - W * 1.3 * st, cy, cx + W * 1.3 * st, cy, 4 * k, '#ffffff', 0.9 * st, 1);
+  g.seg(cx - W * 0.7 * st, cy, cx + W * 0.7 * st, cy, 10 * k, BLIND.deep, 0.35 * st, 1);
+  for (let i = 0; i < 14; i++) {
+    const a = (i / 14) * TAU + u, L = R * (0.9 + 0.5 * (i % 2)) * st;
+    g.beam(cx, cy, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 5 * k, '#ffffff', 0.4 * st);
+  }
+  const s = span(u, HIT, 0.55);
+  if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + s), R * (0.3 + s), 3 * k, BLIND.deep, 1 - s);
+  // dazed: stars reel round the head
+  const dz = span(u, 0.35, 0.45) * (1 - span(u, 0.85, 1)), hy = b.y + 0.12 * H;
+  const n = g.n(5);
+  for (let i = 0; i < n; i++) {
+    const a = u * 11 + (i / n) * TAU, depth = Math.sin(a);
+    g.star(cx + Math.cos(a) * W * 0.3, hy + depth * W * 0.07, (7 + 3 * depth) * k, i % 2 ? '#fff6c8' : '#ffffff', dz * (depth > -0.3 ? 1 : 0.5), a);
+  }
+  const m = g.n(12);
+  for (let i = 0; i < m; i++) {
+    const tw = bell(u, HIT + 0.5 * g.r(i), HIT + 0.3 + 0.5 * g.r(i));
+    g.dot(cx + (g.r(i + 20) - 0.5) * W * 1.6, cy + (g.r(i + 30) - 0.5) * H * 1.2, 2.2 * k, '#ffffff', tw);
+  }
+};
+
+/** Searing Smite: the blow explodes in golden-orange fire, flaming gobs splash out
+ *  onto the ground around the enemy and a ring of fire spreads from its feet. */
+const castigoFuego: Build = (g, u, c, D) => {
+  const { cx, cy, R, k, W, H, ground } = geo(c);
+  const HIT = 0.15, cols = ['#fff1c9', '#ffd35a', '#ffb347', '#ff7a2a'];
+  const pre = span(u, 0, HIT);
+  if (u < HIT) { g.dot(cx, cy, 14 * k * pre + 1, '#ffb347', 0.8 * pre); return; }
+  const fl = 1 - span(u, HIT, 0.5);
+  g.dot(cx, cy, R * 0.95 * fl + 1, SMITE_FIRE.halo, 0.4 * fl);
+  g.dot(cx, cy, R * 0.4 * fl + 1, '#fff1c9', 0.9 * fl);
+  const burn = span(u, HIT, 0.25) * (1 - span(u, 0.7, 0.95));
+  const t = g.n(6);
+  for (let i = 0; i < t; i++) {
+    const x = cx + (i / Math.max(1, t - 1) - 0.5 + (g.r(i + 90) - 0.5) * 0.12) * W * 0.85;
+    const y = ground - (2 + 10 * g.r(i + 95)) * k, mid = 1 - Math.abs(i / Math.max(1, t - 1) - 0.5);
+    tongue(g, x, y, H * (0.25 + 0.5 * mid + 0.25 * g.r(i + 5)) * burn, (11 + 8 * g.r(i + 99)) * k, u * D, i, cols, 0.85 * burn);
+  }
+  const s = span(u, HIT, 0.85);
+  if (s > 0 && s < 1) {
+    const rx = W * (0.3 + 1.4 * easeOut(s));
+    g.ring(cx, ground, rx, rx * 0.2 + 2, 5 * k * (1 - s) + 1.5, SMITE_FIRE.halo, 1 - s);
+    g.ring(cx, ground, rx * 0.92, rx * 0.18 + 2, 2 * k, '#ffd35a', 0.8 * (1 - s));
+  }
+  // splashes: flaming gobs arc out and land on the ground around it
+  const G = 1400 * k, m = g.n(14);
+  for (let i = 0; i < m; i++) {
+    const side = i % 2 ? 1 : -1, vx = side * (180 + 260 * g.r(i + 20)) * k, vy = -(260 + 240 * g.r(i + 30)) * k;
+    const tau = (u - HIT) * D * 0.9, land = (-vy + Math.sqrt(vy * vy + 2 * G * (ground - cy))) / G;
+    if (tau < land) {
+      const p = fly(cx, cy, vx, vy, tau, G);
+      g.drop(p.x, p.y, (4 + 3 * g.r(i + 40)) * k, dropAngle(vx, vy + G * tau), i % 3 ? '#ffb347' : '#ffd35a', 1);
+    } else {
+      const q = span(tau, land, land + 0.35);
+      if (q >= 1) continue;
+      const lx = cx + vx * land;
+      tongue(g, lx, ground, 22 * k * Math.sin(Math.PI * q), 9 * k, u * D, i + 20, cols.slice(1), 1 - q * 0.5);
+    }
+  }
+  const e = g.n(12);
+  for (let i = 0; i < e; i++) {
+    const q = span(u, HIT + 0.4 * g.r(i + 60), 0.7 + 0.3 * g.r(i + 60));
+    if (q > 0 && q < 1) g.spark(cx + (g.r(i + 70) - 0.5) * W * 1.4, ground - q * H * 1.3, 6 * k, -Math.PI / 2, '#ffd35a', 1 - q);
+  }
+};
+
+/** Radiant Smite: a soft golden bloom on the enemy, then a ribbon of light flows
+ *  back to the paladin and gathers into a shield before him. */
+const castigoResplandor: Build = (g, u, c) => {
+  const { cx, cy, R, k, W, H, dir } = geo(c);
+  const HIT = 0.15;
+  const pre = span(u, 0, HIT);
+  if (u < HIT) { g.dot(cx, cy, 12 * k * pre + 1, RADIANT.pale, pre); return; }
+  const fl = bell(u, HIT, 0.55);
+  g.dot(cx, cy, R * 1.1 * fl + 1, RADIANT.halo, 0.3 * fl);
+  g.dot(cx, cy, R * 0.35 * fl + 1, '#ffffff', 0.8 * fl);
+  for (let i = 0; i < 3; i++) {
+    const s = span(u, HIT + i * 0.1, 0.6 + i * 0.1);
+    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + 0.9 * s), R * (0.3 + 0.9 * s), 3 * k, i % 2 ? RADIANT.rim : RADIANT.pale, 0.8 * Math.sin(Math.PI * s));
+  }
+  const src = c.from;
+  if (src && Math.hypot(src.x - cx, src.y - cy) > 60) {
+    const mid = { x: (cx + src.x) / 2, y: Math.min(cy, src.y) - Math.abs(cx - src.x) * 0.25 };
+    const n = g.n(26);
+    for (let i = 0; i < n; i++) {
+      const q = span(u, 0.22 + 0.35 * g.r(i), 0.62 + 0.3 * g.r(i));
+      if (q <= 0 || q >= 1) continue;
+      const e = easeInOut(q), wob = Math.sin(q * 9 + i) * 10 * k;
+      const x = (1 - e) * (1 - e) * cx + 2 * (1 - e) * e * mid.x + e * e * src.x;
+      const y = (1 - e) * (1 - e) * cy + 2 * (1 - e) * e * mid.y + e * e * src.y + wob;
+      if (i % 3 === 0) g.star(x, y, 8 * k, '#ffffff', Math.sin(Math.PI * q));
+      else g.dot(x, y, 2.6 * k, i % 2 ? RADIANT.rim : RADIANT.pale, Math.sin(Math.PI * q));
+    }
+    const sh = span(u, 0.6, 0.72) * (1 - span(u, 0.9, 1)), sx = src.x + dir * 38 * k;
+    g.shield(sx, src.y, 46 * k, 0.6, RADIANT.rim, 0.75 * sh);
+    g.shield(sx, src.y, 46 * k, 0.6, '#ffffff', 0.5 * bell(u, 0.62, 0.8));
+  } else {
+    const n = g.n(16);
+    for (let i = 0; i < n; i++) {
+      const q = span(u, HIT + 0.4 * g.r(i), 0.6 + 0.4 * g.r(i));
+      if (q > 0 && q < 1) g.dot(cx + (g.r(i + 10) - 0.5) * W, cy - q * H * 0.9, 2.4 * k, RADIANT.pale, 1 - q);
+    }
+  }
+};
+
+/** Banishing Smite: a violet-and-gold seal opens under the enemy, a column of light
+ *  rises from it, tendrils drag the enemy down and the seal snaps shut. */
+const castigoDestierro: Build = (g, u, c, D) => {
+  const { cx, cy, k, W, H, ground } = geo(c);
+  const HIT = 0.16, open = easeOutBack(span(u, 0, HIT)) * (1 - easeIn(span(u, 0.7, 0.86)));
+  const rx = W * 0.8 * Math.max(0, open), ry = W * 0.27 * Math.max(0, open), rot = u * D * 1.4;
+  if (rx > 2) {
+    g.dot(cx, ground, rx * 0.9, '#12041f', 0.6 * Math.min(1, open), false);
+    g.ring(cx, ground, rx, ry, 3.5 * k, BANISH.rim, 0.9);
+    g.ring(cx, ground, rx * 0.8, ry * 0.8, 1.6 * k, BANISH.deep, 0.8);
+    const P = (i: number) => ({ x: cx + Math.cos(rot + (i * TAU) / 6) * rx * 0.8, y: ground + Math.sin(rot + (i * TAU) / 6) * ry * 0.8 });
+    for (let i = 0; i < 6; i++) { const a = P(i), b2 = P(i + 2); g.seg(a.x, a.y, b2.x, b2.y, 1.4 * k, i % 2 ? BANISH.deep : BANISH.rim, 0.55); }
+    const runes = g.n(8);
+    for (let i = 0; i < runes; i++) {
+      const t = -rot + (i / runes) * TAU;
+      g.rune(cx + Math.cos(t) * rx * 1.12, ground + Math.sin(t) * ry * 1.12, 6 * k, t, i % 2 ? BANISH.deep : BANISH.pale, 0.75);
+    }
+  }
+  const col = span(u, HIT, 0.24) * (1 - span(u, 0.62, 0.8));
+  g.beam(cx, ground, cx, cy - 0.8 * H, W * 0.8, BANISH.halo, 0.4 * col);
+  g.beam(cx, ground, cx, cy - 0.8 * H, W * 0.25, BANISH.deep, 0.5 * col);
+  // tendrils of the seal drag the enemy down
+  const grab = easeOut(span(u, 0.2, 0.36)) * (1 - span(u, 0.62, 0.76)), pull = span(u, 0.4, 0.7);
+  const tendrils = g.n(5);
+  if (grab > 0.02) for (let v = 0; v < tendrils; v++) {
+    const bx = cx + (v / Math.max(1, tendrils - 1) - 0.5) * rx * 1.4, pts: Point[] = [];
+    const reach = grab * (1 - 0.6 * pull);
+    for (let j = 0; j <= 6; j++) {
+      const s = (j / 6) * reach;
+      pts.push({ x: bx + Math.sin(s * 6 + v * 2 + u * D * 5) * 10 * k * s + (cx - bx) * 0.4 * s, y: ground - s * H * 0.85 });
+    }
+    g.strip(pts, (j) => (6 - j * 0.6) * k + 1, BANISH.rim, 0.4);
+    g.strip(pts, (j) => (4 - j * 0.4) * k + 0.6, '#2a0c45', 0.9, false);
+  }
+  const n = g.n(26);
+  for (let i = 0; i < n; i++) {
+    const q = span(u, 0.2 + 0.35 * g.r(i), 0.55 + 0.3 * g.r(i));
+    if (q <= 0 || q >= 1) continue;
+    const x0 = cx + (g.r(i + 10) - 0.5) * W * 0.9, y0 = cy + (g.r(i + 20) - 0.5) * H * 0.7;
+    g.dot(lerp(x0, cx, easeIn(q) * 0.6), lerp(y0, ground, easeIn(q)), 2.6 * k, i % 3 ? BANISH.pale : BANISH.deep, 1 - q * 0.6);
+  }
+  const shut = bell(u, 0.8, 0.95);
+  g.dot(cx, ground, 24 * k * shut + 1, BANISH.deep, 0.8 * shut);
+  g.seg(cx - W * 0.6 * shut, ground, cx + W * 0.6 * shut, ground, 3 * k, '#ffffff', shut, 1);
+};
+
 export const SPELLS: Record<string, SpellDef> = {
   tajo: { duration: 0.5, phases: [0.2, 0.5], anchor: 'target', build: tajo },
   zarpa: { duration: 0.65, phases: [0.3, 0.6], anchor: 'target', build: zarpa },
@@ -961,6 +1664,24 @@ export const SPELLS: Record<string, SpellDef> = {
   aliento: { duration: 1.3, phases: [0.25, 0.8], anchor: 'target', build: aliento },
   rayoOcular: { duration: 0.8, phases: [0.2, 0.7], anchor: 'target', build: rayoOcular },
   rayoDM: { duration: 1.35, phases: [0.3, 0.75], anchor: 'target', build: rayoDM },
+  // paladin: hammer blows, holy light, and the charge and discharge of each smite
+  martillo: { duration: 0.55, phases: [0.2, 0.5], anchor: 'target', build: martillo },
+  escudoSagrado: { duration: 0.9, phases: [0.3, 0.7], anchor: 'self', build: escudoSagrado },
+  bendicion: { duration: 1.0, phases: [0.3, 0.72], anchor: 'self', build: bendicion },
+  expulsar: { duration: 0.95, phases: [0.25, 0.65], anchor: 'target', build: expulsar },
+  rayoSagrado: { duration: 0.85, phases: [0.3, 0.65], anchor: 'target', build: rayoSagrado },
+  cargaDivina: { duration: 0.9, phases: [0.3, 0.7], anchor: 'self', build: cargaDivina },
+  cargaTrueno: { duration: 0.85, phases: [0.27, 0.7], anchor: 'self', build: cargaTrueno },
+  cargaCegadora: { duration: 0.8, phases: [0.3, 0.65], anchor: 'self', build: cargaCegadora },
+  cargaFuego: { duration: 0.9, phases: [0.3, 0.72], anchor: 'self', build: cargaFuego },
+  cargaResplandor: { duration: 1.0, phases: [0.3, 0.72], anchor: 'self', build: cargaResplandor },
+  cargaDestierro: { duration: 1.0, phases: [0.3, 0.72], anchor: 'self', build: cargaDestierro },
+  castigoDivino: { duration: 0.85, phases: [0.16, 0.6], anchor: 'target', build: castigoDivino },
+  castigoTrueno: { duration: 0.85, phases: [0.14, 0.6], anchor: 'target', build: castigoTrueno },
+  castigoCegador: { duration: 0.9, phases: [0.14, 0.55], anchor: 'target', build: castigoCegador },
+  castigoFuego: { duration: 0.95, phases: [0.15, 0.6], anchor: 'target', build: castigoFuego },
+  castigoResplandor: { duration: 1.0, phases: [0.15, 0.62], anchor: 'target', build: castigoResplandor },
+  castigoDestierro: { duration: 1.1, phases: [0.16, 0.72], anchor: 'target', build: castigoDestierro },
 };
 
 /** Sprites of spell `key` at `t` seconds after it was cast ([] once it is over). */

@@ -4,11 +4,11 @@
 import type { CartaDef } from '../core/types.ts';
 
 /** Portrait full-art cards: the unique class cards and the two d20 cards. */
-const FULL_ART = new Set(['tormenta-venganza', 'furia-indomita', 'maestria-conjuros', 'danza-mortal', 'pacto-final', 'seducir', 'deseo']);
+const FULL_ART = new Set(['tormenta-venganza', 'furia-indomita', 'maestria-conjuros', 'danza-mortal', 'pacto-final', 'angel-vengador', 'seducir', 'deseo']);
 export const hasFullArt = (def: CartaDef) => FULL_ART.has(def.id);
 
 const CLASS_GLOW: Record<CartaDef['clase'], string> = {
-  druida: '#a8e070', barbaro: '#ff9a50', mago: '#a896ff', picaro: '#72e0cc', brujo: '#c98bff', neutral: '#ffe0a0',
+  druida: '#a8e070', barbaro: '#ff9a50', mago: '#a896ff', picaro: '#72e0cc', brujo: '#c98bff', paladin: '#ffd35a', neutral: '#ffe0a0',
 };
 const CARD_GLOW: Record<string, string> = { seducir: '#ff7ab0', deseo: '#ffd86a' };
 

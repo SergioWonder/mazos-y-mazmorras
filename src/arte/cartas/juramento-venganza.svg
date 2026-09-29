@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3e2c10"/>
+      <stop offset="0.6" stop-color="#4a2410"/>
+      <stop offset="1" stop-color="#140c05"/>
+    </linearGradient>
+    <radialGradient id="incendio" cx="0.85" cy="0.8" r="0.5">
+      <stop offset="0" stop-color="#ff7a30" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ff7a30" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.3" cy="0.34" r="0.36">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.68"/>
+    </radialGradient>
+    <linearGradient id="acero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0dcd0"/>
+      <stop offset="1" stop-color="#5e5c56"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.3"/>
+    </filter>
+    <!-- hooded avenger, facing right, arm thrust out -->
+    <g id="h">
+      <path d="M48 60 Q28 92 24 142 L122 142 Q118 98 106 62 Z"/>
+      <path d="M60 42 Q61 20 82 18 Q101 20 105 40 Q107 53 100 63 L66 67 Q58 55 60 42 Z"/>
+      <path d="M63 30 Q50 22 40 32 Q52 32 60 42 Z"/>
+      <path d="M90 66 Q95 56 110 58 Q121 62 119 73 Q106 77 90 66 Z"/>
+      <path d="M100 62 L132 58 L158 56 L160 67 L134 72 L104 79 Z"/>
+      <path d="M154 51 L168 52 L169 69 L155 69 Z"/>
+    </g>
+  </defs>
+
+  <!-- ruined village at night, burning in the distance, rain -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <rect width="280" height="160" fill="url(#incendio)"/>
+  <circle cx="200" cy="26" r="11" fill="#e8d8a8" opacity="0.5"/>
+  <path d="M130 118 L130 84 L140 78 L150 84 L150 96 L162 96 L162 70 L170 64 L178 70 L178 118 Z M262 118 L262 80 L272 74 L280 78 L280 118 Z" fill="#20140a"/>
+  <path d="M166 80 h6 v8 h-6 z" fill="#ff9a40" opacity="0.7"/>
+  <path d="M190 118 L196 96 L202 108 L208 90 L214 118 Z" fill="#ff7a30" opacity="0.4" filter="url(#brillo)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 128 Q90 120 170 126 T280 124 L280 160 L0 160 Z" fill="#120b05"/>
+  <path d="M20 0 L10 30 M60 10 L50 40 M150 0 L140 30 M210 40 L200 70 M250 4 L240 34 M180 90 L172 114 M120 20 L112 44 M268 50 L260 74 M96 100 L90 120" stroke="#c8b890" stroke-width="0.8" opacity="0.35"/>
+
+  <!-- the marked demon, recoiling -->
+  <g>
+    <path d="M254 98 Q272 104 270 122 Q268 132 276 136" fill="none" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M254 98 Q272 104 270 122 Q268 132 276 136" fill="none" stroke="#6e2018" stroke-width="2.6" stroke-linecap="round"/>
+    <path d="M232 104 L228 118 L234 132 M248 104 L252 118 L248 132" fill="none" stroke="#140d0a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M232 104 L228 118 L234 132" fill="none" stroke="#8a2e24" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M248 104 L252 118 L248 132" fill="none" stroke="#6e2018" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M226 133 L240 133 M242 133 L256 133" stroke="#140d0a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M226 102 Q220 82 234 72 Q250 68 256 84 Q260 100 248 107 Q234 110 226 102 Z" fill="#8a2e24" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M244 72 Q256 78 256 92 Q254 104 246 107 Q252 92 244 72 Z" fill="#6e2018"/>
+    <path d="M230 84 Q236 88 244 86 M230 94 Q238 97 246 95" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+    <path d="M230 54 Q221 40 212 40 Q220 47 225 58 Z" fill="#d8c8a0" stroke="#140d0a" stroke-width="1.4"/>
+    <path d="M244 52 Q250 38 259 36 Q253 45 248 57 Z" fill="#d8c8a0" stroke="#140d0a" stroke-width="1.4"/>
+    <path d="M224 66 Q222 52 235 50 Q248 50 248 62 Q248 73 238 75 Q226 75 224 66 Z" fill="#8a2e24" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M240 51 Q249 55 247 66 Q244 74 236 75 Q244 64 240 51 Z" fill="#6e2018"/>
+    <circle cx="230" cy="60" r="4" fill="#ffd75a" opacity="0.6" filter="url(#brillo)"/>
+    <path d="M227 59.5 L233 61" stroke="#ffd75a" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M223 67 Q228 73 236 70 L233 67 Z" fill="#1a0e0a" stroke="#140d0a" stroke-width="1"/>
+    <path d="M225 67.5 L226.4 70 L227.8 68 Z M230 68.4 L231.4 70.8 L232.6 68.6 Z" fill="#e8dcc0"/>
+    <path d="M230 80 Q218 76 212 66 M234 82 Q222 84 214 80" fill="none" stroke="#140d0a" stroke-width="7" stroke-linecap="round"/>
+    <path d="M230 80 Q218 76 212 66 M234 82 Q222 84 214 80" fill="none" stroke="#8a2e24" stroke-width="4" stroke-linecap="round"/>
+    <path d="M212 66 L207 62 M212 66 L208 67 M214 80 L208 77 M214 80 L209 82" stroke="#e8dcc0" stroke-width="1.3" stroke-linecap="round"/>
+  </g>
+
+  <!-- the mark of vengeance burnt onto him -->
+  <circle cx="240" cy="90" r="16" fill="none" stroke="#ffd35a" stroke-width="5" opacity="0.75" filter="url(#brillo)"/>
+  <circle cx="240" cy="90" r="16" fill="none" stroke="#fff0b0" stroke-width="1.4"/>
+  <circle cx="240" cy="90" r="10" fill="none" stroke="#fff0b0" stroke-width="0.9" stroke-dasharray="3 2"/>
+  <path d="M240 68 V78 M240 102 V112 M218 90 H228 M252 90 H262" stroke="#fff0b0" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="M240 84 L243 90 L240 96 L237 90 Z" fill="#fffaf0"/>
+  <!-- sight line from the hammer to the mark -->
+  <path d="M206 64 L226 84" stroke="#ffd35a" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.8"/>
+
+  <!-- hooded avenger, rim-lit -->
+  <use href="#h" transform="translate(1.5 -1.5)" fill="#ffd35a"/>
+  <use href="#h" fill="#0b0910"/>
+  <path d="M84 30 Q98 32 102 46" fill="none" stroke="#ffd35a" stroke-width="0.9" opacity="0.5"/>
+  <!-- burning eyes under the hood -->
+  <ellipse cx="92" cy="44" rx="10" ry="5" fill="#ffa030" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M86 43.5 L90.5 45 M94 44.5 L99 43" stroke="#fff0b0" stroke-width="2" stroke-linecap="round"/>
+  <path d="M99 43 Q106 40 112 42" fill="none" stroke="#ffa030" stroke-width="1.6" opacity="0.6" filter="url(#suave)"/>
+
+  <!-- warhammer levelled at the demon -->
+  <path d="M150 62 L192 60" stroke="#140d0a" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M150 62 L192 60" stroke="#5a3e20" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M154 51 L168 52 L169 69 L155 69 Z" fill="#0b0910"/>
+  <path d="M155 56 H168.5 M155 60 H168.5 M155 64 H168.5" stroke="#ffd35a" stroke-width="0.8" opacity="0.6"/>
+  <g transform="translate(198 60) rotate(-3)">
+    <path d="M-10 -20 L10 -20 L12 0 L10 20 L-10 20 L-12 0 Z" fill="#ffa030" opacity="0.6" filter="url(#brillo)"/>
+    <path d="M-6 -15 L6 -15 L8 -11 L8 11 L6 15 L-6 15 L-8 11 L-8 -11 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M1 -15 L6 -15 L8 -11 L8 11 L6 15 L1 15 Z" fill="#4a4844" opacity="0.7"/>
+    <path d="M-8 -8 H8 M-8 8 H8" stroke="#140d0a" stroke-width="1"/>
+    <path d="M8 -4 L16 0 L8 4 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M-3 -3 L0 -6 L3 -3 L3 3 L0 6 L-3 3 Z" fill="#ffd35a" stroke="#140d0a" stroke-width="0.8"/>
+  </g>
+
+  <!-- embers -->
+  <path d="M186 40h.1M214 30h.1M170 100h.1M200 108h.1M262 60h.1M132 40h.1" stroke="#ffb050" stroke-width="2.4" stroke-linecap="round" opacity="0.8" filter="url(#suave)"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

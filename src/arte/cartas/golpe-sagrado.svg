@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="incendio" cx="0.82" cy="0.72" r="0.45">
+      <stop offset="0" stop-color="#ff9a3a" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ff9a3a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.55" cy="0.46" r="0.44">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6c8"/>
+      <stop offset="0.5" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#c8901e"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <!-- paladin lunging: cape, torso, great helm with crest, pauldron, legs, arm -->
+    <g id="h">
+      <path d="M80 78 Q58 80 34 102 Q50 101 58 110 Q64 96 76 92 Z"/>
+      <path d="M72 106 Q69 92 78 80 Q86 74 94 81 Q95 95 83 106 Z"/>
+      <path d="M82 73 Q81 60 89.5 59.5 Q98 60 97.5 71 L96 78 L83 78 Z"/>
+      <path d="M87 60 Q82 50 72 50 Q80 46 90 51 Q94 55 93 60 Z"/>
+      <path d="M83 83 Q84 74 92 74 Q101 75 100 84 Q95 88 83 83 Z"/>
+      <path d="M71 99 L87 101 L88 112 L78 114 L70 110 Z"/>
+      <path d="M68 104 L75 110 L47 128 L38 128 L40 124 Z"/>
+      <path d="M77 104 L85 105 L93 114 L97 128 L101 131 L88 131 L86 117 L76 111 Z"/>
+      <path d="M86 81 L94 79 L117 71 L119 79 L95 89 Z"/>
+      <path d="M78 86 L64 93 L61 90 L76 82 Z"/>
+    </g>
+  </defs>
+
+  <!-- night over the burning village -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <rect width="280" height="160" fill="url(#incendio)"/>
+  <path d="M0 112 L8 92 L14 110 L22 88 L30 110 L38 94 L44 112 L150 112 L156 96 L162 112 L178 112 L184 90 L190 112 L198 94 L206 112 L230 112 L236 86 L242 110 L250 92 L258 112 L266 90 L272 110 L280 96 L280 160 L0 160 Z" fill="#261d0e"/>
+  <path d="M236 86 L238 60 L240 86 Z M252 92 L256 72 L258 92 Z" fill="#ffb050" opacity="0.5" filter="url(#brillo)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 128 Q70 120 140 126 T280 124 L280 160 L0 160 Z" fill="#16110a"/>
+
+  <!-- golden arc left by the swing -->
+  <path d="M150 12 A98 98 0 0 1 186 84" fill="none" stroke="#ffd35a" stroke-width="18" stroke-linecap="round" opacity="0.75" filter="url(#brillo)"/>
+  <path d="M152 14 A96 96 0 0 1 185 80" fill="none" stroke="#fff6d8" stroke-width="5" stroke-linecap="round"/>
+  <path d="M164 26 A86 86 0 0 1 180 62" fill="none" stroke="#fff6d8" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- hero against the light: rim light behind, silhouette in front -->
+  <use href="#h" transform="translate(1.4 -1.4)" fill="#ffd35a" opacity="0.95"/>
+  <use href="#h" fill="#0b0910"/>
+  <path d="M89 67 L97 67" stroke="#ffd35a" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- haft of the hammer -->
+  <path d="M110 75.5 L182 90.5" stroke="#140d0a" stroke-width="7" stroke-linecap="round"/>
+  <path d="M110 75.5 L182 90.5" stroke="#6a4a26" stroke-width="4" stroke-linecap="round"/>
+  <path d="M111 74.5 L181 89" stroke="#9a7040" stroke-width="1" opacity="0.8"/>
+  <path d="M130 79.5 L134 80.3 M154 84.5 L158 85.3" stroke="#ffd35a" stroke-width="4.4"/>
+  <path d="M130 79.5 L134 80.3 M154 84.5 L158 85.3" stroke="#140d0a" stroke-width="0.6" stroke-dasharray="0.6 4.2"/>
+
+  <!-- hammer head of golden light -->
+  <g transform="translate(192 92.5) rotate(11.6)">
+    <path d="M-15 -27 L15 -27 L16 -20 L16 20 L15 27 L-15 27 L-16 20 L-16 -20 Z" fill="#ffd35a" opacity="0.9" filter="url(#brillo)"/>
+    <path d="M-10 -21 L10 -21 L11.5 -16 L11.5 16 L10 21 L-10 21 L-11.5 16 L-11.5 -16 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M2 -21 L10 -21 L11.5 -16 L11.5 16 L10 21 L2 21 Z" fill="#c8901e" opacity="0.75"/>
+    <path d="M-11.5 -13 L11.5 -13 M-11.5 13 L11.5 13" stroke="#140d0a" stroke-width="1.1"/>
+    <path d="M-7 -18 L-7 18" stroke="#fffaf0" stroke-width="1.8" opacity="0.9"/>
+    <path d="M-4 -6 L0 -9 L4 -6 L4 6 L0 9 L-4 6 Z" fill="#fffaf0" stroke="#8a5a14" stroke-width="0.9"/>
+    <path d="M-12 -4 L-17 0 L-12 4 Z" fill="#c8901e" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+  </g>
+
+  <!-- goblin taking the blow, thrown back -->
+  <g transform="rotate(12 214 130)">
+    <path d="M206 130 Q203 119 208 110 M222 130 Q226 119 220 110" fill="none" stroke="#140d0a" stroke-width="10" stroke-linecap="round"/>
+    <path d="M206 130 Q203 119 208 110 M222 130 Q226 119 220 110" fill="none" stroke="#6f7d4a" stroke-width="6.5" stroke-linecap="round"/>
+    <ellipse cx="204" cy="131" rx="7" ry="3" fill="#3e2e20" stroke="#140d0a" stroke-width="1.6"/>
+    <ellipse cx="225" cy="131" rx="7" ry="3" fill="#3e2e20" stroke="#140d0a" stroke-width="1.6"/>
+    <path d="M226 94 Q238 86 245 73" fill="none" stroke="#140d0a" stroke-width="9" stroke-linecap="round"/>
+    <path d="M226 94 Q238 86 245 73" fill="none" stroke="#6f7d4a" stroke-width="5.5" stroke-linecap="round"/>
+    <path d="M198 112 Q195 92 210 86 Q226 84 231 98 Q233 112 222 116 Q208 120 198 112 Z" fill="#6f7d4a" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M222 88 Q232 96 230 108 Q226 116 216 117 Q226 106 222 88 Z" fill="#56613a"/>
+    <path d="M200 109 Q199 95 210 90 L213 115 Q205 116 200 109 Z" fill="#56422f" stroke="#140d0a" stroke-width="1.4"/>
+    <path d="M199 112 Q214 118 231 110" fill="none" stroke="#5a4230" stroke-width="3"/>
+    <path d="M204 66 Q196 50 191 52 Q193 64 202 71 Z" fill="#56613a" stroke="#140d0a" stroke-width="1.6"/>
+    <path d="M196 79 Q196 64 210 62 Q224 62 226 74 Q226 86 212 88 Q200 88 196 79 Z" fill="#6f7d4a" stroke="#140d0a" stroke-width="2.2"/>
+    <path d="M216 64 Q226 67 226 76 Q224 86 212 88 Q221 78 216 64 Z" fill="#56613a"/>
+    <path d="M222 70 Q240 55 247 57 Q241 70 224 79 Z" fill="#6f7d4a" stroke="#140d0a" stroke-width="2"/>
+    <path d="M229 68 Q238 62 242 61" stroke="#140d0a" stroke-width="0.8" fill="none"/>
+    <path d="M199 73 Q185 75 189 82 Q195 83 200 80 Z" fill="#6f7d4a" stroke="#140d0a" stroke-width="1.8"/>
+    <path d="M201 67 Q207 65 212 68" stroke="#140d0a" stroke-width="1.4" fill="none"/>
+    <circle cx="205" cy="73" r="4" fill="#ffd75a" opacity="0.6" filter="url(#brillo)"/>
+    <circle cx="205" cy="73" r="1.9" fill="#ffd75a"/>
+    <path d="M200 82 Q205 90 212 83 Z" fill="#1a120e" stroke="#140d0a" stroke-width="1.2"/>
+    <path d="M202 83 L203.5 86 L205 83.4 Z M207.5 83.6 L209 86.4 L210.3 83.3 Z" fill="#d8d0b0"/>
+    <path d="M200 96 Q190 90 186 83" fill="none" stroke="#140d0a" stroke-width="9" stroke-linecap="round"/>
+    <path d="M200 96 Q190 90 186 83" fill="none" stroke="#6f7d4a" stroke-width="5.5" stroke-linecap="round"/>
+  </g>
+  <!-- the goblin's cleaver flies off -->
+  <g transform="rotate(-35 256 50)">
+    <path d="M248 44 L264 42 L266 52 L250 56 Z" fill="#8d9297" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M250 55 L246 62" stroke="#140d0a" stroke-width="4" stroke-linecap="round"/>
+    <path d="M250 55 L246 62" stroke="#4a3222" stroke-width="2.2" stroke-linecap="round"/>
+  </g>
+
+  <!-- impact: burst of holy light -->
+  <path d="M206 96 L213 84 L215 96 L228 92 L218 101 L226 112 L212 106 L205 118 L203 104 L190 106 L200 98 L193 88 Z" fill="#ffe89a" opacity="0.85" filter="url(#brillo)"/>
+  <path d="M207 97 L212 89 L213 98 L221 95 L214 101 L219 108 L210 104 L206 111 L205 103 L197 104 L203 99 L199 92 Z" fill="#fffaf0"/>
+  <path d="M222 84 L230 76 M226 116 L234 122 M214 78 L216 68 M232 100 L242 100" stroke="#ffd35a" stroke-width="1.8" stroke-linecap="round"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

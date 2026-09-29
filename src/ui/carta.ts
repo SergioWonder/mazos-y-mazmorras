@@ -40,6 +40,12 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
     desc: 'Recurso del mago en pirámide (máx. nivel 3). Las cartas de conjuro gastan el de mayor nivel; se recuperan al acabar el combate.' },
   { test: (_d, t) => t.includes('escribir') || t.includes('conjuro prodigioso'), icono: '📜', nombre: 'Conjuro Prodigioso',
     desc: 'Carta generada (coste 2, daño base 10) que crece durante el combate. «Escribir X» le suma X de daño y, algunas cartas, le añaden un efecto permanente (área, Vulnerable, bloqueo o ignorar bloqueo). Aparece en tu mano si no está ya en tu mazo, mano o descarte.' },
+  { test: (d, t) => d.castigo === true || t.includes('castigo'), icono: '🌟', nombre: 'Castigo',
+    desc: 'Carga tu siguiente ataque (la próxima carta de ataque que juegues): su primer golpe sobre cada objetivo recibe el efecto. Varios Castigos preparados se descargan juntos. Al jugarlo consume todo tu Fervor para potenciarse.' },
+  { test: (d, t) => d.clase === 'paladin' && t.includes('fervor'), icono: '🔆', nombre: 'Fervor',
+    desc: 'Recurso del paladín: ganas 1 cada vez que juegas un Golpe o una Defensa (también los sagrados). Se acumula durante el combate y los Castigos lo consumen entero para potenciarse.' },
+  { test: (d, t) => d.clase === 'paladin' && (t.includes('golpes') || t.includes('defensas') || t.includes('golpe y')), icono: '🔨', nombre: 'Golpes y Defensas',
+    desc: 'Golpe y Golpe Sagrado cuentan como Golpes; Defender y Defensa Sagrada, como Defensas.' },
   { test: (_d, t) => t.includes('furia'), icono: '🔥', nombre: 'Furia',
     desc: 'Fuerza/Destreza acumulada del bárbaro; se rompe si acabas la ronda sin recibir daño real.' },
   { test: (_d, t) => t.includes('transformacion') || t.includes('transformad'), icono: '🐾', nombre: 'Transformación',
@@ -99,7 +105,7 @@ export function cuadroPalabrasClave(def: CartaDef): HTMLElement {
 }
 
 const ICONO_CLASE: Record<string, string> = {
-  druida: '🌿', barbaro: '🪓', mago: '🔮', picaro: '🗡️', brujo: '🕳️', neutral: '⚔️',
+  druida: '🌿', barbaro: '🪓', mago: '🔮', picaro: '🗡️', brujo: '🕳️', paladin: '🔨', neutral: '⚔️',
 };
 
 /** Descripción corta de cada efecto acumulable en el Conjuro Prodigioso. */
@@ -320,6 +326,18 @@ export const ARTE_CARTA: Record<string, string> = {
   'verbo-aniquilacion': '☠️', 'pacto-final': '🕳️',
   'lanza-sobrenatural': '☄️', 'hambre-patron': '🍽️', 'contrato-maldito': '✍️',
   'ofrenda-maldita': '⚱️', 'egida-afliccion': '🪦',
+  // ── Paladín ──
+  'castigo-divino': '🌟', 'escudo-fe': '⚜️', 'castigo-atronador': '🌩️',
+  'castigo-cegador': '😵', 'castigo-abrasador': '🔥', 'martillo-luz': '🔨',
+  'embate-escudo': '🐏', 'guardia-sagrada': '🙏', 'instruccion-armas': '🏋️',
+  'plegaria-alba': '🌄', 'carga-sagrada': '🏇', 'castigo-desterrador': '🌀',
+  'castigo-resplandeciente': '✨', 'expulsar-mal': '📿', 'palabra-radiante': '☀️',
+  'bastion-fe': '🏰', 'arma-consagrada': '⚒️', 'egida-divina': '🪽',
+  'celo-inquebrantable': '🕯️', 'imposicion-manos': '🤲', 'martillo-juicio': '⚖️',
+  'voz-autoridad': '📣', 'muro-fe': '🧱', 'voto-hierro': '⛓️',
+  'juramento-devocion': '😇', 'juramento-gloria': '🏆', 'juramento-antiguos': '🌳',
+  'juramento-venganza': '🎯', 'colera-celestial': '⚡', 'angel-vengador': '👼',
+  'golpe-sagrado': '💫', 'defensa-sagrada': '🔰',
   // ── Incoloras ──
   seducir: '💗', deseo: '🪄',
   // ── Maldiciones ──

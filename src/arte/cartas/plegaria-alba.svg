@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+<defs>
+<linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4e3e18"/><stop offset="1" stop-color="#1b1409"/></linearGradient>
+<linearGradient id="vidrio" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4c8"/><stop offset="1" stop-color="#ffc860"/></linearGradient>
+<linearGradient id="rayo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a0" stop-opacity="0.55"/><stop offset="1" stop-color="#ffd35a" stop-opacity="0.04"/></linearGradient>
+<radialGradient id="halo" cx="0.52" cy="0.66" r="0.36"><stop offset="0" stop-color="#ffd35a" stop-opacity="0.4"/><stop offset="1" stop-color="#ffd35a" stop-opacity="0"/></radialGradient>
+<radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75"><stop offset="0.55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.62"/></radialGradient>
+<radialGradient id="metal" cx="0.35" cy="0.3" r="0.8"><stop offset="0" stop-color="#c6ccd2"/><stop offset="1" stop-color="#5c646b"/></radialGradient>
+<filter id="brillo" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="suave" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="1.3"/></filter>
+<g id="h">
+<path d="M140 80 Q130 88 127 106 Q124 122 114 132 L140 132 L140 100 Z"/>
+<path d="M134 112 Q130 94 137 82 Q147 74 157 80 Q159 96 150 112 Z"/>
+<path d="M138 108 L132 124" fill="none" stroke-width="9" stroke-linecap="round"/>
+<path d="M130 126 L112 128 L110 133 L134 133 Z"/>
+<path d="M142 108 L158 110 L160 128" fill="none" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M154 133 L168 133 L166 128 L156 128 Z"/>
+<path d="M132 108 L132 118 L152 118 L150 106 Z"/>
+<g transform="translate(0 -1) rotate(12 154 70)">
+<path d="M146 76 L146 64 Q146 58 155 58 Q164 58 164 64 L165 76 Q155 80 146 76 Z"/>
+<path d="M153 58 Q145 55 140 60 Q137 65 138 71 Q141 65 144 66 Q143 69 144 73 Q147 65 150 63 Z"/>
+</g>
+<circle cx="148" cy="83" r="8"/>
+<path d="M150 86 L158 96 L166 91" fill="none" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</defs>
+<rect width="280" height="160" fill="url(#cielo)"/>
+<path d="M0 0 L280 0 L280 122 L0 122 Z" fill="#2c2310"/>
+<path d="M0 30 L280 30 M0 62 L280 62 M0 94 L280 94 M20 0 L20 30 M90 0 L90 30 M150 0 L150 30 M210 0 L210 30 M260 0 L260 30 M120 30 L120 62 M180 30 L180 62 M240 30 L240 62 M100 62 L100 94 M160 62 L160 94 M226 62 L226 94 M130 94 L130 122 M190 94 L190 122 M250 94 L250 122 M10 62 L10 94 M4 94 L4 122 M80 94 L80 122" stroke="#221a0c" stroke-width="1.1"/>
+<path d="M24 108 L24 50 Q24 20 50 10 Q76 20 76 50 L76 108 Z" fill="#1a1309" stroke="#140d0a" stroke-width="2"/>
+<path d="M30 104 L30 52 Q30 26 50 17 Q70 26 70 52 L70 104 Z" fill="url(#vidrio)"/>
+<path d="M50 17 L50 104 M30 58 L70 58 M30 82 L70 82 M36 36 Q50 44 64 36" fill="none" stroke="#3a2a12" stroke-width="2.4"/>
+<circle cx="50" cy="40" r="6" fill="none" stroke="#3a2a12" stroke-width="2"/>
+<path d="M22 110 L78 110 L80 116 L20 116 Z" fill="#3a2e18" stroke="#140d0a" stroke-width="1.4"/>
+<path d="M30 30 Q50 6 70 30 L70 110 L30 110 Z" fill="#ffe7a0" opacity="0.4" filter="url(#brillo)"/>
+<path d="M30 60 L70 40 L240 160 L120 160 Z" fill="url(#rayo)"/>
+<path d="M44 52 L70 60 L200 160 L160 160 Z" fill="url(#rayo)" opacity="0.7"/>
+<path d="M220 122 L220 56 Q220 44 236 40 Q252 44 252 56 L252 122 Z" fill="#241c0d" stroke="#140d0a" stroke-width="1.4"/>
+<circle cx="236" cy="62" r="11" fill="#ffd35a" opacity="0.5" filter="url(#brillo)"/>
+<circle cx="236" cy="62" r="7" fill="#e8b840" stroke="#140d0a" stroke-width="1.4"/>
+<path d="M236 50 L236 53 M236 71 L236 74 M224 62 L227 62 M245 62 L248 62 M227.5 53.5 L229.6 55.6 M244.5 53.5 L242.4 55.6 M227.5 70.5 L229.6 68.4 M244.5 70.5 L242.4 68.4" stroke="#e8b840" stroke-width="1.8" stroke-linecap="round"/>
+<rect width="280" height="160" fill="url(#halo)"/>
+<path d="M0 122 L280 122 L280 160 L0 160 Z" fill="#1c150b"/>
+<path d="M0 122 L280 122" stroke="#40321a" stroke-width="1.2"/>
+<path d="M40 122 L24 160 M100 122 L96 160 M160 122 L166 160 M220 122 L236 160 M0 138 L280 138" stroke="#2a2011" stroke-width="1"/>
+<path d="M80 160 L150 128 L230 128 L220 160 Z" fill="#ffd35a" opacity="0.12"/>
+
+<!-- altar -->
+<path d="M196 96 L270 96 L270 102 L196 102 Z" fill="#5a4a30" stroke="#140d0a" stroke-width="1.6"/>
+<path d="M200 102 L266 102 L266 132 L200 132 Z" fill="#4a3c24" stroke="#140d0a" stroke-width="1.8"/>
+<path d="M240 102 L266 102 L266 132 L240 132 Z" fill="#35291a"/>
+<path d="M214 96 L218 124 L250 124 L254 96 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="1.2"/>
+<path d="M236 96 L254 96 L250 124 L236 124 Z" fill="#c6b890"/>
+<path d="M216 106 L252 106" stroke="#c9a040" stroke-width="2"/>
+<path d="M226 110 L242 110 M234 104 L234 118" stroke="#c9a040" stroke-width="2.2"/>
+<g>
+<path d="M206 96 L206 84 M262 96 L262 80" stroke="#140d0a" stroke-width="4.2" stroke-linecap="round"/>
+<path d="M206 96 L206 84 M262 96 L262 80" stroke="#e8dcc0" stroke-width="2.6" stroke-linecap="round"/>
+<circle cx="206" cy="79" r="4" fill="#ffc050" opacity="0.8" filter="url(#suave)"/>
+<circle cx="262" cy="75" r="4" fill="#ffc050" opacity="0.8" filter="url(#suave)"/>
+<path d="M206 76 Q208 80 206 82 Q204 80 206 76 Z M262 72 Q264 76 262 78 Q260 76 262 72 Z" fill="#fff0c0"/>
+</g>
+
+<!-- shield resting behind him -->
+<g transform="rotate(-10 96 118)">
+<path d="M82 94 L110 94 L110 108 Q110 124 96 134 Q82 124 82 108 Z" fill="#140d0a"/>
+<path d="M84.4 96.4 L107.6 96.4 L107.6 108 Q107.6 122 96 131 Q84.4 122 84.4 108 Z" fill="url(#metal)"/>
+<path d="M87.5 99.5 L104.5 99.5 L104.5 108 Q104.5 119 96 126 Q87.5 119 87.5 108 Z" fill="#d8ccb0" stroke="#140d0a" stroke-width="1.1"/>
+<path d="M96 99.5 L104.5 99.5 L104.5 108 Q104.5 119 96 126 Z" fill="#b6a880"/>
+<circle cx="96" cy="109" r="4" fill="#e8b840" stroke="#140d0a" stroke-width="1.1"/>
+</g>
+
+<!-- kneeling hero in prayer -->
+<use href="#h" fill="#ffd35a" stroke="#ffd35a" transform="translate(-1.4 -1.4)"/>
+<use href="#h" fill="#0b0910" stroke="#0b0910"/>
+<path d="M168 90 L168 124" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+<path d="M168 90 L168 124" stroke="#6a4428" stroke-width="2.8" stroke-linecap="round"/>
+<path d="M168 96 L168 104" stroke="#e8b840" stroke-width="3"/>
+<circle cx="168" cy="88" r="2.6" fill="#e8b840" stroke="#140d0a" stroke-width="1"/>
+<circle cx="166" cy="91" r="4.2" fill="#0b0910"/>
+<path d="M156 120 L180 120 L180 133 L156 133 Z" fill="#8a939a" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+<path d="M168 120 L180 120 L180 133 L168 133 Z" fill="#5f676e"/>
+<path d="M157 123 L179 123" stroke="#e6ecf0" stroke-width="1.1"/>
+<g fill="#fff4c8">
+<circle cx="96" cy="70" r="0.9"/><circle cx="118" cy="84" r="1.1"/><circle cx="140" cy="60" r="0.8"/><circle cx="108" cy="100" r="0.8"/><circle cx="176" cy="74" r="1"/><circle cx="130" cy="96" r="0.7"/>
+</g>
+<rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

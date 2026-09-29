@@ -244,6 +244,22 @@ const DE_CLASE: ReliquiaDef[] = [
     texto: 'Al empezar cada combate acude un diablillo: invocación efímera de 8 de vida que, si aguanta la ronda, golpea por 6 y aplica 2 de Condena.',
     inicioCombate: async (ctx) => { await ctx.invocarEfimero('demonio', 8, 6, 2); },
   },
+  // Paladín
+  {
+    id: 'bendicion-martillo-radiante', nombre: 'Bendición del Martillo Radiante', icono: '🔨', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'paladin',
+    texto: 'Tus Golpes infligen 2 de daño más y tus Defensas dan 2 de bloqueo más.',
+    inicioCombate: async (ctx) => {
+      await ctx.aplicarEstado(ctx.jugador, 'golpesMas', 2);
+      await ctx.aplicarEstado(ctx.jugador, 'defensasMas', 2);
+    },
+  },
+  {
+    id: 'bendicion-aurora', nombre: 'Bendición de la Aurora', icono: '🌅', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'paladin',
+    texto: 'Empiezas cada combate con un Castigo preparado: tu primer ataque inflige 8 de daño más.',
+    inicioCombate: async (ctx) => {
+      await ctx.prepararCastigo({ nombre: 'Bendición de la Aurora', elemento: 'divino', dano: 8 });
+    },
+  },
 ];
 
 // ── Unique cards: the relic puts its card into the deck when obtained ────────
@@ -302,6 +318,10 @@ export const DE_CARTA_UNICA: ReliquiaDef[] = [
     id: 'don-pacto-final', nombre: 'Ojo del Pacto Final', icono: '👁️',
     texto: 'Añade «Pacto Final» a tu mazo (única de clase). Al jugarla, ganas 6 de bloqueo.',
   }, 'pacto-final', 'brujo', async (ctx) => { await ctx.ganarBloqueo(6); }),
+  donDeCarta({
+    id: 'don-angel-vengador', nombre: 'Pluma del Ángel Vengador', icono: '🪶',
+    texto: 'Añade «Ángel Vengador» a tu mazo (única de clase). Al jugarla, ganas 3 de Fervor.',
+  }, 'angel-vengador', 'paladin', async (ctx) => { await ctx.ganarFervor(3); }),
 ];
 
 /** Every blessing relic (only offered by the blessing screens). */

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <path id="h" d="M17 22 Q17 8 32 8 Q47 8 47 22 L47 48 Q47 55 40 56 L24 56 Q17 55 17 48 Z"/>
+    <clipPath id="c"><use href="#h"/></clipPath>
+    <g id="w">
+      <path d="M19 38 Q9 38 4 28 Q1 20 4 10 Q8 18 12 20 Q9 13 11 5 Q15 14 20 17 Z" fill="#f4f4f0" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M19 38 Q11 36 8 30 Q14 32 19 30 Z" fill="#c9ccd2"/>
+      <path d="M7 24 Q12 28 19 28 M12 17 Q15 21 19 22" stroke="#140d0a" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </g>
+  </defs>
+  <!-- wings -->
+  <use href="#w"/>
+  <use href="#w" transform="matrix(-1 0 0 1 64 0)"/>
+  <!-- steel great helm -->
+  <use href="#h" fill="#c4ccd3"/>
+  <g clip-path="url(#c)">
+    <path d="M38 0 Q44 30 38 64 L64 64 L64 0 Z" fill="#7e8890"/>
+    <path d="M17 22 Q18 11 26 9 Q21 16 21 30 L17 30 Z" fill="#eef2f5"/>
+  </g>
+  <use href="#h" fill="none" stroke="#140d0a" stroke-width="3" stroke-linejoin="round"/>
+  <!-- eye slit -->
+  <path d="M19.5 24 H44.5 V28.6 H19.5 Z" fill="#140d0a"/>
+  <!-- golden cross -->
+  <path d="M30 9 H34 V53 H30 Z" fill="#ffd35a" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M32 9 H34 V53 H32 Z" fill="#c08a24"/>
+  <path d="M19.5 24 H44.5 V28.6 H19.5 Z" fill="none" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M24 34 H40" stroke="#ffd35a" stroke-width="3.4"/>
+  <path d="M24 34 H40" stroke="#140d0a" stroke-width="1.2" fill="none" stroke-dasharray="0 16"/>
+  <!-- breathing holes -->
+  <circle cx="23" cy="41" r="1.2" fill="#140d0a"/><circle cx="23" cy="46" r="1.2" fill="#140d0a"/>
+  <circle cx="41" cy="41" r="1.2" fill="#140d0a"/><circle cx="41" cy="46" r="1.2" fill="#140d0a"/>
+</svg>

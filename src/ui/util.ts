@@ -106,6 +106,8 @@ export const ICONO_ESTADO: Record<string, string> = {
   bendicionOscura: '😈', condenaPorBloqueo: '⚖️',
   explosionCondena: '😖', explosionCrece: '🔱', explosionCarga: '📈', explosionBloqueo: '🤝',
   explosionMaldita: '🩸', bloqueoPorMaldicion: '🛡️',
+  fervor: '🔆', castigo: '🌟', golpesMas: '⚒️', defensasMas: '🪽', bastion: '🏰', fervorPorTurno: '🕯️',
+  armaSagrada: '😇', gloria: '🏆', antiguos: '🌳', venganza: '🎯', angelVengador: '👼',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -137,6 +139,10 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   explosionCondena: 'Verbo Agonizante (Condena)', explosionCrece: 'Lanza Sobrenatural',
   explosionCarga: 'Explosión Cargada', explosionBloqueo: 'Don del Patrón',
   explosionMaldita: 'Hambre del Patrón', bloqueoPorMaldicion: 'Égida de la Aflicción',
+  fervor: 'Fervor', castigo: 'Castigo preparado', golpesMas: 'Arma Consagrada', defensasMas: 'Égida Divina',
+  bastion: 'Bastión de Fe', fervorPorTurno: 'Celo Inquebrantable', armaSagrada: 'Juramento de Devoción',
+  gloria: 'Juramento de Gloria', antiguos: 'Juramento de los Antiguos', venganza: 'Juramento de Venganza',
+  angelVengador: 'Ángel Vengador',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -202,6 +208,17 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   explosionBloqueo: 'Cada vez que lanzas tu Explosión Sobrenatural, ganas esa cantidad de bloqueo.',
   explosionMaldita: 'Tu Explosión Sobrenatural inflige esa cantidad de daño adicional por cada maldición en tu mazo, tu mano y tu descarte.',
   bloqueoPorMaldicion: 'Al final de tu turno ganas esa cantidad de bloqueo por cada maldición en tu mano.',
+  fervor: 'Ganas 1 cada vez que juegas un Golpe o una Defensa. Los Castigos lo consumen entero para potenciarse.',
+  castigo: 'Castigos preparados: se descargan todos en el primer golpe de tu próxima carta de ataque.',
+  golpesMas: 'Tus Golpes (y Golpes Sagrados) infligen esa cantidad de daño más.',
+  defensasMas: 'Tus Defensas (Defender y Defensa Sagrada) dan esa cantidad de bloqueo más.',
+  bastion: 'Al inicio de tu turno conservas hasta esa cantidad de tu bloqueo.',
+  fervorPorTurno: 'Ganas esa cantidad de Fervor al inicio de cada turno.',
+  armaSagrada: 'Tus ataques infligen daño adicional igual a tu Fervor, sin consumirlo.',
+  gloria: 'Cada Castigo que descargas te da 1 de Fuerza (con 2, también 1 de Fervor).',
+  antiguos: 'Al final de tu turno ganas esa cantidad de bloqueo por cada punto de Fervor.',
+  venganza: 'Tus Castigos cuestan 0.',
+  angelVengador: 'Al inicio de cada turno preparas un Castigo de esa cantidad de daño y ganas 1 de Fervor.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

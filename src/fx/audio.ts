@@ -1,5 +1,5 @@
 import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
-import { groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-bank.ts';
+import { SFX_RECIPE_ALIAS, groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-bank.ts';
 
 // Audio engine: recorded-style sound effects from `src/audio/sfx/` (synthesised offline
 // by `scripts/sfx/make_sfx.py`, see `fx/sfx-bank.ts`) and the game's original
@@ -241,7 +241,7 @@ class MotorAudio {
     if (!this.ctx) return;
     if (this.reproducirArchivo(resolveSfx(nombre), volume)) return;
     // fallback while the files load (or if they fail): the synthesised recipe
-    const receta = RECETAS[nombre] ?? RECETAS.carta;
+    const receta = RECETAS[nombre] ?? RECETAS[SFX_RECIPE_ALIAS[nombre]] ?? RECETAS.carta;
     const t0 = this.ctx.currentTime;
     for (const capa of receta) this.reproducirCapa(capa, t0 + (capa.retardo ?? 0), volume);
   }

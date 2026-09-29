@@ -1,5 +1,5 @@
 import type { CartaDef, CartaInstancia, ClaseId, EstadoRun, TipoNodo } from './types.ts';
-import { instanciar, mazoInicial, nuevaMaldicion } from './cartas.ts';
+import { DEFENSA_SAGRADA, GOLPE_SAGRADO, instanciar, mazoInicial, nuevaMaldicion } from './cartas.ts';
 import { reliquiaInicial } from './reliquias.ts';
 import { generarMapa } from './mapa.ts';
 import { crearRng } from './rng.ts';
@@ -10,6 +10,7 @@ export const PV_POR_CLASE: Record<ClaseId, number> = {
   mago: 62,
   picaro: 66,
   brujo: 64,
+  paladin: 76,
 };
 
 export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
@@ -58,6 +59,25 @@ export function maldicionesDe(run: EstadoRun): CartaInstancia[] {
 }
 
 /** Campfire «Purificar»: removes a curse from the deck (refuses any other card). */
+/** Takes a card out of the run deck. With the Holy Symbol (paladin) a Strike or a
+ *  Defend is not lost: it turns into its holy version, keeping its upgrade.
+ *  Returns false if the card was not in the deck, and the new card if it changed. */
+export function retirarCarta(run: EstadoRun, carta: CartaInstancia): false | { nueva?: CartaInstancia } {
+  const i = run.mazo.indexOf(carta);
+  if (i < 0) return false;
+  const sagrada = run.reliquias.some((r) => r.id === 'simbolo-sagrado')
+    ? { golpe: GOLPE_SAGRADO, defender: DEFENSA_SAGRADA }[carta.def.id]
+    : undefined;
+  if (!sagrada) {
+    run.mazo.splice(i, 1);
+    return {};
+  }
+  const nueva = instanciar(sagrada);
+  nueva.mejorada = carta.mejorada;
+  run.mazo[i] = nueva;
+  return { nueva };
+}
+
 export function purificar(run: EstadoRun, carta: CartaInstancia): boolean {
   const i = run.mazo.indexOf(carta);
   if (i < 0 || carta.def.tipo !== 'maldicion') return false;

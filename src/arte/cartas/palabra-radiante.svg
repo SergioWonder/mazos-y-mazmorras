@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <linearGradient id="haz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#fff3c4" stop-opacity="0.75"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.64" cy="0.6" r="0.45">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <!-- paladin seen from behind, one hand raised to the sky -->
+    <g id="h">
+      <path d="M-14 -56 Q-18 -30 -21 0 H21 Q18 -30 14 -56 Q0 -60 -14 -56 Z"/>
+      <path d="M-21 -51 Q-21 -62 -8 -61 H8 Q21 -62 21 -51 Q10 -54 -21 -51 Z"/>
+      <path d="M-7 -73 Q-7 -81 0 -81 Q7 -81 7 -73 L7.5 -61 H-7.5 Z"/>
+      <path d="M-9 -63 H9 L8 -59 H-8 Z"/>
+      <path d="M12 -58 L18 -60 L26 -77 L29 -92 L23 -93 L20 -80 L12 -64 Z"/>
+      <circle cx="26.5" cy="-94" r="3.6"/>
+      <path d="M-17 -55 L-11 -55 L-14 -32 L-20 -32 Z"/>
+    </g>
+    <!-- red-robed cultist cowering, facing left -->
+    <g id="c">
+      <path d="M-11 0 Q-8 -20 -7 -30 Q-8 -40 -2 -44 Q6 -46 9 -38 Q10 -22 12 0 L8 -3 L4 1 L0 -3 L-4 1 L-7 -3 Z" fill="#8a2e24" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M3 -44 Q9 -40 9 -30 Q10 -14 12 0 L8 -3 L6 -1 Q7 -22 3 -44 Z" fill="#6e2018"/>
+      <path d="M-8 -26 Q1 -23 10 -26" fill="none" stroke="#c9a040" stroke-width="1.6"/>
+      <path d="M-3 -20 L-2 -12" stroke="#c9a040" stroke-width="1.2"/>
+      <path d="M-4 -36 L-15 -44 L-13 -50 L-2 -41 Z" fill="#8a2e24" stroke="#140d0a" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="-15.5" cy="-49" r="2.4" fill="#d8c0a8" stroke="#140d0a" stroke-width="1"/>
+      <path d="M-7 -38 Q-9 -52 1 -54 Q11 -53 10 -42 Q8 -36 1 -36 Q-5 -36 -7 -38 Z" fill="#8a2e24" stroke="#140d0a" stroke-width="1.8"/>
+      <path d="M4 -52 Q11 -50 10 -42 Q8 -37 3 -36 Q7 -44 4 -52 Z" fill="#6e2018"/>
+      <path d="M-5 -51 Q1 -55.5 8 -51 M-12 -46 L-5 -41" fill="none" stroke="#ffe9b0" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M-5 -42 Q-4 -49 1 -49 Q5 -48 5 -43 Q3 -39 -1 -39 Q-5 -40 -5 -42 Z" fill="#140d0a"/>
+      <circle cx="-2" cy="-44" r="2.2" fill="#ff8a3a" opacity="0.8" filter="url(#suave)"/>
+      <circle cx="2" cy="-44" r="2.2" fill="#ff8a3a" opacity="0.8" filter="url(#suave)"/>
+      <circle cx="-2" cy="-44" r="0.8" fill="#ffe0a0"/>
+      <circle cx="2" cy="-44" r="0.8" fill="#ffe0a0"/>
+    </g>
+  </defs>
+
+  <!-- ruined temple courtyard under a torn cloud bank -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M86 108 V40 H96 V108 Z M250 108 V52 L256 46 L262 52 V108 Z" fill="#231a0b"/>
+  <path d="M84 40 H98 V45 H84 Z" fill="#2c2210"/>
+  <path d="M104 108 V64 Q130 40 156 64 V108 Z M204 108 V64 Q228 42 252 64 V108 Z" fill="#1f170a"/>
+  <path d="M0 108 V70 L20 66 L24 72 L40 70 V108 Z" fill="#231a0b"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 108 H280 V160 H0 Z" fill="#1c150a"/>
+  <path d="M0 108 H280 M20 118 H280 M60 108 L40 160 M150 108 L148 160 M230 108 L250 160" stroke="#120d06" stroke-width="1.2"/>
+  <!-- the cultists' ritual circle, drowned by the light -->
+  <ellipse cx="186" cy="124" rx="74" ry="10" fill="none" stroke="#c0392b" stroke-width="3" opacity="0.5" filter="url(#suave)"/>
+  <ellipse cx="186" cy="124" rx="74" ry="10" fill="none" stroke="#e05a3a" stroke-width="1" stroke-dasharray="3 3" opacity="0.8"/>
+  <!-- storm clouds split open -->
+  <path d="M0 0 H280 V16 Q268 26 254 20 Q244 30 228 22 Q214 28 204 20 Q192 30 178 22 Q164 28 154 20 Q142 30 128 22 Q112 28 102 18 Q86 26 70 18 Q50 26 34 18 Q16 24 0 16 Z" fill="#221a0b"/>
+  <path d="M112 24 Q128 34 142 26 M166 26 Q180 34 192 26 M214 26 Q228 32 240 24" fill="none" stroke="#ffe89a" stroke-width="2" opacity="0.8" filter="url(#suave)"/>
+
+  <!-- three shafts of sacred light -->
+  <path d="M112 22 L146 22 L154 126 L108 126 Z M164 24 L196 24 L204 124 L160 124 Z M212 22 L242 22 L252 122 L208 122 Z" fill="#ffd35a" opacity="0.4" filter="url(#brillo)"/>
+  <path d="M120 22 L138 22 L144 126 L116 126 Z M171 24 L189 24 L195 124 L168 124 Z M219 22 L235 22 L243 122 L216 122 Z" fill="url(#haz)"/>
+  <path d="M129 22 L130 126 M180 24 L181.5 124 M227 22 L229.5 122" stroke="#fffaf0" stroke-width="3"/>
+  <ellipse cx="129" cy="22" rx="16" ry="5" fill="#fff4d6" filter="url(#suave)"/>
+  <ellipse cx="180" cy="24" rx="15" ry="5" fill="#fff4d6" filter="url(#suave)"/>
+  <ellipse cx="227" cy="22" rx="14" ry="5" fill="#fff4d6" filter="url(#suave)"/>
+
+  <!-- cultists caught in the beams -->
+  <use href="#c" transform="translate(134 124) rotate(14) scale(1.05)"/>
+  <use href="#c" transform="translate(182 122) rotate(-12)"/>
+  <use href="#c" transform="translate(232 120) rotate(12) scale(0.9)"/>
+  <!-- the beams scorch the hoods -->
+  <path d="M112 22 L146 22 L154 126 L108 126 Z M164 24 L196 24 L204 124 L160 124 Z M212 22 L242 22 L252 122 L208 122 Z" fill="#fff3c4" opacity="0.14"/>
+  <path d="M146 58 L150 50 M166 56 L162 48 M196 54 L200 46 M240 60 L246 54 M214 62 L210 56" stroke="#e8e0d0" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+  <!-- dropped dagger and ritual candle -->
+  <path d="M150 128 L160 126 L160.5 128 L151 130 Z" fill="#8d9297" stroke="#140d0a" stroke-width="1"/>
+  <path d="M258 116 H263 V124 H258 Z" fill="#d8c0a8" stroke="#140d0a" stroke-width="1"/>
+  <circle cx="260.5" cy="113" r="3" fill="#ff8a3a" opacity="0.8" filter="url(#suave)"/>
+
+  <!-- splashes of light at the feet -->
+  <ellipse cx="131" cy="124" rx="18" ry="4" fill="#fff4d6" opacity="0.85" filter="url(#suave)"/>
+  <ellipse cx="182" cy="122" rx="16" ry="3.6" fill="#fff4d6" opacity="0.85" filter="url(#suave)"/>
+  <ellipse cx="230" cy="120" rx="15" ry="3.4" fill="#fff4d6" opacity="0.85" filter="url(#suave)"/>
+  <path d="M112 116 L106 110 M150 116 L156 110 M164 112 L158 106 M200 114 L206 108 M212 110 L206 104 M248 112 L254 106" stroke="#ffe89a" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- paladin from behind, calling down the word -->
+  <use href="#h" transform="translate(51.5 136.5) scale(1.1)" fill="#ffd35a" opacity="0.95"/>
+  <use href="#h" transform="translate(50 138) scale(1.1)" fill="#0b0910"/>
+  <!-- lowered hammer beside the leg -->
+  <path d="M33 102 L30 132" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M33 102 L30 132" stroke="#4a3420" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M20 131 H40 V141 H20 Z" fill="#5a6168" stroke="#140d0a" stroke-width="1.5"/>
+  <path d="M20 136 H40 V141 H20 Z" fill="#40464c"/>
+  <path d="M33 101 L32 106" stroke="#0b0910" stroke-width="5" stroke-linecap="round"/>
+  <!-- glow in the raised hand and the words rising -->
+  <circle cx="79" cy="34" r="9" fill="#ffd35a" opacity="0.8" filter="url(#brillo)"/>
+  <circle cx="79" cy="34" r="3" fill="#fffaf0"/>
+  <path d="M79 24 V18 M87 27 L92 22 M71 27 L66 22 M89 35 H95" stroke="#fff3c4" stroke-width="1.4" stroke-linecap="round"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

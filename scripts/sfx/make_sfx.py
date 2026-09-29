@@ -450,6 +450,247 @@ def rara(v):
     return finish(reverb(out, 0.35, 1.0, 0.3), -7.0)
 
 
+# ── Paladin ──────────────────────────────────────────────────────────────────
+# A whole class of sounds shares the byte budget of the bank, so these tails are cut
+# earlier and faded out more slowly (holy(): same finish, shorter tail).
+
+def holy(x, peak_db, **kw):
+    return finish(x, peak_db, trim_db=-40.0, fout=0.12, **kw)
+
+
+def steel(base, dur, r, bright=1.0, scale=1.0):
+    """Struck steel (hammer head, shield boss): inharmonic plate modes with a short ring."""
+    ratios = [1, 1.47, 2.09, 2.56, 3.39, 4.17, 5.08]
+    taus = [0.22, 0.16, 0.12, 0.09, 0.06, 0.045, 0.03]
+    amps = [1, 0.8, 0.6, 0.45, 0.3, 0.18, 0.1]
+    amps = [a * (bright if i > 1 else 1) for i, a in enumerate(amps)]
+    return modal([base * k for k in ratios], [t * scale for t in taus], amps, dur, r, beat=0.004)
+
+
+def chime(f, dur, r, tau=0.5):
+    """Tuned bar (glockenspiel-like) partials: a clean, sweet ding."""
+    return modal([f, f * 2.76, f * 5.40], [tau, tau * 0.4, tau * 0.15], [1, 0.22, 0.05], dur, r, beat=0.0015)
+
+
+def choir(notes, dur, vowel, r, vib=0.006, shift=1.0):
+    """Soft sung chord: one glottal voice per note with its own slow vibrato."""
+    t = time(dur)
+    out = np.zeros(n_of(dur))
+    for f in notes:
+        f0 = f * (1 + vib * np.sin(2 * np.pi * (5.0 + r.uniform(-0.5, 0.5)) * t + r.uniform(0, 6)))
+        out += formants(glottal(f0, dur, r, 0.003, 0.05), vowel, shift)
+    return out / len(notes)
+
+
+def martillo(v):
+    r = rng(3000 + v)
+    dur = 0.6
+    body = thud(92 + 9 * v, 38, 0.45, 0.1, 1.1, 650, 1.3, r, knock=0.8, knock_fc=300 + 30 * v)
+    t = time(0.16)
+    crunch = bandpass(impulses(0.16, 900, r) * np.exp(-t / 0.025), 1400 + 200 * v, 0.8) * 1.2
+    clang = steel(430 + 45 * v + r.uniform(-15, 15), 0.5, r, 0.7) * 0.2
+    # a faint holy bell rings on after the blow: a different chord tone per variation
+    halo = bell_modes([523.25, 659.25, 783.99][v], dur, r, 0.2) * 0.08
+    sparkle = grains(dur, 6, lambda q: glass_grain(q, 1400, 2500, (0.04, 0.08)), env_swell(dur, 0.18), r) * 0.04
+    out = mix(body, crunch, clang, 0.6 * click(0.005, 2000, r), sparkle)
+    out = place(out, halo, 0.012)
+    return holy(reverb(out, 0.16, 0.35, 0.1), -3.5, drive=1.9, top=6500)
+
+
+def escudo_sagrado(v):
+    r = rng(3100)
+    out = whoosh(0.15, 300, 1300, 900, 1.3, 0.8, r) * 0.45
+    strike = mix(steel(300, 0.6, r, 0.6, 1.5) * 0.3, thud(170, 110, 0.18, 0.04, 0.6, 500, 0.7, r),
+                 0.5 * click(0.005, 2600, r))
+    out = place(out, strike, 0.12)
+    hum_dur = 0.52
+    t = time(hum_dur)
+    hum = sum(osc(f * (1 + 0.003 * np.sin(2 * np.pi * 4.5 * t + i))) for i, f in enumerate((392.0, 392.9, 587.33)))
+    hum = (hum * 0.05 + choir((392.0, 587.33, 783.99), hum_dur, 'a', r) * 0.3) * env_swell(hum_dur, 0.18, 1.5, 1.6)
+    shimmer = grains(hum_dur, 9, lambda q: glass_grain(q, 1500, 2600, (0.03, 0.07)), env_swell(hum_dur, 0.22), r) * 0.05
+    out = place(out, mix(hum, shimmer), 0.1)
+    return holy(reverb(out, 0.22, 0.4, 0.13), -4.5, top=6500)
+
+
+def bendicion(v):
+    r = rng(3200)
+    dur = 0.66
+    out = np.zeros(n_of(dur))
+    for i, f in enumerate([440.0, 554.37, 659.25, 880.0]):
+        out = place(out, chime(f, 0.5, r, 0.24) * 0.25, 0.045 * i)
+    voices = choir((220.0, 277.18, 329.63, 440.0), dur, 'a', r) * env_swell(dur, 0.2, 1.5, 1.6) * 0.5
+    shimmer = grains(dur, 16, lambda q: glass_grain(q, 1600, 2800, (0.03, 0.06)), env_swell(dur, 0.28), r) * 0.08
+    air = bandpass(noise(dur, 'pink', r), 2400, 1.5) * env_swell(dur, 0.25) * 0.15
+    return holy(reverb(mix(out, voices, shimmer, air), 0.28, 0.45, 0.15), -5.5, top=7000)
+
+
+def expulsar(v):
+    r = rng(3300)
+    dur = 0.8
+    wave = whoosh(dur, 200, 1000, 320, 0.9, 0.36, r) * 1.1
+    sub = osc(glide(dur, 72, 46)) * env_swell(dur, 0.22, 1.3, 1.5) * 0.2
+    voices = choir((146.83, 220.0, 293.66, 369.99), dur, 'o', r, shift=0.95) * env_swell(dur, 0.26, 1.6, 1.5) * 0.7
+    bell = bell_modes(293.66, 0.6, r, 0.25) * 0.14
+    out = place(mix(wave, sub, voices), bell, 0.02)
+    return holy(reverb(out, 0.28, 0.45, 0.15, 3500), -4.0, top=6000)
+
+
+def rayo_sagrado(v):
+    r = rng(3400)
+    fall = 0.14
+    beam = sweep_bandpass(noise(fall, 'pink', r), glide(fall, 4800, 900), 3.0) * env_swell(fall, fall * 0.85, 1.5, 0.6)
+    ray = osc(glide(fall, 2400, 700)) * env_swell(fall, fall * 0.9, 1.5, 0.5) * 0.1
+    out = beam * 0.8 + ray
+    tail = 0.45
+    hit = thud(120, 50, 0.3, 0.06, 0.7, 500, 0.9, r)
+    bells = fm_bell(1046.5, tail, 2.0, 1.2, 0.22) * 0.16 + fm_bell(1567.98, tail, 2.0, 0.8, 0.18) * 0.08
+    shimmer = grains(tail, 12, lambda q: glass_grain(q, 1600, 2800, (0.03, 0.07)), np.exp(-time(tail) / 0.15), r) * 0.07
+    out = place(out, mix(hit, bells, shimmer, 0.5 * click(0.005, 2400, r)), fall)
+    return holy(reverb(out, 0.26, 0.45, 0.14), -4.5, top=7000)
+
+
+def castigo_divino(v):
+    r = rng(3500)
+    hit = thud(100, 40, 0.4, 0.09, 1.0, 600, 1.2, r)
+    bell = bell_modes(349.23, 0.7, r, 0.3) * 0.4
+    shimmer = grains(0.7, 10, lambda q: glass_grain(q, 1400, 2500, (0.04, 0.08)), env_swell(0.7, 0.2), r) * 0.05
+    out = mix(hit, bell, shimmer, 0.6 * click(0.005, 2200, r))
+    return holy(reverb(out, 0.24, 0.45, 0.15, 4000), -4.0, drive=1.6, top=6500)
+
+
+def castigo_trueno(v):
+    r = rng(3600)
+    dur = 0.8
+    t = time(0.07)
+    crack = lowpass(highpass(impulses(0.07, 3500, r) * np.exp(-t / 0.018), 300), 4500) * 2.4
+    # the tearing of the air, a little later and lower: what a phone speaker can play
+    tear = bandpass(impulses(0.2, 600, r) * np.exp(-time(0.2) / 0.06), 1100, 0.7) * 1.4
+    crack = place(crack, tear, 0.015)
+    boom = thud(70, 32, 0.5, 0.13, 1.2, 250, 1.4, r, knock=0.9, knock_fc=320)
+    wob = np.clip(0.55 + lowpass(r.standard_normal(n_of(dur)), 9) * 10, 0.1, 1.5)
+    rumble = lowpass(noise(dur, 'brown', r), 260) * wob * env_ad(dur, 0.03, 0.18) * 1.2
+    return holy(reverb(mix(boom, rumble, crack), 0.1, 0.4, 0.1, 3000), -3.5, drive=1.8, top=6000)
+
+
+def castigo_cegador(v):
+    r = rng(3700)
+    tail = 0.42
+    rise = whoosh(0.12, 1500, 4000, 3000, 2.0, 0.85, r) * 0.3
+    flash = (fm_bell(1174.66, tail, 2.0, 0.8, 0.2) * 0.2 + fm_bell(1567.98, tail, 2.0, 1.0, 0.18) * 0.22
+             + fm_bell(2093.0, tail, 3.01, 0.5, 0.13) * 0.1)
+    sparkle = grains(tail, 22, lambda q: glass_grain(q, 1800, 3200, (0.02, 0.06)), np.exp(-time(tail) / 0.15), r) * 0.1
+    glow = bandpass(noise(tail, 'pink', r), 3200, 2.0) * env_ad(tail, 0.01, 0.09) * 0.25
+    hit = thud(140, 70, 0.15, 0.035, 0.45, 500, 0.6, r)
+    out = place(rise, mix(flash, sparkle, glow, hit), 0.1)
+    return holy(reverb(out, 0.28, 0.4, 0.13), -6.0, top=7500)
+
+
+def castigo_fuego(v):
+    r = rng(3800)
+    dur = 0.65
+    t = time(dur)
+    level = interp_curve(dur, [(0, 0), (0.03, 1.0), (0.3, 0.55), (dur, 0)]) ** 1.3
+    src = noise(dur, 'brown', r) + 0.35 * noise(dur, 'pink', r)
+    roar = sweep_bandpass(src, interp_curve(dur, [(0, 300), (0.08, 1100), (dur, 450)]), 0.6) * level * 1.3
+    crackle = resonate(impulses(dur, 120, r) * np.exp(-t / 0.28), 2200, 0.0015) * 0.35
+    pops = resonate(impulses(dur, 22, r) * np.exp(-t / 0.25), 900, 0.004) * 0.35
+    whoomp = osc(glide(0.3, 95, 48)) * env_ad(0.3, 0.01, 0.09) * 0.35
+    hit = thud(110, 45, 0.3, 0.07, 0.8, 500, 1.0, r)
+    return holy(reverb(mix(roar, crackle, pops, whoomp, hit), 0.14, 0.35, 0.1), -3.5, drive=1.7, top=6500)
+
+
+def castigo_resplandor(v):
+    r = rng(3900)
+    tail = 0.5
+    hit = mix(thud(105, 42, 0.35, 0.08, 1.0, 600, 1.1, r), 0.6 * click(0.005, 2200, r))
+    out = np.concatenate([hit, np.zeros(n_of(0.35))])
+    for i, f in enumerate([987.77, 1318.5, 1760.0]):
+        glass = modal([f, f * 2.32, f * 4.25], [0.26, 0.12, 0.05], [1, 0.3, 0.08], tail, r, beat=0.002)
+        out = place(out, glass * 0.16, 0.03 + 0.035 * i)
+    ward = (osc(659.25, tail) + osc(661.0, tail)) * env_swell(tail, 0.18, 1.5, 1.6) * 0.04
+    sparkle = grains(tail, 12, lambda q: glass_grain(q, 1600, 2800, (0.03, 0.07)), env_swell(tail, 0.15), r) * 0.06
+    out = place(out, mix(ward, sparkle), 0.03)
+    return holy(reverb(out, 0.26, 0.4, 0.13, 5000), -4.5, top=7000)
+
+
+def castigo_destierro(v):
+    r = rng(4000)
+    stamp = mix(thud(85, 38, 0.3, 0.07, 0.9, 400, 1.0, r), bell_modes(220.0, 0.3, r, 0.2) * 0.2)
+    # the seal pulls the foe away: a reversed bell and a falling, growing suction
+    pull = 0.44
+    rev = (bell_modes(293.66, pull, r, 0.4) * 0.35)[::-1]
+    suck = sweep_bandpass(noise(pull, 'pink', r), glide(pull, 1800, 260), 1.2) * (time(pull) / pull) ** 2.5 * 0.9
+    sub = osc(glide(pull, 60, 90)) * (time(pull) / pull) ** 2 * 0.2
+    close = mix(thud(140, 60, 0.14, 0.03, 0.6, 400, 0.6, r), 0.4 * click(0.004, 1800, r))
+    out = place(stamp, mix(rev, suck, sub), 0.05)
+    out = place(out, close, 0.05 + pull)
+    return holy(reverb(out, 0.18, 0.35, 0.1, 3500), -4.5, top=6500)
+
+
+def charge(dur, r, f0, f1, band, hum=0.2, air=0.5):
+    """Shared base of the Smite charges: a rising fifth and a rising band of air."""
+    env = env_swell(dur, dur * 0.72, 2.0, 1.2)
+    tone = osc(glide(dur, f0, f1)) + 0.5 * osc(glide(dur, f0 * 1.5, f1 * 1.5))
+    wind = sweep_bandpass(noise(dur, 'pink', r), glide(dur, *band), 1.8)
+    return (hum * tone + air * wind) * env, env
+
+
+def charged(x):
+    return holy(reverb(x, 0.2, 0.15, 0.045, 4000), -8.0, top=6500)
+
+
+def carga_divina(v):
+    r = rng(4100)
+    dur = 0.36
+    out, env = charge(dur, r, 392.0, 523.25, (700, 2200), 0.12, 0.4)
+    sparkle = grains(dur, 7, lambda q: glass_grain(q, 1400, 2600, (0.02, 0.05)), env, r) * 0.12
+    return charged(place(mix(out, sparkle), chime(1046.5, 0.25, r, 0.12) * 0.08, dur * 0.68))
+
+
+def carga_trueno(v):
+    r = rng(4200)
+    dur = 0.36
+    out, env = charge(dur, r, 110.0, 165.0, (250, 900), 0.25, 0.5)
+    rumble = lowpass(noise(dur, 'brown', r), 220) * env * 0.8
+    ticks = resonate(impulses(dur, 40, r) * env, 700, 0.004) * 0.3
+    return charged(mix(out, rumble, ticks))
+
+
+def carga_cegadora(v):
+    r = rng(4300)
+    dur = 0.36
+    out, env = charge(dur, r, 784.0, 1046.5, (900, 2400), 0.07, 0.35)
+    sparkle = grains(dur, 12, lambda q: glass_grain(q, 1500, 2400, (0.02, 0.04)), env, r) * 0.14
+    return charged(mix(out, sparkle))
+
+
+def carga_fuego(v):
+    r = rng(4400)
+    dur = 0.36
+    out, env = charge(dur, r, 147.0, 220.0, (400, 1000), 0.1, 0.3)
+    roar = sweep_bandpass(noise(dur, 'brown', r) + 0.3 * noise(dur, 'pink', r), glide(dur, 350, 800), 0.7) * env
+    crackle = resonate(impulses(dur, 90, r) * env, 2000, 0.0015) * 0.3
+    return charged(mix(out, roar, crackle))
+
+
+def carga_resplandor(v):
+    r = rng(4500)
+    dur = 0.36
+    out, env = charge(dur, r, 659.25, 880.0, (900, 2600), 0.08, 0.3)
+    for i, f in enumerate([1318.5, 1567.98, 1975.53]):
+        glass = modal([f, f * 2.32], [0.12, 0.05], [1, 0.25], 0.2, r, beat=0.002)
+        out = place(out, glass * 0.1, 0.1 + 0.06 * i)
+    return charged(out)
+
+
+def carga_destierro(v):
+    r = rng(4600)
+    dur = 0.36
+    out, env = charge(dur, r, 220.0, 165.0, (2000, 400), 0.15, 0.5)
+    sub = osc(glide(dur, 80, 60)) * env * 0.2
+    return charged(mix(out, sub))
+
+
 # ── Interface ────────────────────────────────────────────────────────────────
 
 def carta(v):
@@ -482,6 +723,14 @@ SOUNDS = {
     'transformacion': (transformacion, 1, -17), 'ola': (ola, 1, -17), 'zarpa': (zarpa, 1, -16),
     'oscuridad': (oscuridad, 1, -18), 'hojas': (hojas, 1, -20), 'aullido': (aullido, 1, -16),
     'corazones': (corazones, 1, -18), 'aliento': (aliento, 1, -15), 'rara': (rara, 1, -21),
+    # paladin
+    'martillo': (martillo, 3, -16), 'escudoSagrado': (escudo_sagrado, 1, -18), 'bendicion': (bendicion, 1, -18),
+    'expulsar': (expulsar, 1, -17), 'rayoSagrado': (rayo_sagrado, 1, -17),
+    'castigoDivino': (castigo_divino, 1, -16), 'castigoTrueno': (castigo_trueno, 1, -16),
+    'castigoCegador': (castigo_cegador, 1, -18), 'castigoFuego': (castigo_fuego, 1, -16),
+    'castigoResplandor': (castigo_resplandor, 1, -17), 'castigoDestierro': (castigo_destierro, 1, -17),
+    'cargaDivina': (carga_divina, 1, -22), 'cargaTrueno': (carga_trueno, 1, -22), 'cargaCegadora': (carga_cegadora, 1, -23),
+    'cargaFuego': (carga_fuego, 1, -22), 'cargaResplandor': (carga_resplandor, 1, -23), 'cargaDestierro': (carga_destierro, 1, -22),
 }
 
 CEILING_DB = -3.6  # leaves room for MP3 encoding overshoot (decoded peaks stay under -3 dBFS)

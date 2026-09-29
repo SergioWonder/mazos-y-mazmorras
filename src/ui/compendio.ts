@@ -1,5 +1,5 @@
 import type { CartaDef } from '../core/types.ts';
-import { BASICAS, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, NEUTRALES_ESPECIALES, MALDICIONES, defDe } from '../core/cartas.ts';
+import { BASICAS, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, GOLPE_SAGRADO, DEFENSA_SAGRADA, NEUTRALES_ESPECIALES, MALDICIONES, defDe } from '../core/cartas.ts';
 import { renderCarta, cuadroPalabrasClave } from './carta.ts';
 import { el } from './util.ts';
 
@@ -41,6 +41,7 @@ const GRUPOS: { titulo: string; cartas: CartaDef[] }[] = [
   { titulo: '🔮 Mago', cartas: MAGO },
   { titulo: '🗡️ Pícaro', cartas: PICARO },
   { titulo: '🕳️ Brujo', cartas: BRUJO },
+  { titulo: '🔨 Paladín', cartas: [...PALADIN, GOLPE_SAGRADO, DEFENSA_SAGRADA] },
   { titulo: '✨ Únicas (incoloras)', cartas: NEUTRALES_ESPECIALES },
   { titulo: '☠️ Maldiciones', cartas: MALDICIONES },
 ];

@@ -7,6 +7,7 @@
 | `mago.ts` | `MAGO_RIG` | `scripts/hero-tests/mago.ts` |
 | `picaro.ts` | `PICARO_RIG` | `scripts/hero-tests/picaro.ts` |
 | `brujo.ts` | `BRUJO_RIG` | `scripts/hero-tests/brujo.ts` |
+| `paladin.ts` | `PALADIN_RIG` | `scripts/hero-tests/paladin.ts` |
 
 `fx/hero-rig.ts` gathers them (`HERO_RIGS`, `FORM_RIGS`, `heroPose`, `impactFraction`…).
 Only edit your character's rig file and its test file. The engine

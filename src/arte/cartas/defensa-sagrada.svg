@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.36" cy="0.56" r="0.5">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.6"/>
+    </radialGradient>
+    <radialGradient id="metal" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#fff2c0"/>
+      <stop offset="1" stop-color="#b8862a"/>
+    </radialGradient>
+    <radialGradient id="rayos" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff6d0" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#ffd35a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <!-- paladin crouched behind the shield: back, great helm with crest, pauldron, leg -->
+    <g id="h">
+      <path d="M58 132 Q48 112 56 96 Q62 86 74 88 Q84 92 84 106 L92 132 Z"/>
+      <path d="M62 84 Q61 72 70 71.5 Q79 72 78.5 83 L77 90 L63 90 Z"/>
+      <path d="M67 72 Q62 62 52 63 Q60 58 70 63 Q73 67 72 72 Z"/>
+      <path d="M52 100 Q52 90 62 89 Q72 90 72 100 Q64 105 52 100 Z"/>
+      <path d="M40 132 Q44 118 56 112 L60 120 Q52 126 52 132 Z"/>
+    </g>
+  </defs>
+
+  <!-- hill at dusk, goblin archers on the crest -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M150 104 Q200 84 280 90 L280 160 L150 160 Z" fill="#2c2210"/>
+  <g fill="#1b150a">
+    <path d="M206 90 Q204 80 210 78 Q216 78 216 86 L218 96 L204 96 Z"/>
+    <path d="M216 80 Q224 72 228 74 Q222 80 216 84 Z"/>
+    <path d="M212 82 Q222 70 222 92" fill="none" stroke="#1b150a" stroke-width="1.4"/>
+    <path d="M244 92 Q242 82 248 80 Q254 80 254 88 L256 98 L242 98 Z"/>
+    <path d="M254 82 Q262 74 266 76 Q260 82 254 86 Z"/>
+    <path d="M250 84 Q260 72 260 94" fill="none" stroke="#1b150a" stroke-width="1.4"/>
+  </g>
+  <circle cx="211" cy="82" r="1" fill="#ff8a3a"/>
+  <circle cx="249" cy="84" r="1" fill="#ff8a3a"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 130 Q90 122 170 128 T280 132 L280 160 L0 160 Z" fill="#16110a"/>
+  <path d="M20 131 L24 124 M30 132 L33 126 M140 128 L144 121 M150 129 L152 123" stroke="#2c2412" stroke-width="1.2"/>
+
+  <!-- holy light pouring out of the shield -->
+  <circle cx="104" cy="92" r="62" fill="url(#rayos)"/>
+  <path d="M104 92 L170 40 L176 52 Z M104 92 L184 80 L184 94 Z M104 92 L176 128 L168 138 Z M104 92 L150 12 L162 16 Z M104 92 L128 160 L114 160 Z M104 92 L104 4 L114 6 Z" fill="#fff0b0" opacity="0.5" filter="url(#brillo)"/>
+
+  <!-- arrows arriving and burning up in the light -->
+  <g stroke-linecap="round">
+    <path d="M204 58 L162 68" stroke="#140d0a" stroke-width="3"/>
+    <path d="M204 58 L162 68" stroke="#6b4a30" stroke-width="1.6"/>
+    <path d="M204 58 L209 54 M204 58 L210 60" stroke="#8a2e24" stroke-width="1.6"/>
+    <path d="M162 68 L146 72" stroke="#ffd35a" stroke-width="3" opacity="0.8" filter="url(#brillo)"/>
+    <path d="M232 70 L196 50" stroke="#6b4a30" stroke-width="1.4" opacity="0.8"/>
+    <path d="M124 36 L112 24" stroke="#ffd35a" stroke-width="2.4" opacity="0.8"/>
+    <path d="M112 24 L106 18" stroke="#6b4a30" stroke-width="1.3" opacity="0.6"/>
+    <path d="M140 116 L154 126" stroke="#ffd35a" stroke-width="2.4" opacity="0.8"/>
+    <path d="M154 126 L160 130" stroke="#6b4a30" stroke-width="1.3" opacity="0.6"/>
+  </g>
+  <path d="M148 64 L152 60 M150 74 L156 76 M116 30 L120 26 M150 122 L154 118" stroke="#fffaf0" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- hero crouched behind the shield -->
+  <use href="#h" transform="translate(-8.6 -1.4)" fill="#ffd35a" opacity="0.95"/>
+  <use href="#h" transform="translate(-10 0)" fill="#0b0910"/>
+
+  <!-- great heater shield blazing with a sun -->
+  <path d="M66 55 L138 55 Q142 104 102 134 Q62 104 66 55 Z" fill="#ffd35a" opacity="0.7" filter="url(#fuerte)"/>
+  <path d="M68 57 L136 57 Q139 102 102 131 Q65 102 68 57 Z" fill="#140d0a"/>
+  <path d="M71 60 L133 60 Q135 100 102 127 Q69 100 71 60 Z" fill="url(#metal)"/>
+  <path d="M76 65 L128 65 Q129 98 102 121 Q75 98 76 65 Z" fill="#f4ecd8" stroke="#140d0a" stroke-width="1.3"/>
+  <path d="M102 65 L128 65 Q129 98 102 121 Z" fill="#d8c9a4"/>
+  <path d="M102 65 L102 121 M76 84 L128 84" stroke="#b8862a" stroke-width="3"/>
+  <!-- sun emblem -->
+  <circle cx="102" cy="84" r="14" fill="#fff0a0" opacity="0.9" filter="url(#brillo)"/>
+  <path d="M102 68 L104.5 77 L113.3 72.7 L109 81.5 L118 84 L109 86.5 L113.3 95.3 L104.5 91 L102 100 L99.5 91 L90.7 95.3 L95 86.5 L86 84 L95 81.5 L90.7 72.7 L99.5 77 Z" fill="#ffd35a" stroke="#140d0a" stroke-width="1.1" stroke-linejoin="round"/>
+  <circle cx="102" cy="84" r="5.4" fill="#fffaf0" stroke="#8a5a14" stroke-width="1"/>
+  <path d="M74 64 Q84 58 98 59" fill="none" stroke="#fffaf0" stroke-width="1.6" opacity="0.8"/>
+  <circle cx="74" cy="62" r="1.5" fill="#fff2c0" stroke="#140d0a" stroke-width="0.6"/>
+  <circle cx="130" cy="62" r="1.5" fill="#fff2c0" stroke="#140d0a" stroke-width="0.6"/>
+  <circle cx="102" cy="127" r="1.5" fill="#fff2c0" stroke="#140d0a" stroke-width="0.6"/>
+
+  <!-- sparks where an arrow hits the rim -->
+  <circle cx="136" cy="70" r="7" fill="#ffe89a" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M136 70 L144 66 M136 70 L145 73 M136 70 L141 62 M136 70 L142 78" stroke="#fff6d8" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="136" cy="70" r="2.2" fill="#fffaf0"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

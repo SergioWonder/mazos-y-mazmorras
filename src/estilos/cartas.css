@@ -33,6 +33,7 @@
 .carta-mago { --marco: #5e50b0; --tinte: rgba(120, 105, 210, 0.36); }
 .carta-picaro { --marco: #2f7a70; --tinte: rgba(60, 150, 138, 0.36); }
 .carta-brujo { --tinte: rgba(140, 80, 170, 0.34); }
+.carta-paladin { --marco: #a8862e; --tinte: rgba(200, 160, 60, 0.32); }
 .carta-neutral { --marco: #6e6356; --tinte: rgba(120, 108, 92, 0.3); }
 
 /* parchment variant picked per card id (one texture each, shared by every card) */
@@ -420,6 +421,7 @@
 .carta-full-art.carta-mago { --brillo-full: rgba(168, 150, 255, 0.75); }
 .carta-full-art.carta-picaro { --brillo-full: rgba(114, 224, 204, 0.75); }
 .carta-full-art.carta-brujo { --brillo-full: rgba(201, 139, 255, 0.75); }
+.carta-full-art.carta-paladin { --brillo-full: rgba(255, 211, 90, 0.75); }
 @keyframes full-art-respira {
   0%, 100% { transform: scale(1.04) translateY(0); }
   50% { transform: scale(1.1) translateY(-2%); }

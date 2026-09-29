@@ -1,7 +1,7 @@
 # Dracs & Rogues
 
 Roguelike de construcción de mazos al estilo *Slay the Spire* con ambientación de
-fantasía medieval tipo D&D. Cinco clases jugables (Druida, Bárbaro, Mago, Pícaro y Brujo). Tres actos, cada uno con **dos escenarios posibles**
+fantasía medieval tipo D&D. Seis clases jugables (Druida, Bárbaro, Mago, Pícaro, Brujo y Paladín). Tres actos, cada uno con **dos escenarios posibles**
 elegidos al azar en cada partida: el Acto I es **El Asentamiento Ogro** o **La
 Guarida de los Contrabandistas**; el Acto II, **La Cripta** o **El Templo Oscuro**;
 el Acto III, **La Guarida del Dragón** o **El Laberinto del Contemplador**.
@@ -22,7 +22,7 @@ npm run build    # build de producción en dist/
 node --experimental-strip-types scripts/smoke-test.ts
 ```
 
-Simula combates completos con las cinco clases, valida la generación de mapas y las
+Simula combates completos con las seis clases, valida la generación de mapas y las
 mecánicas de clase (Furia, transformaciones, raíces, acrobacias/veneno/dagas del pícaro,
 Explosión/Condena/Agathys del brujo).
 

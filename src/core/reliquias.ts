@@ -1,8 +1,8 @@
 import type {
-  ClaseId, ContextoEfecto, EnemigoCombate, EstadoRun, OrigenReliquia, RarezaReliquia, ReliquiaDef,
+  CartaInstancia, ClaseId, ContextoEfecto, EnemigoCombate, EstadoRun, OrigenReliquia, RarezaReliquia, ReliquiaDef,
 } from './types.ts';
 import { BENDICIONES } from './reliquias-bendicion.ts';
-import { nuevaMaldicion } from './cartas.ts';
+import { defDe, nuevaMaldicion } from './cartas.ts';
 
 export { BENDICIONES };
 
@@ -63,9 +63,15 @@ export const SELLO_PACTO: ReliquiaDef = {
   },
 };
 
+export const SIMBOLO_SAGRADO: ReliquiaDef = {
+  id: 'simbolo-sagrado', nombre: 'Símbolo Sagrado', icono: '🔆', rareza: 'inicial',
+  texto: 'Cuando eliminas un Golpe de tu mazo, se convierte en Golpe Sagrado; si eliminas un Defender, en Defensa Sagrada.',
+  // the transformation lives in retirarCarta (core/run.ts): it happens outside combat
+};
+
 const INICIALES: Record<ClaseId, ReliquiaDef> = {
   druida: TOTEM_ROBLE, barbaro: HACHA_ANCESTRO, mago: PENDULO_AMBAR,
-  picaro: GUANTE_LADRON, brujo: SELLO_PACTO,
+  picaro: GUANTE_LADRON, brujo: SELLO_PACTO, paladin: SIMBOLO_SAGRADO,
 };
 
 export function reliquiaInicial(clase: ClaseId): ReliquiaDef {
@@ -551,10 +557,48 @@ const DE_BRUJO: ReliquiaDef[] = [
   },
 ];
 
+/** true when the card just played is one of the paladin's Strikes or Defends. */
+const esFamilia = (jugada: { carta: CartaInstancia }) => !!defDe(jugada.carta).familia;
+
+const DE_PALADIN: ReliquiaDef[] = [
+  {
+    id: 'guantelete-cruzado', nombre: 'Guantelete del Cruzado', icono: '🧤', rareza: 'comun', soloClase: 'paladin',
+    texto: 'Empiezas cada combate con 2 de Fervor.',
+    inicioCombate: async (ctx) => { await ctx.ganarFervor(2); },
+  },
+  {
+    id: 'rosario-plata', nombre: 'Rosario de Plata', icono: '📿', rareza: 'comun', soloClase: 'paladin',
+    texto: 'Tu primer Golpe o Defensa de cada turno te da 1 de Fervor más.',
+    alJugarCarta: async (ctx, jugada) => {
+      if (!esFamilia(jugada) || ctx.marca('rosario-plata') === ctx.turnoActual()) return;
+      ctx.marca('rosario-plata', ctx.turnoActual());
+      await ctx.ganarFervor(1);
+    },
+  },
+  {
+    id: 'estandarte-sagrado', nombre: 'Estandarte Sagrado', icono: '🚩', rareza: 'rara', soloClase: 'paladin',
+    texto: 'Cada vez que descargas un Castigo, ganas 4 de bloqueo.',
+    alDescargarCastigo: async (ctx, castigos) => { await ctx.ganarBloqueo(4 * castigos.length); },
+  },
+  {
+    id: 'yelmo-juramento', nombre: 'Yelmo del Juramento', icono: '⛑️', rareza: 'rara', soloClase: 'paladin',
+    texto: 'Cada vez que juegas tu 3.er Golpe o Defensa del turno, robas 1 carta.',
+    alJugarCarta: async (ctx, jugada) => {
+      if (!esFamilia(jugada)) return;
+      // counter of this turn's Strikes and Defends, reset when the turn changes
+      if (ctx.marca('yelmo-juramento:turno') !== ctx.turnoActual()) {
+        ctx.marca('yelmo-juramento:turno', ctx.turnoActual());
+        ctx.marca('yelmo-juramento', 0);
+      }
+      if (ctx.marca('yelmo-juramento', ctx.marca('yelmo-juramento') + 1) === 3) await ctx.robar(1);
+    },
+  },
+];
+
 // ── Pool completo y registro ─────────────────────────────────────────────────
 
 export const POOL_RELIQUIAS: ReliquiaDef[] = [
-  ...GENERALES, ...DE_DRUIDA, ...DE_BARBARO, ...DE_MAGO, ...DE_PICARO, ...DE_BRUJO,
+  ...GENERALES, ...DE_DRUIDA, ...DE_BARBARO, ...DE_MAGO, ...DE_PICARO, ...DE_BRUJO, ...DE_PALADIN,
 ];
 
 /** Registro completo (para guardar/cargar partidas por id). */

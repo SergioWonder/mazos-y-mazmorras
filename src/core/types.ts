@@ -1,6 +1,6 @@
 // ── Tipos centrales del juego ────────────────────────────────────────────────
 
-export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo';
+export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo' | 'paladin';
 /** 'maldicion' = curse: unplayable dead weight that clogs the hand and the deck. */
 export type TipoCarta = 'ataque' | 'habilidad' | 'poder' | 'maldicion';
 export type Rareza = 'inicial' | 'comun' | 'infrecuente' | 'rara' | 'especial';
@@ -63,6 +63,17 @@ export type EstadoId =
   | 'bloqueoPorTurno'// (brujo/Celestial) ganas este bloqueo al inicio de cada turno
   | 'bendicionOscura'// (brujo/Infernal) ganas este bloqueo cada vez que un enemigo muere
   | 'condenaPorBloqueo'// (brujo/Pacto Final) al final de tu turno aplicas Condena = tu bloqueo a todos
+  | 'fervor'         // (paladín) se gana con cada Golpe y Defensa; los Castigos lo consumen
+  | 'castigo'        // (paladín) indicador: Castigos preparados para tu siguiente ataque
+  | 'golpesMas'      // (paladín) tus Golpes infligen esta cantidad de daño más
+  | 'defensasMas'    // (paladín) tus Defensas dan esta cantidad de bloqueo más
+  | 'bastion'        // (paladín) al inicio de tu turno conservas hasta esta cantidad de bloqueo
+  | 'fervorPorTurno' // (paladín) ganas este Fervor al inicio de cada turno
+  | 'armaSagrada'    // (paladín/Devoción) tus ataques infligen tu Fervor como daño adicional
+  | 'gloria'         // (paladín/Gloria) cada Castigo descargado da 1 Fuerza (2 = y 1 Fervor)
+  | 'antiguos'       // (paladín/Antiguos) al final de tu turno, este bloqueo por cada Fervor
+  | 'venganza'       // (paladín/Venganza) tus Castigos cuestan 0
+  | 'angelVengador'  // (paladín) al inicio de cada turno preparas un Castigo de este daño y ganas 1 Fervor
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
   | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
@@ -219,6 +230,27 @@ export interface JugadorCombate extends Luchador {
   /** Bloqueo aplazado del pícaro (Acrobacias): cada entrada reaplica su bloqueo
    *  al inicio de los próximos `turnos` turnos. */
   bloqueoAplazado: Array<{ cantidad: number; turnos: number }>;
+  /** (paladin) Smites waiting for the next attack card. */
+  castigos: CastigoPreparado[];
+}
+
+/** Element of a paladin Smite (its look when it charges and when it lands). */
+export type ElementoCastigo = 'divino' | 'trueno' | 'cegador' | 'fuego' | 'resplandor' | 'destierro';
+
+/** A Smite prepared for the next attack; its numbers are fixed when it is played. */
+export interface CastigoPreparado {
+  nombre: string;
+  elemento: ElementoCastigo;
+  /** Extra damage on the attack's first hit on each target. */
+  dano?: number;
+  vulnerable?: number;
+  debil?: number;
+  /** Extra damage dealt to EVERY enemy. */
+  salpicadura?: number;
+  /** Banishes a non-boss target left at or under this health; bosses take it as damage. */
+  destierro?: number;
+  /** Grants block equal to the damage the attack deals. */
+  bloqueoPorDano?: boolean;
 }
 
 export interface CartaDef {
@@ -238,6 +270,10 @@ export interface CartaDef {
   /** Animación especial de carta rara (clase CSS + efecto a pantalla). */
   animRara?: string;
   exhumar?: boolean; // se agota al jugarse
+  /** (paladin) Strike or Defend family: gives Fervor and takes the Strike/Defend bonuses. */
+  familia?: 'golpe' | 'defensa';
+  /** (paladin) a Smite card (Oath of Vengeance makes them free). */
+  castigo?: boolean;
   /** Requiere un espacio de conjuro libre de este nivel mínimo (mago). */
   requiereConjuro?: number;
   /** 1 uso: al jugarse se elimina del mazo para el resto de la partida. */
@@ -444,6 +480,16 @@ export interface ContextoEfecto {
   sanar(obj: Luchador, n: number): Promise<void>;
   /** true si el enemigo es un jefe. */
   esJefe(e: EnemigoCombate): boolean;
+  /** (paladin) Gains Fervor. */
+  ganarFervor(n: number): Promise<void>;
+  /** (paladin) Spends all the Fervor and returns how much there was. */
+  consumirFervor(): number;
+  /** (paladin) Prepares a Smite for the next attack card. */
+  prepararCastigo(c: CastigoPreparado): Promise<void>;
+  /** (paladin) Smites waiting for the next attack. */
+  castigosPreparados(): number;
+  /** (paladin) Draws the first card of that family from the draw pile (false if none). */
+  robarFamilia(familia: 'golpe' | 'defensa'): Promise<boolean>;
   /** Pierdes todo el maná actual y el próximo turno empiezas con 0. */
   manaCero(): void;
   /** Lanza un efecto de partículas sobre un luchador (sin daño ni texto). */
@@ -547,6 +593,8 @@ export interface ReliquiaDef {
   inicioTurno?: (ctx: ContextoEfecto, turno: number) => Promise<void>;
   finTurno?: (ctx: ContextoEfecto) => Promise<void>;
   alGastarConjuro?: (ctx: ContextoEfecto, nivel: number) => Promise<void>;
+  /** (paladin) An attack has just unleashed these Smites. */
+  alDescargarCastigo?: (ctx: ContextoEfecto, castigos: CastigoPreparado[]) => Promise<void>;
   alJugarCarta?: (ctx: ContextoEfecto, jugada: CartaJugada) => Promise<void>;
   /** During the player's turn, playing or discarding the last card has just left the hand empty. */
   alVaciarMano?: (ctx: ContextoEfecto) => Promise<void>;

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <filter id="g" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <path id="f" d="M14 12 H50 V42 L32 56 L14 42 Z"/>
+    <clipPath id="c"><use href="#f"/></clipPath>
+  </defs>
+  <!-- pole -->
+  <path d="M32 7 V62" stroke="#140d0a" stroke-width="5.4" stroke-linecap="round"/>
+  <path d="M32 7 V62" stroke="#8a5a2e" stroke-width="2.6" stroke-linecap="round"/>
+  <!-- golden finial -->
+  <circle cx="32" cy="5.5" r="5" fill="#ffd35a" opacity="0.8" filter="url(#g)"/>
+  <circle cx="32" cy="5.5" r="3.4" fill="#ffd35a" stroke="#140d0a" stroke-width="2"/>
+  <!-- white and gold banner -->
+  <use href="#f" fill="#f4f1e6"/>
+  <g clip-path="url(#c)">
+    <path d="M40 0 H64 V64 H36 Z" fill="#cfc8b4"/>
+    <path d="M14 44 L32 58 L50 44 V40 L32 54 L14 40 Z M14 12 H50 V17 H14 Z" fill="#e8b440"/>
+  </g>
+  <use href="#f" fill="none" stroke="#140d0a" stroke-width="2.8" stroke-linejoin="round"/>
+  <path d="M14 17 H50 M14 40 L32 54 L50 40" stroke="#140d0a" stroke-width="1.2" fill="none"/>
+  <!-- crossbar -->
+  <path d="M10 11 H54" stroke="#140d0a" stroke-width="5" stroke-linecap="round"/>
+  <path d="M10 11 H54" stroke="#e8b440" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M12 13 V21 M52 13 V21" stroke="#140d0a" stroke-width="3.6" stroke-linecap="round"/>
+  <path d="M12 13 V21 M52 13 V21" stroke="#ffd35a" stroke-width="1.6" stroke-linecap="round"/>
+  <!-- radiant sun -->
+  <circle cx="32" cy="29" r="9" fill="#ffd35a" opacity="0.9" filter="url(#g)"/>
+  <path d="M32 20 V38 M23 29 H41 M25.6 22.6 L38.4 35.4 M38.4 22.6 L25.6 35.4" stroke="#140d0a" stroke-width="3.4" stroke-linecap="round"/>
+  <path d="M32 20 V38 M23 29 H41 M25.6 22.6 L38.4 35.4 M38.4 22.6 L25.6 35.4" stroke="#ffd35a" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="32" cy="29" r="4.8" fill="#ffd35a" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M30 27.6 Q30.6 26.6 32 26.3" stroke="#fff6c8" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4a3c18"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.54" cy="0.34" r="0.4">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.66"/>
+    </radialGradient>
+    <linearGradient id="haz" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffe8a0" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffe8a0" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="acero" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8d6cc"/>
+      <stop offset="1" stop-color="#5e5f5c"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <!-- armoured forearm and gauntleted fist gripping the haft -->
+    <g id="m">
+      <path d="M56 -8 L104 -8 L134 34 L114 58 Z"/>
+      <path d="M108 42 Q112 28 128 26 L144 34 Q142 54 130 64 Q114 62 108 42 Z"/>
+      <path d="M130 44 Q131 37 142 36.5 L164 37.5 Q173 39 172 48 L172 66 Q171 73 162 73 L141 73 Q131 72 130 64 Z"/>
+      <path d="M134 39 Q142 28 160 31 L164 39 L142 43 Z"/>
+    </g>
+  </defs>
+
+  <!-- chapel crypt by candlelight -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 0 H280 V118 H0 Z" fill="#2c230e"/>
+  <path d="M56 82 L56 30 Q56 12 76 12 Q96 12 96 30 L96 82 Z" fill="#6a5626"/>
+  <path d="M60 80 L60 31 Q60 16 76 16 Q92 16 92 31 L92 80 Z" fill="#e8cf86"/>
+  <path d="M76 16 L76 80 M60 44 L92 44 M60 62 L92 62" stroke="#3a2c10" stroke-width="2"/>
+  <path d="M60 31 Q60 16 76 16 L76 44 L60 44 Z" fill="#fff4c8"/>
+  <path d="M0 0 L22 0 L22 118 L0 118 Z M200 0 L222 0 L222 118 L200 118 Z" fill="#1f180a"/>
+  <path d="M22 0 Q22 30 50 34 L50 0 Z M200 0 Q200 30 172 34 L172 0 Z" fill="#241c0c"/>
+  <path d="M22 20 L22 118 M200 20 L200 118" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M0 40 H22 M0 70 H22 M0 100 H22 M200 50 H222 M200 86 H222" stroke="#140d0a" stroke-width="1"/>
+  <!-- light shaft from the window onto the vow -->
+  <path d="M60 30 L92 20 L200 130 L112 138 Z" fill="url(#haz)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+
+  <!-- candles -->
+  <g>
+    <path d="M232 118 L232 96 M252 118 L252 90 M244 118 L244 102" stroke="#140d0a" stroke-width="7" stroke-linecap="round"/>
+    <path d="M232 118 L232 96 M252 118 L252 90 M244 118 L244 102" stroke="#d8c8a0" stroke-width="4.4"/>
+    <path d="M233.6 118 L233.6 97 M253.6 118 L253.6 91 M245.6 118 L245.6 103" stroke="#a89468" stroke-width="1.4"/>
+    <circle cx="232" cy="90" r="6" fill="#ffc050" opacity="0.8" filter="url(#brillo)"/>
+    <circle cx="252" cy="84" r="6" fill="#ffc050" opacity="0.8" filter="url(#brillo)"/>
+    <circle cx="244" cy="96" r="6" fill="#ffc050" opacity="0.8" filter="url(#brillo)"/>
+    <path d="M232 94 Q229 90 232 84 Q235 90 232 94 Z M252 88 Q249 84 252 78 Q255 84 252 88 Z M244 100 Q241 96 244 90 Q247 96 244 100 Z" fill="#fff0b0"/>
+  </g>
+
+  <!-- stone floor and altar step -->
+  <path d="M0 118 H280 V160 H0 Z" fill="#1c150a"/>
+  <path d="M0 136 H280 M40 118 L30 160 M140 136 L136 160 M230 118 L240 160" stroke="#110c06" stroke-width="1.2"/>
+  <path d="M100 118 L200 118 L204 130 L96 130 Z" fill="#4a3c22" stroke="#140d0a" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M96 130 L204 130 L204 136 L96 136 Z" fill="#2e2414" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M104 121 H196" stroke="#7a6436" stroke-width="1.2"/>
+
+  <!-- the warhammer planted head-down -->
+  <ellipse cx="150" cy="124" rx="44" ry="4" fill="#0e0a05" opacity="0.7"/>
+  <path d="M144 30 L156 30 L156 94 L144 94 Z" fill="#5a3e20" stroke="#140d0a" stroke-width="2.2"/>
+  <path d="M151.5 30 L156 30 L156 94 L151.5 94 Z" fill="#3e2a14"/>
+  <path d="M144 80 H156 M144 86 H156" stroke="#140d0a" stroke-width="1.1"/>
+  <path d="M140 25 Q150 18 160 25 L159 33 L141 33 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M116 92 L184 92 L190 99 L190 117 L184 124 L116 124 L110 117 L110 99 Z" fill="url(#acero)" stroke="#140d0a" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="M152 92 L184 92 L190 99 L190 117 L184 124 L152 124 Z" fill="#4a4b48" opacity="0.6"/>
+  <path d="M126 92 V124 M174 92 V124" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M138 100 L150 95.5 L162 100 L162 116 L150 120.5 L138 116 Z" fill="#c9a040" stroke="#140d0a" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M150 100 L153 108 L150 116 L147 108 Z" fill="#fff0b0"/>
+  <path d="M113 96 L124 96" stroke="#f4f2ea" stroke-width="1.6" opacity="0.8"/>
+  <circle cx="150" cy="108" r="7" fill="#ffd35a" opacity="0.4" filter="url(#brillo)"/>
+
+  <!-- ring of the oath binding the haft -->
+  <ellipse cx="150" cy="82" rx="34" ry="7.5" fill="none" stroke="#ffd35a" stroke-width="5" opacity="0.7" filter="url(#brillo)"/>
+  <ellipse cx="150" cy="82" rx="34" ry="7.5" fill="none" stroke="#fff4c8" stroke-width="1.3" stroke-dasharray="6 2 1.5 2"/>
+
+  <!-- the fist of the oath, rim-lit -->
+  <circle cx="152" cy="52" r="28" fill="#ffd35a" opacity="0.45" filter="url(#brillo)"/>
+  <use href="#m" transform="translate(1.5 -1.5)" fill="#ffd35a"/>
+  <use href="#m" fill="#0b0910"/>
+  <path d="M131 52 H171.5 M131 60 H171.5 M131 67 H171.5 M112 44 Q120 52 130 56 M86 -6 L122 42 M72 -6 L106 40" fill="none" stroke="#ffd35a" stroke-width="1" opacity="0.5"/>
+
+  <!-- motes of light -->
+  <path d="M120 30h.1M180 36h.1M172 62h.1M126 66h.1M188 20h.1M112 50h.1" stroke="#fff4c8" stroke-width="2.4" stroke-linecap="round" opacity="0.8" filter="url(#suave)"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

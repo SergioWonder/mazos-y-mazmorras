@@ -9,7 +9,7 @@
 
 import {
   Painter, SPELLS, MAX_CARD_SPRITES, geo, span, lerp, easeOut, easeIn, easeInOut, easeOutBack, bell, dropAngle,
-  zigzag, smooth, clamp01, TAU, type Build, type Point, type SpellDef,
+  zigzag, smooth, clamp01, TAU, hash01, lightHammer, vinePath, vineFront, type Build, type Point, type SpellDef,
 } from './spell-fx.ts';
 
 // ── palettes ────────────────────────────────────────────────────────────────
@@ -1525,6 +1525,280 @@ const deseo: Build = (g, u, c, D) => {
   if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + s), W * 0.1 * (0.3 + s) + 2, 4 * k, '#ffd166', 1 - s);
 };
 
+// ── Paladin ─────────────────────────────────────────────────────────────────
+
+const DEVOTION = ['#fffaf0', '#fff3c4', '#ffe7a0', '#ffd35a'];
+const GLORY = ['#ffd35a', '#ffb830', '#fff3c4', '#ffffff'];
+const ANCIENT = ['#3f7d2a', '#7dba4e', '#c9f29b', '#ffd35a'];
+const VENGEANCE = ['#5a0a0a', '#c21f1f', '#ff5a2a', '#ffd35a'];
+const VENGEFUL_FLAME = ['#ffd35a', '#ff5a2a', '#c21f1f', '#7a0a0a', '#3a0505'];
+
+/** Oath of Devotion: a white aura wraps the paladin, a sunburst opens behind him
+ *  and ribbons of light coil up the raised hammer until it blazes. */
+const juramentoDevocion: Build = (g, u, c, D) => {
+  const { b, cx, cy, R, k, W, H, ground, face } = geo(c);
+  const vis = span(u, 0, 0.2) * (1 - span(u, 0.82, 1));
+  const sb = easeOut(span(u, 0.05, 0.4)) * (1 - span(u, 0.8, 1)), sy = cy - 0.15 * H;
+  each(g, 16, (i) => {
+    const a = u * 0.8 + (i / 16) * TAU, L = R * (1.1 + 0.45 * (i % 2)) * sb;
+    g.beam(cx, sy, cx + Math.cos(a) * L, sy + Math.sin(a) * L, 16 * k, DEVOTION[3], 0.22 * sb);
+  });
+  g.dot(cx, cy, R * 0.95, '#fffaf0', 0.14 * vis);
+  for (let i = 0; i < 2; i++) {
+    const s = (u * 1.4 + i / 2) % 1;
+    g.ring(cx, cy, W * 0.55 * (0.9 + 0.3 * s), H * 0.55 * (0.9 + 0.3 * s), 2 * k, '#fff3c4', 0.35 * vis * (1 - s));
+  }
+  const hx = cx + face * W * 0.3, hy = b.y - 0.12 * H, hs = 44 * k + 10, ang = Math.PI / 2 + face * 0.2;
+  gather(g, u, hx, hy, { r0: R * 1.8, u0: 0, u1: 0.34, n: 30, cols: DEVOTION, salt: 5, size: 5 * k });
+  // ribbons of light coiling up the handle to the head
+  const grow = easeOut(span(u, 0.08, 0.38)), rib = vis * (1 - span(u, 0.7, 0.85));
+  const gx = hx + Math.cos(ang) * hs * 1.25, gy = hy + Math.sin(ang) * hs * 1.25, px = -Math.sin(ang), py = Math.cos(ang);
+  if (grow > 0.02) for (let r = 0; r < 3; r++) {
+    const pts: Point[] = [];
+    for (let j = 0; j <= 10; j++) {
+      const t = (j / 10) * grow, w = Math.sin(t * 9 + r * 2.1 - u * D * 6) * hs * 0.6 * (1 - 0.3 * t);
+      pts.push({ x: lerp(gx, hx, t) + px * w, y: lerp(gy, hy, t) + py * w });
+    }
+    g.strip(pts, () => 1.8 * k, '#fff6d8', 0.85 * rib, false);
+    const tip = pts[pts.length - 1];
+    g.dot(tip.x, tip.y, 2.4 * k, '#ffffff', rib);
+  }
+  const fl = bell(u, 0.33, 0.6);
+  g.dot(hx, hy, hs * 1.1 * fl + 1, '#fff3c4', 0.2 * fl);
+  g.star(hx, hy, 44 * k * fl + 0.1, '#ffffff', fl);
+  const s = span(u, 0.35, 0.8);
+  if (s > 0 && s < 1) g.ring(hx, hy, hs * (0.5 + 2 * easeOut(s)), hs * (0.5 + 2 * easeOut(s)), 4 * k * (1 - s) + 1, '#ffe7a0', 1 - s);
+  burst(g, u, hx, hy, { u0: 0.35, u1: 0.9, n: 44, dist: R * 2.2, cols: DEVOTION, salt: 40, kind: 'star', len: 9 * k });
+  rise(g, u, { x: cx, y: ground, w: W * 1.4, h: H * 1.3, u0: 0.2, u1: 1, n: 60, cols: DEVOTION, salt: 90, size: 5 * k });
+  lightHammer(g, hx, hy, ang, hs * (1 + 0.1 * bell(u, 0.35, 0.55)), vis, { halo: '#fff3c4', rim: '#ffe7a0', core: '#ffffff' });
+};
+
+/** Oath of Glory: a sunrise fans out behind the paladin, a laurel wreath of light
+ *  crowns him leaf by leaf and flares, and golden stars shower down. */
+const juramentoGloria: Build = (g, u, c) => {
+  const { b, cx, R, k, W, H, ground } = geo(c);
+  const vis = 1 - span(u, 0.82, 1), fan = easeOut(span(u, 0, 0.35)) * vis;
+  const rays = g.n(11);
+  for (let i = 0; i < rays; i++) {
+    const a = -Math.PI / 2 + (i / Math.max(1, rays - 1) - 0.5) * 2.4, L = H * (1.4 + 0.3 * (i % 2)) * fan;
+    g.beam(cx, ground, cx + Math.cos(a) * L, ground + Math.sin(a) * L, 22 * k, i % 2 ? GLORY[1] : GLORY[0], 0.22 * fan);
+  }
+  g.dot(cx, ground, W * 0.4 * fan + 1, '#ffd35a', 0.12 * fan);
+  const wy = b.y + 0.02 * H, wr = W * 0.48, wry = W * 0.17;
+  g.ring(cx, wy, wr, wry, 2 * k, '#ffd35a', 0.6 * span(u, 0.15, 0.3) * vis);
+  const m = g.n(9);
+  for (const side of [-1, 1]) for (let j = 0; j < m; j++) {
+    const t = j / Math.max(1, m - 1), th = Math.PI / 2 - side * (0.3 + 2.3 * t);
+    const x = cx + Math.cos(th) * wr, y = wy + Math.sin(th) * wry;
+    const t0 = 0.15 + 0.025 * j, pop = Math.max(0, easeOutBack(span(u, t0, t0 + 0.08)));
+    if (pop <= 0) continue;
+    const tang = th - side * Math.PI / 2;
+    g.leaf(x + Math.cos(tang + side * 0.5) * 4 * k, y + Math.sin(tang + side * 0.5) * 4 * k, 11 * k * pop, tang + side * 0.5, j % 2 ? '#e0a82e' : '#ffc53a', vis);
+    g.leaf(x - Math.cos(tang - side * 0.4) * 2 * k, y - Math.sin(tang - side * 0.4) * 2 * k, 8 * k * pop, tang - side * 0.4, '#ffe08a', 0.9 * vis);
+  }
+  const fl = bell(u, 0.35, 0.6);
+  g.star(cx, wy - wry, 44 * k * fl + 0.1, '#ffffff', fl);
+  g.dot(cx, wy - wry, wr * 0.6 * fl + 1, '#fff3c4', 0.2 * fl);
+  for (let i = 0; i < 2; i++) {
+    const s = span(u, 0.35 + i * 0.1, 0.8 + i * 0.1);
+    if (s > 0 && s < 1) g.ring(cx, wy, wr * (1 + 1.6 * s), wry * (1 + 1.6 * s), 3 * k, i ? '#ffffff' : '#ffd35a', 1 - s);
+  }
+  burst(g, u, cx, wy, { u0: 0.35, u1: 1, n: 40, dist: R * 2.2, cols: GLORY, salt: 30, kind: 'star', len: 9 * k, grav: 90 * k });
+  rise(g, u, { x: cx, y: ground, w: W * 1.6, h: H * 1.2, u0: 0.1, u1: 1, n: 40, cols: GLORY, salt: 70, size: 8 * k, kind: 'spark' });
+};
+
+/** Oath of the Ancients: golden-green vines climb and coil round the paladin,
+ *  bloom into gold flowers under slanting forest light; spores drift up. */
+const juramentoAntiguos: Build = (g, u, c) => {
+  const { b, cx, cy, R, k, W, H, ground } = geo(c);
+  const vis = 1 - span(u, 0.8, 1);
+  g.dot(cx, cy, R * 1.05, '#7dba4e', 0.12 * bell(u, 0, 1));
+  g.dot(cx, cy, R * 0.6, '#ffd35a', 0.1 * bell(u, 0.2, 1));
+  const lt = bell(u, 0.05, 0.95);
+  for (let i = 0; i < 3; i++) g.beam(cx - W * 0.9 + i * W * 0.55, b.y - H * 0.8, cx - W * 0.35 + i * W * 0.45, ground, 20 * k, '#ffd35a', 0.16 * lt);
+  const s0 = span(u, 0, 0.5);
+  if (s0 < 1) g.ring(cx, ground, W * (0.3 + 0.6 * s0), W * 0.1 * (0.3 + 0.6 * s0) + 2, 4 * k, '#7dba4e', 1 - s0);
+  const nv = g.n(4);
+  for (let i = 0; i < nv; i++) {
+    const growth = easeOut(span(u, i * 0.04, 0.45));
+    if (growth <= 0.02) continue;
+    const pts = vinePath(b, i, nv, growth, 1.08), m = pts.length - 1;
+    for (let j = 1; j <= m; j++) {
+      const s = growth * (j / m), front = vineFront(i, s), th = lerp(7, 2, s) * k;
+      const p0 = pts[j - 1], p1 = pts[j];
+      g.seg(p0.x, p0.y, p1.x, p1.y, th, front ? '#4e7a2a' : '#2f5a20', (front ? 1 : 0.7) * vis, 0, false);
+      if (front && j % 2) g.seg(p0.x, p0.y, p1.x, p1.y, th * 0.3, '#e8c24a', 0.55 * vis, 0, false);
+    }
+    for (const s of [0.25, 0.45, 0.65, 0.85]) {
+      if (growth < s + 0.05) continue;
+      const q = pts[Math.round((s / growth) * m)], side = (Math.round(s * 20) + i) % 2 ? 1 : -1;
+      g.leaf(q.x + side * 6 * k, q.y - 3 * k, 8 * k, side * 0.7, (Math.round(s * 20) + i) % 3 ? '#7dba4e' : '#ffd35a', vis, (Math.round(s * 20) + i) % 3 === 0);
+      const bloom = span(u, 0.4 + s * 0.3, 0.5 + s * 0.3);
+      if (bloom > 0) g.star(q.x - side * 5 * k, q.y, 6 * k * bloom, '#fff3c4', 0.8 * vis * bloom, u * 3);
+    }
+    const tip = pts[m];
+    g.dot(tip.x, tip.y, 3 * k, '#ffd35a', 0.7 * vis);
+  }
+  burst(g, u, cx, cy, { u0: 0.4, u1: 1, n: 40, dist: R * 1.6, cols: ANCIENT, salt: 50, kind: 'leaf', len: 9 * k, grav: 50 * k });
+  rise(g, u, { x: cx, y: ground, w: W * 1.6, h: H * 1.3, u0: 0.1, u1: 1, n: 44, cols: ['#c9f29b', '#ffd35a', '#7dba4e'], salt: 80, size: 4.5 * k });
+};
+
+/** Oath of Vengeance: a hood of shadow falls over the paladin, his eyes kindle,
+ *  crimson flames rise round him and his hammer levels at a marked foe. */
+const juramentoVenganza: Build = (g, u, c, D) => {
+  const { b, cx, cy, R, k, W, H, ground, face } = geo(c);
+  const vis = 1 - span(u, 0.82, 1), hood = span(u, 0, 0.25) * vis;
+  each(g, 6, (i) => g.dot(cx + (g.r(i) - 0.5) * W * 0.35, b.y + 0.14 * H + (g.r(i + 6) - 0.5) * H * 0.12, W * 0.16, '#140606', 0.45 * hood, false));
+  gather(g, u, cx, b.y + 0.16 * H, { r0: R * 1.5, u0: 0, u1: 0.3, n: 30, cols: ['#3a0505', '#7a0a0a', '#c21f1f'], salt: 7, size: 6 * k });
+  const eo = span(u, 0.18, 0.3) * vis, flick = 0.85 + 0.15 * Math.sin(u * D * 30), ey = b.y + 0.16 * H, ex = cx + face * W * 0.06;
+  for (const s of [-1, 1]) {
+    const x = ex + s * W * 0.07;
+    g.dot(x, ey, 7 * k * eo + 0.5, '#ff5a2a', 0.5 * eo);
+    g.seg(x - s * 5 * k, ey + 1.5 * k, x + s * 5 * k, ey - 1.5 * k, 3 * k * eo + 0.5, '#ffd35a', eo * flick, 1);
+    flame(g, x, ey - 3 * k, 16 * k * eo, 6 * k, u * D, s + 3, VENGEFUL_FLAME, 0.7 * eo);
+  }
+  const au = span(u, 0.2, 0.35) * vis, tongues = g.n(8);
+  for (let i = 0; i < tongues; i++) {
+    const f = (i + 0.5) / tongues, mid = 1 - Math.abs(f - 0.5) * 1.6;
+    flame(g, b.x + (f + (g.r(i + 30) - 0.5) * 0.1) * W, ground - g.r(i + 40) * 8 * k, H * (0.25 + 0.45 * mid + 0.25 * g.r(i + 20)) * au, (14 + 8 * g.r(i + 50)) * k, u * D, i, VENGEFUL_FLAME, 0.55 * au);
+  }
+  const point = Math.max(0, easeOutBack(span(u, 0.25, 0.4)));
+  const hx = lerp(cx + face * W * 0.3, cx + face * W * 0.62, point), hy = lerp(b.y, cy - 0.12 * H, point);
+  const ang = lerp(Math.PI / 2, face > 0 ? Math.PI : 0, point);
+  lightHammer(g, hx, hy, ang, 34 * k + 10, span(u, 0.1, 0.25) * vis, { halo: '#c21f1f', rim: '#ff7a4a', core: '#ffe0c0' });
+  let mx = cx + face * W * 2.6;
+  if (c.view) mx = Math.max(50, Math.min(c.view.w - 50, mx));
+  const my = cy - 0.1 * H, ray = bell(u, 0.33, 0.62);
+  g.beam(hx, hy, mx, my, 12 * k, '#c21f1f', 0.5 * ray);
+  g.beam(hx, hy, mx, my, 3 * k, '#ffd35a', 0.8 * ray);
+  const pop = Math.max(0, easeOutBack(span(u, 0.38, 0.5))) * vis, mr = 30 * k * pop * (1 + 0.1 * Math.sin(u * D * 8));
+  if (mr > 1) {
+    g.ring(mx, my, mr, mr, 4 * k, '#c21f1f', pop);
+    g.ring(mx, my, mr * 0.55, mr * 0.55, 2 * k, '#ffd35a', pop);
+    for (let i = 0; i < 4; i++) {
+      const a = u * 1.2 + (i / 4) * TAU;
+      g.fang(mx + Math.cos(a) * mr * 1.7, my + Math.sin(a) * mr * 1.7, mx + Math.cos(a) * mr * 1.05, my + Math.sin(a) * mr * 1.05, 6 * k, '#ff5a2a', pop);
+    }
+  }
+  burst(g, u, mx, my, { u0: 0.4, u1: 0.85, n: 30, dist: R * 1.2, cols: VENGEANCE.slice(1), salt: 60, len: 10 * k });
+  rise(g, u, { x: cx, y: ground, w: W * 1.2, h: H * 1.4, u0: 0.2, u1: 1, n: 60, cols: ['#ff5a2a', '#ffd35a', '#c21f1f'], salt: 50, size: 7 * k, kind: 'spark' });
+};
+
+/** Celestial Wrath, on each enemy it hits: the sky breaks open over it and a
+ *  column of golden light slams down with the damage, cracking the ground. */
+const coleraCelestial: Build = (g, u, c, D) => {
+  const { b, cx, R, k, W, H, ground } = geo(c);
+  const HIT = 0.14, top = Math.max(0, b.y - 2.4 * H), a = 1 - span(u, 0.8, 1);
+  const sky = span(u, 0, 0.1) * (1 - span(u, 0.7, 1));
+  cloud(g, cx, Math.max(16, b.y - 1.1 * H), W * 1.6, H * 0.3, g.n(8), 7, '#3a2e18', '#ffd35a', 0.7 * sky, bell(u, 0.1, 0.5));
+  const bottom = lerp(top, ground, easeIn(span(u, 0, HIT)));
+  const w = W * (0.25 + 0.75 * easeOut(span(u, HIT - 0.03, HIT + 0.1))) * (1 - easeIn(span(u, 0.55, 0.95))) * (1 + 0.05 * Math.sin(u * D * 60)) + 3 * k;
+  g.beam(cx, top, cx, bottom, w, '#ffb830', 0.5 * a);
+  g.beam(cx, top, cx, bottom, w * 0.45, '#fff3c4', 0.8 * a);
+  g.beam(cx, top, cx, bottom, w * 0.12 + 1, '#ffffff', a);
+  if (u < HIT) return;
+  if (u < HIT + 0.05) g.mark('columna', cx, ground);
+  const fl = bell(u, HIT, HIT + 0.3);
+  g.dot(cx, ground - 0.1 * H, R * 1.1 * fl + 1, '#fff3c4', 0.35 * fl);
+  g.dot(cx, ground - 0.1 * H, 24 * k * fl + 1, '#ffffff', 0.9 * fl);
+  const cr = easeOut(span(u, HIT, HIT + 0.14)) * (1 - span(u, 0.6, 0.95)), cracks = g.n(8);
+  if (cr > 0.02) for (let i = 0; i < cracks; i++) {
+    const an = (i / cracks) * TAU + g.r(i) * 0.5, L = cr * (0.7 + 0.5 * g.r(i + 10));
+    const end = { x: cx + Math.cos(an) * W * 1.1 * L, y: ground + Math.sin(an) * W * 0.24 * L };
+    const pts = zigzag({ x: cx, y: ground }, end, 4, 6 * k, 0, i + 5);
+    g.strip(pts, () => 3.2 * k, '#ffb830', 0.8 * a);
+    g.strip(pts, () => 1.2 * k, '#ffffff', a, false);
+  }
+  const s = span(u, HIT, 0.7);
+  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + 1.1 * easeOut(s)), W * 0.12 * (0.3 + 1.1 * easeOut(s)) + 2, 6 * k * (1 - s) + 1, '#ffd35a', 1 - s);
+  burst(g, u, cx, ground - 6 * k, { u0: HIT, u1: 0.7, n: 34, dist: R * 1.6, cols: GLORY, salt: 30, len: 11 * k, grav: 220 * k, dir: -Math.PI / 2, spread: 2.6 });
+  rise(g, u, { x: cx, y: ground, w: W * 1.2, h: H * 1.5, u0: HIT + 0.1, u1: 1, n: 30, cols: DEVOTION, salt: 60, size: 6 * k });
+};
+
+/** Avenging Angel: light pours down, great feathered wings of light unfold from
+ *  the paladin's back under a halo, his hammer rises crackling and bursts in
+ *  radiance with a shockwave, and feathers drift down. */
+const angelVengador: Build = (g, u, c, D) => {
+  const { b, cx, cy, R, k, W, H, ground, face } = geo(c);
+  const vis = 1 - span(u, 0.85, 1), bm = bell(u, 0, 0.6);
+  g.beam(cx, b.y - 2.2 * H, cx, ground, W * 1.2, '#ffd35a', 0.22 * bm);
+  g.beam(cx, b.y - 2.2 * H, cx, ground, W * 0.35, '#fff3c4', 0.35 * bm);
+  const open = easeOutBack(span(u, 0.12, 0.42)), flap = Math.sin(u * D * 4) * 0.08 * span(u, 0.4, 0.6);
+  const L1 = W * 0.5 * (0.5 + 0.5 * open), L2 = W * 0.95 * (0.4 + 0.6 * open);
+  const e1 = lerp(-1.2, 0.65, open) + flap, e2 = lerp(-1.4, 0.2, open) + flap;
+  const rows: [number, number, number, number, number][] = [
+    // [count, t from, t to, length (× W), angle bias]
+    [9, 0.2, 1, 0.55, 0], [7, 0, 1, 0.48, 0.3], [8, 0, 1, 0.24, 0.15],
+  ];
+  const wingIn = span(u, 0.1, 0.2) * vis;
+  for (const s of [-1, 1]) {
+    // rooted at the shoulders so the paladin's body stays clear under the wings
+    const S = { x: cx + s * W * 0.2, y: b.y + 0.28 * H };
+    const E = { x: S.x + s * Math.cos(e1) * L1, y: S.y - Math.sin(e1) * L1 };
+    const T = { x: E.x + s * Math.cos(e2) * L2, y: E.y - Math.sin(e2) * L2 };
+    rows.forEach(([cnt, t0, t1, len, bias], r) => {
+      const n = g.n(cnt);
+      for (let i = 0; i < n; i++) {
+        const t = lerp(t0, t1, n > 1 ? i / (n - 1) : 0.5);
+        const onArm = r === 1;
+        const base = onArm ? { x: lerp(S.x, E.x, t), y: lerp(S.y, E.y, t) } : r === 0 ? { x: lerp(E.x, T.x, t), y: lerp(E.y, T.y, t) }
+          : t < 0.5 ? { x: lerp(S.x, E.x, t * 2), y: lerp(S.y, E.y, t * 2) } : { x: lerp(E.x, T.x, t * 2 - 1), y: lerp(E.y, T.y, t * 2 - 1) };
+        const phiR = (onArm ? lerp(1.2, 1.0, t) : r === 0 ? lerp(1.0, 0.1, t) : lerp(1.1, 0.4, t)) - bias * 0.3 - flap;
+        const phi = s > 0 ? phiR : Math.PI - phiR;
+        const Lf = W * len * (r === 0 ? 0.65 + 0.5 * t : r === 1 ? 0.55 + 0.45 * t : 1) * (0.4 + 0.6 * open);
+        const tip = { x: base.x + Math.cos(phi) * Lf, y: base.y + Math.sin(phi) * Lf };
+        const a = wingIn * span(u, 0.12 + 0.12 * t, 0.2 + 0.12 * t);
+        g.fang(base.x, base.y, tip.x, tip.y, (r === 2 ? 9 : 12) * k, '#ffc53a', 0.14 * a);
+        g.fang(base.x, base.y, tip.x, tip.y, (r === 2 ? 6 : 8.5) * k, r === 2 ? '#f0d890' : '#fff3d0', 0.85 * a, false);
+        if (r === 0) g.seg(base.x, base.y, lerp(base.x, tip.x, 0.8), lerp(base.y, tip.y, 0.8), 1.2 * k, '#ffffff', 0.5 * a);
+      }
+    });
+    g.seg(S.x, S.y, E.x, E.y, 5 * k, '#ffe7a0', 0.7 * wingIn);
+    g.seg(E.x, E.y, T.x, T.y, 3.5 * k, '#ffe7a0', 0.7 * wingIn);
+  }
+  const hl = span(u, 0.25, 0.4) * vis;
+  g.ring(cx, b.y - 0.02 * H, W * 0.26, W * 0.08, 4 * k, '#ffd35a', hl);
+  g.ring(cx, b.y - 0.02 * H, W * 0.26, W * 0.08, 1.5 * k, '#ffffff', hl);
+  const hx = cx + face * W * 0.18, hy = b.y - 0.4 * H, hs = 50 * k + 10;
+  gather(g, u, hx, hy, { r0: R * 1.8, u0: 0, u1: 0.35, n: 40, cols: GLORY, salt: 9, size: 7 * k, kind: 'star' });
+  lightHammer(g, hx, hy, Math.PI / 2 + face * 0.12, hs * (1 + 0.12 * bell(u, 0.35, 0.55)), span(u, 0.15, 0.3) * vis);
+  const frame = Math.floor(u * D * 20), arcs = span(u, 0.2, 0.3) * (1 - span(u, 0.7, 0.85));
+  if (arcs > 0) for (let j = 0; j < g.n(3); j++) {
+    const an = hash01(frame * 3 + j, 5) * TAU, end = { x: hx + Math.cos(an) * hs * 1.3, y: hy + Math.sin(an) * hs * 1.3 };
+    g.strip(zigzag({ x: hx, y: hy }, end, 4, 7 * k, frame, j + 2), () => 2 * k, j % 2 ? '#ffd35a' : '#ffffff', arcs);
+  }
+  const fl = bell(u, 0.35, 0.62);
+  g.dot(hx, hy, R * 1.1 * fl + 1, '#fff3c4', 0.22 * fl);
+  g.star(hx, hy, 70 * k * fl + 0.1, '#ffffff', fl);
+  for (let i = 0; i < 2; i++) {
+    const s = span(u, 0.36 + i * 0.08, 0.8 + i * 0.08);
+    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.4 + 2.2 * easeOut(s)), R * (0.3 + 1.4 * easeOut(s)), 6 * k * (1 - s) + 1, i ? '#ffffff' : '#ffd35a', 1 - s);
+  }
+  each(g, 40, (i) => {
+    const q = span(u, 0.4 + 0.4 * g.r(i + 100), 1);
+    if (q <= 0 || q >= 1) return;
+    g.leaf(cx + (g.r(i + 110) - 0.5) * W * 3.2 + Math.sin(q * 6 + i) * 14 * k, b.y + q * H * 1.3, 10 * k, Math.sin(q * 5 + i), i % 3 ? '#fff8e0' : '#ffd35a', 1 - q, true);
+  });
+  burst(g, u, hx, hy, { u0: 0.35, u1: 0.95, n: 60, dist: R * 2.2, cols: GLORY, salt: 80, kind: 'star', len: 12 * k });
+  rise(g, u, { x: cx, y: ground, w: W * 1.8, h: H * 1.4, u0: 0.4, u1: 1, n: 40, cols: DEVOTION, salt: 140, size: 6 * k });
+};
+
+/** Avenging Angel's prelude: a shaft of light narrows onto the paladin while
+ *  feathers of light spiral down into it and a ring opens at his feet. */
+const angelPrelude: Build = (g, u, c) => {
+  const { b, cx, cy, R, k, W, H, ground } = geo(c);
+  const vis = span(u, 0, 0.15) * (1 - span(u, 0.9, 1)), w = W * lerp(1.6, 0.5, easeInOut(u));
+  g.beam(cx, b.y - 2 * H, cx, ground, w, '#ffd35a', 0.2 * vis);
+  g.beam(cx, b.y - 2 * H, cx, ground, w * 0.3, '#fff3c4', 0.3 * vis);
+  each(g, 36, (i) => {
+    const q = (u * 1.2 + g.r(i)) % 1, a = g.r(i + 40) * TAU + q * 5, rad = W * (1.4 - 1.1 * q);
+    g.leaf(cx + Math.cos(a) * rad, lerp(b.y - 1.5 * H, cy, q), 9 * k, a, i % 3 ? '#fff3d0' : '#ffd35a', 0.9 * vis * Math.sin(Math.PI * q));
+  });
+  gather(g, u, cx, cy, { r0: R * 2, u0: 0, u1: 0.95, n: 50, cols: GLORY, salt: 3, size: 6 * k, kind: 'star' });
+  const op = easeOut(span(u, 0.1, 0.5));
+  g.ring(cx, ground, W * 0.8 * op + 1, W * 0.2 * op + 1, 3 * k, '#ffd35a', 0.8 * vis);
+};
+
 // ── Preludes: anticipation over the receivers while the showcase holds ─────
 
 /** Generic prelude: themed motes spiral in and motif symbols orbit the receiver
@@ -1627,6 +1901,13 @@ export const CARD_FX: Record<string, Entry> = {
   'haz-desdoblado': entry({ duration: 1.0, phases: [0.25, 0.7], anchor: 'self', build: hazDesdoblado }, [['#b46bff', '#ff5ad8', '#e8d0ff'], 'spark', '#ff5ad8']),
   'verbo-aniquilacion': entry({ duration: 1.2, phases: [0.4, 0.72], anchor: 'target', build: verboAniquilacion }, [VOID, 'rune', '#e8d0ff']),
   'pacto-final': entry({ duration: 1.3, phases: [0.3, 0.72], anchor: 'target', receiver: 'enemies', cap: MULTI, build: pactoFinal }, [HELL, 'rune', '#c21f3a']),
+  // paladin
+  'juramento-devocion': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: juramentoDevocion }, [DEVOTION, 'star', '#fff3c4']),
+  'juramento-gloria': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: juramentoGloria }, [GLORY, 'leaf', '#ffd35a']),
+  'juramento-antiguos': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: juramentoAntiguos }, [ANCIENT, 'leaf', '#7dba4e']),
+  'juramento-venganza': entry({ duration: 1.2, phases: [0.33, 0.72], anchor: 'self', build: juramentoVenganza }, [VENGEANCE, 'spark', '#c21f1f']),
+  'colera-celestial': entry({ duration: 0.9, phases: [0.14, 0.55], anchor: 'target', cap: MULTI, shake: { at: 0.15, level: 2 }, build: coleraCelestial }, [GOLD, 'spark', '#ffd35a']),
+  'angel-vengador': entry({ duration: 1.4, phases: [0.35, 0.75], anchor: 'self', shake: { at: 0.37, level: 2 }, build: angelVengador }, angelPrelude),
   // neutral
   seducir: entry({ duration: 1.2, phases: [0.35, 0.72], anchor: 'target', build: seducir }, [LOVE, 'heart', '#ff5a8a']),
   deseo: entry({ duration: 1.3, phases: [0.33, 0.72], anchor: 'self', build: deseo }, [GOLD, 'star', '#ffd166']),

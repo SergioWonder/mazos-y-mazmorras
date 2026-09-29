@@ -13,6 +13,7 @@ import { DRUIDA_RIG, FORM_RIGS, type FormId } from './heroes/druida.ts';
 import { MAGO_RIG } from './heroes/mago.ts';
 import { PICARO_RIG } from './heroes/picaro.ts';
 import { BRUJO_RIG } from './heroes/brujo.ts';
+import { PALADIN_RIG } from './heroes/paladin.ts';
 
 export {
   ACTION_DURATION, EMISSIVE, EYES, activeAction, applyMatrix,
@@ -23,6 +24,7 @@ export type HeroRig = PuppetRig;
 
 export const HERO_RIGS: Record<ClaseId, HeroRig> = {
   druida: DRUIDA_RIG, barbaro: BARBARO_RIG, mago: MAGO_RIG, picaro: PICARO_RIG, brujo: BRUJO_RIG,
+  paladin: PALADIN_RIG,
 };
 export { FORM_RIGS, type FormId };
 

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a200c"/>
+      <stop offset="0.45" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.62" cy="0.7" r="0.5">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <linearGradient id="haz" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff6d0" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#fffaf0" stop-opacity="1"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <!-- one column of light (origin = impact point) -->
+    <g id="col">
+      <path d="M-16 0 L-8 -100 L8 -100 L16 0 Z" fill="#ffd35a" opacity="0.7" filter="url(#fuerte)"/>
+      <path d="M-7 0 L-3.5 -100 L3.5 -100 L7 0 Z" fill="url(#haz)"/>
+      <path d="M-1 0 L0 -100 L1 0 Z" fill="#ffffff"/>
+    </g>
+    <g id="imp">
+      <ellipse rx="24" ry="9" fill="#ffd35a" opacity="0.85" filter="url(#brillo)"/>
+      <path d="M0 -16 L3 -5 L14 -9 L6 -1 L15 4 L3 3 L0 9 L-3 3 L-15 4 L-6 -1 L-14 -9 L-3 -5 Z" fill="#fffaf0"/>
+    </g>
+  </defs>
+
+  <!-- the sky tears open above the enemy host -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 94 L30 80 L52 88 L80 74 L110 86 L150 78 L190 88 L230 76 L280 86 L280 120 L0 120 Z" fill="#2a2010"/>
+  <!-- storm clouds with gilded rims -->
+  <path d="M0 0 H280 V26 Q266 38 250 30 Q238 42 222 32 Q210 44 192 34 Q176 46 160 34 Q146 44 130 34 Q116 46 100 36 Q84 48 66 36 Q50 46 34 34 Q18 42 0 34 Z" fill="#1e1608"/>
+  <path d="M280 26 Q266 38 250 30 Q238 42 222 32 Q210 44 192 34 Q176 46 160 34 Q146 44 130 34 Q116 46 100 36 Q84 48 66 36" fill="none" stroke="#ffd35a" stroke-width="3" opacity="0.6" filter="url(#brillo)"/>
+  <path d="M280 26 Q266 38 250 30 Q238 42 222 32 Q210 44 192 34 Q176 46 160 34 Q146 44 130 34 Q116 46 100 36 Q84 48 66 36" fill="none" stroke="#ffe8a0" stroke-width="1.2"/>
+  <path d="M0 0 H280 V12 Q250 22 220 14 Q190 24 160 14 Q130 24 100 14 Q70 22 40 14 Q20 20 0 14 Z" fill="#140e06"/>
+
+  <!-- the columns of light -->
+  <use href="#col" transform="translate(98 118) scale(0.9 0.82)"/>
+  <use href="#col" transform="translate(142 120) scale(1.1 0.86)"/>
+  <use href="#col" transform="translate(190 118) scale(1 0.84)"/>
+  <use href="#col" transform="translate(234 120) scale(1.2 0.88)"/>
+  <use href="#col" transform="translate(268 118) scale(0.8 0.84)"/>
+
+  <!-- the enemy host: helmets, spears and banners -->
+  <g fill="#150f07">
+    <path d="M64 132 L64 118 Q67.5 107.8 71 118.2 Q74.8 104.4 78.6 119.5 Q81.6 104.1 84.7 118.3 Q88.3 102.4 92 118.7 Q95.9 103.6 99.8 119.2 Q104.3 109.2 108.8 118.9 Q112 106.6 115.2 120.4 Q118.5 105.6 121.8 119.1 Q125.6 105.9 129.4 118.6 Q133.4 105.1 137.4 119.8 Q141.1 107.7 144.8 120.1 Q148.2 105.2 151.5 120.6 Q155.6 108.5 159.7 118.4 Q163.3 102.8 167 119.5 Q170 105.7 173.1 119.7 Q177.4 107.2 181.7 119.8 Q185.6 107.1 189.5 120.8 Q193.2 102.9 196.9 120.1 Q200.8 104.3 204.8 118.9 Q208.4 102.7 212 119.4 Q215.2 105.7 218.5 120.3 Q221.7 106.3 224.9 120.6 Q228 106 231.1 120.7 Q235.3 102.8 239.6 119.2 Q243.1 105.4 246.6 118.5 Q249.9 105.8 253.2 119.5 Q257.1 104.7 260.9 119.3 Q264.5 107 268 120.1 Q271.8 105.6 275.6 118.2 Q279.9 105.6 284.3 120.4 L280 132 Z"/>
+    <path d="M122 96 L136 99 L122 104 Z M204 90 L218 94 L204 98 Z"/>
+  </g>
+  <path d="M79 114 L77 93 M90 114 L88 89 M98 114 L97 90 M106 114 L104 88 M113 114 L110 92 M126 114 L123 95 M134 114 L133 92 M142 114 L145 98 M152 114 L149 94 M159 114 L158 92 M171 114 L168 90 M184 114 L182 94 M194 114 L194 88 M207 114 L208 98 M216 114 L214 92 M227 114 L229 94 M236 114 L238 91 M249 114 L251 98 M261 114 L259 97 M271 114 L268 92 M278 114 L277 91 M122 118 L122 94 M204 118 L204 88" stroke="#150f07" stroke-width="1.4"/>
+  <path d="M122 96 L136 99 L122 104 Z M204 90 L218 94 L204 98 Z" fill="#6e2018"/>
+  <g fill="#ff5a3a">
+    <circle cx="74.5" cy="112" r="0.8"/><circle cx="88" cy="110" r="0.8"/><circle cx="118" cy="112" r="0.8"/><circle cx="163" cy="110" r="0.8"/><circle cx="208" cy="110" r="0.8"/><circle cx="249.5" cy="112" r="0.8"/>
+  </g>
+  <!-- bodies and debris thrown up by the blasts -->
+  <g fill="#150f07">
+    <path d="M136 96 L142 92 L146 97 L141 101 Z M150 90 L153 86 L156 90 Z M226 94 L232 90 L236 96 L230 99 Z M186 98 L190 94 L194 99 Z M92 100 L97 97 L99 102 Z"/>
+    <path d="M130 88 L134 82 M152 82 L158 78 M240 86 L246 80" stroke="#150f07" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+  <!-- dark field in front of the host -->
+  <path d="M60 126 Q170 118 280 124 L280 160 L60 160 Z" fill="#1a130a"/>
+  <path d="M80 136 Q150 130 220 136 M120 148 Q190 142 260 148" fill="none" stroke="#2a2010" stroke-width="1.2"/>
+  <!-- the blasts among the ranks -->
+  <use href="#imp" transform="translate(98 116) scale(0.85)"/>
+  <use href="#imp" transform="translate(142 118)"/>
+  <use href="#imp" transform="translate(190 116) scale(0.95)"/>
+  <use href="#imp" transform="translate(234 118) scale(1.1)"/>
+  <use href="#imp" transform="translate(268 116) scale(0.8)"/>
+  <path d="M60 124 Q170 116 280 124" fill="none" stroke="#ffd35a" stroke-width="3" opacity="0.4" filter="url(#brillo)"/>
+
+  <!-- the paladin on a crag, hammer raised to call the wrath -->
+  <path d="M0 160 L0 110 Q14 104 30 108 Q46 112 56 126 L66 160 Z" fill="#100b05"/>
+  <path d="M0 110 Q14 104 30 108 Q46 112 56 126" fill="none" stroke="#5a4418" stroke-width="1.2"/>
+  <g transform="translate(30 107)">
+    <g fill="#ffd35a" transform="translate(1 -1)">
+      <path d="M-6 0 L-4 -12 L-6 -20 Q-4 -26 0 -26 Q5 -26 6 -20 L5 -12 L7 0 Z"/>
+      <path d="M-3 -26 Q-3.5 -33 0.5 -33 Q4.5 -33 4 -26 Z"/>
+      <path d="M2 -22 L8 -30 L10 -40 L12 -39 L10 -28 L4 -19 Z"/>
+      <path d="M-5 -21 Q-14 -12 -14 0 L-7 0 Z"/>
+    </g>
+    <g fill="#0b0910">
+      <path d="M-6 0 L-4 -12 L-6 -20 Q-4 -26 0 -26 Q5 -26 6 -20 L5 -12 L7 0 Z"/>
+      <path d="M-3 -26 Q-3.5 -33 0.5 -33 Q4.5 -33 4 -26 Z"/>
+      <path d="M2 -22 L8 -30 L10 -40 L12 -39 L10 -28 L4 -19 Z"/>
+      <path d="M-5 -21 Q-14 -12 -14 0 L-7 0 Z"/>
+    </g>
+    <path d="M11 -38 L13 -50" stroke="#140d0a" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="13" cy="-52" r="6" fill="#ffd35a" opacity="0.9" filter="url(#brillo)"/>
+    <path d="M8 -55 L18 -53 L17 -49 L7 -51 Z" fill="#fff0b0" stroke="#140d0a" stroke-width="1"/>
+    <path d="M13 -58 L20 -76 M14 -58 L40 -70" stroke="#fff4c8" stroke-width="1" opacity="0.7"/>
+  </g>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

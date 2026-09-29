@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="0.7" stop-color="#3a2c10"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.45" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff0b0"/>
+      <stop offset="0.55" stop-color="#e0a834"/>
+      <stop offset="1" stop-color="#8a5e14"/>
+    </linearGradient>
+    <linearGradient id="barrera" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0"/>
+      <stop offset="0.6" stop-color="#ffd35a" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#fff0b0" stop-opacity="0.6"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <!-- one paladin of the wall: great helm over a heater shield (origin = shield top centre) -->
+    <g id="s">
+      <path d="M-4 -3 Q-5 -17 3 -17.5 Q11 -17 10.5 -6 L10 0 L-3 0 Z" fill="#ffd35a" transform="translate(1.2 -1.2)"/>
+      <path d="M-4 -3 Q-5 -17 3 -17.5 Q11 -17 10.5 -6 L10 0 L-3 0 Z" fill="#0b0910"/>
+      <path d="M-0.5 -9.5 L8.5 -9.5" stroke="#ffd35a" stroke-width="1.2" stroke-linecap="round"/>
+      <path d="M2 -17 Q-2 -25 -10 -24 Q-3 -28 5 -21 Z" fill="#0b0910"/>
+      <path d="M-22 -1 L22 -1 Q25 36 0 63 Q-25 36 -22 -1 Z" fill="#140d0a"/>
+      <path d="M-19.5 1.5 L19.5 1.5 Q21.5 34 0 59 Q-21.5 34 -19.5 1.5 Z" fill="url(#oro)"/>
+      <path d="M0 1.5 L19.5 1.5 Q21.5 34 0 59 Z" fill="#8a5e14" opacity="0.55"/>
+      <path d="M-15 5.5 L15 5.5 Q16 31 0 52 Q-16 31 -15 5.5 Z" fill="none" stroke="#140d0a" stroke-width="1"/>
+      <path d="M0 13 L2.2 20 L9 22 L2.2 24 L0 31 L-2.2 24 L-9 22 L-2.2 20 Z" fill="#fffaf0" stroke="#140d0a" stroke-width="0.9" stroke-linejoin="round"/>
+      <path d="M-17 4 Q-10 2 -3 3" fill="none" stroke="#fffaf0" stroke-width="1.4" opacity="0.85"/>
+    </g>
+  </defs>
+
+  <!-- mountain pass at dawn, a horde coming up the valley -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 0 L0 96 L18 70 L26 40 L40 22 L46 0 Z" fill="#2a200c"/>
+  <path d="M280 0 L280 92 L262 74 L250 50 L256 24 L244 0 Z" fill="#2a200c"/>
+  <path d="M40 104 Q90 82 140 90 Q190 82 280 100 L280 160 L0 160 Z" fill="#2a2010"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <g fill="#161008">
+    <path d="M226 106 Q226 96 232 95 Q238 96 237 106 Z M240 104 Q240 95 246 94 Q252 95 251 104 Z M254 106 Q254 96 260 95 Q266 96 265 106 Z M266 102 Q266 94 271 93 Q277 94 276 102 Z"/>
+    <path d="M229 96 L226 86 L232 94 M258 95 L262 84 L262 95 M243 94 L240 84 L246 93" stroke="#161008" stroke-width="1.2"/>
+    <path d="M222 108 L280 104 L280 112 L222 112 Z"/>
+  </g>
+  <circle cx="231" cy="99" r="0.9" fill="#ff5a3a"/>
+  <circle cx="245" cy="98" r="0.9" fill="#ff5a3a"/>
+  <circle cx="259" cy="99" r="0.9" fill="#ff5a3a"/>
+  <path d="M0 126 Q80 112 150 118 T280 120 L280 160 L0 160 Z" fill="#17110a"/>
+
+  <!-- wall of light rising above the shields -->
+  <path d="M44 116 Q36 76 40 38 Q120 32 214 58 Q220 84 214 106 Q130 100 44 116 Z" fill="url(#barrera)" filter="url(#brillo)"/>
+  <path d="M40 38 Q120 32 214 58" fill="none" stroke="#ffd35a" stroke-width="5" opacity="0.6" filter="url(#brillo)"/>
+  <path d="M40 38 Q120 32 214 58" fill="none" stroke="#fff6d0" stroke-width="1.2"/>
+  <path d="M70 36 L70 60 M110 38 L110 64 M150 42 L150 68 M186 50 L186 72" stroke="#fff6d0" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- the shield wall, back to front -->
+  <use href="#s" transform="translate(206 70) scale(0.62)"/>
+  <use href="#s" transform="translate(180 67) scale(0.72)"/>
+  <use href="#s" transform="translate(148 62) scale(0.85)"/>
+  <use href="#s" transform="translate(110 56) scale(1)"/>
+  <use href="#s" transform="translate(64 48) scale(1.2)"/>
+
+  <!-- arrows breaking on the light -->
+  <g stroke-linecap="round">
+    <path d="M236 40 L206 52" stroke="#140d0a" stroke-width="2.6"/>
+    <path d="M236 40 L206 52" stroke="#6b4a30" stroke-width="1.3"/>
+    <path d="M250 70 L222 72" stroke="#140d0a" stroke-width="2.6"/>
+    <path d="M250 70 L222 72" stroke="#6b4a30" stroke-width="1.3"/>
+    <path d="M160 30 L150 40" stroke="#6b4a30" stroke-width="1.2" opacity="0.8"/>
+  </g>
+  <circle cx="205" cy="53" r="5" fill="#ffe89a" opacity="0.9" filter="url(#brillo)"/>
+  <circle cx="221" cy="72" r="5" fill="#ffe89a" opacity="0.9" filter="url(#brillo)"/>
+  <path d="M205 53 L200 48 M205 53 L199 56 M205 53 L204 60 M221 72 L216 66 M221 72 L215 76" stroke="#fffaf0" stroke-width="1.2" stroke-linecap="round"/>
+
+  <!-- dust and glints on the ground -->
+  <ellipse cx="120" cy="124" rx="100" ry="6" fill="#ffd35a" opacity="0.25" filter="url(#brillo)"/>
+  <path d="M40 72h.1M92 30h.1M132 28h.1M176 42h.1M30 110h.1M200 96h.1" stroke="#fff0b0" stroke-width="2.4" stroke-linecap="round" opacity="0.8"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.62" cy="0.7" r="0.45">
+      <stop offset="0" stop-color="#b98cff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#b98cff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="columna" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6b8ff" stop-opacity="0"/>
+      <stop offset="0.7" stop-color="#d6b8ff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffe7a0" stop-opacity="0.5"/>
+    </linearGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.62"/>
+    </radialGradient>
+    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6c8"/>
+      <stop offset="0.5" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#b07a1a"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <!-- paladin facing right: hammer raised overhead, kite shield in front -->
+    <g id="h">
+      <path d="M-10 -57 Q-24 -40 -32 -9 Q-22 -5 -14 -11 Q-14 -34 -6 -50 Z"/>
+      <path d="M-27 -52 Q-17 -57 -9 -53 Q-8 -36 -18 -24 Q-29 -35 -27 -52 Z"/>
+      <path d="M-9 -25 L-2 -25 L-10 -12 L-15 -2 L-12 0 L-24 0 L-21 -4 L-17 -13 Z"/>
+      <path d="M1 -25 L9 -25 L15 -13 L17 -3 L23 -1 L23 1 L11 1 L10 -11 L4 -17 Z"/>
+      <path d="M-9 -35 L9 -35 L12 -24 L-11 -24 Z"/>
+      <path d="M-9 -58 Q0 -61 10 -57 Q13 -46 8 -34 L-8 -34 Q-12 -46 -9 -58 Z"/>
+      <path d="M-13 -55 Q-13 -63 -3 -61 L-4 -51 Q-10 -50 -13 -55 Z"/>
+      <path d="M2 -60 Q13 -64 16 -54 Q12 -49 3 -51 Z"/>
+      <path d="M-6 -75 L7 -75 Q9.5 -75 9.5 -72 L9.5 -61 Q2 -57.5 -6 -60.5 Z"/>
+      <path d="M-5 -74 Q-15 -80 -24 -68 Q-15 -70 -6 -66 Z"/>
+      <path d="M2 -58 L10 -61 L17 -71 L21 -84 L15 -86 L11 -74 L4 -65 Z"/>
+      <circle cx="18" cy="-85" r="3.6"/>
+    </g>
+  </defs>
+
+  <!-- crypt: vaulted niches full of skulls -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M0 40 H280 M0 64 H280 M0 88 H280 M30 40 V64 M70 64 V88 M250 40 V64 M230 64 V88" stroke="#3a2c12" stroke-width="1"/>
+  <path d="M14 112 V52 Q40 24 66 52 V112 Z" fill="#221a0b"/>
+  <path d="M120 112 V44 Q178 -2 236 44 V112 Z" fill="#1f170a"/>
+  <path d="M258 112 V56 Q272 40 286 56 V112 Z" fill="#221a0b"/>
+  <path d="M80 112 V30 H100 V112 Z M240 112 V30 H254 V112 Z" fill="#2c2210" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M78 30 H102 V36 H78 Z M238 30 H256 V36 H238 Z" fill="#3a2d14" stroke="#140d0a" stroke-width="1.2"/>
+  <g fill="#6a5a3c" stroke="#140d0a" stroke-width="0.8">
+    <ellipse cx="28" cy="62" rx="3.6" ry="3"/><ellipse cx="38" cy="61" rx="3.6" ry="3"/><ellipse cx="48" cy="62" rx="3.6" ry="3"/>
+    <ellipse cx="24" cy="78" rx="3.6" ry="3"/><ellipse cx="34" cy="77" rx="3.6" ry="3"/><ellipse cx="46" cy="78" rx="3.6" ry="3"/><ellipse cx="56" cy="77" rx="3.6" ry="3"/>
+    <ellipse cx="266" cy="70" rx="3.6" ry="3"/><ellipse cx="276" cy="71" rx="3.6" ry="3"/>
+  </g>
+  <path d="M20 66 H60 M18 82 H62 M262 74 H280" stroke="#140d0a" stroke-width="1.4"/>
+  <g fill="#140d0a">
+    <circle cx="27" cy="62" r="0.9"/><circle cx="29.4" cy="62" r="0.9"/><circle cx="37" cy="61" r="0.9"/><circle cx="39.4" cy="61" r="0.9"/>
+    <circle cx="47" cy="62" r="0.9"/><circle cx="49.4" cy="62" r="0.9"/><circle cx="33" cy="77" r="0.9"/><circle cx="35.4" cy="77" r="0.9"/>
+    <circle cx="55" cy="77" r="0.9"/><circle cx="57.4" cy="77" r="0.9"/><circle cx="265" cy="70" r="0.9"/><circle cx="267.4" cy="70" r="0.9"/>
+  </g>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 112 H280 V160 H0 Z" fill="#1a1309"/>
+  <path d="M0 112 H280 M0 124 H280 M0 142 H280 M60 112 L30 160 M130 112 L118 160 M210 112 L230 160 M260 112 L290 142" stroke="#0f0b05" stroke-width="1.2"/>
+
+  <!-- column of banishing light -->
+  <path d="M112 122 L132 16 L212 16 L232 122 Z" fill="url(#columna)"/>
+
+  <!-- the seal on the floor (flattened circle) -->
+  <ellipse cx="172" cy="122" rx="66" ry="17" fill="#b98cff" opacity="0.55" filter="url(#brillo)"/>
+  <g transform="translate(172 122) scale(1 0.25)" fill="none" vector-effect="non-scaling-stroke">
+    <circle r="62" stroke="#ffd35a" stroke-width="2.4" vector-effect="non-scaling-stroke"/>
+    <circle r="54" stroke="#e2c8ff" stroke-width="2.6" stroke-dasharray="4 2 1.5 2" vector-effect="non-scaling-stroke"/>
+    <circle r="44" stroke="#ffd35a" stroke-width="1.2" vector-effect="non-scaling-stroke"/>
+    <path d="M0 -44 L38.1 22 L-38.1 22 Z M0 44 L38.1 -22 L-38.1 -22 Z" stroke="#f4e6ff" stroke-width="1.3" vector-effect="non-scaling-stroke"/>
+  </g>
+
+  <!-- chains of light, behind the spectre -->
+  <path d="M132 124 Q140 92 170 86 Q196 82 212 122" fill="none" stroke="#ffd35a" stroke-width="4" opacity="0.6" filter="url(#suave)"/>
+
+  <!-- spectre dragged down into the seal, clawing at the air -->
+  <path d="M170 58 L154 52 L143 36" fill="none" stroke="#140d0a" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M170 58 L154 52 L143 36" fill="none" stroke="#c9d8e2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M143 36 L136 30 M143 36 L140 26 M143 36 L146 27 M143 36 L149 31" stroke="#140d0a" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M143 36 L136 30 M143 36 L140 26 M143 36 L146 27 M143 36 L149 31" stroke="#dfe9ef" stroke-width="1" stroke-linecap="round"/>
+  <path d="M194 60 L212 56 L224 42" fill="none" stroke="#140d0a" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M194 60 L212 56 L224 42" fill="none" stroke="#98acbc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M224 42 L222 32 M224 42 L228 33 M224 42 L232 38 M224 42 L233 45" stroke="#140d0a" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M224 42 L222 32 M224 42 L228 33 M224 42 L232 38 M224 42 L233 45" stroke="#b7c7d3" stroke-width="1" stroke-linecap="round"/>
+  <path d="M172 54 L158 50 L150 60 L156 58 L154 66 L162 60 L166 68 Z" fill="#a9bccb" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M192 56 L208 52 L216 62 L210 60 L211 68 L203 62 L198 70 Z" fill="#7890a3" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M168 50 Q167 31 182 29 Q198 30 197 50 Q201 62 197 74 L203 80 L193 82 Q190 96 183 108 L175 125 Q171 110 168 100 L160 104 Q163 92 164 84 L156 85 Q164 72 164 60 Z" fill="#a9bccb" stroke="#140d0a" stroke-width="2.2" stroke-linejoin="round"/>
+  <path d="M188 34 Q198 42 197 54 Q200 66 196 74 L201 79 L192 81 Q188 96 180 112 Q184 94 185 80 Q190 58 188 34 Z" fill="#7890a3"/>
+  <path d="M171 42 Q173 34 180 32" fill="none" stroke="#e6f0f5" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M168 74 Q173 88 170 100 M182 70 Q184 88 179 106 M175 82 L174 96 M160 84 L166 80" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+  <path d="M172 46 Q172 37 181 37 Q190 38 189 47 Q189 57 181 61 Q172 58 172 46 Z" fill="#161d26" stroke="#140d0a" stroke-width="1.2"/>
+  <circle cx="177.5" cy="46" r="3.6" fill="#7ff0ff" opacity="0.85" filter="url(#suave)"/>
+  <circle cx="185" cy="46" r="3.6" fill="#7ff0ff" opacity="0.85" filter="url(#suave)"/>
+  <path d="M175.5 45 L179.5 46.5 M187 45 L183 46.5" stroke="#e8feff" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M178 52 Q181 50 184 52 L183 58 Q181 60 179 58 Z" fill="#05070a"/>
+  <path d="M179 52.5 V55 M181 52 V55 M183 52.5 V55" stroke="#9fb4c4" stroke-width="0.7"/>
+  <!-- the tail twists as it is sucked in -->
+  <path d="M162 100 Q176 96 186 102 M166 112 Q176 108 182 114" fill="none" stroke="#e2c8ff" stroke-width="1.3" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- chains of light, wrapping in front -->
+  <path d="M136 124 Q146 100 166 94 Q186 90 198 96" fill="none" stroke="#fff3c4" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M150 126 Q158 74 180 70 Q198 70 204 90" fill="none" stroke="#b98cff" stroke-width="4" opacity="0.7" filter="url(#suave)"/>
+  <path d="M150 126 Q158 74 180 70 Q198 70 204 90" fill="none" stroke="#f0e2ff" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M142 112 L146 108 M152 99 L157 97 M188 71 L193 72" stroke="#ffd35a" stroke-width="2.2" stroke-linecap="round"/>
+
+  <!-- front lip of the seal swallows the tail -->
+  <ellipse cx="173" cy="123" rx="16" ry="4.5" fill="#fff4d6" opacity="0.9" filter="url(#suave)"/>
+  <path d="M110 124 Q172 146 234 124" fill="none" stroke="#ffd35a" stroke-width="2.4"/>
+  <path d="M120 125 Q172 142 224 125" fill="none" stroke="#e2c8ff" stroke-width="2.4" stroke-dasharray="4 2 1.5 2"/>
+  <path d="M130 119 L126 110 M150 128 L148 118 M196 128 L199 116 M218 120 L223 110" stroke="#f0e2ff" stroke-width="1.2" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- paladin against the violet light -->
+  <use href="#h" transform="translate(59.4 130.6)" fill="#ffd35a" opacity="0.95"/>
+  <use href="#h" transform="translate(58 132)" fill="#0b0910"/>
+  <path d="M62.5 66 L67.5 66 M65.2 64 V69" stroke="#ffd35a" stroke-width="1" stroke-linecap="round"/>
+  <path d="M-17 -56 Q-10 -55 -9 -52" transform="translate(58 132)" fill="none" stroke="#ffd35a" stroke-width="0.9" opacity="0.7"/>
+
+  <!-- warhammer raised, charged with the seal -->
+  <path d="M72 60 L84 25" stroke="#140d0a" stroke-width="5.4" stroke-linecap="round"/>
+  <path d="M72 60 L84 25" stroke="#6a4a26" stroke-width="3" stroke-linecap="round"/>
+  <path d="M76 48 L80 36" stroke="#0b0910" stroke-width="4.6" stroke-linecap="round"/>
+  <g transform="translate(85 22) rotate(18.4)">
+    <rect x="-17" y="-11" width="34" height="22" rx="4" fill="#c79bff" opacity="0.9" filter="url(#brillo)"/>
+    <path d="M0 -6 L0 -13" stroke="#140d0a" stroke-width="3.6" stroke-linecap="round"/>
+    <path d="M0 -6 L0 -13" stroke="#ffe7a0" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M-9 -6 H9 V6 H-9 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M9 -8.5 H13 V8.5 H9 Z M-13 -8.5 H-9 V8.5 H-13 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M-9 1 H9 V6 H-9 Z M9 2 H13 V8.5 H9 Z M-13 2 H-9 V8.5 H-13 Z" fill="#b07a1a"/>
+    <path d="M-9 -6 H9 V6 H-9 Z" fill="none" stroke="#140d0a" stroke-width="1.2"/>
+    <path d="M-12 -6 V4 M-7 -3.5 H7" stroke="#fffaf0" stroke-width="1" opacity="0.9"/>
+    <circle r="2.2" fill="#e7d4ff" stroke="#140d0a" stroke-width="0.8"/>
+  </g>
+  <path d="M96 30 Q120 44 132 70 M92 40 Q112 60 118 96" fill="none" stroke="#d6b8ff" stroke-width="1.2" stroke-dasharray="2 3" stroke-linecap="round" opacity="0.8"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

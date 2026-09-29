@@ -1,4 +1,6 @@
-import type { CartaDef, CartaInstancia, ClaseId, ContextoEfecto, EnemigoCombate, Rareza, ValorCarta } from './types.ts';
+import type {
+  CartaDef, CartaInstancia, CastigoPreparado, ClaseId, ContextoEfecto, ElementoCastigo, EnemigoCombate, Rareza, ValorCarta,
+} from './types.ts';
 
 let uidSiguiente = 1;
 export function instanciar(def: CartaDef): CartaInstancia {
@@ -60,13 +62,15 @@ export const BASICAS: CartaDef[] = [
     objetivo: 'enemigo',
     texto: 'Inflige 6 de daño.',
     fx: 'tajo',
+    familia: 'golpe',
+    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) }],
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 6);
+      await c.atacar(c.objetivo!, 6 + (c.jugador.estados.golpesMas ?? 0));
     },
     mejora: {
       texto: 'Inflige 9 de daño.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 9);
+        await c.atacar(c.objetivo!, 9 + (c.jugador.estados.golpesMas ?? 0));
       },
     },
   },
@@ -80,13 +84,15 @@ export const BASICAS: CartaDef[] = [
     objetivo: 'ninguno',
     texto: 'Gana 5 de bloqueo.',
     fx: 'bloqueo',
+    familia: 'defensa',
+    valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + (c.jugador.estados.defensasMas ?? 0) }],
     jugar: async (c) => {
-      await c.ganarBloqueo(5);
+      await c.ganarBloqueo(5 + (c.jugador.estados.defensasMas ?? 0));
     },
     mejora: {
       texto: 'Gana 8 de bloqueo.',
       jugar: async (c) => {
-        await c.ganarBloqueo(8);
+        await c.ganarBloqueo(8 + (c.jugador.estados.defensasMas ?? 0));
       },
     },
   },
@@ -4026,6 +4032,596 @@ export function nuevaMaldicion(id: string): CartaInstancia {
   return instanciar(def);
 }
 
+// ── Paladín ──────────────────────────────────────────────────────────────────
+// Mecánicas: Fervor (cada Golpe y Defensa jugados), Castigos que cargan el
+// siguiente ataque consumiendo el Fervor, Golpes y Defensas reforzados, bloqueo.
+
+const fervorDe = (c: ContextoEfecto) => positivo(c.jugador.estados.fervor);
+/** Golpes and Defends in hand (the paladin's Strike/Defend family). */
+const familiaEnMano = (c: ContextoEfecto) => c.jugador.mano.filter((i) => !!defDe(i).familia).length;
+
+/** A Smite: spends the Fervor and prepares its effect for the next attack. */
+function castigo(
+  nombre: string, elemento: ElementoCastigo, efecto: (fervor: number) => Omit<CastigoPreparado, 'nombre' | 'elemento'>,
+) {
+  return async (c: ContextoEfecto) => {
+    await c.prepararCastigo({ nombre, elemento, ...efecto(c.consumirFervor()) });
+  };
+}
+/** Live number of a Smite: base + per-Fervor bonus (`cada` Fervor per step). */
+const valorCastigo = (cada = 1) => (c: ContextoEfecto, n: number[]): ValorCarta[] =>
+  [{ tipo: 'otro', indice: 0, base: n[0] + Math.floor(fervorDe(c) / cada) * (cada === 1 ? n[1] : 1) }];
+
+/** Holy Strike: what the Holy Symbol turns a removed Strike into (never a reward). */
+export const GOLPE_SAGRADO: CartaDef = {
+  id: 'golpe-sagrado',
+  nombre: 'Golpe Sagrado',
+  clase: 'paladin',
+  tipo: 'ataque',
+  rareza: 'especial',
+  coste: 1,
+  objetivo: 'enemigo',
+  familia: 'golpe',
+  fx: 'martillo',
+  texto: 'Inflige 14 de daño.',
+  valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) }],
+  jugar: async (c) => { await c.atacar(c.objetivo!, 14 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo'); },
+  mejora: {
+    texto: 'Inflige 20 de daño.',
+    jugar: async (c) => { await c.atacar(c.objetivo!, 20 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo'); },
+  },
+};
+
+/** Holy Defend: what the Holy Symbol turns a removed Defend into. */
+export const DEFENSA_SAGRADA: CartaDef = {
+  id: 'defensa-sagrada',
+  nombre: 'Defensa Sagrada',
+  clase: 'paladin',
+  tipo: 'habilidad',
+  rareza: 'especial',
+  coste: 1,
+  objetivo: 'ninguno',
+  familia: 'defensa',
+  fx: 'escudoSagrado',
+  texto: 'Gana 11 de bloqueo.',
+  valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + (c.jugador.estados.defensasMas ?? 0) }],
+  jugar: async (c) => { await c.ganarBloqueo(11 + (c.jugador.estados.defensasMas ?? 0)); },
+  mejora: {
+    texto: 'Gana 16 de bloqueo.',
+    jugar: async (c) => { await c.ganarBloqueo(16 + (c.jugador.estados.defensasMas ?? 0)); },
+  },
+};
+
+export const PALADIN: CartaDef[] = [
+  // — Iniciales —
+  {
+    id: 'castigo-divino',
+    nombre: 'Castigo Divino',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'inicial',
+    coste: 1,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaDivina',
+    texto: 'Castigo: tu próximo ataque inflige 6 de\ndaño más (aplica +2 por Fervor gastado).',
+    valores: valorCastigo(),
+    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 6 + 2 * f })),
+    mejora: {
+      texto: 'Castigo: tu próximo ataque inflige 9 de\ndaño más (aplica +3 por Fervor gastado).',
+      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 9 + 3 * f })),
+    },
+  },
+  {
+    id: 'escudo-fe',
+    nombre: 'Escudo de la Fe',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'inicial',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'escudoSagrado',
+    texto: 'Gana 7 de bloqueo.\nGana 1 de Fervor.',
+    jugar: async (c) => { await c.ganarBloqueo(7); await c.ganarFervor(1); },
+    mejora: {
+      texto: 'Gana 10 de bloqueo.\nGana 1 de Fervor.',
+      jugar: async (c) => { await c.ganarBloqueo(10); await c.ganarFervor(1); },
+    },
+  },
+  // — Comunes —
+  {
+    id: 'castigo-atronador',
+    nombre: 'Castigo Atronador',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaTrueno',
+    texto: 'Castigo: tu próximo ataque aplica 2 de\nVulnerable (aplica +1 por cada 2 de\nFervor gastado).',
+    valores: valorCastigo(2),
+    jugar: castigo('Castigo Atronador', 'trueno', (f) => ({ vulnerable: 2 + Math.floor(f / 2) })),
+    mejora: {
+      texto: 'Castigo: tu próximo ataque aplica 3 de\nVulnerable (aplica +1 por cada 2 de\nFervor gastado).',
+      jugar: castigo('Castigo Atronador', 'trueno', (f) => ({ vulnerable: 3 + Math.floor(f / 2) })),
+    },
+  },
+  {
+    id: 'castigo-cegador',
+    nombre: 'Castigo Cegador',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaCegadora',
+    texto: 'Castigo: tu próximo ataque aplica 2 de\nDébil (aplica +1 por cada 2 de\nFervor gastado).',
+    valores: valorCastigo(2),
+    jugar: castigo('Castigo Cegador', 'cegador', (f) => ({ debil: 2 + Math.floor(f / 2) })),
+    mejora: {
+      texto: 'Castigo: tu próximo ataque aplica 3 de\nDébil (aplica +1 por cada 2 de\nFervor gastado).',
+      jugar: castigo('Castigo Cegador', 'cegador', (f) => ({ debil: 3 + Math.floor(f / 2) })),
+    },
+  },
+  {
+    id: 'castigo-abrasador',
+    nombre: 'Castigo Abrasador',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaFuego',
+    texto: 'Castigo: tu próximo ataque inflige además\n4 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
+    valores: valorCastigo(),
+    jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 4 + 2 * f })),
+    mejora: {
+      texto: 'Castigo: tu próximo ataque inflige además\n6 a TODOS los enemigos (aplica +3\npor Fervor gastado).',
+      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 3 * f })),
+    },
+  },
+  {
+    id: 'martillo-luz',
+    nombre: 'Martillo de Luz',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'martillo',
+    texto: 'Inflige 8 de daño.\nGana 1 de Fervor.',
+    jugar: async (c) => { await c.atacar(c.objetivo!, 8, 1, 'martillo'); await c.ganarFervor(1); },
+    mejora: {
+      texto: 'Inflige 11 de daño.\nGana 1 de Fervor.',
+      jugar: async (c) => { await c.atacar(c.objetivo!, 11, 1, 'martillo'); await c.ganarFervor(1); },
+    },
+  },
+  {
+    id: 'embate-escudo',
+    nombre: 'Embate de Escudo',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'martillo',
+    texto: 'Inflige daño igual a tu bloqueo.',
+    valores: (c) => [{ tipo: 'ataque', tras: 'igual a tu bloqueo', base: c.jugador.bloqueo }],
+    jugar: async (c) => { await c.atacar(c.objetivo!, c.jugador.bloqueo, 1, 'martillo'); },
+    mejora: { coste: 0, texto: 'Inflige daño igual a tu bloqueo.' },
+  },
+  {
+    id: 'guardia-sagrada',
+    nombre: 'Guardia Sagrada',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'escudoSagrado',
+    texto: 'Gana 8 de bloqueo. Si tienes un\nCastigo preparado, gana 4 más.',
+    valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + (c.castigosPreparados() > 0 ? n[1] : 0) }],
+    jugar: async (c) => { await c.ganarBloqueo(8 + (c.castigosPreparados() > 0 ? 4 : 0)); },
+    mejora: {
+      texto: 'Gana 11 de bloqueo. Si tienes un\nCastigo preparado, gana 5 más.',
+      jugar: async (c) => { await c.ganarBloqueo(11 + (c.castigosPreparados() > 0 ? 5 : 0)); },
+    },
+  },
+  {
+    id: 'instruccion-armas',
+    nombre: 'Instrucción de Armas',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 0,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    texto: 'Roba 1 Golpe y 1 Defensa de tu mazo.',
+    jugar: async (c) => { await c.robarFamilia('golpe'); await c.robarFamilia('defensa'); },
+    mejora: {
+      texto: 'Roba 1 Golpe y 1 Defensa de tu mazo.\nGana 1 de Fervor.',
+      jugar: async (c) => { await c.robarFamilia('golpe'); await c.robarFamilia('defensa'); await c.ganarFervor(1); },
+    },
+  },
+  {
+    id: 'plegaria-alba',
+    nombre: 'Plegaria del Alba',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    texto: 'Gana 2 de Fervor.\nRoba 1 carta.',
+    jugar: async (c) => { await c.ganarFervor(2); await c.robar(1); },
+    mejora: {
+      texto: 'Gana 3 de Fervor.\nRoba 1 carta.',
+      jugar: async (c) => { await c.ganarFervor(3); await c.robar(1); },
+    },
+  },
+  {
+    id: 'carga-sagrada',
+    nombre: 'Carga Sagrada',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'martillo',
+    texto: 'Inflige 12 de daño.\nGana 6 de bloqueo.',
+    jugar: async (c) => { await c.atacar(c.objetivo!, 12, 1, 'martillo'); await c.ganarBloqueo(6); },
+    mejora: {
+      texto: 'Inflige 16 de daño.\nGana 8 de bloqueo.',
+      jugar: async (c) => { await c.atacar(c.objetivo!, 16, 1, 'martillo'); await c.ganarBloqueo(8); },
+    },
+  },
+  // — Infrecuentes —
+  {
+    id: 'castigo-desterrador',
+    nombre: 'Castigo Desterrador',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaDestierro',
+    texto: 'Castigo: si tu próximo ataque deja al\nenemigo con 12 PV o menos (aplica +3 por\nFervor gastado), lo destierra. A un jefe\nle inflige ese daño.',
+    valores: valorCastigo(),
+    jugar: castigo('Castigo Desterrador', 'destierro', (f) => ({ destierro: 12 + 3 * f })),
+    mejora: {
+      texto: 'Castigo: si tu próximo ataque deja al\nenemigo con 16 PV o menos (aplica +4 por\nFervor gastado), lo destierra. A un jefe\nle inflige ese daño.',
+      jugar: castigo('Castigo Desterrador', 'destierro', (f) => ({ destierro: 16 + 4 * f })),
+    },
+  },
+  {
+    id: 'castigo-resplandeciente',
+    nombre: 'Castigo Resplandeciente',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    castigo: true,
+    fx: 'cargaResplandor',
+    texto: 'Castigo: tu próximo ataque inflige 4 más\n(aplica +1 por Fervor gastado) y ganas\nbloqueo igual al daño que haga.',
+    valores: valorCastigo(),
+    jugar: castigo('Castigo Resplandeciente', 'resplandor', (f) => ({ dano: 4 + f, bloqueoPorDano: true })),
+    mejora: {
+      coste: 0,
+      texto: 'Castigo: tu próximo ataque inflige 4 más\n(aplica +1 por Fervor gastado) y ganas\nbloqueo igual al daño que haga.',
+    },
+  },
+  {
+    id: 'expulsar-mal',
+    nombre: 'Expulsar el Mal',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'todos',
+    fx: 'expulsar',
+    texto: 'Inflige 10 de daño a TODOS los\nenemigos y les aplica 1 de Débil.',
+    jugar: async (c) => {
+      await c.atacarTodos(10, 'expulsar');
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 1);
+    },
+    mejora: {
+      texto: 'Inflige 14 de daño a TODOS los\nenemigos y les aplica 2 de Débil.',
+      jugar: async (c) => {
+        await c.atacarTodos(14, 'expulsar');
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
+      },
+    },
+  },
+  {
+    id: 'palabra-radiante',
+    nombre: 'Palabra Radiante',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'rayoSagrado',
+    texto: 'Inflige 5 de daño a TODOS los enemigos.\nGana 1 de Fervor por cada enemigo.',
+    jugar: async (c) => {
+      const golpeados = c.enemigos.filter((x) => x.vivo).length;
+      await c.atacarTodos(5, 'rayoSagrado');
+      await c.ganarFervor(golpeados);
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño a TODOS los enemigos.\nGana 1 de Fervor por cada enemigo.',
+      jugar: async (c) => {
+        const golpeados = c.enemigos.filter((x) => x.vivo).length;
+        await c.atacarTodos(7, 'rayoSagrado');
+        await c.ganarFervor(golpeados);
+      },
+    },
+  },
+  {
+    id: 'bastion-fe',
+    nombre: 'Bastión de Fe',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'escudoSagrado',
+    texto: 'Poder: al inicio de tu turno conservas\nhasta 10 de tu bloqueo.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'bastion', 10); },
+    mejora: { coste: 1, texto: 'Poder: al inicio de tu turno conservas\nhasta 10 de tu bloqueo.' },
+  },
+  {
+    id: 'arma-consagrada',
+    nombre: 'Arma Consagrada',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    texto: 'Poder: tus Golpes infligen\n3 de daño más.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'golpesMas', 3); },
+    mejora: {
+      texto: 'Poder: tus Golpes infligen\n5 de daño más.',
+      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'golpesMas', 5); },
+    },
+  },
+  {
+    id: 'egida-divina',
+    nombre: 'Égida Divina',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'escudoSagrado',
+    texto: 'Poder: tus Defensas dan\n3 de bloqueo más.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'defensasMas', 3); },
+    mejora: {
+      texto: 'Poder: tus Defensas dan\n5 de bloqueo más.',
+      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'defensasMas', 5); },
+    },
+  },
+  {
+    id: 'celo-inquebrantable',
+    nombre: 'Celo Inquebrantable',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    texto: 'Poder: al inicio de cada turno\nganas 1 de Fervor.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'fervorPorTurno', 1); },
+    mejora: { innato: true, texto: 'Innata.\nPoder: al inicio de cada turno\nganas 1 de Fervor.' },
+  },
+  {
+    id: 'imposicion-manos',
+    nombre: 'Imposición de Manos',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    exhumar: true,
+    fx: 'bendicion',
+    texto: 'Te curas 6 PV (aplica +2 por\nFervor gastado). Se agota.',
+    valores: valorCastigo(),
+    jugar: async (c) => { const f = c.consumirFervor(); await c.curar(6 + 2 * f); },
+    mejora: {
+      texto: 'Te curas 9 PV (aplica +3 por\nFervor gastado). Se agota.',
+      jugar: async (c) => { const f = c.consumirFervor(); await c.curar(9 + 3 * f); },
+    },
+  },
+  {
+    id: 'martillo-juicio',
+    nombre: 'Martillo del Juicio',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'infrecuente',
+    coste: 2,
+    objetivo: 'enemigo',
+    fx: 'martillo',
+    texto: 'Inflige 14 de daño. Los Castigos que\ndescargue se aplican dos veces.',
+    jugar: async (c) => { await c.atacar(c.objetivo!, 14, 1, 'martillo'); },
+    mejora: {
+      texto: 'Inflige 18 de daño. Los Castigos que\ndescargue se aplican dos veces.',
+      jugar: async (c) => { await c.atacar(c.objetivo!, 18, 1, 'martillo'); },
+    },
+  },
+  {
+    id: 'voz-autoridad',
+    nombre: 'Voz de Autoridad',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'todos',
+    fx: 'expulsar',
+    texto: 'Gana 6 de bloqueo. Aplica 1 de\nDébil a TODOS los enemigos.',
+    jugar: async (c) => {
+      await c.ganarBloqueo(6);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 1);
+    },
+    mejora: {
+      texto: 'Gana 9 de bloqueo. Aplica 2 de\nDébil a TODOS los enemigos.',
+      jugar: async (c) => {
+        await c.ganarBloqueo(9);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
+      },
+    },
+  },
+  {
+    id: 'muro-fe',
+    nombre: 'Muro de Fe',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'escudoSagrado',
+    texto: 'Gana 4 de bloqueo por cada Golpe\ny Defensa en tu mano.',
+    valores: (c, n) => [{ tipo: 'bloqueo', tras: 'en tu mano', base: n[0] * familiaEnMano(c) }],
+    jugar: async (c) => { await c.ganarBloqueo(4 * familiaEnMano(c)); },
+    mejora: {
+      texto: 'Gana 5 de bloqueo por cada Golpe\ny Defensa en tu mano.',
+      jugar: async (c) => { await c.ganarBloqueo(5 * familiaEnMano(c)); },
+    },
+  },
+  {
+    id: 'voto-hierro',
+    nombre: 'Voto de Hierro',
+    clase: 'paladin',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 0,
+    objetivo: 'ninguno',
+    exhumar: true,
+    fx: 'bendicion',
+    texto: 'Gana 1 de Fervor por cada Golpe y\nDefensa en tu mano. Se agota.',
+    valores: (c) => [{ tipo: 'otro', tras: 'en tu mano', base: familiaEnMano(c) }],
+    jugar: async (c) => { await c.ganarFervor(familiaEnMano(c)); },
+    mejora: {
+      texto: 'Gana 1 de Fervor por cada Golpe y\nDefensa en tu mano, y 1 más. Se agota.',
+      valores: (c) => [{ tipo: 'otro', tras: 'en tu mano', base: familiaEnMano(c) + 1 }],
+      jugar: async (c) => { await c.ganarFervor(familiaEnMano(c) + 1); },
+    },
+  },
+  // — Raras: juramentos de D&D 2024 y un gran hechizo —
+  {
+    id: 'juramento-devocion',
+    nombre: 'Juramento de Devoción',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'rara',
+    subclase: 'Juramento de Devoción',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    animRara: 'anim-divino',
+    texto: 'Poder: tus ataques infligen daño\nadicional igual a tu Fervor\n(sin consumirlo).',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'armaSagrada', 1); },
+    mejora: { coste: 1, texto: 'Poder: tus ataques infligen daño\nadicional igual a tu Fervor\n(sin consumirlo).' },
+  },
+  {
+    id: 'juramento-gloria',
+    nombre: 'Juramento de Gloria',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'rara',
+    subclase: 'Juramento de Gloria',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    animRara: 'anim-divino',
+    texto: 'Poder: cada vez que descargas un\nCastigo, ganas 1 de Fuerza.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'gloria', 1); },
+    mejora: {
+      texto: 'Poder: cada vez que descargas un\nCastigo, ganas 1 de Fuerza\ny 1 de Fervor.',
+      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'gloria', 2); },
+    },
+  },
+  {
+    id: 'juramento-antiguos',
+    nombre: 'Juramento de los Antiguos',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'rara',
+    subclase: 'Juramento de los Antiguos',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    animRara: 'anim-arbol',
+    texto: 'Poder: al final de tu turno ganas\n2 de bloqueo por cada Fervor.',
+    valores: (c, n) => [{ tipo: 'otro', tras: 'por cada Fervor', base: n[0] * fervorDe(c) }],
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'antiguos', 2); },
+    mejora: {
+      texto: 'Poder: al final de tu turno ganas\n3 de bloqueo por cada Fervor.',
+      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'antiguos', 3); },
+    },
+  },
+  {
+    id: 'juramento-venganza',
+    nombre: 'Juramento de Venganza',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'rara',
+    subclase: 'Juramento de Venganza',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    animRara: 'anim-berserker',
+    texto: 'Poder: tus Castigos cuestan 0.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'venganza', 1); },
+    mejora: { innato: true, texto: 'Innata.\nPoder: tus Castigos cuestan 0.' },
+  },
+  {
+    id: 'colera-celestial',
+    nombre: 'Cólera Celestial',
+    clase: 'paladin',
+    tipo: 'ataque',
+    rareza: 'rara',
+    coste: 3,
+    objetivo: 'todos',
+    fx: 'rayoSagrado',
+    animRara: 'anim-divino',
+    texto: 'Inflige 7 de daño a TODOS los\nenemigos 2 veces.',
+    valores: (_c, n) => [{ tipo: 'ataque', indice: 0, base: n[0], veces: n[1] }],
+    jugar: async (c) => {
+      for (let i = 0; i < 2; i++) await c.atacarTodos(7, 'rayoSagrado');
+    },
+    mejora: {
+      texto: 'Inflige 7 de daño a TODOS los\nenemigos 3 veces.',
+      jugar: async (c) => {
+        for (let i = 0; i < 3; i++) await c.atacarTodos(7, 'rayoSagrado');
+      },
+    },
+  },
+  // — Carta única de clase (don del inicio del Acto III) —
+  {
+    id: 'angel-vengador',
+    nombre: 'Ángel Vengador',
+    clase: 'paladin',
+    tipo: 'poder',
+    rareza: 'especial',
+    coste: 2,
+    objetivo: 'ninguno',
+    fx: 'bendicion',
+    animRara: 'anim-divino',
+    texto: 'Poder: al inicio de cada turno preparas\nun Castigo de 8 de daño más\ny ganas 1 de Fervor.',
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'angelVengador', 8); },
+    mejora: {
+      innato: true,
+      texto: 'Innata. Poder: al inicio de cada turno\npreparas un Castigo de 10 de daño más\ny ganas 1 de Fervor.',
+      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'angelVengador', 10); },
+    },
+  },
+];
+
 // ── Mazos iniciales y recompensas ────────────────────────────────────────────
 
 /** Las 2 cartas de clase con las que arranca cada mazo. */
@@ -4041,10 +4637,12 @@ const INICIALES_DE_CLASE: Record<ClaseId, [string, string]> = {
   picaro: ['filo-rapido', 'pirueta'],
   // el cañón que siempre vuelve + la defensa que muerde
   brujo: ['explosion-sobrenatural', 'armadura-agathys'],
+  // el Castigo que carga el siguiente Golpe + el escudo que da Fervor
+  paladin: ['castigo-divino', 'escudo-fe'],
 };
 
 const POOLS: Record<ClaseId, CartaDef[]> = {
-  druida: DRUIDA, barbaro: BARBARO, mago: MAGO, picaro: PICARO, brujo: BRUJO,
+  druida: DRUIDA, barbaro: BARBARO, mago: MAGO, picaro: PICARO, brujo: BRUJO, paladin: PALADIN,
 };
 
 export function mazoInicial(clase: ClaseId): CartaInstancia[] {
@@ -4072,8 +4670,8 @@ export function cartaUnicaDeClase(clase: ClaseId): CartaDef {
 /** Registro completo (para guardar/cargar partidas por id). */
 export function cartaPorId(id: string): CartaDef | undefined {
   return [
-    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO,
-    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA,
+    ...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN,
+    ...NEUTRALES_ESPECIALES, ...MALDICIONES, CONJURO_PRODIGIOSO, DAGA, GOLPE_SAGRADO, DEFENSA_SAGRADA,
   ].find(
     (c) => c.id === id,
   );

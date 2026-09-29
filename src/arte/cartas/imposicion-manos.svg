@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <radialGradient id="fuego" cx="0.9" cy="0.66" r="0.35">
+      <stop offset="0" stop-color="#ff8a3a" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ff8a3a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="0.5" cy="0.62" r="0.36">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.64"/>
+    </radialGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="fuerte" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <!-- paladin kneeling behind the wounded, hands reaching down -->
+    <g id="h">
+      <path d="M100 60 Q82 80 74 128 H106 Q98 96 106 70 Z"/>
+      <path d="M100 58 Q112 54 122 60 Q124 76 118 112 H98 Q94 76 100 58 Z"/>
+      <path d="M92 66 Q90 55 102 55 L106 64 Z"/>
+      <path d="M113 57 Q125 53 129 63 Q123 67 115 65 Z"/>
+      <path d="M111 44 L124 44 Q126.5 44 126.5 47 L126.5 56 Q119 59 111 56 Z" transform="rotate(16 118 50)"/>
+      <path d="M113 42 Q102 34 92 42 Q102 42 111 48 Z"/>
+      <path d="M115 60 L125 60 L142 93 L136 97 Z"/>
+      <path d="M108 64 L116 64 L131 95 L125 98 Z"/>
+      <path d="M128 93 Q137 88 148 94 L150 99 Q139 102 128 99 Z"/>
+      <path d="M122 96 Q128 92 136 96 L138 100 Q130 102 122 100 Z"/>
+    </g>
+  </defs>
+
+  <!-- the field after the battle, a campfire at the edge -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <rect width="280" height="160" fill="url(#fuego)"/>
+  <path d="M0 96 Q50 84 110 92 T220 88 T280 92 V160 H0 Z" fill="#2a200e"/>
+  <g fill="#1d160a">
+    <path d="M190 92 L206 62 L222 92 Z M205 62 V56"/>
+    <path d="M228 94 L240 72 L252 94 Z"/>
+    <path d="M30 92 V50 H32 V92 Z M32 50 L50 53 L44 58 L50 64 L32 62 Z"/>
+    <path d="M58 96 L64 70 L65.5 70.5 L60 96 Z M166 96 L160 74 L161.5 73.5 L168 96 Z"/>
+  </g>
+  <path d="M206 64 V92" stroke="#3a2c12" stroke-width="1"/>
+  <!-- campfire -->
+  <circle cx="258" cy="104" r="16" fill="#ff8a3a" opacity="0.5" filter="url(#fuerte)"/>
+  <path d="M248 110 L268 104 M250 104 L266 111" stroke="#3e2e20" stroke-width="3" stroke-linecap="round"/>
+  <path d="M250 106 Q250 96 256 92 Q256 98 259 99 Q259 92 263 88 Q268 98 266 106 Z" fill="#e8561e" stroke="#140d0a" stroke-width="1.2" stroke-linejoin="round"/>
+  <path d="M254 106 Q254 100 257 97 Q258 101 260 101 Q261 97 263 95 Q265 101 263 106 Z" fill="#ffb040"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+  <path d="M0 120 Q80 112 150 118 T280 116 V160 H0 Z" fill="#1a130a"/>
+
+  <!-- paladin against the healing light -->
+  <use href="#h" transform="translate(1.4 -1.4)" fill="#ffd35a" opacity="0.95"/>
+  <use href="#h" fill="#0b0910"/>
+  <path d="M117 49 L123 51" stroke="#ffd35a" stroke-width="1" stroke-linecap="round"/>
+
+  <!-- fallen companion lying on his back -->
+  <path d="M112 120 L88 122 L64 126 M112 126 L90 130 L68 136" fill="none" stroke="#140d0a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M112 120 L88 122 L64 126 M112 126 L90 130 L68 136" fill="none" stroke="#5a4632" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M112 120 L88 122 M112 126 L90 130" fill="none" stroke="#443424" stroke-width="3" stroke-linecap="round"/>
+  <path d="M58 120 Q62 118 66 122 L66 130 Q60 132 56 128 Z M62 132 Q66 130 70 134 L70 142 Q64 144 60 140 Z" fill="#3e2e20" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M108 110 Q140 102 178 106 Q184 118 178 130 Q140 136 108 130 Q102 120 108 110 Z" fill="#7d868d" stroke="#140d0a" stroke-width="2.2"/>
+  <path d="M112 122 Q140 128 178 122 Q180 128 178 130 Q140 136 108 130 Z" fill="#5a6168"/>
+  <path d="M118 108 Q120 120 118 131 M130 106 V133 M142 105 V134 M154 105 V133 M166 106 V132" stroke="#5a6168" stroke-width="0.9" stroke-dasharray="1.6 1.4"/>
+  <path d="M126 106 Q142 102 160 105 L158 131 Q142 134 128 132 Z" fill="#3e5a6a" stroke="#140d0a" stroke-width="1.6"/>
+  <path d="M144 104 Q152 104 160 105 L158 131 Q151 133 145 133 Q149 118 144 104 Z" fill="#2e4452"/>
+  <path d="M108 112 Q106 120 108 128" fill="none" stroke="#140d0a" stroke-width="1.2"/>
+  <!-- belt and the arm lying on the ground -->
+  <path d="M112 110 V130" stroke="#3e2e20" stroke-width="3"/>
+  <path d="M172 110 L160 126 L146 138" fill="none" stroke="#140d0a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M172 110 L160 126 L146 138" fill="none" stroke="#7d868d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="144" cy="139" r="3.4" fill="#c9a080" stroke="#140d0a" stroke-width="1.3"/>
+  <!-- head lying back in a closed helm, visor to the sky -->
+  <path d="M174 110 Q180 106 184 110 V124 Q178 128 174 124 Z" fill="#6c747b" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M175 112 V124 M178 110 V126 M181 110 V126" stroke="#4a5056" stroke-width="0.8" stroke-dasharray="1.4 1.2"/>
+  <path d="M182 116 Q181 102 194 101 Q208 102 208 116 Q207 128 194 129 Q183 128 182 116 Z" fill="#8d9297" stroke="#140d0a" stroke-width="2"/>
+  <path d="M197 102 Q208 105 208 116 Q207 127 195 129 Q203 118 197 102 Z" fill="#6c747b"/>
+  <path d="M185 104 Q192 99 200 101" fill="none" stroke="#e6eaee" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M184 109 Q193 106 203 108" fill="none" stroke="#140d0a" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M187 114 h.1 M190 114 h.1 M193 114 h.1 M188 117 h.1 M191 117 h.1" stroke="#140d0a" stroke-width="1.4" stroke-linecap="round"/>
+  <path d="M194 101 Q192 115 195 129" fill="none" stroke="#140d0a" stroke-width="0.9"/>
+  <!-- dropped round shield -->
+  <ellipse cx="228" cy="128" rx="16" ry="8" fill="#6a4a2e" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M228 120 Q244 122 244 128 Q240 136 228 136 Q238 130 228 120 Z" fill="#553a22"/>
+  <circle cx="228" cy="128" r="3" fill="#8d9297" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- the wound, sealing under the light -->
+  <path d="M132 110 Q140 106 150 112 Q154 120 148 126 Q140 128 134 122 Q128 116 132 110 Z" fill="#6a1a14" stroke="#140d0a" stroke-width="1"/>
+  <path d="M150 124 Q152 130 148 133 M136 124 Q134 129 136 132" fill="none" stroke="#6a1a14" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="140" cy="108" r="18" fill="#ffd35a" opacity="0.6" filter="url(#fuerte)"/>
+  <ellipse cx="140" cy="104" rx="14" ry="6" fill="#fff4d6" opacity="0.8" filter="url(#brillo)"/>
+  <path d="M134 113 L149 121" fill="none" stroke="#ffe89a" stroke-width="2" stroke-linecap="round"/>
+  <path d="M134 113 L149 121" fill="none" stroke="#fffaf0" stroke-width="0.8" stroke-linecap="round"/>
+  <path d="M130 101 Q128 96 132 94 M150 102 Q154 98 152 94" fill="none" stroke="#fff3c4" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- motes of light rising -->
+  <g fill="#fff3c4">
+    <circle cx="146" cy="84" r="1.4"/><circle cx="156" cy="74" r="1.1"/><circle cx="138" cy="70" r="1.2"/><circle cx="160" cy="92" r="1"/><circle cx="150" cy="60" r="0.9"/><circle cx="130" cy="82" r="1"/>
+  </g>
+  <path d="M160 66 V72 M157 69 H163 M142 54 V58 M140 56 H144" stroke="#ffd35a" stroke-width="1.2" stroke-linecap="round"/>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

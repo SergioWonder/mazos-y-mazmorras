@@ -1,7 +1,7 @@
 import type { CartaInstancia, EstadoRun, Rareza } from './types.ts';
 import { poolDeClase } from './cartas.ts';
 import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
-import { anadirCarta, anadirMaldicion } from './run.ts';
+import { anadirCarta, anadirMaldicion, retirarCarta } from './run.ts';
 
 /** Una opción de un evento. Devuelve el texto del desenlace. */
 export interface OpcionEvento {
@@ -63,8 +63,8 @@ function quitarCartaBasica(run: EstadoRun, rng: () => number, id?: string): stri
   );
   if (candidatas.length === 0) return 'ninguna carta';
   const carta = candidatas[Math.floor(rng() * candidatas.length)];
-  run.mazo.splice(run.mazo.indexOf(carta), 1);
-  return carta.def.nombre;
+  const r = retirarCarta(run, carta);
+  return r && r.nueva ? `${carta.def.nombre} (se convierte en ${r.nueva.def.nombre})` : carta.def.nombre;
 }
 
 function quitarCartaAleatoria(run: EstadoRun, rng: () => number): string {
@@ -75,8 +75,8 @@ function quitarCartaAleatoria(run: EstadoRun, rng: () => number): string {
   const lista = noBasicas.length ? noBasicas : candidatas;
   if (lista.length === 0) return 'ninguna carta';
   const carta = lista[Math.floor(rng() * lista.length)];
-  run.mazo.splice(run.mazo.indexOf(carta), 1);
-  return defNombre(carta);
+  const r = retirarCarta(run, carta);
+  return r && r.nueva ? `${defNombre(carta)} (se convierte en ${defNombre(r.nueva)})` : defNombre(carta);
 }
 
 function defNombre(c: CartaInstancia): string {

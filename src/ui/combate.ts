@@ -45,7 +45,7 @@ type AccionCarta = Extract<AccionJugador, { kind: 'card' }>;
 
 const NOMBRE_CLASE: Record<string, string> = {
   druida: '🌿 Druida', barbaro: '🪓 Bárbaro', mago: '🔮 Mago', picaro: '🗡️ Pícaro',
-  brujo: '🕳️ Brujo',
+  brujo: '🕳️ Brujo', paladin: '🔨 Paladín',
 };
 const SPRITE_INVOCACION: Record<string, string> = {
   lobo: '🐺', oso: '🐻', fuego: '🔥', agua: '💧', aire: '🌬️', arbol: '🌳', tierra: '⛰️',

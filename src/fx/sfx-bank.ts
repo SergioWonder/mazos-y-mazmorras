@@ -13,12 +13,27 @@ export const SFX_NAMES: readonly string[] = [
   // card and enemy `fx` keys
   'estrellas', 'sangre', 'abisal', 'luna', 'condena', 'veneno', 'transformacion', 'ola', 'zarpa',
   'oscuridad', 'hojas', 'aullido', 'corazones', 'aliento',
+  // paladin `fx` keys (docs/clase-paladin.md): hammer, holy magic and the Smites,
+  // charged when prepared and released on the hit
+  'martillo', 'escudoSagrado', 'bendicion', 'expulsar', 'rayoSagrado',
+  'castigoDivino', 'castigoTrueno', 'castigoCegador', 'castigoFuego', 'castigoResplandor', 'castigoDestierro',
+  'cargaDivina', 'cargaTrueno', 'cargaCegadora', 'cargaFuego', 'cargaResplandor', 'cargaDestierro',
   // flourish layered on top when a rare card is played
   'rara',
 ];
 
 /** Sounds heard many times per fight: they ship several variations each. */
-export const FREQUENT_SFX: readonly string[] = ['tajo', 'impacto', 'golpeEnemigo', 'carta', 'bloqueo'];
+export const FREQUENT_SFX: readonly string[] = ['tajo', 'impacto', 'golpeEnemigo', 'carta', 'bloqueo', 'martillo'];
+
+/** Synthesised recipe that stands in for a sound without one of its own while its MP3
+ *  loads (or if it fails): the closest engine sound. */
+export const SFX_RECIPE_ALIAS: Readonly<Record<string, string>> = {
+  martillo: 'impacto', escudoSagrado: 'bloqueo', bendicion: 'cura', expulsar: 'divino', rayoSagrado: 'divino',
+  castigoDivino: 'divino', castigoTrueno: 'tierra', castigoCegador: 'divino', castigoFuego: 'furia',
+  castigoResplandor: 'divino', castigoDestierro: 'furiaPerdida',
+  cargaDivina: 'estado', cargaTrueno: 'estado', cargaCegadora: 'estado', cargaFuego: 'estado',
+  cargaResplandor: 'estado', cargaDestierro: 'estado',
+};
 
 /** Sound used for a name that is not in the table. */
 export const SFX_FALLBACK = 'impacto';

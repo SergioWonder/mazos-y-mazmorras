@@ -33,7 +33,7 @@ export default defineConfig({
         name: 'Dracs & Rogues',
         short_name: 'Dracs & Rogues',
         description:
-          'Roguelike de construcción de mazos con sabor a D&D: cinco clases, tres actos y un Dungeon Master que siempre tiene la última palabra.',
+          'Roguelike de construcción de mazos con sabor a D&D: seis clases, tres actos y un Dungeon Master que siempre tiene la última palabra.',
         lang: 'es',
         display: 'fullscreen',
         orientation: 'landscape',

@@ -1,6 +1,7 @@
 import type { CartaInstancia, EstadoRun, NodoMapa, ReliquiaDef, TipoNodo } from './types.ts';
 import { candidatosMision, esAlcanzable } from './mapa.ts';
 import { sortearReliquia, otorgarReliquia } from './reliquias.ts';
+import { retirarCarta } from './run.ts';
 
 export { candidatosMision, esAlcanzable };
 
@@ -178,10 +179,8 @@ export function cartasEliminables(run: EstadoRun): CartaInstancia[] {
   return [...run.mazo];
 }
 
-/** Removes one card from the deck. Returns false if it was not in it. */
-export function eliminarCarta(run: EstadoRun, carta: CartaInstancia): boolean {
-  const i = run.mazo.indexOf(carta);
-  if (i < 0) return false;
-  run.mazo.splice(i, 1);
-  return true;
+/** Removes one card from the deck (the Holy Symbol may turn it holy instead).
+ *  Returns false if it was not in it, and the new card if it changed. */
+export function eliminarCarta(run: EstadoRun, carta: CartaInstancia): false | { nueva?: CartaInstancia } {
+  return retirarCarta(run, carta);
 }

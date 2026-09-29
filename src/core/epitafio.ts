@@ -28,7 +28,7 @@ export interface Lapida {
 }
 
 const NOMBRE_CLASE: Record<string, string> = {
-  druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo',
+  druida: 'Druida', barbaro: 'Bárbaro', mago: 'Mago', picaro: 'Pícaro', brujo: 'Brujo', paladin: 'Paladín',
 };
 
 /** Epitaphs; `{asesino}` ones are only used when the killer is known. */

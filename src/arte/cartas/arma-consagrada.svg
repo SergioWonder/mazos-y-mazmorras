@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 160" width="280" height="160">
+  <defs>
+    <linearGradient id="cielo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a1c"/>
+      <stop offset="1" stop-color="#1b1409"/>
+    </linearGradient>
+    <linearGradient id="haz" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff3c4" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#fff3c4" stop-opacity="0.6"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0.55" cy="0.56" r="0.4">
+      <stop offset="0" stop-color="#ffd35a" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#ffd35a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vineta" cx="0.5" cy="0.5" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.64"/>
+    </radialGradient>
+    <linearGradient id="oro" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff6c8"/>
+      <stop offset="0.5" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#b07a1a"/>
+    </linearGradient>
+    <filter id="brillo" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+    <filter id="suave" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <g id="vela">
+      <path d="M-3 0 V-14 H3 V0 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="1.2"/>
+      <path d="M0.5 -14 H3 V0 H0.5 Z" fill="#bfb296"/>
+      <path d="M-3 -12 Q-1 -10 0 -13" fill="none" stroke="#fffaf0" stroke-width="0.9"/>
+      <path d="M-5 0 H5 V2.5 H-5 Z" fill="#8a6a2a" stroke="#140d0a" stroke-width="1"/>
+      <circle cy="-19" r="4.5" fill="#ffb050" opacity="0.7" filter="url(#brillo)"/>
+      <path d="M0 -24 Q3 -19 1.6 -16 Q0 -15 -1.6 -16 Q-3 -19 0 -24 Z" fill="#ffd070" stroke="#140d0a" stroke-width="0.8"/>
+      <path d="M0 -20 Q1 -18 0 -16.5 Q-1 -18 0 -20 Z" fill="#fffaf0"/>
+    </g>
+  </defs>
+
+  <!-- cathedral nave: pointed arches and a stained-glass window -->
+  <rect width="280" height="160" fill="url(#cielo)"/>
+  <path d="M176 118 V52 Q198 16 220 52 V118 Z M230 118 V52 Q252 16 274 52 V118 Z" fill="#2a200e"/>
+  <path d="M168 118 V20 H176 V118 Z M220 118 V20 H230 V118 Z M274 118 V20 H282 V118 Z" fill="#3a2d14" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M184 118 V60 Q198 34 212 60 V118 M238 118 V60 Q252 34 266 60 V118" fill="none" stroke="#1f170a" stroke-width="1.4"/>
+  <path d="M0 0 H80 V118 H0 Z" fill="#33280f"/>
+  <path d="M0 30 H80 M0 60 H80 M0 90 H80 M40 0 V30 M20 30 V60 M60 30 V60 M40 60 V90" stroke="#241b0b" stroke-width="1"/>
+  <!-- the window -->
+  <path d="M18 76 V30 Q36 0 54 30 V76 Z" fill="#140d0a"/>
+  <path d="M22 72 V31 Q36 7 50 31 V72 Z" fill="#c99a3a"/>
+  <path d="M22 72 V52 H36 V72 Z M36 31 Q42 20 50 31 V44 H36 Z" fill="#8a4a36"/>
+  <path d="M36 72 V52 H50 V72 Z M22 31 Q28 20 36 18 V44 H22 Z" fill="#4e6a7a"/>
+  <path d="M29 44 H43 V52 H29 Z" fill="#fff0b0"/>
+  <path d="M36 12 V72 M22 44 H50 M22 52 H50 M22 62 H50 M29 44 V52 M43 44 V52" stroke="#140d0a" stroke-width="1.4"/>
+  <path d="M18 76 V30 Q36 0 54 30 V76 Z" fill="#fff0b0" opacity="0.25" filter="url(#brillo)"/>
+  <rect width="280" height="160" fill="url(#halo)"/>
+
+  <!-- floor and the altar steps -->
+  <path d="M0 118 H280 V160 H0 Z" fill="#1c150a"/>
+  <path d="M70 140 H230 V148 H70 Z" fill="#2a200e" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M60 148 H240 V160 H60 Z" fill="#241b0c" stroke="#140d0a" stroke-width="1.2"/>
+
+  <!-- the altar -->
+  <path d="M84 96 H216 V140 H84 Z" fill="#4a3c20" stroke="#140d0a" stroke-width="2"/>
+  <path d="M178 96 H216 V140 H190 Z" fill="#382d17"/>
+  <path d="M92 104 H108 V134 H92 Z M192 104 H208 V134 H192 Z" fill="none" stroke="#2a200e" stroke-width="1.2"/>
+  <path d="M92 86 H208 L216 96 H84 Z" fill="#6a5a38" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M94 88 H150" stroke="#8a7a52" stroke-width="1.2"/>
+  <!-- altar cloth with the sun -->
+  <path d="M120 96 H180 L182 130 L171 125 L160 131 L150 125 L140 131 L129 125 L118 130 Z" fill="#e8dcc0" stroke="#140d0a" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M160 96 H180 L182 130 L171 125 L164 129 Q166 110 160 96 Z" fill="#c4b594"/>
+  <path d="M119 122 L129 117 L140 123 L150 117 L160 123 L171 117 L181.5 122" fill="none" stroke="#c9901e" stroke-width="1.6"/>
+  <circle cx="150" cy="108" r="5" fill="none" stroke="#c9901e" stroke-width="1.6"/>
+  <path d="M150 99 V101 M150 115 V117 M141 108 H143 M157 108 H159" stroke="#c9901e" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- beam of light falling on the altar -->
+  <path d="M22 40 L50 30 L214 86 L150 100 Z" fill="#ffd35a" opacity="0.3" filter="url(#brillo)"/>
+  <path d="M28 42 L48 36 L204 88 L156 96 Z" fill="url(#haz)"/>
+
+  <use href="#vela" transform="translate(98 90)"/>
+  <use href="#vela" transform="translate(204 90)"/>
+
+  <!-- the warhammer laid on the altar, glowing -->
+  <ellipse cx="148" cy="86" rx="56" ry="12" fill="#ffd35a" opacity="0.55" filter="url(#brillo)"/>
+  <path d="M110 90 L176 86" stroke="#140d0a" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M110 90 L176 86" stroke="#6a4a26" stroke-width="4" stroke-linecap="round"/>
+  <path d="M112 88.8 L174 85" stroke="#9a7040" stroke-width="1.2"/>
+  <path d="M114 86.6 V92.6 M118 86.4 V92.4 M122 86.2 V92.2 M126 86 V92" stroke="#2a1a0e" stroke-width="1.6"/>
+  <circle cx="108" cy="90" r="3.6" fill="url(#oro)" stroke="#140d0a" stroke-width="1.3"/>
+  <path d="M140 84.6 V90.6 M160 83.4 V89.4" stroke="#ffd35a" stroke-width="2.2"/>
+  <g transform="translate(185 79) scale(1.25) translate(-185 -83)">
+  <path d="M185 60 V70" stroke="#140d0a" stroke-width="4.4" stroke-linecap="round"/>
+  <path d="M185 60 V70" stroke="#ffe7a0" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M178 70 H192 V96 H178 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="1.8"/>
+  <path d="M175 67 H195 V73 H175 Z M175 93 H195 V99 H175 Z" fill="url(#oro)" stroke="#140d0a" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M186 70 H192 V96 H186 Z M189 67 H195 V73 H189 Z M189 93 H195 V99 H189 Z" fill="#b07a1a"/>
+  <path d="M178 70 H192 V96 H178 Z" fill="none" stroke="#140d0a" stroke-width="1.2"/>
+  <path d="M180.5 72 V94" stroke="#fffaf0" stroke-width="1.4"/>
+  <path d="M185 76 L187 80 L185 84 L183 80 Z M185 86 V91" fill="#fffaf0" stroke="#fffaf0" stroke-width="0.8"/>
+  </g>
+  <!-- glints and dust in the beam -->
+  <path d="M170 60 L174 56 M198 62 L202 58 M198 82 L204 82 M166 80 L162 76" stroke="#fffaf0" stroke-width="1.4" stroke-linecap="round"/>
+  <g fill="#fff6d8">
+    <circle cx="70" cy="52" r="0.9"/><circle cx="92" cy="64" r="0.8"/><circle cx="110" cy="58" r="1"/><circle cx="126" cy="74" r="0.8"/><circle cx="84" cy="48" r="0.7"/><circle cx="140" cy="70" r="0.9"/><circle cx="104" cy="72" r="0.7"/>
+  </g>
+
+  <rect width="280" height="160" fill="url(#vineta)"/>
+</svg>

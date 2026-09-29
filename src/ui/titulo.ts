@@ -23,7 +23,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     raiz.innerHTML = `
       <div class="titulo-marco">
         <h1 class="titulo-juego"><span>Dracs</span> <em>&</em> <span>Rogues</span></h1>
-        <p class="titulo-sub">Cinco clases, tres actos y dos caminos posibles en cada uno</p>
+        <p class="titulo-sub">Seis clases, tres actos y dos caminos posibles en cada uno</p>
         <p class="titulo-intro">
           Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio
           del temible <strong>Gorzug</strong>, asola las aldeas del condado.
@@ -64,6 +64,13 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             <span class="clase-pv">❤️ ${PV_POR_CLASE.brujo} PV</span>
             <span class="clase-desc">Una Explosión que siempre vuelve, pactos
             que condenan a muerte y bloqueo que muerde.</span>
+          </button>
+          <button class="clase-carta clase-paladin" data-clase="paladin">
+            <span class="clase-icono"></span>
+            <span class="clase-nombre">Paladín</span>
+            <span class="clase-pv">❤️ ${PV_POR_CLASE.paladin} PV</span>
+            <span class="clase-desc">Martillo y escudo: Castigos que cargan su
+            siguiente golpe y Fervor que brota de cada Golpe y Defensa.</span>
           </button>
         </div>
         ${
