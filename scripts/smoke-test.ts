@@ -6517,6 +6517,21 @@ console.log('\n🌵 Espinas en un multigolpe');
   check(pv - comb.jugador.pv === 6, `su ataque se corta al morir: solo llegan los 2 golpes previos (${pv - comb.jugador.pv} de daño)`);
 }
 
+// ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
+console.log('\n📱 Iconos de la app instalada');
+{
+  const fs = await import('node:fs');
+  const conf = fs.readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8');
+  const iconos = [...conf.matchAll(/src: '([^']+\.png)'/g)].map((m) => m[1]);
+  check(iconos.length >= 3 && iconos.every((f) => fs.existsSync(new URL(`../public/${f}`, import.meta.url))),
+    `los iconos del manifiesto existen en public/ (${iconos.join(', ')})`);
+  check(iconos.every((f) => !/^icono-(192|512|maskable-512)\.png$/.test(f)),
+    'los iconos no reutilizan los nombres del icono antiguo (Android no vería el cambio)');
+  check(/id: '\/mazos-y-mazmorras\/'/.test(conf), 'el manifiesto fija su id igual al de la app ya instalada');
+  const aviso = fs.readFileSync(new URL('../public/sw-avisos.js', import.meta.url), 'utf8');
+  check([...aviso.matchAll(/'([\w-]+\.png)'/g)].every((m) => iconos.includes(m[1])), 'las notificaciones usan el icono actual');
+}
+
 // ── Prodigious Spell: a random spell effect whose grandeur follows its power ─
 console.log('\n📜 Efecto del Conjuro Prodigioso');
 {

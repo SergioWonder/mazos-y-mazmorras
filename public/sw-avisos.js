@@ -30,8 +30,8 @@ async function checkMajorVersion() {
   await writeMeta('avisada', version);
   await self.registration.showNotification(`Dracs & Rogues ${version}`, {
     body: headline || '¡Hay una nueva versión mayor del juego!',
-    icon: 'icono-192.png',
-    badge: 'icono-192.png',
+    icon: 'icono-dm-192.png',
+    badge: 'icono-dm-192.png',
     tag: 'version-mayor',
   });
 }

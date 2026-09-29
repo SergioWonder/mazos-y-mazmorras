@@ -27,6 +27,9 @@ export default defineConfig({
       registerType: 'prompt',
       includeAssets: ['icono.svg', 'apple-touch-icon.png', 'favicon.png'],
       manifest: {
+        // Same id Chrome derived from start_url for existing installs: never change it,
+        // or Android treats the game as a different app.
+        id: '/mazos-y-mazmorras/',
         name: 'Dracs & Rogues',
         short_name: 'Dracs & Rogues',
         description:
@@ -37,9 +40,9 @@ export default defineConfig({
         background_color: '#0d120c',
         theme_color: '#0d120c',
         icons: [
-          { src: 'icono-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icono-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'icono-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+          { src: 'icono-dm-192.png', sizes: '192x192', type: 'image/png' },
+          { src: 'icono-dm-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icono-dm-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

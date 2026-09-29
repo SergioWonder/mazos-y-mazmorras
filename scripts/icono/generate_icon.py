@@ -9,9 +9,9 @@ headless Chrome at 2x and post-processed with PIL/numpy (bloom on the glows,
 fine grain, vignette). Outputs:
 
   public/icono.svg              vector source (self-contained, no text/image/script)
-  public/icono-512.png          opaque, square corners
-  public/icono-192.png
-  public/icono-maskable-512.png motif inside the 80 % safe circle, background bleeds
+  public/icono-dm-512.png          opaque, square corners
+  public/icono-dm-192.png
+  public/icono-dm-maskable-512.png motif inside the 80 % safe circle, background bleeds
   public/apple-touch-icon.png   180x180, opaque
   public/favicon.png            48x48, simplified drawing
 
@@ -408,12 +408,12 @@ def main() -> None:
 
     big = post(render(full, 1024, scratch, "icon"))
     big.save(scratch / "icon-1024.png")
-    for size, name in [(512, "icono-512.png"), (192, "icono-192.png"), (180, "apple-touch-icon.png")]:
+    for size, name in [(512, "icono-dm-512.png"), (192, "icono-dm-192.png"), (180, "apple-touch-icon.png")]:
         big.resize((size, size), Image.LANCZOS).save(PUBLIC / name, optimize=True)
 
     mask = post(render(build_svg(mask_scale=0.8), 1024, scratch, "maskable"))
     mask.save(scratch / "maskable-1024.png")
-    mask.resize((512, 512), Image.LANCZOS).save(PUBLIC / "icono-maskable-512.png", optimize=True)
+    mask.resize((512, 512), Image.LANCZOS).save(PUBLIC / "icono-dm-maskable-512.png", optimize=True)
 
     fav = post(render(build_svg(simple=True), 384, scratch, "favicon"), grain=0)
     fav.resize((48, 48), Image.LANCZOS).save(PUBLIC / "favicon.png", optimize=True)

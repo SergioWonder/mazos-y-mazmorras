@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.12.0';
+export const VERSION = '6.12.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.12.1',
+    fecha: '2026-09-29',
+    cambios: [
+      '📱 La app instalada en Android recoge por fin el icono del Dungeon Master (puede tardar un día y pedirte que aceptes el cambio).',
+    ],
+  },
   {
     version: '6.12.0',
     fecha: '2026-09-29',
