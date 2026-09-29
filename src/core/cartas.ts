@@ -4121,11 +4121,13 @@ export const PALADIN: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'escudoSagrado',
-    texto: 'Gana 7 de bloqueo.\nGana 1 de Fervor.',
-    jugar: async (c) => { await c.ganarBloqueo(7); await c.ganarFervor(1); },
+    // spends the Fervor on defence: the other way out besides the Smites
+    texto: 'Gana 5 de bloqueo (aplica +2\npor Fervor gastado).',
+    valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + n[1] * fervorDe(c) }],
+    jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 2 * f); },
     mejora: {
-      texto: 'Gana 10 de bloqueo.\nGana 1 de Fervor.',
-      jugar: async (c) => { await c.ganarBloqueo(10); await c.ganarFervor(1); },
+      texto: 'Gana 7 de bloqueo (aplica +3\npor Fervor gastado).',
+      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 3 * f); },
     },
   },
   // — Comunes —
@@ -4192,11 +4194,19 @@ export const PALADIN: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'martillo',
-    texto: 'Inflige 8 de daño.\nGana 1 de Fervor.',
-    jugar: async (c) => { await c.atacar(c.objetivo!, 8, 1, 'martillo'); await c.ganarFervor(1); },
+    // the light stays on the weapon: it charges the next attack without spending Fervor
+    texto: 'Inflige 7 de daño.\nCastigo: tu próximo ataque\ninflige 4 de daño más.',
+    valores: (_c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] }],
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 7, 1, 'martillo');
+      await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 4 });
+    },
     mejora: {
-      texto: 'Inflige 11 de daño.\nGana 1 de Fervor.',
-      jugar: async (c) => { await c.atacar(c.objetivo!, 11, 1, 'martillo'); await c.ganarFervor(1); },
+      texto: 'Inflige 10 de daño.\nCastigo: tu próximo ataque\ninflige 6 de daño más.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 10, 1, 'martillo');
+        await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 6 });
+      },
     },
   },
   {
@@ -4556,13 +4566,10 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'bendicion',
     animRara: 'anim-arbol',
-    texto: 'Poder: al final de tu turno ganas\n2 de bloqueo por cada Fervor.',
+    texto: 'Poder: al final de tu turno ganas\n1 de bloqueo por cada Fervor.',
     valores: (c, n) => [{ tipo: 'otro', tras: 'por cada Fervor', base: n[0] * fervorDe(c) }],
-    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'antiguos', 2); },
-    mejora: {
-      texto: 'Poder: al final de tu turno ganas\n3 de bloqueo por cada Fervor.',
-      jugar: async (c) => { await c.aplicarEstado(c.jugador, 'antiguos', 3); },
-    },
+    jugar: async (c) => { await c.aplicarEstado(c.jugador, 'antiguos', 1); },
+    mejora: { coste: 1, texto: 'Poder: al final de tu turno ganas\n1 de bloqueo por cada Fervor.' },
   },
   {
     id: 'juramento-venganza',

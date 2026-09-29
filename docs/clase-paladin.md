@@ -53,8 +53,8 @@ Formato: `id` — Nombre — tipo, rareza, coste — texto (mejora) — clave fx
    inflige 6 de daño más (aplica +2 por cada Fervor). Consume tu Fervor. (9, +3 por Fervor)
    — fx `cargaDivina` / descarga `castigoDivino` — El martillo del paladín envuelto en luz
    dorada cae sobre un demonio encogido.
-2. `escudo-fe` — Escudo de la Fe — habilidad, inicial, 1 — Gana 7 de bloqueo. Gana 1 de
-   Fervor. (10) — fx `escudoSagrado` — El paladín alza el escudo; un sello de luz lo cubre y
+2. `escudo-fe` — Escudo de la Fe — habilidad, inicial, 1 — Gana 5 de bloqueo (aplica +2 por
+   Fervor gastado): la salida defensiva del Fervor. (7, +3) — fx `escudoSagrado` — El paladín alza el escudo; un sello de luz lo cubre y
    las flechas rebotan.
 
 ### Comunes
@@ -70,8 +70,8 @@ Formato: `id` — Nombre — tipo, rareza, coste — texto (mejora) — clave fx
    ataque inflige además 4 de daño a TODOS los enemigos (aplica +2 por cada Fervor).
    Consume tu Fervor. (6, +3 por Fervor) — `cargaFuego` / `castigoFuego` — Martillo en llamas
    doradas; un anillo de fuego sobre una fila de esqueletos.
-6. `martillo-luz` — Martillo de Luz — ataque, común, 1 — Inflige 8 de daño. Gana 1 de
-   Fervor. (11) — `martillo` — Un martillo espectral de luz amarilla cae del cielo sobre un
+6. `martillo-luz` — Martillo de Luz — ataque, común, 1 — Inflige 7 de daño. Castigo: tu
+   próximo ataque inflige 4 de daño más (no gasta Fervor). (10, 6) — `martillo` — Un martillo espectral de luz amarilla cae del cielo sobre un
    orco.
 7. `embate-escudo` — Embate de Escudo — ataque, común, 1 — Inflige daño igual a tu bloqueo.
    (coste 0) — `martillo` — El paladín carga con el escudo por delante contra un ogro.
@@ -137,7 +137,7 @@ Formato: `id` — Nombre — tipo, rareza, coste — texto (mejora) — clave fx
     descargas un Castigo, ganas 1 de Fuerza. (…y 1 de Fervor) — secuencia propia — Paladín
     triunfante en lo alto de una escalinata, laureles de luz.
 27. `juramento-antiguos` — Juramento de los Antiguos — poder, rara, 2 — Poder: al final de
-    tu turno ganas 2 de bloqueo por cada Fervor. (3) — secuencia propia — Paladín en un
+    tu turno ganas 1 de bloqueo por cada Fervor. (coste 1) — secuencia propia — Paladín en un
     bosque antiguo, enredaderas doradas y aura verde-oro.
 28. `juramento-venganza` — Juramento de Venganza — poder, rara, 1 — Poder: tus Castigos
     cuestan 0. (Innata) — secuencia propia — Paladín encapuchado de ojos ardientes que

@@ -6923,6 +6923,33 @@ console.log('\n🔨 Paladín');
     check(sin.mazo.length === m - 1 && !sin.mazo.some((c) => c.def.id === 'golpe-sagrado'), 'sin el Símbolo, eliminar un Golpe lo quita');
   }
 
+  // — Shield of Faith spends the Fervor on block; Hammer of Light leaves a Smite —
+  {
+    const { comb } = await montarP();
+    comb.jugador.estados.fervor = 3;
+    comb.jugador.bloqueo = 0;
+    check(comb.valoresDeCarta(CT.cartaPorId('escudo-fe')!)[0].real === 11, 'Escudo de la Fe muestra 5 + 2×3 de bloqueo');
+    await jugar(comb, 'escudo-fe');
+    check(comb.jugador.bloqueo === 11 && fervor(comb) === 0, `Escudo de la Fe: 5 de bloqueo más 2 por Fervor gastado (${comb.jugador.bloqueo})`);
+  }
+  {
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    comb.jugador.estados.fervor = 2;
+    let pv0 = e.pv;
+    await jugar(comb, 'martillo-luz');
+    check(pv0 - e.pv === 7 && fervor(comb) === 2, 'Martillo de Luz inflige 7 y no toca el Fervor');
+    check(comb.jugador.castigos.length === 1, 'Martillo de Luz deja preparado un Castigo');
+    pv0 = e.pv;
+    await jugar(comb, 'golpe');
+    check(pv0 - e.pv === 10, 'el siguiente ataque descarga los 4 de Martillo de Luz (6 + 4)');
+    await jugar(comb, 'castigo-atronador');
+    pv0 = e.pv;
+    await jugar(comb, 'martillo-luz');
+    check((e.estados.vulnerable ?? 0) >= 2 && comb.jugador.castigos.length === 1,
+      'Martillo de Luz descarga los Castigos que había y prepara el suyo después');
+  }
+
   // — powers —
   {
     const { comb } = await montarP();
@@ -6937,8 +6964,8 @@ console.log('\n🔨 Paladín');
     await jugar(comb, 'juramento-devocion');
     comb.jugador.estados.fervor = 3;
     const pv0 = e.pv;
-    await jugar(comb, 'martillo-luz');
-    check(pv0 - e.pv === 11 && fervor(comb) === 4, `Juramento de Devoción: los ataques suman tu Fervor sin gastarlo (${pv0 - e.pv})`);
+    await jugar(comb, 'golpe-sagrado');
+    check(pv0 - e.pv === 17 && fervor(comb) === 4, `Juramento de Devoción: los ataques suman tu Fervor sin gastarlo (${pv0 - e.pv})`);
   }
   {
     const { comb } = await montarP();
@@ -6975,7 +7002,7 @@ console.log('\n🔨 Paladín');
     comb.enemigos[0].intencion = { nombre: 'Golpe', intencion: 'ataque', dano: 4 };
     const pv0 = comb.jugador.pv;
     await comb.terminarTurno();
-    check(comb.jugador.pv === pv0, 'Juramento de los Antiguos: al final del turno ganas 2 de bloqueo por Fervor (para el golpe enemigo)');
+    check(pv0 - comb.jugador.pv === 1, 'Juramento de los Antiguos: al final del turno ganas 1 de bloqueo por Fervor (3 de los 4 del golpe enemigo)');
   }
   {
     const { comb } = await montarP();

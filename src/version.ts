@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.13.0';
+export const VERSION = '6.13.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '6.13.1',
+    fecha: '2026-09-30',
+    cambios: [
+      '🛡️ Escudo de la Fe ahora gasta tu Fervor en defensa: 5 de bloqueo más 2 por cada Fervor gastado.',
+      '🔨 Martillo de Luz inflige 7 y deja preparado un Castigo: tu próximo ataque inflige 4 de daño más.',
+      '🌳 Juramento de los Antiguos da 1 de bloqueo por Fervor (antes 2); mejorado cuesta 1.',
+    ],
+  },
   {
     version: '6.13.0',
     fecha: '2026-09-30',
