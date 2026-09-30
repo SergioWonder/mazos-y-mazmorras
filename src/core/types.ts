@@ -251,6 +251,8 @@ export interface CastigoPreparado {
   destierro?: number;
   /** Grants block equal to the damage the attack deals. */
   bloqueoPorDano?: boolean;
+  /** Not from a Smite card (Hammer of Light, Avenging Angel, Dawn blessing): generic look. */
+  generico?: boolean;
 }
 
 export interface CartaDef {

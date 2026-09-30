@@ -2,10 +2,17 @@
 // badge beside the hero and the full description for its tooltip. Pure.
 
 import type { CastigoPreparado, ElementoCastigo } from '../core/types.ts';
+import type { FlameKind } from '../fx/holy-flames.ts';
 
 const ICONO: Record<ElementoCastigo, string> = {
   divino: '🌟', trueno: '🌩️', cegador: '😵', fuego: '🔥', resplandor: '✨', destierro: '🌀',
 };
+
+/** Colour of the flames around the hero: the Smite card's element, or the holy yellow
+ *  for generic Smites (Hammer of Light, Avenging Angel, Dawn blessing). */
+export function llamasDeCastigo(c: CastigoPreparado): FlameKind {
+  return c.generico ? 'holy' : c.elemento;
+}
 
 export interface ResumenCastigo { icono: string; corto: string; texto: string }
 

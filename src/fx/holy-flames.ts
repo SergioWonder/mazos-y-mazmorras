@@ -9,7 +9,8 @@
 import { applyMatrix, type BoneId, type Matrix, type PuppetRig, type Shape } from './puppet.ts';
 import type { Sprite } from './particle-sim.ts';
 
-export type FlameKind = 'holy';
+/** 'holy' for generic Smites; the others, one per Smite card's element. */
+export type FlameKind = 'holy' | 'divino' | 'trueno' | 'cegador' | 'fuego' | 'resplandor' | 'destierro';
 
 /** Seconds of the fade in (Smite prepared) and fade out (Smite released). */
 export const FLAME_FADE_IN = 0.5;
@@ -22,6 +23,18 @@ const OUTER = ['#ffe27a', '#ffd35a', '#ffc94a'];
 const CORE = ['#ffffff', '#fffbe8', '#fff6d6'];
 const EMBER = ['#fff3c4', '#ffe9a0', '#ffffff'];
 export const HOLY_FLAME_COLOURS = [...OUTER, ...CORE, ...EMBER];
+
+export interface FlamePalette { outer: string[]; core: string[]; ember: string[] }
+/** Colours of each Smite's flames: tongues, their bright cores and the embers. */
+export const FLAME_PALETTES: Record<FlameKind, FlamePalette> = {
+  holy: { outer: OUTER, core: CORE, ember: EMBER },
+  divino: { outer: ['#ffb52e', '#ffc440', '#f29a1c'], core: ['#fff1c2', '#ffe6a0', '#ffffff'], ember: ['#ffd27a', '#ffe9b8', '#fff4d6'] },
+  trueno: { outer: ['#6fb8ff', '#8ccaff', '#4f9dff'], core: ['#ffffff', '#e6f4ff', '#cfe9ff'], ember: ['#cfe9ff', '#ffffff', '#a8d8ff'] },
+  cegador: { outer: ['#e9eeff', '#d6def5', '#f4f6ff'], core: ['#ffffff', '#fbfcff', '#f0f4ff'], ember: ['#ffffff', '#e6ecff', '#f7f9ff'] },
+  fuego: { outer: ['#ff7a2a', '#ff5a1f', '#ff9a3c'], core: ['#ffe0a0', '#ffc870', '#fff0c8'], ember: ['#ffb15a', '#ff8a3a', '#ffe0a0'] },
+  resplandor: { outer: ['#ffc38a', '#ffb07a', '#ffd3a6'], core: ['#fffaf0', '#fff0dc', '#ffffff'], ember: ['#ffe3c4', '#fff4e6', '#ffd0a8'] },
+  destierro: { outer: ['#b77bff', '#9b5cf0', '#d0a0ff'], core: ['#fff0c0', '#ffe6a8', '#f4e8ff'], ember: ['#ffd978', '#d8b0ff', '#fff0c0'] },
+};
 
 /** Tongues of fire (each drawn as TONGUE_SPRITES sprites) and embers. */
 const SLOTS = 14, SLOTS_REDUCED = 7;
@@ -172,6 +185,8 @@ export interface FlameOptions {
   unit: number;
   /** prefers-reduced-motion: fewer tongues and embers. */
   reduced?: boolean;
+  /** Colour of the flames (the prepared Smite's); 'holy' by default. */
+  kind?: FlameKind;
 }
 
 const centreOf = (points: ScreenPoint[]) => {
@@ -232,6 +247,7 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
   const U = o.unit, c = centreOf(points);
   const out: FlameSprite[] = [];
   const slots = o.reduced ? SLOTS_REDUCED : SLOTS, embers = o.reduced ? EMBERS_REDUCED : EMBERS;
+  const pal = FLAME_PALETTES[o.kind ?? 'holy'];
 
   for (let i = 0; i < slots; i++) {
     const { cycle: k, u } = cycleOf(i, t);
@@ -249,13 +265,13 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
       const s = seg(j), size = r * (0.6 + 0.25 * j);
       out.push({
         x: s.x, y: s.y, size, angle: s.ang, stretch: 1.9, shape: 'colmillo',
-        colour: OUTER[j], alpha: level * 0.85 * env, glow: true,
+        colour: pal.outer[j], alpha: level * 0.85 * env, glow: true,
       });
     }
     const b = seg(2), cs = r * 0.55;
     out.push({
       x: b.x, y: b.y, size: cs, angle: b.ang, stretch: 2.3, shape: 'colmillo',
-      colour: pick(CORE, hash(i, k + 13)), alpha: level * 0.8 * env, glow: true,
+      colour: pick(pal.core, hash(i, k + 13)), alpha: level * 0.8 * env, glow: true,
     });
   }
 
@@ -279,7 +295,7 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
       const [x, y] = pathAt(tr, uj), [px, py] = pathAt(tr, uj - 0.03);
       out.push({
         x, y, size: r * (0.6 + 0.3 * j), angle: Math.atan2(y - py, x - px), stretch: 2.4, shape: 'colmillo',
-        colour: j ? CORE[2] : OUTER[0], alpha: level * 0.55 * env, glow: true, front: true,
+        colour: j ? pal.core[2] : pal.outer[0], alpha: level * 0.55 * env, glow: true, front: true,
       });
     }
   }
@@ -295,7 +311,7 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     const wob = Math.sin((u * 1.6 + hash(i + k * 5, 25)) * Math.PI * 2) * 3 * U;
     out.push({
       x: p.x + wob, y: p.y - rise * u, size: (1.2 + hash(i + k * 5, 26) * 0.8) * U, angle: 0, shape: 'disco',
-      colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true, front: true,
+      colour: pick(pal.ember, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true, front: true,
     });
   }
   return out.slice(0, MAX_FLAME_SPRITES);

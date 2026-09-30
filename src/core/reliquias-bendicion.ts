@@ -257,7 +257,7 @@ const DE_CLASE: ReliquiaDef[] = [
     id: 'bendicion-aurora', nombre: 'Bendición de la Aurora', icono: '🌅', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'paladin',
     texto: 'Empiezas cada combate con un Castigo preparado: tu primer ataque inflige 8 de daño más.',
     inicioCombate: async (ctx) => {
-      await ctx.prepararCastigo({ nombre: 'Bendición de la Aurora', elemento: 'divino', dano: 8 });
+      await ctx.prepararCastigo({ nombre: 'Bendición de la Aurora', elemento: 'divino', dano: 8, generico: true });
     },
   },
 ];

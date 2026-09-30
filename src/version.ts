@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.5';
+export const VERSION = '7.0.6';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.6',
+    fecha: '2026-09-30',
+    cambios: [
+      '🎨 Cada Castigo arde con su color: ámbar el Divino, azul el Atronador, blanco el Cegador, naranja el Abrasador, melocotón el Resplandeciente y violeta el Desterrador. Los de Martillo de Luz, Ángel Vengador y la Aurora siguen en amarillo sagrado.',
+    ],
+  },
   {
     version: '7.0.5',
     fecha: '2026-09-30',

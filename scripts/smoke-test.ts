@@ -7196,6 +7196,41 @@ console.log('\n🔥 Llamas del escenario con alfa');
   check(/flameBatch\.draw\([^)]*,\s*1\)/.test(stage), 'las llamas del escenario cubren con alfa: no se recortan fuera del halo de la figura');
 }
 
+// ── Each Smite burns in its own colour (generic ones keep the holy yellow) ──
+console.log('\n🎨 Color de las llamas por Castigo');
+{
+  const HF = await import('../src/fx/holy-flames.ts');
+  const CF = await import('../src/ui/castigo-ficha.ts');
+  const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const tonos = ['holy', 'divino', 'trueno', 'cegador', 'fuego', 'resplandor', 'destierro'] as const;
+  check(tonos.every((k) => !!HF.FLAME_PALETTES[k]), 'hay una paleta de llamas para cada Castigo y otra para los genéricos');
+  const firma = (k: string) => HF.FLAME_PALETTES[k as keyof typeof HF.FLAME_PALETTES].outer.join();
+  check(new Set(tonos.map(firma)).size === tonos.length, 'cada Castigo arde con un color distinto');
+  check(HF.FLAME_PALETTES.holy.outer.join() === HF.HOLY_FLAME_COLOURS.slice(0, 3).join(), 'los genéricos conservan el amarillo sagrado de siempre');
+  const azul = HF.FLAME_PALETTES.trueno.outer.every((c) => { const [r, , b] = hex(c); return b > r; });
+  const naranja = HF.FLAME_PALETTES.fuego.outer.every((c) => { const [r, g, b] = hex(c); return r > g && g > b; });
+  const violeta = HF.FLAME_PALETTES.destierro.outer.some((c) => { const [r, g, b] = hex(c); return b > g && r > g; });
+  check(azul && naranja && violeta, 'el trueno arde azul, el fuego naranja y el destierro violeta');
+  const pts = Array.from({ length: 12 }, (_, i) => ({ x: 100 + Math.cos(i) * 40, y: 200 + Math.sin(i) * 60 }));
+  const usados = new Set(HF.holyFlameFrame(1.2, pts, { level: 1, unit: 1, kind: 'trueno' }).map((f) => f.colour));
+  const pal = HF.FLAME_PALETTES.trueno;
+  check([...usados].every((c) => [...pal.outer, ...pal.core, ...pal.ember].includes(c)), 'un fotograma de llamas usa solo los colores de su Castigo');
+  check(CF.llamasDeCastigo({ nombre: 'Castigo Atronador', elemento: 'trueno', vulnerable: 2 }) === 'trueno', 'las llamas de un Castigo de carta llevan su color');
+  check(CF.llamasDeCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 4, generico: true }) === 'holy', 'las de un Castigo genérico, el amarillo sagrado');
+  const CT = await import('../src/core/cartas.ts');
+  const run = nuevaRun('paladin', 5);
+  const comb = new Combate(run, [GOBLIN_CORTADOR], crearRng(5), uiSilenciosa);
+  await comb.iniciar();
+  comb.jugador.energia = 9;
+  const ml = instanciar(CT.cartaPorId('martillo-luz')!);
+  comb.jugador.mano.push(ml);
+  comb.enemigos[0].pv = 99;
+  await comb.jugarCarta(ml, comb.enemigos[0]);
+  check(comb.jugador.castigos[0]?.generico === true, 'el Castigo de Martillo de Luz es genérico');
+  const fs = await import('node:fs');
+  check(/llamasDeCastigo\(/.test(fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8')), 'el combate enciende las llamas con el color del Castigo preparado');
+}
+
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
 console.log('\n📱 Iconos de la app instalada');
 {

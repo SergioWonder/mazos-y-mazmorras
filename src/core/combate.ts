@@ -1387,7 +1387,7 @@ export class Combate {
     if (escribania > 0) await this.escribirConjuro(escribania);
     // Avenging Angel (paladin): a Smite every turn, or a stronger one if it is still prepared
     const angel = this.jugador.estados.angelVengador ?? 0;
-    if (angel > 0) await this.contexto().prepararCastigo({ nombre: 'Ángel Vengador', elemento: 'divino', dano: angel });
+    if (angel > 0) await this.contexto().prepararCastigo({ nombre: 'Ángel Vengador', elemento: 'divino', dano: angel, generico: true });
     // Unwavering Zeal (paladin): Fervor every turn
     const celo = this.jugador.estados.fervorPorTurno ?? 0;
     if (celo > 0) await this.contexto().ganarFervor(celo);

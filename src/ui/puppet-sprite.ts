@@ -302,6 +302,8 @@ export class PuppetSprite {
   private pending: { at: number; burst: Burst }[] = [];
   // persistent flames around the body (the paladin's prepared Smite)
   private flames: FlameKind | null = null;
+  /** Colour the flames burn in (kept while they fade out). */
+  private flameKind: FlameKind = 'holy';
   private readonly flameFade = new FlameFade();
   private flamePoints: FlameAnchor[] | null = null;
   private flameSprites: FlameSprite[] = [];
@@ -375,6 +377,8 @@ export class PuppetSprite {
   setFlames(kind: FlameKind | null) {
     if (kind === this.flames) return;
     this.flames = kind;
+    // a new colour while lit just recolours the flames: no fade
+    if (kind) this.flameKind = kind;
     this.flameFade.set(!!kind, clock);
     if (!kind || this.burning) return;
     this.burning = true;
@@ -430,7 +434,7 @@ export class PuppetSprite {
     const art = this.rig.art ?? 1;
     const M = spriteMatrix({ x: r.left, y: r.top, w: r.width }, this.mirrored, art);
     const points = flameScreenPoints(this.flamePoints!, bones, M);
-    this.setFlameSprites(holyFlameFrame(t, points, { level, unit: (r.width / 140) * art, reduced: this.flameReduced }));
+    this.setFlameSprites(holyFlameFrame(t, points, { level, unit: (r.width / 140) * art, reduced: this.flameReduced, kind: this.flameKind }));
   }
 
   /** Continuous emitters and pending bursts, converted to screen coordinates. */

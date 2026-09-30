@@ -26,7 +26,7 @@ import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } 
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
-import { resumenCastigo } from './castigo-ficha.ts';
+import { llamasDeCastigo, resumenCastigo } from './castigo-ficha.ts';
 import {
   deathTimeScale, heroDeathFx, heroDeathSequence, playsDefeatSequence, SOUL_SPELL, type DeathCueId,
 } from '../fx/hero-death.ts';
@@ -785,7 +785,7 @@ export function pantallaCombate(
       // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
       actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
       actual.setEchoes((j.estados.espejismo ?? 0) > 0);
-      actual.setFlames(j.castigos.length > 0 ? 'holy' : null);
+      actual.setFlames(j.castigos[0] ? llamasDeCastigo(j.castigos[0]) : null);
       const inv = spriteInvocacion();
       if (inv) {
         $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);

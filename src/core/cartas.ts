@@ -4199,13 +4199,13 @@ export const PALADIN: CartaDef[] = [
     valores: (_c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] }],
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 7, 1, 'martillo');
-      await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 4 });
+      await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 4, generico: true });
     },
     mejora: {
       texto: 'Inflige 10 de daño.\nCastigo: tu próximo ataque\ninflige 6 de daño más.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 10, 1, 'martillo');
-        await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 6 });
+        await c.prepararCastigo({ nombre: 'Martillo de Luz', elemento: 'divino', dano: 6, generico: true });
       },
     },
   },
