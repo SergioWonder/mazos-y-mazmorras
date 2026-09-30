@@ -5354,7 +5354,7 @@ try {
   const violeta = (t: { h: number }) => t.h >= 255 && t.h <= 300;
   const elementos: [string, string, (t: { h: number; s: number; l: number }) => boolean][] = [
     ['Divin', 'oro', oro], ['Trueno', 'azul', azul], ['Cegador', 'blanco', blanco], ['Fuego', 'naranja', naranja],
-    ['Resplandor', 'oro', oro], ['Destierro', 'violeta', violeta],
+    ['Resplandor', 'oro o melocotón', (t) => t.h >= 15 && t.h <= 58], ['Destierro', 'violeta', violeta],
   ];
   for (const [el, nombre, pred] of elementos) {
     for (const k of [...cargas, ...castigos].filter((x) => x.includes(el) && SPELLS[x])) {
@@ -5468,6 +5468,91 @@ try {
   check(muerte.spell === 'muertePaladin' && !!SPELLS.muertePaladin && SPELLS.muertePaladin.anchor === 'self', 'el paladín tiene su propia muerte');
 } catch (e) {
   check(false, `las pruebas de los efectos del paladín revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Smite impacts: each one its own blow, in the colours of its flames ──────
+console.log('\n🔥 Impactos de los Castigos');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const hf = await import('../src/fx/holy-flames.ts');
+  const { SPELLS, spellFrame, spellSignature, MAX_SPELL_SPRITES } = sf;
+  const impactos: [string, keyof typeof hf.FLAME_PALETTES][] = [
+    ['castigoGenerico', 'holy'], ['castigoDivino', 'divino'], ['castigoTrueno', 'trueno'],
+    ['castigoCegador', 'cegador'], ['castigoFuego', 'fuego'], ['castigoResplandor', 'resplandor'],
+  ];
+  // an enemy about 130 px wide, as on a phone
+  const box = { x: 600, y: 200, w: 130, h: 160 };
+  const ctx = { box, from: { x: 170, y: 300 }, facing: -1 as const, seed: 4 };
+  const extent = (s: ReturnType<typeof spellFrame>[number]) =>
+    s.shape === 'estrella' ? s.size * 2 : s.shape === 'chispa' ? s.size * 1.8 : s.size * Math.max(1, s.stretch ?? 1);
+  check(!!SPELLS.castigoGenerico && SPELLS.castigoGenerico.anchor === 'target', 'existe el impacto del Castigo genérico («castigoGenerico»), sobre el objetivo');
+  if (SPELLS.castigoGenerico) {
+    check(SPELLS.castigoGenerico.build !== SPELLS.martillo?.build && SPELLS.castigoGenerico.build !== SPELLS.castigoDivino?.build
+      && spellSignature('castigoGenerico') !== spellSignature('martillo') && spellSignature('castigoGenerico') !== spellSignature('castigoDivino'),
+      'el Castigo genérico se ve distinto del martillo y del Castigo Divino');
+    const d = SPELLS.castigoGenerico;
+    check(spellFrame('castigoGenerico', ctx, d.duration * (d.phases[0] + 0.1)).some((s) => s.shape === 'gota'), 'el Castigo genérico prende al enemigo en llamas sagradas');
+  }
+  const firmas = new Map<string, string>();
+  for (const [k, pal] of impactos) {
+    const d = SPELLS[k];
+    if (!d) { check(false, `«${k}» existe`); continue; }
+    const p = hf.FLAME_PALETTES[pal];
+    const propios = new Set([...p.outer, ...p.core, ...p.ember, '#ffffff'].map((c) => c.toLowerCase()));
+    let total = 0, enPaleta = 0, exterior = 0, maximo = 0;
+    let ancho = 0, alto = 0, grande = 0, visibles = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) {
+      const fr = spellFrame(k, ctx, t);
+      maximo = Math.max(maximo, fr.length);
+      for (const s of fr) {
+        total++;
+        const c = s.colour.toLowerCase();
+        if (propios.has(c)) enPaleta++;
+        if (p.outer.includes(c)) exterior++;
+      }
+      if (t < d.phases[0] * d.duration || t > d.phases[1] * d.duration) continue;
+      const vivos = fr.filter((s) => (s.alpha ?? 1) >= 0.25);
+      if (!vivos.length) continue;
+      const x0 = Math.min(...vivos.map((s) => s.x - extent(s))), x1 = Math.max(...vivos.map((s) => s.x + extent(s)));
+      const y0 = Math.min(...vivos.map((s) => s.y - extent(s))), y1 = Math.max(...vivos.map((s) => s.y + extent(s)));
+      ancho = Math.max(ancho, x1 - x0); alto = Math.max(alto, y1 - y0);
+      grande = Math.max(grande, ...vivos.filter((s) => (s.alpha ?? 1) >= 0.5).map(extent));
+      visibles = Math.max(visibles, vivos.length);
+    }
+    const cuota = total ? enPaleta / total : 0;
+    check(cuota >= 0.75 && exterior > 0, `«${k}» usa los colores de sus llamas «${pal}» (${Math.round(cuota * 100)} %)`);
+    check(ancho >= box.w && alto >= box.h * 0.8 && visibles >= 10,
+      `«${k}» se lee sobre un enemigo de ${box.w} px (${Math.round(ancho)}×${Math.round(alto)} px, ${visibles} elementos)`);
+    check(grande >= box.w * 0.3, `«${k}» tiene una pieza central grande (${Math.round(grande)} px)`);
+    check(d.duration <= 1.0 && d.phases[0] * d.duration <= 0.2 && maximo <= MAX_SPELL_SPRITES,
+      `«${k}» es corto, descarga con el golpe y respeta el tope (${d.duration} s, ${Math.round(d.phases[0] * d.duration * 1000)} ms, ${maximo})`);
+    let r = 0, n = 0;
+    for (let t = 0; t <= d.duration; t += 1 / 30) { r += spellFrame(k, { ...ctx, reduced: true }, t).length; n += spellFrame(k, ctx, t).length; }
+    check(r < n * 0.85, `«${k}» con movimiento reducido dibuja menos (${r} < ${n})`);
+    const f = spellSignature(k), igual = [...firmas].find(([, v]) => v === f);
+    check(!igual, `«${k}» tiene su propio impacto${igual ? ` (igual que «${igual[0]}»)` : ''}`);
+    firmas.set(k, f);
+  }
+  // the Divine Smite: an amber sun sigil falls onto the enemy and stamps on it
+  if (SPELLS.castigoDivino) {
+    const d = SPELLS.castigoDivino;
+    const sello = (t: number) => spellFrame('castigoDivino', ctx, t).filter((s) => s.shape === 'anillo').sort((a, b) => b.size - a.size)[0];
+    const antes = sello(d.duration * d.phases[0] * 0.4), despues = sello(d.duration * (d.phases[0] + 0.08));
+    check(!!antes && antes.y < box.y + box.h * 0.2 && !!despues && despues.y > box.y && despues.y < box.y + box.h,
+      'el sello solar del Castigo Divino cae del cielo y se estampa en el enemigo');
+  }
+  // Banishing is untouched
+  const fnv = (s: string) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h.toString(16); };
+  const huella = (k: string) => {
+    const d = SPELLS[k];
+    return fnv([0.1, 0.3, 0.5, 0.7, 0.9].map((q) => spellFrame(k, ctx, q * d.duration)
+      .map((s) => [s.shape, s.colour, Math.round(s.x), Math.round(s.y), Math.round(s.size * 10), Math.round((s.alpha ?? 1) * 100)].join(':')).join('|')).join('#'));
+  };
+  check(spellSignature('castigoDestierro') === 'anillo2,capsula6,disco1,runa8@48,40|anillo2,capsula66,disco16,haz2,runa8@48,33|anillo2,capsula66,disco27,haz2,runa8@48,35|anillo2,capsula6,disco6,runa8@48,39'
+    && huella('castigoDestierro') === '39ff00de' && SPELLS.castigoDestierro.duration === 1.1, 'el Castigo Desterrador no ha cambiado');
+  check(huella('cargaDestierro') === '5cb9c698', 'la carga del Castigo Desterrador no ha cambiado');
+} catch (e) {
+  check(false, `las pruebas de los impactos de los Castigos revientan: ${(e as Error).stack ?? e}`);
 }
 
 // ── Magic Missile: one weaving dart per hit, in a quick volley ──────────────
@@ -6894,7 +6979,7 @@ console.log('\n🔨 Paladín');
     check((e.estados.vulnerable ?? 0) === 4 && pv0 - e.pv === 14, 'Martillo del Juicio: los Castigos que descarga se aplican dos veces');
   }
 
-  // — a Smite lands once, even on an area attack (no chained splashes) —
+  // — an area attack carries the Smite to every enemy; only the Searing splash lands once —
   {
     const { comb } = await montarP([dummy(), dummy(), dummy()]);
     await jugar(comb, 'castigo-abrasador');
@@ -6907,14 +6992,32 @@ console.log('\n🔨 Paladín');
     await jugar(comb, 'castigo-divino');
     await jugar(comb, 'expulsar-mal');
     const danos = comb.enemigos.map((e) => 300 - e.pv);
-    check(danos.join() === '16,10,10', `Castigo Divino + ataque de área: el daño extra solo en el primer objetivo (${danos.join('/')})`);
+    check(danos.join() === '16,16,16', `Castigo Divino + ataque de área: el daño extra a cada enemigo (${danos.join('/')})`);
   }
   {
     const { comb } = await montarP([dummy(), dummy()]);
     await jugar(comb, 'castigo-atronador');
     await jugar(comb, 'colera-celestial');
     const vul = comb.enemigos.map((e) => e.estados.vulnerable ?? 0);
-    check(vul.join() === '2,0', `Castigo Atronador + Cólera Celestial: el Vulnerable se aplica una vez (${vul.join('/')})`);
+    check(vul.join() === '2,2', `Castigo Atronador + Cólera Celestial: Vulnerable a cada enemigo, una vez por enemigo (${vul.join('/')})`);
+  }
+
+  {
+    const fxs: string[] = [];
+    const ui = { ...uiSilenciosa, fxParticulas: async (_o: any, k: string) => { fxs.push(k); } };
+    const run = nuevaRun('paladin', 910);
+    run.reliquias = [];
+    const comb = new Combate(run, [dummy()], crearRng(910), ui);
+    await comb.iniciar();
+    comb.jugador.mano = [];
+    await jugar(comb, 'martillo-luz');
+    fxs.length = 0;
+    await jugar(comb, 'golpe');
+    check(fxs.includes('castigoGenerico') && !fxs.includes('castigoDivino'), `un Castigo genérico se descarga con su efecto propio (${fxs.join(',')})`);
+    await jugar(comb, 'castigo-divino');
+    fxs.length = 0;
+    await jugar(comb, 'golpe');
+    check(fxs.includes('castigoDivino'), 'el Castigo Divino se descarga con el suyo');
   }
 
   // — holy Strike and Defend —  // — holy Strike and Defend —

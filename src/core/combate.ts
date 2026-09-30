@@ -99,6 +99,8 @@ export class Combate {
   /** (paladin) Smites the attack card being played is unleashing. */
   private castigoEnCurso: {
     lista: CastigoPreparado[]; veces: number; golpeados: Set<EnemigoCombate>;
+    /** The Searing splash already hit everyone (it is area damage: never chained). */
+    salpicado: boolean;
   } | null = null;
   /** Guards the alAplicarEstado hook against relics re-triggering themselves. */
   private enGanchoEstado = false;
@@ -195,20 +197,21 @@ export class Combate {
     return lista.reduce((s, k) => s + (k.dano ?? 0), 0) * veces;
   }
 
-  /** (paladin) First hit of an attack unleashing its Smite: shows it and returns
-   *  its extra damage. The Smite lands once per attack, on the first target hit
-   *  (an area attack does not chain it); 0 once it has landed. */
+  /** (paladin) First hit on `obj` of an attack unleashing its Smite: shows it and
+   *  returns its extra damage. An area attack carries it to every enemy it hits
+   *  (once each); 0 if `obj` already took it. */
   private async cargarCastigoEn(obj: EnemigoCombate): Promise<number> {
     const c = this.castigoEnCurso;
-    if (!c || c.golpeados.size > 0) return 0;
-    for (const k of c.lista) await this.ui.fxParticulas(obj, FX_CASTIGO[k.elemento]);
+    if (!c || c.golpeados.has(obj)) return 0;
+    for (const k of c.lista) await this.ui.fxParticulas(obj, k.generico ? 'castigoGenerico' : FX_CASTIGO[k.elemento]);
     return c.lista.reduce((s, k) => s + (k.dano ?? 0), 0) * c.veces;
   }
 
-  /** (paladin) After that first hit: the Smite's statuses, fire splash and banishment (once). */
+  /** (paladin) After that first hit: the Smite's statuses, fire splash (once per attack,
+   *  it already reaches everyone) and banishment. */
   private async descargarCastigoEn(obj: EnemigoCombate) {
     const c = this.castigoEnCurso;
-    if (!c || c.golpeados.size > 0) return;
+    if (!c || c.golpeados.has(obj)) return;
     c.golpeados.add(obj);
     for (const k of c.lista) {
       if (k.vulnerable && obj.vivo) {
@@ -219,7 +222,8 @@ export class Combate {
         obj.estados.debil = (obj.estados.debil ?? 0) + k.debil * c.veces;
         await this.ui.fxEstado(obj, 'debil', k.debil * c.veces);
       }
-      if (k.salpicadura) {
+      if (k.salpicadura && !c.salpicado) {
+        c.salpicado = true;
         for (const e of this.enemigos.filter((x) => x.vivo)) await this.infligir(e, k.salpicadura * c.veces, 'castigoFuego');
       }
       if (k.destierro && obj.vivo) {
@@ -1463,7 +1467,7 @@ export class Combate {
     // Smites (paladin): the next attack card unleashes every prepared one
     if (def.tipo === 'ataque' && this.jugador.castigos.length > 0) {
       this.castigoEnCurso = {
-        lista: this.jugador.castigos, veces: def.id === 'martillo-juicio' ? 2 : 1, golpeados: new Set(),
+        lista: this.jugador.castigos, veces: def.id === 'martillo-juicio' ? 2 : 1, golpeados: new Set(), salpicado: false,
       };
       this.jugador.castigos = [];
       delete this.jugador.estados.castigo;

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.6';
+export const VERSION = '7.0.7';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.7',
+    fecha: '2026-09-30',
+    cambios: [
+      '💥 Cada Castigo tiene su propio golpe con los colores de sus llamas: el Divino estampa un sol ámbar llameante y los genéricos, una cruz sagrada entre llamas amarillas.',
+      '⚖️ Los ataques de área vuelven a llevar el Castigo a todos los enemigos; solo la llamarada del Castigo Abrasador se lanza una vez, sin encadenarse.',
+    ],
+  },
   {
     version: '7.0.6',
     fecha: '2026-09-30',

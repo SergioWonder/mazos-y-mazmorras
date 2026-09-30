@@ -5,6 +5,7 @@
 // draws the returned sprites in the same WebGL pass as the particles.
 
 import type { ParticleShape, Sprite } from './particle-sim.ts';
+import { FLAME_PALETTES, type FlameKind } from './holy-flames.ts';
 
 export interface Box { x: number; y: number; w: number; h: number }
 export interface Point { x: number; y: number }
@@ -1395,47 +1396,111 @@ const cargaDestierro: Build = (g, u, c, D) => {
 
 // ── Paladin smites: the element discharges on the enemy with the attack ─────
 
-/** Divine Smite: a golden sun emblem stamps onto the enemy, spokes of holy light
- *  wheel out of it and embers drift up. */
-const castigoDivino: Build = (g, u, c) => {
-  const { cx, cy, R, k, W, H, ground } = geo(c);
-  const HIT = 0.16, n = g.n(14);
-  for (let i = 0; i < n; i++) {
-    const q = span(u, g.r(i) * 0.06, HIT);
+/** Colours of a smite's impact: the same as the flames the paladin burned with. */
+const flamesOf = (kind: FlameKind) => FLAME_PALETTES[kind];
+
+/** Smite (generic): the holy fire the paladin was burning with leaps onto the
+ *  enemy: a sacred cross of light flares on the blow and yellow holy flames
+ *  engulf it from a ring of fire at its feet. */
+const castigoGenerico: Build = (g, u, c, D) => {
+  const { b, cx, cy, R, k, W, H, ground } = geo(c);
+  const P = flamesOf('holy'), HIT = 0.14, fire = [P.outer[0], P.outer[1], P.outer[2], P.ember[1]];
+  const n0 = g.n(12);
+  for (let i = 0; i < n0; i++) {
+    const q = span(u, g.r(i) * 0.05, HIT);
     if (q <= 0 || q >= 1) continue;
-    const a = g.r(i + 10) * TAU, rad = (1 - easeIn(q)) * R * 1.3;
-    g.spark(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 10 * k, a + Math.PI, HOLY.rim, q);
+    const a = g.r(i + 10) * TAU, rad = (1 - easeIn(q)) * R * 1.4;
+    g.spark(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, 11 * k, a + Math.PI, P.outer[i % 3], q);
   }
   if (u < HIT) return;
-  const fl = 1 - span(u, HIT, 0.45);
-  g.dot(cx, cy, R * 0.9 * fl + 1, HOLY.pale, 0.3 * fl);
-  g.dot(cx, cy, 20 * k * fl + 1, '#ffffff', fl);
-  const st = easeOutBack(span(u, HIT, 0.3)), out = 1 - span(u, 0.55, 0.9);
-  sunSigil(g, cx, cy, (0.28 * Math.min(W, H) + 6) * st * (1 + 0.4 * span(u, 0.55, 0.9)), 8, u * 1.5, 4 * k, HOLY.rim, '#ffffff', out);
-  const sp = bell(u, HIT, 0.8);
-  for (let i = 0; i < 12; i++) {
-    const a = u * 2 + (i / 12) * TAU, L = R * (1.1 + 0.35 * (i % 3));
-    g.beam(cx + Math.cos(a) * R * 0.3, cy + Math.sin(a) * R * 0.3, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 12 * k, HOLY.rim, 0.35 * sp);
+  // the sacred cross flares on the blow
+  const cr = easeOut(span(u, HIT, HIT + 0.1)), cf = 1 - span(u, 0.36, 0.62), crY = cy - 0.08 * H;
+  if (cf > 0) {
+    g.seg(cx, crY - H * 0.72 * cr, cx, crY + H * 0.62 * cr, 18 * k, P.outer[1], 0.35 * cf, 1);
+    g.seg(cx - W * 0.5 * cr, crY - H * 0.12, cx + W * 0.5 * cr, crY - H * 0.12, 18 * k, P.outer[1], 0.35 * cf, 1);
+    g.seg(cx, crY - H * 0.7 * cr, cx, crY + H * 0.6 * cr, 6 * k, P.core[0], cf, 1);
+    g.seg(cx - W * 0.48 * cr, crY - H * 0.12, cx + W * 0.48 * cr, crY - H * 0.12, 6 * k, P.core[0], cf, 1);
   }
-  for (let i = 0; i < 2; i++) {
-    const s = span(u, HIT + i * 0.08, 0.7 + i * 0.1);
-    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + 1.0 * easeOut(s)), R * (0.3 + 1.0 * easeOut(s)), 5 * k * (1 - s) + 1, i ? HOLY.pale : HOLY.deep, 1 - s);
+  const fl = 1 - span(u, HIT, 0.42);
+  g.dot(cx, crY - H * 0.12, R * 0.7 * fl + 1, P.outer[0], 0.28 * fl);
+  g.dot(cx, crY - H * 0.12, 14 * k * fl + 1, P.core[0], 0.9 * fl);
+  // holy flames engulf it
+  const burn = span(u, HIT, HIT + 0.1) * (1 - span(u, 0.66, 0.92)), t = g.n(8);
+  for (let i = 0; i < t; i++) {
+    const f = i / Math.max(1, t - 1), mid = 1 - Math.abs(f - 0.5) * 1.4;
+    const x = b.x + (0.08 + 0.84 * f + (g.r(i + 20) - 0.5) * 0.08) * W;
+    tongue(g, x, ground - (4 + g.r(i + 30) * 14) * k, H * (0.35 + 0.55 * mid + 0.2 * g.r(i + 40)) * burn, (13 + 8 * g.r(i + 50)) * k, u * D, i, fire, 0.62 * burn);
   }
-  const m = g.n(20);
+  const s = span(u, HIT, 0.75);
+  if (s > 0 && s < 1) {
+    const rx = W * (0.35 + 0.9 * easeOut(s));
+    g.ring(cx, ground, rx, rx * 0.2 + 2, 5 * k * (1 - s) + 1.5, P.outer[2], 1 - s);
+    g.ring(cx, ground, rx * 0.9, rx * 0.18 + 2, 2 * k, P.core[1], 0.8 * (1 - s));
+  }
+  const m = g.n(12), G = 1100 * k;
   for (let i = 0; i < m; i++) {
-    const q = span(u, HIT + 0.3 * g.r(i + 30), 0.6 + 0.4 * g.r(i + 30));
-    if (q <= 0 || q >= 1) continue;
-    g.dot(cx + (g.r(i + 40) - 0.5) * W * 1.1 + Math.sin(q * 6 + i) * 6 * k, ground - q * H * 1.2, 2.4 * k, i % 2 ? HOLY.rim : HOLY.pale, 1 - q);
+    const tau = (u - HIT) * D, vx = (g.r(i + 60) - 0.5) * 360 * k, vy = -(240 + 220 * g.r(i + 70)) * k;
+    if (tau > 0.5) continue;
+    const pp = fly(cx, crY, vx, vy, tau, G);
+    g.drop(pp.x, pp.y, (3.5 + 2.5 * g.r(i + 80)) * k, dropAngle(vx, vy + G * tau), P.outer[i % 3], 1 - tau / 0.5);
+  }
+  const e = g.n(16);
+  for (let i = 0; i < e; i++) {
+    const q = span(u, HIT + 0.35 * g.r(i + 90), 0.62 + 0.38 * g.r(i + 90));
+    if (q > 0 && q < 1) g.spark(cx + (g.r(i + 100) - 0.5) * W * 1.3 + Math.sin(q * 7 + i) * 5 * k, ground - q * H * 1.35, 7 * k, -Math.PI / 2, P.ember[i % 3], 1 - q);
   }
 };
 
-/** Thundering Smite: blue-white bolts fork out of the blow to the ground, a
+/** Divine Smite: an amber sun sigil drops out of the sky onto the enemy, stamps
+ *  on it with a shockwave and burns there as a flaming sun, spokes of amber
+ *  light wheeling out of it, until it crumbles into embers. */
+const castigoDivino: Build = (g, u, c) => {
+  const { b, cx, cy, R, k, W, H, ground } = geo(c);
+  const P = flamesOf('divino'), HIT = 0.16, sr = 0.34 * Math.min(W, H) + 6;
+  const fall = easeIn(span(u, 0, HIT)), sy = lerp(Math.max(20, b.y - 1.1 * H), cy, fall);
+  const burnOut = span(u, 0.62, 0.9), vis = span(u, 0, 0.04) * (1 - burnOut);
+  const r = sr * (u < HIT ? 0.55 + 0.45 * fall : 1 + 0.25 * bell(u, HIT, 0.32)) * (1 - 0.5 * burnOut);
+  if (u < HIT) g.fang(cx, sy - r * 0.2, cx, sy - r * 0.2 - H * 0.7 * (1 - fall * 0.6), r * 0.9, P.outer[1], 0.35 * vis);
+  sunSigil(g, cx, sy, r, 10, u * 2.2, 4.5 * k, P.outer[0], P.core[0], vis);
+  if (u < HIT) return;
+  const fl = 1 - span(u, HIT, 0.46);
+  g.dot(cx, cy, R * 1.05 * fl + 1, P.outer[1], 0.3 * fl);
+  g.dot(cx, cy, 18 * k * fl + 1, '#ffffff', 0.95 * fl);
+  // the flaming corona round the stamped sun
+  const cor = span(u, HIT, HIT + 0.06) * (1 - burnOut), n = g.n(14);
+  for (let i = 0; i < n; i++) {
+    const a = u * 2.2 + (i / n) * TAU, fx = 0.8 + 0.25 * Math.sin(u * 40 + i * 1.7);
+    const x = cx + Math.cos(a) * r * 1.62, y = cy + Math.sin(a) * r * 1.62;
+    g.drop(x, y, 7 * k * fx * cor + 0.5, a + Math.PI / 2, P.outer[i % 3], 0.9 * cor);
+    g.drop(x - Math.cos(a) * 3 * k, y - Math.sin(a) * 3 * k, 3.5 * k * fx * cor + 0.5, a + Math.PI / 2, P.core[1], cor);
+  }
+  const sp = bell(u, HIT, 0.8);
+  for (let i = 0; i < 12; i++) {
+    const a = -u * 1.6 + (i / 12) * TAU, L = R * (1.2 + 0.4 * (i % 3));
+    g.beam(cx + Math.cos(a) * r, cy + Math.sin(a) * r, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 12 * k, P.outer[2], 0.35 * sp);
+  }
+  for (let i = 0; i < 2; i++) {
+    const s = span(u, HIT + i * 0.07, 0.62 + i * 0.1);
+    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.35 + 1.1 * easeOut(s)), R * (0.35 + 1.1 * easeOut(s)), 6 * k * (1 - s) + 1, i ? P.core[1] : P.outer[1], 1 - s);
+  }
+  const s2 = span(u, HIT, 0.7);
+  if (s2 > 0 && s2 < 1) g.ring(cx, ground, W * (0.3 + 0.8 * s2), W * 0.09 * (0.3 + 0.8 * s2) + 2, 4 * k, P.outer[2], 0.9 * (1 - s2));
+  const m = g.n(22);
+  for (let i = 0; i < m; i++) {
+    const q = span(u, 0.55 + 0.25 * g.r(i + 30), 0.85 + 0.15 * g.r(i + 30));
+    if (q <= 0 || q >= 1) continue;
+    const a = g.r(i + 40) * TAU, d = r * (0.6 + 0.9 * q);
+    g.dot(cx + Math.cos(a) * d, cy + Math.sin(a) * d - q * 30 * k, 2.6 * k, P.ember[i % 3], 1 - q);
+  }
+};
+
+/** Thundering Smite: electric-blue bolts fork out of the blow to the ground, a
  *  thunderclap rolls out in waves and sparks crackle over the body. */
 const castigoTrueno: Build = (g, u, c, D) => {
   const { cx, cy, R, k, W, H, ground } = geo(c);
-  const HIT = 0.14, frame = Math.floor(u * D * 24);
+  const P = flamesOf('trueno'), HIT = 0.14, frame = Math.floor(u * D * 24);
   const ch = span(u, 0, HIT);
-  if (u < HIT) { g.dot(cx, cy, 10 * k * ch + 1, THUNDER.pale, ch); g.dot(cx, cy, 30 * k * ch + 1, THUNDER.halo, 0.3 * ch); return; }
+  if (u < HIT) { g.dot(cx, cy, 10 * k * ch + 1, P.core[2], ch); g.dot(cx, cy, 30 * k * ch + 1, P.outer[2], 0.3 * ch); return; }
   const on = 1 - span(u, 0.4, 0.55);
   if (on > 0 && frame % 5 !== 4) {
     const bolts = g.n(4);
@@ -1443,81 +1508,81 @@ const castigoTrueno: Build = (g, u, c, D) => {
       const a = Math.PI / 2 + (j / Math.max(1, bolts - 1) - 0.5) * 2.6 + (g.r(j) - 0.5) * 0.3;
       const end = { x: cx + Math.cos(a) * W * 1.25, y: Math.min(ground, cy + Math.sin(a) * H * 0.9) };
       const pts = zigzag({ x: cx + Math.cos(a) * R * 0.2, y: cy - 0.1 * H + Math.sin(a) * R * 0.12 }, end, 8, 18 * k, frame, j + 3);
-      g.strip(pts, () => 5 * k, THUNDER.halo, 0.3 * on);
-      g.strip(pts, () => 2 * k, THUNDER.pale, on);
+      g.strip(pts, () => 5 * k, P.outer[2], 0.3 * on);
+      g.strip(pts, () => 2 * k, P.core[2], on);
       g.strip(pts, () => 1 * k, '#ffffff', on, false);
     }
   }
   const fl = bell(u, HIT, 0.4);
-  g.dot(cx, cy, R * 0.8 * fl + 1, THUNDER.halo, 0.22 * fl);
+  g.dot(cx, cy, R * 0.8 * fl + 1, P.outer[2], 0.22 * fl);
   g.dot(cx, cy, 12 * k * fl + 1, '#ffffff', 0.85 * fl);
   for (let i = 0; i < 3; i++) {
     const s = span(u, HIT + i * 0.07, 0.62 + i * 0.1);
     if (s <= 0 || s >= 1) continue;
     const r = R * (0.35 + 1.1 * easeOut(s));
-    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, 0, 0.7, THUNDER.rim, 0.9 * (1 - s));
-    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, Math.PI, 0.7, THUNDER.rim, 0.9 * (1 - s));
+    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, 0, 0.7, P.outer[1], 0.9 * (1 - s));
+    g.arc(cx, cy, r, 5 * k * (1 - s) + 1, Math.PI, 0.7, P.outer[1], 0.9 * (1 - s));
   }
   const s = span(u, HIT, 0.7);
-  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + 0.8 * s), W * 0.09 * (0.3 + 0.8 * s) + 2, 4 * k, THUNDER.halo, 1 - s);
+  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + 0.8 * s), W * 0.09 * (0.3 + 0.8 * s) + 2, 4 * k, P.outer[0], 1 - s);
   const cr = span(u, 0.3, 0.36) * (1 - span(u, 0.7, 0.9));
   if (cr > 0) for (let j = 0; j < g.n(3); j++) {
     const a0 = { x: cx + (hash01(frame, j + 40) - 0.5) * W * 0.8, y: cy + (hash01(frame, j + 50) - 0.5) * H * 0.8 };
     const a1 = { x: a0.x + (hash01(frame, j + 60) - 0.5) * 40 * k, y: a0.y + (hash01(frame, j + 70) - 0.5) * 40 * k };
-    g.strip(zigzag(a0, a1, 4, 7 * k, frame, j + 30), () => 1.2 * k, THUNDER.rim, 0.8 * cr, false);
+    g.strip(zigzag(a0, a1, 4, 7 * k, frame, j + 30), () => 1.2 * k, P.outer[1], 0.8 * cr, false);
   }
   const m = g.n(16);
   for (let i = 0; i < m; i++) {
     const q = span(u, HIT + 0.05 * g.r(i + 80), 0.55 + 0.2 * g.r(i + 80));
     if (q <= 0 || q >= 1) continue;
     const a = g.r(i + 90) * TAU, d = easeOut(q) * R * (0.7 + 0.7 * g.r(i + 95));
-    g.spark(cx + Math.cos(a) * d, cy + Math.sin(a) * d, 10 * k, a, i % 2 ? THUNDER.rim : '#ffffff', 1 - q);
+    g.spark(cx + Math.cos(a) * d, cy + Math.sin(a) * d, 10 * k, a, P.ember[i % 3], 1 - q);
   }
 };
 
-/** Blinding Smite: a white flash bursts on the blow with a lens streak and spokes,
- *  then little stars reel round the dazzled enemy's head. */
+/** Blinding Smite: a silver-white flash bursts on the blow with a lens streak and
+ *  spokes, then little stars reel round the dazzled enemy's head. */
 const castigoCegador: Build = (g, u, c) => {
   const { b, cx, cy, R, k, W, H } = geo(c);
-  const HIT = 0.14;
+  const P = flamesOf('cegador'), HIT = 0.14;
   const pre = span(u, 0, HIT);
   if (u < HIT) { g.dot(cx, cy, 8 * k * pre + 0.5, '#ffffff', pre); return; }
   const fl = 1 - span(u, HIT, 0.5);
-  g.dot(cx, cy, R * 1.4 * fl + 1, BLIND.halo, 0.35 * fl);
+  g.dot(cx, cy, R * 1.4 * fl + 1, P.outer[1], 0.35 * fl);
   g.dot(cx, cy, R * 0.5 * fl + 1, '#ffffff', 0.95 * fl);
   const st = bell(u, HIT, 0.55);
   g.seg(cx - W * 1.3 * st, cy, cx + W * 1.3 * st, cy, 4 * k, '#ffffff', 0.9 * st, 1);
-  g.seg(cx - W * 0.7 * st, cy, cx + W * 0.7 * st, cy, 10 * k, BLIND.deep, 0.35 * st, 1);
+  g.seg(cx - W * 0.7 * st, cy, cx + W * 0.7 * st, cy, 10 * k, P.outer[0], 0.35 * st, 1);
   for (let i = 0; i < 14; i++) {
     const a = (i / 14) * TAU + u, L = R * (0.9 + 0.5 * (i % 2)) * st;
-    g.beam(cx, cy, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 5 * k, '#ffffff', 0.4 * st);
+    g.beam(cx, cy, cx + Math.cos(a) * L, cy + Math.sin(a) * L, 5 * k, P.core[i % 3], 0.4 * st);
   }
   const s = span(u, HIT, 0.55);
-  if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + s), R * (0.3 + s), 3 * k, BLIND.deep, 1 - s);
+  if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + s), R * (0.3 + s), 3 * k, P.outer[2], 1 - s);
   // dazed: stars reel round the head
   const dz = span(u, 0.35, 0.45) * (1 - span(u, 0.85, 1)), hy = b.y + 0.12 * H;
   const n = g.n(5);
   for (let i = 0; i < n; i++) {
     const a = u * 11 + (i / n) * TAU, depth = Math.sin(a);
-    g.star(cx + Math.cos(a) * W * 0.3, hy + depth * W * 0.07, (7 + 3 * depth) * k, i % 2 ? '#fff6c8' : '#ffffff', dz * (depth > -0.3 ? 1 : 0.5), a);
+    g.star(cx + Math.cos(a) * W * 0.3, hy + depth * W * 0.07, (7 + 3 * depth) * k, i % 2 ? P.ember[1] : '#ffffff', dz * (depth > -0.3 ? 1 : 0.5), a);
   }
   const m = g.n(12);
   for (let i = 0; i < m; i++) {
     const tw = bell(u, HIT + 0.5 * g.r(i), HIT + 0.3 + 0.5 * g.r(i));
-    g.dot(cx + (g.r(i + 20) - 0.5) * W * 1.6, cy + (g.r(i + 30) - 0.5) * H * 1.2, 2.2 * k, '#ffffff', tw);
+    g.dot(cx + (g.r(i + 20) - 0.5) * W * 1.6, cy + (g.r(i + 30) - 0.5) * H * 1.2, 2.2 * k, P.ember[i % 3], tw);
   }
 };
 
-/** Searing Smite: the blow explodes in golden-orange fire, flaming gobs splash out
+/** Searing Smite: the blow explodes in orange-red fire, flaming gobs splash out
  *  onto the ground around the enemy and a ring of fire spreads from its feet. */
 const castigoFuego: Build = (g, u, c, D) => {
   const { cx, cy, R, k, W, H, ground } = geo(c);
-  const HIT = 0.15, cols = ['#fff1c9', '#ffd35a', '#ffb347', '#ff7a2a'];
+  const P = flamesOf('fuego'), HIT = 0.15, cols = [P.core[2], P.core[1], P.outer[2], P.outer[0]];
   const pre = span(u, 0, HIT);
-  if (u < HIT) { g.dot(cx, cy, 14 * k * pre + 1, '#ffb347', 0.8 * pre); return; }
+  if (u < HIT) { g.dot(cx, cy, 14 * k * pre + 1, P.ember[0], 0.8 * pre); return; }
   const fl = 1 - span(u, HIT, 0.5);
-  g.dot(cx, cy, R * 0.95 * fl + 1, SMITE_FIRE.halo, 0.4 * fl);
-  g.dot(cx, cy, R * 0.4 * fl + 1, '#fff1c9', 0.9 * fl);
+  g.dot(cx, cy, R * 0.95 * fl + 1, P.outer[0], 0.4 * fl);
+  g.dot(cx, cy, R * 0.4 * fl + 1, P.core[2], 0.9 * fl);
   const burn = span(u, HIT, 0.25) * (1 - span(u, 0.7, 0.95));
   const t = g.n(6);
   for (let i = 0; i < t; i++) {
@@ -1528,8 +1593,8 @@ const castigoFuego: Build = (g, u, c, D) => {
   const s = span(u, HIT, 0.85);
   if (s > 0 && s < 1) {
     const rx = W * (0.3 + 1.4 * easeOut(s));
-    g.ring(cx, ground, rx, rx * 0.2 + 2, 5 * k * (1 - s) + 1.5, SMITE_FIRE.halo, 1 - s);
-    g.ring(cx, ground, rx * 0.92, rx * 0.18 + 2, 2 * k, '#ffd35a', 0.8 * (1 - s));
+    g.ring(cx, ground, rx, rx * 0.2 + 2, 5 * k * (1 - s) + 1.5, P.outer[0], 1 - s);
+    g.ring(cx, ground, rx * 0.92, rx * 0.18 + 2, 2 * k, P.core[1], 0.8 * (1 - s));
   }
   // splashes: flaming gobs arc out and land on the ground around it
   const G = 1400 * k, m = g.n(14);
@@ -1538,34 +1603,33 @@ const castigoFuego: Build = (g, u, c, D) => {
     const tau = (u - HIT) * D * 0.9, land = (-vy + Math.sqrt(vy * vy + 2 * G * (ground - cy))) / G;
     if (tau < land) {
       const p = fly(cx, cy, vx, vy, tau, G);
-      g.drop(p.x, p.y, (4 + 3 * g.r(i + 40)) * k, dropAngle(vx, vy + G * tau), i % 3 ? '#ffb347' : '#ffd35a', 1);
+      g.drop(p.x, p.y, (4 + 3 * g.r(i + 40)) * k, dropAngle(vx, vy + G * tau), i % 3 ? P.outer[2] : P.ember[0], 1);
     } else {
       const q = span(tau, land, land + 0.35);
       if (q >= 1) continue;
-      const lx = cx + vx * land;
-      tongue(g, lx, ground, 22 * k * Math.sin(Math.PI * q), 9 * k, u * D, i + 20, cols.slice(1), 1 - q * 0.5);
+      tongue(g, cx + vx * land, ground, 22 * k * Math.sin(Math.PI * q), 9 * k, u * D, i + 20, cols.slice(1), 1 - q * 0.5);
     }
   }
   const e = g.n(12);
   for (let i = 0; i < e; i++) {
     const q = span(u, HIT + 0.4 * g.r(i + 60), 0.7 + 0.3 * g.r(i + 60));
-    if (q > 0 && q < 1) g.spark(cx + (g.r(i + 70) - 0.5) * W * 1.4, ground - q * H * 1.3, 6 * k, -Math.PI / 2, '#ffd35a', 1 - q);
+    if (q > 0 && q < 1) g.spark(cx + (g.r(i + 70) - 0.5) * W * 1.4, ground - q * H * 1.3, 6 * k, -Math.PI / 2, P.ember[i % 3], 1 - q);
   }
 };
 
-/** Radiant Smite: a soft golden bloom on the enemy, then a ribbon of light flows
+/** Radiant Smite: a soft peach bloom on the enemy, then a ribbon of light flows
  *  back to the paladin and gathers into a shield before him. */
 const castigoResplandor: Build = (g, u, c) => {
   const { cx, cy, R, k, W, H, dir } = geo(c);
-  const HIT = 0.15;
+  const P = flamesOf('resplandor'), HIT = 0.15;
   const pre = span(u, 0, HIT);
-  if (u < HIT) { g.dot(cx, cy, 12 * k * pre + 1, RADIANT.pale, pre); return; }
+  if (u < HIT) { g.dot(cx, cy, 12 * k * pre + 1, P.core[1], pre); return; }
   const fl = bell(u, HIT, 0.55);
-  g.dot(cx, cy, R * 1.1 * fl + 1, RADIANT.halo, 0.3 * fl);
+  g.dot(cx, cy, R * 1.1 * fl + 1, P.outer[1], 0.3 * fl);
   g.dot(cx, cy, R * 0.35 * fl + 1, '#ffffff', 0.8 * fl);
   for (let i = 0; i < 3; i++) {
     const s = span(u, HIT + i * 0.1, 0.6 + i * 0.1);
-    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + 0.9 * s), R * (0.3 + 0.9 * s), 3 * k, i % 2 ? RADIANT.rim : RADIANT.pale, 0.8 * Math.sin(Math.PI * s));
+    if (s > 0 && s < 1) g.ring(cx, cy, R * (0.3 + 0.9 * s), R * (0.3 + 0.9 * s), 3 * k, i % 2 ? P.outer[0] : P.outer[2], 0.8 * Math.sin(Math.PI * s));
   }
   const src = c.from;
   if (src && Math.hypot(src.x - cx, src.y - cy) > 60) {
@@ -1578,16 +1642,16 @@ const castigoResplandor: Build = (g, u, c) => {
       const x = (1 - e) * (1 - e) * cx + 2 * (1 - e) * e * mid.x + e * e * src.x;
       const y = (1 - e) * (1 - e) * cy + 2 * (1 - e) * e * mid.y + e * e * src.y + wob;
       if (i % 3 === 0) g.star(x, y, 8 * k, '#ffffff', Math.sin(Math.PI * q));
-      else g.dot(x, y, 2.6 * k, i % 2 ? RADIANT.rim : RADIANT.pale, Math.sin(Math.PI * q));
+      else g.dot(x, y, 2.6 * k, i % 2 ? P.outer[0] : P.ember[0], Math.sin(Math.PI * q));
     }
     const sh = span(u, 0.6, 0.72) * (1 - span(u, 0.9, 1)), sx = src.x + dir * 38 * k;
-    g.shield(sx, src.y, 46 * k, 0.6, RADIANT.rim, 0.75 * sh);
+    g.shield(sx, src.y, 46 * k, 0.6, P.outer[0], 0.75 * sh);
     g.shield(sx, src.y, 46 * k, 0.6, '#ffffff', 0.5 * bell(u, 0.62, 0.8));
   } else {
     const n = g.n(16);
     for (let i = 0; i < n; i++) {
       const q = span(u, HIT + 0.4 * g.r(i), 0.6 + 0.4 * g.r(i));
-      if (q > 0 && q < 1) g.dot(cx + (g.r(i + 10) - 0.5) * W, cy - q * H * 0.9, 2.4 * k, RADIANT.pale, 1 - q);
+      if (q > 0 && q < 1) g.dot(cx + (g.r(i + 10) - 0.5) * W, cy - q * H * 0.9, 2.4 * k, P.ember[i % 3], 1 - q);
     }
   }
 };
@@ -1676,7 +1740,8 @@ export const SPELLS: Record<string, SpellDef> = {
   cargaFuego: { duration: 0.9, phases: [0.3, 0.72], anchor: 'self', build: cargaFuego },
   cargaResplandor: { duration: 1.0, phases: [0.3, 0.72], anchor: 'self', build: cargaResplandor },
   cargaDestierro: { duration: 1.0, phases: [0.3, 0.72], anchor: 'self', build: cargaDestierro },
-  castigoDivino: { duration: 0.85, phases: [0.16, 0.6], anchor: 'target', build: castigoDivino },
+  castigoGenerico: { duration: 0.85, phases: [0.14, 0.6], anchor: 'target', build: castigoGenerico },
+  castigoDivino: { duration: 0.9, phases: [0.16, 0.6], anchor: 'target', build: castigoDivino },
   castigoTrueno: { duration: 0.85, phases: [0.14, 0.6], anchor: 'target', build: castigoTrueno },
   castigoCegador: { duration: 0.9, phases: [0.14, 0.55], anchor: 'target', build: castigoCegador },
   castigoFuego: { duration: 0.95, phases: [0.15, 0.6], anchor: 'target', build: castigoFuego },

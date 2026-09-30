@@ -209,7 +209,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   explosionMaldita: 'Tu Explosión Sobrenatural inflige esa cantidad de daño adicional por cada maldición en tu mazo, tu mano y tu descarte.',
   bloqueoPorMaldicion: 'Al final de tu turno ganas esa cantidad de bloqueo por cada maldición en tu mano.',
   fervor: 'Ganas 1 cada vez que juegas un Golpe o una Defensa. Los Castigos lo consumen entero para potenciarse.',
-  castigo: 'Castigo preparado: se descarga una vez, en el primer golpe de tu próxima carta de ataque. Solo puede haber uno a la vez.',
+  castigo: 'Castigo preparado: se descarga en el primer golpe de tu próxima carta de ataque sobre cada enemigo que alcance. Solo puede haber uno a la vez.',
   golpesMas: 'Tus Golpes (y Golpes Sagrados) infligen esa cantidad de daño más.',
   defensasMas: 'Tus Defensas (Defender y Defensa Sagrada) dan esa cantidad de bloqueo más.',
   bastion: 'Al inicio de tu turno conservas hasta esa cantidad de tu bloqueo.',
