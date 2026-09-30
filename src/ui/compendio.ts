@@ -2,6 +2,7 @@ import type { CartaDef } from '../core/types.ts';
 import { BASICAS, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, GOLPE_SAGRADO, DEFENSA_SAGRADA, NEUTRALES_ESPECIALES, MALDICIONES, defDe } from '../core/cartas.ts';
 import { renderCarta, cuadroPalabrasClave } from './carta.ts';
 import { el } from './util.ts';
+import { audio } from '../fx/audio.ts';
 
 /** Vista en grande de una carta con su cuadro de palabras clave. */
 function ampliarEnGrande(def: CartaDef, mejorada: boolean) {
@@ -15,6 +16,7 @@ function ampliarEnGrande(def: CartaDef, mejorada: boolean) {
   zoom.appendChild(el('p', 'zoom-ayuda', 'Toca para cerrar'));
   zoom.addEventListener('pointerdown', () => zoom.remove());
   document.body.appendChild(zoom);
+  audio.sfx('verCarta');
 }
 
 const CLAVE_COMENTARIOS = 'mazmorra-comentarios';

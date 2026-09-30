@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790781935.3638074,
-    "ast_hash": "04ba8d89361dbfbc063919d8e9d05c3f",
+    "mtime": 1790784707.9854202,
+    "ast_hash": "653fea684075727ef18693cf7132648b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790781903.6331537,
-    "ast_hash": "c31856c2a371ca06c3e580d565b8ebcf",
+    "mtime": 1790784365.8417904,
+    "ast_hash": "922c68dc5171525f42d140eb54104b13",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1790780770.3671997,
-    "ast_hash": "ba0011acb825702025d8e594b581500b",
+    "mtime": 1790784424.473851,
+    "ast_hash": "d20af73dc924432db6d6a4cbc6a55d1f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
@@ -115,13 +115,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790765609.6493022,
-    "ast_hash": "6de3581e3132ab84863e0a1c10f23254",
+    "mtime": 1790784424.475826,
+    "ast_hash": "dbfdb5b3101ee0d370905174e1e7b6be",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
-    "mtime": 1790720691.4235744,
-    "ast_hash": "0bc057f5b06bebbdc6487798047496af",
+    "mtime": 1790784424.4771326,
+    "ast_hash": "7feb7b59bbfc3f152f1751326534ea11",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/evento.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790781935.3634806,
-    "ast_hash": "b8ba4509e3715b65ca44a1c095ce2a88",
+    "mtime": 1790784707.985065,
+    "ast_hash": "0e80242c6bc44e3068b035a2474250d8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -1355,8 +1355,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/make_sfx.py": {
-    "mtime": 1790719257.748308,
-    "ast_hash": "796e88fef4de6d1ac1dbd49c9bf26b40",
+    "mtime": 1790784546.2886264,
+    "ast_hash": "4ea9fec8fdebfdbea688621ef9042412",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/sfxlib.py": {
@@ -1365,8 +1365,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/sfx-bank.ts": {
-    "mtime": 1790719006.9150026,
-    "ast_hash": "bc7549ceace5584ff3b50335ad68fa99",
+    "mtime": 1790784572.1592815,
+    "ast_hash": "5c0579cb5a456e3547986a5d4ff390ef",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/wing.ts": {
@@ -2005,8 +2005,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-fly.ts": {
-    "mtime": 1790459424.8785224,
-    "ast_hash": "82bcc41ccb51d33d81f4c415f8d7012c",
+    "mtime": 1790784424.474924,
+    "ast_hash": "487e31c249877d1777dc446c273f2ae7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-motion.ts": {
@@ -3197,6 +3197,81 @@
   "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/rayoSagrado.mp3": {
     "mtime": 1790719230.535094,
     "ast_hash": "679b07d7272bc7141e3f0e89b9ffcd7d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/sonido-interfaz.ts": {
+    "mtime": 1790784424.4503663,
+    "ast_hash": "ba334c42c46f2bfec8ca45fc9a802433",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/barajar.mp3": {
+    "mtime": 1790784561.4735398,
+    "ast_hash": "6a4d9027d656ac8c10b5d75c02160ea9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/click-1.mp3": {
+    "mtime": 1790784560.9296076,
+    "ast_hash": "6408fc2b8ed9b9bab138dac343eab55b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/click-2.mp3": {
+    "mtime": 1790784560.9594126,
+    "ast_hash": "e9e9946bca23a381897aca56eca9c0cf",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/click-3.mp3": {
+    "mtime": 1790784560.985596,
+    "ast_hash": "4714bd2ed3cad2e0f0725c4363c26e48",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/descartar-1.mp3": {
+    "mtime": 1790784561.3455298,
+    "ast_hash": "06762387a1c182282a4003da4920f2ac",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/descartar-2.mp3": {
+    "mtime": 1790784561.405411,
+    "ast_hash": "25874be98d74a9a1bd0528fc2dee2fa8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/jugarCarta-1.mp3": {
+    "mtime": 1790784561.2059472,
+    "ast_hash": "d567caeef1a0724031942bb249bf8ce4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/jugarCarta-2.mp3": {
+    "mtime": 1790784561.2479155,
+    "ast_hash": "7a2660c27f6b0df983893dd9ef6ca955",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/jugarCarta-3.mp3": {
+    "mtime": 1790784561.2899013,
+    "ast_hash": "9d9c52b0900411f3b06a0e4d6c59e6f8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/robar-1.mp3": {
+    "mtime": 1790784561.0122201,
+    "ast_hash": "8f5028c0b753f8401fe0c2422658c65e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/robar-2.mp3": {
+    "mtime": 1790784561.0421865,
+    "ast_hash": "845bccdc83eaf2f6f836b05ccb582959",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/robar-3.mp3": {
+    "mtime": 1790784561.0717442,
+    "ast_hash": "cb20d68c624ed9b5676b81ea185e5ddc",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/verCarta-1.mp3": {
+    "mtime": 1790784561.1170237,
+    "ast_hash": "6175a37241b23c89d5f9b2690bd90b9d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/verCarta-2.mp3": {
+    "mtime": 1790784561.164612,
+    "ast_hash": "f163f0a828d6c9a72138b04623d40488",
     "semantic_hash": ""
   }
 }

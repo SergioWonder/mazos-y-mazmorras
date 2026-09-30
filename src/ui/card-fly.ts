@@ -9,6 +9,7 @@ import {
   centerOf, discardFrames, distance, drawFrames, playDuration, playFrames, shuffleCount, shuffleFrames,
   type MotionFrame, type Point,
 } from './card-motion.ts';
+import { audio } from '../fx/audio.ts';
 
 /** Hand states that must not travel with the clone. */
 const HAND_CLASSES = ['seleccionada', 'pendiente', 'en-cola', 'en-curso', 'sin-energia', 'arrastrando', 'carta-llegando'];
@@ -106,6 +107,9 @@ export function flyDraw(card: HTMLElement, pile: HTMLElement, delay: number, onL
     onLand();
     return;
   }
+  // the card slides off its pile as it takes off
+  if (delay > 0) setTimeout(() => audio.sfx('robar'), delay);
+  else audio.sfx('robar');
   const reduced = reducedMotion();
   const p = pose(card);
   const wrap = document.createElement('div');
@@ -126,6 +130,7 @@ export function flyDraw(card: HTMLElement, pile: HTMLElement, delay: number, onL
 /** A card left in hand drops into the discard pile (`card` is its old element, still on screen). */
 export function flyDiscard(card: HTMLElement, pile: HTMLElement, index: number): void {
   if (!card.isConnected) return;
+  if (index === 0) audio.sfx('descartar'); // one sweep for the whole batch
   const reduced = reducedMotion();
   if (reduced) return; // the pile counter says it; no motion needed
   const p = pose(card);
@@ -139,6 +144,7 @@ export function flyDiscard(card: HTMLElement, pile: HTMLElement, index: number):
  * Returns how long it lasts (0 when nothing is shown).
  */
 export function flyShuffle(discardPile: HTMLElement, drawPile: HTMLElement, cards: number): number {
+  if (cards > 0) audio.sfx('barajar');
   const n = shuffleCount(cards, reducedMotion());
   if (n === 0) return 0;
   const from = pileCenter(discardPile);

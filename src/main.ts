@@ -26,6 +26,7 @@ import { pantallaFin } from './ui/fin.ts';
 import { pantallaFinalVerdadero } from './ui/final-verdadero.ts';
 import { iniciarTooltips, anuncio } from './ui/util.ts';
 import { crearMenuAjustes } from './ui/menu-ajustes.ts';
+import { activarSonidoInterfaz } from './ui/sonido-interfaz.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
@@ -34,6 +35,8 @@ iniciarActualizaciones();
 
 // Settings menu (sound, volume, performance) at the top right of every screen
 crearMenuAjustes();
+// Soft click on every button and toggle
+activarSonidoInterfaz();
 // Audio: al primer gesto, contexto + música del menú
 const arrancarAudio = () => {
   audio.desbloquear();

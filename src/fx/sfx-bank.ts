@@ -20,10 +20,14 @@ export const SFX_NAMES: readonly string[] = [
   'cargaDivina', 'cargaTrueno', 'cargaCegadora', 'cargaFuego', 'cargaResplandor', 'cargaDestierro',
   // flourish layered on top when a rare card is played
   'rara',
+  // interface: cards drawn, zoomed, played, discarded, shuffled and button clicks
+  'click', 'robar', 'verCarta', 'jugarCarta', 'descartar', 'barajar',
 ];
 
 /** Sounds heard many times per fight: they ship several variations each. */
-export const FREQUENT_SFX: readonly string[] = ['tajo', 'impacto', 'golpeEnemigo', 'carta', 'bloqueo', 'martillo'];
+export const FREQUENT_SFX: readonly string[] = [
+  'tajo', 'impacto', 'golpeEnemigo', 'carta', 'bloqueo', 'martillo', 'click', 'robar', 'jugarCarta',
+];
 
 /** Synthesised recipe that stands in for a sound without one of its own while its MP3
  *  loads (or if it fails): the closest engine sound. */
@@ -33,6 +37,7 @@ export const SFX_RECIPE_ALIAS: Readonly<Record<string, string>> = {
   castigoResplandor: 'divino', castigoDestierro: 'furiaPerdida',
   cargaDivina: 'estado', cargaTrueno: 'estado', cargaCegadora: 'estado', cargaFuego: 'estado',
   cargaResplandor: 'estado', cargaDestierro: 'estado',
+  click: 'ui', robar: 'carta', verCarta: 'carta', jugarCarta: 'carta', descartar: 'carta', barajar: 'carta',
 };
 
 /** Sound used for a name that is not in the table. */

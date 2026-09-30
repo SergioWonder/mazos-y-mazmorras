@@ -711,7 +711,109 @@ def ui(v):
     return finish(mix(wood, 0.3 * click(0.003, 3000, r)), -12.0)
 
 
-# name → (generator, variations, target loudness in dB as measured by `loudness`)
+def tick(freqs, taus, amps):
+    """Unit impulse rung through a few short resonators: the knock of stiff paper or wood."""
+    dur = max(taus) * 7
+    imp = np.zeros(n_of(dur))
+    imp[0] = 1
+    return sum(a * resonate(imp, f, t) for f, t, a in zip(freqs, taus, amps))
+
+
+def paper_slide(dur, f_from, f_peak, f_to, r, peak_at=0.4, q=1.3, grit=0.5):
+    """Card sliding over card: swept pink noise with the grainy stick-slip of friction."""
+    centre = interp_curve(dur, [(0, f_from), (dur * peak_at, f_peak), (dur, f_to)])
+    rub = sweep_bandpass(noise(dur, 'pink', r), centre, q)
+    stick = 1 + grit * lowpass(r.standard_normal(n_of(dur)), 180) * 5
+    return rub * np.clip(stick, 0.2, None) * env_swell(dur, dur * peak_at, 1.5, 1.6)
+
+
+def ui_click(v):
+    # soft tap of a fingertip on a wooden, parchment-covered button: a low woody knock,
+    # lower and duller than `ui`, with a faint paper tick on top
+    r = rng(4700 + v)
+    base = (520, 600, 470)[v] * r.uniform(0.98, 1.02)
+    wood = modal([base, base * 2.43, base * 4.1], [0.016, 0.007, 0.003], [1, 0.35, 0.1], 0.07, r)
+    paper = 0.18 * click(0.004, 1900 + 200 * v, r)
+    return finish(mix(wood, paper), -12.0, top=5000, fout=0.015)
+
+
+def robar(v):
+    # a card slides off the deck: a short, light rub that ends in a small flick. Its energy
+    # sits in the first ~100 ms so five draws in a row stay distinct
+    r = rng(4800 + v)
+    dur = 0.12 + 0.015 * v
+    slide = paper_slide(dur, 1300, 2700 + 250 * v, 1900, r, 0.45, 1.3, 0.45)
+    flick = tick([2100 + 150 * v, 950, 420], [0.0018, 0.0025, 0.003], [0.5, 0.45, 0.25])
+    out = place(slide, flick * 0.3, dur * 0.62)
+    return finish(out, -10.0, top=6000, fout=0.03)
+
+
+def ver_carta(v):
+    # a card is lifted and turned towards the player: a soft breath of air as it rises,
+    # a gentle rub of the fingers and a faint paper flex at the top of the lift
+    r = rng(4900 + v)
+    dur = 0.22 + 0.03 * v
+    air = whoosh(dur, 350, 1100 + 150 * v, 700, 1.0, 0.45, r) * 0.9
+    rub = paper_slide(0.12, 1500, 2300, 1700, r, 0.4, 1.4, 0.4) * 0.35
+    flex = tick([1500 + 120 * v, 700], [0.0025, 0.004], [0.4, 0.5]) * 0.15
+    out = place(air, rub, 0.02)
+    out = place(out, flex, dur * 0.5)
+    return finish(reverb(out, 0.06, 0.2, 0.04), -10.0, top=5500, fout=0.05)
+
+
+def jugar_carta(v):
+    # a card is flicked out of the hand: a crisp cardboard snap with a little body,
+    # then a short whoosh that is gone before the blow or spell that follows
+    r = rng(5000 + v)
+    dur = 0.2 + 0.025 * v
+    snap = tick([2300 + 180 * v, 1250 + 60 * v, 520], [0.0022, 0.003, 0.004], [0.55, 0.6, 0.4])
+    body = thud(200 - 15 * v, 130, 0.05, 0.01, 0.16, 500, 0.4, r, knock=0.5, knock_fc=650)
+    swoosh = whoosh(dur, 600, 2000 + 200 * v, 1100, 1.4, 0.35, r) * 0.55
+    out = place(swoosh, mix(snap * 0.28, body), 0.008)
+    return finish(reverb(out, 0.06, 0.18, 0.04), -8.0, top=6500, fout=0.04)
+
+
+def descartar(v):
+    # the whole hand is swept onto the discard pile: several cards brushing past each
+    # other in a quick staggered cascade, settling with a soft papery pat
+    r = rng(5100 + v)
+    out = np.zeros(n_of(0.36))
+    at = 0.0
+    for k in range(5 + v):
+        d = r.uniform(0.09, 0.13)
+        lo = r.uniform(1000, 1400)
+        slide = paper_slide(d, lo, r.uniform(2200, 3000), lo * 1.4, r, r.uniform(0.35, 0.5), 1.2, 0.5)
+        out = place(out, slide * r.uniform(0.55, 1.0) * (1 - 0.06 * k), at)
+        at += r.uniform(0.024, 0.034)
+    pat = mix(thud(230, 150, 0.08, 0.02, 0.45, 700, 0.6, r, knock=0.5, knock_fc=700),
+              0.2 * tick([1700, 800], [0.002, 0.003], [0.5, 0.5]))
+    out = place(out, pat, at + 0.02)
+    return finish(reverb(out, 0.08, 0.2, 0.05), -9.0, top=6000, fout=0.05)
+
+
+def barajar(v):
+    # a short riffle shuffle: the cards of two halves slap together in a fast burst of
+    # ticks that speeds up and fades, then the deck is squared with a soft brush and tap
+    r = rng(5200 + v)
+    dur = 0.3
+    out = np.zeros(n_of(0.45))
+    t = 0.0
+    while t < dur:
+        u = t / dur
+        f = r.uniform(1600, 2600) * (1 + 0.15 * u)
+        grain = tick([f, f * 0.52], [0.0012, 0.0018], [0.6, 0.4])
+        amp = np.sin(np.pi * min(1.0, (u + 0.08) / 1.0)) ** 0.7 * r.uniform(0.45, 1.0)
+        out = place(out, grain * amp, t)
+        t += r.uniform(0.006, 0.011) * (1.25 - 0.5 * u)
+    flutter = paper_slide(dur, 1400, 2400, 1800, r, 0.5, 1.0, 0.8) * 0.35
+    out = place(out, flutter, 0.0)
+    square = mix(paper_slide(0.09, 1100, 1900, 1300, r, 0.4, 1.2, 0.4) * 0.5,
+                 place(np.zeros(1), thud(210, 140, 0.07, 0.018, 0.4, 700, 0.6, r, knock=0.45, knock_fc=650), 0.05))
+    out = place(out, square, dur + 0.01)
+    return finish(reverb(out, 0.08, 0.2, 0.05), -9.0, top=6000, fout=0.05)
+
+
+# name →(generator, variations, target loudness in dB as measured by `loudness`)
 SOUNDS = {
     'tajo': (tajo, 3, -16), 'impacto': (impacto, 3, -16), 'golpeEnemigo': (golpe_enemigo, 3, -16),
     'bloqueo': (bloqueo, 3, -18), 'carta': (carta, 3, -27),
@@ -731,6 +833,9 @@ SOUNDS = {
     'castigoResplandor': (castigo_resplandor, 1, -17), 'castigoDestierro': (castigo_destierro, 1, -17),
     'cargaDivina': (carga_divina, 1, -22), 'cargaTrueno': (carga_trueno, 1, -22), 'cargaCegadora': (carga_cegadora, 1, -23),
     'cargaFuego': (carga_fuego, 1, -22), 'cargaResplandor': (carga_resplandor, 1, -23), 'cargaDestierro': (carga_destierro, 1, -22),
+    # interface: subtle, heard on every button and card move
+    'click': (ui_click, 3, -31), 'robar': (robar, 3, -30), 'verCarta': (ver_carta, 2, -30),
+    'jugarCarta': (jugar_carta, 3, -25), 'descartar': (descartar, 2, -27), 'barajar': (barajar, 1, -27),
 }
 
 CEILING_DB = -3.6  # leaves room for MP3 encoding overshoot (decoded peaks stay under -3 dBFS)

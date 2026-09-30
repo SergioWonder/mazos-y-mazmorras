@@ -1104,7 +1104,7 @@ export function pantallaCombate(
         const r = grande.getBoundingClientRect();
         await flyShowcase(grande, destinoLanzamiento(def, objetivo, { x: r.left + r.width / 2, y: r.top + r.height / 2 }));
       } else if (desde) {
-        audio.sfx('carta');
+        audio.sfx('jugarCarta');
         const r = desde.getBoundingClientRect();
         const origen = suelta?.center ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 };
         await flyPlay(desde, destinoLanzamiento(def, objetivo, origen), { from: suelta, impactMs: impactoMs });
@@ -1155,6 +1155,7 @@ export function pantallaCombate(
       zoom.appendChild(el('p', 'zoom-ayuda', 'Arrastra la carta para jugarla · toca para cerrar'));
       zoom.addEventListener('pointerdown', () => zoom.remove());
       document.body.appendChild(zoom);
+      audio.sfx('verCarta');
     }
 
     function jugarSobre(idxEnemigo: number) {

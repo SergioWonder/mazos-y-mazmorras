@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.3.1';
+export const VERSION = '7.4.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.4.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '🃏 Las cartas suenan: un roce al robarlas, un chasquido al jugarlas, un barrido al descartar la mano y un riffle al barajar.',
+      '🔍 Ampliar una carta para leerla (en combate o en el compendio) tiene su propio sonido suave.',
+      '🖱️ Clic suave de madera en todos los botones e interruptores de la interfaz.',
+    ],
+  },
   {
     version: '7.3.1',
     fecha: '2026-09-30',

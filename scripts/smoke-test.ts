@@ -7574,5 +7574,30 @@ console.log('\n📜 Efecto del Conjuro Prodigioso');
   check(prodigiousPool('basic').includes(prodigiousSpell(12, () => 0.999)), 'Conjuro Prodigioso: el azar nunca se sale del repertorio');
 }
 
+// ── Interface sounds: cards drawn, zoomed, played, discarded and shuffled; soft button clicks ──
+console.log('\n🖱️ Sonidos de interfaz');
+{
+  const fs = await import('node:fs');
+  const bank = await import('../src/fx/sfx-bank.ts');
+  const leer = (f: string) => (fs.existsSync(new URL(`../src/${f}`, import.meta.url)) ? fs.readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8') : '');
+  const nuevos = ['click', 'robar', 'verCarta', 'jugarCarta', 'descartar', 'barajar'];
+  const faltan = nuevos.filter((n) => !bank.SFX_NAMES.includes(n));
+  check(faltan.length === 0, `la tabla de sonidos tiene los de interfaz ${faltan.join(', ')}`);
+  check(['click', 'robar', 'jugarCarta'].every((n) => bank.FREQUENT_SFX.includes(n)), 'clic, robar y jugar carta alternan variaciones (se oyen muchísimo)');
+  check(nuevos.every((n) => ['carta', 'ui'].includes(bank.SFX_RECIPE_ALIAS[n])), 'mientras cargan, los de interfaz suenan con la receta de carta o de interfaz');
+  const vuelo = leer('ui/card-fly.ts');
+  const trozo = (src: string, desde: string) => src.slice(src.indexOf(desde), src.indexOf('\n}', src.indexOf(desde)));
+  check(/sfx\('robar'/.test(trozo(vuelo, 'export function flyDraw')), 'cada carta robada suena al salir de su pila');
+  check(/sfx\('descartar'/.test(trozo(vuelo, 'export function flyDiscard')), 'descartar la mano suena');
+  check(/sfx\('barajar'/.test(trozo(vuelo, 'export function flyShuffle')), 'barajar el descarte en la pila de robo suena');
+  const combate = leer('ui/combate.ts');
+  check(/sfx\('verCarta'/.test(trozo(combate, 'function ampliarCarta')), 'ampliar una carta en combate suena');
+  check(/sfx\('verCarta'/.test(leer('ui/compendio.ts')), 'ampliar una carta en el compendio suena');
+  check(/sfx\('jugarCarta'/.test(combate) && !/sfx\('carta'\);\s*\n\s*const r = desde\.getBoundingClientRect/.test(combate), 'jugar una carta tiene su propio sonido');
+  const sonidoUi = leer('ui/sonido-interfaz.ts');
+  check(/export function activarSonidoInterfaz/.test(sonidoUi) && /sfx\('click'/.test(sonidoUi), 'hay un clic suave común para los botones de la interfaz');
+  check(/activarSonidoInterfaz\(\)/.test(leer('main.ts')), 'el clic de interfaz se activa al arrancar');
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);
