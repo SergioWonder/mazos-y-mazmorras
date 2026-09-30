@@ -4635,16 +4635,44 @@ console.log('\n🎲 Escena final: el Dungeon Master');
   }
 }
 
-// ── Floating button: music only ──────────────────────────────────────────────
-console.log('\n🎵 Botón de música');
+// ── Settings menu (top right): sound, volume and performance ────────────────
+console.log('\n⚙️ Menú de ajustes');
 {
   const fs = await import('node:fs');
-  const src = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
-  const toggle = /toggleMusica\(\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
-  check(toggle.length > 0 && !/maestro/.test(toggle), 'el botón solo apaga o enciende la música (no el volumen general)');
-  const sfx = /\n  sfx\(nombre: string[^)]*\)\s*\{([\s\S]*?)\n  \}/.exec(src)?.[1] ?? '';
-  check(sfx.length > 0 && !/musicaApagada|silenciado/.test(sfx), 'los efectos de sonido siguen sonando con la música apagada');
-  check(/🎵/.test(src) && !/🔇|🔊/.test(src), 'el botón lleva un icono de música');
+  const A = await import('../src/core/ajustes.ts').catch(() => null);
+  check(!!A, 'existe el módulo de ajustes (core/ajustes.ts)');
+  if (A) {
+    const mem = (datos: Record<string, string> = {}) => ({
+      getItem: (k: string) => (k in datos ? datos[k] : null), setItem: (k: string, v: string) => { datos[k] = v; }, datos,
+    });
+    const d = A.leerAjustes(mem());
+    check(d.musica && d.sonidos && d.volumenMusica === 1 && d.volumenSonidos === 1 && !d.reducirParticulas && !d.resolucionBaja && d.sacudidas && !d.mostrarFps,
+      'por defecto: música y sonidos encendidos a tope, sin recortes de rendimiento y con sacudidas');
+    check(A.leerAjustes(mem({ 'mazmorra-musica-apagada': '1' })).musica === false, 'respeta la música apagada con el botón antiguo');
+    const m = mem();
+    A.guardarAjustes(m, { ...d, sonidos: false, volumenMusica: 0.35, reducirParticulas: true });
+    const r = A.leerAjustes(m);
+    check(!r.sonidos && r.volumenMusica === 0.35 && r.reducirParticulas && r.musica, 'los ajustes se guardan y se recuperan');
+    check(A.leerAjustes(mem({ 'mazmorra-ajustes': '{"volumenSonidos": 7}' })).volumenSonidos === 1, 'los volúmenes se acotan entre 0 y 1');
+    check(A.leerAjustes(mem({ 'mazmorra-ajustes': 'basura' })).musica === true, 'unos ajustes corruptos vuelven a los de por defecto');
+    check(A.gananciaMusica({ ...d, volumenMusica: 0.5 }) === 0.25 && A.gananciaMusica({ ...d, musica: false }) === 0,
+      'la ganancia de la música sigue a su interruptor y a su volumen');
+    check(A.gananciaSfx({ ...d, volumenSonidos: 0.5 }) === 0.45 && A.gananciaSfx({ ...d, sonidos: false }) === 0,
+      'la de los efectos, a los suyos (la música no la toca)');
+  }
+  const src = (f: string) => fs.readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8');
+  check(!/crearBoton\(/.test(src('main.ts')) && !/boton-audio/.test(src('fx/audio.ts')), 'ya no hay botón flotante de música abajo a la derecha');
+  check(/abrirMenuAjustes|crearMenuAjustes/.test(src('main.ts')), 'el menú de ajustes se monta al arrancar');
+  const menu = fs.existsSync(new URL('../src/ui/menu-ajustes.ts', import.meta.url)) ? src('ui/menu-ajustes.ts') : '';
+  for (const k of ['musica', 'sonidos', 'volumenMusica', 'volumenSonidos', 'reducirParticulas', 'resolucionBaja', 'sacudidas', 'mostrarFps']) {
+    check(menu.includes(`'${k}'`), `el menú de ajustes controla «${k}»`);
+  }
+  check(/ajustes\(\)\.sacudidas/.test(src('ui/util.ts')), 'las sacudidas de pantalla se pueden desactivar');
+  check(/menosParticulas\(\)/.test(src('fx/particulas.ts')), 'el motor de efectos reduce partículas si se pide');
+  check(/resolucionBaja/.test(src('ui/puppet-stage.ts')) && /resolucionBaja/.test(src('fx/particulas.ts')), 'la resolución reducida baja el detalle de los lienzos');
+  const css = src('estilos/pantallas.css');
+  const regla = css.slice(css.indexOf('.seleccion-clase {'), css.indexOf('}', css.indexOf('.seleccion-clase {')));
+  check(/grid-template-columns:\s*repeat\(3,/.test(regla), 'las seis clases se reparten en filas iguales de tres');
 }
 
 // ── Ink-drawn campaign map (src/arte/mapa/iconos) ────────────────────────────

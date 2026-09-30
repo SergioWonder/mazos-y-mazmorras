@@ -25,14 +25,16 @@ import { revisarMision, completarMision } from './core/taberna.ts';
 import { pantallaFin } from './ui/fin.ts';
 import { pantallaFinalVerdadero } from './ui/final-verdadero.ts';
 import { iniciarTooltips, anuncio } from './ui/util.ts';
+import { crearMenuAjustes } from './ui/menu-ajustes.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
 avisoInstalacion();
 iniciarActualizaciones();
 
-// Audio: el botón de silencio y, al primer gesto, contexto + música lo-fi
-audio.crearBoton();
+// Settings menu (sound, volume, performance) at the top right of every screen
+crearMenuAjustes();
+// Audio: al primer gesto, contexto + música del menú
 const arrancarAudio = () => {
   audio.desbloquear();
   audio.menu(); // tema del menú principal

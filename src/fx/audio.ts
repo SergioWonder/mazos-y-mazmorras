@@ -1,5 +1,6 @@
 import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
 import { SFX_RECIPE_ALIAS, groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-bank.ts';
+import { ajustes, alCambiarAjustes, gananciaMusica, gananciaSfx, type Ajustes } from '../core/ajustes.ts';
 
 // Audio engine: recorded-style sound effects from `src/audio/sfx/` (synthesised offline
 // by `scripts/sfx/make_sfx.py`, see `fx/sfx-bank.ts`) and the game's original
@@ -9,10 +10,8 @@ import { SFX_RECIPE_ALIAS, groupSfxFiles, pickVariant, playbackJitter, resolveSf
 // is never silent. Everything starts after the player's first gesture, as browsers
 // require, and the mute state is remembered.
 
-// The floating button only switches the music; sound effects always play.
-// The old key muted everything: honour it as "music off" once for returning players.
-const CLAVE_MUSICA = 'mazmorra-musica-apagada';
-const CLAVE_SILENCIO_ANTIGUA = 'mazmorra-audio-silencio';
+// Music and effects each follow their own switch and volume in the settings menu
+// (core/ajustes.ts); switching the music off never silences the effects.
 
 // Hashed URLs of the soundtrack files: a new version of a track gets a new URL, so
 // the service worker's cache-first copy of the old one is never served again.
@@ -157,15 +156,13 @@ const TEMAS: Record<string, TemaChip> = {
   },
 };
 
-/** Normal level of the music bus. */
-const VOLUMEN_MUSICA = 0.5;
 
 class MotorAudio {
   private ctx: AudioContext | null = null;
   private maestro!: GainNode;   // ganancia global (silencio)
   private busSfx!: GainNode;    // bus de efectos
   private busMusica!: GainNode; // bus de música
-  musicaApagada = leerMusicaApagada();
+  get musicaApagada() { return !ajustes().musica; }
 
   private fuente: AudioBufferSourceNode | null = null; // current soundtrack track
   private volPista: GainNode | null = null;
@@ -176,7 +173,7 @@ class MotorAudio {
   private sonando = false;
   private pausada = false; // pausada por estar en segundo plano
   private visibilidadEnganchada = false;
-  private boton: HTMLButtonElement | null = null;
+  private oyendoAjustes = false;
   private sfxBuffers = new Map<string, AudioBuffer[]>(); // decoded effect variations
   private sfxCargando = false;
   private ultimaVariante = new Map<string, number>();
@@ -191,12 +188,13 @@ class MotorAudio {
       this.maestro.gain.value = 1;
       this.maestro.connect(this.ctx.destination);
       this.busSfx = this.ctx.createGain();
-      this.busSfx.gain.value = 0.9;
+      this.busSfx.gain.value = gananciaSfx(ajustes());
       this.busSfx.connect(this.maestro);
       this.busMusica = this.ctx.createGain();
-      this.busMusica.gain.value = VOLUMEN_MUSICA;
+      this.busMusica.gain.value = gananciaMusica(ajustes());
       this.busMusica.connect(this.maestro);
       this.cargarSfx();
+      this.escucharAjustes();
     }
     if (this.ctx.state === 'suspended') void this.ctx.resume();
   }
@@ -353,7 +351,7 @@ class MotorAudio {
     this.sonando = true;
     // a new theme undoes a previous fade (the hero's death)
     this.busMusica.gain.cancelScheduledValues(ctx.currentTime);
-    this.busMusica.gain.setValueAtTime(VOLUMEN_MUSICA, ctx.currentTime);
+    this.busMusica.gain.setValueAtTime(gananciaMusica(ajustes()), ctx.currentTime);
     const tema = TEMAS[id] ?? TEMAS.menu;
     const pista = MUSIC_TRACKS[id];
     if (!pista) { this.chiptune(tema); return; }
@@ -500,7 +498,7 @@ class MotorAudio {
     const g = this.busMusica.gain, t = this.ctx.currentTime;
     g.cancelScheduledValues(t);
     g.setValueAtTime(g.value, t);
-    g.linearRampToValueAtTime(VOLUMEN_MUSICA * Math.max(0, Math.min(1, nivel)), t + Math.max(0.05, segundos));
+    g.linearRampToValueAtTime(gananciaMusica(ajustes()) * Math.max(0, Math.min(1, nivel)), t + Math.max(0.05, segundos));
   }
 
   /** Funeral toll for the fallen hero: a deep inharmonic gong and a low minor choir. */
@@ -598,45 +596,23 @@ class MotorAudio {
 
   // ── Silencio / interfaz ─────────────────────────────────────────────────────
 
-  toggleMusica() {
-    this.musicaApagada = !this.musicaApagada;
-    try { localStorage.setItem(CLAVE_MUSICA, this.musicaApagada ? '1' : '0'); } catch { /* private mode */ }
-    if (this.musicaApagada) this.detenerMusica();
-    else this.refrescarMusica();
-    this.actualizarBoton();
-    this.sfx('ui');
-  }
-
-  /** Floating music button (self-contained widget). */
-  crearBoton() {
-    if (this.boton) return;
-    const b = document.createElement('button');
-    b.className = 'boton-audio';
-    b.setAttribute('aria-label', 'Apagar / encender la música');
-    b.addEventListener('click', () => {
-      this.desbloquear();
-      this.toggleMusica();
+  /** The settings menu changed: switch the music on/off and apply both volumes. */
+  private escucharAjustes() {
+    if (this.oyendoAjustes) return;
+    this.oyendoAjustes = true;
+    let musica = ajustes().musica;
+    alCambiarAjustes((a: Ajustes) => {
+      if (!this.ctx) return;
+      const t = this.ctx.currentTime;
+      this.busSfx.gain.setTargetAtTime(gananciaSfx(a), t, 0.05);
+      this.busMusica.gain.cancelScheduledValues(t);
+      this.busMusica.gain.setTargetAtTime(gananciaMusica(a), t, 0.05);
+      if (a.musica !== musica) {
+        musica = a.musica;
+        if (a.musica) this.refrescarMusica();
+        else this.detenerMusica();
+      }
     });
-    document.body.appendChild(b);
-    this.boton = b;
-    this.actualizarBoton();
-  }
-
-  private actualizarBoton() {
-    if (this.boton) {
-      this.boton.textContent = '🎵';
-      this.boton.title = this.musicaApagada ? 'Música apagada' : 'Música encendida';
-      this.boton.classList.toggle('silenciado', this.musicaApagada);
-    }
-  }
-}
-
-function leerMusicaApagada(): boolean {
-  try {
-    const guardado = localStorage.getItem(CLAVE_MUSICA);
-    return guardado !== null ? guardado === '1' : localStorage.getItem(CLAVE_SILENCIO_ANTIGUA) === '1';
-  } catch {
-    return false;
   }
 }
 

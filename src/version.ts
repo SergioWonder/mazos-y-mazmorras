@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.7';
+export const VERSION = '7.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.1.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '⚙️ Nuevo menú de ajustes arriba a la derecha: música y efectos de sonido por separado, cada uno con su volumen, y opciones de rendimiento (reducir partículas, resolución reducida, sacudidas de pantalla y contador de FPS).',
+      '🏰 En el menú principal las clases se reparten en filas iguales: dos filas de tres (tres de dos en el móvil en vertical).',
+    ],
+  },
   {
     version: '7.0.7',
     fecha: '2026-09-30',

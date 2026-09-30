@@ -15,7 +15,7 @@ import {
 } from '../fx/puppet.ts';
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
 import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
-import { fx as particles } from '../fx/particulas.ts';
+import { fx as particles, menosParticulas } from '../fx/particulas.ts';
 import { FlameFade, flameAnchors, flameLayerFor, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind, type FlameSprite } from '../fx/holy-flames.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
 
@@ -383,7 +383,7 @@ export class PuppetSprite {
     if (!kind || this.burning) return;
     this.burning = true;
     this.flamePoints ??= flameAnchors(this.rig);
-    this.flameReduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.flameReduced = menosParticulas();
     if (flameLayerFor(!!this.gpu) === 'fx') {
       // off-screen or detached sprites draw nothing (their last frame would stay stuck)
       this.flameLayer = particles.capa(() => (this.element.isConnected && this.visible ? this.flameSprites : []));

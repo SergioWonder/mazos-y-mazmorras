@@ -1,5 +1,7 @@
 // Utilidades de DOM, números flotantes y sacudidas de pantalla.
 
+import { ajustes } from '../core/ajustes.ts';
+
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   clase?: string,
@@ -37,6 +39,7 @@ export function numeroFlotante(
 
 /** Sacudida de pantalla (intensidad 1 = leve, 3 = brutal). */
 export function sacudir(intensidad = 1) {
+  if (!ajustes().sacudidas) return; // switched off in the settings menu
   const app = document.getElementById('app')!;
   app.classList.remove('sacudida-1', 'sacudida-2', 'sacudida-3');
   void app.offsetWidth; // reinicia la animación

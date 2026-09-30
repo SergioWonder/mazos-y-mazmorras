@@ -23,7 +23,8 @@
   .titulo-juego { font-size: clamp(1.8rem, 6vw, 2.8rem); }
   .titulo-sub { font-size: 0.9rem; margin: 0.3rem 0 0.6rem; letter-spacing: 0.1em; }
   .titulo-intro { display: none; }
-  .seleccion-clase { gap: 0.7rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+  .seleccion-clase { gap: 0.7rem; margin-bottom: 0.8rem; grid-template-columns: repeat(3, minmax(0, 158px)); }
+  .seleccion-clase .clase-carta { width: auto; }
   .clase-carta { width: 158px; padding: 0.7rem 0.6rem; gap: 0.3rem; }
   .clase-icono .sprite-marioneta { width: 4.6rem; }
   .clase-nombre { font-size: 1.15rem; }
@@ -33,7 +34,7 @@
   .titulo-ayuda { font-size: 0.75rem; padding: 0.3rem; }
 
   /* ── Barra superior compacta ── */
-  .barra-superior { gap: 0.7rem; padding: 0.3rem 0.7rem; font-size: 0.82rem; }
+  .barra-superior { gap: 0.7rem; padding: 0.3rem 3rem 0.3rem 0.7rem; font-size: 0.82rem; }
   .reliquia { font-size: 1.05rem; margin-right: 0.2rem; }
 
   /* ── Mapa ── */
@@ -363,4 +364,9 @@
   .panel-evento > .evento-arte.escena ~ h2, .panel-evento > .evento-arte.escena ~ .evento-texto { text-align: left; }
   .panel-evento > .evento-arte.escena ~ .evento-texto { margin-bottom: 0.8rem; }
   .panel-evento .evento-opciones { clear: both; }
+}
+
+/* narrow portrait phones: three rows of two classes */
+@media (orientation: portrait) and (max-width: 520px) {
+  .seleccion-clase { grid-template-columns: repeat(2, minmax(0, 170px)); }
 }

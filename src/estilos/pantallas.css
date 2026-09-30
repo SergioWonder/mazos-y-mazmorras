@@ -66,9 +66,10 @@
 }
 .titulo-intro strong { color: #ff8a7a; }
 
+/* the classes in rows of the same size: six classes, two rows of three */
 .seleccion-clase {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
   gap: 1.2rem;
   justify-content: center;
   margin-bottom: 1.4rem;

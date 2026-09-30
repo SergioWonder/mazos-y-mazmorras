@@ -10,8 +10,16 @@ import { SpellSystem, SPELLS, MAX_LIVE_SPRITES, type Box, type Point } from './s
 // registers the rare and unique cards' own sequences in SPELLS
 import { cardShake, volleyTiming } from './card-spells.ts';
 
+import { ajustes, alCambiarAjustes } from '../core/ajustes.ts';
+
 /** prefers-reduced-motion: fewer particles and no screen shake. */
 const movimientoReducido = () => typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+/** Fewer particles: reduced motion, or the «reduce particles» setting. */
+export const menosParticulas = () => movimientoReducido() || ajustes().reducirParticulas;
+/** Screen shake allowed: not with reduced motion nor with shakes switched off in the settings. */
+export const sacudidasActivas = () => !movimientoReducido() && ajustes().sacudidas;
+/** Device pixels per CSS pixel for the WebGL canvases (1 with «low resolution»). */
+export const pixelRatio = () => (ajustes().resolucionBaja ? 1 : Math.min(window.devicePixelRatio || 1, 2));
 
 /** Atmósferas ambientales: partículas que ascienden de fondo en cada escenario. */
 export type EstiloAmbiente = AmbientStyle;
@@ -94,7 +102,8 @@ class MotorParticulas {
   iniciar(canvas: HTMLCanvasElement) {
     const svg = new URLSearchParams(location.search).get('render') === 'svg';
     this.renderer = (svg ? null : ParticleRendererGL.create(canvas)) ?? new ParticleRenderer2D(canvas);
-    if (new URLSearchParams(location.search).has('fps')) this.contadorFps();
+    this.contadorFps(new URLSearchParams(location.search).has('fps') || ajustes().mostrarFps);
+    alCambiarAjustes((a) => this.contadorFps(a.mostrarFps));
     requestAnimationFrame((t) => this.bucle(t));
   }
 
@@ -107,7 +116,13 @@ class MotorParticulas {
   }
 
   emitir(nombre: string, x: number, y: number, escala = 1) {
+    const antes = this.particulas.length;
     spawnEffect(this.particulas, nombre, x, y, escala);
+    // fewer particles: keep every other one of this burst
+    if (menosParticulas()) {
+      const nuevas = this.particulas.splice(antes);
+      for (let i = 0; i < nuevas.length; i += 2) this.particulas.push(nuevas[i]);
+    }
   }
 
   /** ¿Hay un efecto de hechizo propio para esta clave? */
@@ -127,7 +142,7 @@ class MotorParticulas {
 
   /** Brief screen shake the spell asks for (null with reduced motion or when it has none). */
   sacudidaHechizo(nombre: string): { delayMs: number; level: 1 | 2 | 3 } | null {
-    return cardShake(nombre, movimientoReducido());
+    return cardShake(nombre, !sacudidasActivas());
   }
 
   /** Volley rhythm of the spell (Magic Missile's darts): ms between casts and until each impact. */
@@ -139,7 +154,7 @@ class MotorParticulas {
    *  (origen opcional para alientos, rayos, aullidos…). */
   hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
     return this.hechizos.add(nombre, {
-      box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: movimientoReducido(),
+      box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: menosParticulas(),
       view: { w: window.innerWidth, h: window.innerHeight },
     }, this.reloj);
   }
@@ -179,9 +194,14 @@ class MotorParticulas {
     for (let i = 0; i < 5; i++) this.emitir(nombre, Math.random() * w, h * 0.3 + Math.random() * h * 0.4, 0.8);
   }
 
-  /** `?fps` in the URL: small frames-per-second counter to check a device. */
-  private contadorFps() {
+  private cajaFps: HTMLElement | null = null;
+
+  /** Small frames-per-second counter (`?fps` in the URL or the settings menu). */
+  private contadorFps(activo: boolean) {
+    if (!activo) { this.cajaFps?.remove(); this.cajaFps = null; return; }
+    if (this.cajaFps) return;
     const caja = document.createElement('div');
+    this.cajaFps = caja;
     caja.style.cssText = 'position:fixed;left:6px;bottom:6px;z-index:999;font:12px monospace;color:#e8d9b0;background:rgba(0,0,0,.6);padding:2px 6px;border-radius:4px;pointer-events:none';
     document.body.appendChild(caja);
     let marcos = 0, desde = performance.now(), peor = 0, previo = desde;
@@ -194,7 +214,7 @@ class MotorParticulas {
         caja.textContent = `${modo} · ${Math.round((marcos * 1000) / (t - desde))} fps · peor ${Math.round(peor)} ms`;
         marcos = 0; desde = t; peor = 0;
       }
-      requestAnimationFrame(medir);
+      if (this.cajaFps === caja) requestAnimationFrame(medir);
     };
     requestAnimationFrame(medir);
   }
@@ -207,7 +227,8 @@ class MotorParticulas {
     if (this.ambienteActivo) {
       this.acumulador += dt;
       const amb = AMBIENTS[this.estiloAmbiente] ?? AMBIENTS.brasas;
-      if (this.acumulador > amb.interval) {
+      // fewer particles: the atmosphere spawns half as often
+      if (this.acumulador > amb.interval * (menosParticulas() ? 2 : 1)) {
         this.acumulador = 0;
         spawnAmbient(this.particulas, this.estiloAmbiente, w, h);
       }
@@ -222,7 +243,7 @@ class MotorParticulas {
     const extra = capas.length ? (spells.length ? [...capas, ...spells] : capas) : spells;
     const lista: Sprite[] = extra.length ? [...this.particulas, ...extra] : this.particulas;
     // mobile: the pixel ratio is capped, particles are small and soft anyway
-    this.renderer?.render(lista, w, h, Math.min(window.devicePixelRatio || 1, 2));
+    this.renderer?.render(lista, w, h, pixelRatio());
     requestAnimationFrame((tt) => this.bucle(tt));
   }
 }

@@ -5,6 +5,7 @@
 // texture, so outline, cut shadow, inner stroke, rim light and glow all come
 // from the same few draw calls per sprite.
 
+import { ajustes } from '../core/ajustes.ts';
 import type { BoneId, EffectGeometry, Effects, Matrix, Pose, PuppetRig } from '../fx/puppet.ts';
 import type { Ghost } from '../fx/animator.ts';
 import {
@@ -333,7 +334,7 @@ export class PuppetStage {
   draw() {
     const gl = this.gl;
     // mobile: cap the pixel ratio, the SDF edges stay crisp anyway
-    this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    this.dpr = ajustes().resolucionBaja ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     const cw = this.canvas.clientWidth, ch = this.canvas.clientHeight;
     const w = Math.max(1, Math.round(cw * this.dpr)), h = Math.max(1, Math.round(ch * this.dpr));
     if (this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
