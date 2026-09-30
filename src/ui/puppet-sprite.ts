@@ -16,7 +16,7 @@ import {
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
 import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
 import { fx as particles } from '../fx/particulas.ts';
-import { FlameFade, flameAnchors, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind } from '../fx/holy-flames.ts';
+import { FlameFade, flameAnchors, flameLayerFor, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind } from '../fx/holy-flames.ts';
 import type { Sprite } from '../fx/particle-sim.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
 
@@ -308,6 +308,8 @@ export class PuppetSprite {
   private flameSprites: Sprite[] = [];
   private flameLayer: (() => void) | null = null;
   private flameReduced = false;
+  /** Flames lit or still fading out. */
+  private burning = false;
 
   constructor(rig: PuppetRig, opts: PuppetOptions) {
     this.rig = rig;
@@ -322,7 +324,7 @@ export class PuppetSprite {
       el.setAttribute('aria-hidden', 'true');
       this.gpu = {
         element: el, rig, style: opts.style, mirrored: !!opts.mirrored, rim: opts.rim ?? LUZ_LUNA[0],
-        aura: null, echoes: false, frame: null, visible: true,
+        aura: null, echoes: false, flames: null, frame: null, visible: true,
       };
       this.stage.add(this.gpu);
       this.element = el;
@@ -367,17 +369,27 @@ export class PuppetSprite {
     if (this.gpu) this.gpu.echoes = on;
   }
 
-  /** Holy flames licking the silhouette (a prepared Smite): they fade in when
-   *  lit, fade out when put out and follow every move of the figure. */
+  /** Holy flames rising behind the figure (a prepared Smite): they fade in when
+   *  lit, fade out when put out and follow every move of the figure. On a WebGL
+   *  stage the stage paints them before the silhouette; without one they go on
+   *  the fx canvas. */
   setFlames(kind: FlameKind | null) {
     if (kind === this.flames) return;
     this.flames = kind;
     this.flameFade.set(!!kind, clock);
-    if (!kind || this.flameLayer) return;
+    if (!kind || this.burning) return;
+    this.burning = true;
     this.flamePoints ??= flameAnchors(this.rig);
     this.flameReduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    // off-screen or detached sprites draw nothing (their last frame would stay stuck)
-    this.flameLayer = particles.capa(() => (this.element.isConnected && this.visible ? this.flameSprites : []));
+    if (flameLayerFor(!!this.gpu) === 'fx') {
+      // off-screen or detached sprites draw nothing (their last frame would stay stuck)
+      this.flameLayer = particles.capa(() => (this.element.isConnected && this.visible ? this.flameSprites : []));
+    }
+  }
+
+  private setFlameSprites(list: Sprite[]) {
+    this.flameSprites = list;
+    if (this.gpu) this.gpu.flames = list.length ? list : null;
   }
 
   destroy() {
@@ -401,7 +413,7 @@ export class PuppetSprite {
       this.gpu.frame = { pose: p, fx, bones, geo, gone: this.gone, ghosts, smearBones };
     } else this.svg!.render(p, fx, bones, geo, this.gone, ghosts);
     this.emit(t, bones);
-    if (this.flameLayer) this.burn(t, bones, fx.opacity);
+    if (this.burning) this.burn(t, bones, fx.opacity);
   }
 
   /** Rebuilds this frame's flames on the current pose; drops the layer once faded out. */
@@ -409,16 +421,17 @@ export class PuppetSprite {
     if (!this.flameFade.active(t)) {
       this.flameLayer?.();
       this.flameLayer = null;
-      this.flameSprites = [];
+      this.burning = false;
+      this.setFlameSprites([]);
       return;
     }
     const level = this.gone ? 0 : this.flameFade.level(t) * opacity;
     const r = this.element.getBoundingClientRect();
-    if (level <= 0 || r.width < 2) { this.flameSprites = []; return; }
+    if (level <= 0 || r.width < 2) { this.setFlameSprites([]); return; }
     const art = this.rig.art ?? 1;
     const M = spriteMatrix({ x: r.left, y: r.top, w: r.width }, this.mirrored, art);
     const points = flameScreenPoints(this.flamePoints!, bones, M);
-    this.flameSprites = holyFlameFrame(t, points, { level, unit: (r.width / 140) * art, reduced: this.flameReduced });
+    this.setFlameSprites(holyFlameFrame(t, points, { level, unit: (r.width / 140) * art, reduced: this.flameReduced }));
   }
 
   /** Continuous emitters and pending bursts, converted to screen coordinates. */

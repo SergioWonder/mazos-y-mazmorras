@@ -7157,10 +7157,10 @@ console.log('\n🏰 Título y aura del Castigo');
   const titulo = fs.readFileSync(new URL('../src/ui/titulo.ts', import.meta.url), 'utf8');
   check(/Notificar nuevas versiones/.test(titulo) && !/versiones mayores/.test(titulo), 'el botón de avisos dice «Notificar nuevas versiones»');
   const combate = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
-  check(/castigos\.length > 0 \? '#fff3c4'/.test(combate), 'con un Castigo preparado el héroe brilla en blanco dorado (además de las llamas)');
+  check(!/castigos\.length > 0 \? '#fff3c4'/.test(combate), 'el Castigo preparado no pone un halo encima del héroe (solo las llamas por detrás)');
   check(/con-castigo/.test(combate), 'con un Castigo preparado el héroe lleva la clase con-castigo');
   const cssC = fs.readFileSync(new URL('../src/estilos/combate.css', import.meta.url), 'utf8');
-  check(/\.heroe\.con-castigo/.test(cssC) && /@keyframes aura-castigo/.test(cssC), 'el aura del Castigo se dibuja también en CSS, visible sin WebGL');
+  check(!/@keyframes aura-castigo/.test(cssC) && !/con-castigo \.sprite-silueta::/.test(cssC), 'el aura del Castigo no es un resplandor CSS encima del héroe');
 }
 
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
@@ -7182,7 +7182,17 @@ console.log('\n📱 Iconos de la app instalada');
 console.log('\n🕯️ Aura de llamas sagradas del Castigo preparado');
 try {
   const hf = await import('../src/fx/holy-flames.ts');
-  const { flameAnchors, flameScreenPoints, holyFlameFrame, FlameFade, FLAME_FADE_IN, FLAME_FADE_OUT, MAX_FLAME_SPRITES, HOLY_FLAME_COLOURS } = hf;
+  const { flameAnchors, flameScreenPoints, holyFlameFrame, FlameFade, FLAME_FADE_IN, FLAME_FADE_OUT, MAX_FLAME_SPRITES, HOLY_FLAME_COLOURS,
+    tongueHead, TONGUE_PERIOD, TONGUE_SPRITES, flameLayerFor } = hf;
+  // back layer: with a WebGL stage the flames are painted by the stage before the figure, not on #fx-canvas
+  const fsP = await import('node:fs');
+  const srcStage = fsP.readFileSync(new URL('../src/ui/puppet-stage.ts', import.meta.url), 'utf8');
+  const srcSprite = fsP.readFileSync(new URL('../src/ui/puppet-sprite.ts', import.meta.url), 'utf8');
+  const cuerpo = srcStage.slice(srcStage.indexOf('private drawSprite('));
+  check(flameLayerFor(true) === 'stage' && flameLayerFor(false) === 'fx', 'llama sagrada: con escenario WebGL las llamas van en la capa del escenario, no en #fx-canvas');
+  check(cuerpo.indexOf('this.drawFlames(') > 0 && cuerpo.indexOf('this.drawFlames(') < cuerpo.indexOf('if (v.aura)') && cuerpo.indexOf('this.drawFlames(') < cuerpo.indexOf('pass(1,'),
+    'llama sagrada: el escenario pinta las llamas antes que la figura (quedan detrás del héroe)');
+  check(/flameLayerFor\(!!this\.gpu\)/.test(srcSprite) && /this\.gpu\.flames\s*=/.test(srcSprite), 'llama sagrada: el sprite entrega sus llamas al escenario cuando lo hay');
   const rigP = HERO_RIGS.paladin;
   const anclas = flameAnchors(rigP);
   check(anclas.length >= 8, `llama sagrada: la silueta del paladín tiene puntos de llama (${anclas.length})`);
@@ -7198,15 +7208,45 @@ try {
   const fr = holyFlameFrame(1.3, pts, { level: 1, unit });
   check(fr.length > 0, 'llama sagrada: con el Castigo preparado hay llamas');
   // readable size: the longest tongues reach at least a fifth of the figure (140·unit wide)
-  const lenguas = fr.filter((f) => f.shape === 'colmillo').map((f) => 2 * f.size * (f.stretch ?? 1));
-  check(Math.max(...lenguas) >= 0.2 * 140 * unit, `llama sagrada: las lenguas se leen a tamaño real (${Math.round(Math.max(...lenguas))} px en una figura de ${140 * unit} px)`);
+  const grupos: number[] = [];
+  for (let t = 0.5; t < 3; t += 0.25) {
+    const f = holyFlameFrame(t, pts, { level: 1, unit });
+    for (let g = 0; g + TONGUE_SPRITES <= f.length && f[g].shape === 'colmillo'; g += TONGUE_SPRITES) {
+      const seg = f.slice(g, g + TONGUE_SPRITES).filter((s) => (s.alpha ?? 1) > 0.3);
+      if (seg.length) grupos.push(Math.max(...seg.map((s) => s.y + s.size)) - Math.min(...seg.map((s) => s.y - s.size * (s.stretch ?? 1) * 2)));
+    }
+  }
+  check(Math.max(...grupos) >= 0.2 * 140 * unit, `llama sagrada: las lenguas se leen a tamaño real (${Math.round(Math.max(...grupos))} px en una figura de ${140 * unit} px)`);
+  // rise and snake: each tongue climbs well above its birthplace and weaves from side to side
+  let subidas = 0, serpentea = 0, ciclos = 0, periodoOk = true;
+  for (let i = 0; i < 8; i++) {
+    const muestras: { x: number; y: number; u: number; cycle: number; period: number }[] = [];
+    for (let t = 0; t < 8; t += 1 / 60) muestras.push(tongueHead(i, t, pts, unit));
+    const porCiclo = new Map<number, typeof muestras>();
+    for (const m of muestras) { if (!porCiclo.has(m.cycle)) porCiclo.set(m.cycle, []); porCiclo.get(m.cycle)!.push(m); }
+    for (const c of porCiclo.values()) {
+      if (c[0].u > 0.05 || c[c.length - 1].u < 0.95) continue;
+      ciclos++;
+      periodoOk &&= c[0].period >= TONGUE_PERIOD[0] && c[0].period <= TONGUE_PERIOD[1];
+      const sube = (c[0].y - c[c.length - 1].y) / unit;
+      if (sube >= 25 && sube <= 60) subidas++;
+      const x0 = c[0].x, x1 = c[c.length - 1].x;
+      const desvio = Math.max(...c.map((m) => Math.abs(m.x - (x0 + (x1 - x0) * m.u)))) / unit;
+      let giros = 0;
+      for (let j = 2; j < c.length; j++) if (Math.sign(c[j].x - c[j - 1].x) * Math.sign(c[j - 1].x - c[j - 2].x) < 0) giros++;
+      if (desvio >= 1.5 && desvio <= 10 && giros >= 1) serpentea++;
+    }
+  }
+  check(ciclos > 10 && periodoOk && TONGUE_PERIOD[0] >= 0.9 && TONGUE_PERIOD[1] <= 1.8, `llama sagrada: cada lengua sube a velocidad intermedia (${TONGUE_PERIOD.join('–')} s por ciclo)`);
+  check(subidas === ciclos, `llama sagrada: las lenguas ascienden entre 25 y 60 unidades por ciclo (${subidas}/${ciclos})`);
+  check(serpentea === ciclos, `llama sagrada: las lenguas serpentean de lado a lado al subir (${serpentea}/${ciclos})`);
   check(JSON.stringify(holyFlameFrame(1.3, pts, { level: 1, unit })) === JSON.stringify(fr), 'llama sagrada: el fotograma es determinista');
   const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
   const amarillo = (c: string) => { const [r, g, b] = rgb(c); return r > 220 && g > 170 && b < 170; };
   const blanco = (c: string) => rgb(c).every((v) => v > 190); // white, or a warm white
   check(HOLY_FLAME_COLOURS.every((c) => amarillo(c) || blanco(c)), 'llama sagrada: la paleta es solo de amarillos y blancos');
   const colores = new Set<string>();
-  let maxN = 0, maxA = 0, saltos = 0, fuera = 0, reducidoMax = 0;
+  let maxN = 0, maxA = 0, saltos = 0, fuera = 0, reducidoMax = 0, sobreCabeza = 0;
   const bx0 = Math.min(...pts.map((p) => p.x)), bx1 = Math.max(...pts.map((p) => p.x));
   const by0 = Math.min(...pts.map((p) => p.y)), by1 = Math.max(...pts.map((p) => p.y));
   let prev = holyFlameFrame(0, pts, { level: 1, unit });
@@ -7214,10 +7254,11 @@ try {
     const f = holyFlameFrame(t, pts, { level: 1, unit });
     maxN = Math.max(maxN, f.length);
     reducidoMax = Math.max(reducidoMax, holyFlameFrame(t, pts, { level: 1, unit, reduced: true }).length);
+    if (f.some((s) => s.shape === 'colmillo' && (s.alpha ?? 1) > 0.3 && s.y < by0 - 10 * unit)) sobreCabeza++;
     for (const s of f) {
       colores.add(s.colour);
       maxA = Math.max(maxA, s.alpha ?? 1);
-      if (s.x < bx0 - 30 * unit || s.x > bx1 + 30 * unit || s.y < by0 - 40 * unit || s.y > by1 + 10 * unit) fuera++;
+      if (s.x < bx0 - 30 * unit || s.x > bx1 + 30 * unit || s.y < by0 - 70 * unit || s.y > by1 + 10 * unit) fuera++;
     }
     // stable: each flame moves smoothly, it only jumps while invisible
     if (f.length === prev.length) {
@@ -7231,7 +7272,8 @@ try {
   check([...colores].some(amarillo) && [...colores].some(blanco), 'llama sagrada: arde en amarillo y blanco');
   check(saltos === 0, `llama sagrada: las llamas se mueven con suavidad, sin saltos visibles (${saltos})`);
   check(maxA >= 0.6 && maxA <= 0.9, `llama sagrada: bien visible pero sin volverse opaca (alfa máx. ${maxA.toFixed(2)})`);
-  check(fuera === 0, `llama sagrada: las llamas se quedan pegadas a la silueta (${fuera} fuera)`);
+  check(fuera === 0, `llama sagrada: las llamas se quedan alrededor de la silueta (${fuera} fuera)`);
+  check(sobreCabeza > 0, `llama sagrada: las lenguas suben por encima de la cabeza (${sobreCabeza} fotogramas)`);
   check(maxN <= MAX_FLAME_SPRITES && MAX_FLAME_SPRITES <= 80, `llama sagrada: respeta el tope de partículas (${maxN} de ${MAX_FLAME_SPRITES})`);
   check(reducidoMax > 0 && reducidoMax < maxN, `llama sagrada: con movimiento reducido hay menos llamas (${reducidoMax} < ${maxN})`);
   const muchos = Array.from({ length: 200 }, (_, i) => ({ x: i * 3, y: 300 + (i % 7) }));

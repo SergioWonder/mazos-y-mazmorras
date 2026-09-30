@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.2';
+export const VERSION = '7.0.3';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.3',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔥 El aura del Castigo son ahora llamas sagradas que ascienden serpenteando por detrás del paladín, sin halo por encima de la figura.',
+    ],
+  },
   {
     version: '7.0.2',
     fecha: '2026-09-30',

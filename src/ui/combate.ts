@@ -783,7 +783,7 @@ export function pantallaCombate(
       const actual = spriteActual();
       $('.sprite-silueta')?.appendChild(actual.element);
       // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
-      actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : j.castigos.length > 0 ? '#fff3c4' : null);
+      actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
       actual.setEchoes((j.estados.espejismo ?? 0) > 0);
       actual.setFlames(j.castigos.length > 0 ? 'holy' : null);
       const inv = spriteInvocacion();

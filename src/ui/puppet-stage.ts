@@ -10,6 +10,8 @@ import type { Ghost } from '../fx/animator.ts';
 import {
   BONE_COUNT, BONE_INDEX, FLAG, PIECE_TEXELS, lighten, multiply, packRig, parseColour, spriteMatrix,
 } from '../fx/puppet-gpu.ts';
+import { SpriteBatchGL } from '../fx/particle-gl.ts';
+import type { Sprite } from '../fx/particle-sim.ts';
 
 const PIECE_VS = `#version 300 es
 precision highp float;
@@ -233,6 +235,8 @@ export interface GpuView {
   rim: string;
   aura: string | null;
   echoes: boolean;
+  /** Sprites painted behind the figure (holy flames), in screen CSS px. */
+  flames: Sprite[] | null;
   frame: GpuFrame | null;
   visible: boolean;
 }
@@ -252,6 +256,10 @@ export class PuppetStage {
   private readonly bonesBuf = new Float32Array(BONE_COUNT * 8);
   private dpr = 1;
   private readonly t0 = performance.now();
+  /** Sprite batch for the flames behind the figures (created on first use). */
+  private flameBatch: SpriteBatchGL | null = null;
+  private flameBroken = false;
+  private origin = { left: 0, top: 0 };
 
   /** Creates a stage on `host`, or returns null when WebGL2 is unavailable. */
   static create(host: HTMLElement, opts: { fixed?: boolean; before?: Node | null; style?: string } = {}): PuppetStage | null {
@@ -332,6 +340,7 @@ export class PuppetStage {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     const origin = this.canvas.getBoundingClientRect();
+    this.origin = { left: origin.left, top: origin.top };
     gl.bindVertexArray(this.quad);
     for (const v of this.views) {
       if (!v.frame || !v.visible || !v.element.isConnected || v.frame.gone || v.frame.fx.opacity <= 0) continue;
@@ -350,6 +359,8 @@ export class PuppetStage {
 
     // ground shadow and effects go through the effect program
     this.drawEffect(S, cw, ch, 0, [58 + f.pose.rootX, 129.5, 22, 4.2], [0, 0, 0, 0], [0, 0, 0, 0.5], [0, 0, 0, 0], fx.opacity, [34 + f.pose.rootX, 124, 82 + f.pose.rootX, 135]);
+    // flames go behind the figure: the silhouette drawn next hides them where they overlap
+    if (v.flames?.length) this.drawFlames(v.flames, cw, ch);
 
     gl.useProgram(this.piece);
     gl.activeTexture(gl.TEXTURE0);
@@ -447,6 +458,22 @@ export class PuppetStage {
         this.drawEffect(S, cw, ch, 3, [o.cx, o.cy, o.r, 0], [0, 0, 0, 0], soft, accent, o.alpha * fx.opacity, [o.cx - o.r - 9, o.cy - o.r - 9, o.cx + o.r + 9, o.cy + o.r + 9]);
       }
     }
+  }
+
+  /** Holy flames (and any sprite list) in this stage's GL context, then back to the puppet state. */
+  private drawFlames(list: Sprite[], cw: number, ch: number) {
+    const gl = this.gl;
+    if (this.flameBroken) return;
+    try {
+      this.flameBatch ??= new SpriteBatchGL(gl);
+    } catch (e) {
+      console.warn('flame layer unavailable', e);
+      this.flameBroken = true;
+      return;
+    }
+    this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top);
+    gl.bindVertexArray(this.quad);
+    gl.useProgram(this.piece);
   }
 
   /** Bone matrices (sprite space) into the uniform buffer. */

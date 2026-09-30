@@ -165,9 +165,11 @@ const SHAPE_CODE: Record<ParticleShape, number> = {
 };
 const FLOATS = 12;
 
-export class ParticleRendererGL {
+/** Instanced sprite batch on any WebGL2 context: draws a sprite list without
+ *  clearing, so another renderer (the puppet stage) can layer it with its own
+ *  drawing. Positions are CSS px; `ox`/`oy` are subtracted (the canvas origin). */
+export class SpriteBatchGL {
   private readonly gl: WebGL2RenderingContext;
-  private readonly canvas: HTMLCanvasElement;
   private readonly program: WebGLProgram;
   private readonly instances: WebGLBuffer;
   private readonly vao: WebGLVertexArrayObject;
@@ -175,17 +177,8 @@ export class ParticleRendererGL {
   private readonly uDpr: WebGLUniformLocation | null;
   private data = new Float32Array(256 * FLOATS);
   private readonly colours = new Map<string, [number, number, number, number]>();
-  private wasEmpty = false;
 
-  /** Returns null when WebGL2 is not available on this canvas. */
-  static create(canvas: HTMLCanvasElement): ParticleRendererGL | null {
-    const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, antialias: false, alpha: true });
-    if (!gl) return null;
-    try { return new ParticleRendererGL(canvas, gl); } catch (e) { console.warn('WebGL particles unavailable', e); return null; }
-  }
-
-  private constructor(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
-    this.canvas = canvas;
+  constructor(gl: WebGL2RenderingContext) {
     this.gl = gl;
     const sh = (type: number, src: string) => {
       const s = gl.createShader(type)!;
@@ -220,14 +213,58 @@ export class ParticleRendererGL {
     attr(1, 4, 0);
     attr(2, 4, 4);
     attr(3, 4, 8);
-    gl.enable(gl.BLEND);
-    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    gl.bindVertexArray(null);
   }
 
   private colour(c: string) {
     let v = this.colours.get(c);
     if (!v) { v = parseColour(c); this.colours.set(c, v); }
     return v;
+  }
+
+  /** Draws the list over whatever the framebuffer holds (w, h: device px). Leaves its
+   *  program and vertex array bound: callers restore their own. */
+  draw(list: Sprite[], w: number, h: number, dpr: number, ox = 0, oy = 0) {
+    if (!list.length) return;
+    const gl = this.gl;
+    if (this.data.length < list.length * FLOATS) this.data = new Float32Array(list.length * FLOATS * 2);
+    const d = this.data;
+    list.forEach((p, i) => {
+      const o = i * FLOATS, c = this.colour(p.colour);
+      d[o] = p.x - ox; d[o + 1] = p.y - oy; d[o + 2] = p.size; d[o + 3] = p.angle;
+      d[o + 4] = c[0]; d[o + 5] = c[1]; d[o + 6] = c[2]; d[o + 7] = particleAlpha(p) * c[3];
+      d[o + 8] = SHAPE_CODE[p.shape]; d[o + 9] = p.glow ? 1 : 0; d[o + 10] = p.stretch ?? 1; d[o + 11] = p.param ?? 0;
+    });
+    gl.useProgram(this.program);
+    gl.uniform2f(this.uCanvas, w, h);
+    gl.uniform1f(this.uDpr, dpr);
+    gl.bindVertexArray(this.vao);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.instances);
+    gl.bufferData(gl.ARRAY_BUFFER, d.subarray(0, list.length * FLOATS), gl.DYNAMIC_DRAW);
+    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, list.length);
+  }
+}
+
+/** Full-screen particle canvas (the fx layer): clears and draws a batch each frame. */
+export class ParticleRendererGL {
+  private readonly gl: WebGL2RenderingContext;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly batch: SpriteBatchGL;
+  private wasEmpty = false;
+
+  /** Returns null when WebGL2 is not available on this canvas. */
+  static create(canvas: HTMLCanvasElement): ParticleRendererGL | null {
+    const gl = canvas.getContext('webgl2', { premultipliedAlpha: true, antialias: false, alpha: true });
+    if (!gl) return null;
+    try { return new ParticleRendererGL(canvas, gl); } catch (e) { console.warn('WebGL particles unavailable', e); return null; }
+  }
+
+  private constructor(canvas: HTMLCanvasElement, gl: WebGL2RenderingContext) {
+    this.canvas = canvas;
+    this.gl = gl;
+    this.batch = new SpriteBatchGL(gl);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   }
 
   render(list: Sprite[], width: number, height: number, dpr: number) {
@@ -240,21 +277,6 @@ export class ParticleRendererGL {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     this.wasEmpty = list.length === 0;
-    if (!list.length) return;
-    if (this.data.length < list.length * FLOATS) this.data = new Float32Array(list.length * FLOATS * 2);
-    const d = this.data;
-    list.forEach((p, i) => {
-      const o = i * FLOATS, c = this.colour(p.colour);
-      d[o] = p.x; d[o + 1] = p.y; d[o + 2] = p.size; d[o + 3] = p.angle;
-      d[o + 4] = c[0]; d[o + 5] = c[1]; d[o + 6] = c[2]; d[o + 7] = particleAlpha(p) * c[3];
-      d[o + 8] = SHAPE_CODE[p.shape]; d[o + 9] = p.glow ? 1 : 0; d[o + 10] = p.stretch ?? 1; d[o + 11] = p.param ?? 0;
-    });
-    gl.useProgram(this.program);
-    gl.uniform2f(this.uCanvas, w, h);
-    gl.uniform1f(this.uDpr, dpr);
-    gl.bindVertexArray(this.vao);
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.instances);
-    gl.bufferData(gl.ARRAY_BUFFER, d.subarray(0, list.length * FLOATS), gl.DYNAMIC_DRAW);
-    gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, list.length);
+    this.batch.draw(list, w, h, dpr);
   }
 }

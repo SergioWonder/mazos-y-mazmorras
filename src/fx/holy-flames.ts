@@ -1,9 +1,10 @@
-// Holy flames: a calm, persistent aura of yellow and white fire licking the
-// hero's silhouette while the paladin holds a prepared Smite. Pure (no DOM):
-// the flame points come from the rig's shapes, follow the bones every frame and
-// each tongue is rebuilt analytically from the time, so frames are
-// deterministic and testable in node. PuppetSprite feeds the result to the fx
-// canvas (same WebGL pass as particles and spells, canvas 2D without WebGL2).
+// Holy flames: a calm, persistent aura of yellow and white fire rising behind
+// the hero while the paladin holds a prepared Smite. Pure (no DOM): the flame
+// points come from the rig's shapes, follow the bones every frame and each
+// tongue is rebuilt analytically from the time, so frames are deterministic
+// and testable in node. With a WebGL puppet stage the stage paints them right
+// before the figure (so the silhouette hides them where they overlap); without
+// one they fall back to the fx canvas.
 
 import { applyMatrix, type BoneId, type Matrix, type PuppetRig, type Shape } from './puppet.ts';
 import type { Sprite } from './particle-sim.ts';
@@ -17,14 +18,21 @@ export const FLAME_FADE_OUT = 0.7;
 export const MAX_FLAME_SPRITES = 72;
 
 /** Outer tongues: warm golds; cores and embers: whites. */
-const OUTER = ['#ffd35a', '#ffe27a', '#ffc94a'];
+const OUTER = ['#ffe27a', '#ffd35a', '#ffc94a'];
 const CORE = ['#ffffff', '#fffbe8', '#fff6d6'];
 const EMBER = ['#fff3c4', '#ffe9a0', '#ffffff'];
 export const HOLY_FLAME_COLOURS = [...OUTER, ...CORE, ...EMBER];
 
-/** Tongue slots (each draws an outer tongue plus a white core) and embers. */
-const SLOTS = 28, SLOTS_REDUCED = 14;
-const EMBERS = 9, EMBERS_REDUCED = 4;
+/** Tongues of fire (each drawn as TONGUE_SPRITES sprites) and embers. */
+const SLOTS = 16, SLOTS_REDUCED = 8;
+const EMBERS = 6, EMBERS_REDUCED = 3;
+/** Sprites per tongue: three golden segments along its path plus a white core. */
+export const TONGUE_SPRITES = 4;
+/** Seconds a tongue takes to rise from its birthplace and die out (min, max). */
+export const TONGUE_PERIOD: [number, number] = [1.0, 1.6];
+
+/** Where the flames are drawn: behind the figure on its WebGL stage, or on the fx canvas. */
+export const flameLayerFor = (hasStage: boolean): 'stage' | 'fx' => (hasStage ? 'stage' : 'fx');
 
 /** Bones whose shapes make the silhouette the flames lick (no weapon, cape or chains). */
 const BODY: BoneId[] = ['legB', 'legF', 'torso', 'armB', 'offhand', 'armF', 'head'];
@@ -161,66 +169,101 @@ export interface FlameOptions {
   reduced?: boolean;
 }
 
-/** One frame of the holy aura: tongues of fire born on the silhouette points
- *  that rise, sway and peel off while shrinking, each with a white core, plus a
- *  few embers drifting up. Every slot lives in cycles and moves to another
- *  point of the body only while invisible, so the fire never jumps. */
+const centreOf = (points: ScreenPoint[]) => {
+  let x = 0, y = 0;
+  for (const p of points) { x += p.x; y += p.y; }
+  return { x: x / points.length, y: y / points.length };
+};
+
+/** Fixed traits of tongue `i` in its cycle `k` (birthplace, rise, sway). */
+function tongueTraits(i: number, k: number, points: ScreenPoint[], c: ScreenPoint, U: number) {
+  const p = points[Math.floor(hash(i * 31 + k, 3) * points.length) % points.length];
+  let nx = p.x - c.x, ny = p.y - c.y;
+  const nl = Math.hypot(nx, ny) || 1;
+  nx /= nl; ny = Math.min(ny / nl, 0.2);
+  const h = (n: number) => hash(i + k * 7, n);
+  return {
+    // born just outside the outline, so the tongue peeks out at the sides
+    bx: p.x + nx * 3 * U, by: p.y + ny * 3 * U, nx,
+    rise: (32 + h(5) * 16) * U,
+    drift: nx * (4 + h(8) * 5) * U,
+    amp: (2.5 + h(7) * 1.5) * U,
+    freq: 1 + h(9) * 0.4,
+    ph: h(6),
+    r0: (4.6 + h(4) * 1.6) * U,
+  };
+}
+type Traits = ReturnType<typeof tongueTraits>;
+
+/** Point of a tongue's path at progress u (0 birth … 1 top): it climbs and snakes. */
+function pathAt(tr: Traits, u: number): [number, number] {
+  const w = Math.PI * 2;
+  const x = tr.bx + tr.drift * u + tr.amp * (Math.sin(w * (tr.freq * u + tr.ph)) - Math.sin(w * tr.ph));
+  return [x, tr.by - tr.rise * u];
+}
+
+function cycleOf(i: number, t: number) {
+  const period = TONGUE_PERIOD[0] + hash(i, 1) * (TONGUE_PERIOD[1] - TONGUE_PERIOD[0]);
+  const c = t / period + hash(i, 2);
+  const cycle = Math.floor(c);
+  return { period, cycle, u: c - cycle };
+}
+
+/** Tip of tongue `i` at time t (for tests and tuning): its position and cycle. */
+export function tongueHead(i: number, t: number, points: ScreenPoint[], unit: number) {
+  const { period, cycle, u } = cycleOf(i, t);
+  const [x, y] = pathAt(tongueTraits(i, cycle, points, centreOf(points), unit), u);
+  return { x, y, u, cycle, period };
+}
+
+/** One frame of the holy aura: tongues of fire born all around the silhouette
+ *  (feet included) that climb above the shoulders and head while snaking from
+ *  side to side, each drawn as three golden segments bending along its path
+ *  with a white core, plus a few embers. Every tongue lives in cycles and moves
+ *  to another point of the body only while invisible, so the fire never jumps. */
 export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions): Sprite[] {
   const level = clamp01(o.level);
   if (level <= 0 || !points.length) return [];
-  const u0 = o.unit;
-  let cx = 0, cy = 0;
-  for (const p of points) { cx += p.x; cy += p.y; }
-  cx /= points.length; cy /= points.length;
+  const U = o.unit, c = centreOf(points);
   const out: Sprite[] = [];
   const slots = o.reduced ? SLOTS_REDUCED : SLOTS, embers = o.reduced ? EMBERS_REDUCED : EMBERS;
 
   for (let i = 0; i < slots; i++) {
-    const period = 0.95 + hash(i, 1) * 0.5;
-    const c = (t / period) + hash(i, 2);
-    const k = Math.floor(c), u = c - k;
-    // this cycle's birthplace, size and sway (fixed for the whole cycle)
-    const p = points[Math.floor(hash(i * 31 + k, 3) * points.length) % points.length];
-    let nx = p.x - cx, ny = p.y - cy;
-    const nl = Math.hypot(nx, ny) || 1;
-    nx /= nl; ny = Math.min(ny / nl, 0.2);
-    // big enough to read on a ~130 px hero: tongues about a third of the figure tall
-    const r = (5.2 + hash(i + k * 7, 4) * 2.6) * u0;
-    const rise = (14 + hash(i + k * 7, 5) * 10) * u0;
-    const ph = hash(i + k * 7, 6);
-    const lateral = (hash(i + k * 7, 7) - 0.5) * 3 * u0;
-    // envelope: kindles quickly, licks upwards, then thins out
-    const env = smooth(clamp01(u / 0.22)) * (1 - smooth(clamp01((u - 0.55) / 0.45)));
-    const push = (1 + u * 2.2) * u0;
-    const sway = Math.sin((u * 0.9 + ph) * Math.PI * 2) * 1.3 * u0;
-    const bx = p.x + nx * push + lateral + sway, by = p.y + ny * push - rise * u;
-    const ang = -Math.PI / 2 + nx * 0.45 + Math.sin((u * 1.2 + ph) * Math.PI * 2 + 1) * 0.16;
-    const dx = Math.cos(ang), dy = Math.sin(ang);
-    const size = r * (0.55 + 0.45 * env) * (1 - 0.35 * u);
-    const stretch = 2.1 + 0.8 * env;
-    // the fang shape grows from its base at -x: shift the centre along the tongue
-    const L = (stretch - 1) * size;
+    const { cycle: k, u } = cycleOf(i, t);
+    const tr = tongueTraits(i, k, points, c, U);
+    // envelope: kindles quickly, climbs, then thins out near the top
+    const env = smooth(clamp01(u / 0.15)) * (1 - smooth(clamp01((u - 0.6) / 0.4)));
+    const r = tr.r0 * (1 - 0.45 * u);
+    // segment 0 is the tip (small, highest), segment 2 the wide base below it
+    const seg = (j: number) => {
+      const uj = Math.max(0, u - j * 0.09);
+      const [x, y] = pathAt(tr, uj), [px, py] = pathAt(tr, uj - 0.03);
+      return { x, y, ang: Math.atan2(y - py, x - px) };
+    };
+    for (let j = 0; j < 3; j++) {
+      const s = seg(j), size = r * (0.6 + 0.25 * j);
+      out.push({
+        x: s.x, y: s.y, size, angle: s.ang, stretch: 1.9, shape: 'colmillo',
+        colour: OUTER[j], alpha: level * 0.85 * env, glow: true,
+      });
+    }
+    const b = seg(2), cs = r * 0.55;
     out.push({
-      x: bx + dx * L, y: by + dy * L, size, angle: ang, stretch, shape: 'colmillo',
-      colour: pick(OUTER, hash(i, k + 11)), alpha: level * 0.85 * env, glow: true,
-    });
-    const cs = size * 0.52, cst = stretch + 0.35, cl = (cst - 1) * cs;
-    out.push({
-      x: bx + dx * (cl + size * 0.25), y: by + dy * (cl + size * 0.25), size: cs, angle: ang, stretch: cst, shape: 'colmillo',
+      x: b.x, y: b.y, size: cs, angle: b.ang, stretch: 2.3, shape: 'colmillo',
       colour: pick(CORE, hash(i, k + 13)), alpha: level * 0.8 * env, glow: true,
     });
   }
 
   for (let i = 0; i < embers; i++) {
     const period = 1.7 + hash(i, 21) * 0.8;
-    const c = (t / period) + hash(i, 22);
-    const k = Math.floor(c), u = c - k;
+    const cc = (t / period) + hash(i, 22);
+    const k = Math.floor(cc), u = cc - k;
     const p = points[Math.floor(hash(i * 17 + k, 23) * points.length) % points.length];
     const env = smooth(clamp01(u / 0.15)) * (1 - smooth(clamp01((u - 0.4) / 0.6)));
-    const rise = (18 + hash(i + k * 5, 24) * 12) * u0;
-    const wob = Math.sin((u * 1.6 + hash(i + k * 5, 25)) * Math.PI * 2) * 2 * u0;
+    const rise = (40 + hash(i + k * 5, 24) * 20) * U;
+    const wob = Math.sin((u * 1.6 + hash(i + k * 5, 25)) * Math.PI * 2) * 3 * U;
     out.push({
-      x: p.x + wob, y: p.y - rise * u, size: (1.3 + hash(i + k * 5, 26) * 0.9) * u0, angle: 0, shape: 'disco',
+      x: p.x + wob, y: p.y - rise * u, size: (1.2 + hash(i + k * 5, 26) * 0.8) * U, angle: 0, shape: 'disco',
       colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true,
     });
   }
