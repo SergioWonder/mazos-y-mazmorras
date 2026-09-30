@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.2.0';
+export const VERSION = '7.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.3.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '📜 «Continuar partida guardada» sale ahora arriba del todo en el menú principal, grande y bien visible.',
+      '⚠️ Si empiezas una partida nueva teniendo una guardada, el juego te pide confirmación antes de borrarla.',
+      '⚙️ El Compendio de cartas, la Galería de sprites y los avisos de nuevas versiones se abren desde el menú de ajustes.',
+    ],
+  },
   {
     version: '7.2.0',
     fecha: '2026-09-30',

@@ -4683,6 +4683,16 @@ console.log('\n⚙️ Menú de ajustes');
     'compendio y galería salen en ajustes solo a través del menú principal');
   check(/avisosDisponibles\(\)/.test(menu) && /cambiarAvisos\(/.test(menu) && /avisosActivados\(\)/.test(menu),
     'el menú de ajustes activa y desactiva los avisos de nuevas versiones');
+
+  // Main menu: only the classes and «Continue», the rest lives in the settings panel
+  check(!/btn-compendio|btn-galeria|btn-avisos/.test(titulo), 'el menú principal ya no lleva compendio, galería ni avisos (están en ajustes)');
+  check(titulo.includes('btn-continuar') && titulo.indexOf('btn-continuar') < titulo.indexOf('class="seleccion-clase"'),
+    'continuar partida guardada sale arriba, antes de las clases');
+  check(/confirmarNuevaPartida\(/.test(titulo) && /puedeContinuar/.test(titulo.slice(titulo.indexOf('const activar'))),
+    'empezar partida con una guardada pide confirmación antes de borrarla');
+  const principal = src('main.ts');
+  check(/run = nuevaRun\(eleccion\.clase\)/.test(principal) && /borrarGuardado\(\);\s*\/\/[^\n]*\n\s*run = nuevaRun\(eleccion\.clase\)/.test(principal),
+    'al confirmar una partida nueva, la guardada se borra en el acto');
 }
 
 // ── Ink-drawn campaign map (src/arte/mapa/iconos) ────────────────────────────
@@ -7319,7 +7329,8 @@ console.log('\n🏰 Título y aura del Castigo');
   const regla = css.slice(css.indexOf('.titulo {'), css.indexOf('}', css.indexOf('.titulo {')));
   check(/overflow-y:\s*auto/.test(regla), 'el menú principal tiene scroll también en escritorio (no se corta el botón de continuar)');
   const titulo = fs.readFileSync(new URL('../src/ui/titulo.ts', import.meta.url), 'utf8');
-  check(/Notificar nuevas versiones/.test(titulo) && !/versiones mayores/.test(titulo), 'el botón de avisos dice «Notificar nuevas versiones»');
+  const ajustesMenu = fs.readFileSync(new URL('../src/ui/menu-ajustes.ts', import.meta.url), 'utf8');
+  check(/Notificar nuevas versiones/.test(ajustesMenu) && !/versiones mayores/.test(ajustesMenu + titulo), 'el interruptor de avisos dice «Notificar nuevas versiones»');
   const combate = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   check(!/castigos\.length > 0 \? '#fff3c4'/.test(combate), 'el Castigo preparado no pone un halo encima del héroe (solo las llamas por detrás)');
   check(/con-castigo/.test(combate), 'con un Castigo preparado el héroe lleva la clase con-castigo');

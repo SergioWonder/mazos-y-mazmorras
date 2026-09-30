@@ -5,7 +5,6 @@ import { el } from './util.ts';
 import { VERSION } from '../version.ts';
 import { pantallaCompendio } from './compendio.ts';
 import { showGallery } from './gallery.ts';
-import { avisosDisponibles, avisosActivados, cambiarAvisos, EVENTO_AVISOS } from './actualizacion.ts';
 import { registrarAccesosMenuPrincipal } from './menu-ajustes.ts';
 import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
@@ -25,6 +24,11 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       <div class="titulo-marco">
         <h1 class="titulo-juego"><span>Dracs</span> <em>&</em> <span>Rogues</span></h1>
         <p class="titulo-sub">Seis clases, tres actos y dos caminos posibles en cada uno</p>
+        ${
+          puedeContinuar
+            ? `<button class="btn-tomar btn-continuar">📜 Continuar partida guardada</button>`
+            : ''
+        }
         <p class="titulo-intro">
           Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio
           del temible <strong>Gorzug</strong>, asola las aldeas del condado.
@@ -74,14 +78,6 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             siguiente golpe y Fervor que brota de cada Golpe y Defensa.</span>
           </button>
         </div>
-        ${
-          puedeContinuar
-            ? `<button class="btn-tomar btn-continuar">📜 Continuar partida guardada</button>`
-            : ''
-        }
-        <button class="btn-tomar btn-compendio">📖 Compendio de cartas</button>
-        <button class="btn-tomar btn-galeria">🎭 Galería de sprites</button>
-        ${avisosDisponibles() ? '<button class="btn-tomar btn-avisos"></button>' : ''}
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
         <p class="titulo-version">v${VERSION}${
           finalVerdaderoDesbloqueado()
@@ -106,9 +102,11 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     const marcar = () => botones.forEach((b, i) => b.classList.toggle('clase-activa', i === idx));
     marcar();
 
-    const activar = (b: HTMLButtonElement) => {
-      if (b.classList.contains('btn-continuar')) terminar({ tipo: 'continuar' });
-      else terminar({ tipo: 'nueva', clase: b.dataset.clase as ClaseId });
+    const activar = async (b: HTMLButtonElement) => {
+      if (b.classList.contains('btn-continuar')) return terminar({ tipo: 'continuar' });
+      // a new run overwrites the saved one: ask first
+      if (puedeContinuar && !(await superponer(confirmarNuevaPartida))) return;
+      terminar({ tipo: 'nueva', clase: b.dataset.clase as ClaseId });
     };
 
     const teclado = (ev: KeyboardEvent) => {
@@ -117,52 +115,72 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
         marcar();
       } else if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
-        activar(botones[idx]);
+        void activar(botones[idx]);
       }
     };
     window.addEventListener('keydown', teclado);
 
     function terminar(eleccion: EleccionTitulo) {
       window.removeEventListener('keydown', teclado);
-      window.removeEventListener(EVENTO_AVISOS, pintarAvisos);
       registrarAccesosMenuPrincipal(null);
       for (const h of heroes) h.destroy();
       stage?.destroy();
       resolver(eleccion);
     }
 
-    botones.forEach((b) => b.addEventListener('click', () => activar(b)));
+    botones.forEach((b) => b.addEventListener('click', () => void activar(b)));
 
-    // Overlays (compendium, gallery) pause the title's keyboard navigation while open;
-    // only one at a time, whether opened here or from the settings panel
+    // Overlays (compendium, gallery, confirmation) pause the title's keyboard navigation
+    // while open; only one at a time, whether opened here or from the settings panel
     let superpuesta = false;
-    const superponer = async (abrir: () => Promise<void>) => {
-      if (superpuesta) return;
+    async function superponer<T>(abrir: () => Promise<T>): Promise<T | undefined> {
+      if (superpuesta) return undefined;
       superpuesta = true;
       window.removeEventListener('keydown', teclado);
-      await abrir();
-      window.addEventListener('keydown', teclado);
-      superpuesta = false;
-    };
-    const abrirCompendio = () => void superponer(pantallaCompendio);
-    // Sprite gallery: heroes, druid forms, invocations and enemies, animated
-    const abrirGaleria = () => void superponer(showGallery);
-    raiz.querySelector('.btn-compendio')!.addEventListener('click', abrirCompendio);
-    raiz.querySelector('.btn-galeria')!.addEventListener('click', abrirGaleria);
-    registrarAccesosMenuPrincipal({ compendio: abrirCompendio, galeria: abrirGaleria });
-
-    // Major-version notifications: the browser asks for permission on this click
-    const btnAvisos = raiz.querySelector<HTMLButtonElement>('.btn-avisos');
-    function pintarAvisos() {
-      if (!btnAvisos) return;
-      const bloqueados = Notification.permission === 'denied';
-      btnAvisos.disabled = bloqueados;
-      btnAvisos.textContent = bloqueados
-        ? '🔕 Avisos bloqueados en el navegador'
-        : avisosActivados() ? '🔔 Notificar nuevas versiones: activado' : '🔕 Notificar nuevas versiones';
+      try {
+        return await abrir();
+      } finally {
+        window.addEventListener('keydown', teclado);
+        superpuesta = false;
+      }
     }
-    pintarAvisos();
-    window.addEventListener(EVENTO_AVISOS, pintarAvisos); // also switched from the settings panel
-    btnAvisos?.addEventListener('click', () => void cambiarAvisos(!avisosActivados()));
+    // The compendium and the sprite gallery open from the settings panel (⚙️)
+    registrarAccesosMenuPrincipal({
+      compendio: () => void superponer(pantallaCompendio),
+      galeria: () => void superponer(showGallery),
+    });
+  });
+}
+
+/** Asks before a new run overwrites the saved one. Resolves true to go ahead. */
+function confirmarNuevaPartida(): Promise<boolean> {
+  return new Promise((resolver) => {
+    const capa = el('div', 'confirmar-fondo');
+    capa.setAttribute('role', 'alertdialog');
+    capa.setAttribute('aria-modal', 'true');
+    capa.innerHTML = `
+      <div class="confirmar">
+        <h3>⚠️ ¿Empezar una partida nueva?</h3>
+        <p>Tienes una partida guardada. Si empiezas otra, <strong>se borrará para siempre</strong>.</p>
+        <div class="confirmar-acciones">
+          <button class="btn-tomar btn-cancelar">Volver</button>
+          <button class="btn-tomar btn-borrar">🗑️ Borrar y empezar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(capa);
+    const cerrar = (ok: boolean) => {
+      window.removeEventListener('keydown', teclado, true);
+      capa.remove();
+      resolver(ok);
+    };
+    // capture phase: Escape cancels and no key reaches the title underneath
+    const teclado = (ev: KeyboardEvent) => {
+      if (ev.code === 'Escape') { ev.preventDefault(); ev.stopImmediatePropagation(); cerrar(false); }
+    };
+    window.addEventListener('keydown', teclado, true);
+    capa.querySelector('.btn-cancelar')!.addEventListener('click', () => cerrar(false));
+    capa.querySelector('.btn-borrar')!.addEventListener('click', () => cerrar(true));
+    capa.addEventListener('click', (ev) => { if (ev.target === capa) cerrar(false); });
+    capa.querySelector<HTMLButtonElement>('.btn-cancelar')!.focus(); // the safe choice by default
   });
 }

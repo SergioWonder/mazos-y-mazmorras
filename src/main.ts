@@ -57,6 +57,7 @@ async function juego() {
       run = cargarRun();
       if (!run) continue; // guardado corrupto o de otra versión: vuelve al título
     } else {
+      borrarGuardado(); // the player confirmed on the title that the old save goes
       run = nuevaRun(eleccion.clase);
     }
 

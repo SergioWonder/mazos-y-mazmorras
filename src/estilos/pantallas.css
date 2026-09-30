@@ -646,16 +646,55 @@
 .pantalla-bendicion .fin-titulo { font-size: clamp(1.8rem, 4.6vw, 3.2rem); }
 .pantalla-bendicion .bendicion-arte { font-size: 3.6rem; }
 
+/* «Continue» sits right under the title, big and glowing */
 .btn-continuar {
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
+  display: block;
+  margin: 0 auto 1.4rem;
+  font-size: 1.3rem;
+  padding: 0.8rem 2.4rem;
   border-color: var(--oro);
+  background: linear-gradient(180deg, #5a4520, #2e2310);
+  box-shadow: 0 0 14px rgba(217, 169, 63, 0.35);
+  animation: continuar-latido 2.4s ease-in-out infinite;
 }
 .btn-continuar.clase-activa {
   border-color: var(--brasa-viva);
-  box-shadow: 0 0 18px rgba(255, 209, 102, 0.5);
+  box-shadow: 0 0 22px rgba(255, 209, 102, 0.6);
   transform: translateY(-2px);
 }
+@keyframes continuar-latido {
+  50% { box-shadow: 0 0 24px rgba(255, 209, 102, 0.55); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-continuar { animation: none; }
+}
+
+/* confirmation before a new run overwrites the saved one */
+.confirmar-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(5, 8, 5, 0.8);
+}
+.confirmar {
+  width: min(92vw, 440px);
+  padding: 1.2rem 1.4rem;
+  text-align: center;
+  background: linear-gradient(180deg, var(--tinta-2), var(--tinta));
+  border: 1px solid rgba(217, 169, 63, 0.5);
+  border-radius: 14px;
+  color: var(--pergamino);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.75);
+}
+.confirmar h3 { margin: 0 0 0.6rem; color: var(--brasa-viva); }
+.confirmar p { margin: 0 0 1rem; line-height: 1.45; }
+.confirmar strong { color: #ff8a7a; }
+.confirmar-acciones { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; }
+.confirmar-acciones .btn-tomar { cursor: pointer; }
+.confirmar-acciones .btn-borrar { border-color: rgba(255, 138, 122, 0.6); }
 
 /* pantalla de capítulo */
 .pantalla-capitulo .capitulo-nombre {
