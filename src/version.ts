@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.1.0';
+export const VERSION = '7.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.2.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔔 Desde el menú de ajustes ya puedes activar o desactivar los avisos de nuevas versiones.',
+      '📚 En el menú principal, los ajustes también llevan al Compendio de cartas y a la Galería de sprites.',
+    ],
+  },
   {
     version: '7.1.0',
     fecha: '2026-09-30',

@@ -9,6 +9,8 @@ const INTERVALO_COMPROBACION = 60 * 1000; // busca versión nueva cada minuto
 const META = 'mazmorra-meta';
 const CLAVE_AVISOS = 'mazmorra-avisos-mayores';
 let registro: ServiceWorkerRegistration | undefined;
+/** Fired on window whenever the notifications are switched on or off. */
+export const EVENTO_AVISOS = 'mazmorra-avisos-cambiados';
 
 /**
  * Gestión de actualizaciones de la PWA:
@@ -79,10 +81,14 @@ export function avisosActivados(): boolean {
 export async function cambiarAvisos(activar: boolean): Promise<boolean> {
   if (activar) {
     const permiso = await Notification.requestPermission();
-    if (permiso !== 'granted') return false;
+    if (permiso !== 'granted') {
+      window.dispatchEvent(new Event(EVENTO_AVISOS)); // may now be blocked
+      return false;
+    }
   }
   try { localStorage.setItem(CLAVE_AVISOS, activar ? '1' : '0'); } catch { /* sin almacenamiento */ }
   await guardarMeta('avisos', activar ? '1' : '0');
+  window.dispatchEvent(new Event(EVENTO_AVISOS)); // the title and the settings panel repaint
   // background checks where supported (Chrome/Android with the app installed)
   const sync = (registro as ServiceWorkerRegistration & { periodicSync?: { register(t: string, o: object): Promise<void>; unregister(t: string): Promise<void> } } | undefined)?.periodicSync;
   try {

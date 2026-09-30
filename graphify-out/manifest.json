@@ -5,23 +5,23 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790629546.3453214,
-    "ast_hash": "e984ffba4c909fcf14d195adf5503b50",
+    "mtime": 1790780305.740271,
+    "ast_hash": "b3987058453c5842c353d5d0b1b01009",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790630304.990532,
-    "ast_hash": "df7af99daacf3be0f1ae2ffb7c8ee809",
+    "mtime": 1790780167.7491865,
+    "ast_hash": "a8cbb2d82f70f873633ac94145f2870f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
-    "mtime": 1790627407.4083583,
-    "ast_hash": "34217bd25dd60db1e138204dfe8a0011",
+    "mtime": 1790765609.6469967,
+    "ast_hash": "5b0a0cc7f5f62770f3db31d9552ea05e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
-    "mtime": 1790621197.7469718,
-    "ast_hash": "96835649bd1530593c5330f95233daf3",
+    "mtime": 1790769931.929464,
+    "ast_hash": "392a6adcb763ee505680833cd885ca66",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/conjuros.ts": {
@@ -35,8 +35,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/eventos.ts": {
-    "mtime": 1790458641.8546464,
-    "ast_hash": "4f674a2e1f5f6e879f22e8aaf515883b",
+    "mtime": 1790719293.6919608,
+    "ast_hash": "ad6b60a82388bf7565f97c40bd8fa1f4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/guardado.ts": {
@@ -50,8 +50,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias.ts": {
-    "mtime": 1790600483.4559872,
-    "ast_hash": "ceeec1621de2bd13ee48a0dc0a82f457",
+    "mtime": 1790719268.6533775,
+    "ast_hash": "f8c396316347e122c6af46061b2fcd3a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/rng.ts": {
@@ -60,18 +60,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/run.ts": {
-    "mtime": 1790458624.3164022,
-    "ast_hash": "e7a735023afb3a06f870d9327924eaee",
+    "mtime": 1790719288.9869423,
+    "ast_hash": "9538ae1b7327d2097679a1bd9be35183",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/types.ts": {
-    "mtime": 1790627407.4027877,
-    "ast_hash": "bed8d47a086fd2237409af85138569f4",
+    "mtime": 1790765609.6460714,
+    "ast_hash": "cbea5e69c8b778edc03a6e593dd68f1a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
-    "mtime": 1790586686.9869437,
-    "ast_hash": "05ad4c1c41f36a23c308e257c612b90a",
+    "mtime": 1790774065.6604733,
+    "ast_hash": "6f07b2d9f97a9265b00878f7439ec46e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/dado.ts": {
@@ -80,23 +80,23 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/hero-rig.ts": {
-    "mtime": 1790524009.2080925,
-    "ast_hash": "972a5d067e859593407d239dcf5ebe27",
+    "mtime": 1790718647.2451699,
+    "ast_hash": "afa93046b2c3bb431f258fde6f4d3a54",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particulas.ts": {
-    "mtime": 1790630321.8210938,
-    "ast_hash": "7a7a87d81ef57fa4b65cfd52d29ed108",
+    "mtime": 1790774107.7317133,
+    "ast_hash": "ae64de2eef6ef9e32783b166aa1496c6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1790586676.7936475,
-    "ast_hash": "6d2f77c1a1c3651e14ca2e8fe2168e8a",
+    "mtime": 1790774170.2369225,
+    "ast_hash": "f15db8ad572308b1bba75269792c4250",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
-    "mtime": 1790532959.4209597,
-    "ast_hash": "8b4c3a4a75720a6335135a869155f74f",
+    "mtime": 1790780221.2063687,
+    "ast_hash": "e798c6dc639b7f4b32ead348bbf10bf8",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/bendicion.ts": {
@@ -110,18 +110,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790620578.2833848,
-    "ast_hash": "25ea71c51e9e2a53031900219fd6ca5e",
+    "mtime": 1790769931.9301014,
+    "ast_hash": "de40401dd9413403c16fed08ce0b64c0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790630325.4239836,
-    "ast_hash": "da7dd0d7f790224fce600f8bf621fbd7",
+    "mtime": 1790765609.6493022,
+    "ast_hash": "6de3581e3132ab84863e0a1c10f23254",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
-    "mtime": 1790458781.1325152,
-    "ast_hash": "c0bd155d13e5db0cf61e6e2ad373782e",
+    "mtime": 1790720691.4235744,
+    "ast_hash": "0bc057f5b06bebbdc6487798047496af",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/evento.ts": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/fin.ts": {
-    "mtime": 1790544684.6253374,
-    "ast_hash": "4419458229866b559ba76c683ecd06ab",
+    "mtime": 1790719438.2695193,
+    "ast_hash": "be3da1232dff964574b702377334fbe4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/hero-sprite.ts": {
@@ -145,28 +145,28 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/mapa.ts": {
-    "mtime": 1790537709.823273,
-    "ast_hash": "e7ac3df1154eb6b3d0167f2a7346fd41",
+    "mtime": 1790761272.2304883,
+    "ast_hash": "a3ccbee758184f776fbbad2c2cbcbc23",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/recompensa.ts": {
-    "mtime": 1790544244.297615,
-    "ast_hash": "2bd78690805b134dac842e24d0e18d86",
+    "mtime": 1790761272.2317014,
+    "ast_hash": "80d12bc6379011901b32ede6242b42b2",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/titulo.ts": {
-    "mtime": 1790532959.4204588,
-    "ast_hash": "a804fca58b25bf10df2fdaf4c35e1ac8",
+    "mtime": 1790780209.0369968,
+    "ast_hash": "28337a9fe12b80a2a96cd834ae404c25",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
-    "mtime": 1790627407.4045098,
-    "ast_hash": "fe5002549ab30397e2ca1099f6410e87",
+    "mtime": 1790774116.3163395,
+    "ast_hash": "4197874fbdc66667b6a5a55713e370a3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790629546.3450017,
-    "ast_hash": "50e448e34ef5cd2b91e774567117ea3a",
+    "mtime": 1790780305.7399693,
+    "ast_hash": "c0474401de7e732b5215e9d29c275d8e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -180,8 +180,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/vite.config.ts": {
-    "mtime": 1790532984.8816466,
-    "ast_hash": "8686e20ba2c3e3b982fef6733c89127c",
+    "mtime": 1790719447.0773258,
+    "ast_hash": "8c43005d8ed180a3e36ca697cb2ba2a3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/skills/editar-carta/SKILL.md": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790621031.984809,
-    "ast_hash": "8871471b7d34b15b4fd66884cb7bb354",
+    "mtime": 1790719447.0796084,
+    "ast_hash": "248d3e7842dbaa3d39220f4f5f4fb29d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -212,16 +212,6 @@
   "/Users/sergio/WonderBits/personal/videogame/public/apple-touch-icon.png": {
     "mtime": 1790533033.1597872,
     "ast_hash": "3a9b6039e4c15a4e45d56d80c2534535",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/icono-192.png": {
-    "mtime": 1790533033.0489776,
-    "ast_hash": "8efc851f70303d8d3d8119ef26b931be",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/icono-512.png": {
-    "mtime": 1790533032.919596,
-    "ast_hash": "48ddeaae334c5acc605ba22d7374f56d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/icono.svg": {
@@ -240,8 +230,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
-    "mtime": 1790459725.128173,
-    "ast_hash": "455cf214a9a8c6f10b0c288257beaa72",
+    "mtime": 1790719438.2705278,
+    "ast_hash": "8ae3c99c45801e1707496ff2bc555a98",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery.ts": {
@@ -250,18 +240,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-sprite.ts": {
-    "mtime": 1790544511.9722567,
-    "ast_hash": "a1bf0f6af5a01ccfe8c146c617f6bd0b",
+    "mtime": 1790774107.7339125,
+    "ast_hash": "6c0ca4d88034efaf63fa27249b769dc4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-gl.ts": {
-    "mtime": 1790423302.907837,
-    "ast_hash": "324ebdddd975032ac58acead7d169fa9",
+    "mtime": 1790765073.7826564,
+    "ast_hash": "cdb42ab85fd672295742477028e466ec",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-sim.ts": {
-    "mtime": 1790544428.3041348,
-    "ast_hash": "a612c804ccbcd3aea5230087f7ae1ac7",
+    "mtime": 1790770110.0123603,
+    "ast_hash": "72010db54deb3dd00bc71731b75d9651",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet-gpu.ts": {
@@ -270,13 +260,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-stage.ts": {
-    "mtime": 1790523975.9364376,
-    "ast_hash": "6e854ea07b5971b2246d03cfdd1d835b",
+    "mtime": 1790774107.7322638,
+    "ast_hash": "c7df5697cf4048cf5d04aa6f60661dd4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/sw-avisos.js": {
-    "mtime": 1790532959.4214728,
-    "ast_hash": "ae54175ae22f986234deca24fe22a381",
+    "mtime": 1790712951.42557,
+    "ast_hash": "e0f9f7fe9e0466ac079c88c61dba46ad",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/versions.ts": {
@@ -590,8 +580,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-looks.ts": {
-    "mtime": 1790353618.5939448,
-    "ast_hash": "911715f9845d074e9cabdead66016f5c",
+    "mtime": 1790719438.270609,
+    "ast_hash": "c167d533fe0d65802703b506261355ed",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/acelerar.svg": {
@@ -1365,8 +1355,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/make_sfx.py": {
-    "mtime": 1790532959.426912,
-    "ast_hash": "f18dcf98078cf8475e969f3243c2c074",
+    "mtime": 1790719257.748308,
+    "ast_hash": "796e88fef4de6d1ac1dbd49c9bf26b40",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/sfx/sfxlib.py": {
@@ -1375,8 +1365,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/sfx-bank.ts": {
-    "mtime": 1790422108.8257492,
-    "ast_hash": "dfecab9a3c098bc74e464a27e18e881d",
+    "mtime": 1790719006.9150026,
+    "ast_hash": "bc7549ceace5584ff3b50335ad68fa99",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/wing.ts": {
@@ -1590,8 +1580,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/spell-fx.ts": {
-    "mtime": 1790630321.8206198,
-    "ast_hash": "c05cb32d9d71d9b2a58d07a52be08500",
+    "mtime": 1790770177.9644017,
+    "ast_hash": "e0eada23726faab691413757b93e32ab",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/enemy-slots.ts": {
@@ -1880,13 +1870,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/bendiciones.ts": {
-    "mtime": 1790458495.5282354,
-    "ast_hash": "822644333525b46f8405886872d62f06",
+    "mtime": 1790719255.5569458,
+    "ast_hash": "031f77fbe89e45963c220aed5393a144",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias-bendicion.ts": {
-    "mtime": 1790581592.1799524,
-    "ast_hash": "544794db9be2f0defca858d27b2920fa",
+    "mtime": 1790765609.6480703,
+    "ast_hash": "b99c66e0a008d76601d9ec4bcfc6abf1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/action-queue.ts": {
@@ -2010,8 +2000,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/taberna.ts": {
-    "mtime": 1790458664.8168879,
-    "ast_hash": "4b436a7d316ded7f9a98cac84403a7eb",
+    "mtime": 1790719288.9871264,
+    "ast_hash": "b5f46f463e1db7a94b8a7ae896b2b432",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-fly.ts": {
@@ -2025,8 +2015,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/taberna.ts": {
-    "mtime": 1790544237.947181,
-    "ast_hash": "606e7c639bfb84b9bc56cf3ee852be61",
+    "mtime": 1790708156.9524772,
+    "ast_hash": "368ac53b83fa8dfdc95809ecad982f38",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/don-danza-mortal.svg": {
@@ -2115,13 +2105,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/escena-final.ts": {
-    "mtime": 1790460408.9421551,
-    "ast_hash": "595bda3e756dbe43c4bb526aca9b5a05",
+    "mtime": 1790718665.5973542,
+    "ast_hash": "0e19956d8fab44275b935b58826c6a53",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/final-verdadero.ts": {
-    "mtime": 1790461047.266011,
-    "ast_hash": "1ab879189aaa782be6d74c046278d81d",
+    "mtime": 1790718665.5967214,
+    "ast_hash": "521bbee62a6b85081cb082cd0bb7da83",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-acto1/generate.py": {
@@ -2410,28 +2400,23 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/README.md": {
-    "mtime": 1790599397.131041,
-    "ast_hash": "c8714592db39042b2f02e565445100f7",
+    "mtime": 1790719936.63275,
+    "ast_hash": "4a31ba61e6b74fc3e06489a0805409a7",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {
-    "mtime": 1790630599.7725556,
-    "ast_hash": "a7d04717df57d8a960bb01c4e4f1091a",
+    "mtime": 1790720239.6002765,
+    "ast_hash": "efc6250cfd2b62882854c2ec4426d3aa",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/icono/generate_icon.py": {
-    "mtime": 1790533024.2491589,
-    "ast_hash": "e1d62f7abe7868fa53304f254f7e1c3e",
+    "mtime": 1790712951.430052,
+    "ast_hash": "0f09ae44f97d317154f9182178d40424",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/public/favicon.png": {
     "mtime": 1790533046.958756,
     "ast_hash": "4b98f8cfd6de521613079da9d7693414",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/public/icono-maskable-512.png": {
-    "mtime": 1790533041.8512676,
-    "ast_hash": "38bc11765a25ad8865b9ebdb268a8a1b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/fondos/mapa-contemplador/generate.py": {
@@ -2665,18 +2650,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/epitafio.ts": {
-    "mtime": 1790544487.64182,
-    "ast_hash": "95d8b6f798152aa39da3453fa1bc2e5f",
+    "mtime": 1790719438.2702937,
+    "ast_hash": "08860f0a1f0ff1454d721a4234859086",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/death-spells.ts": {
-    "mtime": 1790544376.0102339,
-    "ast_hash": "2791b68255c7456fb64ecc0d3c279e9a",
+    "mtime": 1790719759.7704306,
+    "ast_hash": "fb315b789faaf80943c9a35710fcaea6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/hero-death.ts": {
-    "mtime": 1790544396.3055344,
-    "ast_hash": "688a900bcb9dad01f79ad6016a0aa117",
+    "mtime": 1790719759.7707434,
+    "ast_hash": "7ec5d9cdade6f9eeb981d8299b42b83e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/lapida.ts": {
@@ -2852,6 +2837,366 @@
   "/Users/sergio/WonderBits/personal/videogame/src/ui/prodigious-fx.ts": {
     "mtime": 1790630303.1728966,
     "ast_hash": "425d9fba895811cb2785ab547cee5831",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/paladin.ts": {
+    "mtime": 1790719752.405969,
+    "ast_hash": "c349546db49f4a8b91a4cc52d9745f47",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/core/ajustes.ts": {
+    "mtime": 1790774036.553804,
+    "ast_hash": "673248e23086461cff48f85dd78f6d91",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/paladin.ts": {
+    "mtime": 1790719920.6109557,
+    "ast_hash": "b21b6cfa85177a251a44fa95fd863ad4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/holy-flames.ts": {
+    "mtime": 1790765591.8929236,
+    "ast_hash": "a3f739a347cda7268ea0afb2b1377876",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/castigo-ficha.ts": {
+    "mtime": 1790765609.6484299,
+    "ast_hash": "a43b5f6bc22f1bcffb4136e5217c744b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/menu-ajustes.ts": {
+    "mtime": 1790780188.8871498,
+    "ast_hash": "b7e70c2b047b2d2c7892348a624681fd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/visor-mazo-orden.ts": {
+    "mtime": 1790761240.1521883,
+    "ast_hash": "01be1101d98f144067865f291806f905",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/visor-mazo.ts": {
+    "mtime": 1790761240.1538384,
+    "ast_hash": "3575574e8cd4d9a467b96df8c55b4535",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/clase-paladin.md": {
+    "mtime": 1790769931.9311173,
+    "ast_hash": "86ab3a6deb95eb8191947082b1ec0935",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/public/icono-dm-192.png": {
+    "mtime": 1790533033.0489776,
+    "ast_hash": "8efc851f70303d8d3d8119ef26b931be",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/public/icono-dm-512.png": {
+    "mtime": 1790533032.919596,
+    "ast_hash": "48ddeaae334c5acc605ba22d7374f56d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/public/icono-dm-maskable-512.png": {
+    "mtime": 1790533041.8512676,
+    "ast_hash": "38bc11765a25ad8865b9ebdb268a8a1b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/angel-vengador.svg": {
+    "mtime": 1790720197.7285304,
+    "ast_hash": "88194285f0e55f091568f389314112c4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/arma-consagrada.svg": {
+    "mtime": 1790719901.001826,
+    "ast_hash": "d81deaaa78537714d927aeae3ec14b9a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/bastion-fe.svg": {
+    "mtime": 1790719816.2555418,
+    "ast_hash": "61e65349bb585cc07118b35a562e82f4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/carga-sagrada.svg": {
+    "mtime": 1790720171.506137,
+    "ast_hash": "e240351c64438c0ec7c5908a0c89b624",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-abrasador.svg": {
+    "mtime": 1790719580.2239952,
+    "ast_hash": "60e46d1c5c0f82040082101a23a1ed4c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-atronador.svg": {
+    "mtime": 1790719411.2361395,
+    "ast_hash": "d7742cd4b344adcdc9e7608c492c2772",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-cegador.svg": {
+    "mtime": 1790719502.4638588,
+    "ast_hash": "e69da29335dee18aa44fec4bb8c8c75c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-desterrador.svg": {
+    "mtime": 1790719372.0239315,
+    "ast_hash": "6a8d661a159ec47bb9b05039ce827d17",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-divino.svg": {
+    "mtime": 1790719185.3576152,
+    "ast_hash": "92b1986131834e8f9c4cf6f234caa695",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/castigo-resplandeciente.svg": {
+    "mtime": 1790719472.2316566,
+    "ast_hash": "0a146c21ab84cbbd6e08dca261ee6d05",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/celo-inquebrantable.svg": {
+    "mtime": 1790720104.3151755,
+    "ast_hash": "814558929cf56dcafb93d20002dcfc63",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/colera-celestial.svg": {
+    "mtime": 1790719905.7525468,
+    "ast_hash": "51cccf7230ca93ebe945760a9326ff90",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/defensa-sagrada.svg": {
+    "mtime": 1790719214.1839404,
+    "ast_hash": "c7e40eb643f5296f6e116a14201a19e9",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/egida-divina.svg": {
+    "mtime": 1790720000.026659,
+    "ast_hash": "e38ef967f45b18535eddd5159aa3c592",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/embate-escudo.svg": {
+    "mtime": 1790720214.2322528,
+    "ast_hash": "d107b5059d4bf2a9e0acd93d4b7fc889",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/escudo-fe.svg": {
+    "mtime": 1790719333.7424219,
+    "ast_hash": "20000484f79b14e1f150fed7ae4a1eff",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/expulsar-mal.svg": {
+    "mtime": 1790719553.6914582,
+    "ast_hash": "db35d11ed07907275c0629229467a8dc",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/full/angel-vengador.svg": {
+    "mtime": 1790720214.8225076,
+    "ast_hash": "60efe8bc2ce1487c29d213304983cf9e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/golpe-sagrado.svg": {
+    "mtime": 1790719151.3112566,
+    "ast_hash": "f862f239cb201599137ead9bda87a66e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/guardia-sagrada.svg": {
+    "mtime": 1790719931.4353392,
+    "ast_hash": "41cb12cd83e8a4ef2be21bb8825e2a49",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/imposicion-manos.svg": {
+    "mtime": 1790720233.1918743,
+    "ast_hash": "65cbcc7ba4a66ea3fc69d5fb4d52c68d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/instruccion-armas.svg": {
+    "mtime": 1790719965.2926342,
+    "ast_hash": "f1c61802fd013b72788ec5361e2e06a8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/juramento-antiguos.svg": {
+    "mtime": 1790719744.6013951,
+    "ast_hash": "c56fd026a80db2e53273bb79c5167a88",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/juramento-devocion.svg": {
+    "mtime": 1790719533.0715504,
+    "ast_hash": "20cf6057a83370e406140ccee1ef39d1",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/juramento-gloria.svg": {
+    "mtime": 1790719666.9363549,
+    "ast_hash": "fd2c8a8cd59c8c3d68ad6aa58736d4d6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/juramento-venganza.svg": {
+    "mtime": 1790719811.0998695,
+    "ast_hash": "53b1481634dcfa7e654cace50aa963c8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/martillo-juicio.svg": {
+    "mtime": 1790720357.1982176,
+    "ast_hash": "33428c7143e42cabb1fe25ede1910a85",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/martillo-luz.svg": {
+    "mtime": 1790719718.4788804,
+    "ast_hash": "3f431e61d816900113248c2ac7e2c2b7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/muro-fe.svg": {
+    "mtime": 1790719285.632561,
+    "ast_hash": "3c9d5f2e2171078b0489f8f297fc9f78",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/palabra-radiante.svg": {
+    "mtime": 1790719687.8145027,
+    "ast_hash": "4b5901c6f9f7318819b8d43f1c030cd2",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/plegaria-alba.svg": {
+    "mtime": 1790720061.5315158,
+    "ast_hash": "0bf8981deea2a4115aab464a63579c44",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/voto-hierro.svg": {
+    "mtime": 1790719404.572174,
+    "ast_hash": "d7aef8f6681d3d31b83b22eb0f8badc7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/voz-autoridad.svg": {
+    "mtime": 1790720518.5655246,
+    "ast_hash": "dfbc4a1f2256be50062f56b949194fb4",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-aurora.svg": {
+    "mtime": 1790719171.216964,
+    "ast_hash": "3d31b9cfefbcc73a490b1732235bd68e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/bendicion-martillo-radiante.svg": {
+    "mtime": 1790718964.0681293,
+    "ast_hash": "eafb8dca7ddb34833d37a6eb19f17169",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/don-angel-vengador.svg": {
+    "mtime": 1790718964.0709994,
+    "ast_hash": "12ddc4c8382bcc4f62d0cd4d786d8efa",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/estandarte-sagrado.svg": {
+    "mtime": 1790718964.065259,
+    "ast_hash": "84df00165107fc3da4af88256bd0c54f",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/guantelete-cruzado.svg": {
+    "mtime": 1790718964.0621617,
+    "ast_hash": "922f6642d7c5ed21258a0151c3a7bfee",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/rosario-plata.svg": {
+    "mtime": 1790719188.1588557,
+    "ast_hash": "e2dd8d44f5bb1817624ea6b62ca11af7",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/simbolo-sagrado.svg": {
+    "mtime": 1790719171.2166533,
+    "ast_hash": "e98ee4c76fb8dccdc9438183d7a12e13",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/reliquias/yelmo-juramento.svg": {
+    "mtime": 1790718964.0666752,
+    "ast_hash": "7bb64ac2137592c73587b33b7faecd1e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/bendicion.mp3": {
+    "mtime": 1790719230.3206544,
+    "ast_hash": "e3b905273ec71164d77c635052d7c47e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaCegadora.mp3": {
+    "mtime": 1790719257.9286177,
+    "ast_hash": "b414776c3a012cc5a3eb341291f588da",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaDestierro.mp3": {
+    "mtime": 1790719231.3951216,
+    "ast_hash": "656ad13a43aa0d1ae86d2554f35c0649",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaDivina.mp3": {
+    "mtime": 1790719231.1101062,
+    "ast_hash": "4756f4d02f7e43371f1a6cad8d31eebb",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaFuego.mp3": {
+    "mtime": 1790719231.2820044,
+    "ast_hash": "43dca3280de8a4e62d894dd88ee9c40c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaResplandor.mp3": {
+    "mtime": 1790719231.339732,
+    "ast_hash": "fc8bd211a0bf5f5649058b453ad14e26",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/cargaTrueno.mp3": {
+    "mtime": 1790719231.1681495,
+    "ast_hash": "0bce234f72b82d765a8d342b428fc87a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoCegador.mp3": {
+    "mtime": 1790719230.7857459,
+    "ast_hash": "adb6cc9c8c956196aaf2dfb3fc22a924",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoDestierro.mp3": {
+    "mtime": 1790719231.0438883,
+    "ast_hash": "c2fe463092e262ecce32cce8648b7e1e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoDivino.mp3": {
+    "mtime": 1790719230.6316397,
+    "ast_hash": "9167b4f835cc59aa0f715d6441e08e4c",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoFuego.mp3": {
+    "mtime": 1790719230.864932,
+    "ast_hash": "79c1b23a9ebbdb1c405fe824bf968dc3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoResplandor.mp3": {
+    "mtime": 1790719230.9518275,
+    "ast_hash": "322be99884a6afc87deae943c7e92375",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/castigoTrueno.mp3": {
+    "mtime": 1790719257.8693573,
+    "ast_hash": "b0dfd7cb1920c72b2d50e0147630a98b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/escudoSagrado.mp3": {
+    "mtime": 1790719230.2084885,
+    "ast_hash": "1d3627b14f3f492239ae228ca6cee9b1",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/expulsar.mp3": {
+    "mtime": 1790719230.442915,
+    "ast_hash": "f7fa2d22d46ef28bb1e8ce2deb78950a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/martillo-1.mp3": {
+    "mtime": 1790719229.9567556,
+    "ast_hash": "e615b1d24612e040966022d0477d3314",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/martillo-2.mp3": {
+    "mtime": 1790719230.0300488,
+    "ast_hash": "d613acd1cbdcf8ba538aa03435629553",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/martillo-3.mp3": {
+    "mtime": 1790719230.1055923,
+    "ast_hash": "a7ac092ad8000f94189c6df97c33f18b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/sfx/rayoSagrado.mp3": {
+    "mtime": 1790719230.535094,
+    "ast_hash": "679b07d7272bc7141e3f0e89b9ffcd7d",
     "semantic_hash": ""
   }
 }

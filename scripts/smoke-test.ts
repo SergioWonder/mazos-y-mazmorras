@@ -4673,6 +4673,16 @@ console.log('\n⚙️ Menú de ajustes');
   const css = src('estilos/pantallas.css');
   const regla = css.slice(css.indexOf('.seleccion-clase {'), css.indexOf('}', css.indexOf('.seleccion-clase {')));
   check(/grid-template-columns:\s*repeat\(3,/.test(regla), 'las seis clases se reparten en filas iguales de tres');
+
+  // Main-menu shortcuts inside the settings panel
+  const titulo = src('ui/titulo.ts');
+  check(/export function registrarAccesosMenuPrincipal/.test(menu), 'el menú de ajustes admite accesos del menú principal');
+  check(/registrarAccesosMenuPrincipal\(\{/.test(titulo) && /registrarAccesosMenuPrincipal\(null\)/.test(titulo),
+    'el título registra sus accesos al montarse y los retira al salir');
+  check(!/pantallaCompendio|showGallery/.test(menu) && menu.includes('Compendio de cartas') && menu.includes('Galería de sprites'),
+    'compendio y galería salen en ajustes solo a través del menú principal');
+  check(/avisosDisponibles\(\)/.test(menu) && /cambiarAvisos\(/.test(menu) && /avisosActivados\(\)/.test(menu),
+    'el menú de ajustes activa y desactiva los avisos de nuevas versiones');
 }
 
 // ── Ink-drawn campaign map (src/arte/mapa/iconos) ────────────────────────────

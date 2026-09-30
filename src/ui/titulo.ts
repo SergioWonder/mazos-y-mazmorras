@@ -5,7 +5,8 @@ import { el } from './util.ts';
 import { VERSION } from '../version.ts';
 import { pantallaCompendio } from './compendio.ts';
 import { showGallery } from './gallery.ts';
-import { avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
+import { avisosDisponibles, avisosActivados, cambiarAvisos, EVENTO_AVISOS } from './actualizacion.ts';
+import { registrarAccesosMenuPrincipal } from './menu-ajustes.ts';
 import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { finalVerdaderoDesbloqueado } from '../core/escena-final.ts';
@@ -123,6 +124,8 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
 
     function terminar(eleccion: EleccionTitulo) {
       window.removeEventListener('keydown', teclado);
+      window.removeEventListener(EVENTO_AVISOS, pintarAvisos);
+      registrarAccesosMenuPrincipal(null);
       for (const h of heroes) h.destroy();
       stage?.destroy();
       resolver(eleccion);
@@ -130,34 +133,36 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
 
     botones.forEach((b) => b.addEventListener('click', () => activar(b)));
 
-    // Compendio: pausa la navegación por teclado del título mientras está abierto
-    raiz.querySelector('.btn-compendio')!.addEventListener('click', async () => {
+    // Overlays (compendium, gallery) pause the title's keyboard navigation while open;
+    // only one at a time, whether opened here or from the settings panel
+    let superpuesta = false;
+    const superponer = async (abrir: () => Promise<void>) => {
+      if (superpuesta) return;
+      superpuesta = true;
       window.removeEventListener('keydown', teclado);
-      await pantallaCompendio();
+      await abrir();
       window.addEventListener('keydown', teclado);
-    });
+      superpuesta = false;
+    };
+    const abrirCompendio = () => void superponer(pantallaCompendio);
+    // Sprite gallery: heroes, druid forms, invocations and enemies, animated
+    const abrirGaleria = () => void superponer(showGallery);
+    raiz.querySelector('.btn-compendio')!.addEventListener('click', abrirCompendio);
+    raiz.querySelector('.btn-galeria')!.addEventListener('click', abrirGaleria);
+    registrarAccesosMenuPrincipal({ compendio: abrirCompendio, galeria: abrirGaleria });
 
     // Major-version notifications: the browser asks for permission on this click
     const btnAvisos = raiz.querySelector<HTMLButtonElement>('.btn-avisos');
-    const pintarAvisos = () => {
+    function pintarAvisos() {
       if (!btnAvisos) return;
       const bloqueados = Notification.permission === 'denied';
       btnAvisos.disabled = bloqueados;
       btnAvisos.textContent = bloqueados
         ? '🔕 Avisos bloqueados en el navegador'
         : avisosActivados() ? '🔔 Notificar nuevas versiones: activado' : '🔕 Notificar nuevas versiones';
-    };
+    }
     pintarAvisos();
-    btnAvisos?.addEventListener('click', async () => {
-      await cambiarAvisos(!avisosActivados());
-      pintarAvisos();
-    });
-
-    // Sprite gallery: heroes, druid forms, invocations and enemies, animated
-    raiz.querySelector('.btn-galeria')!.addEventListener('click', async () => {
-      window.removeEventListener('keydown', teclado);
-      await showGallery();
-      window.addEventListener('keydown', teclado);
-    });
+    window.addEventListener(EVENTO_AVISOS, pintarAvisos); // also switched from the settings panel
+    btnAvisos?.addEventListener('click', () => void cambiarAvisos(!avisosActivados()));
   });
 }

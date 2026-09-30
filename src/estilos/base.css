@@ -528,6 +528,8 @@ body[data-capitulo='2'] .titulo-juego {
 .ajuste-texto small { opacity: 0.65; font-size: 0.78rem; }
 .ajuste-volumen .ajuste-etiqueta { flex: 0 0 auto; font-size: 0.9rem; opacity: 0.85; }
 .ajuste-volumen input[type='range'] { flex: 1; accent-color: #d9a93f; }
+.menu-ajustes-enlaces { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.menu-ajustes-enlaces .btn-tomar { flex: 1 1 11rem; margin: 0; }
 .ajuste-valor { width: 3.2rem; text-align: right; font-size: 0.85rem; opacity: 0.8; }
 .ajuste-apagado { opacity: 0.45; }
 /* switch: the real checkbox stays (keyboard, screen readers) but is drawn as a toggle */
