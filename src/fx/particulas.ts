@@ -43,7 +43,13 @@ class ParticleRenderer2D {
           ctx.fillRect(-p.size * 2, -p.size * 0.25, p.size * 4, p.size * 0.5);
           ctx.fillRect(-p.size * 0.25, -p.size * 2, p.size * 0.5, p.size * 4);
           break;
-        case 'capsula': case 'colmillo': case 'haz': {
+        case 'colmillo': {
+          // wide round base at -x, sharp tip at +x (fangs, flame tongues)
+          const L = p.size * Math.max((p.stretch ?? 1) - 1, 0);
+          ctx.beginPath(); ctx.arc(-L, 0, p.size, Math.PI / 2, Math.PI * 1.5); ctx.lineTo(L, 0); ctx.closePath(); ctx.fill();
+          break;
+        }
+        case 'capsula': case 'haz': {
           const L = p.size * (p.stretch ?? 1);
           ctx.beginPath(); ctx.moveTo(-L, 0); ctx.lineTo(L, 0);
           ctx.strokeStyle = p.colour; ctx.lineCap = 'round'; ctx.lineWidth = p.size * (p.shape === 'haz' ? 1.4 : 2); ctx.stroke();
@@ -82,6 +88,8 @@ class MotorParticulas {
   private acumulador = 0;
   /** Full-art cards emitting motes (drawn in this same WebGL pass). */
   private fuentes = new Set<{ el: Element; colour: string; acc: number; seen: boolean; born: number }>();
+  /** Persistent layers (a sprite's holy flames): rebuilt by their owner, drawn every frame. */
+  private capas = new Set<() => Sprite[]>();
 
   iniciar(canvas: HTMLCanvasElement) {
     const svg = new URLSearchParams(location.search).get('render') === 'svg';
@@ -158,6 +166,13 @@ class MotorParticulas {
     }
   }
 
+  /** Registers a persistent layer of sprites drawn every frame (an aura that follows a
+   *  puppet); returns the function that removes it. */
+  capa(proveedor: () => Sprite[]): () => void {
+    this.capas.add(proveedor);
+    return () => { this.capas.delete(proveedor); };
+  }
+
   /** Estallido a pantalla completa para cartas raras. */
   estallido(nombre: string) {
     const w = window.innerWidth, h = window.innerHeight;
@@ -199,8 +214,13 @@ class MotorParticulas {
     }
     if (this.fuentes.size) this.emitirFuentes(dt, t);
     stepParticles(this.particulas, dt);
-    const spells = this.hechizos.active ? this.hechizos.frame(this.reloj, Math.max(0, MAX_LIVE_SPRITES - this.particulas.length)) : [];
-    const lista: Sprite[] = spells.length ? [...this.particulas, ...spells] : this.particulas;
+    let capas: Sprite[] = [];
+    for (const c of this.capas) capas = capas.concat(c());
+    capas = capas.slice(0, Math.max(0, MAX_LIVE_SPRITES - this.particulas.length));
+    const libres = Math.max(0, MAX_LIVE_SPRITES - this.particulas.length - capas.length);
+    const spells = this.hechizos.active ? this.hechizos.frame(this.reloj, libres) : [];
+    const extra = capas.length ? (spells.length ? [...capas, ...spells] : capas) : spells;
+    const lista: Sprite[] = extra.length ? [...this.particulas, ...extra] : this.particulas;
     // mobile: the pixel ratio is capped, particles are small and soft anyway
     this.renderer?.render(lista, w, h, Math.min(window.devicePixelRatio || 1, 2));
     requestAnimationFrame((tt) => this.bucle(tt));

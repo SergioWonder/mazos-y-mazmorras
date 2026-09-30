@@ -845,7 +845,14 @@ export class Combate {
         return f;
       },
       async prepararCastigo(c) {
-        self.jugador.castigos.push(c);
+        // only one Smite at a time: a new one (Avenging Angel…) strengthens the prepared one
+        const actual = self.jugador.castigos[0];
+        if (actual) {
+          for (const k of ['dano', 'vulnerable', 'debil', 'salpicadura', 'destierro'] as const) {
+            if (c[k]) actual[k] = (actual[k] ?? 0) + c[k]!;
+          }
+          if (c.bloqueoPorDano) actual.bloqueoPorDano = true;
+        } else self.jugador.castigos.push({ ...c });
         self.jugador.estados.castigo = self.jugador.castigos.length;
         await self.ui.fxEstado(self.jugador, 'castigo', 1);
       },
@@ -1377,12 +1384,9 @@ export class Combate {
     // Tratado Prohibido: escribe en el Conjuro Prodigioso al inicio de cada turno
     const escribania = this.jugador.estados.escribania ?? 0;
     if (escribania > 0) await this.escribirConjuro(escribania);
-    // Avenging Angel (paladin): a Smite ready and some Fervor every turn
+    // Avenging Angel (paladin): a Smite every turn, or a stronger one if it is still prepared
     const angel = this.jugador.estados.angelVengador ?? 0;
-    if (angel > 0) {
-      await this.contexto().prepararCastigo({ nombre: 'Ángel Vengador', elemento: 'divino', dano: angel });
-      await this.contexto().ganarFervor(1);
-    }
+    if (angel > 0) await this.contexto().prepararCastigo({ nombre: 'Ángel Vengador', elemento: 'divino', dano: angel });
     // Unwavering Zeal (paladin): Fervor every turn
     const celo = this.jugador.estados.fervorPorTurno ?? 0;
     if (celo > 0) await this.contexto().ganarFervor(celo);
@@ -1431,6 +1435,8 @@ export class Combate {
     // Curses are unplayable, except the ones that can be paid off
     if (def.tipo === 'maldicion' && def.purgar === undefined) return false;
     if (this.jugador.energia < this.costeEfectivo(def)) return false;
+    // (paladin) only one Smite prepared at a time
+    if (def.castigo && this.jugador.castigos.length > 0) return false;
     if (def.requiereConjuro) {
       const libres = this.jugador.conjuros.filter(
         (c) => !c.gastado && c.nivel >= def.requiereConjuro!,

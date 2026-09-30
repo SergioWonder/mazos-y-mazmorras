@@ -2095,9 +2095,9 @@ export const MAGO: CartaDef[] = [
       await c.aplicarEstado(c.jugador, 'escribania', 4);
     },
     mejora: {
-      texto: 'Poder: al inicio de cada turno,\nEscribir 5 en el Conjuro Prodigioso.',
+      texto: 'Poder: al inicio de cada turno,\nEscribir 7 en el Conjuro Prodigioso.',
       jugar: async (c) => {
-        await c.aplicarEstado(c.jugador, 'escribania', 5);
+        await c.aplicarEstado(c.jugador, 'escribania', 7);
       },
     },
   },
@@ -4456,10 +4456,10 @@ export const PALADIN: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'martillo',
-    texto: 'Inflige 14 de daño. Los Castigos que\ndescargue se aplican dos veces.',
+    texto: 'Inflige 14 de daño. El Castigo que\ndescargue se aplica dos veces.',
     jugar: async (c) => { await c.atacar(c.objetivo!, 14, 1, 'martillo'); },
     mejora: {
-      texto: 'Inflige 18 de daño. Los Castigos que\ndescargue se aplican dos veces.',
+      texto: 'Inflige 18 de daño. El Castigo que\ndescargue se aplica dos veces.',
       jugar: async (c) => { await c.atacar(c.objetivo!, 18, 1, 'martillo'); },
     },
   },
@@ -4619,11 +4619,11 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'bendicion',
     animRara: 'anim-divino',
-    texto: 'Poder: al inicio de cada turno preparas\nun Castigo de 8 de daño más\ny ganas 1 de Fervor.',
+    texto: 'Poder: al inicio de cada turno preparas\nun Castigo de 8 de daño más; si ya\ntienes uno, le suma 8.',
     jugar: async (c) => { await c.aplicarEstado(c.jugador, 'angelVengador', 8); },
     mejora: {
       innato: true,
-      texto: 'Innata. Poder: al inicio de cada turno\npreparas un Castigo de 10 de daño más\ny ganas 1 de Fervor.',
+      texto: 'Innata. Poder: al inicio de cada turno\npreparas un Castigo de 10 de daño más;\nsi ya tienes uno, le suma 10.',
       jugar: async (c) => { await c.aplicarEstado(c.jugador, 'angelVengador', 10); },
     },
   },

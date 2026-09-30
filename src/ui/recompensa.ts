@@ -137,6 +137,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       const panel = el('div', 'panel-recompensa panel-descanso');
       panel.innerHTML = `
         <h2>🏕️ Campamento</h2>
+        <p class="descanso-pv">❤️ ${run.pv}/${run.pvMax} PV</p>
         ${sceneArt('campamento', '🔥', 'hoguera', 'Una hoguera en la noche')}
         <p>El fuego crepita. Hay tiempo para una sola cosa antes de seguir.</p>
         <div class="descanso-opciones">

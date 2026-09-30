@@ -22,10 +22,13 @@ supervitaminan su siguiente ataque y Fervor que se carga jugando Golpes y Defens
 ### Castigos
 - Cartas de habilidad que **preparan** un efecto sobre el **siguiente ataque** que juegues
   (la siguiente carta de tipo ataque). Al jugarlas consumen tu Fervor y fijan su potencia.
-- Se pueden encadenar: todos los preparados se descargan en el mismo ataque.
+- **Solo uno a la vez**: con un Castigo preparado no se puede jugar otra carta de Castigo. Los
+  efectos que generan Castigo (Ángel Vengador) refuerzan el que ya haya.
+- Mientras está preparado, el héroe arde con un aura sagrada de llamas amarillas y blancas, y una
+  ficha junto a él muestra lo que llevará el próximo ataque.
 - Al descargarse: el daño extra va en el **primer golpe** del ataque sobre cada objetivo,
   y los estados se aplican a cada objetivo golpeado.
-- Indicador: estado `castigo` = número de Castigos preparados, con tooltip que los lista.
+- Indicador: estado `castigo` (1 si hay uno preparado) y ficha `castigo-ficha` junto al héroe.
 - Elementos (cada uno con su efecto visual al preparar y al descargar):
 
 | Castigo | Elemento | Efecto al descargar |
@@ -118,7 +121,7 @@ Formato: `id` — Nombre — tipo, rareza, coste — texto (mejora) — clave fx
     (aplica +2 por cada Fervor). Consume tu Fervor. Se agota. (9, +3) — `bendicion` — Manos
     que brillan sobre la herida de un compañero caído.
 21. `martillo-juicio` — Martillo del Juicio — ataque, infrecuente, 2 — Inflige 14 de daño.
-    Los Castigos que descargue se aplican dos veces. (18) — `martillo` — Un martillo
+    El Castigo que descargue se aplica dos veces. (18) — `martillo` — Un martillo
     colosal de luz golpea el suelo y lo agrieta en líneas doradas.
 22. `voz-autoridad` — Voz de Autoridad — habilidad, infrecuente, 1 — Gana 6 de bloqueo.
     Aplica 1 de Débil a TODOS los enemigos. (9, 2) — `expulsar` — El paladín grita con el
@@ -148,7 +151,7 @@ Formato: `id` — Nombre — tipo, rareza, coste — texto (mejora) — clave fx
 
 ### Única de clase (Acto III, full art)
 30. `angel-vengador` — Ángel Vengador — poder, especial, 2 — Poder: al inicio de cada turno
-    preparas un Castigo de 8 de daño más y ganas 1 de Fervor. (Innata; 10) — secuencia
+    preparas un Castigo de 8 de daño más; si ya tienes uno, le suma 8. (Innata; 10) — secuencia
     propia — **Full art**: el paladín con enormes alas de luz, martillo alzado, suspendido
     sobre un campo de batalla.
 

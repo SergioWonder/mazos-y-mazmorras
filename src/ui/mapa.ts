@@ -6,6 +6,7 @@ import { el } from './util.ts';
 import { relicIcon } from './relic-art.ts';
 import { cardArtBitmap } from './card-svgs.ts';
 import { mapIconFor, mapIconUrl, hasMapIcon, mapBackground, mapScenarioKey } from './map-icons.ts';
+import { verCartas } from './visor-mazo.ts';
 
 const NODE_NAME: Record<TipoNodo, string> = {
   combate: 'Combate', elite: 'Élite', descanso: 'Campamento', cofre: 'Cofre',
@@ -78,7 +79,7 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
         <span class="bs-reliquias">${run.reliquias
           .map((r) => `<span class="reliquia" data-tip="<strong>${relicIcon(r, 20)} ${r.nombre}</strong><br>${r.texto}">${relicIcon(r)}</span>`)
           .join('')}</span>
-        <span class="bs-piso">🃏 ${run.mazo.length} cartas</span>
+        <button class="bs-piso bs-mazo" data-tip="<strong>🃏 Tu mazo</strong><br>Toca para ver tus cartas.">🃏 ${run.mazo.length} cartas</button>
       </div>
       <div class="mapa-cartela"><h2 class="mapa-titulo">${nombreCapitulo}</h2></div>
       <div class="mapa-scroll">
@@ -90,6 +91,7 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
       <p class="titulo-ayuda">Elige tu siguiente paso · ←→ y Enter, o haz clic</p>
     `;
     app.appendChild(raiz);
+    raiz.querySelector('.bs-mazo')!.addEventListener('click', () => verCartas('🃏 Tu mazo', run.mazo));
 
     // painted parchment for this scenario (the act's one while it is missing;
     // the CSS parchment when neither exists)

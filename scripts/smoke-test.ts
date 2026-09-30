@@ -1302,6 +1302,12 @@ console.log('— Pícaro: mecánicas nuevas —');
     comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
     await comb.terminarTurno();
     check(comb.jugador.conjuroEscrito === 4, 'Tratado Prohibido escribe 4 al inicio del turno siguiente');
+    const mejor = instanciar(tratado);
+    mejor.mejorada = true;
+    await defDe(mejor).jugar(comb.contexto());
+    comb.enemigos[0].intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    await comb.terminarTurno();
+    check(comb.jugador.conjuroEscrito === 4 + 4 + 7, 'Tratado Prohibido+ escribe 7 cada turno');
   }
 }
 
@@ -6841,10 +6847,16 @@ console.log('\n🔨 Paladín');
     const e = comb.enemigos[0];
     comb.jugador.estados.fervor = 4;
     await jugar(comb, 'castigo-atronador');
-    await jugar(comb, 'castigo-cegador');
+    const cegador = instanciar(CT.cartaPorId('castigo-cegador')!);
+    comb.jugador.mano.push(cegador);
+    check(!comb.puedeJugar(cegador), 'solo puede haber un Castigo preparado: no se puede cargar otro');
+    comb.jugador.mano.pop();
     await jugar(comb, 'golpe');
     check((e.estados.vulnerable ?? 0) === 4, `Castigo Atronador con 4 de Fervor aplica 2 + 2 de Vulnerable (${e.estados.vulnerable})`);
-    check((e.estados.debil ?? 0) === 2, 'Castigo Cegador aplica Débil (el Fervor ya lo gastó el primero); se encadenan en un mismo ataque');
+    check(comb.puedeJugar(cegador), 'tras descargarlo se puede preparar el siguiente');
+    await jugar(comb, 'castigo-cegador');
+    await jugar(comb, 'golpe');
+    check((e.estados.debil ?? 0) === 2, 'Castigo Cegador aplica 2 de Débil');
   }
   {
     const { comb } = await montarP([dummy(), dummy(), dummy()]);
@@ -7039,7 +7051,24 @@ console.log('\n🔨 Paladín');
     const { comb } = await montarP();
     await jugar(comb, 'angel-vengador');
     await comb.terminarTurno();
-    check(comb.jugador.castigos.length === 1 && fervor(comb) >= 1, 'Ángel Vengador: al inicio del turno preparas un Castigo y ganas Fervor');
+    check(comb.jugador.castigos.length === 1 && comb.jugador.castigos[0].dano === 8,
+      'Ángel Vengador: al inicio del turno, sin Castigo preparado, genera uno de 8');
+    await comb.terminarTurno();
+    check(comb.jugador.castigos.length === 1 && comb.jugador.castigos[0].dano === 16,
+      'Ángel Vengador: si ya tienes un Castigo preparado, lo incrementa en 8');
+    check(!('fervorPorTurno' in comb.jugador.estados) && fervor(comb) === 0, 'Ángel Vengador ya no da Fervor');
+  }
+
+  // — the prepared Smite's badge beside the hero —
+  {
+    const { resumenCastigo } = await import('../src/ui/castigo-ficha.ts');
+    const div = resumenCastigo({ nombre: 'Castigo Divino', elemento: 'divino', dano: 10 });
+    check(div.icono === '🌟' && div.corto === '+10' && /10 de daño/.test(div.texto), 'la ficha del Castigo Divino muestra +10');
+    const res = resumenCastigo({ nombre: 'Castigo Resplandeciente', elemento: 'resplandor', dano: 4, bloqueoPorDano: true });
+    check(/4 de daño más y te da bloqueo/.test(res.texto), `la ficha describe el Castigo entero (${res.texto})`);
+    check(resumenCastigo({ nombre: 'x', elemento: 'destierro', destierro: 12 }).corto === '≤12', 'el Destierro muestra su umbral');
+    const fuente = (await import('node:fs')).readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+    check(/castigo-ficha/.test(fuente) && /resumenCastigo/.test(fuente), 'el combate pinta la ficha del Castigo junto al héroe');
   }
 
   // — relics —
@@ -7070,6 +7099,44 @@ console.log('\n🔨 Paladín');
   }
 }
 
+// ── Combat HUD: energy at the left edge, end turn at the right edge ─────────
+console.log('\n🎛️ HUD del combate');
+{
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  const zona = src.slice(src.indexOf('<div class="zona-mano">'), src.indexOf('<div class="linea-lanzamiento">'));
+  const orden = ['energia', 'pila-robo', 'mano', 'pila-descarte', 'btn-fin-turno'].map((c) => zona.search(new RegExp(`class="([\\w-]+ )*${c}"`)));
+  check(orden.every((p, i) => p >= 0 && (i === 0 || p > orden[i - 1])), 'la zona de la mano va de energía (izquierda) a fin de turno (derecha)');
+  const css = fs.readFileSync(new URL('../src/estilos/combate.css', import.meta.url), 'utf8');
+  const regla = css.slice(css.indexOf('.zona-mano {'), css.indexOf('}', css.indexOf('.zona-mano {')));
+  check(/justify-content:\s*space-between/.test(regla), 'la energía y el botón de fin de turno van pegados a los extremos');
+  const movil = fs.readFileSync(new URL('../src/estilos/movil.css', import.meta.url), 'utf8');
+  check(/\.energia \{ order: 1; \}/.test(movil) && /\.btn-fin-turno \{ order: 4; \}/.test(movil),
+    'en vertical, la energía abre la fila del HUD y el fin de turno la cierra');
+}
+
+// ── Deck viewer and the campfire's health ──────────────────────────────────
+console.log('\n🃏 Visor del mazo y vida en la hoguera');
+{
+  const fs = await import('node:fs');
+  const V = await import('../src/ui/visor-mazo-orden.ts').catch(() => null);
+  check(!!V, 'existe el orden del visor del mazo (ui/visor-mazo-orden.ts)');
+  if (V) {
+    const CT = await import('../src/core/cartas.ts');
+    const ids = ['defender', 'golpe', 'castigo-divino', 'golpe', 'arma-consagrada', 'herida-infectada'];
+    const mazo = ids.map((id) => instanciar(CT.cartaPorId(id)!));
+    mazo[1].mejorada = true;
+    const orden = V.ordenarParaVisor(mazo).map((c) => `${c.def.id}${c.mejorada ? '+' : ''}`);
+    check(orden.join() === 'golpe,golpe+,castigo-divino,defender,arma-consagrada,herida-infectada',
+      `el visor ordena ataques, habilidades, poderes y maldiciones; por coste y nombre, con las mejoradas detrás (${orden.join()})`);
+    check(mazo.map((c) => c.def.id).join() === ids.join(), 'ordenar para el visor no cambia el mazo');
+  }
+  const ui = (f: string) => fs.readFileSync(new URL(`../src/ui/${f}`, import.meta.url), 'utf8');
+  check(/verCartas\(/.test(ui('mapa.ts')), 'en el mapa, tocar el mazo abre el visor de tus cartas');
+  check(/verCartas\(/.test(ui('combate.ts')), 'en combate, tocar las pilas abre el visor de sus cartas');
+  check(/descanso-pv/.test(ui('recompensa.ts')), 'la hoguera muestra tus puntos de golpe');
+}
+
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
 console.log('\n📱 Iconos de la app instalada');
 {
@@ -7083,6 +7150,91 @@ console.log('\n📱 Iconos de la app instalada');
   check(/id: '\/mazos-y-mazmorras\/'/.test(conf), 'el manifiesto fija su id igual al de la app ya instalada');
   const aviso = fs.readFileSync(new URL('../public/sw-avisos.js', import.meta.url), 'utf8');
   check([...aviso.matchAll(/'([\w-]+\.png)'/g)].every((m) => iconos.includes(m[1])), 'las notificaciones usan el icono actual');
+}
+
+// ── Paladin: holy flames around the hero while a Smite is prepared ──────────
+console.log('\n🕯️ Aura de llamas sagradas del Castigo preparado');
+try {
+  const hf = await import('../src/fx/holy-flames.ts');
+  const { flameAnchors, flameScreenPoints, holyFlameFrame, FlameFade, FLAME_FADE_IN, FLAME_FADE_OUT, MAX_FLAME_SPRITES, HOLY_FLAME_COLOURS } = hf;
+  const rigP = HERO_RIGS.paladin;
+  const anclas = flameAnchors(rigP);
+  check(anclas.length >= 8, `llama sagrada: la silueta del paladín tiene puntos de llama (${anclas.length})`);
+  check(anclas.every((a) => a.bone !== 'weapon' && !String(a.bone).startsWith('ch')), 'llama sagrada: las llamas nacen del cuerpo, no del martillo ni de la capa');
+  check(JSON.stringify(flameAnchors(rigP)) === JSON.stringify(anclas), 'llama sagrada: los puntos de la silueta son deterministas');
+  const xs = anclas.map((a) => a.at[0]), ys = anclas.map((a) => a.at[1]);
+  check(Math.min(...ys) < 50 && Math.max(...ys) > 115, 'llama sagrada: rodea al héroe de los pies a la cabeza');
+  check(Math.max(...xs) - Math.min(...xs) > 25, 'llama sagrada: rodea al héroe por ambos lados');
+  const huesos = heroBones('paladin', heroPose('paladin', 0.3, null).p);
+  const unit = 1.2, rect = { x: 80, y: 220, w: 140 * unit };
+  const pts = flameScreenPoints(anclas, huesos, spriteMatrix(rect, false, rigP.art ?? 1));
+  check(pts.length === anclas.length && pts.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y)), 'llama sagrada: los puntos se llevan a pantalla');
+  const fr = holyFlameFrame(1.3, pts, { level: 1, unit });
+  check(fr.length > 0, 'llama sagrada: con el Castigo preparado hay llamas');
+  check(JSON.stringify(holyFlameFrame(1.3, pts, { level: 1, unit })) === JSON.stringify(fr), 'llama sagrada: el fotograma es determinista');
+  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const amarillo = (c: string) => { const [r, g, b] = rgb(c); return r > 220 && g > 170 && b < 170; };
+  const blanco = (c: string) => rgb(c).every((v) => v > 190); // white, or a warm white
+  check(HOLY_FLAME_COLOURS.every((c) => amarillo(c) || blanco(c)), 'llama sagrada: la paleta es solo de amarillos y blancos');
+  const colores = new Set<string>();
+  let maxN = 0, maxA = 0, saltos = 0, fuera = 0, reducidoMax = 0;
+  const bx0 = Math.min(...pts.map((p) => p.x)), bx1 = Math.max(...pts.map((p) => p.x));
+  const by0 = Math.min(...pts.map((p) => p.y)), by1 = Math.max(...pts.map((p) => p.y));
+  let prev = holyFlameFrame(0, pts, { level: 1, unit });
+  for (let t = 1 / 60; t < 6; t += 1 / 60) {
+    const f = holyFlameFrame(t, pts, { level: 1, unit });
+    maxN = Math.max(maxN, f.length);
+    reducidoMax = Math.max(reducidoMax, holyFlameFrame(t, pts, { level: 1, unit, reduced: true }).length);
+    for (const s of f) {
+      colores.add(s.colour);
+      maxA = Math.max(maxA, s.alpha ?? 1);
+      if (s.x < bx0 - 30 * unit || s.x > bx1 + 30 * unit || s.y < by0 - 40 * unit || s.y > by1 + 10 * unit) fuera++;
+    }
+    // stable: each flame moves smoothly, it only jumps while invisible
+    if (f.length === prev.length) {
+      f.forEach((s, i) => {
+        const p = prev[i];
+        if (Math.hypot(s.x - p.x, s.y - p.y) > 3 * unit && Math.max(s.alpha ?? 1, p.alpha ?? 1) > 0.06) saltos++;
+      });
+    } else saltos++;
+    prev = f;
+  }
+  check([...colores].some(amarillo) && [...colores].some(blanco), 'llama sagrada: arde en amarillo y blanco');
+  check(saltos === 0, `llama sagrada: las llamas se mueven con suavidad, sin saltos visibles (${saltos})`);
+  check(maxA <= 0.7, `llama sagrada: en calma, translúcida para no tapar al héroe (alfa máx. ${maxA.toFixed(2)})`);
+  check(fuera === 0, `llama sagrada: las llamas se quedan pegadas a la silueta (${fuera} fuera)`);
+  check(maxN <= MAX_FLAME_SPRITES && MAX_FLAME_SPRITES <= 60, `llama sagrada: respeta el tope de partículas (${maxN} de ${MAX_FLAME_SPRITES})`);
+  check(reducidoMax > 0 && reducidoMax < maxN, `llama sagrada: con movimiento reducido hay menos llamas (${reducidoMax} < ${maxN})`);
+  const muchos = Array.from({ length: 200 }, (_, i) => ({ x: i * 3, y: 300 + (i % 7) }));
+  check(holyFlameFrame(2, muchos, { level: 1, unit }).length <= MAX_FLAME_SPRITES, 'llama sagrada: el tope aguanta aunque la silueta tenga muchos puntos');
+  const mov = pts.map((p) => ({ x: p.x + 50, y: p.y - 20 }));
+  const a = holyFlameFrame(2.2, pts, { level: 1, unit }), b = holyFlameFrame(2.2, mov, { level: 1, unit });
+  check(a.length === b.length && a.every((s, i) => Math.abs(b[i].x - s.x - 50) < 1e-6 && Math.abs(b[i].y - s.y + 20) < 1e-6),
+    'llama sagrada: las llamas siguen al sprite cuando se mueve');
+  const ataque = flameScreenPoints(anclas, heroBones('paladin', heroPose('paladin', 0.3, { type: 'attack', p: 0.35 }).p), spriteMatrix(rect, false, rigP.art ?? 1));
+  check(ataque.some((p, i) => Math.hypot(p.x - pts[i].x, p.y - pts[i].y) > 3), 'llama sagrada: las llamas acompañan la pose (al atacar se mueven con el cuerpo)');
+  const media = holyFlameFrame(2.2, pts, { level: 0.5, unit });
+  check(media.length > 0 && media.every((s, i) => Math.abs((s.alpha ?? 1) - (a[i].alpha ?? 1) * 0.5) < 1e-6), 'llama sagrada: el fundido atenúa las llamas');
+  check(holyFlameFrame(2.2, pts, { level: 0, unit }).length === 0, 'llama sagrada: apagada no dibuja nada');
+  // fade in on preparing a Smite, fade out when it is released
+  const fade = new FlameFade();
+  check(fade.level(5) === 0 && !fade.active(5), 'llama sagrada: sin Castigo, sin aura');
+  fade.set(true, 10);
+  check(fade.level(10) === 0 && fade.level(10 + FLAME_FADE_IN / 2) > 0.2 && fade.level(10 + FLAME_FADE_IN / 2) < 0.8 && fade.level(10 + FLAME_FADE_IN) === 1,
+    'llama sagrada: aparece con un fundido al preparar el Castigo');
+  check(FLAME_FADE_IN >= 0.3 && FLAME_FADE_IN <= 1 && FLAME_FADE_OUT >= 0.3 && FLAME_FADE_OUT <= 1.2, 'llama sagrada: fundidos de entrada y salida suaves pero breves');
+  fade.set(true, 11);
+  check(fade.level(11) === 1, 'llama sagrada: volver a pedirla no reinicia el fundido');
+  fade.set(false, 20);
+  check(fade.level(20) === 1 && fade.level(20 + FLAME_FADE_OUT / 2) < 1 && fade.level(20 + FLAME_FADE_OUT) === 0 && !fade.active(20 + FLAME_FADE_OUT),
+    'llama sagrada: se apaga con un fundido al descargar el Castigo');
+  const corte = new FlameFade();
+  corte.set(true, 0);
+  const aMitad = corte.level(FLAME_FADE_IN / 2);
+  corte.set(false, FLAME_FADE_IN / 2);
+  check(Math.abs(corte.level(FLAME_FADE_IN / 2) - aMitad) < 1e-9, 'llama sagrada: apagarla a medio fundido no da saltos');
+} catch (e) {
+  check(false, `las pruebas de la llama sagrada revientan: ${(e as Error).stack ?? e}`);
 }
 
 // ── Prodigious Spell: a random spell effect whose grandeur follows its power ─

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '6.13.1';
+export const VERSION = '7.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔨 Dracs & Rogues 7.0: llega el Paladín, sexta clase, con martillo, escudo y Castigos de luz sagrada.',
+      '🌟 El Paladín gana Fervor con cada Golpe y Defensa y lo gasta en su Castigo: solo uno a la vez, que arde a su alrededor como un aura sagrada hasta descargarse en su próximo ataque. Su Símbolo Sagrado convierte los Golpes y Defender que eliminas en sagrados.',
+      '🎛️ Combate más cómodo: la energía queda en el extremo izquierdo y el fin de turno en el derecho, el Castigo preparado se ve junto al héroe y tocando el mazo o las pilas puedes ver sus cartas.',
+      '🎲 En la taberna puedes eliminar una carta de tu mazo, y en la hoguera ves tus puntos de golpe.',
+      '✨ El mago se luce: Proyectil Mágico en ráfagas serpenteantes que se cargan con cada lanzamiento, el Conjuro Prodigioso con hechizos cada vez más épicos y Tratado Prohibido+ que escribe 7 por turno.',
+      '🗺️ Durante la 6.x: mapas propios para cada escenario, ilustraciones de personajes, muertes épicas del héroe, cartas de pergamino, música para el Dungeon Master, nueva tipografía y números reales en todas las cartas.',
+    ],
+  },
   {
     version: '6.13.1',
     fecha: '2026-09-30',

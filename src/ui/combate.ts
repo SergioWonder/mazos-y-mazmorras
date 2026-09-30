@@ -26,10 +26,12 @@ import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } 
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
+import { resumenCastigo } from './castigo-ficha.ts';
 import {
   deathTimeScale, heroDeathFx, heroDeathSequence, playsDefeatSequence, SOUL_SPELL, type DeathCueId,
 } from '../fx/hero-death.ts';
 import { setSpriteTimeScale } from './puppet-sprite.ts';
+import { verCartas } from './visor-mazo.ts';
 import '../estilos/muerte.css';
 
 /** How the hero fell in the last lost combat (for the tombstone). */
@@ -89,11 +91,11 @@ export function pantallaCombate(
         <div class="aviso-jefe">${esJefe ? '☠️ JEFE ☠️' : ''}</div>
       </div>
       <div class="zona-mano">
-        <div class="pila pila-robo" data-tip="<strong>Pila de robo</strong><br>Cartas que quedan por robar."></div>
         <div class="energia"></div>
+        <div class="pila pila-robo" data-tip="<strong>Pila de robo</strong><br>Cartas que quedan por robar. Toca para verlas."></div>
         <div class="mano"></div>
+        <div class="pila pila-descarte" data-tip="<strong>Descarte</strong><br>Vuelve a barajarse cuando se agota la pila de robo. Toca para verlo."></div>
         <button class="btn-fin-turno">Fin de turno<span class="atajo">[E]</span></button>
-        <div class="pila pila-descarte" data-tip="<strong>Descarte</strong><br>Vuelve a barajarse cuando se agota la pila de robo."></div>
       </div>
       <div class="linea-lanzamiento">Suelta aquí para lanzar</div>
       <div class="ayuda-teclas">←→ elegir · Enter jugar · Esc cancelar · E fin de turno</div>
@@ -732,6 +734,15 @@ export function pantallaCombate(
       return `<div class="conjuro-ficha" data-tip="${tip}">📜 ${dmg}</div>`;
     }
 
+    /** Floating badge of the paladin's prepared Smite (what the next attack carries). */
+    function indicadorCastigo(): string {
+      const c = combate.jugador.castigos[0];
+      if (!c) return '';
+      const ficha = resumenCastigo(c);
+      const tip = `<strong>${ficha.icono} ${c.nombre}</strong><br>${ficha.texto}`.replace(/"/g, '&quot;');
+      return `<div class="castigo-ficha castigo-${c.elemento}" data-tip="${tip}">${ficha.icono} ${ficha.corto}</div>`;
+    }
+
     function renderJugador() {
       const j = combate.jugador;
       const forma = formaActual();
@@ -757,6 +768,7 @@ export function pantallaCombate(
         }" data-luchador="jugador" style="--acento-heroe:${spriteActual().accent}">
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
           ${conjuro}
+          ${indicadorCastigo()}
           ${sprite}
           ${barraVida(j)}
           ${fichasEstados(j)}
@@ -769,6 +781,7 @@ export function pantallaCombate(
       // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
       actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
       actual.setEchoes((j.estados.espejismo ?? 0) > 0);
+      actual.setFlames(j.castigos.length > 0 ? 'holy' : null);
       const inv = spriteInvocacion();
       if (inv) {
         $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
@@ -1152,6 +1165,7 @@ export function pantallaCombate(
       const def = defDe(inst);
       if (def.tipo === 'maldicion' && def.purgar === undefined) return '☠️ Las maldiciones no se pueden jugar';
       if (combate.jugador.energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
+      if (def.castigo && combate.jugador.castigos.length > 0) return '🌟 Ya tienes un Castigo preparado: descárgalo antes con un ataque';
       if (def.requiereConjuro)
         return `◈ Necesitas un espacio de conjuro de nivel ${def.requiereConjuro}+`;
       return 'No puedes jugar esa carta ahora';
@@ -1338,6 +1352,10 @@ export function pantallaCombate(
     window.addEventListener('keydown', alTeclar);
 
     $('.btn-fin-turno').addEventListener('click', pulsarFinTurno);
+    // the piles open the deck viewer (the draw pile shown sorted, never in drawing order)
+    $('.pila-robo').addEventListener('click', () =>
+      verCartas('🂠 Pila de robo', combate.jugador.mazo, 'Ordenadas por tipo y coste, no en el orden en que las robarás.'));
+    $('.pila-descarte').addEventListener('click', () => verCartas('🗑 Descarte', combate.jugador.descarte));
 
     // ── Final del combate ────────────────────────────────────────────────────
     let resuelto = false;

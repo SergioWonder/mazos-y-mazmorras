@@ -298,7 +298,7 @@
     min-height: 0;
     flex-wrap: wrap;
     align-content: space-between;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
     padding: 0.5rem 0.5rem 0.3rem;
     /* the painted ground shows through at the top, the hand sits on a darker shadow */
@@ -313,10 +313,10 @@
     background: rgba(8, 11, 7, 0.6);
     text-shadow: 0 1px 3px #000;
   }
-  .pila-robo { order: 1; }
-  .energia { order: 2; }
-  .btn-fin-turno { order: 3; }
-  .pila-descarte { order: 4; }
+  .energia { order: 1; }
+  .pila-robo { order: 2; }
+  .pila-descarte { order: 3; }
+  .btn-fin-turno { order: 4; }
   .mano {
     order: 5;
     flex-basis: 100%;

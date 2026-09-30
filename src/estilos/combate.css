@@ -343,6 +343,28 @@ body.arrastre-activo .zona-mano,
   box-shadow: 0 0 12px rgba(159, 216, 255, 0.55);
 }
 
+/* The paladin's prepared Smite: bright, beside the hero, like the Prodigious Spell */
+.castigo-ficha {
+  position: absolute;
+  top: 2.2rem;
+  right: -18px;
+  z-index: 2;
+  font-family: var(--fuente-titulo);
+  font-size: 1.05rem;
+  color: #fff8dc;
+  background: radial-gradient(circle at 35% 30%, #c9962a, #4a3308);
+  border: 2px solid #ffd35a;
+  border-radius: 999px;
+  padding: 5px 11px;
+  white-space: nowrap;
+  cursor: help;
+  box-shadow: 0 0 12px rgba(255, 211, 90, 0.6);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+.castigo-ficha.castigo-trueno { border-color: #bfe3ff; }
+.castigo-ficha.castigo-cegador { border-color: #ffffff; }
+.castigo-ficha.castigo-fuego { border-color: #ff9a3c; }
+.castigo-ficha.castigo-destierro { border-color: #c79bff; }
 .conjuro-ficha {
   position: absolute;
   top: 2.2rem;
@@ -427,7 +449,8 @@ body.arrastre-activo .zona-mano,
   height: 218px;
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  /* energy and resources at the left edge, the end turn button at the right edge */
+  justify-content: space-between;
   gap: 1.1rem;
   padding: 0 1.2rem 0.9rem;
   position: relative;
@@ -532,7 +555,7 @@ body.arrastre-activo .zona-mano,
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: help;
+  cursor: pointer;
 }
 .pila span {
   font-family: var(--fuente-titulo);
@@ -825,7 +848,7 @@ body.arrastre-activo { cursor: grabbing; }
 @keyframes glow-pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 @keyframes glow-soft { 0%, 100% { opacity: 0.78; } 50% { opacity: 1; } }
 .rasgo-jefe, .estado-letal, .furia-ficha, .orbe, .btn-fin-turno { position: relative; }
-.luna::after, .rasgo-jefe::after, .conjuro-ficha::after, .estado-letal::after,
+.luna::after, .rasgo-jefe::after, .conjuro-ficha::after, .castigo-ficha::after, .estado-letal::after,
 .furia-ficha::after, .orbe::after, .btn-fin-turno.fin-pendiente::after {
   content: '';
   position: absolute;
@@ -839,6 +862,7 @@ body.arrastre-activo { cursor: grabbing; }
 .rasgo-jefe::after { --glow-t: 2.2s; box-shadow: 0 0 16px rgba(255, 107, 53, 0.85); }
 .furia-ficha::after { --glow-t: 1.4s; box-shadow: 0 0 16px rgba(255, 107, 53, 0.85); }
 .conjuro-ficha::after { --glow-t: 1.8s; box-shadow: 0 0 16px rgba(201, 163, 255, 0.85); }
+.castigo-ficha::after { --glow-t: 1.6s; box-shadow: 0 0 18px rgba(255, 211, 90, 0.9); }
 .estado-letal::after { --glow-t: 0.9s; box-shadow: 0 0 14px rgba(161, 92, 224, 0.9); }
 .orbe::after { --glow-t: 2.4s; box-shadow: 0 0 30px rgba(255, 166, 60, 0.75); }
 .orbe-vacio::after { display: none; }
