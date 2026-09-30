@@ -194,6 +194,8 @@ export const EMISSIVE = new Set([
   'gem', 'orb', 'flame', 'flameCore', 'eyeGlow', 'moonGlow', 'starGlow', 'magic', 'fire', 'poison', 'lava',
   // card art glows
   'bolt', 'slash', 'voidCore', 'soul', 'violetFire', 'violetCore', 'greenFire', 'redMagic', 'sparkle', 'breeze',
+  // monster eyes: burning irises, bloodshot veins and wet highlights
+  'iris', 'vein', 'glint',
 ]);
 export const EYES = new Set(['eye', 'eyeGlow']);
 

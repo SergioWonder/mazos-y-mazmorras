@@ -21,8 +21,8 @@ import { currentForm, type FormId } from '../fx/hero-rig.ts';
 import { layoutSlots } from './enemy-slots.ts';
 import { relicIcon } from './relic-art.ts';
 import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
-import { playDestination, drawDelays, type Point } from './card-motion.ts';
-import { flyDiscard, flyDraw, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
+import { playDestination, drawDelays, exhaustsWhenPlayed, type Point } from './card-motion.ts';
+import { flyDiscard, flyDraw, flyExhaust, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
@@ -864,7 +864,7 @@ export function pantallaCombate(
         div.innerHTML = `
           <div class="intencion" data-tip="<strong>${e.intencion.nombre}</strong><br>${
             tipInt[e.intencion.intencion]
-          }.${desgloseIntencion(e, prevision.get(e))}${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}">${textoIntencion(e, prevision.get(e))}</div>
+          }.${desgloseIntencion(e, prevision.get(e))}${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}${e.intencion.perforante ? '<br>🎯 Atraviesa tu bloqueo (sin romperlo).' : ''}${e.intencion.bloqueoAliados ? `<br>🛡️ Da ${e.intencion.bloqueoAliados} de bloqueo a todos los enemigos.` : ''}">${textoIntencion(e, prevision.get(e))}</div>
           ${esDungeonMaster(e)
             ? '<div class="bloqueo-ficha bloqueo-dm" data-tip="<strong>🛡️ Pantalla del DM</strong><br>Bloqueo infinito: nada de lo que hagas le llega.">🛡️∞ <small>Pantalla del DM</small></div>'
             : e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
@@ -982,15 +982,19 @@ export function pantallaCombate(
       const mano = $('.mano');
       const jugador = combate.jugador;
       const cartas = jugador.mano;
-      // cards gone from the hand to the discard pile (end of turn, discard effects) fly there
+      // cards gone from the hand to the discard pile (end of turn, discard effects) fly there;
+      // the exhausted ones (Spectral Ray, effects that exhaust from the hand) burn away in place
       const enMano = new Set(cartas);
       let nDescartes = 0;
+      const agotadas: HTMLElement[] = [];
       for (const [inst, viejo] of elemPorCarta) {
         if (enMano.has(inst)) continue;
         llegando.delete(inst);
         if (lanzadas.delete(inst)) continue;
         if (jugador.descarte.includes(inst)) flyDiscard(viejo, $('.pila-descarte'), nDescartes++);
+        else if (jugador.agotadas.includes(inst)) agotadas.push(viejo);
       }
+      agotadas.forEach((viejo, k) => flyExhaust(viejo, k, agotadas.length));
       // reshuffle: cards of the last discard pile are back in the draw pile
       const mazoAhora = new Set(jugador.mazo);
       let barajados = 0;
@@ -1084,6 +1088,8 @@ export function pantallaCombate(
       const def = inst.def;
       const suelta = soltada?.inst === inst && performance.now() - soltada.at < 1500 ? soltada : null;
       soltada = null;
+      // a card that will end up exhausted burns away on the way instead of fading on arrival
+      const exhaust = exhaustsWhenPlayed(def, combate.jugador.estados);
       // Animación especial de cartas raras: carta gigante + estallido de partículas
       if (def.animRara) {
         const grande = renderCarta(def);
@@ -1102,12 +1108,12 @@ export function pantallaCombate(
         // the showcase holds the stage, then dives onto the target like any other card
         await espera(600);
         const r = grande.getBoundingClientRect();
-        await flyShowcase(grande, destinoLanzamiento(def, objetivo, { x: r.left + r.width / 2, y: r.top + r.height / 2 }));
+        await flyShowcase(grande, destinoLanzamiento(def, objetivo, { x: r.left + r.width / 2, y: r.top + r.height / 2 }), { exhaust });
       } else if (desde) {
         audio.sfx('jugarCarta');
         const r = desde.getBoundingClientRect();
         const origen = suelta?.center ?? { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-        await flyPlay(desde, destinoLanzamiento(def, objetivo, origen), { from: suelta, impactMs: impactoMs });
+        await flyPlay(desde, destinoLanzamiento(def, objetivo, origen), { from: suelta, impactMs: impactoMs, exhaust });
       }
     }
 

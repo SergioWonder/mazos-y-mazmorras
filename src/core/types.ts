@@ -76,7 +76,9 @@ export type EstadoId =
   | 'angelVengador'  // (paladín) al inicio de cada turno preparas un Castigo de este daño y ganas 1 Fervor
   | 'cartasAgotan'   // (jugador) este turno cada carta que juegues se agota (rayo del Contemplador)
   | 'cartasSobrecoste'// (jugador) este turno cada carta cuesta +1 de energía (rayo del Contemplador)
-  | 'cartasEtereas'; // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
+  | 'cartasEtereas'  // (jugador) este turno las cartas no jugadas se agotan (rayo del Contemplador)
+  | 'coraza'         // (enemy) every hit it takes is reduced by this much
+  | 'robaMenos';     // (player) draws this many fewer cards at the start of the next turn, then it goes
 
 /** Efectos permanentes que las cartas «Escribir» pueden añadir al Conjuro Prodigioso. */
 export type EfectoConjuro = 'area' | 'vulnerable' | 'bloqueo' | 'perforante';
@@ -150,6 +152,10 @@ export interface Movimiento {
   cita?: string;
   /** Line the enemy says in a speech bubble when it acts (the Dungeon Master). */
   dialogo?: string;
+  /** Its hits ignore the hero's block (without breaking it). */
+  perforante?: boolean;
+  /** Block for every living enemy, itself included. */
+  bloqueoAliados?: number;
 }
 
 export interface EnemigoDef {
@@ -168,6 +174,16 @@ export interface EnemigoDef {
   invocaAlMorir?: EnemigoDef;
   /** Marca a los jefes (no muere por efectos «mata si no es jefe»). */
   esJefe?: boolean;
+  /** Its block does not vanish at the start of its turn: it piles up. */
+  conservaBloqueo?: boolean;
+  /** Heals this fraction of the unblocked damage its attacks deal. */
+  vampirico?: number;
+  /** When another enemy dies: it gains these states on itself (and heals). */
+  alMorirAliado?: { efectos?: Array<[EstadoId, number]>; cura?: number };
+  /** When it dies: it lashes out at the hero (damage through block and effects on the hero). */
+  alMorir?: { nombre: string; dano?: number; efectos?: Array<[EstadoId, number, boolean]> };
+  /** Takes half damage while any other enemy is alive (hive mind). */
+  protegidoPorAliados?: boolean;
   /** The Dungeon Master (final joke scene): his screen absorbs every hit, he is
    *  immune to instant kills and lethal Doom, and nothing makes him skip his ray. */
   dungeonMaster?: boolean;
@@ -295,6 +311,8 @@ export interface CartaDef {
   finTurnoEnMano?: (ctx: ContextoEfecto) => Promise<void>;
   /** (curses) Fires right after the card is drawn. */
   alRobar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
+  /** Fires when an effect discards it from the hand (not the end-of-turn discard). */
+  alDescartar?: (ctx: ContextoEfecto) => Promise<void>;
   jugar: (ctx: ContextoEfecto) => Promise<void>;
   /** Live numbers of the text that depend on the combat state. `n` holds the
    *  integers of the (effective) text in order, so one function serves the card
@@ -350,6 +368,7 @@ export interface MejoraCarta {
   requiereConjuro?: number;
   innato?: boolean;
   jugar?: (ctx: ContextoEfecto) => Promise<void>;
+  alDescartar?: (ctx: ContextoEfecto) => Promise<void>;
   /** Live numbers, when the upgrade computes them differently from the card. */
   valores?: (ctx: ContextoEfecto, n: number[]) => ValorCarta[];
 }
@@ -462,6 +481,8 @@ export interface ContextoEfecto {
   descartar(n: number, opcional?: boolean): Promise<number>;
   /** Nº de cartas que has descartado en lo que va de turno (para pagos de descarte). */
   descartadasEsteTurno(): number;
+  /** Discards the whole hand (each card fires its own discard effects); returns how many. */
+  descartarMano(): Promise<number>;
   /** Discards a random card of the hand (never `excepto`). Returns it, or null. */
   descartarAlAzar(excepto?: CartaInstancia): Promise<CartaInstancia | null>;
   /** Añade N Dagas a la mano (pícaro): ataques de 0 de coste que se agotan. */

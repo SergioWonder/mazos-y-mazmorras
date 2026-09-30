@@ -1,5 +1,5 @@
 import type { ClaseId, EstadoRun, MisionTaberna, NodoMapa } from './types.ts';
-import { cartaPorId, instanciar } from './cartas.ts';
+import { cartaPorId, instanciar, CARTAS_RETIRADAS } from './cartas.ts';
 import { reliquiaPorId } from './reliquias.ts';
 
 const CLAVE = 'mazo-y-mazmorra/guardado';
@@ -52,7 +52,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
   if (g.v !== 1) return null;
   const mazo = [];
   for (const c of g.mazo) {
-    const def = cartaPorId(c.id);
+    const def = cartaPorId(CARTAS_RETIRADAS[c.id] ?? c.id);
     if (!def) return null; // carta desconocida: guardado de otra versión
     const inst = instanciar(def);
     inst.mejorada = c.mejorada;

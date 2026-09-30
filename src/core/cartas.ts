@@ -19,9 +19,22 @@ export function defDe(inst: CartaInstancia): CartaDef {
     requiereConjuro: m.requiereConjuro ?? inst.def.requiereConjuro,
     innato: m.innato ?? inst.def.innato,
     jugar: m.jugar ?? inst.def.jugar,
+    alDescartar: m.alDescartar ?? inst.def.alDescartar,
     valores: m.valores ?? inst.def.valores,
   };
 }
+
+/** Hidden Knife: a hit on a random living enemy (a discard has no target). */
+async function apunalarAlAzar(c: ContextoEfecto, dano: number) {
+  const vivos = c.enemigos.filter((e) => e.vivo);
+  if (vivos.length === 0) return;
+  await c.atacar(vivos[Math.floor(c.rng() * vivos.length)], dano);
+}
+
+/** Cards taken out of the game, with the one that replaces them in old saves. */
+export const CARTAS_RETIRADAS: Readonly<Record<string, string>> = {
+  rodar: 'esquiva-refleja', // the rogue's «block twice» common (v7.5.0)
+};
 
 /** Suma de los niveles de los espacios de conjuro libres (mago). */
 function nivelesLibres(c: ContextoEfecto): number {
@@ -2163,16 +2176,16 @@ export const PICARO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'tajo',
-    texto: 'Inflige 6 de daño.\nRoba 1 carta.',
+    texto: 'Inflige 10 de daño.\nDescarta 1 carta.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 6);
-      await c.robar(1);
+      await c.atacar(c.objetivo!, 10);
+      await c.descartar(1);
     },
     mejora: {
-      texto: 'Inflige 8 de daño.\nRoba 1 carta.',
+      texto: 'Inflige 14 de daño.\nDescarta 1 carta.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 8);
-        await c.robar(1);
+        await c.atacar(c.objetivo!, 14);
+        await c.descartar(1);
       },
     },
   },
@@ -2289,24 +2302,56 @@ export const PICARO: CartaDef[] = [
     },
   },
   {
-    id: 'rodar',
-    nombre: 'Rodar',
+    id: 'esquiva-refleja',
+    nombre: 'Esquiva Refleja',
     clase: 'picaro',
     tipo: 'habilidad',
     rareza: 'comun',
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Gana 4 de bloqueo dos veces.',
+    texto: 'Gana 6 de bloqueo.\nSi la descartas: roba 2 cartas.',
     jugar: async (c) => {
-      await c.ganarBloqueo(4);
-      await c.ganarBloqueo(4);
+      await c.ganarBloqueo(6);
+    },
+    alDescartar: async (c) => {
+      await c.robar(2);
     },
     mejora: {
-      texto: 'Gana 5 de bloqueo dos veces.',
+      texto: 'Gana 9 de bloqueo.\nSi la descartas: roba 3 cartas.',
       jugar: async (c) => {
-        await c.ganarBloqueo(5);
-        await c.ganarBloqueo(5);
+        await c.ganarBloqueo(9);
+      },
+      alDescartar: async (c) => {
+        await c.robar(3);
+      },
+    },
+  },
+  {
+    id: 'cuchillo-oculto',
+    nombre: 'Cuchillo Oculto',
+    clase: 'picaro',
+    tipo: 'ataque',
+    rareza: 'comun',
+    coste: 1,
+    objetivo: 'enemigo',
+    fx: 'tajo',
+    texto: 'Inflige 8 de daño.\nSi lo descartas: inflige 8 de daño\na un enemigo al azar.',
+    // only the hit you play shows live; the discard one lands on a random enemy
+    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] }],
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 8);
+    },
+    alDescartar: async (c) => {
+      await apunalarAlAzar(c, 8);
+    },
+    mejora: {
+      texto: 'Inflige 11 de daño.\nSi lo descartas: inflige 11 de daño\na un enemigo al azar.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 11);
+      },
+      alDescartar: async (c) => {
+        await apunalarAlAzar(c, 11);
       },
     },
   },
@@ -2341,17 +2386,17 @@ export const PICARO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'tajo',
-    texto: 'Inflige 6 de daño\n(aplica +4 si el enemigo\nno pretende atacar).',
+    texto: 'Inflige 8 de daño\n(aplica +7 si el enemigo\nno pretende atacar).',
     valores: valoresFurtivos,
     jugar: async (c) => {
-      const extra = c.noPretendeAtacar(c.objetivo!) ? 4 : 0;
-      await c.atacar(c.objetivo!, 6 + extra);
+      const extra = c.noPretendeAtacar(c.objetivo!) ? 7 : 0;
+      await c.atacar(c.objetivo!, 8 + extra);
     },
     mejora: {
-      texto: 'Inflige 8 de daño\n(aplica +6 si el enemigo\nno pretende atacar).',
+      texto: 'Inflige 11 de daño\n(aplica +10 si el enemigo\nno pretende atacar).',
       jugar: async (c) => {
-        const extra = c.noPretendeAtacar(c.objetivo!) ? 6 : 0;
-        await c.atacar(c.objetivo!, 8 + extra);
+        const extra = c.noPretendeAtacar(c.objetivo!) ? 10 : 0;
+        await c.atacar(c.objetivo!, 11 + extra);
       },
     },
   },
@@ -2442,6 +2487,49 @@ export const PICARO: CartaDef[] = [
     },
   },
   {
+    id: 'juego-sucio',
+    nombre: 'Juego Sucio',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'estrellas',
+    texto: 'Roba 2 cartas.\nSi la descartas: gana 2 de energía.',
+    jugar: async (c) => {
+      await c.robar(2);
+    },
+    alDescartar: async (c) => {
+      c.ganarEnergia(2);
+    },
+    mejora: {
+      coste: 0,
+      texto: 'Roba 2 cartas.\nSi la descartas: gana 2 de energía.',
+    },
+  },
+  {
+    id: 'tormenta-filos',
+    nombre: 'Tormenta de Filos',
+    clase: 'picaro',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
+    coste: 1,
+    objetivo: 'ninguno',
+    fx: 'tajo',
+    texto: 'Descarta tu mano.\nAñade 1 Daga a tu mano por cada\ncarta descartada.',
+    jugar: async (c) => {
+      const n = await c.descartarMano();
+      await c.crearDagas(n);
+    },
+    mejora: {
+      texto: 'Descarta tu mano.\nAñade 1 Daga a tu mano por cada\ncarta descartada, y 1 más.',
+      jugar: async (c) => {
+        const n = await c.descartarMano();
+        await c.crearDagas(n + 1);
+      },
+    },
+  },
+  {
     id: 'cuchilladas',
     nombre: 'Cuchilladas',
     clase: 'picaro',
@@ -2511,17 +2599,17 @@ export const PICARO: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'impacto',
-    texto: 'Inflige 10 de daño\n(aplica +14 si el enemigo\nno pretende atacar).',
+    texto: 'Inflige 13 de daño\n(aplica +18 si el enemigo\nno pretende atacar).',
     valores: valoresFurtivos,
     jugar: async (c) => {
-      const extra = c.noPretendeAtacar(c.objetivo!) ? 14 : 0;
-      await c.atacar(c.objetivo!, 10 + extra, 1, 'impacto');
+      const extra = c.noPretendeAtacar(c.objetivo!) ? 18 : 0;
+      await c.atacar(c.objetivo!, 13 + extra, 1, 'impacto');
     },
     mejora: {
-      texto: 'Inflige 14 de daño\n(aplica +18 si el enemigo\nno pretende atacar).',
+      texto: 'Inflige 17 de daño\n(aplica +24 si el enemigo\nno pretende atacar).',
       jugar: async (c) => {
-        const extra = c.noPretendeAtacar(c.objetivo!) ? 18 : 0;
-        await c.atacar(c.objetivo!, 14 + extra, 1, 'impacto');
+        const extra = c.noPretendeAtacar(c.objetivo!) ? 24 : 0;
+        await c.atacar(c.objetivo!, 17 + extra, 1, 'impacto');
       },
     },
   },

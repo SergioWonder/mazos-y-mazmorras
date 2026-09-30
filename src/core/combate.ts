@@ -153,6 +153,12 @@ export class Combate {
 
   danoRecibido(objetivo: Luchador, dano: number, vulnerable = objetivo.estados.vulnerable ?? 0): number {
     if (vulnerable > 0) dano = Math.floor(dano * 1.5);
+    if (objetivo !== this.jugador) {
+      // Hive mind: half damage while any other enemy stands; Carapace: less per hit
+      const e = objetivo as EnemigoCombate;
+      if (e.def?.protegidoPorAliados && this.enemigos.some((x) => x.vivo && x !== e)) dano = Math.floor(dano / 2);
+      dano -= objetivo.estados.coraza ?? 0;
+    }
     return Math.max(0, dano);
   }
 
@@ -307,7 +313,7 @@ export class Combate {
       };
       for (let i = 0; i < p.veces && !p.aplastado; i++) {
         if (espejismo > 0) { espejismo--; p.prevenidos++; continue; }
-        const b = Math.min(bloqueo, p.porGolpe);
+        const b = m.perforante ? 0 : Math.min(bloqueo, p.porGolpe); // piercing: the block is not touched
         bloqueo -= b;
         const s = Math.min(invocacion, p.porGolpe - b);
         invocacion -= s;
@@ -756,6 +762,15 @@ export class Combate {
         return hechos;
       },
       descartadasEsteTurno: () => self.descartadasEsteTurno,
+      async descartarMano() {
+        let n = 0;
+        for (const carta of self.jugador.mano.slice()) {
+          if (!self.jugador.mano.includes(carta)) continue; // a discard effect may have moved it
+          await self.descartarCarta(carta);
+          n++;
+        }
+        return n;
+      },
       async descartarAlAzar(excepto) {
         const candidatas = self.jugador.mano.filter((c) => c !== excepto);
         if (candidatas.length === 0) return null;
@@ -1015,6 +1030,7 @@ export class Combate {
           this.jugador.bloqueo += bend;
           await this.ui.fxBloqueo(this.jugador, bend);
         }
+        if (obj !== this.jugador) await this.disparadoresDeMuerte(e);
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
         if (obj !== this.jugador && e.def.invocaAlMorir) {
           const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
@@ -1032,6 +1048,34 @@ export class Combate {
     }
     await this.comprobarFin();
     return real;
+  }
+
+  /** Death triggers of the enemy traits: the fallen one lashes out (Final Burst) and
+   *  its fanatic allies grow stronger (Fanaticism, Scavenger). */
+  private async disparadoresDeMuerte(e: EnemigoCombate) {
+    const golpe = e.def.alMorir;
+    if (golpe && this.jugador.vivo) {
+      await this.ui.fxMensaje(`💥 ${golpe.nombre}: ¡${e.nombre} estalla al morir!`);
+      if (golpe.dano) await this.infligir(this.jugador, this.danoRecibido(this.jugador, golpe.dano), 'aliento');
+      for (const [estado, n, sobreJugador] of golpe.efectos ?? []) {
+        if (!sobreJugador || !this.jugador.vivo) continue;
+        this.jugador.estados[estado] = (this.jugador.estados[estado] ?? 0) + n;
+        await this.ui.fxEstado(this.jugador, estado, n);
+      }
+    }
+    for (const aliado of this.enemigos.filter((x) => x.vivo && x !== e && x.def.alMorirAliado)) {
+      const r = aliado.def.alMorirAliado!;
+      await this.ui.fxMensaje(`★ ${aliado.nombre}: ${aliado.def.rasgo?.nombre ?? 'se crece'}`);
+      for (const [estado, n] of r.efectos ?? []) {
+        aliado.estados[estado] = (aliado.estados[estado] ?? 0) + n;
+        await this.ui.fxEstado(aliado, estado, n);
+      }
+      const cura = Math.min(r.cura ?? 0, aliado.pvMax - aliado.pv);
+      if (cura > 0) {
+        aliado.pv += cura;
+        await this.ui.fxCura(aliado, cura);
+      }
+    }
   }
 
   /** Devuelve `n` de daño a todos los enemigos vivos (Armadura de Agathys).
@@ -1224,6 +1268,9 @@ export class Combate {
       await this.ui.fxBloqueo(this.jugador, prep);
     }
     await this.ganchos((r, c) => r.alDescartar?.(c, carta));
+    // Cards that pay off being discarded (Reflexive Dodge, Hidden Knife…)
+    const alDescartar = defDe(carta).alDescartar;
+    if (alDescartar && !this.terminado) await alDescartar(this.contexto());
     // Mid-card discards are checked once the card finishes (jugarCarta)
     if (!this.enResolucion) await this.avisarManoVacia();
     this.ui.render();
@@ -1424,6 +1471,12 @@ export class Combate {
         if (this.jugador.mano.length < 10) this.jugador.mano.push(c);
       }
       aRobar = Math.max(0, aRobar - innatas.length);
+    }
+    // Fractured Mind (the Elder Mind Flayer): fewer cards this turn, then it goes
+    const menos = this.jugador.estados.robaMenos ?? 0;
+    if (menos > 0) {
+      aRobar = Math.max(0, aRobar - menos);
+      delete this.jugador.estados.robaMenos;
     }
     this.robarCartas(aRobar);
     this.ui.render();
@@ -1650,7 +1703,13 @@ export class Combate {
       // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
       await this.tickVeneno(e);
       if (!e.vivo || this.terminado) continue; // el Veneno pudo matarlo
-      e.bloqueo = 0;
+      // Regeneration: it heals at the start of its turn
+      const regen = Math.min(e.estados.regeneracion ?? 0, e.pvMax - e.pv);
+      if (regen > 0) {
+        e.pv += regen;
+        await this.ui.fxCura(e, regen);
+      }
+      if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
       await this.ejecutarMovimiento(e);
       this.decrementarEstados(e);
       this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
@@ -1782,7 +1841,17 @@ export class Combate {
         }
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
         const bloqueoAntes = this.jugador.bloqueo;
-        const real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo');
+        // piercing hits go through the block without breaking it
+        const real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+        // Vampiric: it heals part of the damage that got through
+        const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
+        if (sorbo > 0 && e.vivo) {
+          const cura = Math.min(sorbo, e.pvMax - e.pv);
+          if (cura > 0) {
+            e.pv += cura;
+            await this.ui.fxCura(e, cura);
+          }
+        }
         if (!this.terminado) {
           const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
           await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
@@ -1796,6 +1865,12 @@ export class Combate {
     if (m.bloqueo) {
       e.bloqueo += m.bloqueo;
       await this.ui.fxBloqueo(e, m.bloqueo);
+    }
+    if (m.bloqueoAliados) {
+      for (const aliado of this.enemigos.filter((x) => x.vivo)) {
+        aliado.bloqueo += m.bloqueoAliados;
+        await this.ui.fxBloqueo(aliado, m.bloqueoAliados);
+      }
     }
     if (m.cura && e.vivo) {
       const real = Math.min(m.cura, e.pvMax - e.pv);

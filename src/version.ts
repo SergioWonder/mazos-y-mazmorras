@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.4.0';
+export const VERSION = '7.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.5.0',
+    fecha: '2026-09-30',
+    cambios: [
+      '👁️ El Contemplador da miedo de verdad: tallos oculares que serpentean, fauces con colmillos, rayos mucho más dañinos y un nuevo Rayo Desintegrador que te deshace de un solo golpe.',
+      '★ Las élites de los actos II y III tienen habilidades únicas: bloqueo que se acumula, regeneración, vampirismo, hogueras, escamas, mentes colmena… Y los enemigos normales del acto III también traen la suya.',
+      '💀 Los enemigos de los actos II y III tienen más vida y pegan más fuerte.',
+      '🧠 El Cerebro Anciano, con tentáculos y ojos incrustados, es mucho más inquietante, y las alas de dracos, demonios e Ignifax quedan siempre detrás de la cabeza.',
+      '🗡️ Pícaro: Filo Rápido pega mucho más y descarta en vez de robar; fuera Rodar; nuevas cartas que premian descartar (Esquiva Refleja, Cuchillo Oculto, Juego Sucio, Tormenta de Filos), y ataques furtivos más letales.',
+      '🔥 Las cartas que se agotan se desintegran en ceniza y brasas.',
+    ],
+  },
   {
     version: '7.4.0',
     fecha: '2026-09-30',

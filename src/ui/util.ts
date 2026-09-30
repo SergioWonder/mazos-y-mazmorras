@@ -111,6 +111,7 @@ export const ICONO_ESTADO: Record<string, string> = {
   explosionMaldita: '🩸', bloqueoPorMaldicion: '🛡️',
   fervor: '🔆', castigo: '🌟', golpesMas: '⚒️', defensasMas: '🪽', bastion: '🏰', fervorPorTurno: '🕯️',
   armaSagrada: '😇', gloria: '🏆', antiguos: '🌳', venganza: '🎯', angelVengador: '👼',
+  coraza: '🐚', robaMenos: '🧠',
 };
 
 export const NOMBRE_ESTADO: Record<string, string> = {
@@ -146,6 +147,7 @@ export const NOMBRE_ESTADO: Record<string, string> = {
   bastion: 'Bastión de Fe', fervorPorTurno: 'Celo Inquebrantable', armaSagrada: 'Juramento de Devoción',
   gloria: 'Juramento de Gloria', antiguos: 'Juramento de los Antiguos', venganza: 'Juramento de Venganza',
   angelVengador: 'Ángel Vengador',
+  coraza: 'Coraza', robaMenos: 'Mente Fracturada',
 };
 
 export const DESCRIPCION_ESTADO: Record<string, string> = {
@@ -222,6 +224,8 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   antiguos: 'Al final de tu turno ganas esa cantidad de bloqueo por cada punto de Fervor.',
   venganza: 'Tus Castigos cuestan 0.',
   angelVengador: 'Al inicio de cada turno preparas un Castigo de esa cantidad de daño; si ya tienes uno, le suma esa cantidad.',
+  coraza: 'Cada golpe de ataque que recibe se reduce en esa cantidad: los golpes pequeños y repetidos apenas le hacen mella.',
+  robaMenos: 'Al inicio de tu próximo turno robas esa cantidad de cartas menos. Después desaparece.',
 };
 
 /** Contenido de tooltip para una ficha de estado. */

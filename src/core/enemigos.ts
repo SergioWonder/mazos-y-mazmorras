@@ -106,60 +106,70 @@ export const JEFE_OGRO: EnemigoDef = {
 // ═══ Capítulo II: La Cripta ══════════════════════════════════════════════════
 
 export const ESQUELETO_GUERRERO: EnemigoDef = {
-  id: 'esqueleto-guerrero', nombre: 'Esqueleto Guerrero', arte: '💀', pv: [24, 28],
+  id: 'esqueleto-guerrero', nombre: 'Esqueleto Guerrero', arte: '💀', pv: [27, 31],
   ia: (turno, rng) => {
-    if (turno % 3 === 2) return def('Guardia Ósea', 8);
-    return rng() < 0.45 ? atk('Doble Tajo', 6, 2) : atk('Espadazo Oxidado', 10);
+    if (turno % 3 === 2) return def('Guardia Ósea', 9);
+    return rng() < 0.45 ? atk('Doble Tajo', 7, 2) : atk('Espadazo Oxidado', 12);
   },
 };
 
 export const ESQUELETO_ARQUERO: EnemigoDef = {
-  id: 'esqueleto-arquero', nombre: 'Esqueleto Arquero', arte: '🏹', pv: [18, 22],
+  id: 'esqueleto-arquero', nombre: 'Esqueleto Arquero', arte: '🏹', pv: [20, 24],
   ia: (turno, rng) => {
-    if (rng() < 0.3) return atk('Flecha Maldita', 6, 1, [['fragil', 2, true]]);
-    return rng() < 0.5 ? atk('Doble Disparo', 5, 2) : atk('Flecha Negra', 8);
+    if (rng() < 0.3) return atk('Flecha Maldita', 7, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Disparo', 6, 2) : atk('Flecha Negra', 10);
   },
 };
 
 export const ZOMBI: EnemigoDef = {
-  id: 'zombi', nombre: 'Zombi', arte: '🧟', pv: [34, 38], escala: 1.15,
+  id: 'zombi', nombre: 'Zombi', arte: '🧟', pv: [39, 43], escala: 1.15,
   ia: (turno, rng) => {
     if (rng() < 0.25)
-      return { nombre: 'Carne Putrefacta', intencion: 'defensa', bloqueo: 5, cura: 5 };
-    if (rng() < 0.4) return atk('Dentellada', 8, 1, [['vulnerable', 1, true]]);
-    return atk('Embestida Pútrida', 12);
+      return { nombre: 'Carne Putrefacta', intencion: 'defensa', bloqueo: 6, cura: 6 };
+    if (rng() < 0.4) return atk('Dentellada', 10, 1, [['vulnerable', 1, true]]);
+    return atk('Embestida Pútrida', 14);
   },
 };
 
 export const ESPECTRO: EnemigoDef = {
-  id: 'espectro', nombre: 'Espectro', arte: '👻', pv: [26, 30], escala: 1.1,
+  id: 'espectro', nombre: 'Espectro', arte: '👻', pv: [29, 33], escala: 1.1,
   ia: (turno, rng) => {
     if (turno % 4 === 1)
       return { nombre: 'Lamento Fúnebre', intencion: 'perjuicio', efectos: [['debil', 2, true]] };
     if (rng() < 0.45)
-      return { nombre: 'Toque Drenante', intencion: 'ataque', dano: 8, cura: 4 };
-    return atk('Garra Helada', 9);
+      return { nombre: 'Toque Drenante', intencion: 'ataque', dano: 10, cura: 5 };
+    return atk('Garra Helada', 11);
   },
 };
 
 export const NECROFAGO: EnemigoDef = {
-  id: 'necrofago', nombre: 'Necrófago', arte: '🧛', pv: [28, 32],
+  id: 'necrofago', nombre: 'Necrófago', arte: '🧛', pv: [32, 36],
   ia: (turno, rng) => {
-    if (rng() < 0.35) return atk('Zarpa Paralizante', 7, 1, [['debil', 1, true], ['fragil', 1, true]]);
-    return atk('Garras Voraces', 6, 2);
+    if (rng() < 0.35) return atk('Zarpa Paralizante', 8, 1, [['debil', 1, true], ['fragil', 1, true]]);
+    return atk('Garras Voraces', 7, 2);
   },
 };
 
 export const CABALLERO_TUMBARIO: EnemigoDef = {
   id: 'caballero-tumbario', nombre: 'Caballero Tumbario', arte: '🛡️', pv: [92, 100], escala: 1.3,
+  conservaBloqueo: true,
+  rasgo: {
+    nombre: 'Juramento Inquebrantable',
+    texto: 'Juró guardar la cripta más allá de la muerte: su bloqueo no se desvanece entre turnos, se acumula. Rómpelo antes de que se vuelva una muralla.',
+  },
   ia: (turno, rng) => {
-    if (turno % 3 === 0) return def('Muro Sepulcral', 14, [['fuerza', 3, false]]);
+    if (turno % 3 === 0) return def('Muro Sepulcral', 12, [['fuerza', 2, false]]);
     return rng() < 0.45 ? atk('Carga Fantasmal', 12, 2, [['vulnerable', 1, true]]) : atk('Mandoble Maldito', 21);
   },
 };
 
 export const MOMIA_REAL: EnemigoDef = {
   id: 'momia-real', nombre: 'Momia Real', arte: '🪦', pv: [82, 90], escala: 1.3,
+  estadosIniciales: { regeneracion: 5 },
+  rasgo: {
+    nombre: 'Vendas Eternas',
+    texto: 'Los embalsamadores la envolvieron para la eternidad: regenera 5 PV al inicio de cada uno de sus turnos. Solo un castigo constante la tumba.',
+  },
   ia: (turno, rng) => {
     if (turno % 4 === 0)
       return {
@@ -211,53 +221,83 @@ export const SENOR_CRIPTA: EnemigoDef = {
 // ═══ Capítulo III: La Guarida del Dragón ═════════════════════════════════════
 
 export const KOBOLD_LANCERO: EnemigoDef = {
-  id: 'kobold-lancero', nombre: 'Kobold Lancero', arte: '🦎', pv: [30, 34],
-  ia: (turno, rng) => {
-    if (rng() < 0.3) return atk('Trampa de Abrojos', 7, 1, [['fragil', 2, true]]);
-    return rng() < 0.5 ? atk('Doble Lanzada', 7, 2) : atk('Lanza Dracónica', 11);
+  id: 'kobold-lancero', nombre: 'Kobold Lancero', arte: '🦎', pv: [35, 39],
+  rasgo: {
+    nombre: 'Falange',
+    texto: 'Pelea hombro con hombro: sus lanzadas hacen +1 de daño por cada aliado que siga en pie.',
+  },
+  ia: (turno, rng, self, aliados) => {
+    const falange = aliados.length;
+    if (rng() < 0.3) return atk('Trampa de Abrojos', 7 + falange, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Lanzada', 7 + falange, 2) : atk('Lanza Dracónica', 12 + falange);
   },
 };
 
 export const KOBOLD_HECHICERO: EnemigoDef = {
-  id: 'kobold-hechicero', nombre: 'Kobold Hechicero', arte: '🜂', pv: [28, 32],
+  id: 'kobold-hechicero', nombre: 'Kobold Hechicero', arte: '🜂', pv: [33, 37],
+  rasgo: {
+    nombre: 'Escamas del Nido',
+    texto: 'Teje escudos de escamas dracónicas: cada pocos turnos da bloqueo a todos sus aliados, él incluido.',
+  },
   ia: (turno, rng) => {
     if (turno === 0) return { nombre: 'Bendición Dracónica', intencion: 'mejora', fuerzaAliados: 2 };
+    if (turno % 3 === 2) return { nombre: 'Escudo de Escamas', intencion: 'defensa', bloqueoAliados: 7 };
     if (rng() < 0.3)
       return { nombre: 'Humo Cegador', intencion: 'perjuicio', efectos: [['debil', 2, true]] };
-    return atk('Chispa Ígnea', 10);
+    return atk('Chispa Ígnea', 12);
   },
 };
 
 export const CULTISTA_DRAGON: EnemigoDef = {
-  id: 'cultista-dragon', nombre: 'Cultista del Dragón', arte: '🥷', pv: [36, 40],
+  id: 'cultista-dragon', nombre: 'Cultista del Dragón', arte: '🥷', pv: [42, 46],
+  alMorirAliado: { efectos: [['fuerza', 3]] },
+  rasgo: {
+    nombre: 'Fanatismo',
+    texto: 'Cada hermano caído es una ofrenda a Ignifax: cuando muere un aliado, gana 3 de Fuerza.',
+  },
   ia: (turno, rng, self) => {
     if (turno % 3 === 1)
       return { nombre: 'Ofrenda de Sangre', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
-    return rng() < 0.4 ? atk('Daga Ritual', 8, 2) : atk('Tajo Fanático', 12);
+    return rng() < 0.4 ? atk('Daga Ritual', 9, 2) : atk('Tajo Fanático', 14);
   },
 };
 
 export const DRACO_JOVEN: EnemigoDef = {
-  id: 'draco-joven', nombre: 'Draco Joven', arte: '🐲', pv: [44, 48], escala: 1.25,
+  id: 'draco-joven', nombre: 'Draco Joven', arte: '🐲', pv: [51, 55], escala: 1.25,
+  estadosIniciales: { coraza: 1 },
+  rasgo: {
+    nombre: 'Escamas Jóvenes',
+    texto: 'Sus escamas ya empiezan a endurecerse: cada golpe que recibe hace 1 de daño menos.',
+  },
   ia: (turno, rng) => {
-    if (rng() < 0.3) return atk('Aliento Chispeante', 6, 2);
-    if (rng() < 0.45) return atk('Coletazo', 9, 1, [['vulnerable', 1, true]]);
-    return atk('Mordisco', 13);
+    if (rng() < 0.3) return atk('Aliento Chispeante', 7, 2);
+    if (rng() < 0.45) return atk('Coletazo', 11, 1, [['vulnerable', 1, true]]);
+    return atk('Mordisco', 15);
   },
 };
 
 export const ELEMENTAL_MAGMA: EnemigoDef = {
-  id: 'elemental-magma', nombre: 'Elemental de Magma', arte: '🌋', pv: [38, 42], escala: 1.2,
+  id: 'elemental-magma', nombre: 'Elemental de Magma', arte: '🌋', pv: [44, 48], escala: 1.2,
+  alMorir: { nombre: 'Estallido de Magma', dano: 10, efectos: [['quemadura', 1, true]] },
+  rasgo: {
+    nombre: 'Estallido de Magma',
+    texto: 'Al morir revienta en una lluvia de lava: te hace 10 de daño y te deja ardiendo (cada carta que juegues ese turno te quema 3 PV).',
+  },
   ia: (turno, rng) => {
     if (turno % 3 === 2)
-      return { nombre: 'Cuerpo Ardiente', intencion: 'defensa', bloqueo: 10, cura: 4 };
-    if (rng() < 0.35) return atk('Salpicadura de Lava', 8, 1, [['fragil', 1, true]]);
-    return atk('Erupción', 14);
+      return { nombre: 'Cuerpo Ardiente', intencion: 'defensa', bloqueo: 11, cura: 4 };
+    if (rng() < 0.35) return atk('Salpicadura de Lava', 9, 1, [['fragil', 1, true]]);
+    return atk('Erupción', 16);
   },
 };
 
 export const DRACO_VETERANO: EnemigoDef = {
-  id: 'draco-veterano', nombre: 'Draco Veterano', arte: '🐉', pv: [120, 130], escala: 1.45,
+  id: 'draco-veterano', nombre: 'Draco Veterano', arte: '🐉', pv: [112, 122], escala: 1.45,
+  estadosIniciales: { coraza: 3 },
+  rasgo: {
+    nombre: 'Escamas Ancestrales',
+    texto: 'Siglos de batallas le han dejado escamas como placas de acero: cada golpe que recibe hace 3 de daño menos. Los golpes pequeños apenas le rozan.',
+  },
   ia: (turno, rng) => {
     if (turno % 4 === 3) return { nombre: 'Rugido Escamoso', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
     if (rng() < 0.4) return atk('Aliento de Fuego', 12, 2, [['vulnerable', 1, true]]);
@@ -267,6 +307,11 @@ export const DRACO_VETERANO: EnemigoDef = {
 
 export const SUMO_CULTISTA: EnemigoDef = {
   id: 'sumo-cultista', nombre: 'Sumo Cultista de Ignifax', arte: '🧙‍♀️', pv: [110, 118], escala: 1.35,
+  alMorirAliado: { efectos: [['fuerza', 3]], cura: 8 },
+  rasgo: {
+    nombre: 'Devoción del Nido',
+    texto: 'Sacrifica a sus kobolds al dragón: cada vez que muere uno, se cura 8 PV y gana 3 de Fuerza. ¿Los matas… o los ignoras?',
+  },
   ia: (turno, rng, self, aliados) => {
     if (turno % 4 === 0 && aliados.length === 0)
       return {
@@ -415,50 +460,55 @@ export const EMBAUCADOR_ARCANO: EnemigoDef = {
 // ═══ Capítulo II (alt.): El Templo Oscuro ════════════════════════════════════
 
 export const ACOLITO_VELADO: EnemigoDef = {
-  id: 'acolito-velado', nombre: 'Acólito Velado', arte: '🧎', pv: [20, 24],
+  id: 'acolito-velado', nombre: 'Acólito Velado', arte: '🧎', pv: [23, 27],
   ia: (turno, rng) => {
     if (turno === 0) return { nombre: 'Cántico Impío', intencion: 'mejora', fuerzaAliados: 2 };
     if (rng() < 0.35)
       return { nombre: 'Maldición Leve', intencion: 'perjuicio', maldicion: { id: 'duda', destino: 'descarte' } };
-    return atk('Golpe de Báculo', 8);
+    return atk('Golpe de Báculo', 10);
   },
 };
 
 export const LANZADOR_VACIO: EnemigoDef = {
-  id: 'lanzador-vacio', nombre: 'Lanzador del Vacío', arte: '📿', pv: [18, 22],
+  id: 'lanzador-vacio', nombre: 'Lanzador del Vacío', arte: '📿', pv: [20, 24],
   ia: (turno, rng) => {
-    if (rng() < 0.3) return atk('Esquirla del Vacío', 6, 1, [['fragil', 2, true]]);
-    return rng() < 0.5 ? atk('Doble Saeta Oscura', 5, 2) : atk('Saeta Oscura', 9);
+    if (rng() < 0.3) return atk('Esquirla del Vacío', 7, 1, [['fragil', 2, true]]);
+    return rng() < 0.5 ? atk('Doble Saeta Oscura', 6, 2) : atk('Saeta Oscura', 11);
   },
 };
 
 export const DIABLILLO: EnemigoDef = {
-  id: 'diablillo', nombre: 'Diablillo', arte: '👿', pv: [16, 20],
-  ia: (turno, rng) => (rng() < 0.35 ? atk('Pinchazo Ardiente', 4, 2) : atk('Tridente', 8)),
+  id: 'diablillo', nombre: 'Diablillo', arte: '👿', pv: [18, 22],
+  ia: (turno, rng) => (rng() < 0.35 ? atk('Pinchazo Ardiente', 5, 2) : atk('Tridente', 10)),
 };
 
 export const SABUESO_INFERNAL: EnemigoDef = {
-  id: 'sabueso-infernal', nombre: 'Sabueso Infernal', arte: '🐕', pv: [30, 34], escala: 1.15,
+  id: 'sabueso-infernal', nombre: 'Sabueso Infernal', arte: '🐕', pv: [34, 38], escala: 1.15,
   ia: (turno, rng) =>
-    rng() < 0.4 ? atk('Mordisco Ígneo', 7, 1, [['vulnerable', 1, true]]) : atk('Embestida', 11),
+    rng() < 0.4 ? atk('Mordisco Ígneo', 9, 1, [['vulnerable', 1, true]]) : atk('Embestida', 13),
 };
 
 export const POSEIDO: EnemigoDef = {
-  id: 'poseido', nombre: 'Poseído', arte: '🫥', pv: [26, 30], escala: 1.1,
+  id: 'poseido', nombre: 'Poseído', arte: '🫥', pv: [29, 33], escala: 1.1,
   ia: (turno, rng) => {
-    if (rng() < 0.25) return { nombre: 'Convulsión', intencion: 'defensa', bloqueo: 6, cura: 4 };
-    if (rng() < 0.4) return atk('Zarpazo Errático', 7, 1, [['debil', 1, true]]);
-    return atk('Arremetida', 12);
+    if (rng() < 0.25) return { nombre: 'Convulsión', intencion: 'defensa', bloqueo: 7, cura: 5 };
+    if (rng() < 0.4) return atk('Zarpazo Errático', 8, 1, [['debil', 1, true]]);
+    return atk('Arremetida', 14);
   },
 };
 
 export const FLAGELANTE: EnemigoDef = {
-  id: 'flagelante', nombre: 'Flagelante', arte: '🩸', pv: [22, 26],
-  ia: (turno, rng) => (rng() < 0.4 ? atk('Látigo Espinado', 5, 1, [['veneno', 2, true]]) : atk('Azote', 8)),
+  id: 'flagelante', nombre: 'Flagelante', arte: '🩸', pv: [25, 29],
+  ia: (turno, rng) => (rng() < 0.4 ? atk('Látigo Espinado', 6, 1, [['veneno', 2, true]]) : atk('Azote', 10)),
 };
 
 export const DEMONIO_MENOR: EnemigoDef = {
   id: 'demonio-menor', nombre: 'Demonio Menor', arte: '😈', pv: [86, 94], escala: 1.3,
+  vampirico: 0.5,
+  rasgo: {
+    nombre: 'Hambre Abisal',
+    texto: 'Se alimenta de tu sangre: se cura la mitad del daño que te hace atravesando tu bloqueo.',
+  },
   ia: (turno, rng) => {
     if (turno % 4 === 3) return { nombre: 'Rugido Infernal', intencion: 'mejora', efectos: [['fuerza', 3, false]] };
     return rng() < 0.4 ? atk('Garra Demoníaca', 12, 2, [['vulnerable', 1, true]]) : atk('Mazazo Ígneo', 20);
@@ -467,11 +517,15 @@ export const DEMONIO_MENOR: EnemigoDef = {
 
 export const INQUISIDOR_OSCURO: EnemigoDef = {
   id: 'inquisidor-oscuro', nombre: 'Inquisidor Oscuro', arte: '🕯️', pv: [80, 88], escala: 1.3,
+  rasgo: {
+    nombre: 'Hoguera Inquisitorial',
+    texto: 'Su Anatema te condena a la hoguera: mientras ardas, cada carta que juegues te quema 3 PV. Elige bien qué jugar ese turno.',
+  },
   ia: (turno, rng) => {
     if (turno % 4 === 0)
       return {
         nombre: 'Anatema', intencion: 'perjuicio',
-        efectos: [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true]],
+        efectos: [['debil', 2, true], ['fragil', 2, true], ['quemadura', 1, true]],
       };
     if (rng() < 0.3) return { nombre: 'Plegaria Profana', intencion: 'mejora', cura: 10, fuerzaAliados: 2 };
     return atk('Verbo Oscuro', 18);
@@ -522,50 +576,83 @@ export const HERALDO_CULTO: EnemigoDef = {
 // ═══ Capítulo III (alt.): El Laberinto del Contemplador ══════════════════════
 
 export const AZOTAMENTES: EnemigoDef = {
-  id: 'azotamentes', nombre: 'Azotamentes', arte: '🦑', pv: [34, 38],
+  id: 'azotamentes', nombre: 'Azotamentes', arte: '🦑', pv: [39, 43],
+  rasgo: {
+    nombre: 'Mente Fracturada',
+    texto: 'Su Estallido Mental te hace pedazos el pensamiento: el próximo turno robas 1 carta menos.',
+  },
   ia: (turno, rng) => {
     if (rng() < 0.3)
-      return { nombre: 'Estallido Mental', intencion: 'ataque', dano: 9, efectos: [['cartasSobrecoste', 1, true]] };
-    return rng() < 0.5 ? atk('Tentáculos', 5, 2) : atk('Sacudida Psíquica', 12);
+      return { nombre: 'Estallido Mental', intencion: 'ataque', dano: 10, efectos: [['robaMenos', 1, true]] };
+    return rng() < 0.5 ? atk('Tentáculos', 6, 2) : atk('Sacudida Psíquica', 14);
   },
 };
 
 export const LACAYO_ENGENDRADO: EnemigoDef = {
-  id: 'lacayo-engendrado', nombre: 'Lacayo Engendrado', arte: '🧟', pv: [30, 34],
+  id: 'lacayo-engendrado', nombre: 'Lacayo Engendrado', arte: '🧟', pv: [35, 39],
+  estadosIniciales: { regeneracion: 3 },
+  rasgo: {
+    nombre: 'Carne Regenerativa',
+    texto: 'La carne que le implantaron se recompone sola: regenera 3 PV al inicio de cada uno de sus turnos.',
+  },
   ia: (turno, rng) => {
-    if (turno % 3 === 2) return def('Carne Coriácea', 8);
-    return atk('Garras Deformes', 11);
+    if (turno % 3 === 2) return def('Carne Coriácea', 9);
+    return atk('Garras Deformes', 13);
   },
 };
 
 export const CUBO_GELATINOSO: EnemigoDef = {
-  id: 'cubo-gelatinoso', nombre: 'Cubo Gelatinoso', arte: '🟩', pv: [44, 50], escala: 1.3,
+  id: 'cubo-gelatinoso', nombre: 'Cubo Gelatinoso', arte: '🟩', pv: [51, 57], escala: 1.3,
+  rasgo: {
+    nombre: 'Engullir',
+    texto: 'Quien acaba dentro del cubo sale abrasado por su ácido: su Engullir te deja 3 de Veneno.',
+  },
   ia: (turno, rng) =>
-    rng() < 0.35 ? atk('Embestida Ácida', 8, 1, [['fragil', 2, true]]) : atk('Engullir', 13),
+    rng() < 0.35 ? atk('Embestida Ácida', 9, 1, [['fragil', 2, true]]) : atk('Engullir', 15, 1, [['veneno', 3, true]]),
 };
 
 export const REPTADOR_CARRONERO: EnemigoDef = {
-  id: 'reptador-carronero', nombre: 'Reptador Carroñero', arte: '🪲', pv: [30, 34],
-  ia: (turno, rng) => (rng() < 0.4 ? atk('Pinzas', 5, 2) : atk('Mordisco Quitinoso', 10)),
+  id: 'reptador-carronero', nombre: 'Reptador Carroñero', arte: '🪲', pv: [35, 39],
+  alMorirAliado: { efectos: [['fuerza', 1]], cura: 10 },
+  rasgo: {
+    nombre: 'Carroñero',
+    texto: 'Se da un festín con los caídos: cuando muere un aliado, se cura 10 PV y gana 1 de Fuerza.',
+  },
+  ia: (turno, rng) => (rng() < 0.4 ? atk('Pinzas', 6, 2) : atk('Mordisco Quitinoso', 12)),
 };
 
 export const OJO_FLOTANTE: EnemigoDef = {
-  id: 'ojo-flotante', nombre: 'Ojo Flotante', arte: '👁️', pv: [22, 26],
+  id: 'ojo-flotante', nombre: 'Ojo Flotante', arte: '👁️', pv: [26, 30],
+  rasgo: {
+    nombre: 'Mirada Penetrante',
+    texto: 'Su Rayo Ocular no se detiene ante escudos: atraviesa tu bloqueo (sin romperlo).',
+  },
   ia: (turno, rng) =>
-    rng() < 0.35 ? atk('Rayo Debilitador', 5, 1, [['vulnerable', 1, true]]) : atk('Rayo Ocular', 9),
+    rng() < 0.35
+      ? atk('Rayo Debilitador', 6, 1, [['vulnerable', 1, true]])
+      : { nombre: 'Rayo Ocular', intencion: 'ataque', dano: 11, perforante: true },
 };
 
 export const HORROR_TENTACULAR: EnemigoDef = {
-  id: 'horror-tentacular', nombre: 'Horror Tentacular', arte: '🐙', pv: [38, 42], escala: 1.2,
+  id: 'horror-tentacular', nombre: 'Horror Tentacular', arte: '🐙', pv: [44, 48], escala: 1.2,
+  estadosIniciales: { espinas: 2 },
+  rasgo: {
+    nombre: 'Tentáculos Urticantes',
+    texto: 'Sus tentáculos arden al tacto: cada vez que lo atacas te devuelve 2 de daño.',
+  },
   ia: (turno, rng) =>
-    rng() < 0.35 ? atk('Constricción', 7, 1, [['debil', 2, true]]) : atk('Azote de Tentáculos', 13),
+    rng() < 0.35 ? atk('Constricción', 8, 1, [['debil', 2, true]]) : atk('Azote de Tentáculos', 15),
 };
 
 export const AZOTAMENTES_ANCIANO: EnemigoDef = {
   id: 'azotamentes-anciano', nombre: 'Azotamentes Anciano', arte: '🦑', pv: [112, 120], escala: 1.4,
+  rasgo: {
+    nombre: 'Devorador de Mentes',
+    texto: 'Cuando te devora la mente, te arranca los pensamientos: el próximo turno robas 2 cartas menos y cada una cuesta 1 más.',
+  },
   ia: (turno, rng) => {
     if (turno % 4 === 2)
-      return { nombre: 'Devorar Mente', intencion: 'ataque', dano: 14, cura: 10, efectos: [['cartasSobrecoste', 1, true]] };
+      return { nombre: 'Devorar Mente', intencion: 'ataque', dano: 14, cura: 10, efectos: [['robaMenos', 2, true], ['cartasSobrecoste', 1, true]] };
     if (rng() < 0.4)
       return { nombre: 'Onda Psíquica', intencion: 'ataque', dano: 10, efectos: [['cartasEtereas', 1, true]] };
     return atk('Tentáculos Cerebrales', 20);
@@ -574,9 +661,14 @@ export const AZOTAMENTES_ANCIANO: EnemigoDef = {
 
 export const CEREBRO_ANCIANO: EnemigoDef = {
   id: 'cerebro-anciano', nombre: 'Cerebro Anciano', arte: '🧠', pv: [108, 116], escala: 1.35,
+  protegidoPorAliados: true,
+  rasgo: {
+    nombre: 'Mente Colmena',
+    texto: 'Sus ojos son su escudo: mientras le quede algún ojo vivo, recibe la mitad de daño. Y cuando no le queda ninguno, brota otro.',
+  },
   ia: (turno, rng, self, aliados) => {
-    if (turno % 4 === 0 && aliados.length === 0)
-      return { nombre: 'Brotar un Ojo', intencion: 'mejora', invocar: [{ def: OJO_FLOTANTE, pv: 22 }] };
+    if (turno % 3 === 0 && aliados.length === 0)
+      return { nombre: 'Brotar un Ojo', intencion: 'mejora', invocar: [{ def: OJO_FLOTANTE, pv: 26 }] };
     if (turno % 4 === 2)
       return { nombre: 'Dominar Mente', intencion: 'perjuicio', efectos: [['debil', 3, true], ['cartasSobrecoste', 1, true]] };
     if (rng() < 0.4) return { nombre: 'Pulso Aniquilador', intencion: 'ataque', dano: 16, cura: 6 };
@@ -594,18 +686,21 @@ export const OBSERVADOR: EnemigoDef = {
 
 /** Rayos cromáticos del Contemplador: cada color tuerce tu próximo turno. */
 const RAYOS_CONTEMPLADOR: Movimiento[] = [
-  { nombre: 'Rayo Carmesí', intencion: 'ataque', dano: 13, fx: 'aliento', efectos: [['cartasSobrecoste', 1, true]] },
-  { nombre: 'Rayo Áureo', intencion: 'ataque', dano: 11, fx: 'aliento', efectos: [['cartasAgotan', 1, true]] },
-  { nombre: 'Rayo Espectral', intencion: 'ataque', dano: 11, fx: 'aliento', efectos: [['cartasEtereas', 1, true]] },
-  { nombre: 'Rayo Pútrido', intencion: 'ataque', dano: 9, fx: 'aliento', efectos: [['veneno', 4, true]] },
-  { nombre: 'Rayo Necrótico', intencion: 'ataque', dano: 15, fx: 'aliento', efectos: [['vulnerable', 2, true]] },
+  { nombre: 'Rayo Carmesí', intencion: 'ataque', dano: 20, fx: 'aliento', efectos: [['cartasSobrecoste', 1, true]] },
+  { nombre: 'Rayo Áureo', intencion: 'ataque', dano: 18, fx: 'aliento', efectos: [['cartasAgotan', 1, true]] },
+  { nombre: 'Rayo Espectral', intencion: 'ataque', dano: 18, fx: 'aliento', efectos: [['cartasEtereas', 1, true]] },
+  { nombre: 'Rayo Pútrido', intencion: 'ataque', dano: 14, fx: 'aliento', efectos: [['veneno', 5, true]] },
+  { nombre: 'Rayo Necrótico', intencion: 'ataque', dano: 22, fx: 'aliento', efectos: [['vulnerable', 2, true]] },
 ];
+
+/** The great central eye: one huge blast that twists nothing… it just unmakes you. */
+const RAYO_DESINTEGRADOR: Movimiento = { nombre: 'RAYO DESINTEGRADOR', intencion: 'ataque', dano: 45, fx: 'aliento' };
 
 export const CONTEMPLADOR: EnemigoDef = {
   id: 'contemplador', nombre: 'El Contemplador', arte: '👁️', pv: [280, 280], escala: 2.3, esJefe: true,
   rasgo: {
     nombre: 'Ojos del Caos',
-    texto: 'Diez tallos oculares, diez magias distintas. Cada rayo tuerce las reglas de tu próximo turno… y sus Observadores nunca dejan de mirar.',
+    texto: 'Diez tallos oculares, diez magias distintas. Cada rayo tuerce las reglas de tu próximo turno, sus Observadores nunca dejan de mirar… y cuando abre del todo su ojo central, su Rayo Desintegrador te deshace de un solo golpe.',
   },
   ia: (turno, rng, self, aliados) => {
     if (turno === 0)
@@ -613,13 +708,14 @@ export const CONTEMPLADOR: EnemigoDef = {
         nombre: 'Despertar de Ojos', intencion: 'mejora',
         invocar: [{ def: OBSERVADOR, pv: 22 }, { def: OBSERVADOR, pv: 22 }],
       };
-    const ciclo = turno % 4;
+    // five-turn cycle: rays of every colour, and the central eye opens on the fourth
+    const ciclo = turno % 5;
     if (ciclo === 0 && aliados.length === 0)
       return {
         nombre: 'Llamada del Enjambre', intencion: 'mejora',
         invocar: [{ def: OBSERVADOR, pv: 22 }, { def: OBSERVADOR, pv: 22 }],
       };
-    if (ciclo === 0) return { nombre: 'MIRADA ANIQUILADORA', intencion: 'ataque', dano: 30, fx: 'aliento' };
+    if (ciclo === 4) return RAYO_DESINTEGRADOR;
     return RAYOS_CONTEMPLADOR[(turno - 1) % RAYOS_CONTEMPLADOR.length];
   },
 };

@@ -140,12 +140,14 @@ function mejorObjetivo(comb: Combate): EnemigoCombate | undefined {
 
 /** Progresión simulada: un jefe no se pelea con el mazo inicial, así que para
  *  los encuentros tardíos se añaden recompensas y mejoras al mazo. */
-interface OpcionesSim { extra?: number; mejoras?: number }
+/** `pv`: the hero's max HP (a huge one measures what a fight costs to win). */
+interface OpcionesSim { extra?: number; mejoras?: number; pv?: number }
 
 async function simular(
   clase: ClaseId, semilla: number, defs: EnemigoDef[], op: OpcionesSim = {},
 ) {
   const run = nuevaRun(clase, semilla);
+  if (op.pv) { run.pvMax = op.pv; run.pv = op.pv; }
   const rng = crearRng(semilla);
   const pool = poolDeClase(clase);
   for (let i = 0; i < (op.extra ?? 0); i++) {
@@ -1169,11 +1171,11 @@ console.log('— Pícaro: mecánicas nuevas —');
     const e = comb.enemigos[0]; e.pv = e.pvMax = 60; e.bloqueo = 0;
     e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
     await emboscada.jugar(comb.contexto(e));
-    check(60 - e.pv === 24, 'Emboscada: 10 + 14 = 24 si el enemigo no ataca');
+    check(60 - e.pv === 31, 'Emboscada: 13 + 18 = 31 si el enemigo no ataca');
     const e2 = comb.enemigos[0]; e2.pv = e2.pvMax = 60; e2.bloqueo = 0;
     e2.intencion = { nombre: 'Tajo', intencion: 'ataque', dano: 8 };
     await emboscada.jugar(comb.contexto(e2));
-    check(60 - e2.pv === 10, 'Emboscada: solo 10 si el enemigo sí ataca');
+    check(60 - e2.pv === 13, 'Emboscada: solo 13 si el enemigo sí ataca');
   }
   // Trabajo de Pies: poder con 2 de Destreza fijos (se agota, no escala por turno)
   {
@@ -2529,6 +2531,126 @@ console.log('\n🐉 Alas articuladas');
   check(aguila.wingFArm === 0 && aguila.wingBF1 === 0, 'las formas del druida no usan los huesos nuevos del ala');
   const packed = packRig(ENEMY_RIGS['ignifax'], 'illustrated');
   check(packed.count === ENEMY_RIGS['ignifax'].shapes.length && packed.data.every(Number.isFinite), 'Ignifax se empaqueta para la GPU con sus huesos nuevos');
+}
+
+// ── Enemy art: serpentine eye stalks, wings behind the head, the Elder Brain ──
+console.log('\n👁️ Contemplador, alas detrás de la cabeza y Cerebro Anciano');
+{
+  type Rig = (typeof ENEMY_RIGS)[string];
+  type Bone = Parameters<typeof boneParent>[0];
+  type Act = Parameters<typeof puppetPose>[2];
+  // bones from the torso (excluded) down to `tip`
+  const chainTo = (rig: Rig, tip: Bone): Bone[] => {
+    const out: Bone[] = [];
+    for (let b: Bone | null = tip; b && b !== 'torso' && b !== 'root'; b = boneParent(b, rig)) out.unshift(b);
+    return out;
+  };
+  // appendages: chains ending on the bones that carry a piece of `tipKey`, or leaves of `bodyKey` bones
+  const appendages = (rig: Rig, tipKey: string, leavesOf?: string): Bone[][] => {
+    const own = new Set(rig.shapes.filter((s) => s.k === (leavesOf ?? tipKey) && s.b !== 'torso').map((s) => s.b));
+    const tips = leavesOf ? [...own].filter((b) => ![...own].some((o) => o !== b && boneParent(o, rig) === b)) : [...own];
+    return tips.map((b) => chainTo(rig, b));
+  };
+  const series = (rig: Rig, bone: Bone, t0: number, dur: number, act?: (t: number) => Act) =>
+    Array.from({ length: Math.round(dur * 60) }, (_, i) => puppetPose(rig, t0 + i / 60, act ? act(i / 60) : null).p[bone as 'torso']);
+  // lag (s) of b behind a that best aligns them (positive: b follows a)
+  const lagOf = (a: number[], b: number[]) => {
+    const ma = a.reduce((s, v) => s + v, 0) / a.length, mb = b.reduce((s, v) => s + v, 0) / b.length;
+    let best = 0, bestK = 0;
+    for (let k = -30; k <= 45; k++) {
+      let c = 0;
+      for (let i = 45; i < a.length - 45; i++) c += (a[i] - ma) * (b[i + k] - mb);
+      if (c > best) { best = c; bestK = k; }
+    }
+    return bestK / 60;
+  };
+  const range = (v: number[]) => Math.max(...v) - Math.min(...v);
+  // mean angular speed of a set of bones over a window, optionally mid-action
+  const restless = (rig: Rig, bones: Bone[], act?: (q: number) => Act) => {
+    let sum = 0;
+    for (let i = 1; i < 36; i++) {
+      const q0 = 0.25 + ((i - 1) / 35) * 0.5, q1 = 0.25 + (i / 35) * 0.5;
+      const a = puppetPose(rig, q0 * 0.8, act ? act(q0) : null).p, b = puppetPose(rig, q1 * 0.8, act ? act(q1) : null).p;
+      for (const bone of bones) sum += Math.abs(b[bone as 'torso'] - a[bone as 'torso']);
+    }
+    return sum;
+  };
+  const worldBox = (rig: Rig) => {
+    const bones = puppetBones(rig, puppetPose(rig, 0, null).p);
+    let y0 = Infinity, y1 = -Infinity;
+    for (const s of rig.shapes) {
+      const pts: [number, number][] = s.t === 'p' ? s.pts : s.t === 'l' ? [[s.x1, s.y1 - s.w / 2], [s.x2, s.y2 + s.w / 2]]
+        : s.t === 'c' ? [[s.x, s.y - s.r], [s.x, s.y + s.r]] : [[s.x, s.y - s.ry], [s.x, s.y + s.ry]];
+      for (const [x, y] of pts) { const m = bones[s.b]; const wy = m[1] * x + m[3] * y + m[5]; y0 = Math.min(y0, wy); y1 = Math.max(y1, wy); }
+    }
+    return (y1 - y0) * (rig.art ?? 1);
+  };
+  const bbox = (s: Rig['shapes'][number]) => {
+    const pts: [number, number][] = s.t === 'p' ? s.pts : s.t === 'l' ? [[s.x1, s.y1], [s.x2, s.y2]] : s.t === 'c' ? [[s.x - s.r, s.y - s.r], [s.x + s.r, s.y + s.r]] : [[s.x - s.rx, s.y - s.ry], [s.x + s.rx, s.y + s.ry]];
+    const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+    return { w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) };
+  };
+  const serpentine = (name: string, rig: Rig, chains: Bone[][]) => {
+    const peaks = new Set<number>();
+    let lagging = 0, moving = 0;
+    for (const chain of chains) {
+      const root = series(rig, chain[0], 0, 6), tip = series(rig, chain[chain.length - 1], 0, 6);
+      if (lagOf(root, tip) > 0.02) lagging++;
+      if (chain.every((b) => range(series(rig, b, 0, 3)) > 3)) moving++;
+      peaks.add(Math.round(root.slice(0, 180).indexOf(Math.max(...root.slice(0, 180))) / 6));
+    }
+    const any = chains.length > 0;
+    check(any && moving === chains.length, `${name}: todas las articulaciones se mueven en reposo (${moving}/${chains.length})`);
+    check(any && lagging === chains.length, `${name}: una onda viaja de la raíz a la punta de cada apéndice (${lagging}/${chains.length})`);
+    check(any && peaks.size >= Math.min(5, chains.length), `${name}: los apéndices van desfasados entre sí (${peaks.size} fases distintas)`);
+  };
+
+  // — El Contemplador —
+  const beholder = ENEMY_RIGS['contemplador'];
+  const stalks = appendages(beholder, 'sclera');
+  check(stalks.length >= 10, `el Contemplador tiene ${stalks.length} tallos oculares (≥ 10)`);
+  check(stalks.filter((c) => c.length >= 3).length >= 8 && stalks.every((c) => c.length >= 2), 'sus tallos son cadenas de varios segmentos (8 de 3 o más, ninguno de 1)');
+  check(new Set(stalks.flat()).size === stalks.flat().length, 'cada tallo tiene sus propias articulaciones');
+  check(stalks.flat().every((b) => beholder.shapes.some((s) => s.b === b && s.k === 'flesh')), 'cada segmento del tallo tiene su trozo de carne');
+  serpentine('Contemplador', beholder, stalks.filter((c) => c.length >= 3));
+  const stalkBones = stalks.flat();
+  const calm = restless(beholder, stalkBones), angry = restless(beholder, stalkBones, (q) => ({ type: 'attack', p: q }));
+  check(angry > calm * 1.4, `los tallos se agitan más al atacar (${angry.toFixed(0)} vs ${calm.toFixed(0)} en reposo)`);
+  const fangs = beholder.shapes.filter((s) => s.k === 'teeth' || s.k === 'fang');
+  check(fangs.length >= 14 && fangs.filter((s) => bbox(s).h >= 8).length >= 4, `boca con ${fangs.length} dientes, colmillos largos incluidos`);
+  const mouth = beholder.shapes.find((s) => s.k === 'socket' && s.b === 'torso');
+  check(!!mouth && bbox(mouth).w >= 36, `la boca es grande (${mouth ? bbox(mouth).w.toFixed(0) : 0} de ancho)`);
+  check(beholder.shapes.filter((s) => s.k === 'vein').length >= 4 && ['iris', 'pupil', 'glint'].every((k) => beholder.shapes.some((s) => s.k === k)),
+    'el ojo central tiene venas, iris, pupila rasgada y brillo');
+  check(beholder.shapes.filter((s) => s.k === 'chitin').length >= 5 && beholder.shapes.filter((s) => s.k === 'scar').length >= 3, 'placas quitinosas y cicatrices en el cuerpo');
+  check(!!beholder.aura && beholder.shapes.length <= 110, `conserva el aura y no se pasa de piezas (${beholder.shapes.length} ≤ 110)`);
+  const tipBones = new Set(stalks.map((c) => c[c.length - 1]));
+  const eyeEmitters = (beholder.emitters ?? []).filter((e) => e.effect === 'ojo');
+  check(eyeEmitters.length === stalks.length && eyeEmitters.every((e) => tipBones.has(e.bone)), 'cada ojo de tallo echa sus partículas desde la punta');
+
+  // — Wings always behind the head and the neck —
+  const winged = [...Object.entries(ENEMY_RIGS), ...Object.entries(INVOCATION_RIGS).map(([id, r]) => [`invocación ${id}`, r] as const)]
+    .filter(([, r]) => !!r.wings);
+  check(winged.length >= 7, `${winged.length} figuras con alas articuladas`);
+  const wingBones = new Set<string>([...WING_BONES.B, ...WING_BONES.F]);
+  for (const [id, rig] of winged) {
+    const lastWing = rig.shapes.reduce((m, s, i) => (wingBones.has(s.b) ? i : m), -1);
+    const firstHead = rig.shapes.findIndex((s) => s.b === 'head');
+    // draw order is the shape order in every pose and action (no renderer sorts pieces)
+    check(lastWing >= 0 && firstHead > lastWing, `${id}: las alas se dibujan detrás de la cabeza y el cuello (ala ${lastWing} < cabeza ${firstHead})`);
+  }
+
+  // — El Cerebro Anciano —
+  const brainRig = ENEMY_RIGS['cerebro-anciano'];
+  const tentacles = appendages(brainRig, 'tentacle', 'tentacle');
+  check(tentacles.filter((c) => c.length >= 3).length >= 6, `el Cerebro Anciano cuelga ${tentacles.length} tentáculos articulados (≥ 6 de 3 segmentos)`);
+  serpentine('Cerebro Anciano', brainRig, tentacles.filter((c) => c.length >= 3));
+  const lobes = (['head', 'cape'] as Bone[]).filter((b) => brainRig.shapes.some((s) => s.b === b && s.k === 'flesh'));
+  check(lobes.length >= 1 && lobes.every((b) => range(series(brainRig, b, 0, 3)) > 1.5), 'los lóbulos laten y abren y cierran los surcos');
+  check(brainRig.shapes.filter((s) => s.k === 'eyeGlow').length >= 3, 'ojos incrustados en la masa cerebral');
+  check(brainRig.shapes.filter((s) => s.k === 'magic').length >= 5, 'venas de brillo psiónico');
+  check(worldBox(brainRig) >= 80, `el cerebro es enorme (${worldBox(brainRig).toFixed(0)} de alto, antes 64)`);
+  check(brainRig.shapes.length <= 90, `y no se pasa de piezas (${brainRig.shapes.length} ≤ 90)`);
 }
 
 // ── Spell VFX: one distinct composition per card fx key (pure part) ─────────
@@ -4096,6 +4218,140 @@ console.log('— Taberna y misiones —');
   const sh = CM.shuffleFrames({ x: 960, y: 760 }, { x: 40, y: 760 }, 0);
   check(soloCompositor(sh) && sh[sh.length - 1].transform.includes('translate(-920px, 0px)'),
     'al barajar, las cartas van del descarte a la pila de robo');
+}
+
+// ── Exhausted cards disintegrate (src/ui/card-motion.ts + card-fly.ts) ──────────
+console.log('\n— Cartas agotadas: se desintegran —');
+{
+  const fs = await import('node:fs');
+  const CM: any = await import('../src/ui/card-motion.ts');
+  const leer = (f: string) => (fs.existsSync(new URL(`../src/${f}`, import.meta.url)) ? fs.readFileSync(new URL(`../src/${f}`, import.meta.url), 'utf8') : '');
+  const trozo = (src: string, desde: string) => (src.includes(desde) ? src.slice(src.indexOf(desde), src.indexOf('\n}', src.indexOf(desde))) : '');
+  const W = 120, H = 170;
+  const plan = typeof CM.dissolvePlan === 'function' ? CM.dissolvePlan(W, H, { seed: 3 }) : null;
+  check(!!plan, 'existe un plan puro de desintegración de cartas');
+  if (plan) {
+    check(plan.duration >= 600 && plan.duration <= 900, `la desintegración dura entre 0,6 y 0,9 s (${plan.duration} ms)`);
+    const nums = (clip: string) => (clip.match(/-?\d+(\.\d+)?px/g) ?? []).map((s) => parseFloat(s));
+    const ys = (clip: string) => nums(clip).filter((_, i) => i % 2 === 1);
+    const card = plan.card as { clipPath: string; offset: number }[];
+    check(card.length >= 6 && card.every((f) => /^polygon\(/.test(f.clipPath)),
+      'la carta se recorta con un polígono animado (clip-path, sin repintar texturas)');
+    const vertices = card.map((f) => nums(f.clipPath).length);
+    check(vertices.every((n) => n === vertices[0]) && [plan.glow, plan.char, plan.core].every(
+      (fr: { clipPath: string }[]) => fr.length === card.length && fr.every((f) => nums(f.clipPath).length === nums(fr[0].clipPath).length)),
+    'todos los fotogramas del borde tienen los mismos vértices (se interpolan suave)');
+    check(card.every((f, i) => i === 0 || f.offset >= card[i - 1].offset) && card[0].offset === 0 && card[card.length - 1].offset === 1,
+      'los fotogramas del recorte van de 0 a 1 en orden');
+    const edge0 = CM.dissolveEdge(0, W, H, 3) as { x: number; y: number }[];
+    const edge1 = CM.dissolveEdge(1, W, H, 3) as { x: number; y: number }[];
+    check(edge0.every((p) => p.y <= 0), 'al empezar el borde está por encima de la carta: se ve entera');
+    check(edge1.every((p) => p.y >= H), 'al acabar el borde ha pasado la carta entera: no queda nada');
+    const firstY = ys(card[0].clipPath).slice(0, edge0.length);
+    const lastY = ys(card[card.length - 1].clipPath).slice(0, edge1.length);
+    check(firstY.every((y) => y <= 0) && lastY.every((y) => y >= H), 'el recorte arranca con la carta entera y termina vacío');
+    const mid = CM.dissolveEdge(0.5, W, H, 3) as { x: number; y: number }[];
+    const alturas = mid.map((p) => p.y);
+    check(Math.max(...alturas) - Math.min(...alturas) > 6, 'el borde que avanza es irregular (se quema, no es un corte recto)');
+    check(edge0[0].x <= 0 && edge0[edge0.length - 1].x >= W, 'el borde cruza la carta de lado a lado');
+    const glowBand = (() => {
+      const g = nums(plan.glow[Math.floor(plan.glow.length / 2)].clipPath);
+      const n = g.length / 4;
+      let max = 0;
+      for (let i = 0; i < n; i++) max = Math.max(max, Math.abs(g[(2 * n - 1 - i) * 2 + 1] - g[i * 2 + 1]));
+      return max;
+    })();
+    check(glowBand > 1 && glowBand <= 12, `el filo incandescente es una franja fina (${glowBand.toFixed(1)} px)`);
+    const embers = plan.embers as { at: number; x: number; y: number; preset: string }[];
+    check(embers.length >= 16 && embers.length <= CM.DISSOLVE_MAX_EMBERS, `se desprenden fragmentos con tope (${embers.length} ≤ ${CM.DISSOLVE_MAX_EMBERS})`);
+    check(embers.every((e) => e.x >= 0 && e.x <= W && e.y >= 0 && e.y <= H), 'los fragmentos salen de dentro de la carta');
+    check(embers.every((e) => e.at >= 0 && e.at <= plan.duration), 'los fragmentos salen mientras dura la desintegración');
+    check(embers.every((e) => {
+      const edge = CM.dissolveEdge(CM.dissolveProgress(e.at / plan.duration), W, H, 3) as { x: number; y: number }[];
+      const near = edge.reduce((a, p) => (Math.abs(p.x - e.x) < Math.abs(a.x - e.x) ? p : a));
+      return Math.abs(near.y - e.y) <= H * 0.12;
+    }), 'cada fragmento se desprende del borde que avanza en ese instante');
+    check(new Set(embers.map((e) => e.preset)).size >= 2 && embers.every((e) => !!EFFECTS[e.preset]),
+      'los fragmentos mezclan brasas y ceniza, con presets de partículas existentes');
+    const up = (k: string) => !!EFFECTS[k] && (EFFECTS[k].gravity < 0 || (EFFECTS[k].direction ?? [0, 0])[1] < 0);
+    check(up('brasaCarta') && up('cenizaCarta') && !!EFFECTS.brasaCarta.glow,
+      'las brasas brillan y brasas y ceniza se las lleva una corriente hacia arriba');
+    check(plan.lift.every((f: { [k: string]: unknown }) => Object.keys(f).every((k) => ['transform', 'opacity', 'offset', 'easing'].includes(k)))
+      && plan.flash.every((f: { [k: string]: unknown }) => Object.keys(f).every((k) => ['transform', 'opacity', 'offset', 'easing'].includes(k))),
+    'el cuerpo de la carta y su destello solo animan transform y opacidad');
+    check(Math.max(...plan.flash.map((f: { opacity: number }) => f.opacity)) > 0.3 && plan.flash[0].opacity === 0,
+      'hay una anticipación: la carta se enciende antes de deshacerse');
+    const fewer = CM.dissolvePlan(W, H, { seed: 3, fewer: true });
+    check(fewer.embers.length > 0 && fewer.embers.length <= Math.ceil(embers.length / 2),
+      `con «Reducir partículas» salen la mitad de fragmentos (${fewer.embers.length})`);
+    const reduced = CM.dissolvePlan(W, H, { seed: 3, reduced: true });
+    check(reduced.embers.length === 0 && reduced.card.length === 0 && reduced.duration <= 250
+      && reduced.lift[reduced.lift.length - 1].opacity === 0 && reduced.lift.every((f: { transform: string }) => f.transform === reduced.lift[0].transform),
+    'con movimiento reducido la carta agotada solo se desvanece, sin partículas');
+    const pose = CM.dissolvePlan(W, H, { seed: 3, prefix: 'translate(-50%, -50%) ', dx: 40, dy: -80, angle: 12, scale: 0.8 });
+    check(pose.lift.every((f: { transform: string }) => f.transform.startsWith('translate(-50%, -50%)') && f.transform.includes('rotate(1')),
+      'la desintegración conserva la pose en que se quedó la carta (escaparate incluido)');
+    const batch = CM.dissolveBudget(8, false);
+    check(batch * 8 <= CM.DISSOLVE_BATCH_EMBERS && CM.dissolveBudget(1, false) === CM.DISSOLVE_MAX_EMBERS,
+      'si se agotan muchas cartas a la vez, el total de fragmentos sigue con tope');
+    const st = CM.dissolveDelays(5, false);
+    check(st.length === 5 && st[0] === 0 && st[4] > st[3] && CM.dissolveDelays(5, true).every((d: number) => d === 0),
+      'varias cartas agotadas a la vez se deshacen escalonadas (a la vez con movimiento reducido)');
+    const ex = CM.exhaustFrames({ x: 500, y: 700 }, { x: 700, y: 200 }, {});
+    const fin = ex[ex.length - 1];
+    check(fin.opacity === 1 && /scale\(0\.[5-9]/.test(fin.transform) && fin.transform.includes('translate(80px, -200px)'),
+      'la carta que se agota al jugarla sube hacia el objetivo, visible, y se deshace a medio camino');
+  }
+
+  // prediction of the core rules: the play decides, before the flight, whether the card will disintegrate
+  if (typeof CM.exhaustsWhenPlayed === 'function') {
+    const todas: CartaDef[] = [...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN, ...NEUTRALES_ESPECIALES];
+    const poder = todas.find((c) => c.tipo === 'poder' && !c.alTopeDelMazo);
+    const unUso = todas.find((c) => c.unUso);
+    const tope = todas.find((c) => c.alTopeDelMazo);
+    check(CM.exhaustsWhenPlayed(DAGA, {}) && !!poder && CM.exhaustsWhenPlayed(poder, {}) && !!unUso && CM.exhaustsWhenPlayed(unUso, {}),
+      'las Dagas, los poderes y las cartas de un uso se desintegran al jugarlas');
+    check(!CM.exhaustsWhenPlayed(BASICAS[0], {}) && CM.exhaustsWhenPlayed(BASICAS[0], { cartasAgotan: 1 }),
+      'una carta normal va al descarte, salvo con el Rayo Áureo (todas se agotan)');
+    check(!tope || !CM.exhaustsWhenPlayed(tope, { cartasAgotan: 1 }), 'la Explosión Sobrenatural vuelve al mazo: no se desintegra');
+    // agrees with the real combat engine
+    const probar = async (def: CartaDef, estados: Record<string, number>) => {
+      const run = nuevaRun('picaro', 5151);
+      const c = new Combate(run, [GOBLIN_CORTADOR], crearRng(5151), uiSilenciosa);
+      await c.iniciar();
+      c.enemigos[0].pv = 500;
+      const inst = instanciar(def);
+      c.jugador.mano.push(inst);
+      c.jugador.energia = 9;
+      Object.assign(c.jugador.estados, estados);
+      const previsto = CM.exhaustsWhenPlayed(def, c.jugador.estados);
+      await c.jugarCarta(inst, c.enemigos[0]);
+      return previsto === c.jugador.agotadas.includes(inst);
+    };
+    const golpe = BASICAS.find((c) => c.tipo === 'ataque' && c.objetivo === 'enemigo') ?? BASICAS[0];
+    check(await probar(DAGA, {}) && await probar(golpe, {}) && await probar(golpe, { cartasAgotan: 1 }),
+      'la previsión coincide con el motor: la carta acaba en agotadas justo cuando se desintegra');
+  } else check(false, 'existe exhaustsWhenPlayed para saber si la carta jugada se desintegrará');
+
+  const vuelo = leer('ui/card-fly.ts');
+  const agotar = trozo(vuelo, 'export function flyExhaust');
+  check(!!agotar, 'card-fly exporta flyExhaust (desintegra una carta en su sitio)');
+  check(/reducedMotion\(\)/.test(agotar) && /menosParticulas\(\)/.test(agotar), 'la desintegración respeta el movimiento reducido y «Reducir partículas»');
+  check(/fx\.emitir\(/.test(vuelo) && /clipPath|clip-path/.test(vuelo) && !/filter|box-shadow|boxShadow/.test(agotar),
+    'los fragmentos van al lienzo de partículas y el borde es un recorte (sin filtros ni sombras animadas)');
+  check(/exhaust/.test(trozo(vuelo, 'export function flyPlay')) && /exhaust/.test(trozo(vuelo, 'export function flyShowcase')),
+    'el vuelo de una carta jugada (y el de las raras) puede acabar desintegrándose');
+  const combateUi = leer('ui/combate.ts');
+  const mano = trozo(combateUi, 'function renderMano()');
+  check(/agotadas\.includes\(inst\)[\s\S]{0,120}flyExhaust\(/.test(mano),
+    'las cartas que se agotan desde la mano se desintegran en su sitio');
+  check(/descarte\.includes\(inst\)\) flyDiscard/.test(mano), 'las descartadas siguen volando al descarte');
+  const lanz = trozo(combateUi, 'async function animarLanzamiento');
+  check(/exhaustsWhenPlayed\(/.test(lanz) && /flyPlay\([^;]*exhaust/.test(lanz) && /flyShowcase\([^;]*exhaust/.test(lanz),
+    'al jugar una carta que se agota, su vuelo termina desintegrándose en vez de desvanecerse');
+  const css = leer('estilos/cartas.css');
+  check(['carta-brasa', 'carta-quemado', 'carta-filo', 'carta-destello'].every((k) => css.includes(`.${k}`)),
+    'la carta que arde tiene su chamuscado, su filo incandescente y su destello');
 }
 
 console.log('— Maldiciones —');
@@ -6741,7 +6997,7 @@ console.log('\n🔢 Números calculados');
   check(await valor('golpe', debil) === 6, 'Golpe con Débil y Fuerza 2: (6 + 2) × 0,75 = 6');
   check(await valor('defender', debil) === 3, 'Defender con Frágil y Destreza -1: (5 - 1) × 0,75 = 3');
   check(await valor('golpe', reliquias) === 24, 'Golpe con Corazón de Cristal, Hoja Sedienta, Oportunista y Fuerza 2 contra un Vulnerable: 24');
-  check(await valor('punalada-trapera', reliquias) === 30 && await valor('punalada-trapera', atacante) === 7,
+  check(await valor('punalada-trapera', reliquias) === 37 && await valor('punalada-trapera', atacante) === 9,
     'Puñalada Trapera suma su extra solo si el enemigo no pretende atacar');
   check(await valor('golpe-septico', reliquias) === 30, 'Golpe Séptico suma el Veneno del objetivo');
   check(await valor('tempestad-acero', reliquias) === 33, 'Tempestad de Acero suma 3 por cada descarte del turno');
@@ -7597,6 +7853,243 @@ console.log('\n🖱️ Sonidos de interfaz');
   const sonidoUi = leer('ui/sonido-interfaz.ts');
   check(/export function activarSonidoInterfaz/.test(sonidoUi) && /sfx\('click'/.test(sonidoUi), 'hay un clic suave común para los botones de la interfaz');
   check(/activarSonidoInterfaz\(\)/.test(leer('main.ts')), 'el clic de interfaz se activa al arrancar');
+}
+
+// ── Rogue: discard synergies, a harder-hitting Quick Blade, stronger sneak attacks ──
+console.log('\n🗡️ Pícaro: descartes y ataques furtivos');
+{
+  const carta = (id: string) => PICARO.find((c) => c.id === id);
+  const montar = async (semilla: number) => {
+    const comb = new Combate(nuevaRun('picaro', semilla), [GOBLIN_CORTADOR], crearRng(semilla), uiSilenciosa);
+    await comb.iniciar();
+    comb.run.reliquias.length = 0;
+    comb.jugador.estados = {};
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 99; e.bloqueo = 0;
+    return { comb, e };
+  };
+  // Quick Blade: far more damage, and it discards instead of drawing
+  {
+    const filo = carta('filo-rapido')!;
+    const { comb, e } = await montar(9101);
+    const mano = comb.jugador.mano.length, mazo = comb.jugador.mazo.length;
+    await filo.jugar(comb.contexto(e));
+    check(99 - e.pv === 10, `Filo Rápido inflige 10 de daño (${99 - e.pv})`);
+    check(comb.jugador.mano.length === mano - 1 && comb.jugador.mazo.length === mazo && comb.descartadasEsteTurno === 1,
+      'Filo Rápido descarta 1 carta en vez de robar');
+    const inst = instanciar(filo); inst.mejorada = true;
+    const { comb: c2, e: e2 } = await montar(9102);
+    await defDe(inst).jugar(c2.contexto(e2));
+    check(99 - e2.pv === 14, 'Filo Rápido+ inflige 14 de daño');
+  }
+  // Roll is gone (old saves swap it for a card that still exists)
+  check(!carta('rodar'), 'Rodar ya no está entre las cartas del pícaro');
+  const g = serializarRun(nuevaRun('picaro', 9103));
+  g.mazo.push({ id: 'rodar', mejorada: false });
+  const rehecha = rehidratarRun(g);
+  check(!!rehecha && rehecha.mazo.length === g.mazo.length && rehecha.mazo.every((c) => !!c.def),
+    'una partida guardada con Rodar sigue cargando (la carta se cambia por otra)');
+  // New cards that pay off being discarded
+  const nuevas = ['esquiva-refleja', 'juego-sucio', 'cuchillo-oculto', 'tormenta-filos'];
+  check(nuevas.every((id) => !!carta(id)), `hay cartas nuevas de descartes (${nuevas.filter((id) => !carta(id)).join(', ') || 'todas'})`);
+  const descartarla = async (id: string, semilla: number) => {
+    const { comb, e } = await montar(semilla);
+    const inst = instanciar(carta(id)!);
+    comb.jugador.mano.push(inst);
+    await comb.descartarCarta(inst);
+    return { comb, e };
+  };
+  if (nuevas.every((id) => !!carta(id))) {
+    {
+      const { comb } = await montar(9104);
+      const antes = comb.jugador.mano.length;
+      const inst = instanciar(carta('esquiva-refleja')!);
+      comb.jugador.mano.push(inst);
+      await comb.descartarCarta(inst);
+      check(comb.jugador.mano.length === antes + 2, 'Esquiva Refleja: si la descartas, robas 2 cartas');
+    }
+    {
+      const { comb } = await montar(9105);
+      const energia = comb.jugador.energia;
+      const inst = instanciar(carta('juego-sucio')!);
+      comb.jugador.mano.push(inst);
+      await comb.descartarCarta(inst);
+      check(comb.jugador.energia === energia + 2, 'Juego Sucio: si la descartas, ganas 2 de energía');
+    }
+    {
+      const { e } = await descartarla('cuchillo-oculto', 9106);
+      check(99 - e.pv === 8, `Cuchillo Oculto: si lo descartas, apuñala a un enemigo (${99 - e.pv})`);
+    }
+    {
+      const { comb, e } = await montar(9107);
+      const tormenta = carta('tormenta-filos')!;
+      const enMano = comb.jugador.mano.length;
+      await tormenta.jugar(comb.contexto(e));
+      const dagas = comb.jugador.mano.filter((c) => c.def.id === 'daga').length;
+      check(comb.descartadasEsteTurno === enMano && dagas === enMano && comb.jugador.mano.length === enMano,
+        `Tormenta de Filos: descarta la mano y te da una Daga por cada carta (${dagas} de ${enMano})`);
+    }
+  }
+  const conDescartes = PICARO.filter((c) => /[Dd]escart/.test(c.texto)).length;
+  check(conDescartes >= 10, `el pícaro tiene muchas sinergias de descarte (${conDescartes} cartas)`);
+  // Sneak attacks: more base damage and a bigger bonus against a foe that is not attacking
+  const golpe = async (id: string, ataca: boolean, mejorada = false) => {
+    const { comb, e } = await montar(9110);
+    e.intencion = ataca ? { nombre: 'Tajo', intencion: 'ataque', dano: 8 } : { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 4 };
+    const inst = instanciar(carta(id)!); inst.mejorada = mejorada;
+    await defDe(inst).jugar(comb.contexto(e));
+    return 99 - e.pv;
+  };
+  check(await golpe('punalada-trapera', true) === 8 && await golpe('punalada-trapera', false) === 15, 'Puñalada Trapera: 8, o 8 + 7 si no pretende atacar');
+  check(await golpe('punalada-trapera', false, true) === 21, 'Puñalada Trapera+: 11 + 10 si no pretende atacar');
+  check(await golpe('emboscada', true) === 13 && await golpe('emboscada', false) === 31, 'Emboscada: 13, o 13 + 18 si no pretende atacar');
+  check(await golpe('emboscada', false, true) === 41, 'Emboscada+: 17 + 24 si no pretende atacar');
+}
+
+// ── Enemy difficulty: the Beholder, Act II/III elites and normals ─────────────
+console.log('\n👁️ Dificultad de enemigos (Contemplador, élites y normales II–III)');
+{
+  const E: any = ENEMIGOS;
+  const T = (t: number, r = 0.5, self: any = { pv: 100, pvMax: 100, estados: {} }, al: any[] = []) =>
+    (d: EnemigoDef) => d.ia(t, () => r, self, al);
+  // Every move an enemy can pick (sampled over turns, rolls and «has allies or not»)
+  const movimientos = (d: EnemigoDef) => {
+    const out: any[] = [];
+    for (let t = 0; t < 12; t++) for (const r of [0.05, 0.3, 0.5, 0.7, 0.95]) for (const al of [[], [{}]]) {
+      out.push(T(t, r, { pv: 100, pvMax: 100, estados: {} }, al)(d));
+      out.push(T(t, r, { pv: 30, pvMax: 100, estados: {} }, al)(d));
+    }
+    return out;
+  };
+  const total = (m: any) => (m.dano ?? 0) * (m.veces ?? 1);
+
+  // The Beholder: harder rays that still twist your turn, plus a Disintegration Ray
+  const rayos = movimientos(E.CONTEMPLADOR).filter((m) => m.intencion === 'ataque');
+  const desintegrador = rayos.find((m) => /desintegr/i.test(m.nombre));
+  check(!!desintegrador && desintegrador.dano >= 40 && (desintegrador.veces ?? 1) === 1 && !desintegrador.efectos?.length,
+    `el Contemplador tiene un Rayo Desintegrador: un solo golpe enorme sin efectos (${desintegrador?.dano ?? '—'})`);
+  const cromaticos = rayos.filter((m) => m !== desintegrador && m.efectos?.length);
+  check(cromaticos.length >= 5 && cromaticos.every((m) => m.dano >= 14),
+    'sus rayos de color siguen aplicando efectos y hacen al menos 14 de daño');
+  const coste = async (jefe: EnemigoDef) => {
+    let perdidos = 0, n = 0;
+    for (const clase of CLASES) for (let s = 1; s <= 3; s++) {
+      const r = await simular(clase, s * 977 + 5, [jefe], { extra: 16, mejoras: 6, pv: 1500 });
+      perdidos += r.combate.jugador.pvMax - Math.max(0, r.combate.jugador.pv); n++;
+    }
+    return perdidos / n;
+  };
+  const [cIgn, cCon] = [await coste(E.IGNIFAX), await coste(E.CONTEMPLADOR)];
+  check(cCon >= cIgn * 0.8, `el Contemplador cuesta casi tanta vida como Ignifax (${Math.round(cCon)} frente a ${Math.round(cIgn)} PV)`);
+
+  // Unique abilities: every Act II/III elite and every Act III normal has one (★ trait)
+  const elites = ACTOS.slice(1).flatMap((a) => a.flatMap((c) => c.elites.flat()));
+  const normales3 = [...new Set(ACTOS[2].flatMap((c) => c.normales.flat()))];
+  for (const d of [...elites, ...normales3]) check(!!d.rasgo?.nombre && !!d.rasgo?.texto, `${d.nombre}: tiene una habilidad única (★)`);
+  const nombresRasgo = [...elites, ...normales3].map((d) => d.rasgo?.nombre);
+  check(new Set(nombresRasgo).size === nombresRasgo.length, 'ninguna habilidad única se repite');
+
+  // Act II normals: more stats; Act III normals: better stats
+  const antes2: Record<string, [number, number]> = {
+    'esqueleto-guerrero': [24, 12], 'esqueleto-arquero': [18, 10], zombi: [34, 12], espectro: [26, 9], necrofago: [28, 12],
+    'acolito-velado': [20, 8], 'lanzador-vacio': [18, 10], diablillo: [16, 8], 'sabueso-infernal': [30, 11], poseido: [26, 12], flagelante: [22, 8],
+  };
+  const antes3: Record<string, [number, number]> = {
+    'kobold-lancero': [30, 14], 'kobold-hechicero': [28, 10], 'cultista-dragon': [36, 16], 'draco-joven': [44, 13], 'elemental-magma': [38, 14],
+    azotamentes: [34, 12], 'lacayo-engendrado': [30, 11], 'cubo-gelatinoso': [44, 13], 'reptador-carronero': [30, 10], 'ojo-flotante': [22, 9], 'horror-tentacular': [38, 13],
+  };
+  for (const [antes, acto, pvMult] of [[antes2, 1, 1.12], [antes3, 2, 1.15]] as const) {
+    for (const d of [...new Set(ACTOS[acto].flatMap((c) => c.normales.flat()))]) {
+      const [pv0, golpe0] = antes[d.id] ?? [0, 0];
+      const golpe = Math.max(...movimientos(d).map(total));
+      check(d.pv[0] >= Math.floor(pv0 * pvMult) && golpe >= golpe0 + 2,
+        `${d.nombre}: más PV (${pv0} → ${d.pv[0]}) y más daño (${golpe0} → ${golpe})`);
+    }
+  }
+
+  // Engine: the mechanics behind the new abilities
+  const probar = async (defs: EnemigoDef[], semilla = 8100) => {
+    const c = new Combate(nuevaRun('mago', semilla), defs, crearRng(semilla), uiSilenciosa);
+    await c.iniciar();
+    c.run.reliquias.length = 0; // clean numbers: no relic reacts to anything
+    c.jugador.bloqueo = 0;
+    c.jugador.estados = {};
+    return c;
+  };
+  const quieto = (id: string, extra: Partial<EnemigoDef> = {}): EnemigoDef =>
+    ({ id, nombre: id, arte: '?', pv: [60, 60], ia: () => ({ nombre: 'Esperar', intencion: 'defensa', bloqueo: 0 }), ...extra });
+  {
+    const c = await probar([quieto('acorazado', { estadosIniciales: { coraza: 3 } as any })]);
+    await c.contexto(c.enemigos[0]).atacar(c.enemigos[0], 10);
+    check(c.danoRecibido(c.enemigos[0], 10) === 7 && c.enemigos[0].pv === 53, 'Coraza: cada golpe que recibe se reduce en esa cantidad');
+  }
+  {
+    const c = await probar([quieto('regenera', { estadosIniciales: { regeneracion: 5 } as any })]);
+    c.enemigos[0].pv = 40;
+    c.jugador.bloqueo = 999;
+    await c.terminarTurno();
+    check(c.enemigos[0].pv === 45, 'un enemigo con Regeneración se cura al inicio de su turno');
+  }
+  {
+    const muro: EnemigoDef = quieto('muro', { conservaBloqueo: true, ia: () => ({ nombre: 'Muro', intencion: 'defensa', bloqueo: 10 }) } as any);
+    const c = await probar([muro]);
+    await c.terminarTurno(); await c.terminarTurno();
+    check(c.enemigos[0].bloqueo === 20, 'con Juramento Inquebrantable su bloqueo se acumula de un turno a otro');
+  }
+  {
+    const vamp: EnemigoDef = quieto('vampiro', { vampirico: 0.5, ia: () => ({ nombre: 'Mordisco', intencion: 'ataque', dano: 10 }) } as any);
+    const c = await probar([vamp]);
+    c.enemigos[0].pv = 30;
+    await c.terminarTurno();
+    check(c.enemigos[0].pv === 35, 'un enemigo vampírico se cura la mitad del daño que te hace');
+  }
+  {
+    const fan: EnemigoDef = quieto('fanatico', { alMorirAliado: { efectos: [['fuerza', 3]], cura: 5 } } as any);
+    const c = await probar([fan, quieto('victima', { pv: [5, 5] })]);
+    c.enemigos[0].pv = 40;
+    await c.infligir(c.enemigos[1], 99);
+    check((c.enemigos[0].estados.fuerza ?? 0) === 3 && c.enemigos[0].pv === 45, 'cuando muere un aliado, el fanático gana Fuerza y se cura');
+  }
+  {
+    const bomba: EnemigoDef = quieto('bomba', { alMorir: { nombre: 'Estallido', dano: 9, efectos: [['fragil', 1, true]] } } as any);
+    const c = await probar([bomba]);
+    const pv = c.jugador.pv;
+    await c.infligir(c.enemigos[0], 999);
+    check(c.jugador.pv === pv - 9 && (c.jugador.estados.fragil ?? 0) === 1, 'al morir, estalla: te hace daño y te aplica su efecto');
+  }
+  {
+    const colmena: EnemigoDef = quieto('colmena', { protegidoPorAliados: true } as any);
+    const c = await probar([colmena, quieto('ojo')]);
+    await c.contexto(c.enemigos[0]).atacar(c.enemigos[0], 10);
+    const conOjo = 60 - c.enemigos[0].pv;
+    await c.infligir(c.enemigos[1], 999);
+    await c.contexto(c.enemigos[0]).atacar(c.enemigos[0], 10);
+    check(conOjo === 5 && c.enemigos[0].pv === 45, 'Mente Colmena: recibe la mitad de daño mientras le quede algún aliado');
+  }
+  {
+    const lector: EnemigoDef = quieto('lector', { ia: () => ({ nombre: 'Leer', intencion: 'perjuicio', efectos: [['robaMenos', 2, true]] }) } as any);
+    const c = await probar([lector]);
+    c.jugador.bloqueo = 999;
+    await c.terminarTurno();
+    check(c.jugador.mano.length === 3 && !(c.jugador.estados.robaMenos ?? 0), 'Mente Fracturada: robas esa cantidad de cartas menos y se va');
+  }
+  {
+    const ojo: EnemigoDef = quieto('mirada', { ia: () => ({ nombre: 'Mirada', intencion: 'ataque', dano: 8, perforante: true }) } as any);
+    const c = await probar([ojo]);
+    const pv = c.jugador.pv;
+    c.jugador.bloqueo = 20;
+    await c.terminarTurno();
+    check(c.jugador.pv === pv - 8, 'un ataque perforante ignora tu bloqueo');
+  }
+  {
+    const escudero: EnemigoDef = quieto('escudero', { ia: () => ({ nombre: 'Escudo', intencion: 'defensa', bloqueoAliados: 6 }) } as any);
+    const c = await probar([quieto('aliado'), escudero]);
+    c.jugador.bloqueo = 999;
+    // the ally acts first (its block resets at its turn), then the escudero shields everyone
+    await c.terminarTurno();
+    check(c.enemigos[0].bloqueo === 6 && c.enemigos[1].bloqueo === 6, 'Protector del Nido: da bloqueo a todos los enemigos');
+  }
+  const util = await import('../src/ui/util.ts').catch(() => null) as any;
+  if (util) for (const k of ['coraza', 'robaMenos']) check(!!util.ICONO_ESTADO?.[k] && !!util.NOMBRE_ESTADO?.[k] && !!util.DESCRIPCION_ESTADO?.[k], `el estado «${k}» tiene icono, nombre y descripción`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

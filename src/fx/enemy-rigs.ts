@@ -4,7 +4,10 @@
 // build, head, weapon, clothing and palette. Bosses add bespoke pieces,
 // particle emitters and per-action bursts on top.
 
-import { C, E, P, L, type BoneId, type Burst, type Emitter, type PartialPose, type PuppetRig, type Shape } from './puppet.ts';
+import {
+  C, E, P, L, slitEye,
+  type ActionProgress, type BoneId, type Burst, type Emitter, type PartialPose, type Pose, type PuppetRig, type Shape,
+} from './puppet.ts';
 import { buildWings, type WingSpec } from './wing.ts';
 
 type Pt = [number, number];
@@ -416,6 +419,8 @@ function biped(id: string, o: BipedOpts): PuppetRig {
   }
   if (o.belt || o.loincloth) shapes.push(L('torso', 'belt', 58 - b.ww, 98, 58 + b.ww, 97.5, 3), C('torso', 'metal', 60, 97.7, 1.5));
   if (o.loincloth) shapes.push(P('torso', 'cloth', [[56, 99], [66, 98.5], [65, 112], [62, 108], [59, 113]]));
+  // near wing over the body but always behind the head (it hangs from the back)
+  if (wings) shapes.push(...wings.front);
   // head
   shapes.push(...head(o.head, hc, b.hr / 10, o.headOpts));
   // front arm, weapon, hand
@@ -424,7 +429,6 @@ function biped(id: string, o: BipedOpts): PuppetRig {
   const w = weapon(o.weapon, handF);
   shapes.push(...w.shapes);
   shapes.push(C('armF', 'skin', handF[0], handF[1], b.aw * 0.62));
-  if (wings) shapes.push(...wings.front);
 
   const grip = GRIP[o.weapon];
   const hunch = o.hunch ?? 0;
@@ -580,6 +584,8 @@ function drake(id: string, palette: Record<string, string>, veteran: boolean, wi
       L('torso', 'ink', 48, 94, 54, 92, 0.6), L('torso', 'ink', 60, 93, 66, 92, 0.6), L('torso', 'ink', 54, 97, 60, 96, 0.6),
       E('legF', 'scale', 48, 102, 8, 9), L('legF', 'scale', 48, 106, 44, 116, 5.5), L('legF', 'scale', 44, 116, 48, 126, 5), E('legF', 'scale', 50, 127, 5.5, 2.4),
       P('legF', 'horn', [[54, 126], [57, 127.5], [54, 129]]),
+      // near wing over the body, under the neck and the head in every pose
+      ...wings.front,
       P('head', 'scale', [[72, 97], [74, 82], [80, 72], [87, 74], [84, 87], [81, 99]]),
       P('head', 'belly', [[79, 97], [82, 85], [86, 76], [84.5, 87], [82, 98]]),
       L('head', 'ink', 80.5, 92, 83.5, 92.5, 0.6), L('head', 'ink', 82, 86, 85, 86.5, 0.6), L('head', 'ink', 83.5, 80, 86, 80.5, 0.6),
@@ -594,7 +600,6 @@ function drake(id: string, palette: Record<string, string>, veteran: boolean, wi
       C('head', 'eyeGlow', 94, 69.6, 1.5),
       L('armF', 'scale', 78, 100, 80, 114, 5.5), L('armF', 'scale', 80, 114, 78, 126, 5), E('armF', 'scale', 80, 127, 5.5, 2.4),
       P('armF', 'horn', [[85, 126], [88, 127.5], [85, 129]]),
-      ...wings.front,
     ],
   });
 }
@@ -670,22 +675,139 @@ function floatingEye(id: string, palette: Record<string, string>, stalks: number
   });
 }
 
+// ── Serpentine appendages (eye stalks, tentacles) ────────────────────────────
+// A chain of 2-3 bones (a generic chain slot, a wing chain or arm → hand) with
+// one tapering capsule per segment. The rig's `animate` drives it with a wave
+// that travels from the root to the tip, so it writhes like a snake.
+type PoseBone = Extract<BoneId, keyof Pose>;
+interface Appendage {
+  bones: PoseBone[];
+  /** Root pivot followed by the end of each segment (bind pose). */
+  joints: Pt[];
+  /** Screen direction of the root segment (degrees, y down). */
+  dir: number;
+}
+
+const round2 = (v: number) => Math.round(v * 100) / 100;
+const smoothRamp = (x: number) => { const u = Math.min(1, Math.max(0, x)); return u * u * (3 - 2 * u); };
+/** 0 → 1 → 1 → 0 over an action fraction q, with the given corners. */
+const envelope = (q: number, a: number, b: number, c: number, d: number) =>
+  q <= a || q >= d ? 0 : q < b ? smoothRamp((q - a) / (b - a)) : q <= c ? 1 : smoothRamp((d - q) / (d - c));
+
+/** An appendage growing from `root` towards `dir`, each segment turning `curl` degrees more. */
+function appendage(bones: PoseBone[], root: Pt, dir: number, lens: number[], curl: number): Appendage {
+  const joints: Pt[] = [root];
+  let [x, y] = root;
+  lens.forEach((l, k) => {
+    const a = ((dir + curl * (k - 0.4)) * Math.PI) / 180;
+    x += l * Math.cos(a); y += l * Math.sin(a);
+    joints.push([round2(x), round2(y)]);
+  });
+  return { bones, joints, dir };
+}
+
+/** Pivots of an appendage's bones: each one turns around its own root joint. */
+const appendagePivots = (list: Appendage[]) =>
+  Object.fromEntries(list.flatMap((a) => a.bones.map((b, k) => [b, a.joints[k]]))) as Partial<Record<BoneId, Pt>>;
+
+/** Tapering capsules, one per segment, each on its own bone. */
+const segments = (a: Appendage, key: string, widths: number[]): Shape[] =>
+  a.bones.map((b, k) => L(b, key, a.joints[k][0], a.joints[k][1], a.joints[k + 1][0], a.joints[k + 1][1], widths[k]));
+
+/** Travelling wave: every joint swings like the previous one, `lag` radians later. */
+function writhe(p: Pose, a: Appendage, t: number, hz: number, phase: number, amps: number[], lag: number, gain: number) {
+  a.bones.forEach((b, k) => { p[b] += amps[k] * gain * Math.sin(2 * Math.PI * hz * t + phase - k * lag); });
+}
+
+/** Action envelopes shared by the writhing monsters: fury (attack/spell), flinch (hit) and death. */
+function actionMoods(action: ActionProgress | null) {
+  const q = action?.p ?? 0, type = action?.type;
+  return {
+    fury: type === 'attack' || type === 'spell' ? envelope(q, 0.02, 0.28, 0.78, 1) : 0,
+    flinch: type === 'hit' ? envelope(q, 0, 0.08, 0.3, 1) : 0,
+    dead: type === 'death' ? smoothRamp((q - 0.05) / 0.5) : 0,
+  };
+}
+
 function brain(id: string, palette: Record<string, string>): PuppetRig {
-  const tentacle = (bone: BoneId, x: number, dx: number): Shape[] => [L(bone, 'flesh', x, 96, x + dx, 110, 2.6), L(bone, 'flesh', x + dx, 110, x + dx * 0.4, 122, 2)];
+  const phase = phaseOf(id);
+  // the brain mass: a core with two throbbing hemispheres on top
+  const core = { x: 60, y: 76, rx: 24, ry: 17 };
+  const under = (x: number): Pt => [x, round2(core.y + core.ry * Math.sqrt(1 - ((x - core.x) / core.rx) ** 2) - 3)];
+  const grow = (bones: PoseBone[], x: number, dir: number, curl: number) => appendage(bones, under(x), dir, [12, 11, 10], curl);
+  // tentacles hanging from the underside, four behind the core and four in front
+  const behind = [
+    grow(['wingB', 'wingBArm', 'wingBF1'], 41, 114, -12),
+    grow(['chA1', 'chA2', 'chA3'], 51, 101, 12),
+    grow(['chC1', 'chC2', 'chC3'], 68, 84, -12),
+    grow(['wingF', 'wingFArm', 'wingFF1'], 79, 68, 12),
+  ];
+  const front = [
+    grow(['chB1', 'chB2', 'chB3'], 46, 106, 14),
+    grow(['chD1', 'chD2', 'chD3'], 57, 93, -10),
+    grow(['chE1', 'chE2', 'chE3'], 65, 86, 12),
+    grow(['chF1', 'chF2', 'chF3'], 74, 76, -14),
+  ];
+  const tentacles = [...behind, ...front];
+  const sucker = (a: Appendage): Shape => {
+    const [p, q] = [a.joints[1], a.joints[2]];
+    return C(a.bones[1], 'sucker', round2((p[0] + q[0]) / 2 + 1.1), round2((p[1] + q[1]) / 2), 0.9);
+  };
+  // sunken glowing eyes: a dark pit with an angry slit inside
+  const pitEye = (b: BoneId, x: number, y: number, s: number): Shape[] =>
+    [E(b, 'socket', x, y, 3.4 * s, 2.3 * s), slitEye(b, 'eyeGlow', [x - 2.6 * s, y - 0.9 * s], [x + 2.4 * s, y + 0.4 * s], 1.5 * s)];
+  // a bulging, outlined fold of the cortex along a short polyline
+  const fold = (b: BoneId, pts: Pt[]): Shape[] => pts.slice(1).map((q, i) => L(b, 'fold', pts[i][0], pts[i][1], q[0], q[1], 5.2));
   return finish(id, {
-    accent: palette.magic ?? '#e7a8ff', style: 'magic', focus: [76, 80], focusBone: 'torso', hover: 4, art: 1.15, palette,
-    pivots: { torso: [60, 84], legB: [52, 96], legF: [64, 96], armB: [46, 94], armF: [72, 94] },
+    accent: palette.magic ?? '#c77dff', style: 'magic', focus: [80, 73], focusBone: 'head', hover: 3, art: 1.5,
+    palette: { tentacle: '#5e3f58', sucker: '#cdb6a4', fleshD: '#5a3a4c', fold: '#b39496', ...palette },
+    pivots: { torso: [60, 84], head: [60, 88], cape: [60, 88], ...appendagePivots(tentacles) },
     rest: {},
     windup: { rootX: -4, torso: -12 },
     strike: { rootX: 6, torso: 10 },
+    emitters: [{ bone: 'torso', at: [60, 60], effect: 'arcana', rate: 1.5, spread: 16 }],
+    animate: (p, t, action) => {
+      const { fury, flinch, dead } = actionMoods(action);
+      tentacles.forEach((a, i) => {
+        for (const b of a.bones) p[b] = 0;
+        writhe(p, a, t, 0.42 + 0.06 * (i % 3), phase + i * 1.7, [7, 10, 14], 0.85, (1 + 0.5 * fury) * (1 - 0.7 * dead));
+        writhe(p, a, t, 1.9 + 0.2 * (i % 2), phase + i * 1.3, [5, 8, 11], 1.1, fury);
+        // lash at the hero, recoil when hit, hang limp when dying
+        a.bones.forEach((b, k) => { p[b] += -10 * fury * ((k + 1) / 3) + 8 * flinch - (a.dir - 90) * 0.25 * dead; });
+      });
+      // the hemispheres throb like a heart (a double beat), opening and closing the fissure
+      const beat = t * 0.9 + phase / 6.28, c = beat - Math.floor(beat);
+      const throb = Math.exp(-((c - 0.1) ** 2) / 0.004) + 0.6 * Math.exp(-((c - 0.3) ** 2) / 0.004);
+      const swell = throb * (1 + 1.5 * fury) * (1 - dead);
+      p.head = 3 * swell - 2 * flinch;
+      p.cape = -3 * swell + 2 * flinch;
+    },
     shapes: [
-      ...tentacle('armB', 46, -6), ...tentacle('legB', 52, -3),
-      E('torso', 'flesh', 60, 82, 22, 16),
-      L('torso', 'ink', 44, 76, 54, 70, 0.8), L('torso', 'ink', 50, 84, 62, 74, 0.8), L('torso', 'ink', 60, 90, 72, 78, 0.8), L('torso', 'ink', 66, 70, 76, 80, 0.8),
-      L('torso', 'ink', 40, 86, 48, 92, 0.7), L('torso', 'ink', 70, 92, 78, 86, 0.7), L('torso', 'ink', 58, 68, 60, 96, 0.9),
-      P('torso', 'socket', [[62, 94], [72, 93], [70, 97], [64, 97]]),
-      C('torso', 'magic', 74, 80, 2.4),
-      ...tentacle('legF', 64, 3), ...tentacle('armF', 72, 7),
+      ...behind.flatMap((a) => segments(a, 'tentacle', [4.6, 3.5, 2.3])),
+      P('torso', 'fleshD', [[53, 86], [67, 86], [65, 99], [60, 104], [55, 99]]),
+      L('torso', 'magic', 58, 90, 61, 101, 0.9), L('torso', 'magic', 63, 89, 62, 97, 0.8),
+      E('torso', 'flesh', core.x, core.y, core.rx, core.ry),
+      E('torso', 'fleshD', 50, 88, 11, 5.5),
+      // psionic light leaks through the fissure when the lobes part
+      L('torso', 'magic', 61, 56, 60, 82, 1.4),
+      // far hemisphere: coiled folds (gyri) over a darker mass, the grooves glowing
+      E('cape', 'flesh', 48, 71, 17, 15.5),
+      L('cape', 'magic', 38, 76, 50, 72, 0.9),
+      ...fold('cape', [[36, 64], [42, 58.5], [51, 57.5]]), ...fold('cape', [[33.5, 72], [40, 67.5], [49, 66.5]]),
+      ...fold('cape', [[36.5, 80], [45, 77], [54, 76.5]]), ...fold('cape', [[54, 61], [57, 68]]), ...fold('cape', [[43, 86], [52, 84.5]]),
+      ...pitEye('cape', 46, 72, 0.8),
+      // near hemisphere, crowded with eyes
+      E('head', 'flesh', 72, 70, 17.5, 16.5),
+      L('head', 'magic', 66, 74, 80, 79, 0.9),
+      ...fold('head', [[60.5, 62], [67, 56.5], [76, 56.5]]), ...fold('head', [[79.5, 57], [86, 62.5]]),
+      ...fold('head', [[62.5, 70], [70, 65.5], [78.5, 66.5]]), ...fold('head', [[82.5, 68], [88, 73.5]]),
+      ...fold('head', [[63.5, 79], [72, 76.5], [80, 79]]), ...fold('head', [[83, 80], [86.5, 84]]),
+      ...pitEye('head', 79, 72.5, 1.5), ...pitEye('head', 70, 62, 0.9), ...pitEye('head', 84, 62.5, 0.8),
+      L('torso', 'magic', 46, 84, 56, 88, 0.8),
+      // a lamprey maw on the underside
+      E('torso', 'socket', 69, 89, 6.5, 3),
+      ...[64.5, 67.5, 70.5, 73.5].map((x): Shape => P('torso', 'teeth', [[x - 1, 86.8], [x + 0.3, 89.6], [x + 1, 86.8]])),
+      ...front.flatMap((a) => [...segments(a, 'tentacle', [5.2, 3.9, 2.5]), sucker(a)]),
     ],
   });
 }
@@ -766,6 +888,8 @@ function elemental(id: string, kind: 'fire' | 'water' | 'wind', palette: Record<
 // ── Bosses ───────────────────────────────────────────────────────────────────
 interface BossExtras {
   back?: Shape[];
+  /** Drawn just before the head: over the body and the wings, under the face (a far horn). */
+  underHead?: Shape[];
   front?: Shape[];
   emitters: Emitter[];
   bursts: Partial<Record<'attack' | 'spell' | 'hit' | 'death', Burst[]>>;
@@ -776,9 +900,13 @@ interface BossExtras {
   art?: number;
 }
 function boss(base: PuppetRig, x: BossExtras): PuppetRig {
+  const headAt = base.shapes.findIndex((s) => s.b === 'head');
+  const body = x.underHead && headAt >= 0
+    ? [...base.shapes.slice(0, headAt), ...x.underHead, ...base.shapes.slice(headAt)]
+    : [...(x.underHead ?? []), ...base.shapes];
   return {
     ...base,
-    shapes: [...(x.back ?? []), ...base.shapes, ...(x.front ?? [])],
+    shapes: [...(x.back ?? []), ...body, ...(x.front ?? [])],
     // bosses are meant to be busy: every emitter runs 40% hotter than written
     emitters: x.emitters.map((e) => ({ ...e, rate: e.rate * 1.4 })), bursts: x.bursts, aura: x.aura,
     flap: x.flap ?? base.flap, flapBones: x.flapBones ?? base.flapBones, hover: x.hover ?? base.hover, art: x.art ?? base.art,
@@ -792,35 +920,147 @@ const candle = (bone: BoneId, x: number, y: number): Shape[] => [
   L(bone, 'bone', x, y, x, y + 8, 2.4), P(bone, 'fire', [[x - 1.3, y], [x, y - 4.2], [x + 1.3, y]]),
 ];
 
+/** Height of a polyline at x (linear between its vertices, clamped at the ends). */
+function heightAt(line: Pt[], x: number): number {
+  if (x <= line[0][0]) return line[0][1];
+  for (let i = 1; i < line.length; i++) {
+    const [x0, y0] = line[i - 1], [x1, y1] = line[i];
+    if (x <= x1) return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
+  }
+  return line[line.length - 1][1];
+}
+
+/**
+ * The Beholder: a heavy chitin-plated orb with a gaping, fanged maw on a hinged
+ * jaw, one huge bloodshot eye (slit pupil, darting saccades, a glaring lid under
+ * a horned brow) and ten eye stalks. Eight stalks are 3-segment chains and two
+ * are 2-segment ones; a wave travels down each of them, out of phase with the
+ * others, and turns into a frantic writhing when it attacks.
+ */
 function beholder(id: string, palette: Record<string, string>): PuppetRig {
-  const stalk = (bone: BoneId, [x1, y1]: Pt, [x2, y2]: Pt): Shape[] => {
-    const mx = (x1 + x2) / 2 + (y2 - y1) * 0.15, my = (y1 + y2) / 2 - (x2 - x1) * 0.15;
-    return [L(bone, 'flesh', x1, y1, mx, my, 2.6), L(bone, 'flesh', mx, my, x2, y2, 2.2), C(bone, 'sclera', x2, y2, 3.2), C(bone, 'eyeGlow', x2 + 0.8, y2, 1.4)];
+  const phase = phaseOf(id);
+  const cx = 60, cy = 80, R = 25;
+  const polar = (deg: number, r: number): Pt => [round2(cx + r * Math.cos((deg * Math.PI) / 180)), round2(cy + r * Math.sin((deg * Math.PI) / 180))];
+  const LONG = [9.5, 8.5, 7.5], SHORT = [9, 8];
+  const grow = (bones: PoseBone[], dir: number, curl: number, r = 19) => appendage(bones, polar(dir, r), dir, bones.length === 3 ? LONG : SHORT, curl);
+  // stalks sprouting from behind the orb, and two in front rooted on the carapace
+  const behind = [
+    grow(['chA1', 'chA2', 'chA3'], -168, 14),
+    grow(['chB1', 'chB2', 'chB3'], -146, -12),
+    grow(['chC1', 'chC2', 'chC3'], -124, 16),
+    grow(['chD1', 'chD2', 'chD3'], -62, -14),
+    grow(['chE1', 'chE2', 'chE3'], -38, 12),
+    grow(['chF1', 'chF2', 'chF3'], -14, -16),
+    grow(['armB', 'offhand'], 165, 18),
+    grow(['armF', 'weapon'], 10, -18),
+  ];
+  const inFront = [grow(['wingB', 'wingBArm', 'wingBF1'], -104, -12, 21), grow(['wingF', 'wingFArm', 'wingFF1'], -83, 14, 21)];
+  const stalks = [...behind, ...inFront];
+  const stalkShapes = (a: Appendage): Shape[] => {
+    const long = a.bones.length === 3, r = long ? 3.6 : 3.2, last = a.bones[a.bones.length - 1];
+    const tip = a.joints[a.joints.length - 1], prev = a.joints[a.joints.length - 2];
+    // each eye looks out along its stalk, leaning towards the hero
+    let dx = tip[0] - prev[0], dy = tip[1] - prev[1];
+    const l = Math.hypot(dx, dy) || 1;
+    dx = dx / l + 0.9; dy /= l;
+    const k = Math.hypot(dx, dy) || 1;
+    const at = (f: number): [number, number] => [round2(tip[0] + (dx / k) * r * f), round2(tip[1] + (dy / k) * r * f)];
+    return [
+      ...segments(a, 'flesh', long ? [3.8, 3.1, 2.5] : [3.4, 2.7]),
+      C(last, 'sclera', tip[0], tip[1], r), C(last, 'eyeGlow', ...at(0.35), r * 0.5), C(last, 'eye', ...at(0.5), r * 0.22),
+    ];
   };
-  const tips: [BoneId, Pt][] = [['head', [46, 40]], ['head', [60, 36]], ['head', [76, 40]], ['armB', [28, 56]], ['armB', [24, 80]], ['armF', [96, 54]], ['armF', [100, 80]], ['cape', [34, 44]], ['cape', [22, 66]]];
-  const roots: Pt[] = [[54, 64], [60, 62], [66, 64], [44, 74], [42, 84], [78, 72], [80, 82], [48, 66], [44, 70]];
+  // carapace: chitin plates along the dome, standing a little proud of the flesh
+  const plate = (a0: number, a1: number): Shape =>
+    P('torso', 'chitin', [polar(a0, R + 1.5), polar((a0 + a1) / 2, R + 2.6), polar(a1, R + 1.5), polar(a1, 18), polar((a0 + a1) / 2, 18.5), polar(a0, 18)]);
+  // the maw: upper lip line, the jaw's lip line and the fangs along them
+  const lip: Pt[] = [[36, 94], [48, 97.5], [62, 98.5], [76, 95.5], [88, 89]];
+  const jawLip: Pt[] = [[35, 104], [44, 108.5], [58, 110.5], [72, 109], [83, 103], [88, 97]];
+  const fang = (b: BoneId, x: number, h: number, up: boolean): Shape => {
+    const y0 = heightAt(up ? jawLip : lip, x) + (up ? 0.6 : -0.6), s = up ? -1 : 1, w = h >= 8 ? 2.2 : 1.6, hook = h >= 8 ? 0.9 : 0.3;
+    return P(b, 'teeth', [[x - w, y0], [x + w, y0], [round2(x + 0.3 - hook * 0.4), round2(y0 + s * h * 0.62)], [round2(x - hook), round2(y0 + s * h)], [round2(x - w * 0.55 - hook * 0.4), round2(y0 + s * h * 0.5)]]);
+  };
+  const upper: [number, number][] = [[40, 4.5], [45, 11], [51, 5], [56, 5.5], [61, 8.5], [66, 5], [71, 5], [77, 11], [83, 4.5]];
+  const lower: [number, number][] = [[42, 4], [48, 9], [55, 4.5], [62, 5], [68, 9.5], [75, 4.5], [81, 4]];
+  // bloodshot veins on the lower half of the eye (the lid hides the top)
+  const eye = { x: 70, y: 76, rx: 12.5, ry: 11.5 };
+  const vein = (deg: number): Shape => {
+    const a = (deg * Math.PI) / 180, b = ((deg + 10) * Math.PI) / 180;
+    return L('torso', 'vein', round2(eye.x + 12.1 * Math.cos(a)), round2(eye.y + 11.1 * Math.sin(a)), round2(eye.x + 7.4 * Math.cos(b)), round2(eye.y + 6.8 * Math.sin(b)), 0.55);
+  };
+  // hash of an integer to 0..1, for the eye's saccade targets
+  const pick = (n: number) => { const v = Math.sin(n * 12.9898 + phase) * 43758.5453; return v - Math.floor(v); };
   return finish(id, {
-    accent: palette.magic, style: 'magic', focus: [70, 80], focusBone: 'torso', hover: 4, art: 1.25, flap: 8, flapBones: 'arms',
+    accent: palette.magic, style: 'magic', focus: [72, 76], focusBone: 'torso', hover: 3.5, art: 1.3,
     palette,
-    pivots: { torso: [60, 84], head: [60, 64], armB: [44, 76], armF: [78, 76], cape: [48, 66] },
+    pivots: {
+      torso: [60, 84], head: [70, 130], cape: [55, 70], legF: [33, 104],
+      ...appendagePivots(stalks),
+    },
     rest: {},
-    windup: { rootX: -5, torso: -12, head: -8 },
-    strike: { rootX: 8, torso: 10, head: 6 },
+    windup: { rootX: -5, torso: -12 },
+    strike: { rootX: 8, torso: 10 },
+    animate: (p, t, action) => {
+      const { fury, flinch, dead } = actionMoods(action);
+      stalks.forEach((a, i) => {
+        for (const b of a.bones) p[b] = 0;
+        const amps = a.bones.length === 3 ? [8, 11, 14] : [9, 13];
+        // slow serpentine wave, each stalk at its own pace and phase…
+        writhe(p, a, t, 0.5 + 0.07 * (i % 4), phase + i * 1.9, amps, 0.9, (1 + 0.4 * fury) * (1 - 0.8 * dead));
+        // …and a frantic writhing on top of it while it attacks
+        writhe(p, a, t, 2.2 + 0.15 * (i % 3), phase * 1.3 + i * 2.6, amps, 1.2, 0.85 * fury);
+        // flinch back when hit, droop towards the ground when dying
+        const down = Math.cos((a.dir * Math.PI) / 180) >= 0 ? 1 : -1;
+        a.bones.forEach((b, k) => { p[b] += -14 * flinch * (k ? 0.6 : 1) + down * 24 * dead; });
+      });
+      // the great eye darts from one spot to another, and locks on the hero to attack
+      const s = t / 0.85, slot = Math.floor(s);
+      const from = -3 + 5.5 * pick(slot - 1), to = -3 + 5.5 * pick(slot);
+      const look = from + (to - from) * smoothRamp((s - slot) / 0.12);
+      p.head = look * (1 - fury) + 2.6 * fury - 3.5 * dead + 1.6 * Math.sin(t * 37) * flinch;
+      // heavy upper lid: a glaring squint that opens wide to attack and shuts when it dies
+      p.cape = 1.5 + 1.2 * Math.sin(t * 0.9 + phase) - 8 * fury + 9 * flinch + 14 * dead;
+      // the jaw chews slowly, gapes on the attack and hangs slack in death
+      p.legF = 2 + 1.5 * Math.sin(t * 2.3 + phase) + 13 * fury + 6 * flinch + 16 * dead;
+    },
     shapes: [
-      ...tips.flatMap(([bone, tip], i) => ['cape', 'armB'].includes(bone) ? stalk(bone, roots[i], tip) : []),
-      C('torso', 'flesh', 60, 84, 22),
-      L('torso', 'ink', 42, 76, 50, 66, 0.7), L('torso', 'ink', 40, 90, 46, 100, 0.7), L('torso', 'ink', 52, 64, 62, 62, 0.6), L('torso', 'ink', 72, 100, 78, 94, 0.6),
-      C('torso', 'ink', 46, 84, 0.9), C('torso', 'ink', 52, 70, 0.8), C('torso', 'ink', 74, 66, 0.8),
-      P('torso', 'socket', [[45, 95], [76, 93], [72, 104], [58, 107], [48, 104]]),
-      ...[48, 54, 60, 66, 72].map((x): Shape => P('torso', 'teeth', [[x, 94.5 - (x - 45) * 0.06], [x + 2, 99], [x + 4, 94.3 - (x - 45) * 0.06]])),
-      ...[51, 57, 63, 69].map((x): Shape => P('torso', 'teeth', [[x, 105], [x + 2, 100.5], [x + 4, 105]])),
-      E('torso', 'sclera', 68, 79, 11, 10),
-      C('torso', 'magic', 70, 79, 5.6), C('torso', 'ink', 71, 79, 2.4),
-      P('torso', 'flesh', [[55, 72], [81, 69], [79, 74], [58, 76]]), L('torso', 'ink', 56, 74.5, 80, 71.5, 0.8),
-      ...tips.flatMap(([bone, tip], i) => ['head', 'armF'].includes(bone) ? stalk(bone, roots[i], tip) : []),
+      ...behind.flatMap(stalkShapes),
+      C('torso', 'flesh', cx, cy, R),
+      plate(-176, -156), plate(-153, -133), plate(-130, -110), plate(-107, -87), plate(-84, -66),
+      // old wounds, one of them stitched shut
+      L('torso', 'scar', 39, 70, 46, 88, 2.2), L('torso', 'ink', 40.4, 76.4, 44.4, 75, 0.55), L('torso', 'ink', 42.6, 82.4, 46.6, 81, 0.55),
+      L('torso', 'scar', 46, 60, 55, 69, 2), L('torso', 'ink', 48.6, 66.2, 52.2, 62.8, 0.55),
+      // the maw: throat, tongue, gums, fangs and the hinged lower jaw
+      P('torso', 'socket', [[36, 94], [48, 97.5], [62, 98.5], [76, 95.5], [88, 89], [89.5, 100], [85, 111], [74, 118], [56, 120], [40, 115], [34, 106]]),
+      E('legF', 'tongue', 60, 107.5, 10, 3.2),
+      L('torso', 'gum', 37, 94.2, 48, 97.6, 2.4), L('torso', 'gum', 48, 97.6, 62, 98.6, 2.4), L('torso', 'gum', 62, 98.6, 87, 89.4, 2.4),
+      ...upper.map(([x, h]) => fang('torso', x, h, false)),
+      P('legF', 'flesh', [...jawLip, [89, 103], [85, 112], [75, 120], [60, 124], [46, 122], [37, 115], [33, 108]]),
+      ...lower.map(([x, h]) => fang('legF', x, h, true)),
+      // the great eye
+      E('torso', 'sclera', eye.x, eye.y, eye.rx, eye.ry),
+      ...[205, 160, 118, 68, 24].map(vein),
+      C('head', 'ink', eye.x, eye.y, 6.9), C('head', 'iris', eye.x, eye.y, 6.1),
+      P('head', 'pupil', [[70, 70.2], [71.3, 73.5], [71.6, 76], [71.3, 78.5], [70, 81.8], [68.7, 78.5], [68.4, 76], [68.7, 73.5]]),
+      C('head', 'glint', 67.4, 73.2, 1.3),
+      P('cape', 'flesh', [[54, 70], [56, 64], [62, 59.5], [71, 58.5], [80, 60], [85.5, 64.5], [86.5, 71], [83, 72.8], [76, 71], [68, 70.4], [60, 71]]),
+      P('torso', 'chitin', [[55, 69], [58, 62], [65, 57], [75, 55.5], [85, 57.5], [93, 62.5], [90, 66], [83, 63.5], [75, 62.5], [66, 64], [60, 69]]),
+      L('torso', 'scar', 80, 55.5, 85.5, 64.5, 1.8),
+      // the two front stalks grow out of rings in the carapace
+      ...inFront.flatMap((a) => [C('torso', 'chitin', a.joints[0][0], a.joints[0][1], 3.6), ...stalkShapes(a)]),
     ],
   });
 }
+
+/** One 'ojo' particle source on each stalk eye of a rig. */
+const stalkEyeEmitters = (rig: PuppetRig): Emitter[] => rig.shapes.flatMap((s): Emitter[] =>
+  s.t === 'c' && s.k === 'sclera' && s.b !== 'torso' ? [{ bone: s.b, at: [s.x, s.y], effect: 'ojo', rate: 1 }] : []);
+const BEHOLDER = beholder('contemplador', {
+  flesh: '#56304a', chitin: '#2a1824', scar: '#a8707e', socket: '#12050b', gum: '#5e0e22', tongue: '#8a2238', teeth: '#d8cca4',
+  sclera: '#d2c48a', vein: '#e0203c', iris: '#ff3a6e', pupil: '#070205', glint: '#fff6ee', magic: '#ff4ad0', eyeGlow: '#ffb43a',
+});
+/** Tip of the front-right stalk (spell beam). */
+const BEHOLDER_TOP = BEHOLDER.shapes.find((s) => s.b === 'wingFF1' && s.k === 'sclera') as Extract<Shape, { t: 'c' }>;
 
 const BOSSES: Record<string, PuppetRig> = {
   'jefe-ogro': boss(biped('jefe-ogro', {
@@ -917,7 +1157,8 @@ const BOSSES: Record<string, PuppetRig> = {
     palette: { skin: '#5a1410', body: '#5a1410', legs: '#3a0c0a', boots: '#1a0605', horn: '#1a1210', wing: '#2a0806', eyeGlow: '#ffb347', fire: '#ff7a1a', lava: '#ff6a1a', metal: '#3a3436' },
   }), {
     art: 1.45, aura: '#ff4a1a',
-    back: [P('head', 'horn', [[54, 58], [40, 48], [33, 33], [44, 43], [56, 54]])],
+    // the far horn sits over the wings but under the face
+    underHead: [P('head', 'horn', [[54, 58], [40, 48], [33, 33], [44, 43], [56, 54]])],
     front: [
       P('head', 'horn', [[64, 56], [70, 42], [66, 29], [75, 40], [70, 58]]),
       L('torso', 'lava', 52, 82, 58, 94, 1.3), L('torso', 'lava', 66, 82, 62, 92, 1.3), L('torso', 'lava', 56, 96, 64, 98, 1),
@@ -964,18 +1205,17 @@ const BOSSES: Record<string, PuppetRig> = {
       death: [{ bone: 'torso', at: [60, 96], effect: 'aliento', scale: 1.5 }, { bone: 'torso', at: [60, 96], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [60, 96], effect: 'ascua', scale: 40 }],
     },
   }),
-  contemplador: boss(beholder('contemplador', { flesh: '#5a3a52', socket: '#1a0e14', sclera: '#e0d8c8', magic: '#ff5ad8', eyeGlow: '#ffd75a' }), {
-    aura: '#b0309a',
+  contemplador: boss(BEHOLDER, {
+    aura: '#a0208a',
     emitters: [
-      { bone: 'torso', at: [70, 79], effect: 'arcana', rate: 8, spread: 10 },
-      { bone: 'torso', at: [60, 84], effect: 'arcana', rate: 4, spread: 26 },
-      { bone: 'torso', at: [60, 101], effect: 'vacio', rate: 3, spread: 10 },
-      ...([['head', [46, 40]], ['head', [60, 36]], ['head', [76, 40]], ['armB', [28, 56]], ['armB', [24, 80]], ['armF', [96, 54]], ['armF', [100, 80]], ['cape', [34, 44]], ['cape', [22, 66]]] as [BoneId, Pt][])
-        .map(([bone, at]): Emitter => ({ bone, at, effect: 'ojo', rate: 1.2 })),
+      { bone: 'torso', at: [70, 76], effect: 'arcana', rate: 8, spread: 10 },
+      { bone: 'torso', at: [60, 82], effect: 'arcana', rate: 4, spread: 28 },
+      { bone: 'legF', at: [62, 108], effect: 'vacio', rate: 3, spread: 9 },
+      ...stalkEyeEmitters(BEHOLDER),
     ],
     bursts: {
-      attack: [{ bone: 'torso', at: [72, 79], effect: 'rayo', scale: 1.5 }, { bone: 'torso', at: [72, 79], effect: 'abisal' }],
-      spell: [{ bone: 'torso', at: [66, 80], effect: 'abisal', scale: 1.3 }, { bone: 'head', at: [60, 36], effect: 'rayo' }],
+      attack: [{ bone: 'head', at: [70, 76], effect: 'rayo', scale: 1.5 }, { bone: 'head', at: [70, 76], effect: 'abisal' }],
+      spell: [{ bone: 'torso', at: [66, 78], effect: 'abisal', scale: 1.3 }, { bone: 'wingFF1', at: [BEHOLDER_TOP.x, BEHOLDER_TOP.y], effect: 'rayo' }],
       death: [{ bone: 'torso', at: [60, 84], effect: 'abisal', scale: 2 }, { bone: 'torso', at: [60, 84], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [60, 84], effect: 'arcana', scale: 40 }],
     },
   }),
@@ -1135,7 +1375,10 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   'ojo-flotante': floatingEye('ojo-flotante', { flesh: '#8a5a6a', magic: '#d98bff', eyeGlow: '#ffd75a' }, 3),
   'horror-tentacular': horror('horror-tentacular', { flesh: '#5a6a5a', eyeGlow: '#e8e070' }),
   'azotamentes-anciano': biped('azotamentes-anciano', { build: 'normal', head: 'tentacle', weapon: 'staff', palette: { skin: '#8a5a8a', robe: '#3a1e44', body: '#3a1e44', magic: '#e7a8ff', eyeGlow: '#f2e8ff', gold: '#c9a040' }, robe: true, arms: 'skin', cloak: true }),
-  'cerebro-anciano': brain('cerebro-anciano', { flesh: '#b07a8a', magic: '#e7a8ff' }),
+  'cerebro-anciano': brain('cerebro-anciano', {
+    flesh: '#8a6a74', fold: '#b39496', fleshD: '#5c3a4a', tentacle: '#5a3b54', sucker: '#cdb8a0', socket: '#16060e',
+    magic: '#c77dff', eyeGlow: '#d4ff5a', teeth: '#d6cba8',
+  }),
   observador: floatingEye('observador', { flesh: '#7a4a5a', magic: '#ff9ad0', eyeGlow: '#ffd75a' }, 2),
   ...BOSSES,
   // final scene

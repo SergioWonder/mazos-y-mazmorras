@@ -301,7 +301,8 @@ export const ARTE_CARTA: Record<string, string> = {
   'maestria-conjuros': '🎓',
   // ── Pícaro ──
   daga: '📌', 'filo-rapido': '⚡', pirueta: '🤸', 'daga-veloz': '🔪',
-  'lanzamiento-daga': '🎯', finta: '🌀', 'golpe-bajo': '👊', rodar: '🛞',
+  'lanzamiento-daga': '🎯', finta: '🌀', 'golpe-bajo': '👊', 'esquiva-refleja': '🛞',
+  'cuchillo-oculto': '🪒', 'juego-sucio': '🪤', 'tormenta-filos': '🌩️',
   distraccion: '💫', 'punalada-trapera': '🩸', 'ataque-sutil': '🤫',
   'trabajo-de-pies': '👣', esfumarse: '💨', 'mano-rapida': '🤹',
   cuchilladas: '✂️', preparacion: '🎒', cambiazo: '🎭', emboscada: '🥷',

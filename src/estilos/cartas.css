@@ -302,6 +302,36 @@
 /* a drawn card waits hidden in its slot until its flying copy lands */
 .mano .carta.carta-llegando { opacity: 0; }
 
+/* ── Exhausted cards burn away (card-fly.ts): a ragged incandescent edge eats the
+   card from a top corner. Every layer is a static fill; only clip-path, transform
+   and opacity animate. ─────────────────────────────────────────────────────── */
+.carta.carta-ardiendo {
+  /* no outer shadow nor halo: the clip would cut them, and a filter would re-render every frame */
+  box-shadow: inset 0 0 0 1px rgba(255, 250, 230, 0.5);
+  filter: none;
+  transition: none;
+  will-change: transform, opacity, clip-path;
+}
+.carta-ardiendo > .carta-quemado,
+.carta-ardiendo > .carta-brasa,
+.carta-ardiendo > .carta-filo,
+.carta-ardiendo > .carta-destello {
+  position: absolute;
+  inset: -3px; /* the card's border box: the same frame the clip polygons use */
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 30;
+}
+/* scorched paper right under the edge */
+.carta-ardiendo > .carta-quemado { background: linear-gradient(180deg, rgba(58, 24, 6, 0.78), rgba(30, 10, 2, 0.82)); }
+/* the glowing band and its white-hot line */
+.carta-ardiendo > .carta-brasa { background: linear-gradient(100deg, #ff6a1a, #ffb347 45%, #ff8a2a 70%, #ff5a1a); }
+.carta-ardiendo > .carta-filo { background: #fff3c8; }
+/* anticipation: the card flares up before the edge bites */
+.carta-ardiendo > .carta-destello {
+  background: radial-gradient(ellipse 90% 70% at 50% 35%, rgba(255, 240, 200, 0.95), rgba(255, 170, 80, 0.55) 60%, rgba(255, 110, 30, 0.1));
+}
+
 /* ── Showcase de carta rara al jugarse ──────────────────────────────────── */
 .carta-showcase {
   position: fixed;

@@ -84,6 +84,9 @@ export const EFFECTS: Record<string, EffectPreset> = {
   destelloCarta: { count: 1, colours: ['#fff8e0'], speed: [0, 0.05], life: [0.5, 0.9], size: [1.2, 2.2], shape: 'estrella', gravity: 0, glow: true },
   // defeat screen: ash flakes drifting down from the top
   ceniza: { count: 1, colours: ['rgba(150,140,134,0.7)', 'rgba(110,100,96,0.65)', '#ff8c3b'], speed: [0.2, 0.6], life: [5, 8], size: [1, 2.6], shape: 'circulo', gravity: 0.002, direction: [1.2, 1.95] },
+  // exhausted cards burning away (card-fly.ts): glowing flakes and dark ash carried up
+  brasaCarta: { count: 1, colours: ['#ffd27a', '#ff9a3c', '#fff1c0', '#ff7a1a'], speed: [0.6, 1.6], life: [0.45, 0.9], size: [1.1, 2.4], shape: 'circulo', gravity: -0.045, direction: [-2.05, -1.1], glow: true },
+  cenizaCarta: { count: 1, colours: ['rgba(52,40,32,0.9)', 'rgba(92,76,64,0.85)', '#d0662a', '#e8883a'], speed: [0.5, 1.3], life: [0.7, 1.2], size: [1.8, 3.6], shape: 'hoja', gravity: -0.03, direction: [-2.1, -1.05] },
   // paladin: fallbacks of the hammer, holy light and smites (their spells draw them normally)
   martillo: { count: 22, colours: ['#ffd35a', '#fff6d8', '#ffb830'], speed: [3, 8], life: [0.25, 0.5], size: [2, 4], shape: 'chispa', gravity: 0.15, glow: true },
   escudoSagrado: { count: 16, colours: ['#ffd35a', '#fff3c4', '#e0a82e'], speed: [1, 3], life: [0.4, 0.8], size: [2, 4], shape: 'estrella', gravity: -0.04, glow: true },
