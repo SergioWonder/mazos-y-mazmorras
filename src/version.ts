@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.3.0';
+export const VERSION = '7.3.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.3.1',
+    fecha: '2026-09-30',
+    cambios: [
+      '✨ En el ordenador vuelven a verse las partículas con brillo (estrellas, llamas, ascuas, hechizos…), que solo se veían bien en el móvil.',
+    ],
+  },
   {
     version: '7.3.0',
     fecha: '2026-09-30',

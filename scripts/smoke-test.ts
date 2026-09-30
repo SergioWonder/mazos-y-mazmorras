@@ -7346,6 +7346,9 @@ console.log('\n🔥 Llamas del escenario con alfa');
   const stage = fs.readFileSync(new URL('../src/ui/puppet-stage.ts', import.meta.url), 'utf8');
   check(/uniform float uCover;/.test(gl) && /max\(1\.0 - additive, uCover\)/.test(gl), 'el lote de sprites puede escribir alfa además de sumar luz (uCover)');
   check(/flameBatch\.draw\([^)]*,\s*1\)/.test(stage), 'las llamas del escenario cubren con alfa: no se recortan fuera del halo de la figura');
+  // alpha-0 light is invalid premultiplied data: desktop compositors drop it (mobile ones add it)
+  const capa = gl.slice(gl.indexOf('class ParticleRendererGL'));
+  check(/this\.batch\.draw\(list, w, h, dpr, 0, 0, 1\)/.test(capa), 'las partículas con brillo escriben alfa: se ven también en PC, no solo en móvil');
 }
 
 // ── Each Smite burns in its own colour (generic ones keep the holy yellow) ──

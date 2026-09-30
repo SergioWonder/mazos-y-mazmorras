@@ -58,8 +58,9 @@ flat in float vStretch;
 flat in float vParam;
 flat in float vSize;
 out vec4 outColour;
-// 0: glows only add light (fx canvas over the page); 1: they also cover with alpha, for a
-// canvas whose empty pixels must stay valid when composited (the puppet stage)
+// 0: glows only add light (alpha 0: only valid inside a canvas that already holds alpha);
+// 1: they also cover with alpha, so the pixels stay valid premultiplied data when the
+// canvas is composited over the page (desktop compositors drop alpha-0 light)
 uniform float uCover;
 float sdBox(vec2 p, vec2 b) { vec2 d = abs(p) - b; return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0); }
 float sdHeart(vec2 p) {
@@ -284,6 +285,7 @@ export class ParticleRendererGL {
     gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
     this.wasEmpty = list.length === 0;
-    this.batch.draw(list, w, h, dpr);
+    // cover: glows with alpha 0 show on mobile but vanish on desktop browsers
+    this.batch.draw(list, w, h, dpr, 0, 0, 1);
   }
 }

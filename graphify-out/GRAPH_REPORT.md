@@ -1,7 +1,7 @@
 # Graph Report - videogame  (2026-09-30)
 
 ## Corpus Check
-- 159 files · ~968,748 words
+- 159 files · ~968,852 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `a3c0bb6c`
+- Built from commit: `62706f91`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -473,8 +473,8 @@ Cohesion: 0.13
 Nodes (21): bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion, ofrecerBendicionEntreActos() (+13 more)
 
 ### Community 86 - "Community 86"
-Cohesion: 0.14
-Nodes (16): FX_CASTIGO, CastigoPreparado, EfectoConjuro, EfectoInvocacion, EfectoTemporal, JugadorCombate, Luchador, ValorMostrado (+8 more)
+Cohesion: 0.13
+Nodes (17): FX_CASTIGO, crearEnemigo(), CastigoPreparado, EfectoConjuro, EfectoInvocacion, EfectoTemporal, JugadorCombate, Luchador (+9 more)
 
 ### Community 87 - "Community 87"
 Cohesion: 0.15
@@ -497,11 +497,11 @@ Cohesion: 0.09
 Nodes (25): Ease, strikeKeys(), StrikeSpec, Keyframe, PartialPose, BEARD, DISCHARGE, HAT (+17 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.22
-Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
+Cohesion: 0.24
+Nodes (7): broadleaf(), cartouche(), compass_rose(), crossbones(), eye_glyph(), A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Ornamental scroll cartouche with illegible lettering.
 
 ### Community 94 - "Community 94"
-Cohesion: 0.20
+Cohesion: 0.22
 Nodes (5): densify(), Plan, Dungeon-style floor plan: rooms and tunnels with solid walls, rock hatching outs, Wall points with outward normals., SVG elements for every floor piece grown by `grow` px, filled/stroked with col.
 
 ### Community 95 - "Community 95"
@@ -509,12 +509,12 @@ Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.24
-Nodes (8): broadleaf(), dagger(), eye_glyph(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+Cohesion: 0.40
+Nodes (5): dagger(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 97 - "Community 97"
-Cohesion: 0.17
-Nodes (15): Actualizaciones y avisos, Arte de las cartas, Bendiciones, Controles, Roguelike de construcción de mazos, Diseño, Dracs & Rogues, Ejecutar (+7 more)
+Cohesion: 0.12
+Nodes (21): Actualizaciones y avisos, Ambientación fantasía medieval D&D, Arte de las cartas, Bendiciones, Clase Bárbaro (80 PV), Controles, Roguelike de construcción de mazos, Diseño (+13 more)
 
 ### Community 98 - "Community 98"
 Cohesion: 0.10
@@ -529,20 +529,20 @@ Cohesion: 0.08
 Nodes (33): ACTOS, Capitulo, elegirEvento(), EnemigoDef, fx, Eventos narrativos, bossIconFor(), hasMapIcon() (+25 more)
 
 ### Community 101 - "Community 101"
-Cohesion: 0.12
-Nodes (17): esDungeonMaster(), SELLO_PACTO, EstadoId, Acrobacias (pícaro), Ambientación fantasía medieval D&D, Clase Bárbaro (80 PV), Clase Brujo (64 PV), Condena (ejecuta al igualar los PV actuales) (+9 more)
+Cohesion: 0.13
+Nodes (14): esDungeonMaster(), SELLO_PACTO, EstadoId, Acrobacias (pícaro), Armadura de Agathys (el bloqueo devuelve daño a todos), Clase Brujo (64 PV), Condena (ejecuta al igualar los PV actuales), Oscuridad (baja el ataque de todos) (+6 more)
 
 ### Community 103 - "Community 103"
-Cohesion: 0.24
-Nodes (3): crearEnemigo(), EnemigoCombate, Armadura de Agathys (el bloqueo devuelve daño a todos)
+Cohesion: 0.18
+Nodes (4): EnemigoCombate, Movimiento, Ataques furtivos (pícaro), Intención enemiga
 
 ### Community 104 - "Community 104"
 Cohesion: 0.11
 Nodes (18): ATTACK, CAPE_IN, CAPE_OUT, DEATH, EXALT, HAMMER, HIT, KNEEL (+10 more)
 
 ### Community 105 - "Community 105"
-Cohesion: 0.20
-Nodes (5): Movimiento, Ataques furtivos (pícaro), Intención enemiga, Oscuridad (baja el ataque de todos), Raíces (druida)
+Cohesion: 0.40
+Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
 
 ### Community 106 - "Community 106"
 Cohesion: 0.33

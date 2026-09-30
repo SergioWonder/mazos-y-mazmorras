@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 94,
+      "community": 93,
       "norm_label": ".uid()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 96,
+      "community": 93,
       "norm_label": ".dot()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 93,
+      "community": 105,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 93,
+      "community": 105,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 96,
+      "community": 93,
       "norm_label": "broadleaf()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 93,
+      "community": 105,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 96,
+      "community": 93,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 93,
+      "community": 105,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 93,
+      "community": 105,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 96,
+      "community": 93,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -16081,7 +16081,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L146",
       "id": "core_combate_combate_danodeataque",
-      "community": 105,
+      "community": 101,
       "norm_label": ".danodeataque()"
     },
     {
@@ -16090,7 +16090,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L154",
       "id": "core_combate_combate_danorecibido",
-      "community": 105,
+      "community": 103,
       "norm_label": ".danorecibido()"
     },
     {
@@ -16108,7 +16108,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L169",
       "id": "core_combate_combate_danogolpe",
-      "community": 105,
+      "community": 103,
       "norm_label": ".danogolpe()"
     },
     {
@@ -16144,7 +16144,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L212",
       "id": "core_combate_combate_descargarcastigoen",
-      "community": 103,
+      "community": 101,
       "norm_label": ".descargarcastigoen()"
     },
     {
@@ -16180,7 +16180,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L280",
       "id": "core_combate_combate_danointencion",
-      "community": 105,
+      "community": 103,
       "norm_label": ".danointencion()"
     },
     {
@@ -16189,7 +16189,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L287",
       "id": "core_combate_combate_vulnerablealgolpe",
-      "community": 105,
+      "community": 103,
       "norm_label": ".vulnerablealgolpe()"
     },
     {
@@ -16216,7 +16216,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L339",
       "id": "core_combate_combate_ataqueanulado",
-      "community": 105,
+      "community": 101,
       "norm_label": ".ataqueanulado()"
     },
     {
@@ -16234,7 +16234,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L351",
       "id": "core_combate_combate_nopretendeatacar",
-      "community": 105,
+      "community": 103,
       "norm_label": ".nopretendeatacar()"
     },
     {
@@ -16252,7 +16252,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L364",
       "id": "core_combate_combate_ventajafurtivacontra",
-      "community": 105,
+      "community": 103,
       "norm_label": ".ventajafurtivacontra()"
     },
     {
@@ -16279,7 +16279,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L385",
       "id": "core_combate_combate_bonoataquereliquias",
-      "community": 105,
+      "community": 103,
       "norm_label": ".bonoataquereliquias()"
     },
     {
@@ -16387,7 +16387,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L956",
       "id": "core_combate_combate_infligir",
-      "community": 103,
+      "community": 101,
       "norm_label": ".infligir()"
     },
     {
@@ -16396,7 +16396,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1040",
       "id": "core_combate_combate_rebotaragathys",
-      "community": 103,
+      "community": 101,
       "norm_label": ".rebotaragathys()"
     },
     {
@@ -17188,7 +17188,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L784",
       "id": "core_enemigos_crearenemigo",
-      "community": 103,
+      "community": 86,
       "norm_label": "crearenemigo()"
     },
     {
@@ -18448,7 +18448,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L129",
       "id": "core_types_movimiento",
-      "community": 105,
+      "community": 103,
       "norm_label": "movimiento"
     },
     {
@@ -23126,7 +23126,7 @@
       "label": "SHAPE_CODE",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L165",
+      "source_location": "L166",
       "id": "fx_particle_gl_shape_code",
       "community": 54,
       "norm_label": "shape_code"
@@ -23135,7 +23135,7 @@
       "label": "SpriteBatchGL",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L174",
+      "source_location": "L175",
       "id": "fx_particle_gl_spritebatchgl",
       "community": 54,
       "norm_label": "spritebatchgl"
@@ -23144,7 +23144,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L185",
+      "source_location": "L186",
       "id": "fx_particle_gl_spritebatchgl_constructor",
       "community": 54,
       "norm_label": ".constructor()"
@@ -23153,7 +23153,7 @@
       "label": ".colour()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L224",
+      "source_location": "L225",
       "id": "fx_particle_gl_spritebatchgl_colour",
       "community": 54,
       "norm_label": ".colour()"
@@ -23162,7 +23162,7 @@
       "label": ".draw()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L233",
+      "source_location": "L234",
       "id": "fx_particle_gl_spritebatchgl_draw",
       "community": 17,
       "norm_label": ".draw()"
@@ -23171,7 +23171,7 @@
       "label": "ParticleRendererGL",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L256",
+      "source_location": "L257",
       "id": "fx_particle_gl_particlerenderergl",
       "community": 17,
       "norm_label": "particlerenderergl"
@@ -23180,7 +23180,7 @@
       "label": ".create()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L263",
+      "source_location": "L264",
       "id": "fx_particle_gl_particlerenderergl_create",
       "community": 17,
       "norm_label": ".create()"
@@ -23189,7 +23189,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L269",
+      "source_location": "L270",
       "id": "fx_particle_gl_particlerenderergl_constructor",
       "community": 17,
       "norm_label": ".constructor()"
@@ -23198,7 +23198,7 @@
       "label": ".render()",
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
-      "source_location": "L277",
+      "source_location": "L278",
       "id": "fx_particle_gl_particlerenderergl_render",
       "community": 17,
       "norm_label": ".render()"
@@ -30924,7 +30924,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -30963,7 +30963,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "clase barbaro (80 pv)",
       "id": "readme_clase_barbaro"
     },
@@ -31015,7 +31015,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 105,
+      "community": 101,
       "norm_label": "raices (druida)",
       "id": "readme_raices"
     },
@@ -31041,7 +31041,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "furia (barbaro)",
       "id": "readme_furia"
     },
@@ -31054,7 +31054,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "hemorragia (barbaro)",
       "id": "readme_hemorragia"
     },
@@ -31132,7 +31132,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 105,
+      "community": 103,
       "norm_label": "ataques furtivos (picaro)",
       "id": "readme_ataques_furtivos"
     },
@@ -31145,7 +31145,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 105,
+      "community": 103,
       "norm_label": "intencion enemiga",
       "id": "readme_intencion_enemiga"
     },
@@ -31171,7 +31171,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -31574,7 +31574,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 103,
+      "community": 101,
       "norm_label": "armadura de agathys (el bloqueo devuelve dano a todos)",
       "id": "readme_armadura_agathys"
     },
@@ -31587,7 +31587,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 105,
+      "community": 101,
       "norm_label": "oscuridad (baja el ataque de todos)",
       "id": "readme_oscuridad"
     },
@@ -31600,7 +31600,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 101,
+      "community": 97,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -121425,9 +121425,9 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L156",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_titulo",
-      "target": "ui_titulo_confirmarnuevapartida",
-      "confidence_score": 1.0
+      "target": "ui_titulo_confirmarnuevapartida"
     },
     {
       "relation": "contains",
@@ -121478,9 +121478,9 @@
       "source_file": "src/ui/titulo.ts",
       "source_location": "L158",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_titulo_confirmarnuevapartida",
-      "target": "ui_util_el",
-      "confidence_score": 1.0
+      "target": "ui_util_el"
     },
     {
       "relation": "contains",
@@ -124973,5 +124973,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "a3c0bb6c610ab7c9ec539ef298fcfeda39de4de8"
+  "built_at_commit": "62706f9187c4164dac9da38d8f73ca05aadf366c"
 }
