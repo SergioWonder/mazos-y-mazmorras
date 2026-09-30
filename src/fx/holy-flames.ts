@@ -14,7 +14,7 @@ export type FlameKind = 'holy';
 export const FLAME_FADE_IN = 0.5;
 export const FLAME_FADE_OUT = 0.7;
 /** Sprite cap of one aura frame (tongues, their white cores and embers). */
-export const MAX_FLAME_SPRITES = 48;
+export const MAX_FLAME_SPRITES = 72;
 
 /** Outer tongues: warm golds; cores and embers: whites. */
 const OUTER = ['#ffd35a', '#ffe27a', '#ffc94a'];
@@ -23,8 +23,8 @@ const EMBER = ['#fff3c4', '#ffe9a0', '#ffffff'];
 export const HOLY_FLAME_COLOURS = [...OUTER, ...CORE, ...EMBER];
 
 /** Tongue slots (each draws an outer tongue plus a white core) and embers. */
-const SLOTS = 20, SLOTS_REDUCED = 10;
-const EMBERS = 5, EMBERS_REDUCED = 2;
+const SLOTS = 28, SLOTS_REDUCED = 14;
+const EMBERS = 9, EMBERS_REDUCED = 4;
 
 /** Bones whose shapes make the silhouette the flames lick (no weapon, cape or chains). */
 const BODY: BoneId[] = ['legB', 'legF', 'torso', 'armB', 'offhand', 'armF', 'head'];
@@ -184,8 +184,9 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     let nx = p.x - cx, ny = p.y - cy;
     const nl = Math.hypot(nx, ny) || 1;
     nx /= nl; ny = Math.min(ny / nl, 0.2);
-    const r = (2.4 + hash(i + k * 7, 4) * 1.2) * u0;
-    const rise = (6 + hash(i + k * 7, 5) * 5) * u0;
+    // big enough to read on a ~130 px hero: tongues about a third of the figure tall
+    const r = (5.2 + hash(i + k * 7, 4) * 2.6) * u0;
+    const rise = (14 + hash(i + k * 7, 5) * 10) * u0;
     const ph = hash(i + k * 7, 6);
     const lateral = (hash(i + k * 7, 7) - 0.5) * 3 * u0;
     // envelope: kindles quickly, licks upwards, then thins out
@@ -201,12 +202,12 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     const L = (stretch - 1) * size;
     out.push({
       x: bx + dx * L, y: by + dy * L, size, angle: ang, stretch, shape: 'colmillo',
-      colour: pick(OUTER, hash(i, k + 11)), alpha: level * 0.5 * env, glow: true,
+      colour: pick(OUTER, hash(i, k + 11)), alpha: level * 0.85 * env, glow: true,
     });
     const cs = size * 0.52, cst = stretch + 0.35, cl = (cst - 1) * cs;
     out.push({
       x: bx + dx * (cl + size * 0.25), y: by + dy * (cl + size * 0.25), size: cs, angle: ang, stretch: cst, shape: 'colmillo',
-      colour: pick(CORE, hash(i, k + 13)), alpha: level * 0.42 * env, glow: true,
+      colour: pick(CORE, hash(i, k + 13)), alpha: level * 0.8 * env, glow: true,
     });
   }
 
@@ -219,8 +220,8 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     const rise = (18 + hash(i + k * 5, 24) * 12) * u0;
     const wob = Math.sin((u * 1.6 + hash(i + k * 5, 25)) * Math.PI * 2) * 2 * u0;
     out.push({
-      x: p.x + wob, y: p.y - rise * u, size: (0.5 + hash(i + k * 5, 26) * 0.35) * u0, angle: 0, shape: 'disco',
-      colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.6 * env, glow: true,
+      x: p.x + wob, y: p.y - rise * u, size: (1.3 + hash(i + k * 5, 26) * 0.9) * u0, angle: 0, shape: 'disco',
+      colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true,
     });
   }
   return out.slice(0, MAX_FLAME_SPRITES);

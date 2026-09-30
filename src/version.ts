@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.0';
+export const VERSION = '7.0.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.1',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔥 El aura del Castigo preparado se ve de verdad: llamas sagradas más grandes y luminosas alrededor del paladín.',
+      '🌟 Con un Castigo preparado, las demás cartas de Castigo salen en gris, como cuando no tienes energía.',
+      '💬 Mensajes más escuetos cuando una carta ya no se puede jugar.',
+    ],
+  },
   {
     version: '7.0.0',
     fecha: '2026-09-30',

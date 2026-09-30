@@ -586,7 +586,7 @@ export function pantallaCombate(
         else await jugar(a.card, a.target);
       },
       onDiscard: (a, motivo) => {
-        if (a.kind === 'card') anuncio(`«${defDe(a.card).nombre}» sale de la cola: ${motivo}`, 'anuncio-error');
+        if (a.kind === 'card') anuncio(motivo, 'anuncio-error');
       },
       onChange: () => render(),
     });
@@ -608,6 +608,10 @@ export function pantallaCombate(
       const porPagar = cartasPorPagar();
       const energia = forecastEnergy(combate.jugador.energia, porPagar, (a) => combate.costeEfectivo(defDe(a.card)));
       if (energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
+      // (paladin) one Smite at a time: greyed out while one is prepared (or about to be)
+      if (def.castigo && (combate.jugador.castigos.length > 0 || porPagar.some((a) => defDe(a.card).castigo))) {
+        return '🌟 Ya tienes un Castigo preparado';
+      }
       if (def.requiereConjuro) {
         const libres = combate.jugador.conjuros.filter((c) => !c.gastado && c.nivel >= def.requiereConjuro!).length;
         const reservados = porPagar.filter((a) => defDe(a.card).requiereConjuro).length;
@@ -964,7 +968,7 @@ export function pantallaCombate(
       btn.classList.toggle('fin-pendiente', pendiente);
       btn.classList.toggle('turno-enemigo', enCurso && !pendiente);
       const html = pendiente
-        ? 'Fin de turno<span class="atajo">⏳ en cola</span>'
+        ? 'Fin de turno<span class="atajo">⏳</span>'
         : enCurso
           ? 'Turno enemigo<span class="atajo">…</span>'
           : 'Fin de turno<span class="atajo">[E]</span>';
@@ -1165,7 +1169,7 @@ export function pantallaCombate(
       const def = defDe(inst);
       if (def.tipo === 'maldicion' && def.purgar === undefined) return '☠️ Las maldiciones no se pueden jugar';
       if (combate.jugador.energia < combate.costeEfectivo(def)) return 'Sin energía suficiente';
-      if (def.castigo && combate.jugador.castigos.length > 0) return '🌟 Ya tienes un Castigo preparado: descárgalo antes con un ataque';
+      if (def.castigo && combate.jugador.castigos.length > 0) return '🌟 Ya tienes un Castigo preparado';
       if (def.requiereConjuro)
         return `◈ Necesitas un espacio de conjuro de nivel ${def.requiereConjuro}+`;
       return 'No puedes jugar esa carta ahora';

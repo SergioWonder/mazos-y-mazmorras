@@ -7137,6 +7137,16 @@ console.log('\n🃏 Visor del mazo y vida en la hoguera');
   check(/descanso-pv/.test(ui('recompensa.ts')), 'la hoguera muestra tus puntos de golpe');
 }
 
+// ── Smite cards grey out while one is prepared; no "queue" wording for the player ──
+console.log('\n🌟 Castigo activo en la mano');
+{
+  const fs = await import('node:fs');
+  const src = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  const noEncolable = src.slice(src.indexOf('function motivoNoEncolable'), src.indexOf('/** Queues a card'));
+  check(/def\.castigo/.test(noEncolable), 'con un Castigo preparado, las cartas de Castigo salen en gris como sin energía');
+  check(!/sale de la cola/.test(src) && !/en cola<\/span>/.test(src), 'los mensajes y el botón de fin de turno no hablan de «cola»');
+}
+
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
 console.log('\n📱 Iconos de la app instalada');
 {
@@ -7171,6 +7181,9 @@ try {
   check(pts.length === anclas.length && pts.every((p) => Number.isFinite(p.x) && Number.isFinite(p.y)), 'llama sagrada: los puntos se llevan a pantalla');
   const fr = holyFlameFrame(1.3, pts, { level: 1, unit });
   check(fr.length > 0, 'llama sagrada: con el Castigo preparado hay llamas');
+  // readable size: the longest tongues reach at least a fifth of the figure (140·unit wide)
+  const lenguas = fr.filter((f) => f.shape === 'colmillo').map((f) => 2 * f.size * (f.stretch ?? 1));
+  check(Math.max(...lenguas) >= 0.2 * 140 * unit, `llama sagrada: las lenguas se leen a tamaño real (${Math.round(Math.max(...lenguas))} px en una figura de ${140 * unit} px)`);
   check(JSON.stringify(holyFlameFrame(1.3, pts, { level: 1, unit })) === JSON.stringify(fr), 'llama sagrada: el fotograma es determinista');
   const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
   const amarillo = (c: string) => { const [r, g, b] = rgb(c); return r > 220 && g > 170 && b < 170; };
@@ -7201,9 +7214,9 @@ try {
   }
   check([...colores].some(amarillo) && [...colores].some(blanco), 'llama sagrada: arde en amarillo y blanco');
   check(saltos === 0, `llama sagrada: las llamas se mueven con suavidad, sin saltos visibles (${saltos})`);
-  check(maxA <= 0.7, `llama sagrada: en calma, translúcida para no tapar al héroe (alfa máx. ${maxA.toFixed(2)})`);
+  check(maxA >= 0.6 && maxA <= 0.9, `llama sagrada: bien visible pero sin volverse opaca (alfa máx. ${maxA.toFixed(2)})`);
   check(fuera === 0, `llama sagrada: las llamas se quedan pegadas a la silueta (${fuera} fuera)`);
-  check(maxN <= MAX_FLAME_SPRITES && MAX_FLAME_SPRITES <= 60, `llama sagrada: respeta el tope de partículas (${maxN} de ${MAX_FLAME_SPRITES})`);
+  check(maxN <= MAX_FLAME_SPRITES && MAX_FLAME_SPRITES <= 80, `llama sagrada: respeta el tope de partículas (${maxN} de ${MAX_FLAME_SPRITES})`);
   check(reducidoMax > 0 && reducidoMax < maxN, `llama sagrada: con movimiento reducido hay menos llamas (${reducidoMax} < ${maxN})`);
   const muchos = Array.from({ length: 200 }, (_, i) => ({ x: i * 3, y: 300 + (i % 7) }));
   check(holyFlameFrame(2, muchos, { level: 1, unit }).length <= MAX_FLAME_SPRITES, 'llama sagrada: el tope aguanta aunque la silueta tenga muchos puntos');
