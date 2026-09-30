@@ -7944,6 +7944,29 @@ console.log('\n🗡️ Pícaro: descartes y ataques furtivos');
   check(await golpe('punalada-trapera', false, true) === 21, 'Puñalada Trapera+: 11 + 10 si no pretende atacar');
   check(await golpe('emboscada', true) === 13 && await golpe('emboscada', false) === 31, 'Emboscada: 13, o 13 + 18 si no pretende atacar');
   check(await golpe('emboscada', false, true) === 41, 'Emboscada+: 17 + 24 si no pretende atacar');
+  // Smoke Bomb replaces Vanish (which did the same as Pirouette)
+  {
+    check(!carta('esfumarse'), 'Esfumarse ya no existe (hacía lo mismo que Pirueta)');
+    const bomba = carta('bomba-humo');
+    check(!!bomba && bomba.coste === 2, 'Bomba de Humo cuesta 2 de energía');
+    if (bomba) {
+      const comb = new Combate(nuevaRun('picaro', 9130), [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(9130), uiSilenciosa);
+      await comb.iniciar();
+      comb.run.reliquias.length = 0;
+      await bomba.jugar(comb.contexto());
+      check(comb.enemigos.every((e) => e.estados.oscuridad === 5), 'Bomba de Humo: 5 de Oscuridad a todos los enemigos');
+      const inst = instanciar(bomba); inst.mejorada = true;
+      const c2 = new Combate(nuevaRun('picaro', 9131), [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(9131), uiSilenciosa);
+      await c2.iniciar();
+      await defDe(inst).jugar(c2.contexto());
+      check(c2.enemigos.every((e) => e.estados.oscuridad === 7), 'Bomba de Humo+: 7 de Oscuridad a todos');
+    }
+    const g2 = serializarRun(nuevaRun('picaro', 9132));
+    g2.mazo.push({ id: 'esfumarse', mejorada: true });
+    const r2 = rehidratarRun(g2);
+    check(!!r2 && r2.mazo.at(-1)?.def.id === 'bomba-humo' && r2.mazo.at(-1)?.mejorada === true,
+      'una partida guardada con Esfumarse la cambia por Bomba de Humo (y conserva la mejora)');
+  }
   // Steel Tempest: a big hit that grows with every card discarded this combat
   {
     const { comb, e } = await montar(9120);

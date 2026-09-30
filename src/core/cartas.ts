@@ -34,6 +34,7 @@ async function apunalarAlAzar(c: ContextoEfecto, dano: number) {
 /** Cards taken out of the game, with the one that replaces them in old saves. */
 export const CARTAS_RETIRADAS: Readonly<Record<string, string>> = {
   rodar: 'esquiva-refleja', // the rogue's «block twice» common (v7.5.0)
+  esfumarse: 'bomba-humo', // did the same as Pirouette (v7.5.2)
 };
 
 /** Suma de los niveles de los espacios de conjuro libres (mago). */
@@ -2445,22 +2446,22 @@ export const PICARO: CartaDef[] = [
     },
   },
   {
-    id: 'esfumarse',
-    nombre: 'Esfumarse',
+    id: 'bomba-humo',
+    nombre: 'Bomba de Humo',
     clase: 'picaro',
     tipo: 'habilidad',
     rareza: 'infrecuente',
-    coste: 1,
-    objetivo: 'ninguno',
-    fx: 'luna',
-    texto: 'Acrobacias: gana 8 de bloqueo\ny vuelve a ganarlo el próximo turno.',
+    coste: 2,
+    objetivo: 'todos',
+    fx: 'oscuridad',
+    texto: 'Aplica 5 de Oscuridad a todos\nlos enemigos (baja su ataque).',
     jugar: async (c) => {
-      await c.ganarBloqueoAcrobatico(8);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'oscuridad', 5);
     },
     mejora: {
-      texto: 'Acrobacias: gana 11 de bloqueo\ny vuelve a ganarlo el próximo turno.',
+      texto: 'Aplica 7 de Oscuridad a todos\nlos enemigos (baja su ataque).',
       jugar: async (c) => {
-        await c.ganarBloqueoAcrobatico(11);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'oscuridad', 7);
       },
     },
   },

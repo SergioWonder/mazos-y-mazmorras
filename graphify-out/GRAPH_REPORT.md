@@ -1,7 +1,7 @@
 # Graph Report - videogame  (2026-09-30)
 
 ## Corpus Check
-- 160 files · ~984,728 words
+- 160 files · ~984,945 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `79339cec`
+- Built from commit: `f45e8586`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -254,12 +254,12 @@ Cohesion: 0.33
 Nodes (4): Cambiar o ampliar pistas, Efectos de sonido, Música y sonido, Pistas usadas (todas CC0 / dominio público)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.08
-Nodes (16): Combate, esDungeonMaster(), crearEnemigo(), SELLO_PACTO, CartaInstancia, CastigoPreparado, EnemigoCombate, JugadorCombate (+8 more)
+Cohesion: 0.07
+Nodes (21): Combate, esDungeonMaster(), crearEnemigo(), SELLO_PACTO, CartaInstancia, CastigoPreparado, EnemigoCombate, EstadoId (+13 more)
 
 ### Community 26 - "Configuración de Vite y PWA"
-Cohesion: 0.09
-Nodes (31): finalVerdaderoDesbloqueado(), ChangelogEntry, isMajorUpgrade(), majorChangelog(), majorOf(), shouldNotifyMajor(), Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG (+23 more)
+Cohesion: 0.06
+Nodes (44): AlmacenSimple, DiaAgenda, DIAS_AGENDA, finalVerdaderoDesbloqueado(), FRASES_DM, GUION_AGENDA, INTENCION_DM, LineaAgenda (+36 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.05
@@ -334,8 +334,8 @@ Cohesion: 0.10
 Nodes (35): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), ChainState, createChainState(), FlameAnchor (+27 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.05
-Nodes (74): CARTAS_RETIRADAS, AlmacenSimple, desenlaceCampana, DiaAgenda, DIAS_AGENDA, FRASES_DM, GUION_AGENDA, INTENCION_DM (+66 more)
+Cohesion: 0.06
+Nodes (68): CARTAS_RETIRADAS, desenlaceCampana, borrarGuardado(), cargarRun(), Guardado, guardarRun(), hayGuardado(), rehidratarRun() (+60 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.10
@@ -427,7 +427,7 @@ Nodes (43): additive(), analyze(), bell(), brass_note(), choir_note(), cymbal(),
 
 ### Community 75 - "Community 75"
 Cohesion: 0.04
-Nodes (85): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion (+77 more)
+Nodes (74): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion (+66 more)
 
 ### Community 76 - "Community 76"
 Cohesion: 0.08
@@ -462,16 +462,16 @@ Cohesion: 0.14
 Nodes (24): beholder(), build(), compass_eye(), crystal(), crystals(), escher_stairs(), eyes_along(), iso() (+16 more)
 
 ### Community 84 - "Community 84"
-Cohesion: 0.04
-Nodes (64): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+56 more)
+Cohesion: 0.03
+Nodes (86): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+78 more)
 
 ### Community 85 - "Community 85"
-Cohesion: 0.07
-Nodes (40): poolDeClase(), recompensaCartas(), Presentador, reliquiaInicial(), crearRng(), nuevaRun(), shapeBBox(), Shell HTML del juego (canvas fx + #app + #overlay) (+32 more)
+Cohesion: 0.12
+Nodes (20): POOL_RELIQUIAS, ReliquiaDef, Actualizaciones y avisos, Ambientación fantasía medieval D&D, Arte de las cartas, Bendiciones, Controles, Roguelike de construcción de mazos (+12 more)
 
 ### Community 86 - "Community 86"
 Cohesion: 0.07
-Nodes (41): FX_CASTIGO, PrevisionAtaque, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), CartaJugada, ContextoEfecto, DiceTheme (+33 more)
+Nodes (38): FX_CASTIGO, PrevisionAtaque, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), CartaJugada, ContextoEfecto, DiceTheme (+30 more)
 
 ### Community 87 - "Community 87"
 Cohesion: 0.15
@@ -565,11 +565,11 @@ Nodes (3): JEFE_OGRO, SENOR_CRIPTA, Jefes únicos con rasgo propio
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Combate` connect `Community 23` to `Community 19`, `Community 75`, `Community 85`, `Community 86`?**
+- **Why does `Combate` connect `Community 23` to `Community 19`, `Community 75`, `Community 84`, `Community 86`?**
   _High betweenness centrality (0.012) - this node is a cross-community bridge._
-- **Why does `PuppetStage` connect `Community 54` to `Renderizado de cartas`, `Community 45`, `Community 13`, `Community 46`, `Community 19`, `Configuración de Vite y PWA`?**
+- **Why does `PuppetStage` connect `Community 54` to `Renderizado de cartas`, `Community 45`, `Community 13`, `Community 19`, `Configuración de Vite y PWA`?**
   _High betweenness centrality (0.009) - this node is a cross-community bridge._
-- **Why does `PuppetSprite` connect `Community 45` to `Community 98`, `Renderizado de cartas`, `Cartas: registro y Explosión`, `Community 13`, `Community 46`, `Community 19`, `Community 54`?**
+- **Why does `PuppetSprite` connect `Community 45` to `Community 98`, `Renderizado de cartas`, `Cartas: registro y Explosión`, `Community 13`, `Community 19`, `Community 54`, `Configuración de Vite y PWA`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **What connects `version`, `configurations`, `name` to the rest of the system?**
   _996 weakly-connected nodes found - possible documentation gaps or missing edges._

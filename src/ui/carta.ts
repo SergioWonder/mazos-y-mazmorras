@@ -304,7 +304,7 @@ export const ARTE_CARTA: Record<string, string> = {
   'lanzamiento-daga': '🎯', finta: '🌀', 'golpe-bajo': '👊', 'esquiva-refleja': '🛞',
   'cuchillo-oculto': '🪒', 'juego-sucio': '🪤', 'tormenta-filos': '🌩️',
   distraccion: '💫', 'punalada-trapera': '🩸', 'ataque-sutil': '🤫',
-  'trabajo-de-pies': '👣', esfumarse: '💨', 'mano-rapida': '🤹',
+  'trabajo-de-pies': '👣', 'bomba-humo': '💨', 'mano-rapida': '🤹',
   cuchilladas: '✂️', preparacion: '🎒', cambiazo: '🎭', emboscada: '🥷',
   'filo-toxico': '🧪', 'giro-veloz': '🌬️', atraco: '💰',
   'lluvia-de-dagas': '🌧️', 'guardia-de-cuchillas': '🔰',

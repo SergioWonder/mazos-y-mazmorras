@@ -15181,7 +15181,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1",
       "id": "scripts_smoke_test",
-      "community": 85,
+      "community": 84,
       "norm_label": "smoke-test.ts"
     },
     {
@@ -15190,7 +15190,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L35",
       "id": "scripts_smoke_test_clases",
-      "community": 85,
+      "community": 84,
       "norm_label": "clases"
     },
     {
@@ -15199,7 +15199,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L38",
       "id": "scripts_smoke_test_check",
-      "community": 85,
+      "community": 84,
       "norm_label": "check()"
     },
     {
@@ -15208,7 +15208,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L47",
       "id": "scripts_smoke_test_uisilenciosa",
-      "community": 85,
+      "community": 84,
       "norm_label": "uisilenciosa"
     },
     {
@@ -15217,7 +15217,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L74",
       "id": "scripts_smoke_test_sintildes",
-      "community": 85,
+      "community": 84,
       "norm_label": "sintildes()"
     },
     {
@@ -15226,7 +15226,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L77",
       "id": "scripts_smoke_test_danoentrante",
-      "community": 85,
+      "community": 84,
       "norm_label": "danoentrante()"
     },
     {
@@ -15235,7 +15235,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L86",
       "id": "scripts_smoke_test_mitiga",
-      "community": 85,
+      "community": 84,
       "norm_label": "mitiga"
     },
     {
@@ -15244,7 +15244,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L91",
       "id": "scripts_smoke_test_esescalado",
-      "community": 85,
+      "community": 84,
       "norm_label": "esescalado()"
     },
     {
@@ -15253,7 +15253,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L98",
       "id": "scripts_smoke_test_puntuarcarta",
-      "community": 85,
+      "community": 84,
       "norm_label": "puntuarcarta()"
     },
     {
@@ -15262,7 +15262,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L135",
       "id": "scripts_smoke_test_mejorobjetivo",
-      "community": 85,
+      "community": 84,
       "norm_label": "mejorobjetivo()"
     },
     {
@@ -15271,7 +15271,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L144",
       "id": "scripts_smoke_test_opcionessim",
-      "community": 85,
+      "community": 84,
       "norm_label": "opcionessim"
     },
     {
@@ -15280,7 +15280,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L146",
       "id": "scripts_smoke_test_simular",
-      "community": 85,
+      "community": 84,
       "norm_label": "simular()"
     },
     {
@@ -15289,7 +15289,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L289",
       "id": "scripts_smoke_test_cap",
-      "community": 85,
+      "community": 84,
       "norm_label": "cap"
     },
     {
@@ -15298,7 +15298,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1944",
       "id": "scripts_smoke_test_rig",
-      "community": 85,
+      "community": 84,
       "norm_label": "rig"
     },
     {
@@ -15307,7 +15307,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1945",
       "id": "scripts_smoke_test_spec",
-      "community": 85,
+      "community": 84,
       "norm_label": "spec"
     },
     {
@@ -15316,7 +15316,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L1946",
       "id": "scripts_smoke_test_act",
-      "community": 85,
+      "community": 84,
       "norm_label": "act"
     },
     {
@@ -15325,7 +15325,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2381",
       "id": "scripts_smoke_test_e",
-      "community": 85,
+      "community": 84,
       "norm_label": "e"
     },
     {
@@ -15334,7 +15334,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2540",
       "id": "scripts_smoke_test_bone",
-      "community": 85,
+      "community": 84,
       "norm_label": "bone"
     },
     {
@@ -15343,7 +15343,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2769",
       "id": "scripts_smoke_test_reliclike",
-      "community": 85,
+      "community": 84,
       "norm_label": "reliclike"
     },
     {
@@ -15352,7 +15352,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2824",
       "id": "scripts_smoke_test_mov",
-      "community": 85,
+      "community": 84,
       "norm_label": "mov"
     },
     {
@@ -15361,7 +15361,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2825",
       "id": "scripts_smoke_test_reliquia",
-      "community": 85,
+      "community": 84,
       "norm_label": "reliquia"
     },
     {
@@ -15370,7 +15370,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2840",
       "id": "scripts_smoke_test_montar",
-      "community": 85,
+      "community": 84,
       "norm_label": "montar()"
     },
     {
@@ -15379,7 +15379,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L3440",
       "id": "scripts_smoke_test_t",
-      "community": 85,
+      "community": 84,
       "norm_label": "t"
     },
     {
@@ -15388,7 +15388,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L3470",
       "id": "scripts_smoke_test_accion",
-      "community": 85,
+      "community": 84,
       "norm_label": "accion"
     },
     {
@@ -15397,7 +15397,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L4382",
       "id": "scripts_smoke_test_montarm",
-      "community": 85,
+      "community": 84,
       "norm_label": "montarm()"
     },
     {
@@ -15406,7 +15406,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L5083",
       "id": "scripts_smoke_test_montarb",
-      "community": 85,
+      "community": 84,
       "norm_label": "montarb()"
     },
     {
@@ -15415,7 +15415,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L6258",
       "id": "scripts_smoke_test_sprite2",
-      "community": 85,
+      "community": 84,
       "norm_label": "sprite2"
     },
     {
@@ -15424,7 +15424,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L6665",
       "id": "scripts_smoke_test_escenario",
-      "community": 85,
+      "community": 84,
       "norm_label": "escenario"
     },
     {
@@ -15433,7 +15433,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L6926",
       "id": "scripts_smoke_test_montarnumeros",
-      "community": 85,
+      "community": 84,
       "norm_label": "montarnumeros()"
     },
     {
@@ -15442,7 +15442,7 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L7163",
       "id": "scripts_smoke_test_montarp",
-      "community": 85,
+      "community": 84,
       "norm_label": "montarp()"
     },
     {
@@ -15764,7 +15764,7 @@
       "label": "nivelesLibres()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L40",
+      "source_location": "L41",
       "id": "core_cartas_niveleslibres",
       "community": 84,
       "norm_label": "niveleslibres()"
@@ -15773,7 +15773,7 @@
       "label": "positivo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L49",
+      "source_location": "L50",
       "id": "core_cartas_positivo",
       "community": 84,
       "norm_label": "positivo()"
@@ -15782,7 +15782,7 @@
       "label": "nivelAGastar()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L52",
+      "source_location": "L53",
       "id": "core_cartas_nivelagastar",
       "community": 84,
       "norm_label": "nivelagastar()"
@@ -15791,7 +15791,7 @@
       "label": "valoresDeConjuro()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L57",
+      "source_location": "L58",
       "id": "core_cartas_valoresdeconjuro",
       "community": 84,
       "norm_label": "valoresdeconjuro()"
@@ -15800,7 +15800,7 @@
       "label": "valoresFurtivos()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L61",
+      "source_location": "L62",
       "id": "core_cartas_valoresfurtivos",
       "community": 84,
       "norm_label": "valoresfurtivos()"
@@ -15809,7 +15809,7 @@
       "label": "BASICAS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L67",
+      "source_location": "L68",
       "id": "core_cartas_basicas",
       "community": 84,
       "norm_label": "basicas"
@@ -15818,7 +15818,7 @@
       "label": "DRUIDA",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L116",
+      "source_location": "L117",
       "id": "core_cartas_druida",
       "community": 84,
       "norm_label": "druida"
@@ -15827,7 +15827,7 @@
       "label": "BARBARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L811",
+      "source_location": "L812",
       "id": "core_cartas_barbaro",
       "community": 84,
       "norm_label": "barbaro"
@@ -15836,7 +15836,7 @@
       "label": "CONJURO_PRODIGIOSO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1444",
+      "source_location": "L1445",
       "id": "core_cartas_conjuro_prodigioso",
       "community": 84,
       "norm_label": "conjuro_prodigioso"
@@ -15845,7 +15845,7 @@
       "label": "DAGA",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1483",
+      "source_location": "L1484",
       "id": "core_cartas_daga",
       "community": 84,
       "norm_label": "daga"
@@ -15854,7 +15854,7 @@
       "label": "cargaProyectil()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1509",
+      "source_location": "L1510",
       "id": "core_cartas_cargaproyectil",
       "community": 84,
       "norm_label": "cargaproyectil()"
@@ -15863,7 +15863,7 @@
       "label": "proyectilesExtra()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1511",
+      "source_location": "L1512",
       "id": "core_cartas_proyectilesextra",
       "community": 84,
       "norm_label": "proyectilesextra()"
@@ -15872,7 +15872,7 @@
       "label": "lanzarProyectiles()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1513",
+      "source_location": "L1514",
       "id": "core_cartas_lanzarproyectiles",
       "community": 84,
       "norm_label": "lanzarproyectiles()"
@@ -15881,7 +15881,7 @@
       "label": "MAGO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L1520",
+      "source_location": "L1521",
       "id": "core_cartas_mago",
       "community": 84,
       "norm_label": "mago"
@@ -15890,7 +15890,7 @@
       "label": "PICARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2169",
+      "source_location": "L2170",
       "id": "core_cartas_picaro",
       "community": 84,
       "norm_label": "picaro"
@@ -15899,7 +15899,7 @@
       "label": "maldicionesEnCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2970",
+      "source_location": "L2971",
       "id": "core_cartas_maldicionesencartas",
       "community": 84,
       "norm_label": "maldicionesencartas()"
@@ -15908,7 +15908,7 @@
       "label": "MALDICIONES_DEL_PACTO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2976",
+      "source_location": "L2977",
       "id": "core_cartas_maldiciones_del_pacto",
       "community": 84,
       "norm_label": "maldiciones_del_pacto"
@@ -15917,7 +15917,7 @@
       "label": "maldicionDelPacto()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2981",
+      "source_location": "L2982",
       "id": "core_cartas_maldiciondelpacto",
       "community": 84,
       "norm_label": "maldiciondelpacto()"
@@ -15926,7 +15926,7 @@
       "label": "danoExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2987",
+      "source_location": "L2988",
       "id": "core_cartas_danoexplosion",
       "community": 84,
       "norm_label": "danoexplosion()"
@@ -15935,7 +15935,7 @@
       "label": "lanzarExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2999",
+      "source_location": "L3000",
       "id": "core_cartas_lanzarexplosion",
       "community": 84,
       "norm_label": "lanzarexplosion()"
@@ -15944,7 +15944,7 @@
       "label": "BRUJO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3028",
+      "source_location": "L3029",
       "id": "core_cartas_brujo",
       "community": 84,
       "norm_label": "brujo"
@@ -15953,7 +15953,7 @@
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3895",
+      "source_location": "L3896",
       "id": "core_cartas_resolverseducir",
       "community": 84,
       "norm_label": "resolverseducir()"
@@ -15962,7 +15962,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3928",
+      "source_location": "L3929",
       "id": "core_cartas_resolverdeseo",
       "community": 84,
       "norm_label": "resolverdeseo()"
@@ -15971,7 +15971,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3965",
+      "source_location": "L3966",
       "id": "core_cartas_neutrales_especiales",
       "community": 84,
       "norm_label": "neutrales_especiales"
@@ -15980,7 +15980,7 @@
       "label": "maldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4021",
+      "source_location": "L4022",
       "id": "core_cartas_maldicion",
       "community": 84,
       "norm_label": "maldicion()"
@@ -15989,7 +15989,7 @@
       "label": "MALDICIONES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4029",
+      "source_location": "L4030",
       "id": "core_cartas_maldiciones",
       "community": 84,
       "norm_label": "maldiciones"
@@ -15998,7 +15998,7 @@
       "label": "nuevaMaldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4117",
+      "source_location": "L4118",
       "id": "core_cartas_nuevamaldicion",
       "community": 75,
       "norm_label": "nuevamaldicion()"
@@ -16007,7 +16007,7 @@
       "label": "fervorDe()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4127",
+      "source_location": "L4128",
       "id": "core_cartas_fervorde",
       "community": 84,
       "norm_label": "fervorde()"
@@ -16016,7 +16016,7 @@
       "label": "familiaEnMano()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4129",
+      "source_location": "L4130",
       "id": "core_cartas_familiaenmano",
       "community": 84,
       "norm_label": "familiaenmano()"
@@ -16025,7 +16025,7 @@
       "label": "castigo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4132",
+      "source_location": "L4133",
       "id": "core_cartas_castigo",
       "community": 84,
       "norm_label": "castigo()"
@@ -16034,7 +16034,7 @@
       "label": "valorCastigo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4140",
+      "source_location": "L4141",
       "id": "core_cartas_valorcastigo",
       "community": 84,
       "norm_label": "valorcastigo()"
@@ -16043,7 +16043,7 @@
       "label": "GOLPE_SAGRADO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4144",
+      "source_location": "L4145",
       "id": "core_cartas_golpe_sagrado",
       "community": 84,
       "norm_label": "golpe_sagrado"
@@ -16052,7 +16052,7 @@
       "label": "DEFENSA_SAGRADA",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4164",
+      "source_location": "L4165",
       "id": "core_cartas_defensa_sagrada",
       "community": 84,
       "norm_label": "defensa_sagrada"
@@ -16061,7 +16061,7 @@
       "label": "PALADIN",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4183",
+      "source_location": "L4184",
       "id": "core_cartas_paladin",
       "community": 84,
       "norm_label": "paladin"
@@ -16070,7 +16070,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4723",
+      "source_location": "L4724",
       "id": "core_cartas_iniciales_de_clase",
       "community": 84,
       "norm_label": "iniciales_de_clase"
@@ -16079,7 +16079,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4739",
+      "source_location": "L4740",
       "id": "core_cartas_pools",
       "community": 84,
       "norm_label": "pools"
@@ -16088,7 +16088,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4743",
+      "source_location": "L4744",
       "id": "core_cartas_mazoinicial",
       "community": 84,
       "norm_label": "mazoinicial()"
@@ -16097,16 +16097,16 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4754",
+      "source_location": "L4755",
       "id": "core_cartas_pooldeclase",
-      "community": 85,
+      "community": 84,
       "norm_label": "pooldeclase()"
     },
     {
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4761",
+      "source_location": "L4762",
       "id": "core_cartas_cartaunicadeclase",
       "community": 75,
       "norm_label": "cartaunicadeclase()"
@@ -16115,7 +16115,7 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4766",
+      "source_location": "L4767",
       "id": "core_cartas_cartaporid",
       "community": 19,
       "norm_label": "cartaporid()"
@@ -16124,9 +16124,9 @@
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4776",
+      "source_location": "L4777",
       "id": "core_cartas_recompensacartas",
-      "community": 85,
+      "community": 84,
       "norm_label": "recompensacartas()"
     },
     {
@@ -16144,7 +16144,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L16",
       "id": "core_combate_presentador",
-      "community": 85,
+      "community": 84,
       "norm_label": "presentador"
     },
     {
@@ -17404,7 +17404,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 46,
+      "community": 26,
       "norm_label": "escena-final.ts"
     },
     {
@@ -17413,7 +17413,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L8",
       "id": "core_escena_final_frases_dm",
-      "community": 46,
+      "community": 26,
       "norm_label": "frases_dm"
     },
     {
@@ -17422,7 +17422,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 46,
+      "community": 26,
       "norm_label": "intencion_dm"
     },
     {
@@ -17440,7 +17440,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 46,
+      "community": 26,
       "norm_label": "dias_agenda"
     },
     {
@@ -17449,7 +17449,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 46,
+      "community": 26,
       "norm_label": "diaagenda"
     },
     {
@@ -17458,7 +17458,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 46,
+      "community": 26,
       "norm_label": "lineaagenda"
     },
     {
@@ -17467,7 +17467,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 46,
+      "community": 26,
       "norm_label": "guion_agenda"
     },
     {
@@ -17476,7 +17476,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L98",
       "id": "core_escena_final_almacensimple",
-      "community": 46,
+      "community": 26,
       "norm_label": "almacensimple"
     },
     {
@@ -17485,7 +17485,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L103",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 46,
+      "community": 26,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -17494,7 +17494,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L112",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 46,
+      "community": 26,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -18007,7 +18007,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L77",
       "id": "core_reliquias_reliquiainicial",
-      "community": 85,
+      "community": 84,
       "norm_label": "reliquiainicial()"
     },
     {
@@ -18088,7 +18088,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L600",
       "id": "core_reliquias_pool_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "pool_reliquias"
     },
     {
@@ -18169,7 +18169,7 @@
       "source_file": "src/core/rng.ts",
       "source_location": "L2",
       "id": "core_rng_crearrng",
-      "community": 85,
+      "community": 84,
       "norm_label": "crearrng()"
     },
     {
@@ -18205,7 +18205,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L1",
       "id": "core_run",
-      "community": 75,
+      "community": 46,
       "norm_label": "run.ts"
     },
     {
@@ -18223,7 +18223,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L16",
       "id": "core_run_nuevarun",
-      "community": 85,
+      "community": 84,
       "norm_label": "nuevarun()"
     },
     {
@@ -18232,7 +18232,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L42",
       "id": "core_run_curadedescanso",
-      "community": 75,
+      "community": 46,
       "norm_label": "curadedescanso()"
     },
     {
@@ -18241,7 +18241,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L49",
       "id": "core_run_descansar",
-      "community": 75,
+      "community": 46,
       "norm_label": "descansar()"
     },
     {
@@ -18250,7 +18250,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L57",
       "id": "core_run_maldicionesde",
-      "community": 75,
+      "community": 46,
       "norm_label": "maldicionesde()"
     },
     {
@@ -18268,7 +18268,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L81",
       "id": "core_run_purificar",
-      "community": 75,
+      "community": 46,
       "norm_label": "purificar()"
     },
     {
@@ -18286,7 +18286,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L96",
       "id": "core_run_afilarcarta",
-      "community": 75,
+      "community": 46,
       "norm_label": "afilarcarta()"
     },
     {
@@ -18322,7 +18322,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L127",
       "id": "core_run_pesoraroefectivo",
-      "community": 75,
+      "community": 46,
       "norm_label": "pesoraroefectivo()"
     },
     {
@@ -18511,7 +18511,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L10",
       "id": "core_types_estadoid",
-      "community": 86,
+      "community": 23,
       "norm_label": "estadoid"
     },
     {
@@ -18646,7 +18646,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L274",
       "id": "core_types_cartadef",
-      "community": 75,
+      "community": 46,
       "norm_label": "cartadef"
     },
     {
@@ -18781,7 +18781,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L579",
       "id": "core_types_reliquiadef",
-      "community": 75,
+      "community": 85,
       "norm_label": "reliquiadef"
     },
     {
@@ -23812,7 +23812,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L251",
       "id": "fx_particulas_fx",
-      "community": 46,
+      "community": 26,
       "norm_label": "fx"
     },
     {
@@ -23902,7 +23902,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L56",
       "id": "fx_puppet_gpu_shapebbox",
-      "community": 85,
+      "community": 84,
       "norm_label": "shapebbox()"
     },
     {
@@ -27187,7 +27187,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 46,
+      "community": 26,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -27196,7 +27196,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 46,
+      "community": 26,
       "norm_label": "nombre_clase"
     },
     {
@@ -27205,7 +27205,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 46,
+      "community": 26,
       "norm_label": "izquierda"
     },
     {
@@ -27214,7 +27214,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 46,
+      "community": 26,
       "norm_label": "derecha"
     },
     {
@@ -28303,7 +28303,7 @@
       "source_file": "src/ui/recompensa.ts",
       "source_location": "L1",
       "id": "ui_recompensa",
-      "community": 75,
+      "community": 46,
       "norm_label": "recompensa.ts"
     },
     {
@@ -28564,7 +28564,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L16",
       "id": "ui_util_espera",
-      "community": 46,
+      "community": 26,
       "norm_label": "espera()"
     },
     {
@@ -29131,7 +29131,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme",
-      "community": 84,
+      "community": 85,
       "norm_label": "readme.md"
     },
     {
@@ -29140,7 +29140,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme_dracs_rogues",
-      "community": 84,
+      "community": 85,
       "norm_label": "dracs & rogues"
     },
     {
@@ -29149,7 +29149,7 @@
       "source_file": "README.md",
       "source_location": "L11",
       "id": "readme_ejecutar",
-      "community": 84,
+      "community": 85,
       "norm_label": "ejecutar"
     },
     {
@@ -29158,7 +29158,7 @@
       "source_file": "README.md",
       "source_location": "L19",
       "id": "readme_tests_del_motor_sin_navegador",
-      "community": 84,
+      "community": 85,
       "norm_label": "tests del motor (sin navegador)"
     },
     {
@@ -29167,7 +29167,7 @@
       "source_file": "README.md",
       "source_location": "L37",
       "id": "readme_controles",
-      "community": 84,
+      "community": 85,
       "norm_label": "controles"
     },
     {
@@ -29176,7 +29176,7 @@
       "source_file": "README.md",
       "source_location": "L47",
       "id": "readme_dise\u00f1o",
-      "community": 84,
+      "community": 85,
       "norm_label": "diseno"
     },
     {
@@ -29185,7 +29185,7 @@
       "source_file": "README.md",
       "source_location": "L256",
       "id": "readme_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "reliquias"
     },
     {
@@ -29194,7 +29194,7 @@
       "source_file": "README.md",
       "source_location": "L335",
       "id": "readme_bendiciones",
-      "community": 75,
+      "community": 85,
       "norm_label": "bendiciones"
     },
     {
@@ -29203,7 +29203,7 @@
       "source_file": "README.md",
       "source_location": "L397",
       "id": "readme_estructura",
-      "community": 84,
+      "community": 85,
       "norm_label": "estructura"
     },
     {
@@ -29212,7 +29212,7 @@
       "source_file": "README.md",
       "source_location": "L444",
       "id": "readme_arte_de_las_cartas",
-      "community": 84,
+      "community": 85,
       "norm_label": "arte de las cartas"
     },
     {
@@ -29221,7 +29221,7 @@
       "source_file": "README.md",
       "source_location": "L455",
       "id": "readme_mapa_a_tinta",
-      "community": 84,
+      "community": 85,
       "norm_label": "mapa a tinta"
     },
     {
@@ -29230,7 +29230,7 @@
       "source_file": "README.md",
       "source_location": "L480",
       "id": "readme_actualizaciones_y_avisos",
-      "community": 84,
+      "community": 85,
       "norm_label": "actualizaciones y avisos"
     },
     {
@@ -29239,7 +29239,7 @@
       "source_file": "README.md",
       "source_location": "L490",
       "id": "readme_motor_gr\u00e1fico_webgl2",
-      "community": 84,
+      "community": 85,
       "norm_label": "motor grafico (webgl2)"
     },
     {
@@ -29634,7 +29634,7 @@
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
-      "community": 84,
+      "community": 85,
       "norm_label": "mazo y mazmorra",
       "id": "readme_mazo_y_mazmorra"
     },
@@ -31384,7 +31384,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "roguelike de construccion de mazos",
       "id": "readme_deckbuilder_roguelike"
     },
@@ -31397,7 +31397,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "slay the spire (referencia de diseno)",
       "id": "readme_slay_the_spire"
     },
@@ -31410,7 +31410,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -31501,7 +31501,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 23,
       "norm_label": "raices (druida)",
       "id": "readme_raices"
     },
@@ -31657,7 +31657,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -31722,7 +31722,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 84,
       "norm_label": "mejora de cartas en campamentos",
       "id": "readme_mejora_cartas"
     },
@@ -31787,7 +31787,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 86,
+      "community": 23,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -31800,7 +31800,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 86,
+      "community": 23,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -31826,7 +31826,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 84,
       "norm_label": "arquitectura: nucleo sin dom + interfaz presentador",
       "id": "readme_arquitectura_presentador"
     },
@@ -31839,7 +31839,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 84,
       "norm_label": "estructura de carpetas (core / ui / fx / estilos)",
       "id": "readme_estructura_carpetas"
     },
@@ -31852,7 +31852,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 84,
       "norm_label": "smoke test del motor sin navegador",
       "id": "readme_smoke_test_motor"
     },
@@ -31995,7 +31995,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 84,
       "norm_label": "shell html del juego (canvas fx + #app + #overlay)",
       "id": "index_shell_html"
     },
@@ -32073,7 +32073,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 23,
       "norm_label": "oscuridad (baja el ataque de todos)",
       "id": "readme_oscuridad"
     },
@@ -32086,7 +32086,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -127144,5 +127144,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "79339cecfe4ab53a89ea24046c008c2b283a404e"
+  "built_at_commit": "f45e8586ded3b881e76d622faa83830734610355"
 }

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.5.1';
+export const VERSION = '7.5.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.5.2',
+    fecha: '2026-09-30',
+    cambios: [
+      '💨 Esfumarse, que hacía lo mismo que Pirueta, pasa a ser Bomba de Humo: por 2 de energía aplica 5 de Oscuridad (7 mejorada) a todos los enemigos y les baja el ataque.',
+    ],
+  },
   {
     version: '7.5.1',
     fecha: '2026-09-30',
