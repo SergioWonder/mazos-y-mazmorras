@@ -7186,6 +7186,16 @@ console.log('\n🏰 Título y aura del Castigo');
   check(!/@keyframes aura-castigo/.test(cssC) && !/con-castigo \.sprite-silueta::/.test(cssC), 'el aura del Castigo no es un resplandor CSS encima del héroe');
 }
 
+// ── Stage flames write alpha (pure additive pixels vanish outside the figure's halo) ──
+console.log('\n🔥 Llamas del escenario con alfa');
+{
+  const fs = await import('node:fs');
+  const gl = fs.readFileSync(new URL('../src/fx/particle-gl.ts', import.meta.url), 'utf8');
+  const stage = fs.readFileSync(new URL('../src/ui/puppet-stage.ts', import.meta.url), 'utf8');
+  check(/uniform float uCover;/.test(gl) && /max\(1\.0 - additive, uCover\)/.test(gl), 'el lote de sprites puede escribir alfa además de sumar luz (uCover)');
+  check(/flameBatch\.draw\([^)]*,\s*1\)/.test(stage), 'las llamas del escenario cubren con alfa: no se recortan fuera del halo de la figura');
+}
+
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
 console.log('\n📱 Iconos de la app instalada');
 {

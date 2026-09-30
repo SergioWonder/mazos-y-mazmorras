@@ -58,6 +58,9 @@ flat in float vStretch;
 flat in float vParam;
 flat in float vSize;
 out vec4 outColour;
+// 0: glows only add light (fx canvas over the page); 1: they also cover with alpha, for a
+// canvas whose empty pixels must stay valid when composited (the puppet stage)
+uniform float uCover;
 float sdBox(vec2 p, vec2 b) { vec2 d = abs(p) - b; return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0); }
 float sdHeart(vec2 p) {
   p = vec2(abs(p.x), -p.y * 0.9 + 0.55) / 1.1;
@@ -156,7 +159,7 @@ void main() {
   }
   a *= vColour.a;
   if (a <= 0.003) discard;
-  outColour = vec4(vColour.rgb * a, a * (1.0 - additive));
+  outColour = vec4(vColour.rgb * a, a * max(1.0 - additive, uCover));
 }`;
 
 const SHAPE_CODE: Record<ParticleShape, number> = {
@@ -175,6 +178,7 @@ export class SpriteBatchGL {
   private readonly vao: WebGLVertexArrayObject;
   private readonly uCanvas: WebGLUniformLocation | null;
   private readonly uDpr: WebGLUniformLocation | null;
+  private readonly uCover: WebGLUniformLocation | null;
   private data = new Float32Array(256 * FLOATS);
   private readonly colours = new Map<string, [number, number, number, number]>();
 
@@ -195,6 +199,7 @@ export class SpriteBatchGL {
     this.program = p;
     this.uCanvas = gl.getUniformLocation(p, 'uCanvas');
     this.uDpr = gl.getUniformLocation(p, 'uDpr');
+    this.uCover = gl.getUniformLocation(p, 'uCover');
     this.vao = gl.createVertexArray()!;
     gl.bindVertexArray(this.vao);
     const quad = gl.createBuffer();
@@ -222,9 +227,10 @@ export class SpriteBatchGL {
     return v;
   }
 
-  /** Draws the list over whatever the framebuffer holds (w, h: device px). Leaves its
-   *  program and vertex array bound: callers restore their own. */
-  draw(list: Sprite[], w: number, h: number, dpr: number, ox = 0, oy = 0) {
+  /** Draws the list over whatever the framebuffer holds (w, h: device px). `cover` 1 makes
+   *  the glows write alpha too (see uCover). Leaves its program and vertex array bound:
+   *  callers restore their own. */
+  draw(list: Sprite[], w: number, h: number, dpr: number, ox = 0, oy = 0, cover = 0) {
     if (!list.length) return;
     const gl = this.gl;
     if (this.data.length < list.length * FLOATS) this.data = new Float32Array(list.length * FLOATS * 2);
@@ -238,6 +244,7 @@ export class SpriteBatchGL {
     gl.useProgram(this.program);
     gl.uniform2f(this.uCanvas, w, h);
     gl.uniform1f(this.uDpr, dpr);
+    gl.uniform1f(this.uCover, cover);
     gl.bindVertexArray(this.vao);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.instances);
     gl.bufferData(gl.ARRAY_BUFFER, d.subarray(0, list.length * FLOATS), gl.DYNAMIC_DRAW);

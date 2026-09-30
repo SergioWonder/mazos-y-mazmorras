@@ -477,7 +477,11 @@ export class PuppetStage {
       this.flameBroken = true;
       return;
     }
-    this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top);
+    // cover 1: purely additive pixels (alpha 0) would vanish wherever the figure's halo
+    // has not written alpha, clipping the flames to a band around the silhouette. A second,
+    // additive pass then brightens them like light, now over pixels that do have alpha.
+    this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top, 1);
+    this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top, 0);
     gl.bindVertexArray(this.quad);
     gl.useProgram(this.piece);
   }
