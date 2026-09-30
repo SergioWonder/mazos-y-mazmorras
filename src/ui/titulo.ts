@@ -145,7 +145,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       btnAvisos.disabled = bloqueados;
       btnAvisos.textContent = bloqueados
         ? '🔕 Avisos bloqueados en el navegador'
-        : avisosActivados() ? '🔔 Avisos de versiones mayores: activados' : '🔕 Avisarme de versiones mayores';
+        : avisosActivados() ? '🔔 Notificar nuevas versiones: activado' : '🔕 Notificar nuevas versiones';
     };
     pintarAvisos();
     btnAvisos?.addEventListener('click', async () => {

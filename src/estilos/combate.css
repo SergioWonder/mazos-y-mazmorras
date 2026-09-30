@@ -151,6 +151,36 @@ body.arrastre-activo .zona-mano,
   filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.55));
 }
 .sprite-marioneta { display: block; height: auto; aspect-ratio: 140 / 135; overflow: visible; }
+/* Prepared Smite (paladin): holy white-gold fire behind the figure. DOM layer, so it
+   shows on every device alongside the WebGL flames; it only animates opacity/scale. */
+.heroe.con-castigo .sprite-silueta { position: relative; }
+.heroe.con-castigo .sprite-silueta::before,
+.heroe.con-castigo .sprite-silueta::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  width: 92%;
+  height: 104%;
+  translate: -50% 0;
+  border-radius: 50% 50% 42% 42% / 62% 62% 38% 38%;
+  pointer-events: none;
+  z-index: -1;
+  will-change: opacity, transform;
+}
+.heroe.con-castigo .sprite-silueta::before {
+  background: radial-gradient(ellipse 50% 58% at 50% 62%, rgba(255, 252, 235, 0.55), rgba(255, 214, 90, 0.38) 45%, rgba(255, 170, 40, 0) 72%);
+  animation: aura-castigo 1.6s ease-in-out infinite;
+}
+.heroe.con-castigo .sprite-silueta::after {
+  background: radial-gradient(ellipse 34% 46% at 50% 55%, rgba(255, 255, 250, 0.45), rgba(255, 230, 140, 0) 70%);
+  animation: aura-castigo 1.1s ease-in-out -0.5s infinite alternate;
+}
+@keyframes aura-castigo {
+  0%, 100% { opacity: 0.75; transform: scale(1, 1); }
+  40% { opacity: 1; transform: scale(1.04, 1.09); }
+  70% { opacity: 0.85; transform: scale(0.98, 1.03); }
+}
 /* Short scenes (landscape phones): a big boss would push its health bar and statuses
    below the scene edge. The sprite gives way, leaving room for the top bar, intent,
    name, trait, health bar and statuses (~180px with one row of statuses).

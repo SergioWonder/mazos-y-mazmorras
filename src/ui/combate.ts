@@ -769,7 +769,7 @@ export function pantallaCombate(
       $('.lado-jugador').innerHTML = `
         <div class="heroe ${furiaActiva ? 'con-furia' : ''} ${forma ? 'transformado' : ''} ${
           (j.estados.espejismo ?? 0) > 0 ? 'con-espejismo' : ''
-        }" data-luchador="jugador" style="--acento-heroe:${spriteActual().accent}">
+        } ${j.castigos.length > 0 ? 'con-castigo' : ''}" data-luchador="jugador" style="--acento-heroe:${spriteActual().accent}">
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
           ${conjuro}
           ${indicadorCastigo()}
@@ -783,7 +783,7 @@ export function pantallaCombate(
       const actual = spriteActual();
       $('.sprite-silueta')?.appendChild(actual.element);
       // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
-      actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
+      actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : j.castigos.length > 0 ? '#fff3c4' : null);
       actual.setEchoes((j.estados.espejismo ?? 0) > 0);
       actual.setFlames(j.castigos.length > 0 ? 'holy' : null);
       const inv = spriteInvocacion();

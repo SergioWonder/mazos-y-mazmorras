@@ -7147,6 +7147,22 @@ console.log('\n🌟 Castigo activo en la mano');
   check(!/sale de la cola/.test(src) && !/en cola<\/span>/.test(src), 'los mensajes y el botón de fin de turno no hablan de «cola»');
 }
 
+// ── Title screen scrolls on desktop; notification wording; Smite glow ──────
+console.log('\n🏰 Título y aura del Castigo');
+{
+  const fs = await import('node:fs');
+  const css = fs.readFileSync(new URL('../src/estilos/pantallas.css', import.meta.url), 'utf8');
+  const regla = css.slice(css.indexOf('.titulo {'), css.indexOf('}', css.indexOf('.titulo {')));
+  check(/overflow-y:\s*auto/.test(regla), 'el menú principal tiene scroll también en escritorio (no se corta el botón de continuar)');
+  const titulo = fs.readFileSync(new URL('../src/ui/titulo.ts', import.meta.url), 'utf8');
+  check(/Notificar nuevas versiones/.test(titulo) && !/versiones mayores/.test(titulo), 'el botón de avisos dice «Notificar nuevas versiones»');
+  const combate = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/castigos\.length > 0 \? '#fff3c4'/.test(combate), 'con un Castigo preparado el héroe brilla en blanco dorado (además de las llamas)');
+  check(/con-castigo/.test(combate), 'con un Castigo preparado el héroe lleva la clase con-castigo');
+  const cssC = fs.readFileSync(new URL('../src/estilos/combate.css', import.meta.url), 'utf8');
+  check(/\.heroe\.con-castigo/.test(cssC) && /@keyframes aura-castigo/.test(cssC), 'el aura del Castigo se dibuja también en CSS, visible sin WebGL');
+}
+
 // ── PWA icons: the manifest points at existing files, with new names so Android refreshes them ─
 console.log('\n📱 Iconos de la app instalada');
 {

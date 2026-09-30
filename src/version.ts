@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.1';
+export const VERSION = '7.0.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.2',
+    fecha: '2026-09-30',
+    cambios: [
+      '🔥 El paladín con un Castigo preparado arde con una luz sagrada blanca y dorada que late tras él, en cualquier dispositivo.',
+      '🏰 El menú principal tiene scroll en escritorio: el botón de continuar partida ya no queda cortado.',
+      '🔔 El botón de avisos pasa a llamarse «Notificar nuevas versiones».',
+    ],
+  },
   {
     version: '7.0.1',
     fecha: '2026-09-30',

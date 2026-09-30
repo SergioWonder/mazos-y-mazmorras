@@ -3,9 +3,13 @@
 .titulo {
   height: 100vh;
   display: grid;
-  place-items: center;
+  justify-items: center;
   padding: 2rem;
+  /* taller than the window (six classes): scroll instead of clipping top and bottom */
+  overflow-y: auto;
 }
+/* centred while it fits; once it overflows it starts at the top and scrolls */
+.titulo > .titulo-marco { margin-block: auto; }
 
 .titulo-marco {
   max-width: 880px;
