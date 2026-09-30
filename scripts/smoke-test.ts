@@ -6894,7 +6894,30 @@ console.log('\n🔨 Paladín');
     check((e.estados.vulnerable ?? 0) === 4 && pv0 - e.pv === 14, 'Martillo del Juicio: los Castigos que descarga se aplican dos veces');
   }
 
-  // — holy Strike and Defend —
+  // — a Smite lands once, even on an area attack (no chained splashes) —
+  {
+    const { comb } = await montarP([dummy(), dummy(), dummy()]);
+    await jugar(comb, 'castigo-abrasador');
+    await jugar(comb, 'expulsar-mal');
+    const danos = comb.enemigos.map((e) => 300 - e.pv);
+    check(danos.every((d) => d === 14), `Castigo Abrasador + Expulsar el Mal: 10 del ataque y la llamarada una sola vez a cada uno (${danos.join('/')})`);
+  }
+  {
+    const { comb } = await montarP([dummy(), dummy(), dummy()]);
+    await jugar(comb, 'castigo-divino');
+    await jugar(comb, 'expulsar-mal');
+    const danos = comb.enemigos.map((e) => 300 - e.pv);
+    check(danos.join() === '16,10,10', `Castigo Divino + ataque de área: el daño extra solo en el primer objetivo (${danos.join('/')})`);
+  }
+  {
+    const { comb } = await montarP([dummy(), dummy()]);
+    await jugar(comb, 'castigo-atronador');
+    await jugar(comb, 'colera-celestial');
+    const vul = comb.enemigos.map((e) => e.estados.vulnerable ?? 0);
+    check(vul.join() === '2,0', `Castigo Atronador + Cólera Celestial: el Vulnerable se aplica una vez (${vul.join('/')})`);
+  }
+
+  // — holy Strike and Defend —  // — holy Strike and Defend —
   {
     const { comb } = await montarP();
     const e = comb.enemigos[0];
@@ -7274,6 +7297,23 @@ try {
   check(maxA >= 0.6 && maxA <= 0.9, `llama sagrada: bien visible pero sin volverse opaca (alfa máx. ${maxA.toFixed(2)})`);
   check(fuera === 0, `llama sagrada: las llamas se quedan alrededor de la silueta (${fuera} fuera)`);
   check(sobreCabeza > 0, `llama sagrada: las lenguas suben por encima de la cabeza (${sobreCabeza} fotogramas)`);
+  // not a cut-out: a minority of thin, fainter tongues is drawn in front, licking the outline
+  let delante = 0, detras = 0, alfaDelante = 0, alfaDetras = 0, tamDelante = 0, tamDetras = 0;
+  for (let t = 0; t < 6; t += 1 / 30) {
+    for (const s of holyFlameFrame(t, pts, { level: 1, unit })) {
+      if (s.shape !== 'colmillo') continue;
+      if (s.front) { delante++; alfaDelante = Math.max(alfaDelante, s.alpha ?? 1); tamDelante += s.size; }
+      else { detras++; alfaDetras = Math.max(alfaDetras, s.alpha ?? 1); tamDetras += s.size; }
+    }
+  }
+  const parteDelante = delante / (delante + detras);
+  check(delante > 0 && detras > 0, 'llama sagrada: hay lenguas delante y detrás del héroe (la figura se funde con el fuego)');
+  check(parteDelante >= 0.15 && parteDelante <= 0.35, `llama sagrada: las de delante son minoría (${Math.round(parteDelante * 100)} %)`);
+  check(alfaDelante <= alfaDetras * 0.65 && tamDelante / delante < tamDetras / detras,
+    `llama sagrada: las de delante son más finas y translúcidas (alfa ${alfaDelante.toFixed(2)} frente a ${alfaDetras.toFixed(2)})`);
+  const ultima = cuerpo.lastIndexOf('this.drawFlames(');
+  check(ultima > cuerpo.indexOf('this.drawFlames(') && ultima > cuerpo.indexOf("pass(0, [0, 0, 0, 0], { skip: FLAG.backlit })") && ultima > cuerpo.indexOf('pass(1, [0, 0, 0, 0]);'),
+    'llama sagrada: el escenario pinta las lenguas de delante después de la figura');
   check(maxN <= MAX_FLAME_SPRITES && MAX_FLAME_SPRITES <= 80, `llama sagrada: respeta el tope de partículas (${maxN} de ${MAX_FLAME_SPRITES})`);
   check(reducidoMax > 0 && reducidoMax < maxN, `llama sagrada: con movimiento reducido hay menos llamas (${reducidoMax} < ${maxN})`);
   const muchos = Array.from({ length: 200 }, (_, i) => ({ x: i * 3, y: 300 + (i % 7) }));

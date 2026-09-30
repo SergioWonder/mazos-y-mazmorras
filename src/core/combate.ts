@@ -195,19 +195,20 @@ export class Combate {
     return lista.reduce((s, k) => s + (k.dano ?? 0), 0) * veces;
   }
 
-  /** (paladin) First hit on `obj` of an attack unleashing Smites: shows them
-   *  and returns their extra damage (0 if there are none or it was already hit). */
+  /** (paladin) First hit of an attack unleashing its Smite: shows it and returns
+   *  its extra damage. The Smite lands once per attack, on the first target hit
+   *  (an area attack does not chain it); 0 once it has landed. */
   private async cargarCastigoEn(obj: EnemigoCombate): Promise<number> {
     const c = this.castigoEnCurso;
-    if (!c || c.golpeados.has(obj)) return 0;
+    if (!c || c.golpeados.size > 0) return 0;
     for (const k of c.lista) await this.ui.fxParticulas(obj, FX_CASTIGO[k.elemento]);
     return c.lista.reduce((s, k) => s + (k.dano ?? 0), 0) * c.veces;
   }
 
-  /** (paladin) After that first hit: the Smites' statuses, fire splash and banishment. */
+  /** (paladin) After that first hit: the Smite's statuses, fire splash and banishment (once). */
   private async descargarCastigoEn(obj: EnemigoCombate) {
     const c = this.castigoEnCurso;
-    if (!c || c.golpeados.has(obj)) return;
+    if (!c || c.golpeados.size > 0) return;
     c.golpeados.add(obj);
     for (const k of c.lista) {
       if (k.vulnerable && obj.vivo) {

@@ -12,6 +12,7 @@ import {
 } from '../fx/puppet-gpu.ts';
 import { SpriteBatchGL } from '../fx/particle-gl.ts';
 import type { Sprite } from '../fx/particle-sim.ts';
+import type { FlameSprite } from '../fx/holy-flames.ts';
 
 const PIECE_VS = `#version 300 es
 precision highp float;
@@ -235,8 +236,8 @@ export interface GpuView {
   rim: string;
   aura: string | null;
   echoes: boolean;
-  /** Sprites painted behind the figure (holy flames), in screen CSS px. */
-  flames: Sprite[] | null;
+  /** Holy flames in screen CSS px: painted behind the figure, `front` ones over it. */
+  flames: FlameSprite[] | null;
   frame: GpuFrame | null;
   visible: boolean;
 }
@@ -359,8 +360,11 @@ export class PuppetStage {
 
     // ground shadow and effects go through the effect program
     this.drawEffect(S, cw, ch, 0, [58 + f.pose.rootX, 129.5, 22, 4.2], [0, 0, 0, 0], [0, 0, 0, 0.5], [0, 0, 0, 0], fx.opacity, [34 + f.pose.rootX, 124, 82 + f.pose.rootX, 135]);
-    // flames go behind the figure: the silhouette drawn next hides them where they overlap
-    if (v.flames?.length) this.drawFlames(v.flames, cw, ch);
+    // flames go behind the figure (the silhouette drawn next hides them where they
+    // overlap); a few thin licks go over it afterwards, so it does not read as a cut-out
+    const flames = v.flames ?? [];
+    const behind = flames.filter((s) => !s.front), inFront = flames.filter((s) => s.front);
+    if (behind.length) this.drawFlames(behind, cw, ch);
 
     gl.useProgram(this.piece);
     gl.activeTexture(gl.TEXTURE0);
@@ -436,6 +440,8 @@ export class PuppetStage {
       pass(0, [0, 0, 0, 0], { skip: FLAG.backlit });
       pass(3, [0, 0, 0, -0.5], { only: FLAG.emissive, glow: 0.9, margin: 5, additive: true });
     }
+
+    if (inFront.length) this.drawFlames(inFront, cw, ch);
 
     // attack effects
     const g = f.geo;

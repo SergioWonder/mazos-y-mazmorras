@@ -41,7 +41,7 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
   { test: (_d, t) => t.includes('escribir') || t.includes('conjuro prodigioso'), icono: '📜', nombre: 'Conjuro Prodigioso',
     desc: 'Carta generada (coste 2, daño base 10) que crece durante el combate. «Escribir X» le suma X de daño y, algunas cartas, le añaden un efecto permanente (área, Vulnerable, bloqueo o ignorar bloqueo). Aparece en tu mano si no está ya en tu mazo, mano o descarte.' },
   { test: (d, t) => d.castigo === true || t.includes('castigo'), icono: '🌟', nombre: 'Castigo',
-    desc: 'Carga tu siguiente ataque (la próxima carta de ataque que juegues): su primer golpe sobre cada objetivo recibe el efecto. Solo puedes tener un Castigo preparado a la vez. Al jugarlo gasta todo tu Fervor para potenciarse.' },
+    desc: 'Carga tu siguiente ataque (la próxima carta de ataque que juegues): su primer golpe recibe el efecto, una sola vez aunque el ataque sea de área. Solo puedes tener un Castigo preparado a la vez. Al jugarlo gasta todo tu Fervor para potenciarse.' },
   { test: (d, t) => d.clase === 'paladin' && t.includes('fervor'), icono: '🔆', nombre: 'Fervor',
     desc: 'Recurso del paladín: ganas 1 cada vez que juegas un Golpe o una Defensa (también los sagrados). Se acumula durante el combate y los Castigos lo consumen entero para potenciarse.' },
   { test: (d, t) => d.clase === 'paladin' && (t.includes('golpes') || t.includes('defensas') || t.includes('golpe y')), icono: '🔨', nombre: 'Golpes y Defensas',

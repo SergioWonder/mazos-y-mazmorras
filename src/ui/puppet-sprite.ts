@@ -16,8 +16,7 @@ import {
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
 import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
 import { fx as particles } from '../fx/particulas.ts';
-import { FlameFade, flameAnchors, flameLayerFor, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind } from '../fx/holy-flames.ts';
-import type { Sprite } from '../fx/particle-sim.ts';
+import { FlameFade, flameAnchors, flameLayerFor, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind, type FlameSprite } from '../fx/holy-flames.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -305,7 +304,7 @@ export class PuppetSprite {
   private flames: FlameKind | null = null;
   private readonly flameFade = new FlameFade();
   private flamePoints: FlameAnchor[] | null = null;
-  private flameSprites: Sprite[] = [];
+  private flameSprites: FlameSprite[] = [];
   private flameLayer: (() => void) | null = null;
   private flameReduced = false;
   /** Flames lit or still fading out. */
@@ -387,7 +386,7 @@ export class PuppetSprite {
     }
   }
 
-  private setFlameSprites(list: Sprite[]) {
+  private setFlameSprites(list: FlameSprite[]) {
     this.flameSprites = list;
     if (this.gpu) this.gpu.flames = list.length ? list : null;
   }

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.0.3';
+export const VERSION = '7.0.4';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.0.4',
+    fecha: '2026-09-30',
+    cambios: [
+      '⚖️ El Castigo se aplica una sola vez aunque el ataque sea de área: en el primer objetivo, y la llamarada del Castigo Abrasador ya no se encadena.',
+      '🔥 Las llamas del Castigo también lamen el borde del paladín por delante: la figura se funde con el fuego en vez de parecer recortada.',
+    ],
+  },
   {
     version: '7.0.3',
     fecha: '2026-09-30',

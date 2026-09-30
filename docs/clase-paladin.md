@@ -26,8 +26,8 @@ supervitaminan su siguiente ataque y Fervor que se carga jugando Golpes y Defens
   efectos que generan Castigo (Ángel Vengador) refuerzan el que ya haya.
 - Mientras está preparado, el héroe arde con un aura sagrada de llamas amarillas y blancas, y una
   ficha junto a él muestra lo que llevará el próximo ataque.
-- Al descargarse: el daño extra va en el **primer golpe** del ataque sobre cada objetivo,
-  y los estados se aplican a cada objetivo golpeado.
+- Al descargarse: se aplica **una sola vez**, en el primer golpe del ataque (en un ataque de área,
+  solo sobre el primer objetivo; la llamarada del Abrasador sigue alcanzando a todos, una vez).
 - Indicador: estado `castigo` (1 si hay uno preparado) y ficha `castigo-ficha` junto al héroe.
 - Elementos (cada uno con su efecto visual al preparar y al descargar):
 

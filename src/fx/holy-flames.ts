@@ -15,7 +15,7 @@ export type FlameKind = 'holy';
 export const FLAME_FADE_IN = 0.5;
 export const FLAME_FADE_OUT = 0.7;
 /** Sprite cap of one aura frame (tongues, their white cores and embers). */
-export const MAX_FLAME_SPRITES = 72;
+export const MAX_FLAME_SPRITES = 76;
 
 /** Outer tongues: warm golds; cores and embers: whites. */
 const OUTER = ['#ffe27a', '#ffd35a', '#ffc94a'];
@@ -24,7 +24,10 @@ const EMBER = ['#fff3c4', '#ffe9a0', '#ffffff'];
 export const HOLY_FLAME_COLOURS = [...OUTER, ...CORE, ...EMBER];
 
 /** Tongues of fire (each drawn as TONGUE_SPRITES sprites) and embers. */
-const SLOTS = 16, SLOTS_REDUCED = 8;
+const SLOTS = 14, SLOTS_REDUCED = 7;
+/** Thin, fainter tongues drawn in front of the figure, licking its outline, so the
+ *  silhouette melts into the fire instead of reading as a cut-out (2 sprites each). */
+const FRONT_SLOTS = 7, FRONT_SLOTS_REDUCED = 3;
 const EMBERS = 6, EMBERS_REDUCED = 3;
 /** Sprites per tongue: three golden segments along its path plus a white core. */
 export const TONGUE_SPRITES = 4;
@@ -38,6 +41,8 @@ export const flameLayerFor = (hasStage: boolean): 'stage' | 'fx' => (hasStage ? 
 const BODY: BoneId[] = ['legB', 'legF', 'torso', 'armB', 'offhand', 'armF', 'head'];
 
 export interface FlameAnchor { bone: BoneId; at: [number, number] }
+/** A flame sprite; `front` ones are painted over the figure, the rest behind it. */
+export interface FlameSprite extends Sprite { front?: boolean }
 export interface ScreenPoint { x: number; y: number }
 
 // ── silhouette points ───────────────────────────────────────────────────────
@@ -221,11 +226,11 @@ export function tongueHead(i: number, t: number, points: ScreenPoint[], unit: nu
  *  side to side, each drawn as three golden segments bending along its path
  *  with a white core, plus a few embers. Every tongue lives in cycles and moves
  *  to another point of the body only while invisible, so the fire never jumps. */
-export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions): Sprite[] {
+export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions): FlameSprite[] {
   const level = clamp01(o.level);
   if (level <= 0 || !points.length) return [];
   const U = o.unit, c = centreOf(points);
-  const out: Sprite[] = [];
+  const out: FlameSprite[] = [];
   const slots = o.reduced ? SLOTS_REDUCED : SLOTS, embers = o.reduced ? EMBERS_REDUCED : EMBERS;
 
   for (let i = 0; i < slots; i++) {
@@ -254,6 +259,32 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     });
   }
 
+  // front licks: born just inside the outline and rising over its edge, thin and faint
+  const front = o.reduced ? FRONT_SLOTS_REDUCED : FRONT_SLOTS;
+  for (let i = 0; i < front; i++) {
+    const id = 50 + i;
+    const { cycle: k, u } = cycleOf(id, t);
+    const base = tongueTraits(id, k, points, c, U);
+    const h = (n: number) => hash(id + k * 7, n);
+    const tr: Traits = {
+      ...base,
+      bx: base.bx - base.nx * 6 * U, by: base.by + 2 * U,
+      rise: (16 + h(5) * 10) * U, drift: base.nx * (2 + h(8) * 2) * U,
+      amp: (1.5 + h(7) * 1) * U, r0: (2.6 + h(4) * 0.8) * U,
+    };
+    const env = smooth(clamp01(u / 0.2)) * (1 - smooth(clamp01((u - 0.5) / 0.5)));
+    const r = tr.r0 * (1 - 0.4 * u);
+    for (let j = 0; j < 2; j++) {
+      const uj = Math.max(0, u - j * 0.1);
+      const [x, y] = pathAt(tr, uj), [px, py] = pathAt(tr, uj - 0.03);
+      out.push({
+        x, y, size: r * (0.6 + 0.3 * j), angle: Math.atan2(y - py, x - px), stretch: 2.4, shape: 'colmillo',
+        colour: j ? CORE[2] : OUTER[0], alpha: level * 0.55 * env, glow: true, front: true,
+      });
+    }
+  }
+
+  // embers drift in front: sparks over the outline help blend the figure into the fire
   for (let i = 0; i < embers; i++) {
     const period = 1.7 + hash(i, 21) * 0.8;
     const cc = (t / period) + hash(i, 22);
@@ -264,7 +295,7 @@ export function holyFlameFrame(t: number, points: ScreenPoint[], o: FlameOptions
     const wob = Math.sin((u * 1.6 + hash(i + k * 5, 25)) * Math.PI * 2) * 3 * U;
     out.push({
       x: p.x + wob, y: p.y - rise * u, size: (1.2 + hash(i + k * 5, 26) * 0.8) * U, angle: 0, shape: 'disco',
-      colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true,
+      colour: pick(EMBER, hash(i, k + 27)), alpha: level * 0.85 * env, glow: true, front: true,
     });
   }
   return out.slice(0, MAX_FLAME_SPRITES);
