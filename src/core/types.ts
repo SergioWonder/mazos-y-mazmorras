@@ -481,6 +481,8 @@ export interface ContextoEfecto {
   descartar(n: number, opcional?: boolean): Promise<number>;
   /** Nº de cartas que has descartado en lo que va de turno (para pagos de descarte). */
   descartadasEsteTurno(): number;
+  /** Cards discarded by effects so far this combat. */
+  descartadasEsteCombate(): number;
   /** Discards the whole hand (each card fires its own discard effects); returns how many. */
   descartarMano(): Promise<number>;
   /** Discards a random card of the hand (never `excepto`). Returns it, or null. */

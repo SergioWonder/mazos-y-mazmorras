@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-09-30)
 
 ## Corpus Check
-- 160 files · ~984,361 words
+- 160 files · ~984,728 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 3532 nodes · 8947 edges · 109 communities (99 shown, 10 thin omitted)
+- 3532 nodes · 8947 edges · 110 communities (100 shown, 10 thin omitted)
 - Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 497 edges (avg confidence: 0.82)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c018fc67`
+- Built from commit: `79339cec`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -119,6 +119,7 @@
 - [[_COMMUNITY_Community 102|Community 102]]
 - [[_COMMUNITY_Community 103|Community 103]]
 - [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
 - [[_COMMUNITY_Community 106|Community 106]]
 - [[_COMMUNITY_Community 108|Community 108]]
 - [[_COMMUNITY_Community 109|Community 109]]
@@ -143,10 +144,10 @@
   src/core/cartas.ts → README.md
 - `GOBLIN_FAMELICO` --conceptually_related_to--> `Intención enemiga`  [INFERRED]
   src/core/enemigos.ts → README.md
+- `rehidratarRun()` --conceptually_related_to--> `PWA jugable sin conexión`  [INFERRED]
+  src/core/guardado.ts → README.md
 - `generarMapa()` --implements--> `Mapa de 10 filas por capítulo`  [INFERRED]
   src/core/mapa.ts → README.md
-- `SELLO_PACTO` --implements--> `Condena (ejecuta al igualar los PV actuales)`  [INFERRED]
-  src/core/reliquias.ts → README.md
 
 ## Import Cycles
 - None detected.
@@ -158,7 +159,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (109 total, 10 thin omitted)
+## Communities (110 total, 10 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.04
@@ -238,7 +239,7 @@ Nodes (30): appendagePivots(), bear(), beholder(), biped(), brain(), candle(), c
 
 ### Community 19 - "Community 19"
 Cohesion: 0.04
-Nodes (75): defDe(), esFamilia(), TipoCarta, Convención: el texto de la carta debe cuadrar con su efecto, BackdropShape, backgroundTheme(), sceneBackground, SCENES (+67 more)
+Nodes (53): cartaPorId(), ElementoCastigo, BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, CARD_FX (+45 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -253,8 +254,8 @@ Cohesion: 0.33
 Nodes (4): Cambiar o ampliar pistas, Efectos de sonido, Música y sonido, Pistas usadas (todas CC0 / dominio público)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.09
-Nodes (11): Combate, esDungeonMaster(), crearEnemigo(), CartaInstancia, EnemigoCombate, JugadorCombate, Luchador, Armadura de Agathys (el bloqueo devuelve daño a todos) (+3 more)
+Cohesion: 0.08
+Nodes (16): Combate, esDungeonMaster(), crearEnemigo(), SELLO_PACTO, CartaInstancia, CastigoPreparado, EnemigoCombate, JugadorCombate (+8 more)
 
 ### Community 26 - "Configuración de Vite y PWA"
 Cohesion: 0.09
@@ -333,8 +334,8 @@ Cohesion: 0.10
 Nodes (35): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), ChainState, createChainState(), FlameAnchor (+27 more)
 
 ### Community 46 - "Community 46"
-Cohesion: 0.04
-Nodes (76): CARTAS_RETIRADAS, AlmacenSimple, desenlaceCampana, DiaAgenda, DIAS_AGENDA, FRASES_DM, GUION_AGENDA, INTENCION_DM (+68 more)
+Cohesion: 0.05
+Nodes (74): CARTAS_RETIRADAS, AlmacenSimple, desenlaceCampana, DiaAgenda, DIAS_AGENDA, FRASES_DM, GUION_AGENDA, INTENCION_DM (+66 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.10
@@ -357,8 +358,8 @@ Cohesion: 0.10
 Nodes (20): bloom(), blur(), _box_mean(), brush_texture(), fractal_noise(), kuwahara(), mockup(), painterly_warp() (+12 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.23
-Nodes (11): cartaPorId(), CARD_FX, cardSpellKey(), hitSpell(), BASIC, cardSequences(), EXCLUDED_CARDS, PRODIGIOUS_THRESHOLDS (+3 more)
+Cohesion: 0.06
+Nodes (48): defDe(), esFamilia(), TipoCarta, Convención: el texto de la carta debe cuadrar con su efecto, PWA jugable sin conexión, mostrarAvisoActualizar(), CARD_GLOW, CLASS_GLOW (+40 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.12
@@ -446,7 +447,7 @@ Nodes (29): backbeat(), band_levels(), Buf, build_intro(), build_loop(), delay()
 
 ### Community 80 - "Community 80"
 Cohesion: 0.10
-Nodes (29): ACTOS, bitmaps, cardArtBitmap(), cardSvgUrl(), pending, pickSvg(), rasterise(), SvgTable (+21 more)
+Nodes (27): ACTOS, contenidoOpcion(), bossIconFor(), hasMapIcon(), MAP_EXTRA_ICONS, MAP_SCENARIOS, mapBackground(), mapBackgroundName() (+19 more)
 
 ### Community 81 - "Community 81"
 Cohesion: 0.18
@@ -462,19 +463,19 @@ Nodes (24): beholder(), build(), compass_eye(), crystal(), crystals(), escher_st
 
 ### Community 84 - "Community 84"
 Cohesion: 0.04
-Nodes (58): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+50 more)
+Nodes (64): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+56 more)
 
 ### Community 85 - "Community 85"
 Cohesion: 0.07
-Nodes (42): poolDeClase(), recompensaCartas(), Presentador, reliquiaInicial(), crearRng(), nuevaRun(), currentForm(), formFromLabel() (+34 more)
+Nodes (40): poolDeClase(), recompensaCartas(), Presentador, reliquiaInicial(), crearRng(), nuevaRun(), shapeBBox(), Shell HTML del juego (canvas fx + #app + #overlay) (+32 more)
 
 ### Community 86 - "Community 86"
 Cohesion: 0.07
-Nodes (41): FX_CASTIGO, PrevisionAtaque, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), CartaDef, CartaJugada, CastigoPreparado (+33 more)
+Nodes (41): FX_CASTIGO, PrevisionAtaque, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), CartaJugada, ContextoEfecto, DiceTheme (+33 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.13
-Nodes (20): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), offset_line(), pine() (+12 more)
+Cohesion: 0.15
+Nodes (17): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), pine(), A random angular rune glyph inside an s x 1.4s cell centred on (x, y). (+9 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.07
@@ -493,8 +494,8 @@ Cohesion: 0.17
 Nodes (11): ACTIONS, CAPE, CAPE_BACK, CORE, FALLEN, HOOD_PEAK, PICARO_RIG, SASH (+3 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.22
-Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
+Cohesion: 0.24
+Nodes (7): broadleaf(), cartouche(), compass_rose(), crossbones(), eye_glyph(), A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Ornamental scroll cartouche with illegible lettering.
 
 ### Community 94 - "Community 94"
 Cohesion: 0.22
@@ -505,12 +506,12 @@ Cohesion: 0.14
 Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.18
-Nodes (10): broadleaf(), dagger(), eye_glyph(), group(), mockup(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Review mock-up with node markers where the UI draws them (not delivered).      t (+2 more)
+Cohesion: 0.40
+Nodes (5): dagger(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 97 - "Community 97"
-Cohesion: 0.12
-Nodes (20): POOL_RELIQUIAS, ReliquiaDef, Actualizaciones y avisos, Ambientación fantasía medieval D&D, Arte de las cartas, Bendiciones, Controles, Roguelike de construcción de mazos (+12 more)
+Cohesion: 0.33
+Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
 
 ### Community 98 - "Community 98"
 Cohesion: 0.09
@@ -539,6 +540,10 @@ Nodes (4): Ajustes, alCambiarAjustes(), abrirMenuAjustes(), sacudir()
 ### Community 104 - "Community 104"
 Cohesion: 0.06
 Nodes (37): ChainRun, Ease, pulse(), shake(), strikeKeys(), StrikeSpec, ChainSpec, Keyframe (+29 more)
+
+### Community 105 - "Community 105"
+Cohesion: 0.40
+Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
 
 ### Community 106 - "Community 106"
 Cohesion: 0.33

@@ -6902,6 +6902,7 @@ console.log('\n🔢 Números calculados');
         j.conjuroEscrito = 7;
         Object.assign(e.estados, { veneno: 5, condena: 4, hemorragia: 6, vulnerable: 1 });
         comb.descartadasEsteTurno = 2;
+        comb.descartadasEsteCombate = 5;
         await comb.contexto().invocarEfimero('sabueso', 9, 5);
         j.mano.push(instanciar(cartaPorId('grilletes')!)); // a curse to offer
       },
@@ -7000,7 +7001,7 @@ console.log('\n🔢 Números calculados');
   check(await valor('punalada-trapera', reliquias) === 37 && await valor('punalada-trapera', atacante) === 9,
     'Puñalada Trapera suma su extra solo si el enemigo no pretende atacar');
   check(await valor('golpe-septico', reliquias) === 30, 'Golpe Séptico suma el Veneno del objetivo');
-  check(await valor('tempestad-acero', reliquias) === 33, 'Tempestad de Acero suma 3 por cada descarte del turno');
+  check(await valor('tempestad-acero', reliquias) === 55, 'Tempestad de Acero suma 3 por cada descarte del combate');
   check(await valor('sangre-caliente', reliquias) === 30 && await valor('sangre-caliente', fuerte) === 10,
     'Sangre Caliente muestra como vigente la rama de Furia solo con Furia activa');
   check(await valor('senda-fanatico', reliquias, 1) === 14, 'Senda del Fanático: el bloqueo suma el doble de la Furia');
@@ -7943,6 +7944,22 @@ console.log('\n🗡️ Pícaro: descartes y ataques furtivos');
   check(await golpe('punalada-trapera', false, true) === 21, 'Puñalada Trapera+: 11 + 10 si no pretende atacar');
   check(await golpe('emboscada', true) === 13 && await golpe('emboscada', false) === 31, 'Emboscada: 13, o 13 + 18 si no pretende atacar');
   check(await golpe('emboscada', false, true) === 41, 'Emboscada+: 17 + 24 si no pretende atacar');
+  // Steel Tempest: a big hit that grows with every card discarded this combat
+  {
+    const { comb, e } = await montar(9120);
+    for (let t = 0; t < 3; t++) {
+      const inst = instanciar(carta('esquiva-refleja')!);
+      comb.jugador.mano.push(inst);
+      await comb.descartarCarta(inst);
+      if (t < 2) { e.intencion = { nombre: 'Cubrirse', intencion: 'defensa', bloqueo: 0 }; comb.jugador.bloqueo = 999; await comb.terminarTurno(); }
+    }
+    check(comb.descartadasEsteCombate === 3 && comb.descartadasEsteTurno === 1, 'los descartes se cuentan durante todo el combate (y aparte los del turno)');
+    e.pv = 99; e.bloqueo = 0; comb.jugador.estados = {};
+    await carta('tempestad-acero')!.jugar(comb.contexto(e));
+    check(99 - e.pv === 21, `Tempestad de Acero: 12 + 3 por cada carta descartada en el combate (${99 - e.pv})`);
+    const nueva = await montar(9121);
+    check(nueva.comb.descartadasEsteCombate === 0, 'cada combate empieza la cuenta desde cero');
+  }
 }
 
 // ── Enemy difficulty: the Beholder, Act II/III elites and normals ─────────────

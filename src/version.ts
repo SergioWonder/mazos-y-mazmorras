@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.5.0';
+export const VERSION = '7.5.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.5.1',
+    fecha: '2026-09-30',
+    cambios: [
+      '🌪️ Tempestad de Acero ahora pega de verdad: 12 de daño (16 mejorada) y +3 (+4) por cada carta que hayas descartado en todo el combate, no solo en el turno.',
+    ],
+  },
   {
     version: '7.5.0',
     fecha: '2026-09-30',

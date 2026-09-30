@@ -81,6 +81,7 @@ export class Combate {
   danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
   danoBloqueadoEsteTurno = 0; // daño absorbido por el bloqueo en la ronda
   descartadasEsteTurno = 0; // cartas descartadas por efectos este turno (pícaro)
+  descartadasEsteCombate = 0; // cards discarded by effects over the whole fight (Steel Tempest)
   terminado: 'victoria' | 'derrota' | null = null;
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero = false;
@@ -762,6 +763,7 @@ export class Combate {
         return hechos;
       },
       descartadasEsteTurno: () => self.descartadasEsteTurno,
+      descartadasEsteCombate: () => self.descartadasEsteCombate,
       async descartarMano() {
         let n = 0;
         for (const carta of self.jugador.mano.slice()) {
@@ -1260,6 +1262,7 @@ export class Combate {
     this.jugador.mano.splice(idx, 1);
     this.jugador.descarte.push(carta);
     this.descartadasEsteTurno++;
+    this.descartadasEsteCombate++;
     await this.ui.fxMensaje(`🗑 Descartas «${defDe(carta).nombre}»`);
     // Preparación: ganas bloqueo por cada carta descartada
     const prep = this.jugador.estados.preparacion ?? 0;

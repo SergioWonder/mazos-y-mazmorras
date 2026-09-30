@@ -2921,15 +2921,15 @@ export const PICARO: CartaDef[] = [
     objetivo: 'enemigo',
     fx: 'impacto',
     animRara: 'anim-psionico',
-    texto: 'Inflige 6 de daño\n(aplica +3 por cada carta\ndescartada este turno).',
-    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + n[1] * c.descartadasEsteTurno() }],
+    texto: 'Inflige 12 de daño\n(aplica +3 por cada carta\ndescartada en este combate).',
+    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + n[1] * c.descartadasEsteCombate() }],
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 6 + 3 * c.descartadasEsteTurno(), 1, 'impacto');
+      await c.atacar(c.objetivo!, 12 + 3 * c.descartadasEsteCombate(), 1, 'impacto');
     },
     mejora: {
-      texto: 'Inflige 8 de daño\n(aplica +4 por cada carta\ndescartada este turno).',
+      texto: 'Inflige 16 de daño\n(aplica +4 por cada carta\ndescartada en este combate).',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 8 + 4 * c.descartadasEsteTurno(), 1, 'impacto');
+        await c.atacar(c.objetivo!, 16 + 4 * c.descartadasEsteCombate(), 1, 'impacto');
       },
     },
   },
