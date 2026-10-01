@@ -80,8 +80,7 @@ def render(spec: MixSpec) -> dict:
             raise KeyError(f'MIDI track {part.track!r} not found (has: {sorted(song.tracks)})')
         path = part.sfz if os.path.isabs(part.sfz) else config.library(part.sfz)
         inst = instruments.setdefault(path, sampler.Instrument.load(path, sr))
-        expr = track.cc.get(11) or track.cc.get(1)
-        audio = inst.render_track(track.notes, total, expression=expr)
+        audio = inst.render_track(track.notes, total, cc=track.cc)
         if part.automation:
             audio = audio * automation_curve(part.automation, len(audio), sr, bar_seconds)[:, None]
         audio = _place(audio, part.pan, part.width) * 10 ** (part.gain_db / 20)

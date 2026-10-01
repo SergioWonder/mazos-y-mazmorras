@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.6.0';
+export const VERSION = '7.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.7.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '🎻 Banda sonora nueva del Acto I, con instrumentos de orquesta reales: cada escenario tiene su propia canción y cada jefe su tema.',
+      '🗺️⚔️ En el mapa suena una versión tranquila y en combate la misma canción con más tensión: al entrar o salir de un combate la música cambia sin cortarse, desde el mismo punto.',
+      '👹 Gorzug devora el tema a mordiscos; 🃏 Vexis te roba el vals del menú y lo convierte en un circo macabro.',
+    ],
+  },
   {
     version: '7.6.0',
     fecha: '2026-10-01',

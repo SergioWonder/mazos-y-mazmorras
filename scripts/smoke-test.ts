@@ -2336,7 +2336,7 @@ console.log('\n🎵 Banda sonora');
   check(new Set(['cap1', 'cap2', 'cap3', 'menu'].map((t) => MUSIC_TRACKS[t].file)).size === 4, 'cada acto y el menú tienen su propia música');
   // the sample-based main theme (scripts/musica/menu): 42 bars of 3/4 at 108 BPM = 70 s
   check(MUSIC_TRACKS.menu.loopSamples === 3087000, 'el tema del menú con samples dura su bucle exacto de 70 s');
-  check(fs.statSync(new URL('../src/audio/menu.mp3', import.meta.url)).size > 1_600_000, 'y el MP3 del menú es el nuevo (192 kbps)');
+  check(fs.statSync(new URL('../src/audio/menu.mp3', import.meta.url)).size > 1_400_000, 'y el MP3 del menú es el nuevo (VBR de calidad 2)');
   check(MUSIC_TRACKS['cap1-jefe'].file !== MUSIC_TRACKS['cap2-jefe'].file && MUSIC_TRACKS['cap2-jefe'].file !== MUSIC_TRACKS['cap3-jefe'].file, 'cada acto tiene su música de jefe');
   const bucle = 44100 * 60;
   const recortado = loopWindow(60, bucle);
@@ -6399,7 +6399,7 @@ console.log('\n🎸 Música del DM');
   const combatTheme = mt.combatTheme as ((c: number, jefe: boolean, defs: EnemigoDef[]) => string) | undefined;
   const DMdef = (ENEMIGOS as unknown as Record<string, EnemigoDef>).DUNGEON_MASTER;
   check(typeof combatTheme === 'function' && combatTheme(2, true, [DMdef]) === 'dm', 'el combate contra el Dungeon Master suena con su propia pista');
-  check(typeof combatTheme === 'function' && combatTheme(0, true, [ENEMIGOS.JEFE_OGRO]) === 'cap1-jefe'
+  check(typeof combatTheme === 'function' && combatTheme(0, true, [ENEMIGOS.JEFE_OGRO]) === 'cap1-e0-jefe'
     && combatTheme(2, true, [ENEMIGOS.JEFE_OGRO]) === 'cap3-jefe' && combatTheme(1, false, [ENEMIGOS.JEFE_OGRO]) === 'cap2',
     'los jefes normales y los combates de cada acto siguen con su pista');
   if (dm) {
@@ -6413,7 +6413,7 @@ console.log('\n🎸 Música del DM');
   const bpmChip = Number(/bpm:\s*(\d+)/.exec(chip)?.[1] ?? 0);
   check(bpmChip >= 150 && /bateria:\s*true/.test(chip) && /epico:\s*true/.test(chip), 'hay chiptune agresivo de respaldo para el DM si falla el archivo');
   const combateSrc = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
-  check(/audio\.reproducirTema\(combatTheme\(run\.capitulo, esJefe, defs\)\)/.test(combateSrc), 'la pantalla de combate elige la música con combatTheme');
+  check(/audio\.reproducirTema\(combatTheme\(run\.capitulo, esJefe, defs, run\.escenario\)\)/.test(combateSrc), 'la pantalla de combate elige la música con combatTheme');
   const mainSrc = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
   check(/escenaDM = await pantallaCombate\([^\n]*\n[^\n]*audio\.menu\(\)/.test(mainSrc), 'tras el combate del DM vuelve la música del tema principal');
 }
@@ -7986,6 +7986,54 @@ console.log('\n🗡️ Pícaro: descartes y ataques furtivos');
     const nueva = await montar(9121);
     check(nueva.comb.descartadasEsteCombate === 0, 'cada combate empieza la cuenta desde cero');
   }
+}
+
+// ── Soundtrack: one song per scenario in two synced versions (map ↔ combat) ──
+console.log('\n🎼 Versiones de exploración y combate sincronizadas');
+{
+  const fs = await import('node:fs');
+  const mt = await import('../src/fx/music-tracks.ts') as any;
+  check(typeof mt.loopPosition === 'function' && typeof mt.sameSong === 'function' && typeof mt.exploreTheme === 'function',
+    'el motor de música sabe en qué punto del bucle va una pista y qué pistas son la misma canción');
+  if (typeof mt.loopPosition === 'function') {
+    // loop from 0.025 s to 10.025 s, started at buffer offset 0 (MP3 delay skipped)
+    check(Math.abs(mt.loopPosition(3, 0, 0.025, 10.025) - 3) < 1e-9, 'antes de dar la vuelta, la posición es lo que lleva sonando');
+    check(Math.abs(mt.loopPosition(13, 0, 0.025, 10.025) - 3) < 1e-9, 'tras dar la vuelta al bucle, vuelve al mismo compás');
+    check(Math.abs(mt.loopPosition(1, 2.5, 0.5, 10.5) - 3.5) < 1e-9, 'cuenta desde el punto en que arrancó la pista');
+  }
+  if (typeof mt.sameSong === 'function') {
+    const tabla = {
+      a: { file: 'a.mp3', loopSamples: 441000, group: 'ogros' },
+      b: { file: 'b.mp3', loopSamples: 441000, group: 'ogros' },
+      c: { file: 'c.mp3', loopSamples: 441000 },
+      d: { file: 'd.mp3', loopSamples: 400000, group: 'ogros' },
+    };
+    check(mt.sameSong('a', 'b', tabla) && !mt.sameSong('a', 'c', tabla) && !mt.sameSong('a', 'd', tabla) && !mt.sameSong('a', 'a', tabla),
+      'dos pistas son la misma canción si comparten grupo y duración exacta de bucle');
+    const conEscenario = { ...mt.MUSIC_TRACKS, 'cap1-e1': { file: 'x.mp3', loopSamples: 1 }, 'cap1-e1-combate': { file: 'y.mp3', loopSamples: 1 }, 'cap1-e1-jefe': { file: 'z.mp3', loopSamples: 1 } };
+    check(mt.exploreTheme(0, 1, conEscenario) === 'cap1-e1' && mt.combatTheme(0, false, [], 1, conEscenario) === 'cap1-e1-combate'
+      && mt.combatTheme(0, true, [], 1, conEscenario) === 'cap1-e1-jefe', 'cada escenario puede tener su exploración, su combate y su jefe');
+    check(mt.exploreTheme(1, 0) === 'cap2' && mt.combatTheme(1, false, [], 0) === 'cap2' && mt.combatTheme(1, true, [], 0) === 'cap2-jefe',
+      'si un escenario aún no tiene música propia, suena la del acto');
+  }
+  // Act I: each scenario has its song in two versions plus its own boss (sample-based)
+  const T = mt.MUSIC_TRACKS as Record<string, { file: string; loopSamples: number; group?: string }>;
+  const actoI: Array<[string, number]> = [
+    ['cap1-e0', 3528000], ['cap1-e0-combate', 3528000], ['cap1-e0-jefe', 3704400],
+    ['cap1-e1', 3528000], ['cap1-e1-combate', 3528000], ['cap1-e1-jefe', 3528000],
+  ];
+  check(actoI.every(([id, n]) => T[id]?.loopSamples === n && fs.existsSync(new URL(`../src/audio/${T[id].file}`, import.meta.url))),
+    'el Acto I tiene su música por escenario: exploración, combate y jefe, con su bucle exacto');
+  check(mt.sameSong('cap1-e0', 'cap1-e0-combate') && mt.sameSong('cap1-e1', 'cap1-e1-combate') && !mt.sameSong('cap1-e0', 'cap1-e1')
+    && !mt.sameSong('cap1-e0-combate', 'cap1-e0-jefe'), 'mapa y combate de cada escenario son la misma canción; el jefe y el otro escenario no');
+  check(mt.exploreTheme(0, 1) === 'cap1-e1' && mt.combatTheme(0, false, [], 1) === 'cap1-e1-combate' && mt.combatTheme(0, true, [], 0) === 'cap1-e0-jefe',
+    'el Acto I ya usa la música de su escenario');
+  const motor = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
+  check(/sameSong\(/.test(motor) && /loopPosition\(/.test(motor), 'al pasar entre versiones de la misma canción, el audio sigue desde el mismo punto');
+  const juego = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  const combateUi = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/exploreTheme\(run\.capitulo, run\.escenario\)/.test(juego) && /combatTheme\(run\.capitulo, esJefe, defs, run\.escenario\)/.test(combateUi),
+    'el mapa y el combate piden la música de su escenario');
 }
 
 // ── Paladin: Holy Charge counts as both a Strike and a Defend ────────────────

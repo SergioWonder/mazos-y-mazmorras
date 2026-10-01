@@ -11,6 +11,7 @@ import { desenlaceCampana } from './core/escena-final.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
 import { audio } from './fx/audio.ts';
+import { exploreTheme } from './fx/music-tracks.ts';
 import { pantallaTitulo, type EleccionTitulo } from './ui/titulo.ts';
 import { pantallaMapa } from './ui/mapa.ts';
 import { pantallaCombate, caidaDelHeroe } from './ui/combate.ts';
@@ -83,7 +84,7 @@ async function juego() {
       document.body.dataset.capitulo = String(run.capitulo);
       document.body.dataset.escenario = String(run.escenario);
       fx.estiloAmbiente = cap.ambiente;
-      audio.musica(run.capitulo); // música de exploración del capítulo
+      audio.reproducirTema(exploreTheme(run.capitulo, run.escenario)); // the scenario's map version
 
       const nodo = await pantallaMapa(run, `${cap.subtitulo} · ${cap.nombre}`);
       nodo.visitado = true;

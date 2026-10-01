@@ -6,6 +6,9 @@ export interface MusicTrack {
   file: string;        // file name inside src/audio/
   loopSamples: number; // exact loop length in samples at 44.1 kHz
   introSamples?: number; // intro played once before the loop starts (samples at 44.1 kHz)
+  /** Tracks of one group with the same loopSamples are versions of one song (map and
+   *  combat): switching between them carries on from the same point of the loop. */
+  group?: string;
 }
 
 const SOURCE_RATE = 44100;
@@ -16,6 +19,13 @@ export const MP3_DELAY_SAMPLES = 1105;
 export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'menu': { file: 'menu.mp3', loopSamples: 3087000 },       // main theme (leitmotif), sample-based: 3/4, 108 BPM, 42 bars
   'cap1': { file: 'cap1.mp3', loopSamples: 3386880 },      // «Taberna y travesura»
+  // Act I, sample-based (scripts/musica/acto1-*): each scenario's song in two synced versions
+  'cap1-e0': { file: 'cap1-e0.mp3', loopSamples: 3528000, group: 'cap1-e0' },          // «Tambores en el valle», map
+  'cap1-e0-combate': { file: 'cap1-e0-combate.mp3', loopSamples: 3528000, group: 'cap1-e0' }, // same song, combat
+  'cap1-e0-jefe': { file: 'cap1-e0-jefe.mp3', loopSamples: 3704400 },                 // «El festín de Gorzug»
+  'cap1-e1': { file: 'cap1-e1.mp3', loopSamples: 3528000, group: 'cap1-e1' },          // «Bajo la posada vieja», map
+  'cap1-e1-combate': { file: 'cap1-e1-combate.mp3', loopSamples: 3528000, group: 'cap1-e1' }, // same song, combat
+  'cap1-e1-jefe': { file: 'cap1-e1-jefe.mp3', loopSamples: 3528000 },                 // «La función de medianoche» (Vexis)
   'cap1-jefe': { file: 'jefe1.mp3', loopSamples: 3024000 }, // «Señor de la guerra»
   'cap2': { file: 'cap2.mp3', loopSamples: 3256615 },      // «Marcha de los huesos»
   'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
@@ -25,9 +35,37 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
 };
 
 /** Theme of a combat: the Dungeon Master has his own track; the rest use the act's theme. */
-export function combatTheme(chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean }[]): string {
+export function combatTheme(
+  chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean }[], scenario = 0,
+  tracks: Record<string, MusicTrack> = MUSIC_TRACKS,
+): string {
   if (enemies.some((e) => e.dungeonMaster)) return 'dm';
-  return `cap${chapter + 1}${boss ? '-jefe' : ''}`;
+  const own = `cap${chapter + 1}-e${scenario}-${boss ? 'jefe' : 'combate'}`;
+  return tracks[own] ? own : `cap${chapter + 1}${boss ? '-jefe' : ''}`;
+}
+
+/** Map and events: the scenario's own exploration version, or the act's theme. */
+export function exploreTheme(chapter: number, scenario = 0, tracks: Record<string, MusicTrack> = MUSIC_TRACKS): string {
+  const own = `cap${chapter + 1}-e${scenario}`;
+  return tracks[own] ? own : `cap${chapter + 1}`;
+}
+
+/** Two different tracks that are versions of the same song (same group, same loop). */
+export function sameSong(a: string, b: string, tracks: Record<string, MusicTrack> = MUSIC_TRACKS): boolean {
+  const x = tracks[a], y = tracks[b];
+  return a !== b && !!x?.group && x.group === y?.group && x.loopSamples === y.loopSamples;
+}
+
+/**
+ * Where a looping source is inside its buffer (seconds) after playing `elapsed` seconds
+ * from `begin`, with the loop running from `start` to `end`. The same position, shifted
+ * by each buffer's own `start`, is where the other version of the song picks up.
+ */
+export function loopPosition(elapsed: number, begin: number, start: number, end: number): number {
+  const pos = begin + elapsed;
+  if (pos < end) return pos;
+  const span = end - start;
+  return start + ((pos - start) % span);
 }
 
 /**

@@ -116,6 +116,91 @@ class TestSampler(Fixture):
         self.assertGreater(first, second * 2)
 
 
+class TestAdvancedSfz(unittest.TestCase):
+    """The Sonatina-style features: CC1 dynamics crossfades, gain and filter on CC,
+    keyswitches, regions included inside a group, «first» triggers and vel2attack."""
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        os.makedirs(os.path.join(self.dir, 'inc'))
+        noise = np.random.default_rng(1).standard_normal(3 * SR).astype(np.float32) * 0.3
+        sf.write(os.path.join(self.dir, 'soft.wav'), sine(440, 1.0, 0.3), SR)
+        sf.write(os.path.join(self.dir, 'loud.wav'), sine(660, 1.0, 0.3), SR)
+        sf.write(os.path.join(self.dir, 'noise.wav'), noise, SR)
+        sf.write(os.path.join(self.dir, 'ks_a.wav'), sine(440, 1.0, 0.3), SR)
+        sf.write(os.path.join(self.dir, 'ks_b.wav'), sine(880, 1.0, 0.3), SR)
+        with open(os.path.join(self.dir, 'inc', 'layer.sfz'), 'w') as f:
+            f.write('<region> sample=$FILE lokey=60 hikey=72 pitch_keycenter=69\n')
+        with open(os.path.join(self.dir, 'xf.sfz'), 'w') as f:
+            f.write("""<control> set_cc1=64
+<group> amp_veltrack=0 xfout_locc1=0 xfout_hicc1=127 xf_cccurve=gain
+#define $FILE soft.wav
+#include "inc/layer.sfz"
+<group> amp_veltrack=0 xfin_locc1=0 xfin_hicc1=127 xf_cccurve=gain
+#define $FILE loud.wav
+#include "inc/layer.sfz"
+""")
+        with open(os.path.join(self.dir, 'cc.sfz'), 'w') as f:
+            f.write("""<control> set_cc1=127
+<group> amp_veltrack=0 gain_cc1=24 volume=-24 fil_type=lpf_2p cutoff=500 cutoff_cc1=4800 ampeg_attack=0.5 ampeg_vel2attack=-0.5
+<region> sample=noise.wav lokey=0 hikey=127 pitch_keycenter=60 trigger=first
+<region> sample=noise.wav lokey=0 hikey=127 pitch_keycenter=60 trigger=legato
+""")
+        with open(os.path.join(self.dir, 'ks.sfz'), 'w') as f:
+            f.write("""<group> sw_lokey=24 sw_hikey=25 sw_last=24 sw_default=24
+<region> sample=ks_a.wav lokey=60 hikey=72 pitch_keycenter=69
+<group> sw_lokey=24 sw_hikey=25 sw_last=25 sw_default=24
+<region> sample=ks_b.wav lokey=60 hikey=72 pitch_keycenter=69
+""")
+
+    def inst(self, name):
+        return sampler.Instrument(sfz.load(os.path.join(self.dir, name)), sr=SR)
+
+    def test_regions_included_inside_a_group_inherit_it(self):
+        regions = sfz.load(os.path.join(self.dir, 'xf.sfz')).regions
+        self.assertEqual(len(regions), 2)
+        self.assertEqual(regions[0].get('xfout_hicc1'), '127')
+        self.assertTrue(regions[1].sample_path.endswith('loud.wav'))
+
+    def test_cc1_crossfades_the_dynamic_layers(self):
+        inst = self.inst('xf.sfz')
+        quiet = inst.render_note(69, 100, 0.5, cc={1: 0})
+        loud = inst.render_note(69, 100, 0.5, cc={1: 127})
+        self.assertAlmostEqual(dominant_freq(quiet[:SR // 3]), 440, delta=5)
+        self.assertAlmostEqual(dominant_freq(loud[:SR // 3]), 660, delta=5)
+        both = inst.render_note(69, 100, 0.5)  # set_cc1=64: half of each
+        spec = np.abs(np.fft.rfft(both[:SR // 2, 0]))
+        f = np.fft.rfftfreq(SR // 2, 1 / SR)
+        self.assertGreater(spec[np.argmin(abs(f - 440))], spec.max() * 0.3)
+        self.assertGreater(spec[np.argmin(abs(f - 660))], spec.max() * 0.3)
+
+    def test_cc1_gain_filter_first_trigger_and_vel2attack(self):
+        inst = self.inst('cc.sfz')
+        full = inst.render_note(60, 127, 0.8, cc={1: 127})
+        soft = inst.render_note(60, 127, 0.8, cc={1: 20})
+        self.assertGreater(len(full), 0)  # «first» plays as a normal attack; «legato» is left out
+        rms = lambda x: float(np.sqrt(np.mean(x[SR // 4: SR // 2] ** 2)))
+        self.assertGreater(rms(full), rms(soft) * 4)  # gain_cc1: 24 dB of range
+        hf = lambda x: float(np.abs(np.fft.rfft(x[SR // 4: SR // 2, 0]))[3000:].sum() / np.abs(np.fft.rfft(x[SR // 4: SR // 2, 0])).sum())
+        self.assertGreater(hf(full), hf(soft) * 1.5)  # the filter opens with CC1
+        slow = inst.render_note(60, 1, 0.8, cc={1: 127})
+        self.assertGreater(np.abs(full[: SR // 40]).max(), np.abs(slow[: SR // 40]).max() * 3)  # vel2attack: faster when loud
+
+    def test_keyswitches_pick_the_articulation(self):
+        inst = self.inst('ks.sfz')
+        notes = [midi_io.Note(69, 100, 0.0, 0.4), midi_io.Note(25, 100, 0.5, 0.55), midi_io.Note(69, 100, 0.6, 1.0)]
+        out = inst.render_track(notes, 1.6)
+        self.assertAlmostEqual(dominant_freq(out[int(0.05 * SR): int(0.35 * SR)]), 440, delta=5)
+        self.assertAlmostEqual(dominant_freq(out[int(0.65 * SR): int(0.95 * SR)]), 880, delta=5)
+
+    def test_cc1_swell_moves_the_gain_of_held_notes(self):
+        inst = self.inst('cc.sfz')
+        note = [midi_io.Note(60, 127, 0.0, 2.0)]
+        out = inst.render_track(note, 2.5, cc={1: [(0.0, 20), (1.5, 127)]})
+        rms = lambda a, b: float(np.sqrt(np.mean(out[int(a * SR): int(b * SR)] ** 2)))
+        self.assertGreater(rms(1.5, 1.9), rms(0.5, 0.7) * 3)
+
+
 class TestMidi(unittest.TestCase):
     def test_roundtrip(self):
         import mido
@@ -159,10 +244,37 @@ class TestMix(unittest.TestCase):
         self.assertLess(gain(100), -20)    # two octaves below: about -24 dB (a 6 dB/oct filter gives -12)
         self.assertGreater(gain(1600), -1)  # two octaves above: untouched
 
+    def test_mp3_export_keeps_level_and_length(self):
+        import subprocess
+        tmp = tempfile.mkdtemp()
+        x = np.stack([sine(1000, 6, 0.5), sine(440, 6, 0.5)], axis=1)
+        mix.export_mp3(x, SR, os.path.join(tmp, 'x.mp3'))
+        subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', os.path.join(tmp, 'x.mp3'), os.path.join(tmp, 'y.wav')], check=True)
+        y, _ = sf.read(os.path.join(tmp, 'y.wav'))
+        self.assertEqual(len(y), len(x))  # the loop length survives (LAME gapless header)
+        gain = 20 * np.log10(np.sqrt(np.mean(y[SR:-SR] ** 2)) / np.sqrt(np.mean(x[SR:-SR] ** 2)))
+        self.assertLess(abs(gain), 0.05)  # CBR 192k used to lose 0.264 dB
+
     def test_mp3_export(self):
         path = os.path.join(tempfile.mkdtemp(), 'x.mp3')
         mix.export_mp3(np.stack([sine(220, 1, 0.3)] * 2, axis=1), SR, path)
         self.assertGreater(os.path.getsize(path), 5000)
+
+
+class TestConfig(unittest.TestCase):
+    def test_libraries_live_in_several_roots(self):
+        from estudio import config
+        a, b = tempfile.mkdtemp(), tempfile.mkdtemp()
+        os.makedirs(os.path.join(b, 'VCSL'))
+        roots = config.roots(f'{a}{os.pathsep}{b}')
+        self.assertEqual(roots, [a, b])
+        self.assertEqual(config.library('VCSL', 'x.sfz', roots=roots), os.path.join(b, 'VCSL', 'x.sfz'))
+        # unknown library: the first root, so the error names a sensible place
+        self.assertEqual(config.library('Nope', roots=roots), os.path.join(a, 'Nope'))
+
+    def test_default_roots_include_the_external_disk(self):
+        from estudio import config
+        self.assertIn('/Volumes/Base/audio-samples', config.roots(None))
 
 
 class TestRender(Fixture):

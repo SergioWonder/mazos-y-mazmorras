@@ -14,17 +14,26 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 | Fichero     | Tema | Carácter |
 |-------------|------|----------|
 | `menu.mp3`  | Tema principal | Orquesta de cámara con samples reales (VSCO 2): vals de aventura en re mayor, 3/4 a 108; trompa, maderas, cuerdas y arpa. Hecho con el estudio de `scripts/musica/estudio/` |
-| `cap1.mp3`  | Acto I: Asentamiento Ogro y Contrabandistas | «Taberna y travesura», giga pícara en 6/8 |
-| `jefe1.mp3` | Jefes del acto I | «Señor de la guerra», épica orquestal en re menor |
+| `cap1-e0.mp3` / `cap1-e0-combate.mp3` | Acto I, Asentamiento Ogro (mapa / combate) | «Tambores en el valle»: marcha en mi menor con color frigio a 132; la misma canción en dos versiones sincronizadas |
+| `cap1-e0-jefe.mp3` | Jefe Gorzug | «El festín de Gorzug»: re menor a 160 en 3+3+2; el tema se va devorando a mordiscos |
+| `cap1-e1.mp3` / `cap1-e1-combate.mp3` | Acto I, Contrabandistas (mapa / combate) | «Bajo la posada vieja»: saloma en 6/8, sol dórico; ocarina, armónica, piano de taberna; giga en combate |
+| `cap1-e1-jefe.mp3` | Jefe Vexis | «La función de medianoche»: el vals del menú robado, do♯ menor a 180, circo macabro |
+| `cap1.mp3`  | (respaldo del Acto I) | «Taberna y travesura», giga pícara en 6/8 (sintetizada) |
+| `jefe1.mp3` | (respaldo de jefes del Acto I) | «Señor de la guerra», épica orquestal en re menor (sintetizada) |
 | `cap2.mp3`  | Acto II: La Cripta y El Templo Oscuro | «Marcha de los huesos», misterio travieso en re dórico |
 | `jefe2.mp3` | Jefes del acto II | «Presagio», tensión ritual en mi frigio |
 | `cap3.mp3`  | Acto III: Guarida del Dragón y Laberinto | «Brasas y locura», amenaza sombría en mi frigio a 90 BPM, con el leitmotiv como eco lúgubre |
 | `jefe3.mp3` | Jefes del acto III | Combate final, la pista más épica |
 | `dm.mp3`    | El Dungeon Master | «Behind the Screen», metalcore progresivo instrumental en sol menor a 140 BPM; su intro suena una vez y queda fuera del bucle |
 
-El tema del menú ya sale del **estudio con samples** (`scripts/musica/estudio/`, ver su README):
+En cada escenario con música propia, el mapa y el combate son **dos versiones de la misma canción**
+(mismo `group` y `loopSamples` en `src/fx/music-tracks.ts`): al cambiar de una a otra el juego sigue
+desde el mismo punto del bucle con un fundido cruzado de 1,6 s. Sin pista propia, suena la del acto.
+
+El tema del menú y el Acto I ya salen del **estudio con samples** (`scripts/musica/estudio/`, ver su README):
 `scripts/musica/menu/compose.py` genera el MIDI y `scripts/musica/menu/mix.py` lo renderiza a
-192 kbps. Las demás pistas siguen siendo las sintetizadas, a 160 kbps. Los scripts de las sintetizadas
+MP3 VBR de calidad 2 (mantiene el nivel exacto). Las pistas `acto1-*` siguen el mismo esquema en
+`scripts/musica/acto1-*/`. Las demás pistas siguen siendo las sintetizadas, a 160 kbps. Los scripts de las sintetizadas
 están en `scripts/musica/<pista>/` y solo necesitan Python 3, numpy y ffmpeg: por
 ejemplo, `python3 scripts/musica/acto2/cap2.py` deja `cap2.mp3` junto al script. Para
 publicarla, cópiala aquí (Vite le pone un hash en el nombre, así que la caché del juego la renueva) y, si cambió su duración, actualiza `loopSamples` en

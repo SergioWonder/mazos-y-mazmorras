@@ -12,9 +12,18 @@ brief (docs/musica/<pista>.md)  →  compose.py → build/<pista>.mid  →  mix.
 
 - Python 3.12 en `scripts/musica/estudio/.venv` (no se versiona). Recrearlo:
   `/opt/homebrew/bin/python3.12 -m venv scripts/musica/estudio/.venv && scripts/musica/estudio/.venv/bin/pip install -r scripts/musica/estudio/requirements.txt`
-- Samples fuera del repo, en `~/WonderBits/personal/audio-samples/` (cambiable con la variable
-  `DRACS_SAMPLES`). Hoy: **VSCO 2 Community Edition** (CC0), rama `SFZ` de
-  `github.com/sgossner/VSCO-2-CE`. Catálogo con rangos: [INSTRUMENTOS.md](INSTRUMENTOS.md).
+- Samples fuera del repo, repartidos en varias carpetas (`config.DEFAULT_ROOTS`; se cambian con
+  `DRACS_SAMPLES=carpeta1:carpeta2`). `config.library('<biblioteca>', ...)` busca cada biblioteca en
+  la primera carpeta que la tenga:
+  - `~/WonderBits/personal/audio-samples/`: **VSCO 2 Community Edition** (CC0), rama `SFZ` de
+    `github.com/sgossner/VSCO-2-CE`.
+  - `/Volumes/Base/audio-samples/` (disco externo **Base**; tiene que estar montado para renderizar):
+    **VCSL** (CC0, `github.com/sgossner/VCSL`: piano de taberna, clave, flautas dulces, armónica,
+    arpa folk, yunque, matraca, flexatón, copas…) y **Sonatina Symphonic Orchestra**
+    (Creative Commons Sampling Plus 1.0, `github.com/peastman/sso`: coro, celesta, cuerdas con col
+    legno y armónicos, metales con marcato…).
+- Catálogo con rangos y cómo se controla la dinámica de cada instrumento: [INSTRUMENTOS.md](INSTRUMENTOS.md),
+  que regenera `catalogo.py`.
 - `ffmpeg` con `libmp3lame` para exportar.
 - Tests: `scripts/musica/estudio/.venv/bin/python -m unittest discover scripts/musica/estudio/tests`
 
@@ -23,7 +32,7 @@ brief (docs/musica/<pista>.md)  →  compose.py → build/<pista>.mid  →  mix.
 | Módulo | Qué hace |
 |---|---|
 | `sfz.py` | Lee `.sfz`: cabeceras, herencia de opcodes, `#define`, `#include`, nombres de nota |
-| `sampler.py` | Reproduce regiones por nota, velocidad y round robin; transposición, bucles, envolvente ADSR, samples de release, curva de CC11/CC1 |
+| `sampler.py` | Reproduce todas las regiones que tocan a cada nota (velocidad, round robin, aleatorio, keyswitch y cruces por controlador); transposición, bucles, filtro paso bajo, envolvente ADSR con `vel2*`, samples de release; dinámica por CC1 al estilo Sonatina (`gain_cc`, `xfin`/`xfout`, `cutoff_cc`, también durante la nota) y CC11 como volumen general |
 | `midi_io.py` | MIDI multipista → notas y curvas de controlador en segundos (respeta cambios de tempo) |
 | `mix.py` | Buses (paso alto Butterworth de 12 dB/oct, estanterías, picos, compresión), sala de convolución, sonoridad (LUFS), limitador true-peak, bucle perfecto, MP3, medidas por bandas |
 | `render.py` | `MixSpec` + `render()`: MIDI → instrumentos → buses → sala → máster → bucle → MP3, con informe de medidas |

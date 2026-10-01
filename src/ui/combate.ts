@@ -75,7 +75,7 @@ export function pantallaCombate(
     app.innerHTML = '';
     app.className = `pantalla-combate ${esJefe ? 'combate-jefe' : ''}`;
     fx.ambiente(true);
-    audio.reproducirTema(combatTheme(run.capitulo, esJefe, defs)); // act theme, boss theme or the DM's own track
+    audio.reproducirTema(combatTheme(run.capitulo, esJefe, defs, run.escenario)); // scenario combat version, boss or the DM
 
     // ── Estructura ──────────────────────────────────────────────────────────
     const raiz = el('div', 'combate');

@@ -1,4 +1,7 @@
-import { MUSIC_TRACKS, loopWindow } from './music-tracks.ts';
+import { MUSIC_TRACKS, loopPosition, loopWindow, sameSong } from './music-tracks.ts';
+
+/** Crossfade between the map and combat versions of a song (seconds). */
+const CRUCE_VERSIONES = 1.6;
 import { SFX_RECIPE_ALIAS, groupSfxFiles, pickVariant, playbackJitter, resolveSfx } from './sfx-bank.ts';
 import { ajustes, alCambiarAjustes, gananciaMusica, gananciaSfx, type Ajustes } from '../core/ajustes.ts';
 
@@ -166,6 +169,8 @@ class MotorAudio {
 
   private fuente: AudioBufferSourceNode | null = null; // current soundtrack track
   private volPista: GainNode | null = null;
+  /** When and where the current source started, to know where its loop is now. */
+  private reloj: { t0: number; begin: number; start: number; end: number } | null = null;
   private buffers = new Map<string, Promise<AudioBuffer>>();
   private generacion = 0; // discards loads for a theme that is no longer playing
   private temporizadorMusica: number | null = null;
@@ -311,6 +316,11 @@ class MotorAudio {
   reproducirTema(id: string) {
     this.engancharVisibilidad();
     if (this.temaActual === id && this.sonando) return;
+    // the other version of the same song (map ↔ combat): carry on from the same point
+    if (this.temaActual && this.sonando && this.fuente && this.ctx?.state === 'running' && sameSong(this.temaActual, id)) {
+      this.cruzarVersion(id);
+      return;
+    }
     this.temaActual = id;
     this.desbloquear();
     if (!this.ctx) return;
@@ -342,7 +352,49 @@ class MotorAudio {
     }
     this.fuente = null;
     this.volPista = null;
+    this.reloj = null;
     this.sonando = false;
+  }
+
+  /** Crossfades into another version of the playing song at the same point of its loop. */
+  private cruzarVersion(id: string) {
+    const ctx = this.ctx!;
+    const pista = MUSIC_TRACKS[id];
+    this.temaActual = id;
+    const gen = ++this.generacion;
+    this.cargarPista(pista.file).then((buf) => {
+      if (gen !== this.generacion || !this.ctx || !this.fuente || !this.volPista || !this.reloj) return;
+      const ahora = ctx.currentTime;
+      const viejo = this.reloj;
+      const pos = loopPosition(ahora - viejo.t0, viejo.begin, viejo.start, viejo.end);
+      const { start, end } = loopWindow(buf.duration, pista.loopSamples, pista.introSamples);
+      const offset = pos < viejo.start ? pos : start + (pos - viejo.start);
+      // the old version fades out while the new one fades in from the same bar
+      this.volPista.gain.cancelScheduledValues(ahora);
+      this.volPista.gain.setValueAtTime(this.volPista.gain.value, ahora);
+      this.volPista.gain.linearRampToValueAtTime(0, ahora + CRUCE_VERSIONES);
+      this.fuente.stop(ahora + CRUCE_VERSIONES + 0.05);
+      const fuente = ctx.createBufferSource();
+      fuente.buffer = buf;
+      fuente.loop = true;
+      fuente.loopStart = start;
+      fuente.loopEnd = end;
+      const vol = ctx.createGain();
+      vol.gain.setValueAtTime(0, ahora);
+      vol.gain.linearRampToValueAtTime(1.2, ahora + CRUCE_VERSIONES);
+      fuente.connect(vol).connect(this.busMusica);
+      fuente.start(ahora, offset);
+      this.fuente = fuente;
+      this.volPista = vol;
+      this.reloj = { t0: ahora, begin: offset, start, end };
+    }).catch(() => { /* the version failed to load: the current one keeps playing */ });
+  }
+
+  /** Decodes the other versions of a song in advance, so switching is instant. */
+  private precargarVersiones(id: string) {
+    for (const otra of Object.keys(MUSIC_TRACKS)) {
+      if (sameSong(id, otra)) void this.cargarPista(MUSIC_TRACKS[otra].file).catch(() => {});
+    }
   }
 
   private arrancarTema(id: string) {
@@ -372,6 +424,8 @@ class MotorAudio {
       fuente.start(t, begin); // the intro (if any) plays once, then the loop repeats
       this.fuente = fuente;
       this.volPista = vol;
+      this.reloj = { t0: t, begin, start, end };
+      this.precargarVersiones(id);
     }).catch(() => {
       if (gen === this.generacion) this.chiptune(tema);
     });
