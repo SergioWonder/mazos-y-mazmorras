@@ -1831,14 +1831,15 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'estrellas',
-    texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel.',
+    exhumar: true, // the price of a free recovery: Arcane Sacrifice pays in HP instead
+    texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel. Se agota.',
     jugar: async (c) => {
       const nivel = await c.recuperarConjuro(true);
       if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
       coste: 0,
-      texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel.',
+      texto: 'Recupera el espacio de conjuro gastado\nde MAYOR nivel. Se agota.',
     },
   },
   {

@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-10-01)
 
 ## Corpus Check
-- 202 files · ~1,126,958 words
+- 203 files · ~1,135,394 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4731 nodes · 11576 edges · 140 communities (132 shown, 8 thin omitted)
+- 4752 nodes · 11596 edges · 148 communities (138 shown, 10 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 554 edges (avg confidence: 0.79)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8bdcaba8`
+- Built from commit: `c695c2de`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -119,6 +119,7 @@
 - [[_COMMUNITY_Community 102|Community 102]]
 - [[_COMMUNITY_Community 103|Community 103]]
 - [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
 - [[_COMMUNITY_Community 106|Community 106]]
 - [[_COMMUNITY_Community 107|Community 107]]
 - [[_COMMUNITY_Community 108|Community 108]]
@@ -150,7 +151,14 @@
 - [[_COMMUNITY_Community 137|Community 137]]
 - [[_COMMUNITY_Community 138|Community 138]]
 - [[_COMMUNITY_Community 139|Community 139]]
+- [[_COMMUNITY_Community 140|Community 140]]
 - [[_COMMUNITY_Community 141|Community 141]]
+- [[_COMMUNITY_Community 142|Community 142]]
+- [[_COMMUNITY_Community 143|Community 143]]
+- [[_COMMUNITY_Community 144|Community 144]]
+- [[_COMMUNITY_Community 145|Community 145]]
+- [[_COMMUNITY_Community 146|Community 146]]
+- [[_COMMUNITY_Community 147|Community 147]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `span()` - 108 edges
@@ -171,10 +179,10 @@
   src/core/cartas.ts → README.md
 - `GOBLIN_FAMELICO` --conceptually_related_to--> `Intención enemiga`  [INFERRED]
   src/core/enemigos.ts → README.md
+- `rehidratarRun()` --conceptually_related_to--> `PWA jugable sin conexión`  [INFERRED]
+  src/core/guardado.ts → README.md
 - `generarMapa()` --implements--> `Mapa de 10 filas por capítulo`  [INFERRED]
   src/core/mapa.ts → README.md
-- `SELLO_PACTO` --implements--> `Condena (ejecuta al igualar los PV actuales)`  [INFERRED]
-  src/core/reliquias.ts → README.md
 
 ## Import Cycles
 - None detected.
@@ -186,11 +194,11 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (140 total, 8 thin omitted)
+## Communities (148 total, 10 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.03
-Nodes (76): ACOLITO_VELADO, ACTOS, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, Capitulo (+68 more)
+Nodes (78): ACOLITO_VELADO, AZOTAMENTES, AZOTAMENTES_ANCIANO, BANDIDO_BALLESTERO, CABALLERO_TUMBARIO, CAPITAN_BANDIDO, CEREBRO_ANCIANO, CUBO_GELATINOSO (+70 more)
 
 ### Community 1 - "Persistencia y partículas"
 Cohesion: 0.05
@@ -201,36 +209,36 @@ Cohesion: 0.05
 Nodes (64): banner(), bone_pile(), bonfire(), box_mean(), brazier(), build_svg(), cauldron(), chief_tent() (+56 more)
 
 ### Community 3 - "Actos, mapa y guardado"
-Cohesion: 0.16
-Nodes (24): bridge(), codetta(), glass(), intro(), Note, P(), Consecutive notes from (bar, beat): items = [(pitch | None for a rest, beats)]., Sustained chords [(bar, beat, [pitches], beats)], back to back. Common tones are (+16 more)
+Cohesion: 0.09
+Nodes (50): bar_of(), bridge(), build(), check_ranges(), codetta(), dynamics(), glass(), intro() (+42 more)
 
 ### Community 4 - "Audio y música"
-Cohesion: 0.12
-Nodes (4): gananciaMusica(), gananciaSfx(), MotorAudio, sameSong()
+Cohesion: 0.13
+Nodes (3): gananciaMusica(), gananciaSfx(), MotorAudio
 
 ### Community 5 - "Combate: turnos e invocaciones"
 Cohesion: 0.08
 Nodes (40): arc(), bone(), box(), cofre_contemplador(), cofre_dragon(), cofre_ogro(), coin(), combate_contemplador() (+32 more)
 
 ### Community 6 - "Renderizado de cartas"
-Cohesion: 0.06
-Nodes (49): Action, ACTION_DURATION, ActionProgress, ActionType, activeAction(), applyMatrix(), BONE_ORDER, BoneId (+41 more)
+Cohesion: 0.07
+Nodes (41): Action, ActionProgress, ActionType, activeAction(), applyMatrix(), BONE_ORDER, BoneId, DEFAULT_PIVOTS (+33 more)
 
 ### Community 7 - "Dado 3D en WebGL"
 Cohesion: 0.12
 Nodes (55): validateChains(), rigOf(), ACTION_DURATION, CHAIN_BONES, ChainSlot, defaultImpact(), puppetImpact(), puppetPose() (+47 more)
 
 ### Community 8 - "Community 8"
-Cohesion: 0.13
-Nodes (25): advantageLanes(), compensationFor(), cross(), d20Geometry, DEFAULT_BOX, dot(), mulberry32(), norm() (+17 more)
+Cohesion: 0.11
+Nodes (31): advantageLanes(), compensationFor(), cross(), d20Geometry, d20Numbering(), DEFAULT_BOX, dot(), faceOfNumber() (+23 more)
 
 ### Community 9 - "Configuración de TypeScript"
 Cohesion: 0.12
 Nodes (16): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, module, moduleDetection, moduleResolution, noEmit (+8 more)
 
 ### Community 10 - "Cartas: registro y Explosión"
-Cohesion: 0.06
-Nodes (47): rigidJoints(), BossExtras, actionHold(), ActionProgress, ALL_CHAIN_BONES, applyMatrix(), BONE_ORDER, boneParent() (+39 more)
+Cohesion: 0.08
+Nodes (40): angleBetween(), CHAIN_DEFAULTS, ChainRun, constrain(), Pt, rigidJoints(), RigidSampler, stepChains() (+32 more)
 
 ### Community 11 - "Dependencias y scripts npm"
 Cohesion: 0.15
@@ -242,7 +250,7 @@ Nodes (16): compilerOptions, allowImportingTsExtensions, isolatedModules, lib, m
 
 ### Community 13 - "Community 13"
 Cohesion: 0.14
-Nodes (16): ENEMY_RIGS, INVOCATION_RIGS, ActionType, captureAction(), CaptureOptions, post(), rasterSvg(), GalleryCard (+8 more)
+Nodes (16): INVOCATION_RIGS, ActionType, captureAction(), CaptureOptions, post(), rasterSvg(), GalleryCard, galleryCatalogue() (+8 more)
 
 ### Community 14 - "Community 14"
 Cohesion: 0.22
@@ -257,16 +265,16 @@ Cohesion: 0.08
 Nodes (50): additive(), analyze(), bell(), brass_note(), celesta_note(), choir_note(), cymbal(), db() (+42 more)
 
 ### Community 17 - "Motor de partículas"
-Cohesion: 0.13
-Nodes (17): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de OpenGameArt, Efectos de sonido sintetizados (Web Audio API, sin ficheros), Capa, RECETAS, SFX_FILES, TemaChip, TEMAS (+9 more)
+Cohesion: 0.09
+Nodes (25): Loop chiptune procedural de respaldo, Música 8-bit con pistas CC0 de OpenGameArt, Efectos de sonido sintetizados (Web Audio API, sin ficheros), Capa, RECETAS, SFX_FILES, TemaChip, TEMAS (+17 more)
 
 ### Community 18 - "Community 18"
-Cohesion: 0.17
-Nodes (64): almaCuchillas(), angelPrelude(), angelVengador(), bendicionCelestial(), bolt(), burst(), clarividencia(), cloud() (+56 more)
+Cohesion: 0.09
+Nodes (102): almaCuchillas(), ANCIENT, angelPrelude(), angelVengador(), ARCANE, bendicionCelestial(), BLOOD, bolt() (+94 more)
 
 ### Community 19 - "Community 19"
 Cohesion: 0.05
-Nodes (46): BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, preludeKey(), DeathCue, DeathCueId (+38 more)
+Nodes (44): PrevisionAtaque, BackdropShape, backgroundTheme(), sceneBackground, SCENES, THEMES, preludeKey(), rodarDado() (+36 more)
 
 ### Community 20 - "Skill /editar-carta"
 Cohesion: 0.33
@@ -281,16 +289,16 @@ Cohesion: 0.33
 Nodes (4): Cambiar o ampliar pistas, Efectos de sonido, Música y sonido, Pistas usadas (todas CC0 / dominio público)
 
 ### Community 23 - "Community 23"
-Cohesion: 0.07
-Nodes (20): Combate, esDungeonMaster(), crearEnemigo(), SELLO_PACTO, CartaInstancia, EnemigoCombate, EstadoId, JugadorCombate (+12 more)
+Cohesion: 0.08
+Nodes (19): Combate, esDungeonMaster(), crearEnemigo(), SELLO_PACTO, CartaInstancia, EnemigoCombate, EstadoId, Luchador (+11 more)
 
 ### Community 26 - "Configuración de Vite y PWA"
 Cohesion: 0.08
-Nodes (37): finalVerdaderoDesbloqueado(), ChangelogEntry, isMajorUpgrade(), majorChangelog(), majorOf(), shouldNotifyMajor(), Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG (+29 more)
+Nodes (40): ChangelogEntry, isMajorUpgrade(), majorChangelog(), majorOf(), shouldNotifyMajor(), PWA jugable sin conexión, Skill /release (versión + changelog + push a main), Ventana de novedades alimentada por CHANGELOG (+32 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.05
-Nodes (23): CELL_TRI, COLOR_CRITICO, COLOR_NORMAL, COLOR_PIFIA, COLOR_TENUE, compile(), DebugOptions, escala() (+15 more)
+Nodes (21): CELL_TRI, COLOR_CRITICO, COLOR_NORMAL, COLOR_PIFIA, COLOR_TENUE, compile(), DebugOptions, escala() (+13 more)
 
 ### Community 29 - "Community 29"
 Cohesion: 0.25
@@ -357,12 +365,12 @@ Cohesion: 0.08
 Nodes (133): abisal(), aliento(), aullido(), barajar(), bell_modes(), bendicion(), bloqueo(), bubble() (+125 more)
 
 ### Community 45 - "Community 45"
-Cohesion: 0.05
-Nodes (58): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), BackdropTheme, ChainState, createChainState() (+50 more)
+Cohesion: 0.10
+Nodes (33): AnimFrame, Ghost, PuppetAnimator, rigSmears(), smearBonesOf(), ChainState, createChainState(), FlameAnchor (+25 more)
 
 ### Community 46 - "Community 46"
 Cohesion: 0.06
-Nodes (59): cartaPorId(), CARTAS_RETIRADAS, desenlaceCampana, borrarGuardado(), cargarRun(), guardarRun(), hayGuardado(), rehidratarRun() (+51 more)
+Nodes (67): cartaPorId(), CARTAS_RETIRADAS, desenlaceCampana, borrarGuardado(), cargarRun(), Guardado, guardarRun(), hayGuardado() (+59 more)
 
 ### Community 47 - "Community 47"
 Cohesion: 0.10
@@ -385,16 +393,16 @@ Cohesion: 0.10
 Nodes (20): bloom(), blur(), _box_mean(), brush_texture(), fractal_noise(), kuwahara(), mockup(), painterly_warp() (+12 more)
 
 ### Community 52 - "Community 52"
-Cohesion: 0.05
-Nodes (51): ANCIENT, ARCANE, BLOOD, BurstOpts, CARD_FX, cardSpellKey(), chain(), d20() (+43 more)
+Cohesion: 0.21
+Nodes (11): CARD_FX, cardSpellKey(), hitSpell(), SPELLS, BASIC, cardSequences(), EXCLUDED_CARDS, PRODIGIOUS_THRESHOLDS (+3 more)
 
 ### Community 53 - "Community 53"
 Cohesion: 0.12
 Nodes (19): bass_clarinet(), bone_xylo(), choir_ooh(), finish(), marimba(), _modal(), muffled_tamb(), organ() (+11 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.07
-Nodes (43): poolDeClase(), recompensaCartas(), Presentador, CONTEMPLADOR, GOBLIN_ARQUERO, reliquiaInicial(), crearRng(), nuevaRun() (+35 more)
+Cohesion: 0.06
+Nodes (49): poolDeClase(), recompensaCartas(), Presentador, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), CONTEMPLADOR, GOBLIN_CORTADOR (+41 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.27
@@ -413,20 +421,16 @@ Cohesion: 0.12
 Nodes (32): barge(), barrel_side(), barrel_top(), boathouse(), build(), cargo_pile(), cellars(), crate() (+24 more)
 
 ### Community 59 - "Community 59"
-Cohesion: 0.05
-Nodes (58): defDe(), esFamilia(), TipoCarta, Convención: el texto de la carta debe cuadrar con su efecto, CARD_GLOW, CLASS_GLOW, FULL_ART, hasFullArt() (+50 more)
+Cohesion: 0.07
+Nodes (37): defDe(), esFamilia(), TipoCarta, Convención: el texto de la carta debe cuadrar con su efecto, CARD_GLOW, CLASS_GLOW, FULL_ART, hasFullArt() (+29 more)
 
 ### Community 60 - "Community 60"
 Cohesion: 0.09
 Nodes (24): cymbal_roll(), dark_bell(), drone(), harmonics(), lib_note(), muffled_taiko(), piccolo(), Extensions for the Act III track: bridges the two approved synths and adds timpa (+16 more)
 
-### Community 61 - "Community 61"
-Cohesion: 0.12
-Nodes (7): ActionQueue, ActionQueueHooks, CardAction, CardCheckEnv, checkCardAction(), forecastEnergy(), Verdict
-
 ### Community 64 - "Community 64"
-Cohesion: 0.03
-Nodes (85): strandShapes(), Ease, pulse(), shake(), strikeKeys(), StrikeSpec, Keyframe, PartialPose (+77 more)
+Cohesion: 0.05
+Nodes (45): strandShapes(), slitEye(), AGUILA_RIG, ANTLER_BEADS, BEAR_CHAINS, BEAR_FALLEN, BELT_CHARM, CAPE_BACK (+37 more)
 
 ### Community 65 - "Community 65"
 Cohesion: 0.48
@@ -437,8 +441,8 @@ Cohesion: 0.60
 Nodes (5): bar_t(), build_parts(), melody_events(), Act II normal combat: "Marcha de los huesos" (La Cripta / El Templo Oscuro).  Sp, section()
 
 ### Community 67 - "Community 67"
-Cohesion: 0.07
-Nodes (31): cardShake(), volleyTiming(), ParticleRendererGL, SHAPE_CODE, AmbientPreset, AMBIENTS, AmbientStyle, between() (+23 more)
+Cohesion: 0.06
+Nodes (31): cardShake(), volleyTiming(), ParticleRendererGL, AmbientPreset, AMBIENTS, AmbientStyle, between(), EffectPreset (+23 more)
 
 ### Community 68 - "Community 68"
 Cohesion: 0.40
@@ -458,15 +462,15 @@ Nodes (43): additive(), analyze(), bell(), brass_note(), choir_note(), cymbal(),
 
 ### Community 75 - "Community 75"
 Cohesion: 0.04
-Nodes (80): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion (+72 more)
+Nodes (75): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos(), especial(), OfertaBendicion (+67 more)
 
 ### Community 76 - "Community 76"
 Cohesion: 0.08
-Nodes (55): burn(), BurnPose, burnSolo(), cardClone(), flyDiscard(), flyDraw(), flyExhaust(), flyPlay() (+47 more)
+Nodes (56): menosParticulas(), burn(), BurnPose, burnSolo(), cardClone(), flyDiscard(), flyDraw(), flyExhaust() (+48 more)
 
 ### Community 77 - "Community 77"
-Cohesion: 0.20
-Nodes (23): bar_of(), build(), check_ranges(), main(), name_of(), new_parts(), parallels(), Part (+15 more)
+Cohesion: 0.09
+Nodes (20): BackdropTheme, SHAPE_CODE, SpriteBatchGL, EYES, BONE_INDEX, FLAG, hexRgb(), lighten() (+12 more)
 
 ### Community 78 - "Community 78"
 Cohesion: 0.14
@@ -477,12 +481,12 @@ Cohesion: 0.12
 Nodes (28): backbeat(), band_levels(), Buf, build_intro(), build_loop(), delay(), duck_env(), eighths() (+20 more)
 
 ### Community 80 - "Community 80"
-Cohesion: 0.11
-Nodes (43): bar_of(), bridge(), build(), codetta(), intro(), main(), name_of(), new_parts() (+35 more)
+Cohesion: 0.19
+Nodes (24): bar_of(), build(), main(), name_of(), new_parts(), Note, notes_in(), parallels() (+16 more)
 
 ### Community 81 - "Community 81"
-Cohesion: 0.26
-Nodes (10): DatosCaida, elegirEpitafio(), EPITAFIOS, lapida, NOMBRE_CLASE, pick(), plural(), escape() (+2 more)
+Cohesion: 0.18
+Nodes (15): DatosCaida, elegirEpitafio(), EPITAFIOS, lapida, NOMBRE_CLASE, pick(), plural(), ACTION_DURATION (+7 more)
 
 ### Community 82 - "Community 82"
 Cohesion: 0.29
@@ -493,20 +497,20 @@ Cohesion: 0.14
 Nodes (24): beholder(), build(), compass_eye(), crystal(), crystals(), escher_stairs(), eyes_along(), iso() (+16 more)
 
 ### Community 84 - "Community 84"
-Cohesion: 0.05
-Nodes (53): FX_CASTIGO, PrevisionAtaque, crearEspacios(), ORDEN_NIVELES, piramideConjuros(), AlmacenSimple, DiaAgenda, DIAS_AGENDA (+45 more)
+Cohesion: 0.09
+Nodes (34): FX_CASTIGO, CartaDef, CartaJugada, CastigoPreparado, ContextoEfecto, DiceTheme, EfectoConjuro, EfectoInvocacion (+26 more)
 
 ### Community 85 - "Community 85"
 Cohesion: 0.04
-Nodes (67): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+59 more)
+Nodes (66): BARBARO, BASICAS, BRUJO, cargaProyectil(), CONJURO_PRODIGIOSO, DAGA, danoExplosion(), DEFENSA_SAGRADA (+58 more)
 
 ### Community 86 - "Community 86"
 Cohesion: 0.26
-Nodes (15): almaHeroe(), DEATH_SPELLS, mix(), muerteBarbaro(), muerteBrujo(), muerteDruida(), muerteMago(), muertePaladin() (+7 more)
+Nodes (16): almaHeroe(), DEATH_SPELLS, mix(), muerteBarbaro(), muerteBrujo(), muerteDruida(), muerteMago(), muertePaladin() (+8 more)
 
 ### Community 87 - "Community 87"
-Cohesion: 0.13
-Nodes (20): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), offset_line(), pine() (+12 more)
+Cohesion: 0.15
+Nodes (17): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), pine(), A random angular rune glyph inside an s x 1.4s cell centred on (x, y). (+9 more)
 
 ### Community 89 - "Community 89"
 Cohesion: 0.07
@@ -521,32 +525,32 @@ Cohesion: 0.23
 Nodes (5): hexc(), neatline(), Double map border with alternating graduated blocks., scale_bar(), Sketch
 
 ### Community 92 - "Community 92"
-Cohesion: 0.11
-Nodes (61): ParticleShape, abisal(), aliento(), Anchor, aullido(), BANISH, bendicion(), BLIND (+53 more)
+Cohesion: 0.10
+Nodes (62): ParticleShape, abisal(), aliento(), Anchor, aullido(), BANISH, bendicion(), BLIND (+54 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.22
-Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
+Cohesion: 0.24
+Nodes (7): broadleaf(), cartouche(), compass_rose(), crossbones(), eye_glyph(), A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Ornamental scroll cartouche with illegible lettering.
 
 ### Community 94 - "Community 94"
 Cohesion: 0.22
 Nodes (5): densify(), Plan, Dungeon-style floor plan: rooms and tunnels with solid walls, rock hatching outs, Wall points with outward normals., SVG elements for every floor piece grown by `grow` px, filled/stroked with col.
 
 ### Community 95 - "Community 95"
-Cohesion: 0.29
-Nodes (4): paint(), spellFrame(), spellMarks(), SpellSystem
+Cohesion: 0.09
+Nodes (33): ACTOS, Capitulo, elegirEvento(), fx, Eventos narrativos, bossIconFor(), hasMapIcon(), MAP_EXTRA_ICONS (+25 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.18
-Nodes (10): broadleaf(), dagger(), eye_glyph(), group(), mockup(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Review mock-up with node markers where the UI draws them (not delivered).      t (+2 more)
+Cohesion: 0.40
+Nodes (5): dagger(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 97 - "Community 97"
 Cohesion: 0.10
 Nodes (12): bar_of(), cc_at(), cymbal_peak_seconds(), half(), MenuBrasasScore, phrase(), Acceptance tests for the main-menu theme «Brasas» (docs/musica/menu-brasas.md)., Dynamic level on the section-7 scale (0 = pp floor … 5 = f ceiling). (+4 more)
 
 ### Community 98 - "Community 98"
-Cohesion: 0.10
-Nodes (24): BODY, centreOf(), clamp01(), CORE, cycleOf(), DIRS, EMBER, FLAME_PALETTES (+16 more)
+Cohesion: 0.09
+Nodes (27): BODY, centreOf(), clamp01(), CORE, cycleOf(), DIRS, EMBER, FLAME_PALETTES (+19 more)
 
 ### Community 99 - "Community 99"
 Cohesion: 0.08
@@ -561,20 +565,24 @@ Cohesion: 0.12
 Nodes (25): boss_crypt(), boss_temple(), crypt(), Act II sketches on leitmotif 7 «Sombra»: La Cripta (from the horror sketch, with, El Templo Oscuro. The tune passes between low male voices and high female voices, Vol'guth, the lich: «Sombra» as a necromantic rite at 144. Full organ and a larg, Malachar, the cult's Herald (and Abaddon behind him): «Sombra» in D phrygian at, La Cripta. Exploration: bowed vibraphone, then alto flute with celesta ghosts; w (+17 more)
 
 ### Community 102 - "Community 102"
-Cohesion: 0.09
-Nodes (56): actionMoods(), Appendage, appendagePivots(), bear(), beholder(), BEHOLDER_TOP, biped(), BipedOpts (+48 more)
+Cohesion: 0.07
+Nodes (24): actionMoods(), Appendage, BEHOLDER_TOP, BipedOpts, BONE, BOSSES, Build, BUILDS (+16 more)
 
 ### Community 103 - "Community 103"
 Cohesion: 0.22
 Nodes (8): Acto I, Acto II: lo que pidió el usuario tras oír los bocetos (`scripts/musica/leitmotivs/acto2_bocetos.py`), Acto III, Actos: dos versiones de la misma canción, Actos II y III, Dirección musical (indicada por el usuario, 1 oct 2026), Jefes, Leitmotivs (decididos por el usuario tras oír los bocetos de `scripts/musica/leitmotivs/`)
 
 ### Community 104 - "Community 104"
-Cohesion: 0.50
-Nodes (3): dynamics(), Controller breakpoints [(bar, beat, value)], sampled on the eighth grid., CC1 on the Sonatina sustains (from tick 0), CC11 on the VSCO sustains.
+Cohesion: 0.21
+Nodes (32): appendagePivots(), bear(), beholder(), biped(), brain(), candle(), canine(), card() (+24 more)
+
+### Community 105 - "Community 105"
+Cohesion: 0.08
+Nodes (28): Ease, pulse(), shake(), strikeKeys(), StrikeSpec, Keyframe, PartialPose, howlVibrato() (+20 more)
 
 ### Community 106 - "Community 106"
-Cohesion: 0.33
-Nodes (6): d20Numbering(), faceOfNumber(), oppositeFace(), settledRoll(), simulateRoll(), numberAtlas()
+Cohesion: 0.18
+Nodes (19): bridge(), codetta(), intro(), P(), Consecutive notes from (bar, beat): items = [(pitch | None for a rest, beats)]., Harp arpeggio: events = [(beat, pitch)], each an eighth unless the next one is l, CC11 breakpoints [(bar, beat, value)], sampled on the 1/8-bar grid., Bars 1-4: Bm(add9) | Gmaj7 | Em9 | A7sus4 - A7. Head of the motif as a memory. (+11 more)
 
 ### Community 107 - "Community 107"
 Cohesion: 0.10
@@ -589,8 +597,8 @@ Cohesion: 0.06
 Nodes (76): arp(), bassoon_grimaces(), bridge(), build(), cc1_to_velocity(), cc_value(), check_limits(), climax() (+68 more)
 
 ### Community 110 - "Community 110"
-Cohesion: 0.11
-Nodes (33): load(), Note, Reads a multitrack MIDI file into notes and controller curves in seconds., _seconds(), Song, _tempo_map(), Track, _cc_number() (+25 more)
+Cohesion: 0.10
+Nodes (34): Sample-based music studio for «Dracs & Rogues»: SFZ sampler, MIDI input, mix and, load(), Note, Reads a multitrack MIDI file into notes and controller curves in seconds., _seconds(), Song, _tempo_map(), Track (+26 more)
 
 ### Community 111 - "Community 111"
 Cohesion: 0.06
@@ -609,16 +617,16 @@ Cohesion: 0.09
 Nodes (15): bar_of(), bar_start(), beat_of(), cc_at(), is_sonatina(), level(), line(), notes_between() (+7 more)
 
 ### Community 115 - "Community 115"
-Cohesion: 0.05
-Nodes (47): angleBetween(), CHAIN_DEFAULTS, ChainRun, constrain(), Pt, RigidSampler, stepChains(), stepRun() (+39 more)
+Cohesion: 0.11
+Nodes (18): ATTACK, CAPE_IN, CAPE_OUT, DEATH, EXALT, HAMMER, HIT, KNEEL (+10 more)
 
 ### Community 116 - "Community 116"
 Cohesion: 0.11
 Nodes (17): 1. Función, emoción y repetición, 2. Tempo, métrica, tonalidad, duración, 3. Forma compás a compás e intensidad, 4. Armonía por sección, 5. Leitmotiv, 6. Orquestación por sección, 7. Dinámica, 8. Criterios de aceptación (+9 more)
 
 ### Community 117 - "Community 117"
-Cohesion: 0.22
-Nodes (15): Part, checks(), decode(), main(), measure(), Menu theme «Brasas» (fantasy and magic): mix and master (brief: docs/musica/menu, Fader rides as automation points: each (first bar, last bar, dB) lifts or lowers, ride() (+7 more)
+Cohesion: 0.20
+Nodes (14): checks(), decode(), main(), measure(), Menu theme «Brasas» (fantasy and magic): mix and master (brief: docs/musica/menu, Fader rides as automation points: each (first bar, last bar, dB) lifts or lowers, ride(), vcsl() (+6 more)
 
 ### Community 118 - "Community 118"
 Cohesion: 0.09
@@ -650,7 +658,7 @@ Nodes (33): checks(), crossfade_test(), decode(), joint_checks(), lag_ms(), main
 
 ### Community 128 - "Community 128"
 Cohesion: 0.11
-Nodes (32): check_shared_seating(), checks(), cross_checks(), crossfade(), decode(), main(), measure(), onset_offsets() (+24 more)
+Nodes (31): check_shared_seating(), checks(), cross_checks(), crossfade(), decode(), main(), measure(), onset_offsets() (+23 more)
 
 ### Community 129 - "Community 129"
 Cohesion: 0.11
@@ -674,7 +682,7 @@ Nodes (18): 1. Función, emoción y repetición, 2. Tempo, métrica, tonalidad, 
 
 ### Community 134 - "Community 134"
 Cohesion: 0.22
-Nodes (13): checks(), decode(), main(), measure(), Menu theme «La puerta del juego»: mix and master (brief: docs/musica/menu.md, §8, Fader rides as automation points: each (first bar, last bar, dB) lifts or lowers, ride(), vsco() (+5 more)
+Nodes (15): Part, checks(), decode(), main(), measure(), Menu theme «La puerta del juego»: mix and master (brief: docs/musica/menu.md, §8, Fader rides as automation points: each (first bar, last bar, dB) lifts or lowers, ride() (+7 more)
 
 ### Community 135 - "Community 135"
 Cohesion: 0.18
@@ -696,28 +704,52 @@ Nodes (7): build_midi(), main(), n(), Short leitmotif candidates for the soundtr
 Cohesion: 0.43
 Nodes (6): main(), name(), Regenerates INSTRUMENTOS.md: every playable instrument of the installed librarie, row(), int, str
 
+### Community 140 - "Community 140"
+Cohesion: 0.14
+Nodes (20): actionHold(), smoothstep(), WingJoints, WingSide, angleOf(), articulateWings(), buildWing(), clamp() (+12 more)
+
 ### Community 141 - "Community 141"
-Cohesion: 0.24
-Nodes (10): Sample-based music studio for «Dracs & Rogues»: SFZ sampler, MIDI input, mix and, automation_curve(), MixSpec, _place(), Renders a multitrack MIDI with sample instruments into a mastered, seamless loop, Fader ride → per-sample gain. Points are (bar position, dB) with bars 1-based (2, render(), float (+2 more)
+Cohesion: 0.31
+Nodes (9): automation_curve(), MixSpec, _place(), Renders a multitrack MIDI with sample instruments into a mastered, seamless loop, Fader ride → per-sample gain. Points are (bar position, dB) with bars 1-based (2, render(), float, int (+1 more)
+
+### Community 142 - "Community 142"
+Cohesion: 0.10
+Nodes (20): 1. Función, emoción y repetición, 2. Tempo, métrica, tonalidad, duración, 3. Forma compás a compás e intensidad, 4. Armonía por sección (común a las dos versiones), 5. Leitmotiv, 6. Orquestación por sección, 7. Dinámica, 8. Criterios de aceptación (+12 more)
+
+### Community 143 - "Community 143"
+Cohesion: 0.11
+Nodes (17): ActionScript, AMULET, ATTACK, BLAST, BRUJO_RIG, CAPE_FRONT, CAPE_IN, CAPE_OUT (+9 more)
+
+### Community 144 - "Community 144"
+Cohesion: 0.12
+Nodes (15): ATTACK, BARBARO_RIG, BEARD, CHOP, DEATH, HIT, KNEEL, LOCK_BACK (+7 more)
+
+### Community 145 - "Community 145"
+Cohesion: 0.33
+Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
+
+### Community 146 - "Community 146"
+Cohesion: 0.40
+Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
 
 ## Knowledge Gaps
-- **656 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+651 more)
+- **672 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+667 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **8 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `vel()` connect `Community 90` to `Community 101`, `Community 79`, `Community 119`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `PuppetRig` connect `Community 45` to `Community 64`, `Community 98`, `Community 102`, `Renderizado de cartas`, `Dado 3D en WebGL`, `Cartas: registro y Explosión`, `Community 115`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `render_choir()` connect `Community 57` to `Community 80`?**
-  _High betweenness centrality (0.005) - this node is a cross-community bridge._
+- **Why does `PuppetRig` connect `Community 45` to `Community 64`, `Community 98`, `Community 102`, `Renderizado de cartas`, `Dado 3D en WebGL`, `Community 105`, `Cartas: registro y Explosión`, `Community 140`, `Community 77`, `Community 143`, `Community 144`, `Community 115`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+- **Why does `render_choir()` connect `Community 57` to `Community 106`?**
+  _High betweenness centrality (0.006) - this node is a cross-community bridge._
 - **What connects `version`, `configurations`, `name` to the rest of the system?**
-  _1395 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1411 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Bestiario de enemigos` be split into smaller, more focused modules?**
-  _Cohesion score 0.02967969438730532 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.027170868347338936 - nodes in this community are weakly interconnected._
 - **Should `Persistencia y partículas` be split into smaller, more focused modules?**
   _Cohesion score 0.05254901960784314 - nodes in this community are weakly interconnected._
 - **Should `Motor de combate` be split into smaller, more focused modules?**

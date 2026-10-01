@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.8.0';
+export const VERSION = '7.8.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.8.1',
+    fecha: '2026-10-01',
+    cambios: [
+      '🔮 Recuperación Arcana (mago) ahora se agota: es el precio de recuperar un conjuro gratis, frente al Sacrificio Arcano, que lo paga con vida.',
+    ],
+  },
   {
     version: '7.8.0',
     fecha: '2026-10-01',

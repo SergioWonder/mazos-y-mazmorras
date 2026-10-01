@@ -967,7 +967,8 @@ console.log('— Cartas únicas de clase (Acto III) —');
 console.log('— Recuperación de conjuros sostenible —');
 {
   const recu = MAGO.find((c) => c.id === 'recuperacion-arcana')!;
-  check(!recu.exhumar, 'Recuperación Arcana ya no se agota');
+  // decided again (oct 2026): it exhausts, the price that sets it apart from Arcane Sacrifice (which costs HP)
+  check(!!recu.exhumar && /Se agota/.test(recu.texto) && /Se agota/.test(recu.mejora?.texto ?? ''), 'Recuperación Arcana se agota (como contrapartida a Sacrificio Arcano)');
   const marea = MAGO.find((c) => c.id === 'marea-arcana')!;
   check(!!marea && !marea.exhumar, 'Marea Arcana existe y no se agota');
   const run = nuevaRun('mago', 60);

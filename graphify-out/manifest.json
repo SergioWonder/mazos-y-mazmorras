@@ -5,18 +5,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790863340.6541517,
-    "ast_hash": "26f23eb7fd676631c731cb40cb169ab4",
+    "mtime": 1790863859.7466986,
+    "ast_hash": "c7b657beb7fa4409408035c0184dde8f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790863320.7469387,
-    "ast_hash": "c62ce37061d12545ba82404372e4427f",
+    "mtime": 1790863829.630307,
+    "ast_hash": "ef61ee0ee78c1a8acf46da2efca81ddc",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
-    "mtime": 1790863320.7473207,
-    "ast_hash": "50a4901e949dad6883031e847b998dce",
+    "mtime": 1790863840.7591755,
+    "ast_hash": "d2772dbb8ffd39a7e658c04044c70b9b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790863340.6539018,
-    "ast_hash": "03f0ef7a199a0f140041800b0300f0da",
+    "mtime": 1790863859.7464569,
+    "ast_hash": "fc719581429fe7d32657fab8c2c22278",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -3532,6 +3532,11 @@
   "/Users/sergio/WonderBits/personal/videogame/docs/musica/menu-brasas.md": {
     "mtime": 1790857692.488165,
     "ast_hash": "219696f9f89c5e709a50ce18b201daab",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/musica/acto2-cripta.md": {
+    "mtime": 1790863694.1030877,
+    "ast_hash": "e9a6075cf36bf9b1448640cd208737e3",
     "semantic_hash": ""
   }
 }
