@@ -8028,6 +8028,18 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
     && !mt.sameSong('cap1-e0-combate', 'cap1-e0-jefe'), 'mapa y combate de cada escenario son la misma canción; el jefe y el otro escenario no');
   check(mt.exploreTheme(0, 1) === 'cap1-e1' && mt.combatTheme(0, false, [], 1) === 'cap1-e1-combate' && mt.combatTheme(0, true, [], 0) === 'cap1-e0-jefe',
     'el Acto I ya usa la música de su escenario');
+  // the calm returns as soon as the last enemy falls: rewards are chosen to the map version
+  check(typeof mt.themeAfterCombat === 'function', 'hay una regla para la música al acabar un combate');
+  if (typeof mt.themeAfterCombat === 'function') {
+    check(mt.themeAfterCombat('victoria', 0, 1, []) === 'cap1-e1' && mt.themeAfterCombat('victoria', 0, 0, [{}]) === 'cap1-e0',
+      'al ganar un combate vuelve la versión tranquila del escenario');
+    check(mt.themeAfterCombat('derrota', 0, 0, []) === null && mt.themeAfterCombat('victoria', 2, 0, [{ dungeonMaster: true }]) === null,
+      'una derrota o la escena del Dungeon Master no cambian la música');
+  }
+  const combateFin = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  const finalCombate = combateFin.slice(combateFin.indexOf('function comprobarFinal'), combateFin.indexOf('setTimeout', combateFin.indexOf('function comprobarFinal')));
+  check(/themeAfterCombat\(combate\.terminado, run\.capitulo, run\.escenario, defs\)/.test(finalCombate),
+    'la música cambia en cuanto cae el último enemigo, antes de las recompensas');
   const motor = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
   check(/sameSong\(/.test(motor) && /loopPosition\(/.test(motor), 'al pasar entre versiones de la misma canción, el audio sigue desde el mismo punto');
   const juego = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');

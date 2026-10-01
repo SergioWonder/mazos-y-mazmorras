@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790854807.1973784,
-    "ast_hash": "9650387a559b744c159ae92d7e0f1e66",
+    "mtime": 1790855521.3381603,
+    "ast_hash": "2a76a64dfce791ae7061aab84c3bb71d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790854749.254704,
-    "ast_hash": "2ffef20112422385971530d33420bbdd",
+    "mtime": 1790855291.7121537,
+    "ast_hash": "cdebd265091999ff9be57592e9995b40",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1790847268.3195827,
-    "ast_hash": "354ef76357137a34fdd6e55c54aa6d14",
+    "mtime": 1790855308.159234,
+    "ast_hash": "6d53841f00147eeb1c2e2ebcc97fc461",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790854807.197069,
-    "ast_hash": "032fcef8498cfe151a531ce46337e8ba",
+    "mtime": 1790855521.3376255,
+    "ast_hash": "19c678ca505d921117e283e2018f0587",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -1230,8 +1230,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/music-tracks.ts": {
-    "mtime": 1790854731.708539,
-    "ast_hash": "121295f89ec840e4502402148bb602e4",
+    "mtime": 1790855308.158663,
+    "ast_hash": "396520760780a8003f128c9304cf4edf",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/compositor-musical.md": {
@@ -3497,6 +3497,11 @@
   "/Users/sergio/WonderBits/personal/videogame/src/audio/cap1-e1.mp3": {
     "mtime": 1790854731.6659527,
     "ast_hash": "8e764bb57eed340840089049eb217461",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/leitmotivs/demos.py": {
+    "mtime": 1790854899.9544623,
+    "ast_hash": "694291e10d937d7c3ed634fafa86ce67",
     "semantic_hash": ""
   }
 }

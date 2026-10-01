@@ -50,6 +50,15 @@ export function exploreTheme(chapter: number, scenario = 0, tracks: Record<strin
   return tracks[own] ? own : `cap${chapter + 1}`;
 }
 
+/** Music once a fight is over: a victory brings back the scenario's calm version right
+ *  away (rewards are chosen to it); a defeat or the Dungeon Master's scene keep theirs. */
+export function themeAfterCombat(
+  result: 'victoria' | 'derrota', chapter: number, scenario: number, enemies: { dungeonMaster?: boolean }[],
+): string | null {
+  if (result !== 'victoria' || enemies.some((e) => e.dungeonMaster)) return null;
+  return exploreTheme(chapter, scenario);
+}
+
 /** Two different tracks that are versions of the same song (same group, same loop). */
 export function sameSong(a: string, b: string, tracks: Record<string, MusicTrack> = MUSIC_TRACKS): boolean {
   const x = tracks[a], y = tracks[b];

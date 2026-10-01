@@ -5,7 +5,7 @@ import type {
 } from '../core/types.ts';
 import { fx } from '../fx/particulas.ts';
 import { audio } from '../fx/audio.ts';
-import { combatTheme } from '../fx/music-tracks.ts';
+import { combatTheme, themeAfterCombat } from '../fx/music-tracks.ts';
 import { rodarDado, rodarDados } from '../fx/dado.ts';
 import {
   anuncio, centroDe, el, espera, ICONO_ESTADO, NOMBRE_ESTADO, numeroFlotante, sacudir, tipEstado,
@@ -1377,6 +1377,9 @@ export function pantallaCombate(
       resuelto = true;
       cola.close(); // whatever was still queued is dropped
       window.removeEventListener('keydown', alTeclar);
+      // the last enemy just fell: the calm version comes back, from the same point of the song
+      const calma = themeAfterCombat(combate.terminado, run.capitulo, run.escenario, defs);
+      if (calma) audio.reproducirTema(calma);
       // a real defeat plays the hero's death (the Dungeon Master's ray has its own scene)
       const muerte = playsDefeatSequence(combate.terminado, defs) ? muerteHeroe() : null;
       setTimeout(() => {
