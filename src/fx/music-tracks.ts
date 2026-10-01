@@ -28,6 +28,14 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap1-e1-jefe': { file: 'cap1-e1-jefe.mp3', loopSamples: 3528000 },                 // «La función de medianoche» (Vexis)
   'cap1-jefe': { file: 'jefe1.mp3', loopSamples: 3024000 }, // «Señor de la guerra»
   'cap2': { file: 'cap2.mp3', loopSamples: 3256615 },      // «Marcha de los huesos»
+  // Act II, sample-based (scripts/musica/acto2-*), on leitmotif 7 «Sombra»
+  'cap2-e0': { file: 'cap2-e0.mp3', loopSamples: 3528000, group: 'cap2-e0' },          // «Nana para los que no duermen», map
+  'cap2-e0-combate': { file: 'cap2-e0-combate.mp3', loopSamples: 3528000, group: 'cap2-e0' }, // same song, combat
+  'cap2-e0-jefe': { file: 'cap2-e0-jefe.mp3', loopSamples: 4116000 },                 // «Misa de la filacteria» (Vol'guth)
+  'cap2-e1': { file: 'cap2-e1.mp3', loopSamples: 3704400, group: 'cap2-e1' },          // «Vísperas del pozo», map
+  'cap2-e1-combate': { file: 'cap2-e1-combate.mp3', loopSamples: 3704400, group: 'cap2-e1' }, // same song, combat
+  'cap2-e1-jefe': { file: 'cap2-e1-jefe.mp3', loopSamples: 3704400, group: 'cap2-e1-jefe' },  // «El pacto»: Malachar, the ritual
+  'cap2-e1-jefe-fase2': { file: 'cap2-e1-jefe-fase2.mp3', loopSamples: 3704400, group: 'cap2-e1-jefe' }, // same song: Abaddon, chaos
   'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
   'cap3': { file: 'cap3.mp3', loopSamples: 3528000 },      // «Brasas y locura», E phrygian, 90 BPM
   'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor

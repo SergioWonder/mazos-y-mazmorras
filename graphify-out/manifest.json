@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790863859.7466986,
-    "ast_hash": "c7b657beb7fa4409408035c0184dde8f",
+    "mtime": 1790868748.5495975,
+    "ast_hash": "32c950221a04a20437e7bae0954772ac",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790863829.630307,
-    "ast_hash": "ef61ee0ee78c1a8acf46da2efca81ddc",
+    "mtime": 1790868489.9952893,
+    "ast_hash": "dbc138c0e20840a457725090cbb1c24a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790863859.7464569,
-    "ast_hash": "fc719581429fe7d32657fab8c2c22278",
+    "mtime": 1790868748.5490735,
+    "ast_hash": "6fac6ccdd980dc5d7ae1c24d56eeeddc",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -1230,8 +1230,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/music-tracks.ts": {
-    "mtime": 1790861657.6798034,
-    "ast_hash": "552bcf723662b8c78d56ac04de4f5416",
+    "mtime": 1790868472.153029,
+    "ast_hash": "07044ae03b156a84f4c3869a4d9ded13",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/.claude/agents/compositor-musical.md": {
@@ -1245,8 +1245,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/audio/LEEME.md": {
-    "mtime": 1790863340.6533084,
-    "ast_hash": "1618800da10ffa58b3391222932975f9",
+    "mtime": 1790868748.5482824,
+    "ast_hash": "c69c636991091aa0d05f1ad068da70e5",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/fondos/asentamiento-ogro-movil.webp": {
@@ -3315,8 +3315,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/sampler.py": {
-    "mtime": 1790847494.2545562,
-    "ast_hash": "850593793ec1af708ff4df56b749bff2",
+    "mtime": 1790866753.5314813,
+    "ast_hash": "f6fb8ab16c49c3aabd97da3a98eab332",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/sfz.py": {
@@ -3325,8 +3325,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/tests/test_estudio.py": {
-    "mtime": 1790854347.8582544,
-    "ast_hash": "5cb5453b1c16906e98a497eeb698e3b7",
+    "mtime": 1790866782.4472623,
+    "ast_hash": "666e1bc5c025f0683c3485eeaf584fdc",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/compose.py": {
@@ -3537,6 +3537,116 @@
   "/Users/sergio/WonderBits/personal/videogame/docs/musica/acto2-cripta.md": {
     "mtime": 1790863694.1030877,
     "ast_hash": "e9a6075cf36bf9b1448640cd208737e3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-cripta/test_compose.py": {
+    "mtime": 1790866725.0895283,
+    "ast_hash": "faf68bfe62724fea8be31aada7568e65",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-malachar-abaddon/compose.py": {
+    "mtime": 1790866710.8004794,
+    "ast_hash": "71b4a3ad741fac8a33c81cb4f9fb93ed",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-malachar-abaddon/test_compose.py": {
+    "mtime": 1790866722.7620785,
+    "ast_hash": "17e3ce7077bc9723c56513df23e44f55",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-templo/compose.py": {
+    "mtime": 1790866539.7364445,
+    "ast_hash": "94dcf27caa13318e72aad66599a38f56",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-templo/test_compose.py": {
+    "mtime": 1790866524.635262,
+    "ast_hash": "3635dc8efc5afe32951b451d34a3e7d1",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-volguth/test_compose.py": {
+    "mtime": 1790867284.2346857,
+    "ast_hash": "07c1f7d3ab801b2cf5f03be95d392765",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/musica/acto2-malachar-abaddon.md": {
+    "mtime": 1790864539.403239,
+    "ast_hash": "419f3b3939d55d5404c5f177b70d8e4e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/musica/acto2-templo.md": {
+    "mtime": 1790864192.681306,
+    "ast_hash": "95517c580043045ed7ec4c04bef96fca",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/musica/acto2-volguth.md": {
+    "mtime": 1790863926.121227,
+    "ast_hash": "bd24746c0b17e57d8129f28e645b0071",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-cripta/compose.py": {
+    "mtime": 1790866725.0891244,
+    "ast_hash": "875213f13bd36c6ad0c03a681c0c8578",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-volguth/compose.py": {
+    "mtime": 1790867284.2342522,
+    "ast_hash": "04dd873cc52988a47dea40c2bbac6d74",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-cripta/mix.py": {
+    "mtime": 1790868063.9091094,
+    "ast_hash": "5211764b75bd939940f87b9d8e4206a8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-malachar-abaddon/mix.py": {
+    "mtime": 1790868315.511216,
+    "ast_hash": "f92b5cc1b75720b40f3a226a12d4a83e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-templo/mix.py": {
+    "mtime": 1790868257.0077322,
+    "ast_hash": "8b7a9835380c726615b9606cb6b69379",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/acto2-volguth/mix.py": {
+    "mtime": 1790868248.2113085,
+    "ast_hash": "aa6bc220c640f0341aff085319a7a797",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e0-combate.mp3": {
+    "mtime": 1790868402.1319687,
+    "ast_hash": "c7e8e1c382fa5eb62b8bbe3c3769fc9b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e0-jefe.mp3": {
+    "mtime": 1790868402.1358433,
+    "ast_hash": "adf8c3d3433d6b79082cc55d38196f37",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e0.mp3": {
+    "mtime": 1790868402.128218,
+    "ast_hash": "e0ac6c366680b1e39dadd35f166fab6a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e1-combate.mp3": {
+    "mtime": 1790868402.1432664,
+    "ast_hash": "0a1764ff97b12ae579c583b64543683d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e1.mp3": {
+    "mtime": 1790868402.139592,
+    "ast_hash": "d9e06604bf2523d9b70c0abe21812ae3",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e1-jefe-fase2.mp3": {
+    "mtime": 1790868472.1325595,
+    "ast_hash": "99e2fb06e3396d66177facaa8b5f9387",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e1-jefe.mp3": {
+    "mtime": 1790868472.1301298,
+    "ast_hash": "d7ee99c5d7e12baaae15c914a676aa97",
     "semantic_hash": ""
   }
 }

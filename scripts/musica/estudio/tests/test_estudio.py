@@ -193,6 +193,17 @@ class TestAdvancedSfz(unittest.TestCase):
         self.assertAlmostEqual(dominant_freq(out[int(0.05 * SR): int(0.35 * SR)]), 440, delta=5)
         self.assertAlmostEqual(dominant_freq(out[int(0.65 * SR): int(0.95 * SR)]), 880, delta=5)
 
+    def test_release_key_tails_sound_after_the_note(self):
+        tail = sine(330, 0.8, 0.3)
+        sf.write(os.path.join(self.dir, 'tail.wav'), tail, SR)
+        with open(os.path.join(self.dir, 'organ.sfz'), 'w') as f:
+            f.write('<region> sample=soft.wav lokey=60 hikey=72 pitch_keycenter=69 ampeg_release=0.05\n'
+                    '<region> sample=tail.wav lokey=60 hikey=72 pitch_keycenter=69 trigger=release_key\n')
+        inst = self.inst('organ.sfz')
+        out = inst.render_track([midi_io.Note(69, 100, 0.0, 0.3)], 1.5)
+        after = out[int(0.45 * SR): int(0.9 * SR)]
+        self.assertAlmostEqual(dominant_freq(after), 330, delta=5)  # the recorded tail rings after the key is let go
+
     def test_cc1_swell_moves_the_gain_of_held_notes(self):
         inst = self.inst('cc.sfz')
         note = [midi_io.Note(60, 127, 0.0, 2.0)]

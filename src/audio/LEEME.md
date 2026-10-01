@@ -20,7 +20,11 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 | `cap1-e1-jefe.mp3` | Jefe Vexis | «La función de medianoche»: el vals del menú robado, do♯ menor a 180, circo macabro |
 | `cap1.mp3`  | (respaldo del Acto I) | «Taberna y travesura», giga pícara en 6/8 (sintetizada) |
 | `jefe1.mp3` | (respaldo de jefes del Acto I) | «Señor de la guerra», épica orquestal en re menor (sintetizada) |
-| `cap2.mp3`  | Acto II: La Cripta y El Templo Oscuro | «Marcha de los huesos», misterio travieso en re dórico |
+| `cap2-e0.mp3` / `cap2-e0-combate.mp3` | Acto II, La Cripta (mapa / combate) | «Nana para los que no duermen»: la menor a 72, leitmotiv «Sombra» como nana torcida; danza macabra en combate |
+| `cap2-e0-jefe.mp3` | Jefe Vol'guth | «Misa de la filacteria»: do menor a 144, coro y órgano; la filacteria hace morir y despertar la música |
+| `cap2-e1.mp3` / `cap2-e1-combate.mp3` | Acto II, El Templo Oscuro (mapa / combate) | «Vísperas del pozo»: si♭ menor a 80, coros graves y agudos alternos; salmodia y puñaladas en combate |
+| `cap2-e1-jefe.mp3` / `cap2-e1-jefe-fase2.mp3` | Jefe Malachar / Abaddon | «El pacto»: do♯ frigio a 160; el ritual de Malachar y el caos de Abaddon son la misma canción y el juego cruza al alzarse el demonio |
+| `cap2.mp3`  | (respaldo del Acto II) | «Marcha de los huesos», misterio travieso en re dórico |
 | `jefe2.mp3` | Jefes del acto II | «Presagio», tensión ritual en mi frigio |
 | `cap3.mp3`  | Acto III: Guarida del Dragón y Laberinto | «Brasas y locura», amenaza sombría en mi frigio a 90 BPM, con el leitmotiv como eco lúgubre |
 | `jefe3.mp3` | Jefes del acto III | Combate final, la pista más épica |

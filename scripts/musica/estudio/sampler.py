@@ -7,7 +7,8 @@ Supported beyond the basics (needed by Sonatina Symphonic Orchestra):
 - `gain_ccN` (dB at full controller), also followed over time while a note is held;
 - `fil_type` lpf_1p/lpf_2p with `cutoff`, `cutoff_ccN`, `fil_keytrack`, `fil_veltrack`;
 - keyswitches (`sw_lokey/sw_hikey/sw_last/sw_default`): keyswitch notes do not sound;
-- `trigger=first` plays as a normal attack, `trigger=legato` is skipped (no legato engine);
+- `trigger=first` plays as a normal attack, `trigger=legato` is skipped (no legato engine),
+  `trigger=release` and `release_key` play their tail at note-off;
 - `ampeg_vel2attack/vel2decay/vel2release`, `group_volume`, `master_volume`, `global_volume`.
 """
 from __future__ import annotations
@@ -105,7 +106,8 @@ class Instrument:
     def pick_all(self, key: int, vel: int, trigger: str = 'attack', cc: dict[int, int] | None = None,
                  switch: int | None = None) -> list[tuple[sfz.Region, float]]:
         """Every region that sounds for this note, with its crossfade gain."""
-        triggers = ('attack', 'first') if trigger == 'attack' else (trigger,)
+        # release tails: «release» and «release_key» (Sonatina's organ) both sound at note-off
+        triggers = ('attack', 'first') if trigger == 'attack' else ('release', 'release_key') if trigger == 'release' else (trigger,)
         ccs = self._controls(cc)
         sw = switch if switch is not None else self.sw_default
         cands = [r for r in self.inst.regions
@@ -253,7 +255,7 @@ class Instrument:
         n = int(round(total_seconds * sr))
         out = np.zeros((n, 2), dtype=np.float32)
         cc = cc or {}
-        has_release = any(r.get('trigger') == 'release' for r in self.inst.regions)
+        has_release = any(r.get('trigger') in ('release', 'release_key') for r in self.inst.regions)
         switch = self.sw_default
         for note in notes:
             if self.sw_range and self.sw_range[0] <= note.pitch <= self.sw_range[1]:

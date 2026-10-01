@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.8.1';
+export const VERSION = '7.9.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.9.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '🕯️ Banda sonora nueva del Acto II, con orquesta, coros y órgano reales: la Cripta y el Templo Oscuro tienen su canción de mapa y de combate, que cambian sin cortarse.',
+      '💀 Vol\'guth tiene su misa de difuntos, y su filacteria hace morir y despertar la música.',
+      '😈 Malachar dirige un ritual de coros y campanas… y cuando se alza Abaddon, la misma canción estalla en caos sin perder el compás.',
+    ],
+  },
   {
     version: '7.8.1',
     fecha: '2026-10-01',
