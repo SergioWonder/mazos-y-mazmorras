@@ -44,6 +44,10 @@ def row(lib: str, path: str) -> str | None:
     rnd = any(r.get('lorand') for r in att)
     player = sampler.Instrument(inst)
     dyn = 'CC1' if 1 in player.reacts_to else 'velocidad'
+    # regions that only sound once a controller opens them (organ stops on CC16–29…)
+    gates = sorted({int(k[4:]) for r in att for k in r.opcodes if k.startswith('locc') and r.num(k, 0) > 0})
+    if gates:
+        dyn += f' · **mudo hasta abrir CC{gates[0]}–{gates[-1]} ≥ 64**' if len(gates) > 1 else f' · **mudo hasta abrir CC{gates[0]}**'
     ks = 'sí' if player.sw_range else ''
     rel = os.path.relpath(path, config.library(lib))
     return (f'| `{lib}/{rel}` | {name(lo)}–{name(hi)} ({lo}–{hi}) | {layers} | '

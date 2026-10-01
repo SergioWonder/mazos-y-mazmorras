@@ -2334,8 +2334,8 @@ console.log('\n🎵 Banda sonora');
   check(temas.every((t) => fs.existsSync(new URL(`../src/audio/${MUSIC_TRACKS[t].file}`, import.meta.url))), 'todas las pistas existen en src/audio');
   check(temas.every((t) => MUSIC_TRACKS[t].file.endsWith('.mp3') && MUSIC_TRACKS[t].loopSamples > 44100 * 30), 'las pistas son MP3 (suenan en Safari) con la longitud exacta del bucle');
   check(new Set(['cap1', 'cap2', 'cap3', 'menu'].map((t) => MUSIC_TRACKS[t].file)).size === 4, 'cada acto y el menú tienen su propia música');
-  // the sample-based main theme (scripts/musica/menu): 42 bars of 3/4 at 108 BPM = 70 s
-  check(MUSIC_TRACKS.menu.loopSamples === 3087000, 'el tema del menú con samples dura su bucle exacto de 70 s');
+  // the main theme «Brasas» (scripts/musica/menu-brasas): 28 bars of 4/4 at 84 BPM = 80 s
+  check(MUSIC_TRACKS.menu.loopSamples === 3528000, 'el tema del menú «Brasas» dura su bucle exacto de 80 s');
   check(fs.statSync(new URL('../src/audio/menu.mp3', import.meta.url)).size > 1_400_000, 'y el MP3 del menú es el nuevo (VBR de calidad 2)');
   check(MUSIC_TRACKS['cap1-jefe'].file !== MUSIC_TRACKS['cap2-jefe'].file && MUSIC_TRACKS['cap2-jefe'].file !== MUSIC_TRACKS['cap3-jefe'].file, 'cada acto tiene su música de jefe');
   const bucle = 44100 * 60;
@@ -7016,7 +7016,7 @@ console.log('\n🔢 Números calculados');
   check(await valor('ofrenda-maldita', reliquias) === 42 && await valor('ofrenda-maldita', fuerte) === 13,
     'Ofrenda Maldita: con maldición en mano vale la rama grande; sin ella, la pequeña');
   check(await valor('sacrificio-familiar', reliquias) === 18, 'Sacrificio del Familiar: el doble de la vida de la invocación');
-  check(await valor('festin-carmesi', reliquias) === 12, 'Festín Carmesí: el doble de la Hemorragia del objetivo');
+  check(await valor('festin-carmesi', reliquias) === 6, 'Festín Carmesí: tanta Fuerza como Hemorragia hay en juego');
   check(await valor('verbo-aniquilacion', reliquias) === 166, 'Verbo de Aniquilación: Condena de un tercio de los PV actuales');
   check(await valor('nube-nauseabunda', reliquias) === 9, 'Nube Nauseabunda: el Veneno que detona (el que había más el nuevo)');
   check(await valor('reabrir-heridas', reliquias, 1) === 6, 'Reabrir Heridas: la Hemorragia que añade al duplicarla');
@@ -7050,7 +7050,7 @@ console.log('\n🔢 Números calculados');
       'un valor que empeora sale en rojo');
     const { comb: c3, e: e3 } = await montarNumeros(cartaPorId('festin-carmesi')!, reliquias);
     const fest = cartaPorId('festin-carmesi')!;
-    check(formatearTexto(fest.texto, { valores: c3.valoresDeCarta(fest, e3) }).includes('(12)'),
+    check(formatearTexto(fest.texto, { valores: c3.valoresDeCarta(fest, e3) }).includes('(6)'),
       'una carta sin número en el texto muestra su valor calculado entre paréntesis');
     check(formatearTexto('Inflige 6 de daño.') === 'Inflige 6 de daño.', 'fuera de combate se ve el valor base');
     const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
@@ -8028,6 +8028,17 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
     && !mt.sameSong('cap1-e0-combate', 'cap1-e0-jefe'), 'mapa y combate de cada escenario son la misma canción; el jefe y el otro escenario no');
   check(mt.exploreTheme(0, 1) === 'cap1-e1' && mt.combatTheme(0, false, [], 1) === 'cap1-e1-combate' && mt.combatTheme(0, true, [], 0) === 'cap1-e0-jefe',
     'el Acto I ya usa la música de su escenario');
+  // a boss in two phases (Malachar → Abaddon): the second phase is the other version of its song
+  const E2: any = ENEMIGOS;
+  check(E2.DEMONIO_MAYOR?.faseMusical === 2 && !E2.HERALDO_CULTO?.faseMusical, 'Abaddon es la segunda fase musical del jefe del Templo');
+  const conFase = { ...T, 'cap2-e1-jefe': { file: 'a.mp3', loopSamples: 9, group: 'malachar' }, 'cap2-e1-jefe-fase2': { file: 'b.mp3', loopSamples: 9, group: 'malachar' } };
+  check(mt.combatTheme(1, true, [E2.HERALDO_CULTO], 1, conFase) === 'cap2-e1-jefe' && mt.combatTheme(1, true, [E2.DEMONIO_MAYOR], 1, conFase) === 'cap2-e1-jefe-fase2'
+    && mt.sameSong('cap2-e1-jefe', 'cap2-e1-jefe-fase2', conFase), 'cuando se alza Abaddon suena la segunda fase, que es la misma canción');
+  check(mt.combatTheme(1, true, [E2.DEMONIO_MAYOR], 1, { 'cap2-e1-jefe': { file: 'a.mp3', loopSamples: 9 } }) === 'cap2-e1-jefe',
+    'sin pista de segunda fase, sigue la del jefe');
+  const uiCombate = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/combatTheme\(run\.capitulo, true, combate\.enemigos\.filter\(\(e\) => e\.vivo\)\.map\(\(e\) => e\.def\), run\.escenario\)/.test(uiCombate),
+    'durante el combate de jefe la música sigue a los enemigos vivos (cambio de fase)');
   // the calm returns as soon as the last enemy falls: rewards are chosen to the map version
   check(typeof mt.themeAfterCombat === 'function', 'hay una regla para la música al acabar un combate');
   if (typeof mt.themeAfterCombat === 'function') {
@@ -8046,6 +8057,26 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
   const combateUi = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   check(/exploreTheme\(run\.capitulo, run\.escenario\)/.test(juego) && /combatTheme\(run\.capitulo, esJefe, defs, run\.escenario\)/.test(combateUi),
     'el mapa y el combate piden la música de su escenario');
+}
+
+// ── Barbarian: Crimson Feast turns every Bleed in play into Rage Strength ──────
+console.log('\n🍷 Festín Carmesí: la Hemorragia se vuelve Furia');
+{
+  const fest = BARBARO.find((c) => c.id === 'festin-carmesi')!;
+  check(fest.tipo === 'habilidad' && fest.objetivo === 'todos' && /^Furia:/.test(fest.texto), 'Festín Carmesí es una habilidad de Furia sobre todos los enemigos');
+  const comb = new Combate(nuevaRun('barbaro', 9150), [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(9150), uiSilenciosa);
+  await comb.iniciar();
+  comb.run.reliquias.length = 0;
+  comb.jugador.estados = {};
+  comb.jugador.furiaFuerza = 0;
+  comb.enemigos[0].estados.hemorragia = 4;
+  comb.enemigos[1].estados.hemorragia = 3;
+  const visto = comb.valoresDeCarta(fest).find((v) => v.aplica !== false)?.real;
+  await fest.jugar(comb.contexto());
+  check(visto === 7 && (comb.jugador.estados.fuerza ?? 0) === 7 && comb.jugador.furiaFuerza === 7,
+    `consume toda la Hemorragia (4 + 3) y la gana como Fuerza de Furia (${comb.jugador.estados.fuerza ?? 0})`);
+  check(comb.enemigos.every((e) => !e.estados.hemorragia), 'y la Hemorragia desaparece de todos los enemigos');
+  check(fest.mejora?.coste === 1, 'Festín Carmesí+ cuesta 1');
 }
 
 // ── Paladin: Holy Charge counts as both a Strike and a Defend ────────────────

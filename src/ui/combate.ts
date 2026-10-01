@@ -653,6 +653,10 @@ export function pantallaCombate(
 
     // ── Render ───────────────────────────────────────────────────────────────
     function render() {
+      // a boss phase change (Abaddon rising) crossfades to the other version of the boss song
+      if (esJefe && !combate.terminado && combate.enemigos.some((e) => e.vivo)) {
+        audio.reproducirTema(combatTheme(run.capitulo, true, combate.enemigos.filter((e) => e.vivo).map((e) => e.def), run.escenario));
+      }
       renderBarra();
       renderJugador();
       renderEnemigos();

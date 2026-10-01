@@ -171,7 +171,7 @@ Carpeta: `/Volumes/Base/audio-samples/sso` · 262 instrumentos.
 | `sso/Sonatina Symphonic Orchestra/Organ/Great - Principal 4ft.sfz` | C2–G6 (36–91) | 1 | — | velocidad |  |
 | `sso/Sonatina Symphonic Orchestra/Organ/Great - Stopped Diapason 8ft.sfz` | C2–G6 (36–91) | 1 | — | velocidad |  |
 | `sso/Sonatina Symphonic Orchestra/Organ/Great - Twelfth 3ft.sfz` | C2–G6 (36–91) | 1 | — | velocidad |  |
-| `sso/Sonatina Symphonic Orchestra/Organ/Organ All Stops.sfz` | C2–G6 (36–91) | 1 | — | CC1 |  |
+| `sso/Sonatina Symphonic Orchestra/Organ/Organ All Stops.sfz` | C2–G6 (36–91) | 1 | — | CC1 · **mudo hasta abrir CC16–29 ≥ 64** |  |
 | `sso/Sonatina Symphonic Orchestra/Organ/Organ Combinations.sfz` | C2–G6 (36–91) | 1 | — | CC1 | sí |
 | `sso/Sonatina Symphonic Orchestra/Organ/Organ Single Stops.sfz` | C2–G6 (36–91) | 1 | — | CC1 | sí |
 | `sso/Sonatina Symphonic Orchestra/Organ/Pedal - Bourdon 16ft.sfz` | C2–E4 (36–64) | 1 | — | velocidad |  |
@@ -434,7 +434,7 @@ Carpeta: `/Volumes/Base/audio-samples/VCSL` · 164 instrumentos.
 | `VCSL/Chordophones/Zithers/Dan Tranh - Tremolo.sfz` | B2–C6 (47–84) | 1 | — | velocidad |  |
 | `VCSL/Chordophones/Zithers/Dan Tranh - Vibrato.sfz` | B2–C6 (47–84) | 2 | — | velocidad |  |
 | `VCSL/Chordophones/Zithers/Grand Piano, Kawai.sfz` | A0–C#8 (21–109) | 10 | — | velocidad |  |
-| `VCSL/Chordophones/Zithers/Grand Piano, Steinway B.sfz` | A0–C8 (21–108) | 3 | — | velocidad |  |
+| `VCSL/Chordophones/Zithers/Grand Piano, Steinway B.sfz` | A0–C8 (21–108) | 3 | — | velocidad · **mudo hasta abrir CC64** |  |
 | `VCSL/Chordophones/Zithers/Harpsichord, English - Keyswitch.sfz` | A#1–F6 (34–89) | 1 | — | velocidad | sí |
 | `VCSL/Chordophones/Zithers/Harpsichord, English - Lute.sfz` | A#1–F6 (34–89) | 1 | — | velocidad |  |
 | `VCSL/Chordophones/Zithers/Harpsichord, English - Normal.sfz` | A#1–F6 (34–89) | 1 | — | velocidad |  |

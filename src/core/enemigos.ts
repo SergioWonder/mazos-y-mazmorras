@@ -534,6 +534,7 @@ export const INQUISIDOR_OSCURO: EnemigoDef = {
 
 export const DEMONIO_MAYOR: EnemigoDef = {
   id: 'demonio-mayor', nombre: 'Abaddon, el Demonio Mayor', arte: '😈', pv: [108, 108], escala: 2.0, esJefe: true,
+  faseMusical: 2, // his rise turns Malachar's ritual into chaos: the boss song's second version
   rasgo: {
     nombre: 'Furia del Abismo',
     texto: 'Lo que el Heraldo guardaba en su carne. Ahora libre, arde por arrastrarte con él al pozo.',

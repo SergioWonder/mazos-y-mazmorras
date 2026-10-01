@@ -184,6 +184,8 @@ export interface EnemigoDef {
   alMorir?: { nombre: string; dano?: number; efectos?: Array<[EstadoId, number, boolean]> };
   /** Takes half damage while any other enemy is alive (hive mind). */
   protegidoPorAliados?: boolean;
+  /** Phase of its boss song it brings in when it enters the fight (2 = the «-fase2» track). */
+  faseMusical?: number;
   /** The Dungeon Master (final joke scene): his screen absorbs every hit, he is
    *  immune to instant kills and lethal Doom, and nothing makes him skip his ray. */
   dungeonMaster?: boolean;

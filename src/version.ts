@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.7.1';
+export const VERSION = '7.8.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.8.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '✨ Nuevo tema del menú, «Brasas»: misterio y magia con celesta, flauta alto, violín solista, arpa y coro.',
+      '🍷 Festín Carmesí (bárbaro) cambia: Furia que consume toda la Hemorragia de los enemigos y te da esa cantidad de Fuerza (mejorada cuesta 1).',
+    ],
+  },
   {
     version: '7.7.1',
     fecha: '2026-10-01',

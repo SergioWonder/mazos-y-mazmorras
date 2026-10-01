@@ -13,7 +13,7 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 
 | Fichero     | Tema | Carácter |
 |-------------|------|----------|
-| `menu.mp3`  | Tema principal | Orquesta de cámara con samples reales (VSCO 2): vals de aventura en re mayor, 3/4 a 108; trompa, maderas, cuerdas y arpa. Hecho con el estudio de `scripts/musica/estudio/` |
+| `menu.mp3`  | Tema principal | «Brasas», fantasía y magia: re menor a 84 con celesta, flauta alto, violín solista, arpa y coro (leitmotiv 3). Hecho con el estudio de `scripts/musica/menu-brasas/` |
 | `cap1-e0.mp3` / `cap1-e0-combate.mp3` | Acto I, Asentamiento Ogro (mapa / combate) | «Tambores en el valle»: marcha en mi menor con color frigio a 132; la misma canción en dos versiones sincronizadas |
 | `cap1-e0-jefe.mp3` | Jefe Gorzug | «El festín de Gorzug»: re menor a 160 en 3+3+2; el tema se va devorando a mordiscos |
 | `cap1-e1.mp3` / `cap1-e1-combate.mp3` | Acto I, Contrabandistas (mapa / combate) | «Bajo la posada vieja»: saloma en 6/8, sol dórico; ocarina, armónica, piano de taberna; giga en combate |
@@ -31,7 +31,7 @@ En cada escenario con música propia, el mapa y el combate son **dos versiones d
 desde el mismo punto del bucle con un fundido cruzado de 1,6 s. Sin pista propia, suena la del acto.
 
 El tema del menú y el Acto I ya salen del **estudio con samples** (`scripts/musica/estudio/`, ver su README):
-`scripts/musica/menu/compose.py` genera el MIDI y `scripts/musica/menu/mix.py` lo renderiza a
+`scripts/musica/menu-brasas/compose.py` genera el MIDI y `scripts/musica/menu-brasas/mix.py` lo renderiza a
 MP3 VBR de calidad 2 (mantiene el nivel exacto). Las pistas `acto1-*` siguen el mismo esquema en
 `scripts/musica/acto1-*/`. Las demás pistas siguen siendo las sintetizadas, a 160 kbps. Los scripts de las sintetizadas
 están en `scripts/musica/<pista>/` y solo necesitan Python 3, numpy y ffmpeg: por

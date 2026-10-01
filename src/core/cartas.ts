@@ -24,6 +24,18 @@ export function defDe(inst: CartaInstancia): CartaDef {
   };
 }
 
+/** Crimson Feast: every Bleed on the enemies, swallowed and turned into Rage Strength. */
+const hemorragiaEnJuego = (c: ContextoEfecto) => c.enemigos.filter((e) => e.vivo).reduce((t, e) => t + (e.estados.hemorragia ?? 0), 0);
+async function festinCarmesi(c: ContextoEfecto) {
+  const total = hemorragiaEnJuego(c);
+  if (total <= 0) {
+    await c.mensaje('Ningún enemigo sangra…');
+    return;
+  }
+  for (const e of c.enemigos.filter((x) => x.vivo)) delete e.estados.hemorragia;
+  await c.ganarFuria(total);
+}
+
 /** Hidden Knife: a hit on a random living enemy (a discard has no target). */
 async function apunalarAlAzar(c: ContextoEfecto, dano: number) {
   const vivos = c.enemigos.filter((e) => e.vivo);
@@ -1375,38 +1387,18 @@ export const BARBARO: CartaDef[] = [
     id: 'festin-carmesi',
     nombre: 'Festín Carmesí',
     clase: 'barbaro',
-    tipo: 'ataque',
+    tipo: 'habilidad',
     rareza: 'rara',
     coste: 2,
-    objetivo: 'enemigo',
+    objetivo: 'todos',
     fx: 'sangre',
     animRara: 'anim-berserker',
-    texto: 'Consume la Hemorragia del objetivo\ne inflige el doble de esa cantidad.',
-    valores: (c) => {
-      const hem = c.objetivo?.estados.hemorragia ?? 0;
-      return hem > 0 ? [{ tipo: 'directo', tras: 'el doble de esa cantidad', base: hem * 2 }] : [];
-    },
-    jugar: async (c) => {
-      const hem = c.objetivo!.estados.hemorragia ?? 0;
-      if (hem > 0) {
-        await c.danar(c.objetivo!, hem * 2, 'sangre');
-        delete c.objetivo!.estados.hemorragia;
-      } else {
-        await c.mensaje('El objetivo no sangra…');
-      }
-    },
+    texto: 'Furia: consume toda la Hemorragia\nde los enemigos y gana esa\ncantidad de Fuerza.',
+    valores: (c) => [{ tipo: 'otro', tras: 'esa\ncantidad', base: hemorragiaEnJuego(c) }],
+    jugar: festinCarmesi,
     mejora: {
-      texto: 'Consume la Hemorragia del objetivo,\ninflige el doble de esa cantidad\ny cúrate esa cantidad.',
-      jugar: async (c) => {
-        const hem = c.objetivo!.estados.hemorragia ?? 0;
-        if (hem > 0) {
-          await c.danar(c.objetivo!, hem * 2, 'sangre');
-          delete c.objetivo!.estados.hemorragia;
-          await c.curar(hem);
-        } else {
-          await c.mensaje('El objetivo no sangra…');
-        }
-      },
+      coste: 1,
+      texto: 'Furia: consume toda la Hemorragia\nde los enemigos y gana esa\ncantidad de Fuerza.',
     },
   },
   // — Carta única de clase (don del inicio del Acto III) —

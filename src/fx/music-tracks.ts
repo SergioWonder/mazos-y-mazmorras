@@ -17,7 +17,7 @@ const SOURCE_RATE = 44100;
 export const MP3_DELAY_SAMPLES = 1105;
 
 export const MUSIC_TRACKS: Record<string, MusicTrack> = {
-  'menu': { file: 'menu.mp3', loopSamples: 3087000 },       // main theme (leitmotif), sample-based: 3/4, 108 BPM, 42 bars
+  'menu': { file: 'menu.mp3', loopSamples: 3528000 },       // main theme «Brasas» (fantasy and magic), D minor, 84 BPM, 28 bars
   'cap1': { file: 'cap1.mp3', loopSamples: 3386880 },      // «Taberna y travesura»
   // Act I, sample-based (scripts/musica/acto1-*): each scenario's song in two synced versions
   'cap1-e0': { file: 'cap1-e0.mp3', loopSamples: 3528000, group: 'cap1-e0' },          // «Tambores en el valle», map
@@ -36,11 +36,14 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
 
 /** Theme of a combat: the Dungeon Master has his own track; the rest use the act's theme. */
 export function combatTheme(
-  chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean }[], scenario = 0,
+  chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean; faseMusical?: number }[], scenario = 0,
   tracks: Record<string, MusicTrack> = MUSIC_TRACKS,
 ): string {
   if (enemies.some((e) => e.dungeonMaster)) return 'dm';
   const own = `cap${chapter + 1}-e${scenario}-${boss ? 'jefe' : 'combate'}`;
+  // a boss's second phase (Abaddon rising from Malachar) has its own version of the song
+  const phase = Math.max(1, ...enemies.map((e) => e.faseMusical ?? 1));
+  if (boss && phase > 1 && tracks[`${own}-fase${phase}`]) return `${own}-fase${phase}`;
   return tracks[own] ? own : `cap${chapter + 1}${boss ? '-jefe' : ''}`;
 }
 
