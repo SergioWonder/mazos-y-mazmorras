@@ -1,0 +1,8 @@
+numpy
+scipy
+soundfile
+mido
+pretty_midi
+music21
+pedalboard
+pyloudnorm

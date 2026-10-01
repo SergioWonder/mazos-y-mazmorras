@@ -13,7 +13,7 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 
 | Fichero     | Tema | Carácter |
 |-------------|------|----------|
-| `menu.mp3`  | Tema principal | Obertura de aventura, cálida y heroica |
+| `menu.mp3`  | Tema principal | Orquesta de cámara con samples reales (VSCO 2): vals de aventura en re mayor, 3/4 a 108; trompa, maderas, cuerdas y arpa. Hecho con el estudio de `scripts/musica/estudio/` |
 | `cap1.mp3`  | Acto I: Asentamiento Ogro y Contrabandistas | «Taberna y travesura», giga pícara en 6/8 |
 | `jefe1.mp3` | Jefes del acto I | «Señor de la guerra», épica orquestal en re menor |
 | `cap2.mp3`  | Acto II: La Cripta y El Templo Oscuro | «Marcha de los huesos», misterio travieso en re dórico |
@@ -22,7 +22,9 @@ La música se **pausa** en segundo plano y el botón flotante 🎵 apaga o encie
 | `jefe3.mp3` | Jefes del acto III | Combate final, la pista más épica |
 | `dm.mp3`    | El Dungeon Master | «Behind the Screen», metalcore progresivo instrumental en sol menor a 140 BPM; su intro suena una vez y queda fuera del bucle |
 
-Todas las pistas son MP3 a 160 kbps, 44,1 kHz y estéreo. Los scripts que las generan
+El tema del menú ya sale del **estudio con samples** (`scripts/musica/estudio/`, ver su README):
+`scripts/musica/menu/compose.py` genera el MIDI y `scripts/musica/menu/mix.py` lo renderiza a
+192 kbps. Las demás pistas siguen siendo las sintetizadas, a 160 kbps. Los scripts de las sintetizadas
 están en `scripts/musica/<pista>/` y solo necesitan Python 3, numpy y ffmpeg: por
 ejemplo, `python3 scripts/musica/acto2/cap2.py` deja `cap2.mp3` junto al script. Para
 publicarla, cópiala aquí (Vite le pone un hash en el nombre, así que la caché del juego la renueva) y, si cambió su duración, actualiza `loopSamples` en

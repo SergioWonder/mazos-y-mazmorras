@@ -2334,6 +2334,9 @@ console.log('\n🎵 Banda sonora');
   check(temas.every((t) => fs.existsSync(new URL(`../src/audio/${MUSIC_TRACKS[t].file}`, import.meta.url))), 'todas las pistas existen en src/audio');
   check(temas.every((t) => MUSIC_TRACKS[t].file.endsWith('.mp3') && MUSIC_TRACKS[t].loopSamples > 44100 * 30), 'las pistas son MP3 (suenan en Safari) con la longitud exacta del bucle');
   check(new Set(['cap1', 'cap2', 'cap3', 'menu'].map((t) => MUSIC_TRACKS[t].file)).size === 4, 'cada acto y el menú tienen su propia música');
+  // the sample-based main theme (scripts/musica/menu): 42 bars of 3/4 at 108 BPM = 70 s
+  check(MUSIC_TRACKS.menu.loopSamples === 3087000, 'el tema del menú con samples dura su bucle exacto de 70 s');
+  check(fs.statSync(new URL('../src/audio/menu.mp3', import.meta.url)).size > 1_600_000, 'y el MP3 del menú es el nuevo (192 kbps)');
   check(MUSIC_TRACKS['cap1-jefe'].file !== MUSIC_TRACKS['cap2-jefe'].file && MUSIC_TRACKS['cap2-jefe'].file !== MUSIC_TRACKS['cap3-jefe'].file, 'cada acto tiene su música de jefe');
   const bucle = 44100 * 60;
   const recortado = loopWindow(60, bucle);
@@ -7982,6 +7985,46 @@ console.log('\n🗡️ Pícaro: descartes y ataques furtivos');
     check(99 - e.pv === 21, `Tempestad de Acero: 12 + 3 por cada carta descartada en el combate (${99 - e.pv})`);
     const nueva = await montar(9121);
     check(nueva.comb.descartadasEsteCombate === 0, 'cada combate empieza la cuenta desde cero');
+  }
+}
+
+// ── Paladin: Holy Charge counts as both a Strike and a Defend ────────────────
+console.log('\n⚒️ Carga Sagrada: Golpe y Defensa a la vez');
+{
+  const carga = PALADIN.find((c) => c.id === 'carga-sagrada')!;
+  const montar = async (semilla: number) => {
+    const comb = new Combate(nuevaRun('paladin', semilla), [GOBLIN_CORTADOR], crearRng(semilla), uiSilenciosa);
+    await comb.iniciar();
+    comb.run.reliquias.length = 0;
+    comb.jugador.estados = { golpesMas: 3, defensasMas: 2 };
+    comb.jugador.bloqueo = 0;
+    const e = comb.enemigos[0]; e.pv = e.pvMax = 99; e.bloqueo = 0; e.estados = {};
+    return { comb, e };
+  };
+  {
+    const { comb, e } = await montar(9140);
+    const valores = comb.valoresDeCarta(carga, e).filter((v) => v.aplica !== false);
+    check(valores.some((v) => v.tipo === 'ataque' && v.real === 15) && valores.some((v) => v.tipo === 'bloqueo' && v.real === 8),
+      'Carga Sagrada muestra +3 de daño (Arma Consagrada) y +2 de bloqueo (Égida Divina)');
+    const inst = instanciar(carga);
+    comb.jugador.mano.push(inst);
+    comb.jugador.energia = 10;
+    await comb.jugarCarta(inst, e);
+    check(99 - e.pv === 15 && comb.jugador.bloqueo === 8, `Carga Sagrada: 12 + 3 de daño y 6 + 2 de bloqueo (${99 - e.pv} y ${comb.jugador.bloqueo})`);
+    check((comb.jugador.estados.fervor ?? 0) === 1, 'y da 1 de Fervor, como cualquier Golpe o Defensa (no 2)');
+  }
+  {
+    const inst = instanciar(carga); inst.mejorada = true;
+    const { comb, e } = await montar(9141);
+    await defDe(inst).jugar(comb.contexto(e));
+    check(99 - e.pv === 19 && comb.jugador.bloqueo === 10, 'Carga Sagrada+: 16 + 3 de daño y 8 + 2 de bloqueo');
+  }
+  for (const familia of ['golpe', 'defensa'] as const) {
+    const { comb } = await montar(9142);
+    comb.jugador.mazo = [instanciar(carga)];
+    comb.jugador.mano = [];
+    const ok = await comb.contexto().robarFamilia(familia);
+    check(ok && comb.jugador.mano[0]?.def.id === 'carga-sagrada', `buscar un${familia === 'golpe' ? ' Golpe' : 'a Defensa'} puede traer Carga Sagrada`);
   }
 }
 

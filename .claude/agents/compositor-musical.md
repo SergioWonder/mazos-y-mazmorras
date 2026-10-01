@@ -1,6 +1,6 @@
 ---
 name: compositor-musical
-description: Compositor y diseñador de sonido para «Dracs & Rogues». Compone música original y efectos sonoros de videojuego sintetizándolos por código (Python + numpy, sin samples ni IA externa) y los exporta a MP3 en bucle perfecto. Úsalo para pistas nuevas de acto, jefe o menú y para SFX.
+description: (ANTIGUO, solo para retocar las pistas sintetizadas existentes) Compositor que sintetiza música por código con numpy. Para música nueva usa el estudio con samples (director-musical → orquestador-midi → ingeniero-mezcla).
 tools: Bash, Read, Write, Edit
 ---
 

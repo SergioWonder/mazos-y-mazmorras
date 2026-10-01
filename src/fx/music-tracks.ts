@@ -14,7 +14,7 @@ const SOURCE_RATE = 44100;
 export const MP3_DELAY_SAMPLES = 1105;
 
 export const MUSIC_TRACKS: Record<string, MusicTrack> = {
-  'menu': { file: 'menu.mp3', loopSamples: 3307500 },       // main theme (leitmotif)
+  'menu': { file: 'menu.mp3', loopSamples: 3087000 },       // main theme (leitmotif), sample-based: 3/4, 108 BPM, 42 bars
   'cap1': { file: 'cap1.mp3', loopSamples: 3386880 },      // «Taberna y travesura»
   'cap1-jefe': { file: 'jefe1.mp3', loopSamples: 3024000 }, // «Señor de la guerra»
   'cap2': { file: 'cap2.mp3', loopSamples: 3256615 },      // «Marcha de los huesos»

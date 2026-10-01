@@ -288,8 +288,9 @@ export interface CartaDef {
   /** Animación especial de carta rara (clase CSS + efecto a pantalla). */
   animRara?: string;
   exhumar?: boolean; // se agota al jugarse
-  /** (paladin) Strike or Defend family: gives Fervor and takes the Strike/Defend bonuses. */
-  familia?: 'golpe' | 'defensa';
+  /** (paladin) Strike or Defend family: gives Fervor and takes the Strike/Defend bonuses.
+   *  'ambas' counts as both (Holy Charge): both bonuses, found by either search, 1 Fervor. */
+  familia?: 'golpe' | 'defensa' | 'ambas';
   /** (paladin) a Smite card (Oath of Vengeance makes them free). */
   castigo?: boolean;
   /** Requiere un espacio de conjuro libre de este nivel mínimo (mago). */

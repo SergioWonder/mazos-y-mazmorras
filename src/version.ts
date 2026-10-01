@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.5.2';
+export const VERSION = '7.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '7.6.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '🎻 Nuevo tema del menú, tocado con instrumentos de orquesta reales: trompa, maderas, cuerdas y arpa presentan el leitmotiv del héroe en un vals de aventura.',
+      '⚒️ Carga Sagrada cuenta como Golpe y como Defensa: suma el daño extra de tus Golpes y el bloqueo extra de tus Defensas, y la encuentran las cartas que buscan cualquiera de los dos.',
+    ],
+  },
   {
     version: '7.5.2',
     fecha: '2026-09-30',

@@ -16,3 +16,7 @@ graphify-out/[0-9]*/
 scripts/musica/**/*.mp3
 scripts/musica/**/*.wav
 scripts/musica/**/__pycache__/
+
+# sample-based music studio: local virtualenv and render output
+scripts/musica/estudio/.venv/
+scripts/musica/**/build/

@@ -883,7 +883,8 @@ export class Combate {
         const mazo = self.jugador.mazo;
         // pop() draws from the end: the top of the pile is searched first
         for (let i = mazo.length - 1; i >= 0; i--) {
-          if (defDe(mazo[i]).familia !== familia) continue;
+          const suya = defDe(mazo[i]).familia;
+          if (suya !== familia && suya !== 'ambas') continue;
           if (self.jugador.mano.length >= 10) return false;
           const [carta] = mazo.splice(i, 1);
           self.jugador.mano.push(carta);

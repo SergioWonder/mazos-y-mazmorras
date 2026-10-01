@@ -4370,11 +4370,22 @@ export const PALADIN: CartaDef[] = [
     coste: 2,
     objetivo: 'enemigo',
     fx: 'martillo',
-    texto: 'Inflige 12 de daño.\nGana 6 de bloqueo.',
-    jugar: async (c) => { await c.atacar(c.objetivo!, 12, 1, 'martillo'); await c.ganarBloqueo(6); },
+    familia: 'ambas', // a Strike and a Defend at once: it takes both bonuses
+    texto: 'Inflige 12 de daño.\nGana 6 de bloqueo.\nCuenta como Golpe y como Defensa.',
+    valores: (c, n) => [
+      { tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) },
+      { tipo: 'bloqueo', indice: 1, base: n[1] + (c.jugador.estados.defensasMas ?? 0) },
+    ],
+    jugar: async (c) => {
+      await c.atacar(c.objetivo!, 12 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo');
+      await c.ganarBloqueo(6 + (c.jugador.estados.defensasMas ?? 0));
+    },
     mejora: {
-      texto: 'Inflige 16 de daño.\nGana 8 de bloqueo.',
-      jugar: async (c) => { await c.atacar(c.objetivo!, 16, 1, 'martillo'); await c.ganarBloqueo(8); },
+      texto: 'Inflige 16 de daño.\nGana 8 de bloqueo.\nCuenta como Golpe y como Defensa.',
+      jugar: async (c) => {
+        await c.atacar(c.objetivo!, 16 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo');
+        await c.ganarBloqueo(8 + (c.jugador.estados.defensasMas ?? 0));
+      },
     },
   },
   // — Infrecuentes —
