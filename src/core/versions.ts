@@ -21,3 +21,11 @@ export function majorChangelog<T extends ChangelogEntry>(changelog: T[], current
 export function shouldNotifyMajor(installed: string, remote: string, lastNotified: string | null): boolean {
   return majorOf(remote) > majorOf(installed) && lastNotified !== remote;
 }
+
+/** Whether the "new versions" switch is on. The player's own choice (`stored` in localStorage, with
+ *  `backup` mirrored in the service worker's cache in case local storage is lost) decides; the
+ *  browser's permission only switches it off when notifications are blocked. Home-screen apps on
+ *  some phones report the permission as 'default' again after a relaunch even though it was granted. */
+export function noticesOn(stored: string | null, backup: string | null, permission: NotificationPermission): boolean {
+  return (stored ?? backup) === '1' && permission !== 'denied';
+}

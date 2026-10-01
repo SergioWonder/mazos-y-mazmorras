@@ -1,6 +1,6 @@
 import { registerSW } from 'virtual:pwa-register';
 import { VERSION, CHANGELOG } from '../version.ts';
-import { isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../core/versions.ts';
+import { isMajorUpgrade, majorChangelog, noticesOn, shouldNotifyMajor } from '../core/versions.ts';
 import { el } from './util.ts';
 
 const CLAVE_VERSION = 'mazmorra-version-vista';
@@ -9,6 +9,7 @@ const INTERVALO_COMPROBACION = 60 * 1000; // busca versión nueva cada minuto
 const META = 'mazmorra-meta';
 const CLAVE_AVISOS = 'mazmorra-avisos-mayores';
 let registro: ServiceWorkerRegistration | undefined;
+let copiaAvisos: string | null = null; // the choice mirrored in CacheStorage, read at start-up
 /** Fired on window whenever the notifications are switched on or off. */
 export const EVENTO_AVISOS = 'mazmorra-avisos-cambiados';
 
@@ -30,7 +31,7 @@ export function iniciarActualizaciones() {
       if (!registration) return;
       registro = registration;
       void guardarMeta('instalada', VERSION);
-      void comprobarVersionMayor();
+      void recuperarAvisos().then(() => comprobarVersionMayor());
       // El SW solo busca versión nueva al navegar; forzamos comprobaciones
       // periódicas y al recuperar el foco para que el aviso no dependa de
       // la caché ni de cerrar y reabrir la app.
@@ -74,7 +75,25 @@ async function leerMeta(clave: string): Promise<string | null> {
 export const avisosDisponibles = () => 'Notification' in window && 'serviceWorker' in navigator;
 
 export function avisosActivados(): boolean {
-  try { return localStorage.getItem(CLAVE_AVISOS) === '1' && Notification.permission === 'granted'; } catch { return false; }
+  let guardado: string | null = null;
+  try { guardado = localStorage.getItem(CLAVE_AVISOS); } catch { /* sin almacenamiento */ }
+  try { return noticesOn(guardado, copiaAvisos, Notification.permission); } catch { return false; }
+}
+
+/** Reads the copy of the choice kept in CacheStorage; if local storage lost it, restores it. */
+async function recuperarAvisos() {
+  copiaAvisos = await leerMeta('avisos');
+  try {
+    if (copiaAvisos !== null && localStorage.getItem(CLAVE_AVISOS) === null) localStorage.setItem(CLAVE_AVISOS, copiaAvisos);
+  } catch { /* sin almacenamiento */ }
+  window.dispatchEvent(new Event(EVENTO_AVISOS));
+  // the choice is on but the browser forgot the permission: ask again on the next tap (a granted
+  // permission comes straight back without a prompt)
+  if (avisosActivados() && Notification.permission === 'default') {
+    window.addEventListener('pointerdown', () => {
+      void Notification.requestPermission().then(() => window.dispatchEvent(new Event(EVENTO_AVISOS)));
+    }, { once: true });
+  }
 }
 
 /** Activa o desactiva los avisos. Pide permiso al navegador (necesita un clic). */
@@ -87,7 +106,8 @@ export async function cambiarAvisos(activar: boolean): Promise<boolean> {
     }
   }
   try { localStorage.setItem(CLAVE_AVISOS, activar ? '1' : '0'); } catch { /* sin almacenamiento */ }
-  await guardarMeta('avisos', activar ? '1' : '0');
+  copiaAvisos = activar ? '1' : '0';
+  await guardarMeta('avisos', copiaAvisos);
   window.dispatchEvent(new Event(EVENTO_AVISOS)); // the title and the settings panel repaint
   // background checks where supported (Chrome/Android with the app installed)
   const sync = (registro as ServiceWorkerRegistration & { periodicSync?: { register(t: string, o: object): Promise<void>; unregister(t: string): Promise<void> } } | undefined)?.periodicSync;
@@ -100,7 +120,7 @@ export async function cambiarAvisos(activar: boolean): Promise<boolean> {
 
 /** Consulta version.json y avisa (una vez) si hay una versión mayor nueva. */
 async function comprobarVersionMayor() {
-  if (!registro || !avisosActivados()) return;
+  if (!registro || !avisosActivados() || Notification.permission !== 'granted') return;
   try {
     const res = await fetch(`${import.meta.env.BASE_URL}version.json?t=${Date.now()}`, { cache: 'no-store' });
     if (!res.ok) return;

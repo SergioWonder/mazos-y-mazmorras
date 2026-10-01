@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.2.0';
+export const VERSION = '8.2.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.2.1',
+    fecha: '2026-10-01',
+    cambios: [
+      '🔔 «Notificar nuevas versiones» se queda activado al volver a entrar: el juego recuerda tu elección aunque el móvil olvide el permiso al cerrar la app, y lo recupera con tu siguiente toque.',
+    ],
+  },
   {
     version: '8.2.0',
     fecha: '2026-10-01',

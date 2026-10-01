@@ -22,7 +22,7 @@ import { ENEMY_RIGS, INVOCATION_RIGS } from '../src/fx/enemy-rigs.ts';
 import { galleryCatalogue } from '../src/ui/gallery-catalogue.ts';
 import { pickSvg } from '../src/ui/card-svgs.ts';
 import { packRig, spriteMatrix, MAX_POLY, PIECE_TEXELS } from '../src/fx/puppet-gpu.ts';
-import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor } from '../src/core/versions.ts';
+import { majorOf, isMajorUpgrade, majorChangelog, shouldNotifyMajor, noticesOn } from '../src/core/versions.ts';
 import { hasFullArt } from '../src/ui/card-looks.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { sceneBackground } from '../src/fx/background.ts';
@@ -2313,6 +2313,12 @@ console.log('\n🔔 Actualizaciones mayores');
   check(!shouldNotifyMajor('3.7.0', '4.0.0', '4.0.0'), 'pero solo una vez');
   check(!shouldNotifyMajor('3.7.0', '3.8.0', null), 'y nunca por versiones menores');
   check(!shouldNotifyMajor('4.0.0', '4.0.0', null), 'ni si ya la tienes instalada');
+  check(noticesOn('1', null, 'granted') && noticesOn('1', '1', 'default'),
+    'el interruptor de avisos sigue encendido al volver a entrar aunque el navegador diga que el permiso está pendiente');
+  check(noticesOn(null, '1', 'granted') && !noticesOn('0', '1', 'granted'),
+    'si se pierde el almacenamiento local, la elección se recupera de la copia del service worker');
+  check(!noticesOn('1', '1', 'denied') && !noticesOn(null, null, 'granted') && !noticesOn('0', null, 'default'),
+    'los avisos se ven apagados si están bloqueados o el jugador nunca los activó');
 }
 
 // ── Ilustraciones SVG dibujadas a mano (src/arte/cartas) ─────────────────────

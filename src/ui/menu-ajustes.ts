@@ -7,7 +7,7 @@
 import { ajustes, alCambiarAjustes, cambiarAjuste, type Ajustes } from '../core/ajustes.ts';
 import { el } from './util.ts';
 import { audio } from '../fx/audio.ts';
-import { avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
+import { EVENTO_AVISOS, avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
 
 type Interruptor = { tipo: 'interruptor'; clave: keyof Ajustes; etiqueta: string; ayuda?: string };
 type Deslizador = { tipo: 'volumen'; clave: 'volumenMusica' | 'volumenSonidos'; etiqueta: string; depende: 'musica' | 'sonidos' };
@@ -70,6 +70,7 @@ export function abrirMenuAjustes() {
       <button class="menu-ajustes-cerrar" aria-label="Cerrar">✕</button>
     </div>`;
   const pintar: Array<(a: Ajustes) => void> = [];
+  const alCerrar: Array<() => void> = []; // listeners to drop when the panel closes
   for (const sec of SECCIONES) {
     const bloque = el('section', 'menu-ajustes-seccion');
     bloque.appendChild(el('h3', '', sec.titulo));
@@ -135,6 +136,8 @@ export function abrirMenuAjustes() {
       pintarAvisos();
     });
     pintarAvisos();
+    window.addEventListener(EVENTO_AVISOS, pintarAvisos);
+    alCerrar.push(() => window.removeEventListener(EVENTO_AVISOS, pintarAvisos));
     bloque.appendChild(fila);
     panel.appendChild(bloque);
   }
@@ -162,6 +165,7 @@ export function abrirMenuAjustes() {
   const dejarDeOir = alCambiarAjustes(repintar);
 
   const cerrar = () => {
+    alCerrar.forEach((f) => f());
     window.removeEventListener('keydown', teclado, true);
     dejarDeOir();
     capa.remove();

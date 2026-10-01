@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790879447.301703,
-    "ast_hash": "3cbcd1fcbb6ad02d26c55e3f2e9f489b",
+    "mtime": 1790880776.5870974,
+    "ast_hash": "b6995415ca7a0db23967db6936095a93",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790879413.0361981,
-    "ast_hash": "1db75ea630d99f5b450150accf7f8f78",
+    "mtime": 1790880717.0455387,
+    "ast_hash": "727a34a9274add2d01780c1f7063a755",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -95,8 +95,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
-    "mtime": 1790780221.2063687,
-    "ast_hash": "e798c6dc639b7f4b32ead348bbf10bf8",
+    "mtime": 1790880756.71894,
+    "ast_hash": "0a799bf8278ea65adec83454b45f3ca1",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/bendicion.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790879447.2984927,
-    "ast_hash": "1d7eefb7b396590492108cbe7ced2299",
+    "mtime": 1790880776.5836356,
+    "ast_hash": "cdd40a0375d801e00139fa807c9d79df",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/versions.ts": {
-    "mtime": 1790345503.5431275,
-    "ast_hash": "4b25f92ba6a1641d53e16eb6d5c8ade8",
+    "mtime": 1790880729.71983,
+    "ast_hash": "4cb05f450190ff20480e500fff76df64",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/card-svgs.ts": {
@@ -2855,8 +2855,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/menu-ajustes.ts": {
-    "mtime": 1790780188.8871498,
-    "ast_hash": "b7e70c2b047b2d2c7892348a624681fd",
+    "mtime": 1790880746.2205567,
+    "ast_hash": "514f54202133a85e7c32f881a0580d21",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/visor-mazo-orden.ts": {
