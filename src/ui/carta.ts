@@ -286,7 +286,7 @@ export const ARTE_CARTA: Record<string, string> = {
   'senda-arbol-mundo': '🌳', 'senda-fanatico': '⚡', 'voto-sangre': '🩸',
   'corte-sangrante': '🔪', 'doble-tajo': '🪒', desgarro: '🪓',
   'hacha-carnicera': '🪚', 'furia-sanguinaria': '👺', 'sed-de-sangre': '🧛',
-  'reabrir-heridas': '🩹', 'festin-carmesi': '🍷', 'furia-indomita': '🐗',
+  'reabrir-heridas': '🩹', 'cadena-filacteria': '🫙', 'festin-carmesi': '🍷', 'furia-indomita': '🐗',
   // ── Mago ──
   'manos-ardientes': '🔥', 'proyectil-magico': '✨', 'rayo-escarcha': '❄️',
   'toque-electrizante': '⚡', 'armadura-mago': '🧥', 'truco-magia': '🎩',

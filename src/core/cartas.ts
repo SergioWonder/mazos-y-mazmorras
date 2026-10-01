@@ -4022,6 +4022,15 @@ function maldicion(d: Omit<CartaDef, 'clase' | 'tipo' | 'rareza' | 'coste' | 'ob
 
 export const MALDICIONES: CartaDef[] = [
   maldicion({
+    id: 'cadena-filacteria',
+    nombre: 'Cadena de la Filacteria',
+    purgar: 1,
+    texto: "Mientras esté en tu mano, cada carta que\njuegues cura 3 PV a Vol'guth.\nPaga 1 de energía para romperla.",
+    alJugarOtraEnMano: async (c) => {
+      for (const e of c.enemigos.filter((x) => x.vivo && x.def.pasiva === 'filacteria')) await c.curarEnemigo(e, 3);
+    },
+  }),
+  maldicion({
     id: 'herida-infectada',
     nombre: 'Herida Infectada',
     texto: 'Injugable.\nAl final del turno, si está en tu mano, pierdes 2 PV.',

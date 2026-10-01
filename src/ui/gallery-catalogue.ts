@@ -2,7 +2,7 @@
 // smoke test can check that every illustrated enemy is listed exactly once.
 
 import type { ClaseId, EnemigoDef } from '../core/types.ts';
-import { ACTOS, DUNGEON_MASTER, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR } from '../core/enemigos.ts';
+import { ACTOS, DUNGEON_MASTER, FILACTERIA_VOLGUTH, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR } from '../core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import type { FormId } from '../fx/hero-rig.ts';
 
@@ -62,7 +62,8 @@ export function galleryCatalogue(): GallerySection[] {
     (BOSS_SUMMONS[`${act}-${esc}`] ?? []).forEach((d) => add(d, false));
     cap.elites.flat().forEach((d) => add(d, true));
     // the boss, and whatever it unleashes on death (Malachar → Abaddon)
-    cap.jefe.forEach((d) => { add(d, false); if (d.invocaAlMorir) add(d.invocaAlMorir, false); });
+    // the boss, and whatever takes its place on death (Malachar → Abaddon, Vol'guth → his phylactery)
+    cap.jefe.forEach((d) => { add(d, false); if (d.invocaAlMorir) add(d.invocaAlMorir, false); if (d.filacteria) add(d.filacteria, false); });
     sections.push({ title: cap.nombre, subtitle: cap.subtitulo, act, cards });
   }));
   // the final joke: the Dungeon Master waits behind his screen after Act III

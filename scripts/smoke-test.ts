@@ -659,33 +659,59 @@ console.log('— Jefes con efectos únicos —');
   check((dragon.estados.espinas ?? 0) === 6, 'y sus escamas arden más (+2 Espinas)');
   check(dragon.rasgoUsado === true, 'el enfurecimiento es de un solo uso');
 
-  // Vol'guth: la filacteria lo revive con 60 PV, invulnerable 1 turno y sediento
-  const run2 = nuevaRun('mago', 6666);
-  const combate2 = new Combate(run2, [SENOR_CRIPTA], crearRng(6666), uiSilenciosa);
-  await combate2.iniciar();
-  const liche = combate2.enemigos[0];
-  liche.pv = 5;
-  await combate2.contexto(liche).atacar(liche, 99);
-  check(liche.vivo && liche.pv === 60, 'la filacteria lo revive con 60 PV');
-  check((liche.estados.invulnerable ?? 0) === 1, 'y queda invulnerable');
-  await combate2.contexto(liche).atacar(liche, 999);
-  check(liche.vivo && liche.pv === 60, 'invulnerable: no recibe daño ese turno');
-  combate2.jugador.bloqueo = 999;
-  await combate2.terminarTurno(); // su turno consume la invulnerabilidad
-  check((liche.estados.invulnerable ?? 0) === 0, 'la invulnerabilidad dura 1 turno');
-  const drena = ['Drenar Vida', 'Lluvia de Huesos Voraz', 'Nova Necrótica Voraz', 'Maldición del Despertar'];
-  for (let t = 0; t < 4 && liche.vivo; t++) {
-    if (liche.intencion.cura && liche.intencion.dano) break;
+  // Vol'guth (rework): dies into his phylactery; it rebuilds him after a turn unless it breaks
+  {
+    const run2 = nuevaRun('mago', 6666);
+    run2.reliquias = [];
+    const combate2 = new Combate(run2, [SENOR_CRIPTA], crearRng(6666), uiSilenciosa);
+    await combate2.iniciar();
+    const liche = combate2.enemigos[0];
+    check(SENOR_CRIPTA.pv[0] <= 140, `Vol'guth tiene menos vida (${SENOR_CRIPTA.pv[0]})`);
+    await combate2.contexto(liche).atacar(liche, 999);
+    const fil = combate2.enemigos[0];
+    check(!combate2.terminado && fil.vivo && fil.def.id === 'filacteria-volguth' && fil.pv === fil.pvMax && fil.pvMax >= 30 && fil.pvMax <= 60,
+      `al morir, su sitio lo ocupa la filacteria (${fil.def.id}, ${fil.pv} PV)`);
+    check(fil.intencion.resucitar !== true, 'la filacteria no lo devuelve en su primer turno: tienes un turno entero para romperla');
     combate2.jugador.bloqueo = 999;
-    combate2.jugador.pv = combate2.jugador.pvMax;
     await combate2.terminarTurno();
+    check(combate2.enemigos[0] === fil && fil.intencion.resucitar === true, 'en su segundo turno anuncia la resurrección');
+    await combate2.contexto(fil).atacar(fil, 12);
+    const quedaba = fil.pv;
+    combate2.jugador.bloqueo = 999;
+    await combate2.terminarTurno();
+    const vuelto = combate2.enemigos[0];
+    check(vuelto.def.id === 'senor-cripta' && vuelto.vivo && vuelto.pv === vuelto.pvMax && vuelto.filacteriaUsada === true,
+      'si la filacteria aguanta, Vol\'guth resucita con toda su vida (y despierto)');
+    await combate2.contexto(vuelto).atacar(vuelto, 999);
+    const fil2 = combate2.enemigos[0];
+    check(fil2.def.id === 'filacteria-volguth' && fil2.pv === quedaba, `al matarlo otra vez, la filacteria vuelve con la vida que le quedaba (${fil2.pv} de ${quedaba})`);
+    await combate2.contexto(fil2).atacar(fil2, 999);
+    check(!combate2.enemigos[0].vivo && combate2.terminado === 'victoria', 'romper la filacteria lo destruye para siempre');
   }
-  check(
-    drena.includes(liche.intencion.nombre) || liche.filacteriaUsada === true,
-    'tras despertar, sus ataques drenan vida',
-  );
-  await combate2.contexto(liche).atacar(liche, 999);
-  check(!liche.vivo && combate2.terminado === 'victoria', 'la segunda muerte es definitiva');
+  // his curse turn hands you a chain that heals him while you hold it
+  {
+    const mov = SENOR_CRIPTA.ia(0, () => 0.5, { pv: 100, pvMax: 130, estados: {} } as never, []);
+    check(mov.maldicion?.id === 'cadena-filacteria' && mov.maldicion?.destino === 'mano', 'su turno de maldición te mete la Cadena de la Filacteria en la mano');
+    const run3 = nuevaRun('mago', 6667);
+    run3.reliquias = [];
+    const c3 = new Combate(run3, [SENOR_CRIPTA], crearRng(6667), uiSilenciosa);
+    await c3.iniciar();
+    const v = c3.enemigos[0];
+    c3.jugador.bloqueo = 999;
+    c3.jugador.mano = [];
+    v.intencion = mov;
+    await c3.terminarTurno();
+    const cadena = c3.jugador.mano.find((x) => x.def.id === 'cadena-filacteria');
+    check(!!cadena, 'tras su turno, la cadena está en tu mano');
+    v.pv = 100;
+    const { cartaPorId: porId } = await import('../src/core/cartas.ts');
+    const otra = instanciar(porId('defender')!);
+    c3.jugador.mano.push(otra);
+    c3.jugador.energia = 5;
+    await c3.jugarCarta(otra);
+    check(v.pv === 103, `mientras la tengas en la mano, cada carta que juegas cura 3 a Vol'guth (${v.pv})`);
+    check(cadena?.def.purgar === 1, 'puedes romperla pagando 1 de energía');
+  }
 }
 
 console.log('— Quemadura (Aliento de Dragón) —');
@@ -2150,7 +2176,7 @@ console.log('\n👹 Bestiario ilustrado');
   }
   // jefes: marioneta propia, emisores de partículas y ráfagas al atacar y morir
   const jefes = defs.filter((d) => d.esJefe);
-  check(jefes.length === 7, `hay ${jefes.length} jefes`);
+  check(jefes.length === 8, `hay ${jefes.length} jefes (los 7 y la filacteria de Vol'guth)`);
   for (const d of jefes) {
     const rig = ENEMY_RIGS[d.id];
     check(!!rig && rig.shapes.length >= 30, `${d.nombre}: marioneta épica (${rig?.shapes.length ?? 0} piezas)`);
@@ -2172,6 +2198,36 @@ console.log('\n👹 Bestiario ilustrado');
   const asc: Particle[] = [];
   for (let i = 0; i < 20; i++) spawnEffect(asc, 'ascua', 0, 0);
   check(asc.reduce((a, p) => a + p.vy, 0) < 0, 'las ascuas de los jefes suben');
+  // Vol'guth's phylactery: the soul escapes upwards when it breaks
+  {
+    const lib = EFFECTS.almaLiberada, cris = EFFECTS.cristalRoto;
+    check(!!lib && lib.gravity < 0 && !!lib.glow && lib.life[1] >= 1.5, 'el alma liberada asciende, brilla y tarda en disiparse');
+    const ps: Particle[] = [];
+    spawnEffect(ps, 'almaLiberada', 0, 0, 1, () => 0.5);
+    check(ps.length > 0 && ps.every((p) => p.vy < 0), 'todos los jirones del alma liberada salen hacia arriba');
+    check(!!cris && cris.gravity > 0, 'los cristales de la filacteria caen al romperse');
+    const fil = ENEMY_RIGS['filacteria-volguth'];
+    check(!!fil, 'la filacteria de Vol\'guth tiene marioneta');
+    if (fil) {
+      const muerte = fil.bursts?.death ?? [];
+      check(muerte.some((b) => b.effect === 'almaLiberada') && muerte.some((b) => b.effect === 'cristalRoto'),
+        'al morir la filacteria se rompe en cristales y suelta el alma');
+      const soul = { bone: 'head' as const, at: fil.focus };
+      const at = (act: { type: 'death' | 'hit' | 'spell'; p: number } | null, t = 0) =>
+        emitterWorld(fil, puppetBones(fil, puppetPose(fil, t, act).p), soul);
+      const quieto = at(null), fuera = at({ type: 'death', p: 0.75 });
+      check(quieto[1] - fuera[1] > 20, `el alma sube al romperse la urna (${(quieto[1] - fuera[1]).toFixed(1)} u)`);
+      check(Math.abs(quieto[0] - fuera[0]) < 6, 'y sube recta, sin salir disparada a un lado');
+      const latidos = Array.from({ length: 30 }, (_, i) => puppetPose(fil, i * 0.05, null).p.squash);
+      check(Math.max(...latidos) - Math.min(...latidos) > 0.005, 'en reposo la filacteria late');
+      const rot = (q: number) => { const p = puppetPose(fil, 0, { type: 'death', p: q }).p; return Math.abs(p.armB) + Math.abs(p.armF) + Math.abs(p.wingB) + Math.abs(p.wingF); };
+      check(rot(0.6) > 80, 'al morir, los fragmentos de cristal se abren');
+      const golpe = puppetPose(fil, 0, { type: 'hit', p: 0.15 }).p;
+      check(Math.abs(golpe.armB) + Math.abs(golpe.armF) > 4, 'al recibir un golpe, el cristal se agrieta');
+      const hechizo = puppetPose(fil, 0, { type: 'spell', p: 0.5 }).p;
+      check(hechizo.cape < -20, 'al resucitar a Vol\'guth, la tapa se abre');
+    }
+  }
   for (const f of ['lobo', 'oso', 'fuego', 'agua', 'aire', 'arbol', 'tierra', 'sabueso', 'demonio']) {
     check(!!INVOCATION_RIGS[f] && INVOCATION_RIGS[f].shapes.length >= 8, `invocación ${f}: tiene marioneta ilustrada`);
   }
@@ -2202,7 +2258,7 @@ console.log('\n🎭 Galería de sprites');
   check(new Set(ids).size === ids.length, 'ningún enemigo sale repetido');
   check(Object.keys(ENEMY_RIGS).every((id) => ids.includes(id)), 'están todos los enemigos ilustrados');
   check(ids.every((id) => !!ENEMY_RIGS[id]), 'todos los que salen tienen marioneta');
-  check(de('enemy').filter((f) => f.boss).length === 7, 'y los 7 jefes aparecen marcados como jefe');
+  check(de('enemy').filter((f) => f.boss).length === 8, 'y los 7 jefes y la filacteria aparecen marcados como jefe');
   check(secciones.filter((s) => s.act !== undefined).length === 6, 'una sección por escenario (3 actos × 2)');
 }
 
@@ -4372,7 +4428,8 @@ console.log('— Maldiciones —');
     'herida-infectada', 'duda', 'pesadilla', 'deuda-sangre', 'marca-condenado',
     'maldicion-momia', 'remordimiento', 'paralisis', 'codicia', 'grilletes',
   ];
-  check(MALD.length >= 8 && MALD.length <= 10, `hay entre 8 y 10 maldiciones (${MALD.length})`);
+  // 10 shared curses plus the bosses' own (Vol'guth's Phylactery Chain)
+  check(MALD.length >= 8 && MALD.length <= 11, `hay entre 8 y 11 maldiciones (${MALD.length})`);
   check(ESPERADAS.every((id) => !!M(id)), `existen todas las maldiciones previstas (faltan: ${ESPERADAS.filter((id) => !M(id)).join(', ')})`);
   check(MALD.every((c) => c.tipo === 'maldicion' && c.clase === 'neutral'), 'todas son de tipo «maldicion»');
   check(MALD.every((c) => !c.mejora), 'las maldiciones no se pueden mejorar en los campamentos');

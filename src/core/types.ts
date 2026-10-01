@@ -144,7 +144,9 @@ export interface Movimiento {
   /** devora al aliado vivo con menos PV: lo mata, se cura y gana Fuerza */
   devorar?: { cura: number; fuerza: number };
   /** Slips a curse into the player's piles for THIS combat only (never the run deck). */
-  maldicion?: { id: string; destino: 'mazo' | 'descarte' };
+  maldicion?: { id: string; destino: 'mazo' | 'descarte' | 'mano' };
+  /** (a phylactery) Brings its lich back to life, at full health, in its place. */
+  resucitar?: boolean;
   /** Kills the hero outright, ignoring block, Mirror Image, invulnerability,
    *  summons and relics (the Dungeon Master's ray). */
   mataAlInstante?: boolean;
@@ -168,8 +170,10 @@ export interface EnemigoDef {
   rasgo?: { nombre: string; texto: string };
   /** Estados con los que entra en combate (pasivas: espinas, etc.). */
   estadosIniciales?: Partial<Record<EstadoId, number>>;
-  /** Pasiva especial: 'filacteria' = la primera vez que muere revive con 30 PV. */
+  /** Pasiva especial: 'filacteria' = al morir, su sitio lo ocupa su filacteria (`filacteria`). */
   pasiva?: 'filacteria';
+  /** (a lich) The phylactery that takes his place when he dies; it brings him back if it survives. */
+  filacteria?: EnemigoDef;
   /** Al morir, libera a este enemigo en el campo (Heraldo del Culto → Demonio Mayor). */
   invocaAlMorir?: EnemigoDef;
   /** Marca a los jefes (no muere por efectos «mata si no es jefe»). */
@@ -206,6 +210,10 @@ export interface EnemigoCombate extends Luchador {
   danoBaseMax: number;
   /** La filacteria ya se consumió (pasiva del liche). */
   filacteriaUsada?: boolean;
+  /** (a lich) Health left in his phylactery: it carries over every time it comes back. */
+  filacteriaPv?: number;
+  /** (a phylactery) The lich whose soul it holds, and how many times it has brought him back. */
+  alma?: { def: EnemigoDef; resurrecciones: number };
   /** Rasgo único de un solo uso ya gastado (enfurecerse, etc.). */
   rasgoUsado?: boolean;
   /** Si está activo, este enemigo se salta su próxima acción (Seducir/Deseo). */
@@ -312,6 +320,8 @@ export interface CartaDef {
   /** (curses) Fires at the end of the player's turn, before the discard, only if
    *  the card is in the hand. */
   finTurnoEnMano?: (ctx: ContextoEfecto) => Promise<void>;
+  /** (curses) Fires each time another card is played while this one is in the hand. */
+  alJugarOtraEnMano?: (ctx: ContextoEfecto) => Promise<void>;
   /** (curses) Fires right after the card is drawn. */
   alRobar?: (ctx: ContextoEfecto, carta: CartaInstancia) => Promise<void>;
   /** Fires when an effect discards it from the hand (not the end-of-turn discard). */
@@ -442,7 +452,9 @@ export interface ContextoEfecto {
    *  enemies it hit and its damage per hit (before the target's modifiers). */
   explosionLanzada(golpeados: EnemigoCombate[], dano: number): Promise<void>;
   /** Slips a curse into the player's draw pile or discard for THIS combat only. */
-  meterMaldicion(id: string, destino: 'mazo' | 'descarte'): Promise<void>;
+  meterMaldicion(id: string, destino: 'mazo' | 'descarte' | 'mano'): Promise<void>;
+  /** Heals an enemy (curses that feed it, such as the Phylactery's Chain). */
+  curarEnemigo(e: EnemigoCombate, n: number): Promise<void>;
   /** Consumes a curse from the hand (the player picks one if there are several):
    *  it is exhausted for this combat. Returns it, or null if there was none. */
   consumirMaldicion(): Promise<CartaInstancia | null>;

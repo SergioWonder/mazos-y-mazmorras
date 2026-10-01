@@ -107,6 +107,9 @@ export const EFFECTS: Record<string, EffectPreset> = {
   castigoResplandor: { count: 24, colours: ['#ffc38a', '#ffd3a6', '#fffaf0'], speed: [1, 4], life: [0.5, 1], size: [2, 4], shape: 'circulo', gravity: -0.04, glow: true },
   castigoDestierro: { count: 28, colours: ['#b46bff', '#6c2fb5', '#ffd35a', '#e8d0ff'], speed: [1, 5], life: [0.5, 1], size: [2, 5], shape: 'circulo', gravity: 0.06, glow: true },
   muertePaladin: { count: 30, colours: ['#ffd35a', '#e0a82e', '#8a7a5a'], speed: [1, 5], life: [0.6, 1.2], size: [2, 4], shape: 'chispa', gravity: 0.1, glow: true },
+  // Vol'guth's phylactery breaking: glass shards falling and the freed soul rising in wisps
+  cristalRoto: { count: 24, colours: ['#9fd8c4', '#d8fff0', '#3e6e60', '#6fbaa0'], speed: [2, 6], life: [0.5, 1.0], size: [1.5, 3.5], shape: 'chispa', gravity: 0.22 },
+  almaLiberada: { count: 30, colours: ['#7affc8', '#b8ffe0', '#effff8', '#4fd8a0'], speed: [0.3, 1.4], life: [1.3, 2.5], size: [2.5, 6], shape: 'circulo', gravity: -0.035, direction: [-2.2, -0.95], glow: true },
   rayo: { count: 14, colours: ['#ff5ad8', '#ffd75a', '#6bd8ff', '#ffffff'], speed: [3, 9], life: [0.25, 0.5], size: [1.5, 3], shape: 'chispa', gravity: 0, direction: [Math.PI - 0.5, Math.PI + 0.5], glow: true },
 };
 

@@ -70,7 +70,9 @@ class SfzInstrument:
     regions: list[Region] = field(default_factory=list)
 
 
-def _preprocess(path: str, defines: dict[str, str], depth: int = 0) -> str:
+def _preprocess(path: str, defines: dict[str, str], depth: int = 0, root: str | None = None) -> str:
+    """Inlines #include (paths relative to the ROOT .sfz, as sfizz does) and expands #define."""
+    root = root or os.path.dirname(path)
     if depth > 8:
         raise RecursionError('#include nested too deep')
     with open(path, encoding='utf-8', errors='replace') as f:
@@ -85,8 +87,10 @@ def _preprocess(path: str, defines: dict[str, str], depth: int = 0) -> str:
             continue
         m = re.match(r'\s*#include\s+"(.+)"', line)
         if m:
-            inc = os.path.join(os.path.dirname(path), m.group(1))
-            out.append(_preprocess(inc, defines, depth + 1))
+            inc = os.path.join(root, m.group(1))
+            if not os.path.exists(inc):  # some libraries write it relative to the including file
+                inc = os.path.join(os.path.dirname(path), m.group(1))
+            out.append(_preprocess(inc, defines, depth + 1, root))
             continue
         for name in sorted(defines, key=len, reverse=True):
             line = line.replace(name, defines[name])

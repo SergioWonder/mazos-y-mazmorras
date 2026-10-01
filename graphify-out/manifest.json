@@ -5,23 +5,23 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790868748.5495975,
-    "ast_hash": "32c950221a04a20437e7bae0954772ac",
+    "mtime": 1790872086.587203,
+    "ast_hash": "8e0308c727aa7c958fbe12398f691911",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790868489.9952893,
-    "ast_hash": "dbc138c0e20840a457725090cbb1c24a",
+    "mtime": 1790871297.6207306,
+    "ast_hash": "1eaf9d1ef62edd9a71e4e7c6ddcb4c5b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
-    "mtime": 1790863840.7591755,
-    "ast_hash": "d2772dbb8ffd39a7e658c04044c70b9b",
+    "mtime": 1790870707.694943,
+    "ast_hash": "08b966709053738fb88933b769bf8566",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
-    "mtime": 1790846925.7770784,
-    "ast_hash": "02513b3ba3d42297f40fd8eec30ed2e0",
+    "mtime": 1790870707.6939135,
+    "ast_hash": "67d01b8e675131eda30faae7f8c65ed0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/conjuros.ts": {
@@ -30,8 +30,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/enemigos.ts": {
-    "mtime": 1790861638.5194259,
-    "ast_hash": "b2871eea808cbbdc78eb0daff3a5d777",
+    "mtime": 1790870694.26349,
+    "ast_hash": "ab46555c46ffcec1e06dcada547b12b0",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/eventos.ts": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/types.ts": {
-    "mtime": 1790861638.518935,
-    "ast_hash": "8c95bf2c7e25ee3f035c6f887de530f5",
+    "mtime": 1790870694.262807,
+    "ast_hash": "0c1f676ce692c4812129af934ae88c73",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790789789.5471716,
-    "ast_hash": "e31224acdf3c51ad49014ce37fc634d0",
+    "mtime": 1790870740.3209653,
+    "ast_hash": "d3a13c9f8b690f38b2d1bff7961fe8df",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790868748.5490735,
-    "ast_hash": "6fac6ccdd980dc5d7ae1c24d56eeeddc",
+    "mtime": 1790872086.5840504,
+    "ast_hash": "09205f936b8cfa2af2c04a7427655606",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/enemy-rigs.ts": {
-    "mtime": 1790787944.856954,
-    "ast_hash": "ae959cdbfa172eeb993d1465061e199c",
+    "mtime": 1790872009.224109,
+    "ast_hash": "c8de4f6fac37b0b9dd45133a50187a4e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet.ts": {
@@ -230,8 +230,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
-    "mtime": 1790719438.2705278,
-    "ast_hash": "8ae3c99c45801e1707496ff2bc555a98",
+    "mtime": 1790870707.6958077,
+    "ast_hash": "2cb310a26da6c6d115a6ef0c26402f4c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery.ts": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-sim.ts": {
-    "mtime": 1790788555.3029037,
-    "ast_hash": "c4ac57961d9a64a00b12820d7cf8c40b",
+    "mtime": 1790871030.3840365,
+    "ast_hash": "7ee092bf6a2aa0e07108498bb5cf2bed",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet-gpu.ts": {
@@ -3315,18 +3315,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/sampler.py": {
-    "mtime": 1790866753.5314813,
-    "ast_hash": "f6fb8ab16c49c3aabd97da3a98eab332",
+    "mtime": 1790870813.8486161,
+    "ast_hash": "47a9f117749f98910e58b9c4357785bb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/sfz.py": {
-    "mtime": 1790842849.2562072,
-    "ast_hash": "b51f20b25c194229432f8d2e26eb6740",
+    "mtime": 1790870789.524367,
+    "ast_hash": "de3102ddb0c280e83de6fadcf9e598b2",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/estudio/tests/test_estudio.py": {
-    "mtime": 1790866782.4472623,
-    "ast_hash": "666e1bc5c025f0683c3485eeaf584fdc",
+    "mtime": 1790870813.8482444,
+    "ast_hash": "77c48ab16cbc4764a95118cd0f56b659",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/musica/menu/compose.py": {
@@ -3647,6 +3647,16 @@
   "/Users/sergio/WonderBits/personal/videogame/src/audio/cap2-e1-jefe.mp3": {
     "mtime": 1790868472.1301298,
     "ast_hash": "d7ee99c5d7e12baaae15c914a676aa97",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/scripts/musica/leitmotivs/acto3_bocetos.py": {
+    "mtime": 1790871078.2163053,
+    "ast_hash": "f332a16a504c7e07106a5bfb0ce467d6",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/cadena-filacteria.svg": {
+    "mtime": 1790871960.3489752,
+    "ast_hash": "10270861d3294d150db89e96a29075bd",
     "semantic_hash": ""
   }
 }

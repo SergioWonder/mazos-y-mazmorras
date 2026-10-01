@@ -466,17 +466,21 @@ export class Combate {
   }
 
   /** An enemy slips a curse into the player's piles for this combat only. */
-  async meterMaldicion(id: string, destino: 'mazo' | 'descarte', origen?: EnemigoCombate) {
+  async meterMaldicion(id: string, destino: 'mazo' | 'descarte' | 'mano', origen?: EnemigoCombate) {
     const carta = nuevaMaldicion(id);
-    if (destino === 'mazo') {
+    // a full hand sends it to the discard pile instead
+    const donde = destino === 'mano' && this.jugador.mano.length >= 10 ? 'descarte' : destino;
+    if (donde === 'mazo') {
       const pos = Math.floor(this.rng() * (this.jugador.mazo.length + 1));
       this.jugador.mazo.splice(pos, 0, carta);
+    } else if (donde === 'mano') {
+      this.jugador.mano.push(carta);
     } else {
       this.jugador.descarte.push(carta);
     }
     const quien = origen ? `${origen.nombre} te maldice: ` : '';
     await this.ui.fxMensaje(
-      `☠️ ${quien}«${carta.def.nombre}» entra en tu ${destino === 'mazo' ? 'mazo' : 'descarte'}`,
+      `☠️ ${quien}«${carta.def.nombre}» entra en tu ${donde === 'mazo' ? 'mazo' : donde === 'mano' ? 'mano' : 'descarte'}`,
     );
     this.ui.render();
   }
@@ -682,6 +686,12 @@ export class Combate {
         if (!self.terminado) await self.ganchos((r, c) => r.alLanzarExplosion?.(c, golpeados, dano));
       },
       meterMaldicion: (id, destino) => self.meterMaldicion(id, destino),
+      async curarEnemigo(e, n) {
+        const real = Math.min(n, e.pvMax - e.pv);
+        if (!e.vivo || real <= 0) return;
+        e.pv += real;
+        await self.ui.fxCura(e, real);
+      },
       consumirMaldicion: () => self.consumirMaldicion(),
       async sacrificarInvocacion() {
         const inv = self.jugador.invocacion;
@@ -1017,13 +1027,9 @@ export class Combate {
     if (!(obj === this.jugador && soakInv > 0 && real === 0)) await this.ui.fxGolpe(obj, real, fx);
     if (obj.pv <= 0 && obj.vivo) {
       const e = obj as EnemigoCombate;
-      // Pasiva del liche: la primera muerte no cuenta
-      if (obj !== this.jugador && e.def.pasiva === 'filacteria' && !e.filacteriaUsada) {
-        e.filacteriaUsada = true;
-        e.pv = 60;
-        e.estados.invulnerable = 1; // un turno intocable mientras se recompone
-        await this.ui.fxMensaje('☠️ ¡Su filacteria lo devuelve a la no-vida!');
-        this.ui.render();
+      // The lich does not die: his phylactery takes his place
+      if (obj !== this.jugador && e.def.pasiva === 'filacteria' && e.def.filacteria) {
+        await this.refugiarseEnFilacteria(e);
       } else {
         obj.vivo = false;
         if (obj !== this.jugador) await this.ui.fxMuerte(e);
@@ -1051,6 +1057,40 @@ export class Combate {
     }
     await this.comprobarFin();
     return real;
+  }
+
+  /** Vol'guth falls: his body crumbles and his phylactery takes his slot, with the health it
+   *  had left the last time (full the first time). */
+  private async refugiarseEnFilacteria(e: EnemigoCombate) {
+    const vasija = e.def.filacteria!;
+    e.vivo = false;
+    await this.ui.fxMuerte(e);
+    const fil = crearEnemigo(vasija, this.rng);
+    fil.pv = Math.min(fil.pvMax, e.filacteriaPv ?? fil.pvMax);
+    fil.alma = { def: e.def, resurrecciones: e.alma?.resurrecciones ?? 0 };
+    const i = this.enemigos.indexOf(e);
+    if (i >= 0) this.enemigos[i] = fil;
+    else this.enemigos.push(fil);
+    await this.ui.fxMensaje(`☠️ ${e.nombre} cae… y su alma se refugia en la filacteria`);
+    this.ui.render();
+  }
+
+  /** The phylactery survived: the lich rises again at full health in its slot. */
+  private async resucitarDeFilacteria(fil: EnemigoCombate) {
+    const alma = fil.alma;
+    if (!alma) return;
+    const liche = crearEnemigo(alma.def, this.rng);
+    liche.filacteriaUsada = true; // back from the dead: his attacks feed on life
+    liche.filacteriaPv = fil.pv;
+    liche.alma = { def: alma.def, resurrecciones: alma.resurrecciones + 1 };
+    liche.intencion = alma.def.ia(0, this.rng, liche, this.enemigos.filter((x) => x.vivo && x !== fil));
+    liche.danoBaseMax = liche.intencion.dano ?? 0;
+    fil.vivo = false;
+    const i = this.enemigos.indexOf(fil);
+    if (i >= 0) this.enemigos[i] = liche;
+    await this.ui.fxMensaje(`☠️ ¡La filacteria devuelve a ${liche.nombre} a la no-vida!`);
+    this.ui.render();
+    await this.ui.fxCura(liche, liche.pv);
   }
 
   /** Death triggers of the enemy traits: the fallen one lashes out (Final Burst) and
@@ -1571,6 +1611,11 @@ export class Combate {
       delete this.jugador.estados.roboAcelerado;
       await this.ui.fxMensaje('💨 El impulso de Acelerar se disipa');
     }
+    // Curses held in the hand that react to every card played (the Phylactery's Chain)
+    for (const otra of this.jugador.mano.filter((c) => c !== carta && defDe(c).alJugarOtraEnMano)) {
+      if (this.terminado) break;
+      await defDe(otra).alJugarOtraEnMano!(this.contexto());
+    }
     // Relic hooks: the card just played, and the hand left empty by it
     if (!this.terminado) {
       const jugada = {
@@ -1817,6 +1862,10 @@ export class Combate {
     const m = e.intencion;
     await this.ui.fxEnemigoActua(e);
     if (m.dialogo) await this.dialogoDM(e, m.dialogo);
+    if (m.resucitar) {
+      await this.resucitarDeFilacteria(e);
+      return;
+    }
 
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de

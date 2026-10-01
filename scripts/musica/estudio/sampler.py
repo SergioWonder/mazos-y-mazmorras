@@ -64,6 +64,15 @@ class Instrument:
     def audio(self, region: sfz.Region) -> np.ndarray:
         """The region's sample as float32 stereo at the instrument rate (cached)."""
         path = region.sample_path
+        builtin = (region.get('sample') or '').strip()
+        if builtin.startswith('*'):  # SFZ generators: *silence, *sine, *noise (one second, keycenter pitch)
+            if builtin not in self._audio:
+                t = np.arange(self.sr) / self.sr
+                f = 440 * 2 ** ((region.keycenter - 69) / 12)
+                wave = {'*sine': np.sin(2 * np.pi * f * t) * 0.5,
+                        '*noise': np.random.default_rng(0).standard_normal(self.sr) * 0.2}.get(builtin, np.zeros(self.sr))
+                self._audio[builtin] = np.repeat(wave.astype(np.float32)[:, None], 2, axis=1)
+            return self._audio[builtin]
         if path not in self._audio:
             data, rate = sf.read(path, dtype='float32', always_2d=True)
             if data.shape[1] == 1:

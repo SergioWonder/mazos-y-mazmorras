@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '7.9.0';
+export const VERSION = '8.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,19 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.0.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '⚱️ Dracs & Rogues 8.0: Vol\'guth ya no muere a la primera. Al caer, su alma se refugia en su Filacteria; si no la rompes en un turno, el liche vuelve con toda su vida… hasta que la urna se haga añicos y su alma escape para siempre.',
+      '⛓️ Nueva maldición, Cadena de la Filacteria: mientras la tengas en la mano, cada carta que juegues cura a Vol\'guth. Rómpela pagando 1 de energía.',
+      '🎻 Banda sonora nueva con orquesta, coros y órgano reales: tema del menú «Brasas», canciones propias para cada escenario de los actos I y II y un tema para cada jefe. En el mapa suena una versión tranquila y en combate la misma canción con más tensión, sin cortarse.',
+      '😈 Malachar dirige un ritual de coros y campanas, y cuando se alza Abaddon la misma canción estalla en caos sin perder el compás.',
+      '👁️ Enemigos más duros: el Contemplador y su Rayo Desintegrador, élites con habilidades únicas en los actos II y III y un Cerebro Anciano mucho más inquietante.',
+      '⚙️ Nuevo menú de ajustes (volúmenes de música y efectos, rendimiento, compendio, galería y avisos), sonidos de cartas e interfaz, partículas visibles en el ordenador y cartas que se desintegran al agotarse.',
+      '🗡️ Pícaro centrado en los descartes, Carga Sagrada que es Golpe y Defensa, Bomba de Humo, Tempestad de Acero, Festín Carmesí como Furia y Recuperación Arcana que se agota.',
+    ],
+  },
   {
     version: '7.9.0',
     fecha: '2026-10-01',

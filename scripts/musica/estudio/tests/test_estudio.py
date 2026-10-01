@@ -67,6 +67,25 @@ class TestSfz(Fixture):
         loop = inst.regions[3]
         self.assertEqual((loop.lokey, loop.hikey, loop.keycenter), (72, 72, 72))  # key= sets all three
 
+    def test_builtin_generator_samples(self):
+        with open(os.path.join(self.dir, 'gen.sfz'), 'w') as f:
+            f.write('<region> sample=*silence key=60\n<region> sample=*sine key=69 pitch_keycenter=69\n')
+        inst = sampler.Instrument(sfz.load(os.path.join(self.dir, 'gen.sfz')), sr=SR)
+        self.assertLess(np.abs(inst.render_note(60, 100, 0.3)).max(), 1e-6)  # *silence: nothing, no error
+        self.assertAlmostEqual(dominant_freq(inst.render_note(69, 100, 0.5)[: SR // 3]), 440, delta=5)
+
+    def test_nested_includes_resolve_from_the_root_file(self):
+        os.makedirs(os.path.join(self.dir, 'maps'))
+        with open(os.path.join(self.dir, 'maps', 'outer.sfz'), 'w') as f:
+            f.write('#include "maps/inner.sfz"\n')  # SFZ: relative to the root .sfz, not to this file
+        with open(os.path.join(self.dir, 'maps', 'inner.sfz'), 'w') as f:
+            f.write('<region> sample=Soft Layer/a4 rr1.wav key=69\n')
+        with open(os.path.join(self.dir, 'kit.sfz'), 'w') as f:
+            f.write('<control> default_path=Samples/\n#include "maps/outer.sfz"\n')
+        inst = sfz.load(os.path.join(self.dir, 'kit.sfz'))
+        self.assertEqual(len(inst.regions), 1)
+        self.assertTrue(os.path.exists(inst.regions[0].sample_path))
+
     def test_note_names(self):
         self.assertEqual(sfz.note_number('c4'), 60)
         self.assertEqual(sfz.note_number('f#3'), 54)

@@ -5,10 +5,12 @@
 // particle emitters and per-action bursts on top.
 
 import {
-  C, E, P, L, slitEye,
+  C, E, P, L, slitEye, actionHold, CHAIN_BONES,
   type ActionProgress, type BoneId, type Burst, type Emitter, type PartialPose, type Pose, type PuppetRig, type Shape,
 } from './puppet.ts';
 import { buildWings, type WingSpec } from './wing.ts';
+import { strandShapes, type ChainSpec } from './chains.ts';
+import { EASE } from './motion.ts';
 
 type Pt = [number, number];
 
@@ -1062,6 +1064,204 @@ const BEHOLDER = beholder('contemplador', {
 /** Tip of the front-right stalk (spell beam). */
 const BEHOLDER_TOP = BEHOLDER.shapes.find((s) => s.b === 'wingFF1' && s.k === 'sclera') as Extract<Shape, { t: 'c' }>;
 
+/**
+ * Vol'guth's phylactery: a levitating reliquary of blackened silver held by a
+ * skeletal hand, with a glass bulb wrapped in a chain and padlock. Inside, the
+ * lich's soul (a crowned spectral skull with two trailing wisps) throbs like a
+ * heart. The glass is four shards, one per bone, that meet along jagged seams:
+ * a hit pops them apart for a moment, and the death bursts them open like petals
+ * while the lid blows off, the urn sinks and the soul rises out and fades.
+ * The soul hangs from a pivot far to the left, so its tiny rotations are
+ * effectively a vertical translation (the only way a bone can slide).
+ */
+function phylactery(id: string): PuppetRig {
+  const phase = phaseOf(id);
+  const bulb = { x: 60, y: 88, rx: 19, ry: 18 };
+  const rim = (deg: number): Pt => {
+    const a = (deg * Math.PI) / 180;
+    return [round2(bulb.x + bulb.rx * Math.cos(a)), round2(bulb.y + bulb.ry * Math.sin(a))];
+  };
+  // seams radiating from an off-centre crack origin; angles increase clockwise (y down)
+  const origin: Pt = [58.5, 85];
+  const seams = [200, 285, 375, 480, 560];
+  const jags = [1.6, -1.4, 1.2, -1.8, 1.6];
+  const shardBones = ['armB', 'armF', 'wingF', 'wingB'] as const;
+  /** Two jagged points of the seam at `deg`, from the origin outwards (rim excluded). */
+  const seam = (deg: number, jag: number): Pt[] => {
+    const [ex, ey] = rim(deg), dx = ex - origin[0], dy = ey - origin[1], len = Math.hypot(dx, dy);
+    const nx = -dy / len, ny = dx / len;
+    return [
+      [round2(origin[0] + dx * 0.36 + nx * jag), round2(origin[1] + dy * 0.36 + ny * jag)],
+      [round2(origin[0] + dx * 0.7 - nx * jag * 0.8), round2(origin[1] + dy * 0.7 - ny * jag * 0.8)],
+    ];
+  };
+  const shard = (i: number): Shape => {
+    const a0 = seams[i], a1 = seams[i + 1], n = Math.ceil((a1 - a0) / 15) - 1;
+    const arc = Array.from({ length: n }, (_, k) => rim(a0 + ((k + 1) * (a1 - a0)) / (n + 1)));
+    return P(shardBones[i], 'glass', [origin, ...seam(a0, jags[i]), rim(a0), ...arc, rim(a1), ...seam(a1, jags[i + 1]).reverse()]);
+  };
+  /** Shard bone covering a point of the bulb (chain links and the padlock break with it). */
+  const shardAt = (x: number, y: number): BoneId => {
+    let a = (Math.atan2(y - origin[1], x - origin[0]) * 180) / Math.PI;
+    while (a < seams[0]) a += 360;
+    return shardBones[Math.max(0, seams.findIndex((s, k) => a >= s && a < seams[k + 1]))];
+  };
+  /** Fine craquelure: one branch from each shard's first seam towards its rim. */
+  const branch = (i: number): Shape => {
+    const [sx, sy] = seam(seams[i], jags[i])[0], [ex, ey] = rim((seams[i] + seams[i + 1]) / 2);
+    return L(shardBones[i], 'ink', sx, sy, round2(sx + (ex - sx) * 0.6), round2(sy + (ey - sy) * 0.55), 0.5);
+  };
+  // the chain wrapped diagonally across the glass: ring and side-on links alternate
+  const [ax, ay] = [43, 94.5], [bx, by] = [77, 88.5];
+  const len = Math.hypot(bx - ax, by - ay), ux = (bx - ax) / len, uy = (by - ay) / len;
+  const wrap: Shape[] = Array.from({ length: 7 }, (_, k): Shape[] => {
+    const cx = ax + (bx - ax) * ((k + 0.5) / 7), cy = ay + (by - ay) * ((k + 0.5) / 7), b = shardAt(cx, cy);
+    const seg = (h: number, key: string, w: number) => L(b, key, round2(cx - ux * h), round2(cy - uy * h), round2(cx + ux * h), round2(cy + uy * h), w);
+    return k % 2 === 0 ? [seg(2.1, 'iron', 3.2), seg(0.85, 'ink', 0.9)] : [seg(2.4, 'iron', 1.4)];
+  }).flat();
+  // the padlock hangs from the third link; a broken chain dangles from it
+  const lockX = 52.5, lockBone = shardAt(lockX, 96);
+  // soul wisps curling up the sides (they trail when the soul moves)
+  const tailA: ChainSpec = { slot: 'A', parent: 'head', joints: [[56.5, 98], [53, 100.5], [49.5, 100], [47, 97.5]], freq: 1.6, damping: 0.2, sag: 0.2, sway: 1.6, limit: 70 };
+  const tailB: ChainSpec = { slot: 'B', parent: 'head', joints: [[63.5, 98], [67, 100.5], [70.5, 100], [73, 97.5]], freq: 1.8, damping: 0.2, sag: 0.2, sway: 1.4, limit: 70 };
+  const hanging: ChainSpec = {
+    slot: 'E', parent: lockBone, joints: [[lockX, 100.4], [lockX - 0.3, 104], [lockX - 0.6, 107.6], [lockX - 0.9, 111.2]],
+    freq: 2.4, damping: 0.25, sag: 1, sway: 0.8, limit: 60,
+  };
+  const dangling = (c: ChainSpec): Shape[] => {
+    const [b1, b2, b3] = CHAIN_BONES[c.slot], j = c.joints;
+    const mid = (k: number): Pt => [round2((j[k][0] + j[k + 1][0]) / 2), round2((j[k][1] + j[k + 1][1]) / 2)];
+    const ring = (b: BoneId, [x, y]: Pt): Shape[] => [E(b, 'iron', x, y, 1.4, 2.1), E(b, 'ink', x, y, 0.5, 1.1)];
+    return [
+      ...ring(b1, mid(0)), L(b2, 'iron', j[1][0], j[1][1] - 0.6, j[2][0], j[2][1] + 0.6, 1.3), ...ring(b3, mid(2)),
+      L(b3, 'iron', j[3][0] - 0.2, j[3][1] - 0.4, j[3][0] + 1.4, j[3][1] + 1, 1.1), // the broken, open link
+    ];
+  };
+  /** A bony finger of the hand cradling the bulb: phalanges and knuckles. */
+  const finger = (pts: Pt[], widths: number[], claw = false): Shape[] => {
+    const [tx, ty] = pts[pts.length - 1], [px, py] = pts[pts.length - 2], d = Math.hypot(tx - px, ty - py), w = widths[widths.length - 1] / 2;
+    const fx = (tx - px) / d, fy = (ty - py) / d;
+    return [
+      ...pts.slice(1).map((q, k) => L('torso', 'bone', pts[k][0], pts[k][1], q[0], q[1], widths[k])),
+      ...pts.slice(1, -1).map(([x, y], k) => C('torso', 'bone', x, y, widths[k] * 0.62)),
+      // a hooked claw at the fingertip, bent towards the glass
+      ...(claw ? [P('torso', 'bone', [[round2(tx - fy * w), round2(ty + fx * w)], [round2(tx + fx * 3.2 + (60 - tx) * 0.08), round2(ty + fy * 3.2)], [round2(tx + fy * w), round2(ty - fx * w)]])] : []),
+    ];
+  };
+  const mirror = (pts: Pt[]): Pt[] => pts.map(([x, y]) => [120 - x, y]);
+  const outer: Pt[] = [[50, 108.5], [43.6, 101.6], [41.4, 92.4], [43, 84.6]], inner: Pt[] = [[55, 109], [51.2, 103], [50.2, 96.6]];
+  // the soul's far pivot: rotating `head` by liftDeg(dy) slides the soul dy units vertically
+  const soulPivot: Pt = [-3000, 84], reach = 60 - soulPivot[0];
+  const liftDeg = (dy: number) => (Math.asin(Math.max(-1, Math.min(1, dy / reach))) * 180) / Math.PI;
+  /** Lub-dub heartbeat, 0..~1, every 1.35 s. */
+  const heartbeat = (t: number) => {
+    const c = (((t + phase) / 1.35) % 1 + 1) % 1;
+    const thump = (c0: number, w: number) => { const u = (c - c0) / w; return u > 0 && u < 1 ? Math.sin(u * Math.PI) ** 2 : 0; };
+    return thump(0, 0.13) + 0.6 * thump(0.19, 0.13);
+  };
+  return finish(id, {
+    accent: '#7affc8', style: 'magic', focus: [60, 83], focusBone: 'head', hover: 2, art: 1.3,
+    palette: {
+      silver: '#5b6266', iron: '#3c3f44', bone: '#cfc6a8', glass: '#30544a', hollow: '#0d1b17', gold: '#8c7442', socket: '#141010',
+      soul: '#2c8a66', greenFire: '#0e3226', magic: '#c2f7dc', eyeGlow: '#f2fff8', glint: '#a9d6c4', gem: '#6dfcc0', sparkle: '#dff5b8',
+    },
+    pivots: {
+      torso: [60, 110], head: soulPivot, cape: [51, 60.5],
+      armB: rim(200), armF: rim(375), wingF: rim(100), wingB: rim(125),
+    },
+    chains: [tailA, tailB, hanging],
+    rest: {},
+    windup: { torso: -3, torsoY: 1.5 },
+    strike: { torso: 2, torsoY: -3 },
+    actions: {
+      hit: {
+        keys: [[0, {}], [0.08, { rootX: -5, torso: -7, torsoY: 1.5 }, EASE.expoOut], [0.3, { rootX: -1, torso: 2.5 }], [0.55, { torso: -0.8 }], [1, {}]],
+      },
+      death: {
+        // shudders under the blow, bursts open and, with no magic left to hold it, sinks to the floor
+        keys: [
+          [0, {}], [0.05, { rootX: -3, torso: -5 }, EASE.expoOut], [0.1, { rootX: 2.5, torso: 4 }], [0.16, { rootX: -1, torso: -2, torsoY: -2 }],
+          [0.42, { rootX: 0, torso: -1, torsoY: 8 }, EASE.easeIn], [0.5, { torso: 0.5, torsoY: 7 }], [1, { torso: 0, torsoY: 8 }],
+        ],
+      },
+    },
+    animate: (p, t, action) => {
+      const q = action?.p ?? 0, type = action?.type;
+      const beat = heartbeat(t) * (1 - 0.6 * actionHold(action));
+      // the whole reliquary throbs with the soul's heartbeat
+      p.squash += 0.022 * beat;
+      let lift = Math.sin(t * 2 * Math.PI * 0.7 + phase) * 1.3 - beat * 1.2, lid = 0, crack = 0;
+      if (type === 'spell') {
+        // bringing Vol'guth back: the lid swings open and the soul surges up, trembling
+        const e = envelope(q, 0.08, 0.38, 0.7, 0.96);
+        lid = -65 * e; lift -= 14 * e; crack = e * (1.2 + Math.sin(t * 2 * Math.PI * 13));
+      } else if (type === 'hit') {
+        const k = envelope(q, 0, 0.06, 0.12, 0.7);
+        crack = k * (8 + Math.sin(q * 38) * 1.5); lift += 2.5 * k; lid = -7 * k;
+      } else if (type === 'death') {
+        const shudder = q < 0.16 ? Math.sin(q * 140) * (q / 0.16) * 2 : 0;
+        crack = shudder + 70 * EASE.easeOut(Math.min(1, Math.max(0, (q - 0.15) / 0.35)));
+        lid = -80 * EASE.easeOut(Math.min(1, Math.max(0, (q - 0.14) / 0.3)));
+        lift -= 60 * smoothRamp((q - 0.16) / 0.6);
+      }
+      // the soul and the lid own their bones: no generic breathing on them
+      p.head = liftDeg(lift);
+      p.cape = lid;
+      p.armB = -crack; p.armF = crack; p.wingB = -crack * 0.7; p.wingF = crack * 0.7;
+      p.weapon = 0; p.offhand = 0;
+      // the wisps whip on every beat
+      p.chA1 -= beat * 9; p.chB1 += beat * 9;
+    },
+    shapes: [
+      // — the hollow inside, seen only through the opening shards —
+      E('torso', 'hollow', bulb.x, bulb.y, bulb.rx - 0.6, bulb.ry - 0.6),
+      // — glass shards and their craquelure —
+      ...[0, 1, 2, 3].map(shard), ...[0, 1, 2, 3].map(branch),
+      // — the soul: halo, wisps, body and the crowned spectral skull —
+      E('head', 'greenFire', 60, 88, 11.5, 13.5),
+      ...strandShapes(tailA, 'soul', [4.6, 3.2, 1.8, 0.4]), ...strandShapes(tailB, 'soul', [4.6, 3.2, 1.8, 0.4]),
+      P('head', 'soul', [[60, 73], [65, 74.6], [68, 79.6], [68.4, 86.6], [66.6, 93], [63.6, 98.6], [60, 101.4], [56.4, 98.6], [53.4, 93], [51.6, 86.6], [52, 79.6], [55, 74.6]]),
+      C('head', 'magic', 60, 83, 5), P('head', 'magic', [[56.8, 86], [63.2, 86], [62.3, 90.2], [57.7, 90.2]]),
+      P('head', 'sparkle', [[55.6, 79.6], [56, 76.4], [57.7, 78.1], [60, 75.2], [62.3, 78.1], [64, 76.4], [64.4, 79.6]]),
+      E('head', 'ink', 57.9, 83.2, 1.75, 1.95), E('head', 'ink', 62.1, 83.2, 1.75, 1.95),
+      P('head', 'ink', [[59.3, 86.3], [60.7, 86.3], [60, 85]]), L('head', 'ink', 57.7, 88.4, 62.3, 88.4, 0.5),
+      C('head', 'eyeGlow', 58, 83.4, 0.8), C('head', 'eyeGlow', 62, 83.4, 0.8),
+      // — glints on the glass (they break with their shard) —
+      L(shardAt(46, 80), 'glint', 44.6, 84.6, 49, 76.6, 1.3), C(shardAt(46, 88), 'glint', 44.8, 88.6, 0.7), L(shardAt(75, 84), 'glint', 75.4, 80.6, 76, 86, 0.9),
+      // — the chain across the glass and its padlock —
+      ...wrap,
+      E(lockBone, 'iron', lockX, 94, 1.9, 2), E(lockBone, 'ink', lockX, 94.2, 1, 1.15),
+      P(lockBone, 'iron', [[49.7, 95.4], [55.3, 95.4], [55.7, 100.6], [49.3, 100.6]]), C(lockBone, 'gem', lockX, 97.8, 0.75),
+      // — the skeletal hand cradling the bulb from below —
+      ...finger(outer, [3.2, 2.7, 2.2], true), ...finger(mirror(outer), [3.2, 2.7, 2.2], true),
+      ...finger(inner, [3, 2.4]), ...finger(mirror(inner), [3, 2.4]),
+      // — the foot: stem, round plinth with a skull and glowing runes —
+      P('torso', 'silver', [[53, 105.5], [67, 105.5], [65.4, 111], [54.6, 111]]),
+      P('torso', 'silver', [[47, 116.4], [50, 113.2], [55, 111.2], [65, 111.2], [70, 113.2], [73, 116.4], [71, 119.2], [49, 119.2]]),
+      P('torso', 'iron', [[48, 118.4], [72, 118.4], [70.6, 121], [49.4, 121]]),
+      C('torso', 'bone', 60, 114.6, 3.6), P('torso', 'bone', [[57.6, 116.4], [62.4, 116.4], [61.8, 119.6], [58.2, 119.6]]),
+      C('torso', 'socket', 58.6, 114.6, 1.05), C('torso', 'socket', 61.4, 114.6, 1.05), L('torso', 'ink', 58.2, 118.2, 61.8, 118.2, 0.4),
+      C('torso', 'magic', 58.6, 114.7, 0.45), C('torso', 'magic', 61.4, 114.7, 0.45),
+      L('torso', 'gem', 51.4, 117.4, 52.6, 115, 0.6), L('torso', 'gem', 68.6, 115, 67.4, 117.4, 0.6),
+      // — shoulder, neck and lip (the soul slips behind them on its way out) —
+      P('torso', 'silver', [[49.4, 74], [52, 70], [68, 70], [70.6, 74], [66, 75.6], [54, 75.6]]),
+      P('torso', 'silver', [[53.6, 62], [66.4, 62], [67, 71], [53, 71]]), L('torso', 'ink', 53.4, 66.6, 66.6, 66.6, 0.5),
+      L('torso', 'gem', 55.6, 69.6, 56.6, 67.6, 0.6), L('torso', 'gem', 59.5, 67.6, 60.5, 69.6, 0.6), L('torso', 'gem', 63.4, 69.6, 64.4, 67.6, 0.6),
+      P('torso', 'silver', [[50.6, 60.2], [69.4, 60.2], [68, 63.6], [52, 63.6]]),
+      // — the lid: a dome with a tarnished band and a soul gem held in silver prongs —
+      P('cape', 'silver', [[51, 60.6], [69, 60.6], [68, 57], [64.6, 54.2], [60, 53.4], [55.4, 54.2], [52, 57]]),
+      P('cape', 'gold', [[51.6, 58], [68.4, 58], [69, 60.6], [51, 60.6]]),
+      C('cape', 'gem', 56, 59.3, 0.55), C('cape', 'gem', 64, 59.3, 0.55), L('cape', 'ink', 60, 54, 60, 58, 0.5),
+      E('cape', 'silver', 60, 53.6, 3.2, 1.6),
+      P('cape', 'gem', [[60, 40], [62.6, 44.4], [60, 49.6], [57.4, 44.4]]),
+      L('cape', 'silver', 57.4, 53, 57.6, 45.6, 1.4), L('cape', 'silver', 62.6, 53, 62.4, 45.6, 1.4),
+      // — the broken chain dangling from the padlock, in front of everything —
+      ...dangling(hanging),
+    ],
+  });
+}
+const PHYLACTERY = phylactery('filacteria-volguth');
+
 const BOSSES: Record<string, PuppetRig> = {
   'jefe-ogro': boss(biped('jefe-ogro', {
     build: 'hulking', head: 'ogre', weapon: 'club', cloak: true, loincloth: true, arms: 'skin', hunch: 4,
@@ -1127,6 +1327,25 @@ const BOSSES: Record<string, PuppetRig> = {
       attack: [{ bone: 'weapon', at: [71, 58], effect: 'condena', scale: 0.8 }],
       spell: [{ bone: 'torso', at: [58, 90], effect: 'luna' }, { bone: 'torso', at: [58, 110], effect: 'alma', scale: 30 }],
       death: [{ bone: 'torso', at: [58, 90], effect: 'muerte', scale: 2 }, { bone: 'torso', at: [58, 100], effect: 'alma', scale: 40 }],
+    },
+  }),
+  // his phylactery takes his place when he falls
+  'filacteria-volguth': boss(PHYLACTERY, {
+    aura: '#22735a',
+    emitters: [
+      { bone: 'head', at: [60, 88], effect: 'alma', rate: 2.5, spread: 7 },
+      { bone: 'cape', at: [60, 42], effect: 'alma', rate: 1.2, spread: 1.5 },
+      { bone: 'torso', at: [60, 119], effect: 'escarcha', rate: 1, spread: 12 },
+    ],
+    bursts: {
+      attack: [{ bone: 'head', at: [60, 84], effect: 'alma', scale: 20 }, { bone: 'head', at: [60, 84], effect: 'condena', scale: 0.6 }],
+      spell: [{ bone: 'head', at: [60, 84], effect: 'almaLiberada', scale: 0.8 }, { bone: 'torso', at: [60, 88], effect: 'alma', scale: 30 }],
+      hit: [{ bone: 'torso', at: [60, 88], effect: 'cristalRoto', scale: 0.4 }],
+      death: [
+        { bone: 'torso', at: [60, 88], effect: 'cristalRoto', scale: 1.3 },
+        { bone: 'head', at: [60, 84], effect: 'almaLiberada', scale: 1.2 },
+        { bone: 'torso', at: [60, 88], effect: 'muerte', scale: 0.8 },
+      ],
     },
   }),
   'heraldo-culto': boss(biped('heraldo-culto', {

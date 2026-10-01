@@ -183,12 +183,25 @@ export const MOMIA_REAL: EnemigoDef = {
   },
 };
 
+/** Vol'guth's phylactery: takes his place when he falls and, if it survives a full turn,
+ *  brings him back at full health. Its health carries over between deaths; breaking it ends him. */
+export const FILACTERIA_VOLGUTH: EnemigoDef = {
+  id: 'filacteria-volguth', nombre: "Filacteria de Vol'guth", arte: '⚱️', pv: [40, 40], escala: 1.1, esJefe: true,
+  rasgo: {
+    nombre: 'Alma encadenada',
+    texto: "Guarda el alma de Vol'guth. Si sigue en pie al acabar su segundo turno, lo devuelve a la no-vida con toda su vida. Rómpela y el liche muere para siempre.",
+  },
+  ia: (turno) => turno === 0
+    ? { nombre: 'Latido del alma', intencion: 'mejora' }
+    : { nombre: 'RESURRECCIÓN', intencion: 'mejora', resucitar: true },
+};
+
 export const SENOR_CRIPTA: EnemigoDef = {
-  id: 'senor-cripta', nombre: "Vol'guth, Señor de la Cripta", arte: '🧙‍♂️', pv: [178, 178], escala: 1.8,
-  pasiva: 'filacteria', esJefe: true,
+  id: 'senor-cripta', nombre: "Vol'guth, Señor de la Cripta", arte: '🧙‍♂️', pv: [130, 130], escala: 1.8,
+  pasiva: 'filacteria', filacteria: FILACTERIA_VOLGUTH, esJefe: true,
   rasgo: {
     nombre: 'Filacteria',
-    texto: 'Su alma está atada a una filacteria: para él, la muerte no es un final… sino un despertar.',
+    texto: 'Su alma está atada a una filacteria: cuando cae, la urna ocupa su lugar y lo devuelve a la vida si no la rompes a tiempo. Y su maldición te encadena a ella.',
   },
   ia: (turno, rng, self) => {
     // Tras despertar de la filacteria, su hambre de vida se desata:
@@ -199,6 +212,7 @@ export const SENOR_CRIPTA: EnemigoDef = {
       return {
         nombre: despierto ? 'Maldición del Despertar' : 'Maldición Eterna',
         intencion: 'perjuicio',
+        maldicion: { id: 'cadena-filacteria', destino: 'mano' }, // a chain that feeds him while you hold it
         efectos: despierto
           ? [['debil', 3, true], ['fragil', 3, true], ['vulnerable', 2, true], ['fuerza', 3, false]]
           : [['debil', 2, true], ['fragil', 2, true], ['vulnerable', 1, true], ['fuerza', 2, false]],
