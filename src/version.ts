@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.1.0';
+export const VERSION = '8.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.2.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '👁️ El Contemplador tiene su propio tema: metalcore con sintetizadores, breakdowns que hunden el suelo, compases que cambian sin aviso y una voz rasgada que surge en los silencios.',
+      '🐉 Ignifax, la batalla final, suena a clímax: coros enormes, mazazos seguidos de silencio y un trono de órgano y tambores donde la música cambia de pulso sin perder el paso.',
+    ],
+  },
   {
     version: '8.1.0',
     fecha: '2026-10-01',

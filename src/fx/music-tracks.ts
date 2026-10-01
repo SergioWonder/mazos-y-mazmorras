@@ -43,6 +43,8 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap3-e0-combate': { file: 'cap3-e0-combate.mp3', loopSamples: 3402000, group: 'cap3-e0' }, // same song: Saqueo and Derrumbe
   'cap3-e1': { file: 'cap3-e1.mp3', loopSamples: 3628800, group: 'cap3-e1' },          // «Ojo del vacío», map
   'cap3-e1-combate': { file: 'cap3-e1-combate.mp3', loopSamples: 3628800, group: 'cap3-e1' }, // same song: Asalto and Espiral
+  'cap3-e0-jefe': { file: 'cap3-e0-jefe.mp3', loopSamples: 3549000 },                  // «Llamarada / Trono de ceniza» (Ignifax): 168 ⇄ 126
+  'cap3-e1-jefe': { file: 'cap3-e1-jefe.mp3', loopSamples: 3553200 },                  // «El ojo abierto» (Contemplador): metalcore with synths
   'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor
   'dm': { file: 'dm.mp3', loopSamples: 5065200, introSamples: 604800 }, // «Behind the Screen», G minor metalcore, 140 BPM
 };

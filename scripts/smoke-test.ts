@@ -8105,6 +8105,12 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
     && mt.sameSong('cap3-e0', 'cap3-e0-combate') && mt.sameSong('cap3-e1', 'cap3-e1-combate') && !mt.sameSong('cap3-e0', 'cap3-e1')
     && mt.exploreTheme(2, 1) === 'cap3-e1' && mt.combatTheme(2, false, [], 0) === 'cap3-e0-combate',
     'el Acto III tiene su canción por escenario en dos versiones, mapa y combate, con su bucle exacto');
+  check(T['cap3-e1-jefe']?.loopSamples === 3553200 && fs.existsSync(new URL('../src/audio/cap3-e1-jefe.mp3', import.meta.url))
+    && mt.combatTheme(2, true, [ENEMIGOS.CONTEMPLADOR], 1) === 'cap3-e1-jefe' && !mt.sameSong('cap3-e1-combate', 'cap3-e1-jefe'),
+    'el Contemplador tiene su propia pista de jefe');
+  check(T['cap3-e0-jefe']?.loopSamples === 3549000 && fs.existsSync(new URL('../src/audio/cap3-e0-jefe.mp3', import.meta.url))
+    && mt.combatTheme(2, true, [ENEMIGOS.IGNIFAX], 0) === 'cap3-e0-jefe' && !mt.sameSong('cap3-e0-combate', 'cap3-e0-jefe'),
+    'Ignifax tiene su propia pista de jefe, el clímax del Acto III');
   check(mt.sameSong('cap2-e0', 'cap2-e0-combate') && mt.sameSong('cap2-e1', 'cap2-e1-combate') && mt.sameSong('cap2-e1-jefe', 'cap2-e1-jefe-fase2')
     && !mt.sameSong('cap2-e1-combate', 'cap2-e1-jefe'), 'mapa/combate y Malachar/Abaddon son la misma canción; el Templo y su jefe no');
   check(mt.combatTheme(1, true, [E2DEF('DEMONIO_MAYOR')], 1) === 'cap2-e1-jefe-fase2' && mt.combatTheme(1, true, [E2DEF('HERALDO_CULTO')], 1) === 'cap2-e1-jefe',

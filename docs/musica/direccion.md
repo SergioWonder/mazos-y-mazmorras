@@ -97,3 +97,27 @@ Fuente de verdad para los briefs de `docs/musica/<pista>.md`. Orden de trabajo: 
 - **Nada de agudos que pitan:** la celesta va una octava por debajo del boceto (el motivo a su altura) y nada tenido
   pasa de F5.
 - Brief: [acto3-laberinto.md](acto3-laberinto.md).
+
+### Acto III · Jefe del Laberinto: El Contemplador (`cap3-e1-jefe`)
+
+- **Caos y frenesí, metalcore moderno a lo Architects y Bad Omens:** un sintetizador encima de la batería y el bajo
+  (supersierra, arpegios de *pluck*, *glitches*, *risers*, *sub drops*) y una voz rota tipo *vocal fry* (`growl`).
+- El usuario aprobó **enteros** los dos bocetos de `scripts/musica/leitmotivs/acto3_jefes.py` («Mirada del abismo» y
+  «Caos cromático»): una sola pista a ♩ = 140 que los encadena (4/4 → 7/8 → 4/4 → 5/4) sobre «Fractura» en si (♭2 = Do).
+- Sintetizadores **audibles** (en el boceto quedaban enterrados bajo las guitarras) y, como siempre, nada agudo tenido
+  por encima de F5 y la banda de 2,5–6 kHz domada.
+- Brief: [acto3-contemplador.md](acto3-contemplador.md).
+
+### Acto III · Jefe de la Guarida: Ignifax, el Dragón Rojo (`cap3-e0-jefe`)
+
+- **El clímax de la música dracónica del acto y la última batalla del juego:** coros poderosos con pausas, épico y
+  frenético, sobre «Tesoro maldito».
+- El usuario aprobó **enteros** los dos bocetos de `scripts/musica/leitmotivs/acto3_jefes.py` («Llamarada», ♩ = 168 en
+  3/4, y «Trono de ceniza», ♩ = 126 en 4/4): una sola pista de 80,5 s que los alterna por **modulación métrica exacta**
+  (168 = 126 × 4/3) y guarda todas sus ideas (la máquina de guerra que se para en seco, los martillazos y el silencio, el
+  trono con órgano, coro grave y latido de timbal, el groove 3+3+2, la ruptura con gritos, el motivo un semitono y una
+  tercera menor arriba, los tres golpes en hemiolia). Una sola cumbre: el regreso en do menor.
+- **El yunque del boceto («campanita») era demasiado agudo:** se cambia por un golpe de metal grave (tambor de freno con
+  martillo) en un bus oscuro y ~11 dB por debajo. El órgano lleno tapaba la percusión: va a −14 dB de parte en el trono
+  y más abajo en los clímax; la percusión empuja y el coro y las trompas lideran.
+- Brief: [acto3-ignifax.md](acto3-ignifax.md).
