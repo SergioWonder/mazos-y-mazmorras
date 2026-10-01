@@ -87,32 +87,32 @@ def fractura():
     return s, parts, 1.6, 1, 8 * 3.5
 
 
-def ojo_vacio():
-    """«Ojo del vacío» (4/4 at 70): a whole-tone motif on wine glasses and celesta over an augmented
-    choir chord — then, in bar 5, a half-time breakdown in C crashes in, syncopated and full of holes."""
-    s = Score(70, 4)
-    motif = m('C5 D5 E5 F#5 G#5 F#5 D5 C5')
+def arrange_ojo(motif, root, pad, cluster, glasses_shift=0, bpm=70):
+    """The «Ojo del vacío» arrangement for any eight-note motif: four bars of celesta and wine glasses
+    over a choir pad, then a half-time breakdown on `root` full of holes, the choir taking the motif
+    and the organ holding a semitone `cluster`."""
+    s = Score(bpm, 4)
     for bar in range(8):
         at = bar * 4
         for k in range(2):
             p = motif[(bar * 2 + k) % len(motif)]
             if bar < 4:
                 s.note('Celeste', at + k * 2, 2, p + 12, 60)
-                if 74 <= p <= 87:
-                    s.note('Glasses', at + k * 2, 2.05, p, 58)
+                if 74 <= p + glasses_shift <= 87:
+                    s.note('Glasses', at + k * 2, 2.05, p + glasses_shift, 58)
             else:
-                s.note('Choir', at + k * 2, 2.05, p - 12, 92)
-        for x in m('C3 E3 G#3'):
+                s.note('Choir', at + k * 2, 2.05, p - 12 if p - 12 >= 57 else p, 92)
+        for x in pad:
             s.note('Choir Pad', at, 4.05, x, 70)
         if bar >= 4:
             hits = [0, .75, 1.5, 2.5, 3.25] if bar % 2 == 0 else [0, .75, 1.5]  # the second bar of each pair falls silent
             for h in hits:
-                chug(s, at + h, .35, n('C2'), 112)
+                chug(s, at + h, .35, root, 112)
                 s.note('Drums', at + h, .3, KICK, 110)
             s.note('Drums', at + 2, .4, SNARE, 118)
             s.note('Drums', at, .6, CRASH if bar == 4 else RIDE, 100)
-            s.note('Organ', at, 4.05, n('C3'), 80)
-            s.note('Organ', at, 4.05, n('Db3'), 80)  # a semitone cluster: the eye opens
+            for x in cluster:
+                s.note('Organ', at, 4.05, x, 80)
     s.curve('Choir Pad', [(0, 50), (16, 70), (32, 80)])
     s.curve('Choir', [(16, 90), (32, 104)])
     parts = [('Celeste', 'celeste', 'bells', 0.3, 4, 0.50), ('Glasses', 'glasses', 'bells', -0.3, 2, 0.55),
@@ -120,6 +120,38 @@ def ojo_vacio():
              ('Guitar', 'guitar', 'guitar', -0.2, -6, 0.12), ('Bass', 'bass_el', 'bass_el', 0.0, -2, 0.08),
              ('Drums', 'drums', 'kit', 0.0, -2, 0.18), ('Organ', 'organ_8', 'organ', 0.2, -8, 0.40)]
     return s, parts, 2.6, 8, 4
+
+
+def ojo_vacio():
+    """«Ojo del vacío» (4/4 at 70): a whole-tone motif on wine glasses and celesta over an augmented
+    choir chord — then, in bar 5, a half-time breakdown in C crashes in, syncopated and full of holes."""
+    return arrange_ojo(m('C5 D5 E5 F#5 G#5 F#5 D5 C5'), n('C2'), m('C3 E3 G#3'), m('C3 Db3'))
+
+
+# The other Laberinto motifs (and two new ones) in the «Ojo del vacío» arrangement
+def ojo_fractura():
+    """Fractura's semitone-and-tritone motif over a diminished pad in D."""
+    return arrange_ojo(m('D5 Eb5 A4 G#4 D5 F5 E5 Bb4'), n('D2'), m('D3 F3 Ab3'), m('D3 Eb3'))
+
+
+def ojo_colmena():
+    """Mente colmena's chromatic fall over an augmented pad in A."""
+    return arrange_ojo(m('A5 G#5 G5 F#5 F5 E5 Bb4 A4'), n('A2'), m('A2 C#3 F3'), m('A2 Bb2'))
+
+
+def ojo_mas_alla():
+    """Más allá's Hijaz motif (an octave lower) over an augmented pad in E."""
+    return arrange_ojo(m('E4 F4 G#4 A4 C5 B4 F4 E4'), n('E2'), m('E3 G#3 C4'), m('E3 F3'), glasses_shift=12)
+
+
+def ojo_escalera():
+    """New — «Escalera de Escher»: B locrian, climbing to the tritone and falling back past where it began."""
+    return arrange_ojo(m('B4 C5 F5 E5 D5 C5 F4 B4'), n('B1'), m('B2 D3 F3'), m('B2 C3'))
+
+
+def ojo_susurro():
+    """New — «Susurro estelar»: leaps of a major seventh that never land, over an augmented pad in G."""
+    return arrange_ojo(m('G4 F#5 C5 B4 Eb5 D5 G#4 G4'), n('G2'), m('G2 B2 D#3'), m('G2 Ab2'))
 
 
 def mente_colmena():
@@ -220,33 +252,75 @@ def ceniza():
     return s, parts, 3.0, 8, 4
 
 
-def ruinas_oro():
-    """«Ruinas de oro» (E phrygian, 3/4 at 84): a solo cello mourns over a low harp ostinato in E with
-    the ♭2; contrabassoon below, a bowed vibraphone glow in its dark middle register and a soft frame drum."""
+def arrange_ruinas(motif, ostinato, low, glow, shift=0):
+    """The «Ruinas de oro» arrangement (3/4 at 84) for any motif of (note, beats) adding up to whole
+    bars: solo cello over a low harp ostinato, contrabassoon on `low` (root, and its neighbour every
+    fourth bar), a soft frame drum and a bowed vibraphone glow alternating the two `glow` notes."""
     s = Score(84, 3)
-    motif = [('E3', 1), ('F3', 1), ('G3', 1), ('B3', 3), ('C4', 1), ('B3', 1), ('A3', 1), ('F3', 2), ('E3', 1),
-             ('E3', 1), ('G3', 1), ('B3', 1), ('D4', 3), ('C4', 1), ('B3', 1), ('F3', 1), ('E3', 3)]
     at = 0.0
     for name, d in motif:
-        s.note('Cello', at, d + .04, n(name) + 12, 84)
+        s.note('Cello', at, d + .04, n(name) + shift, 84)
         at += d
     total = at
     phrase_cc(s, 'Cello', 0, total, 70, 98)
-    ostinato = m('E2 B2 E3 F3 B2 E3')
     for k in range(int(total * 2)):
         s.note('Harp', k / 2, .5, ostinato[k % len(ostinato)], 60 + 8 * (k % 6 == 0))
     for bar in range(int(total // 3)):
         b = bar * 3
-        s.note('Contrabassoon', b, 3.05, n('E1') if bar % 4 != 2 else n('F1'), 70)
+        s.note('Contrabassoon', b, 3.05, low[0] if bar % 4 != 2 else low[1], 70)
         s.note('Frame Drum', b, .5, 61, 64)
         s.note('Frame Drum', b + 2, .5, 64, 48)
         if bar % 2 == 0:
-            s.note('Vibes', b, 3, n('G4') if bar % 4 == 0 else n('F4'), 52)
+            s.note('Vibes', b, 3, glow[0] if bar % 4 == 0 else glow[1], 52)
     s.curve('Contrabassoon', [(0, 66), (total, 80)])
     parts = [('Cello', 'cello_solo', 'lead', 0.15, 0, 0.32), ('Harp', 'harp', 'harp', -0.4, 2, 0.40),
              ('Contrabassoon', 'contrabassoon', 'low', -0.1, -2, 0.30), ('Frame Drum', 'frame_drum', 'drums', 0.2, -4, 0.40),
              ('Vibes', 'vibes_bowed', 'bells', -0.3, 4, 0.50)]
     return s, parts, 2.8, 1, total
+
+
+def ruinas_oro():
+    """«Ruinas de oro» (E phrygian, 3/4 at 84): a solo cello mourns over a low harp ostinato in E with
+    the ♭2; contrabassoon below, a bowed vibraphone glow in its dark middle register and a soft frame drum."""
+    motif = [('E3', 1), ('F3', 1), ('G3', 1), ('B3', 3), ('C4', 1), ('B3', 1), ('A3', 1), ('F3', 2), ('E3', 1),
+             ('E3', 1), ('G3', 1), ('B3', 1), ('D4', 3), ('C4', 1), ('B3', 1), ('F3', 1), ('E3', 3)]
+    return arrange_ruinas(motif, m('E2 B2 E3 F3 B2 E3'), m('E1 F1'), m('G4 F4'), shift=12)
+
+
+# The other Guarida motifs (recast in 3/4) and two new ones in the «Ruinas de oro» arrangement
+def ruinas_ceniza():
+    """Ceniza's horn melody, C harmonic minor."""
+    motif = [('C4', 2), ('D4', 1), ('Eb4', 1), ('G4', 2), ('Ab4', 2), ('G4', 1), ('F4', 1), ('Eb4', 2), ('D4', 2), ('B3', 1),
+             ('D4', 1), ('Eb4', 1), ('D4', 1), ('B3', 3), ('C4', 3)]
+    return arrange_ruinas(motif, m('C2 G2 C3 Eb3 G2 C3'), m('C1 G1'), m('Eb4 D4'))
+
+
+def ruinas_garras():
+    """Garras de magma's horn call, D aeolian, answered a step higher."""
+    motif = [('D4', 1), ('A4', 2), ('F4', 1.5), ('E4', .5), ('D4', 1), ('C4', 1), ('A3', 2), ('D4', 3),
+             ('D4', 1), ('A4', 2), ('Bb4', 1.5), ('A4', .5), ('F4', 1), ('E4', 1), ('C#4', 2), ('D4', 3)]
+    return arrange_ruinas(motif, m('D2 A2 D3 Eb3 A2 D3'), m('D1 Eb1'), m('F4 E4'))
+
+
+def ruinas_corazon():
+    """Corazón del volcán's choir line, C# Hungarian minor."""
+    motif = [('C#4', 1), ('D#4', 1), ('E4', 1), ('G4', 2), ('G#4', 1), ('A4', 2), ('G#4', 1), ('E4', 3),
+             ('G4', 1), ('E4', 1), ('D#4', 1), ('C#4', 2), ('D#4', 1), ('G4', 1.5), ('E4', 1.5), ('C#4', 3)]
+    return arrange_ruinas(motif, m('C#2 G#2 C#3 D3 G#2 C#3'), m('C#1 D1'), m('E4 G4'))
+
+
+def ruinas_tesoro():
+    """New — «Tesoro maldito»: A minor lament that sinks a step at a time onto the leading tone."""
+    motif = [('A4', 2), ('G4', 1), ('F4', 2), ('E4', 1), ('D4', 1), ('E4', 1), ('F4', 1), ('E4', 3),
+             ('C5', 2), ('B4', 1), ('A4', 1), ('G#4', 1), ('F4', 1), ('E4', 1.5), ('F4', .5), ('D4', 1), ('A3', 3)]
+    return arrange_ruinas(motif, m('A1 E2 A2 Bb2 E2 A2'), m('A1 Bb1'), m('E4 F4'))
+
+
+def ruinas_huevo():
+    """New — «El último huevo»: G Hungarian minor, a tender rise to the raised fourth — what the dragon guards."""
+    motif = [('G4', 1), ('A4', 1), ('Bb4', 1), ('C#5', 3), ('D5', 1), ('C#5', 1), ('Bb4', 1), ('A4', 3),
+             ('G4', 1), ('Bb4', 1), ('D5', 1), ('Eb5', 2), ('D5', 1), ('C#5', 1), ('Bb4', 1), ('A4', 1), ('G4', 3)]
+    return arrange_ruinas(motif, m('G1 D2 G2 Ab2 D2 G2'), m('G1 Ab1'), m('Bb4 A4'), shift=-12)
 
 
 def garras_magma():
@@ -317,6 +391,11 @@ SKETCHES = [
     ('laberinto-3-mente-colmena', mente_colmena), ('laberinto-4-mas-alla', mas_alla),
     ('dragon-1-ceniza', ceniza), ('dragon-2-ruinas-de-oro', ruinas_oro),
     ('dragon-3-garras-de-magma', garras_magma), ('dragon-4-corazon-del-volcan', corazon_volcan),
+    ('ojo-1-fractura', ojo_fractura), ('ojo-2-mente-colmena', ojo_colmena), ('ojo-3-mas-alla', ojo_mas_alla),
+    ('ojo-4-escalera-de-escher', ojo_escalera), ('ojo-5-susurro-estelar', ojo_susurro),
+    ('ruinas-1-ceniza', ruinas_ceniza), ('ruinas-2-garras-de-magma', ruinas_garras),
+    ('ruinas-3-corazon-del-volcan', ruinas_corazon), ('ruinas-4-tesoro-maldito', ruinas_tesoro),
+    ('ruinas-5-el-ultimo-huevo', ruinas_huevo),
 ]
 
 
@@ -325,7 +404,7 @@ def main() -> None:
     wanted = sys.argv[1:]
     clips = []
     for title, build in SKETCHES:
-        if wanted and not any(w in title for w in wanted):
+        if wanted and not any(title.startswith(w) for w in wanted):
             continue
         score, parts, reverb_s, bars, beats_per_bar = build()
         mid_path = os.path.join(BUILD, f'acto3-{title}.mid')
@@ -341,10 +420,10 @@ def main() -> None:
         peaks = {k: round(float(v['pico_db']), 1) for k, v in r['parts'].items()}
         print(f'{title:30s} {r["seconds"]:5.1f} s  {r["lufs"]:6.1f} LUFS  presencia {r["bands_db"]["presencia 2.5-6k"]:6.1f}  picos {peaks}')
         clips.append((title, r['out'], r['seconds']))
-    if wanted:
-        return
     sr = config.SR
-    for prefix in ('laberinto', 'dragon'):
+    for prefix in ('laberinto', 'dragon', 'ojo', 'ruinas'):
+        if not any(title.startswith(prefix) for title, _, _ in clips):
+            continue
         parts, t, stamps = [], 0.0, []
         with tempfile.TemporaryDirectory() as tmp:
             for title, c, secs in clips:

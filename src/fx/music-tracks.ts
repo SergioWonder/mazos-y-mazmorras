@@ -38,6 +38,11 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap2-e1-jefe-fase2': { file: 'cap2-e1-jefe-fase2.mp3', loopSamples: 3704400, group: 'cap2-e1-jefe' }, // same song: Abaddon, chaos
   'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
   'cap3': { file: 'cap3.mp3', loopSamples: 3528000 },      // «Brasas y locura», E phrygian, 90 BPM
+  // Act III, sample-based: La Guarida del Dragón (e0) on «Tesoro maldito», El Laberinto (e1) on «Fractura»
+  'cap3-e0': { file: 'cap3-e0.mp3', loopSamples: 3402000, group: 'cap3-e0' },          // «Tesoro maldito», map
+  'cap3-e0-combate': { file: 'cap3-e0-combate.mp3', loopSamples: 3402000, group: 'cap3-e0' }, // same song: Saqueo and Derrumbe
+  'cap3-e1': { file: 'cap3-e1.mp3', loopSamples: 3628800, group: 'cap3-e1' },          // «Ojo del vacío», map
+  'cap3-e1-combate': { file: 'cap3-e1-combate.mp3', loopSamples: 3628800, group: 'cap3-e1' }, // same song: Asalto and Espiral
   'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor
   'dm': { file: 'dm.mp3', loopSamples: 5065200, introSamples: 604800 }, // «Behind the Screen», G minor metalcore, 140 BPM
 };

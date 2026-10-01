@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.0.0';
+export const VERSION = '8.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.1.0',
+    fecha: '2026-10-01',
+    cambios: [
+      '🐉 Banda sonora nueva del Acto III: la Guarida del Dragón canta «Tesoro maldito», un lamento de violonchelo entre ruinas, lava y azufre que en combate se convierte en tambores de guerra, yunques y cuerdas frenéticas.',
+      '👁️ El Laberinto del Contemplador suena a cristal oscuro y coros, y en combate estalla en guitarras distorsionadas, doble bombo y parones en seco.',
+    ],
+  },
   {
     version: '8.0.0',
     fecha: '2026-10-01',

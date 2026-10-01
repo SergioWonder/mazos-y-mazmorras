@@ -6457,8 +6457,9 @@ console.log('\n🎸 Música del DM');
   const combatTheme = mt.combatTheme as ((c: number, jefe: boolean, defs: EnemigoDef[]) => string) | undefined;
   const DMdef = (ENEMIGOS as unknown as Record<string, EnemigoDef>).DUNGEON_MASTER;
   check(typeof combatTheme === 'function' && combatTheme(2, true, [DMdef]) === 'dm', 'el combate contra el Dungeon Master suena con su propia pista');
+  const sinActoIII = Object.fromEntries(Object.entries(mt.MUSIC_TRACKS as Record<string, unknown>).filter(([k]) => !k.startsWith('cap3-')));
   check(typeof combatTheme === 'function' && combatTheme(0, true, [ENEMIGOS.JEFE_OGRO]) === 'cap1-e0-jefe'
-    && combatTheme(2, true, [ENEMIGOS.JEFE_OGRO]) === 'cap3-jefe' && combatTheme(2, false, [ENEMIGOS.JEFE_OGRO]) === 'cap3',
+    && mt.combatTheme(2, true, [ENEMIGOS.JEFE_OGRO], 0, sinActoIII) === 'cap3-jefe' && mt.combatTheme(2, false, [ENEMIGOS.JEFE_OGRO], 0, sinActoIII) === 'cap3',
     'los jefes normales y los combates de cada acto siguen con su pista');
   if (dm) {
     const intro = (dm.introSamples ?? 0) / 44100, bucle = dm.loopSamples / 44100;
@@ -8071,7 +8072,9 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
     const conEscenario = { ...mt.MUSIC_TRACKS, 'cap1-e1': { file: 'x.mp3', loopSamples: 1 }, 'cap1-e1-combate': { file: 'y.mp3', loopSamples: 1 }, 'cap1-e1-jefe': { file: 'z.mp3', loopSamples: 1 } };
     check(mt.exploreTheme(0, 1, conEscenario) === 'cap1-e1' && mt.combatTheme(0, false, [], 1, conEscenario) === 'cap1-e1-combate'
       && mt.combatTheme(0, true, [], 1, conEscenario) === 'cap1-e1-jefe', 'cada escenario puede tener su exploración, su combate y su jefe');
-    check(mt.exploreTheme(2, 0) === 'cap3' && mt.combatTheme(2, false, [], 0) === 'cap3' && mt.combatTheme(2, true, [], 0) === 'cap3-jefe',
+    const sinEscenarios = Object.fromEntries(Object.entries(mt.MUSIC_TRACKS as Record<string, unknown>).filter(([k]) => !k.startsWith('cap3-')));
+    check(mt.exploreTheme(2, 0, sinEscenarios) === 'cap3' && mt.combatTheme(2, false, [], 0, sinEscenarios) === 'cap3'
+      && mt.combatTheme(2, true, [], 0, sinEscenarios) === 'cap3-jefe',
       'si un escenario aún no tiene música propia, suena la del acto');
   }
   // Act I: each scenario has its song in two versions plus its own boss (sample-based)
@@ -8094,6 +8097,14 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
   ];
   check(actoII.every(([id, n]) => T[id]?.loopSamples === n && fs.existsSync(new URL(`../src/audio/${T[id].file}`, import.meta.url))),
     `el Acto II tiene su música por escenario y sus jefes, con su bucle exacto (${actoII.filter(([id, n]) => T[id]?.loopSamples !== n).map(([id]) => id).join(', ') || 'todas'})`);
+  // Act III: La Guarida (e0, «Tesoro maldito») and El Laberinto (e1, «Fractura»), map and combat
+  const actoIII: Array<[string, number]> = [
+    ['cap3-e0', 3402000], ['cap3-e0-combate', 3402000], ['cap3-e1', 3628800], ['cap3-e1-combate', 3628800],
+  ];
+  check(actoIII.every(([id, n]) => T[id]?.loopSamples === n && fs.existsSync(new URL(`../src/audio/${T[id].file}`, import.meta.url)))
+    && mt.sameSong('cap3-e0', 'cap3-e0-combate') && mt.sameSong('cap3-e1', 'cap3-e1-combate') && !mt.sameSong('cap3-e0', 'cap3-e1')
+    && mt.exploreTheme(2, 1) === 'cap3-e1' && mt.combatTheme(2, false, [], 0) === 'cap3-e0-combate',
+    'el Acto III tiene su canción por escenario en dos versiones, mapa y combate, con su bucle exacto');
   check(mt.sameSong('cap2-e0', 'cap2-e0-combate') && mt.sameSong('cap2-e1', 'cap2-e1-combate') && mt.sameSong('cap2-e1-jefe', 'cap2-e1-jefe-fase2')
     && !mt.sameSong('cap2-e1-combate', 'cap2-e1-jefe'), 'mapa/combate y Malachar/Abaddon son la misma canción; el Templo y su jefe no');
   check(mt.combatTheme(1, true, [E2DEF('DEMONIO_MAYOR')], 1) === 'cap2-e1-jefe-fase2' && mt.combatTheme(1, true, [E2DEF('HERALDO_CULTO')], 1) === 'cap2-e1-jefe',
