@@ -1313,8 +1313,8 @@ const pactoFinal: Build = (g, u, c, D) => {
 const DART_FLIGHT = 0.45;
 /** Seconds its impact burst lingers after the strike. */
 const DART_FADE = 0.26;
-/** Seconds between two darts of the same volley (almost a burst). */
-const DART_GAP = 0.09;
+/** Seconds between two darts of the same volley: quick, but each one reads on its own. */
+const DART_GAP = 0.15;
 
 /** Lane of the i-th dart of a volley: how high it flies over the caster→target line
  *  (+1 the highest arc, -1 the lowest swing below it). Any first 3, 4 or 5 darts

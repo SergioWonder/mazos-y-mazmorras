@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.2.1';
+export const VERSION = '8.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,17 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.3.0',
+    fecha: '2026-10-02',
+    cambios: [
+      '🗡️ Mago: Rayo Abrasador se sustituye por Arma Mágica, un poder que gasta un conjuro para que tus Golpes peguen más y tus Defender den más bloqueo (2/4, +1 por nivel del espacio).',
+      '🔮 Más formas de recuperar espacios: Canalizar Maná+ da 2 espacios, Sacrificio Arcano cuesta 4 PV (3 mejorado, que además recupera uno de nivel 1) y Toque Vampírico ya acepta cualquier espacio (12/14, +3 por nivel).',
+      '🔥 Bola de Fuego cuesta 2 y pega 18/24 (+4 por nivel); Desintegrar 20/26 (+6 por nivel); Manos Ardientes 4/7 (+2 por nivel); Escudo Arcano 4/7 de bloqueo (+3 por nivel libre).',
+      '❄️ Rayo de Escarcha 7/8, Armadura de Mago 7/10 de bloqueo, Dictado Veloz 4/6 por golpe, Glifo Mordiente escribe 4/5 y aplica Débil a todos, y Truco de Magia siempre roba 2 (cuesta 1/0). Los Proyectiles Mágicos salen algo más espaciados.',
+      '🐺 Druida: la Bendición de la Manada ya no alarga las transformaciones, pero el lobo espiritual llega con 5 de vida.',
+    ],
+  },
   {
     version: '8.2.1',
     fecha: '2026-10-01',

@@ -162,10 +162,9 @@ const DE_CLASE: ReliquiaDef[] = [
   // Druida
   {
     id: 'bendicion-manada', nombre: 'Bendición de la Manada', icono: '🐺', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'druida',
-    texto: 'Cada vez que te transformas, tu forma dura 1 turno más y un lobo espiritual acude a tu lado: Invoca 4.',
-    alTransformarse: async (ctx, efecto) => {
-      if (!efecto.permanente) efecto.turnos += 1;
-      await ctx.invocar('lobo', 4);
+    texto: 'Cada vez que te transformas, un lobo espiritual acude a tu lado: Invoca 5.',
+    alTransformarse: async (ctx) => {
+      await ctx.invocar('lobo', 5);
     },
   },
   {

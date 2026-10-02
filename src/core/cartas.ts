@@ -46,8 +46,19 @@ async function apunalarAlAzar(c: ContextoEfecto, dano: number) {
 /** Cards taken out of the game, with the one that replaces them in old saves. */
 export const CARTAS_RETIRADAS: Readonly<Record<string, string>> = {
   rodar: 'esquiva-refleja', // the rogue's «block twice» common (v7.5.0)
+  'rayo-abrasador': 'arma-magica', // the wizard's single-target nuke (v8.3.0)
   esfumarse: 'bomba-humo', // did the same as Pirouette (v7.5.2)
 };
+
+/** Extra damage of the Strikes: Arma Consagrada (paladin) + Arma Mágica (wizard). */
+function extraGolpes(c: ContextoEfecto): number {
+  return (c.jugador.estados.golpesMas ?? 0) + (c.jugador.estados.armaMagica ?? 0);
+}
+
+/** Extra block of the Defends: Égida Divina (paladin) + Arma Mágica (wizard). */
+function extraDefensas(c: ContextoEfecto): number {
+  return (c.jugador.estados.defensasMas ?? 0) + (c.jugador.estados.armaMagica ?? 0);
+}
 
 /** Suma de los niveles de los espacios de conjuro libres (mago). */
 function nivelesLibres(c: ContextoEfecto): number {
@@ -89,14 +100,14 @@ export const BASICAS: CartaDef[] = [
     texto: 'Inflige 6 de daño.',
     fx: 'tajo',
     familia: 'golpe',
-    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) }],
+    valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + extraGolpes(c) }],
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 6 + (c.jugador.estados.golpesMas ?? 0));
+      await c.atacar(c.objetivo!, 6 + extraGolpes(c));
     },
     mejora: {
       texto: 'Inflige 9 de daño.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 9 + (c.jugador.estados.golpesMas ?? 0));
+        await c.atacar(c.objetivo!, 9 + extraGolpes(c));
       },
     },
   },
@@ -111,14 +122,14 @@ export const BASICAS: CartaDef[] = [
     texto: 'Gana 5 de bloqueo.',
     fx: 'bloqueo',
     familia: 'defensa',
-    valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + (c.jugador.estados.defensasMas ?? 0) }],
+    valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + extraDefensas(c) }],
     jugar: async (c) => {
-      await c.ganarBloqueo(5 + (c.jugador.estados.defensasMas ?? 0));
+      await c.ganarBloqueo(5 + extraDefensas(c));
     },
     mejora: {
       texto: 'Gana 8 de bloqueo.',
       jugar: async (c) => {
-        await c.ganarBloqueo(8 + (c.jugador.estados.defensasMas ?? 0));
+        await c.ganarBloqueo(8 + extraDefensas(c));
       },
     },
   },
@@ -1521,20 +1532,20 @@ export const MAGO: CartaDef[] = [
     objetivo: 'todos',
     requiereConjuro: 1,
     fx: 'furia',
-    texto: 'Gasta un conjuro: inflige 4 de daño\n(aplica +4 por nivel) y aplica 1 Vulnerable por\nespacio de conjuro a TODOS los enemigos.',
+    texto: 'Gasta un conjuro: inflige 4 de daño\n(aplica +2 por nivel) y aplica 1 Vulnerable por\nespacio de conjuro a TODOS los enemigos.',
     valores: valoresDeConjuro(0, 1),
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
       const vuln = c.jugador.conjuros.length;
-      await c.atacarTodos(4 + 4 * nivel, 'furia');
+      await c.atacarTodos(4 + 2 * nivel, 'furia');
       for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'vulnerable', vuln);
     },
     mejora: {
-      texto: 'Gasta un conjuro: inflige 6 de daño\n(aplica +5 por nivel) y aplica 1 Vulnerable por\nespacio de conjuro a TODOS los enemigos.',
+      texto: 'Gasta un conjuro: inflige 7 de daño\n(aplica +2 por nivel) y aplica 1 Vulnerable por\nespacio de conjuro a TODOS los enemigos.',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(1);
         const vuln = c.jugador.conjuros.length;
-        await c.atacarTodos(6 + 5 * nivel, 'furia');
+        await c.atacarTodos(7 + 2 * nivel, 'furia');
         for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'vulnerable', vuln);
       },
     },
@@ -1553,8 +1564,11 @@ export const MAGO: CartaDef[] = [
       await c.ganarConjuro(false);
     },
     mejora: {
-      coste: 0,
-      texto: 'Gana 1 espacio de conjuro\ndurante este combate.',
+      texto: 'Gana 2 espacios de conjuro\ndurante este combate.',
+      jugar: async (c) => {
+        await c.ganarConjuro(false);
+        await c.ganarConjuro(false);
+      },
     },
   },
   {
@@ -1585,16 +1599,16 @@ export const MAGO: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
-    texto: 'Inflige 5 de daño.\nAplica 1 de Débil.',
+    texto: 'Inflige 7 de daño.\nAplica 1 de Débil.',
     fx: 'ola',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 5, 1, 'ola');
+      await c.atacar(c.objetivo!, 7, 1, 'ola');
       await c.aplicarEstado(c.objetivo!, 'debil', 1);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nAplica 2 de Débil.',
+      texto: 'Inflige 8 de daño.\nAplica 2 de Débil.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 7, 1, 'ola');
+        await c.atacar(c.objetivo!, 8, 1, 'ola');
         await c.aplicarEstado(c.objetivo!, 'debil', 2);
       },
     },
@@ -1629,16 +1643,16 @@ export const MAGO: CartaDef[] = [
     rareza: 'comun',
     coste: 1,
     objetivo: 'ninguno',
-    texto: 'Gana 6 de bloqueo.\nRoba 1 carta.',
+    texto: 'Gana 7 de bloqueo.\nRoba 1 carta.',
     fx: 'bloqueo',
     jugar: async (c) => {
-      await c.ganarBloqueo(6);
+      await c.ganarBloqueo(7);
       await c.robar(1);
     },
     mejora: {
-      texto: 'Gana 9 de bloqueo.\nRoba 1 carta.',
+      texto: 'Gana 10 de bloqueo.\nRoba 1 carta.',
       jugar: async (c) => {
-        await c.ganarBloqueo(9);
+        await c.ganarBloqueo(10);
         await c.robar(1);
       },
     },
@@ -1649,18 +1663,16 @@ export const MAGO: CartaDef[] = [
     clase: 'mago',
     tipo: 'habilidad',
     rareza: 'comun',
-    coste: 0,
+    coste: 1,
     objetivo: 'ninguno',
-    texto: 'Roba 1 carta.',
+    texto: 'Roba 2 cartas.',
     fx: 'estrellas',
     jugar: async (c) => {
-      await c.robar(1);
+      await c.robar(2);
     },
     mejora: {
+      coste: 0,
       texto: 'Roba 2 cartas.',
-      jugar: async (c) => {
-        await c.robar(2);
-      },
     },
   },
   {
@@ -1672,15 +1684,15 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Gana 4 de bloqueo\n(aplica +2 por cada NIVEL\nde espacio disponible).',
+    texto: 'Gana 4 de bloqueo\n(aplica +3 por cada NIVEL\nde espacio disponible).',
     valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + n[1] * nivelesLibres(c) }],
     jugar: async (c) => {
-      await c.ganarBloqueo(4 + 2 * nivelesLibres(c));
+      await c.ganarBloqueo(4 + 3 * nivelesLibres(c));
     },
     mejora: {
-      texto: 'Gana 6 de bloqueo\n(aplica +3 por cada NIVEL\nde espacio disponible).',
+      texto: 'Gana 7 de bloqueo\n(aplica +3 por cada NIVEL\nde espacio disponible).',
       jugar: async (c) => {
-        await c.ganarBloqueo(6 + 3 * nivelesLibres(c));
+        await c.ganarBloqueo(7 + 3 * nivelesLibres(c));
       },
     },
   },
@@ -1690,45 +1702,45 @@ export const MAGO: CartaDef[] = [
     clase: 'mago',
     tipo: 'ataque',
     rareza: 'infrecuente',
-    coste: 1,
+    coste: 2,
     objetivo: 'todos',
     requiereConjuro: 1,
     fx: 'impacto',
-    texto: 'Gasta un conjuro: inflige 8 de daño\n(aplica +4 por nivel) a TODOS los enemigos.',
+    texto: 'Gasta un conjuro: inflige 18 de daño\n(aplica +4 por nivel) a TODOS los enemigos.',
     valores: valoresDeConjuro(0, 1),
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
-      await c.atacarTodos(8 + 4 * nivel, 'impacto');
+      await c.atacarTodos(18 + 4 * nivel, 'impacto');
     },
     mejora: {
-      texto: 'Gasta un conjuro: inflige 11 de daño\n(aplica +5 por nivel) a TODOS los enemigos.',
+      texto: 'Gasta un conjuro: inflige 24 de daño\n(aplica +4 por nivel) a TODOS los enemigos.',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(1);
-        await c.atacarTodos(11 + 5 * nivel, 'impacto');
+        await c.atacarTodos(24 + 4 * nivel, 'impacto');
       },
     },
   },
   {
-    id: 'rayo-abrasador',
-    nombre: 'Rayo Abrasador',
+    id: 'arma-magica',
+    nombre: 'Arma Mágica',
     clase: 'mago',
-    tipo: 'ataque',
+    tipo: 'poder',
     rareza: 'infrecuente',
     coste: 1,
-    objetivo: 'enemigo',
+    objetivo: 'ninguno',
     requiereConjuro: 1,
-    fx: 'impacto',
-    texto: 'Gasta un conjuro: inflige 14 de daño\n(aplica +6 por nivel del espacio).',
-    valores: valoresDeConjuro(0, 1),
+    fx: 'estrellas',
+    texto: 'Gasta un conjuro. Poder:\ntus Golpes infligen 2 de daño más\ny tus Defensas dan 2 de bloqueo más\n(aplica +1 por nivel).',
+    valores: (c, n) => [0, 1].map((i) => ({ tipo: 'otro' as const, indice: i, base: n[i] + n[2] * nivelAGastar(c, 1) })),
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(1);
-      await c.atacar(c.objetivo!, 14 + 6 * nivel, 1, 'impacto');
+      await c.aplicarEstado(c.jugador, 'armaMagica', 2 + nivel);
     },
     mejora: {
-      texto: 'Gasta un conjuro: inflige 18 de daño\n(aplica +8 por nivel del espacio).',
+      texto: 'Gasta un conjuro. Poder:\ntus Golpes infligen 4 de daño más\ny tus Defensas dan 4 de bloqueo más\n(aplica +1 por nivel).',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(1);
-        await c.atacar(c.objetivo!, 18 + 8 * nivel, 1, 'impacto');
+        await c.aplicarEstado(c.jugador, 'armaMagica', 4 + nivel);
       },
     },
   },
@@ -1740,20 +1752,20 @@ export const MAGO: CartaDef[] = [
     rareza: 'infrecuente',
     coste: 1,
     objetivo: 'enemigo',
-    requiereConjuro: 2,
+    requiereConjuro: 1,
     fx: 'muerte',
-    texto: 'Gasta un conjuro de nivel 2+:\ninflige 8 de daño (aplica +4 por nivel)\ny cura la mitad del daño.',
-    valores: valoresDeConjuro(1, 2),
+    texto: 'Gasta un conjuro:\ninflige 12 de daño (aplica +3 por nivel)\ny cura la mitad del daño.',
+    valores: valoresDeConjuro(0, 1),
     jugar: async (c) => {
-      const nivel = await c.gastarConjuro(2);
-      const hecho = await c.atacar(c.objetivo!, 8 + 4 * nivel, 1, 'muerte');
+      const nivel = await c.gastarConjuro(1);
+      const hecho = await c.atacar(c.objetivo!, 12 + 3 * nivel, 1, 'muerte');
       await c.curar(Math.ceil(hecho / 2));
     },
     mejora: {
-      texto: 'Gasta un conjuro de nivel 2+:\ninflige 10 de daño (aplica +5 por nivel)\ny cura la mitad del daño.',
+      texto: 'Gasta un conjuro:\ninflige 14 de daño (aplica +3 por nivel)\ny cura la mitad del daño.',
       jugar: async (c) => {
-        const nivel = await c.gastarConjuro(2);
-        const hecho = await c.atacar(c.objetivo!, 10 + 5 * nivel, 1, 'muerte');
+        const nivel = await c.gastarConjuro(1);
+        const hecho = await c.atacar(c.objetivo!, 14 + 3 * nivel, 1, 'muerte');
         await c.curar(Math.ceil(hecho / 2));
       },
     },
@@ -1789,17 +1801,20 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'muerte',
-    texto: 'Pierde 5 PV.\nRecupera el espacio de conjuro\ngastado de MAYOR nivel.',
+    texto: 'Pierde 4 PV.\nRecupera el espacio de conjuro\ngastado de MAYOR nivel.',
     jugar: async (c) => {
-      await c.perderPV(5);
+      await c.perderPV(4);
       const nivel = await c.recuperarConjuro(true);
       if (nivel === 0) await c.mensaje('No había conjuros gastados…');
     },
     mejora: {
-      texto: 'Recupera el espacio de conjuro\ngastado de MAYOR nivel.\nSin coste de vida.',
+      texto: 'Pierde 3 PV. Recupera el espacio\nde conjuro gastado de MAYOR nivel\ny, si te falta, uno de nivel 1.',
       jugar: async (c) => {
+        await c.perderPV(3);
         const nivel = await c.recuperarConjuro(true);
         if (nivel === 0) await c.mensaje('No había conjuros gastados…');
+        // the lowest spent slot is a level 1 one whenever any of those is missing
+        else if (c.jugador.conjuros.some((e) => e.gastado && e.nivel === 1)) await c.recuperarConjuro();
       },
     },
   },
@@ -1913,16 +1928,18 @@ export const MAGO: CartaDef[] = [
     coste: 1,
     objetivo: 'enemigo',
     fx: 'impacto',
-    texto: 'Inflige 5 de daño.\nEscribir 4 en el Conjuro Prodigioso.',
+    texto: 'Inflige 5 de daño. Escribir 4.\nAplica 1 de Débil a TODOS\nlos enemigos.',
     jugar: async (c) => {
       await c.atacar(c.objetivo!, 5, 1, 'impacto');
       await c.escribir(4);
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 1);
     },
     mejora: {
-      texto: 'Inflige 7 de daño.\nEscribir 6 en el Conjuro Prodigioso.',
+      texto: 'Inflige 7 de daño. Escribir 5.\nAplica 2 de Débil a TODOS\nlos enemigos.',
       jugar: async (c) => {
         await c.atacar(c.objetivo!, 7, 1, 'impacto');
-        await c.escribir(6);
+        await c.escribir(5);
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
       },
     },
   },
@@ -1943,11 +1960,11 @@ export const MAGO: CartaDef[] = [
       await c.escribir(3);
     },
     mejora: {
-      texto: 'Inflige 5 de daño dos veces.\nEscribir 4 por cada golpe.',
+      texto: 'Inflige 6 de daño dos veces.\nEscribir 4 por cada golpe.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 5, 1, 'estrellas');
+        await c.atacar(c.objetivo!, 6, 1, 'estrellas');
         await c.escribir(4);
-        if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 5, 1, 'estrellas');
+        if (c.objetivo!.vivo) await c.atacar(c.objetivo!, 6, 1, 'estrellas');
         await c.escribir(4);
       },
     },
@@ -2025,17 +2042,17 @@ export const MAGO: CartaDef[] = [
     requiereConjuro: 2,
     fx: 'impacto',
     animRara: 'anim-evocacion',
-    texto: 'Gasta un conjuro de nivel 2+:\ninflige 20 de daño (aplica +10 por nivel).\nIgnora y destruye el bloqueo.',
+    texto: 'Gasta un conjuro de nivel 2+:\ninflige 20 de daño (aplica +6 por nivel).\nIgnora y destruye el bloqueo.',
     valores: valoresDeConjuro(1, 2, 'directo'),
     jugar: async (c) => {
       const nivel = await c.gastarConjuro(2);
-      await c.danarPerforante(c.objetivo!, 20 + 10 * nivel, 'impacto');
+      await c.danarPerforante(c.objetivo!, 20 + 6 * nivel, 'impacto');
     },
     mejora: {
-      texto: 'Gasta un conjuro de nivel 2+:\ninflige 28 de daño (aplica +12 por nivel).\nIgnora y destruye el bloqueo.',
+      texto: 'Gasta un conjuro de nivel 2+:\ninflige 26 de daño (aplica +6 por nivel).\nIgnora y destruye el bloqueo.',
       jugar: async (c) => {
         const nivel = await c.gastarConjuro(2);
-        await c.danarPerforante(c.objetivo!, 28 + 12 * nivel, 'impacto');
+        await c.danarPerforante(c.objetivo!, 26 + 6 * nivel, 'impacto');
       },
     },
   },
@@ -2050,14 +2067,14 @@ export const MAGO: CartaDef[] = [
     subclase: 'Adivinación',
     fx: 'estrellas',
     animRara: 'anim-abjuracion',
-    texto: 'Poder: a partir del siguiente turno,\nganas 1 de energía al inicio\nde cada turno.',
+    texto: 'Poder: ganas 1 de energía\nal inicio de cada turno.',
     // the extra energy only arrives with the next turn's refill (no instant refund)
     jugar: async (c) => {
       c.jugador.energiaMax += 1;
     },
     mejora: {
       innato: true,
-      texto: 'Innata: empiezas cada combate con ella.\nPoder: a partir del siguiente turno,\nganas 1 de energía al inicio de cada turno.',
+      texto: 'Innata: empiezas cada combate con ella.\nPoder: ganas 1 de energía\nal inicio de cada turno.',
       jugar: async (c) => {
         c.jugador.energiaMax += 1;
       },
@@ -4155,11 +4172,11 @@ export const GOLPE_SAGRADO: CartaDef = {
   familia: 'golpe',
   fx: 'martillo',
   texto: 'Inflige 14 de daño.',
-  valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) }],
-  jugar: async (c) => { await c.atacar(c.objetivo!, 14 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo'); },
+  valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + extraGolpes(c) }],
+  jugar: async (c) => { await c.atacar(c.objetivo!, 14 + extraGolpes(c), 1, 'martillo'); },
   mejora: {
     texto: 'Inflige 20 de daño.',
-    jugar: async (c) => { await c.atacar(c.objetivo!, 20 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo'); },
+    jugar: async (c) => { await c.atacar(c.objetivo!, 20 + extraGolpes(c), 1, 'martillo'); },
   },
 };
 
@@ -4175,11 +4192,11 @@ export const DEFENSA_SAGRADA: CartaDef = {
   familia: 'defensa',
   fx: 'escudoSagrado',
   texto: 'Gana 11 de bloqueo.',
-  valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + (c.jugador.estados.defensasMas ?? 0) }],
-  jugar: async (c) => { await c.ganarBloqueo(11 + (c.jugador.estados.defensasMas ?? 0)); },
+  valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + extraDefensas(c) }],
+  jugar: async (c) => { await c.ganarBloqueo(11 + extraDefensas(c)); },
   mejora: {
     texto: 'Gana 16 de bloqueo.',
-    jugar: async (c) => { await c.ganarBloqueo(16 + (c.jugador.estados.defensasMas ?? 0)); },
+    jugar: async (c) => { await c.ganarBloqueo(16 + extraDefensas(c)); },
   },
 };
 
@@ -4375,18 +4392,18 @@ export const PALADIN: CartaDef[] = [
     familia: 'ambas', // a Strike and a Defend at once: it takes both bonuses
     texto: 'Inflige 12 de daño.\nGana 6 de bloqueo.\nCuenta como Golpe y como Defensa.',
     valores: (c, n) => [
-      { tipo: 'ataque', indice: 0, base: n[0] + (c.jugador.estados.golpesMas ?? 0) },
-      { tipo: 'bloqueo', indice: 1, base: n[1] + (c.jugador.estados.defensasMas ?? 0) },
+      { tipo: 'ataque', indice: 0, base: n[0] + extraGolpes(c) },
+      { tipo: 'bloqueo', indice: 1, base: n[1] + extraDefensas(c) },
     ],
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 12 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo');
-      await c.ganarBloqueo(6 + (c.jugador.estados.defensasMas ?? 0));
+      await c.atacar(c.objetivo!, 12 + extraGolpes(c), 1, 'martillo');
+      await c.ganarBloqueo(6 + extraDefensas(c));
     },
     mejora: {
       texto: 'Inflige 16 de daño.\nGana 8 de bloqueo.\nCuenta como Golpe y como Defensa.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 16 + (c.jugador.estados.golpesMas ?? 0), 1, 'martillo');
-        await c.ganarBloqueo(8 + (c.jugador.estados.defensasMas ?? 0));
+        await c.atacar(c.objetivo!, 16 + extraGolpes(c), 1, 'martillo');
+        await c.ganarBloqueo(8 + extraDefensas(c));
       },
     },
   },

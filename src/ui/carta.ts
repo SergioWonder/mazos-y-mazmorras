@@ -290,7 +290,7 @@ export const ARTE_CARTA: Record<string, string> = {
   // ── Mago ──
   'manos-ardientes': '🔥', 'proyectil-magico': '✨', 'rayo-escarcha': '❄️',
   'toque-electrizante': '⚡', 'armadura-mago': '🧥', 'truco-magia': '🎩',
-  'escudo-arcano': '💠', 'bola-fuego': '☄️', 'rayo-abrasador': '🔆',
+  'escudo-arcano': '💠', 'bola-fuego': '☄️', 'arma-magica': '🌠',
   'toque-vampirico': '🦇', 'estudio-arcano': '📖', 'recuperacion-arcana': '🌀',
   'canalizar-mana': '🕯️', 'meditacion-arcana': '🧘', 'sacrificio-arcano': '🩸',
   'marea-arcana': '🌊', acelerar: '💨', 'escuela-evocacion': '💥',

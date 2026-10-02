@@ -5,18 +5,18 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790880776.5870974,
-    "ast_hash": "b6995415ca7a0db23967db6936095a93",
+    "mtime": 1790933894.0796251,
+    "ast_hash": "01cba296073116ca74cb98446a470484",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790880717.0455387,
-    "ast_hash": "727a34a9274add2d01780c1f7063a755",
+    "mtime": 1790933836.5896046,
+    "ast_hash": "13fa243fb3e152977e8ae2daa10b53ca",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
-    "mtime": 1790870707.694943,
-    "ast_hash": "08b966709053738fb88933b769bf8566",
+    "mtime": 1790933968.2285728,
+    "ast_hash": "1f7243b74ea3f7651dad67128d3f6687",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
@@ -65,8 +65,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/types.ts": {
-    "mtime": 1790870694.262807,
-    "ast_hash": "0c1f676ce692c4812129af934ae88c73",
+    "mtime": 1790933811.5396967,
+    "ast_hash": "61b41c3be247b85ad26c9b3d86d4377a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/audio.ts": {
@@ -110,8 +110,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
-    "mtime": 1790870740.3209653,
-    "ast_hash": "d3a13c9f8b690f38b2d1bff7961fe8df",
+    "mtime": 1790933850.7531335,
+    "ast_hash": "627599ed9ec1877c88086108470a2991",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
@@ -160,13 +160,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/util.ts": {
-    "mtime": 1790787137.1808546,
-    "ast_hash": "3612db8ae356461f12af954173a9ba93",
+    "mtime": 1790933811.5403411,
+    "ast_hash": "6ae4ab5a92759271528ae3989864074c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790880776.5836356,
-    "ast_hash": "cdd40a0375d801e00139fa807c9d79df",
+    "mtime": 1790933894.0763075,
+    "ast_hash": "583869f0c0ff756f3aef5620cc2c8d0b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -967,11 +967,6 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/punalada-trapera.svg": {
     "mtime": 1790353494.901594,
     "ast_hash": "d42289ccbfdad8ff63d807e2c1700ed5",
-    "semantic_hash": ""
-  },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/rayo-abrasador.svg": {
-    "mtime": 1790353046.5321693,
-    "ast_hash": "3804ca7403ad3e80ed3feea04148264c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/rayo-escarcha.svg": {
@@ -1865,8 +1860,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias-bendicion.ts": {
-    "mtime": 1790765609.6480703,
-    "ast_hash": "b99c66e0a008d76601d9ec4bcfc6abf1",
+    "mtime": 1790933511.9991388,
+    "ast_hash": "5a089924a22f92c706afc107f3f81fb6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/action-queue.ts": {
@@ -2395,8 +2390,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {
-    "mtime": 1790720239.6002765,
-    "ast_hash": "efc6250cfd2b62882854c2ec4426d3aa",
+    "mtime": 1790933816.2192998,
+    "ast_hash": "79bd806ccfbe345c44c01a9215630e07",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/icono/generate_icon.py": {
@@ -3782,6 +3777,11 @@
   "/Users/sergio/WonderBits/personal/videogame/src/audio/cap3-e0-jefe.mp3": {
     "mtime": 1790879305.3533006,
     "ast_hash": "654258f6f5342715a615dd565ac57fbc",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/cartas/arma-magica.svg": {
+    "mtime": 1790933853.8744853,
+    "ast_hash": "6349e5862562ad80be34730da9874a3f",
     "semantic_hash": ""
   }
 }

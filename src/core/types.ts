@@ -66,6 +66,7 @@ export type EstadoId =
   | 'fervor'         // (paladín) se gana con cada Golpe y Defensa; los Castigos lo consumen
   | 'castigo'        // (paladín) indicador: Castigos preparados para tu siguiente ataque
   | 'golpesMas'      // (paladín) tus Golpes infligen esta cantidad de daño más
+  | 'armaMagica'     // (mago) tus Golpes infligen y tus Defensas dan esta cantidad más
   | 'defensasMas'    // (paladín) tus Defensas dan esta cantidad de bloqueo más
   | 'bastion'        // (paladín) al inicio de tu turno conservas hasta esta cantidad de bloqueo
   | 'fervorPorTurno' // (paladín) ganas este Fervor al inicio de cada turno

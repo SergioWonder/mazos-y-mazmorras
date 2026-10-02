@@ -552,9 +552,9 @@ console.log('— Mejoras de cartas —');
   golpe.mejorada = true;
   check(defDe(golpe).nombre === 'Golpe+' && defDe(golpe).texto.includes('9'), 'mejorada usa nombre+ y efecto nuevo');
 
-  const canalizar = instanciar(MAGO.find((c) => c.id === 'canalizar-mana')!);
-  canalizar.mejorada = true;
-  check(defDe(canalizar).coste === 0, 'la mejora puede reducir el coste (Canalizar Maná+ = 0)');
+  const estudio = instanciar(MAGO.find((c) => c.id === 'estudio-arcano')!);
+  estudio.mejorada = true;
+  check(defDe(estudio).coste === 0, 'la mejora puede reducir el coste (Estudio Arcano+ = 0)');
 
   // la mejora funciona dentro de un combate real
   const run = nuevaRun('barbaro', 777);
@@ -3908,8 +3908,8 @@ console.log('\n🙏 Bendiciones');
   {
     const { comb } = await montar('druida', ['bendicion-manada']);
     await jugarCon(comb, 'forma-lobo');
-    check(comb.jugador.efectosTemporales[0]?.turnos === 4 && comb.jugador.invocacion?.vida === 4,
-      'Bendición de la Manada: la forma dura 1 turno más e Invocas 4');
+    check(comb.jugador.efectosTemporales[0]?.turnos === 3 && comb.jugador.invocacion?.vida === 5,
+      'Bendición de la Manada: la forma dura lo normal e Invocas 5');
   }
   {
     const { comb } = await montar('druida', ['bendicion-raices'], [atacante(1)]);
@@ -5947,7 +5947,7 @@ try {
   check(def.phases[0] < def.phases[1] && def.phases[1] < 1, 'vuelo < impacto < disipación');
   // volley timing: quick, and the feedback waits for the impact
   const r = volleyTiming(k, false)!, rr = volleyTiming(k, true)!;
-  check(!!r && r.gapMs >= 70 && r.gapMs <= 110, `los dardos salen casi en ráfaga (${r?.gapMs} ms entre ellos)`);
+  check(!!r && r.gapMs >= 130 && r.gapMs <= 180, `los dardos salen en ráfaga, uno tras otro (${r?.gapMs} ms entre ellos)`);
   check(!!r && r.impactMs === Math.round(vuelo * 1000), 'el daño de cada dardo se muestra cuando impacta');
   check(!!rr && rr.gapMs > r.gapMs && rr.impactMs === r.impactMs, 'con movimiento reducido los dardos se espacian para leer cada número');
   check(['estrellas', 'tajo', 'impacto', cardSpellKey('tormenta-venganza', 'raices'), ''].every((x) => volleyTiming(x, false) === null),
@@ -6188,7 +6188,7 @@ console.log('\n🔮 Clarividencia');
     await comb.terminarTurno();
     check(comb.jugador.energiaMax === max + 1 && comb.jugador.energia === max + 1, `Clarividencia${mejorada ? '+' : ''}: desde el siguiente turno empiezas con 1 de energía más`);
   }
-  check(/siguiente turno/i.test(clari.texto), 'el texto aclara que la energía llega a partir del siguiente turno');
+  check(/al inicio de cada turno/i.test(clari.texto), 'el texto dice que la energía llega al inicio de cada turno');
 }
 
 // ── Illustrated narrative scenes (src/arte/escenas) ──────────────────────────
@@ -7085,9 +7085,9 @@ console.log('\n🔢 Números calculados');
   check(await valor('verbo-aniquilacion', reliquias) === 166, 'Verbo de Aniquilación: Condena de un tercio de los PV actuales');
   check(await valor('nube-nauseabunda', reliquias) === 9, 'Nube Nauseabunda: el Veneno que detona (el que había más el nuevo)');
   check(await valor('reabrir-heridas', reliquias, 1) === 6, 'Reabrir Heridas: la Hemorragia que añade al duplicarla');
-  check(await valor('escudo-arcano', fuerte) === 26, 'Escudo Arcano: 4 + 2 por cada nivel libre (10) + Destreza');
+  check(await valor('escudo-arcano', fuerte) === 36, 'Escudo Arcano: 4 + 3 por cada nivel libre (10) + Destreza');
   check(await valor('proyectil-magico', fuerte) === 2, 'Proyectil Mágico ignora Fuerza y Vulnerable (daño directo)');
-  check(await valor('bola-fuego', ESCENARIOS[0]) === 20, 'Bola de Fuego suma su bonus por el nivel del espacio que gastará (3)');
+  check(await valor('bola-fuego', ESCENARIOS[0]) === 30, 'Bola de Fuego suma su bonus por el nivel del espacio que gastará (3)');
 
   // — Several enemies: Vulnerable counts only when it is known who takes the hit —
   {
@@ -7187,7 +7187,7 @@ console.log('\n📝 Textos con números calculados');
 {
   const CTX = await import('../src/core/cartas.ts');
   const ids = ['postura-firme', 'golpe-demoledor', 'reflejos-acero', 'ataque-sutil', 'golpe-septico', 'tempestad-acero',
-    'punalada-trapera', 'emboscada', 'diezmo-sangre', 'escudo-arcano', 'manos-ardientes', 'bola-fuego', 'rayo-abrasador',
+    'punalada-trapera', 'emboscada', 'diezmo-sangre', 'escudo-arcano', 'manos-ardientes', 'bola-fuego', 'arma-magica',
     'toque-vampirico', 'escuela-evocacion'];
   for (const id of ids) {
     const def = CTX.cartaPorId(id)!;
@@ -8357,6 +8357,129 @@ console.log('\n👁️ Dificultad de enemigos (Contemplador, élites y normales 
   }
   const util = await import('../src/ui/util.ts').catch(() => null) as any;
   if (util) for (const k of ['coraza', 'robaMenos']) check(!!util.ICONO_ESTADO?.[k] && !!util.NOMBRE_ESTADO?.[k] && !!util.DESCRIPCION_ESTADO?.[k], `el estado «${k}» tiene icono, nombre y descripción`);
+}
+
+// ── Wizard rebalance (v8.3.0): more ways to win spell slots back ────────────
+console.log('\n🔮 Reequilibrio del mago');
+{
+  const { crearEspacios } = await import('../src/core/conjuros.ts');
+  const { cartaPorId, CARTAS_RETIRADAS } = await import('../src/core/cartas.ts');
+  const objetivo = (): EnemigoDef => ({ id: 'muneco-mago', nombre: 'Muñeco', arte: '🎯', pv: [300, 300], ia: () => ({ nombre: 'Esperar', intencion: 'defensa' }) } as any);
+  async function montarMago(espacios = 6, enemigos = 1) {
+    const run = nuevaRun('mago', 8080);
+    run.reliquias = [];
+    const comb = new Combate(run, Array.from({ length: enemigos }, objetivo), crearRng(8080), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.descarte.push(...comb.jugador.mano);
+    comb.jugador.mano = [];
+    comb.jugador.energia = 99;
+    comb.jugador.conjuros = crearEspacios(espacios);
+    comb.enemigos.forEach((e) => { e.bloqueo = 0; e.estados = {}; });
+    return comb;
+  }
+  async function jugar(comb: Combate, id: string, mejorada = false, objetivoI = 0) {
+    const inst = instanciar(cartaPorId(id)!);
+    inst.mejorada = mejorada;
+    comb.jugador.mano.push(inst);
+    await comb.jugarCarta(inst, comb.enemigos[objetivoI]);
+    return inst;
+  }
+  const danoDe = async (id: string, mejorada = false, espacios = 6) => {
+    const comb = await montarMago(espacios);
+    const pv = comb.enemigos[0].pv;
+    await jugar(comb, id, mejorada);
+    return pv - comb.enemigos[0].pv;
+  };
+  const bloqueoDe = async (id: string, mejorada = false, espacios = 6) => {
+    const comb = await montarMago(espacios);
+    await jugar(comb, id, mejorada);
+    return comb.jugador.bloqueo;
+  };
+  const def = (id: string, mejorada = false) => { const i = instanciar(cartaPorId(id)!); i.mejorada = mejorada; return defDe(i); };
+
+  check(await bloqueoDe('armadura-mago') === 7 && await bloqueoDe('armadura-mago', true) === 10, 'Armadura de Mago: 7 / 10 de bloqueo');
+  check(def('bola-fuego').coste === 2 && def('bola-fuego', true).coste === 2, 'Bola de Fuego cuesta 2');
+  check(await danoDe('bola-fuego') === 30 && await danoDe('bola-fuego', true) === 36, 'Bola de Fuego: 18 / 24 (+4 por nivel; nivel 3 gastado)');
+  {
+    const comb = await montarMago(1);
+    await jugar(comb, 'canalizar-mana', true);
+    check(comb.jugador.conjuros.length === 3 && def('canalizar-mana', true).coste === 1, 'Canalizar Maná+: cuesta 1 y gana 2 espacios de conjuro');
+    const base = await montarMago(1);
+    await jugar(base, 'canalizar-mana');
+    check(base.jugador.conjuros.length === 2, 'Canalizar Maná: gana 1 espacio de conjuro');
+  }
+  check(await danoDe('dictado-veloz') === 8 && await danoDe('dictado-veloz', true) === 12, 'Dictado Veloz: 4 / 6 de daño dos veces');
+  {
+    const comb = await montarMago();
+    await jugar(comb, 'dictado-veloz', true);
+    check(comb.jugador.conjuroEscrito === 8, 'Dictado Veloz+: sigue escribiendo 4 por golpe');
+  }
+  check(await bloqueoDe('escudo-arcano') === 34 && await bloqueoDe('escudo-arcano', true) === 37, 'Escudo Arcano: 4 / 7 (+3 por cada nivel libre)');
+  check(!/siguiente turno/.test(def('escuela-abjuracion').texto) && !/siguiente turno/.test(def('escuela-abjuracion', true).texto),
+    'Clarividencia ya no dice «a partir del siguiente turno»');
+  {
+    const comb = await montarMago();
+    const e0 = comb.jugador.energiaMax;
+    await jugar(comb, 'escuela-abjuracion');
+    check(comb.jugador.energiaMax === e0 + 1, 'Clarividencia: sigue dando +1 de energía máxima');
+  }
+  check(await danoDe('escuela-evocacion') === 38 && await danoDe('escuela-evocacion', true) === 44, 'Desintegrar: 20 / 26 (+6 por nivel)');
+  {
+    const comb = await montarMago(6, 2);
+    await jugar(comb, 'glifo-mordiente');
+    check(comb.jugador.conjuroEscrito === 4 && comb.enemigos.every((e) => e.estados.debil === 1), 'Glifo Mordiente: Escribir 4 y 1 de Débil a todos');
+    const m = await montarMago(6, 2);
+    await jugar(m, 'glifo-mordiente', true);
+    check(m.jugador.conjuroEscrito === 5 && m.enemigos.every((e) => e.estados.debil === 2), 'Glifo Mordiente+: Escribir 5 y 2 de Débil a todos');
+  }
+  check(await danoDe('manos-ardientes') === 10 && await danoDe('manos-ardientes', true) === 13, 'Manos Ardientes: 4 / 7 (+2 por nivel)');
+  check(await danoDe('rayo-escarcha') === 7 && await danoDe('rayo-escarcha', true) === 8, 'Rayo de Escarcha: 7 / 8 de daño');
+  {
+    const comb = await montarMago();
+    const pv = comb.jugador.pv;
+    comb.jugador.conjuros.forEach((e) => (e.gastado = true));
+    await jugar(comb, 'sacrificio-arcano');
+    check(comb.jugador.pv === pv - 4 && comb.jugador.conjuros.filter((e) => !e.gastado).map((e) => e.nivel).join() === '3',
+      'Sacrificio Arcano: pierde 4 PV y recupera el de mayor nivel');
+    const m = await montarMago();
+    m.jugador.conjuros.forEach((e) => (e.gastado = true));
+    await jugar(m, 'sacrificio-arcano', true);
+    check(m.jugador.pv === pv - 3 && m.jugador.conjuros.filter((e) => !e.gastado).map((e) => e.nivel).sort().join() === '1,3',
+      'Sacrificio Arcano+: pierde 3 PV, recupera el de mayor nivel y también uno de nivel 1');
+    const sinUno = await montarMago();
+    sinUno.jugador.conjuros.filter((e) => e.nivel > 1).forEach((e) => (e.gastado = true));
+    await jugar(sinUno, 'sacrificio-arcano', true);
+    check(sinUno.jugador.conjuros.filter((e) => e.gastado).map((e) => e.nivel).sort().join() === '2,2',
+      'Sacrificio Arcano+: si no falta ninguno de nivel 1, solo recupera el de mayor nivel');
+  }
+  check(def('toque-vampirico').requiereConjuro === 1, 'Toque Vampírico ya no exige un espacio de nivel 2+');
+  check(await danoDe('toque-vampirico', false, 1) === 15 && await danoDe('toque-vampirico', true) === 23, 'Toque Vampírico: 12 / 14 (+3 por nivel)');
+  {
+    const comb = await montarMago();
+    comb.jugador.mazo.push(...['golpe', 'golpe', 'golpe'].map((id) => instanciar(cartaPorId(id)!)));
+    await jugar(comb, 'truco-magia');
+    check(comb.jugador.mano.length === 2 && def('truco-magia').coste === 1 && def('truco-magia', true).coste === 0,
+      'Truco de Magia: roba 2 cartas y cuesta 1 / 0');
+  }
+  // Arma Mágica replaces Rayo Abrasador
+  check(!cartaPorId('rayo-abrasador') && CARTAS_RETIRADAS['rayo-abrasador'] === 'arma-magica', 'Rayo Abrasador se retira en favor de Arma Mágica');
+  {
+    const arma = cartaPorId('arma-magica')!;
+    check(arma?.tipo === 'poder' && arma.clase === 'mago' && arma.requiereConjuro === 1, 'Arma Mágica: poder del mago que gasta un conjuro');
+    const comb = await montarMago();
+    await jugar(comb, 'arma-magica'); // spends the level 3 slot: 2 + 3
+    const pv = comb.enemigos[0].pv;
+    await jugar(comb, 'golpe');
+    await jugar(comb, 'defender');
+    check(pv - comb.enemigos[0].pv === 11 && comb.jugador.bloqueo === 10, 'Arma Mágica (nivel 3): tus Golpes +5 de daño y tus Defender +5 de bloqueo');
+    const m = await montarMago(1);
+    await jugar(m, 'arma-magica', true); // level 1: 4 + 1
+    const pv2 = m.enemigos[0].pv;
+    await jugar(m, 'golpe');
+    check(pv2 - m.enemigos[0].pv === 11, 'Arma Mágica+ (nivel 1): tus Golpes +5 de daño');
+    const util = await import('../src/ui/util.ts') as any;
+    check(!!util.ICONO_ESTADO?.armaMagica && !!util.NOMBRE_ESTADO?.armaMagica && !!util.DESCRIPCION_ESTADO?.armaMagica, 'el estado «armaMagica» tiene icono, nombre y descripción');
+  }
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
