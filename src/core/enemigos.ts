@@ -442,15 +442,16 @@ export const MAESTRO_NINJA: EnemigoDef = {
 
 export const IMAGEN_ILUSORIA: EnemigoDef = {
   id: 'imagen-ilusoria', nombre: 'Imagen Ilusoria', arte: '🃏', pv: [8, 10], escala: 0.85,
-  ia: (turno, rng) => (rng() < 0.4 ? def('Parpadeo', 4) : atk('Cuchillada Falsa', 5)),
+  ia: (turno, rng) => (rng() < 0.4 ? def('Parpadeo', 6) : atk('Cuchillada Falsa', 5)),
 };
 
 export const EMBAUCADOR_ARCANO: EnemigoDef = {
   id: 'embaucador-arcano', nombre: 'Vexis, el Embaucador Arcano', arte: '🃏', pv: [120, 128], escala: 1.9, esJefe: true,
   rasgo: {
     nombre: 'Mil Rostros',
-    texto: 'Ladrón, asesino e ilusionista a la vez: nunca golpeas al que crees. Sus dagas van untadas y sus copias bailan a tu alrededor.',
+    texto: 'Ladrón, asesino e ilusionista a la vez: nunca golpeas al que crees. Mientras sus copias sigan en pie, tus ataques contra él caen al azar sobre él o sobre una de ellas. Y sus dagas van untadas.',
   },
+  senuelos: ['imagen-ilusoria'],
   ia: (turno, rng, self, aliados) => {
     if (turno === 0)
       return {

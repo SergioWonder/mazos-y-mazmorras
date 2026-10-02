@@ -90,6 +90,8 @@ export class Combate {
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero = false;
   enResolucion = false;
+  /** Decoy roll the UI already made for a card (so it flies where the blow will land). */
+  private desvioPrevisto: { carta: CartaInstancia; desde: EnemigoCombate; hacia: EnemigoCombate } | null = null;
   /** The hero's end-of-turn countdown already ran: the enemies are about to act. */
   private faseEnemiga = false;
   /** Cards played this turn / this combat (relic rhythm hooks). */
@@ -1554,12 +1556,35 @@ export class Combate {
     return true;
   }
 
+  /** Where an attack card aimed at `objetivo` really lands: an enemy with decoys (Vexis and
+   *  his illusions) shares the blow out at random among itself and its living decoys. The UI
+   *  asks before the card flies; jugarCarta then keeps that same roll. */
+  objetivoReal(carta: CartaInstancia, objetivo?: EnemigoCombate): EnemigoCombate | undefined {
+    const def = defDe(carta);
+    const senuelos = objetivo?.def.senuelos;
+    if (!objetivo?.vivo || def.tipo !== 'ataque' || def.objetivo !== 'enemigo' || !senuelos?.length) return objetivo;
+    const candidatos = [objetivo, ...this.enemigos.filter((e) => e.vivo && e !== objetivo && senuelos.includes(e.def.id))];
+    const hacia = candidatos[Math.floor(this.rng() * candidatos.length)];
+    this.desvioPrevisto = { carta, desde: objetivo, hacia };
+    return hacia;
+  }
+
   async jugarCarta(carta: CartaInstancia, objetivo?: EnemigoCombate) {
     if (!this.puedeJugar(carta)) return;
     if (carta.def.tipo === 'maldicion') {
       await this.saldarMaldicion(carta);
       return;
     }
+    // decoys: keep the roll the UI already made for this card, or roll now
+    const previsto = this.desvioPrevisto;
+    this.desvioPrevisto = null;
+    const yaTirado = !!previsto && previsto.carta === carta && previsto.hacia.vivo
+      && (objetivo === previsto.desde || objetivo === previsto.hacia);
+    const apuntado = yaTirado ? previsto!.desde : objetivo;
+    const real = yaTirado ? previsto!.hacia : this.objetivoReal(carta, objetivo);
+    this.desvioPrevisto = null;
+    if (real && apuntado && real !== apuntado && real.def.id !== apuntado.def.id) await this.ui.fxMensaje('🃏 ¡Era una ilusión!');
+    objetivo = real;
     this.enResolucion = true;
     const def = defDe(carta);
     const idx = this.jugador.mano.indexOf(carta);
@@ -1873,6 +1898,8 @@ export class Combate {
       return;
     }
 
+    // a poisoned blade only poisons if some hit got past your block and your summon
+    let atraveso = false;
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
       // atacar el enemigo pierde PV igual a la DIFERENCIA (cuánto superan las
@@ -1902,6 +1929,7 @@ export class Combate {
         const bloqueoAntes = this.jugador.bloqueo;
         // piercing hits go through the block without breaking it
         const real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+        if (real > 0) atraveso = true;
         // Vampiric: it heals part of the damage that got through
         const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
         if (sorbo > 0 && e.vivo) {
@@ -1946,6 +1974,7 @@ export class Combate {
     }
     if (m.efectos) {
       for (const [estado, n, sobreJugador] of m.efectos) {
+        if (estado === 'veneno' && sobreJugador && m.dano !== undefined && !atraveso) continue;
         const obj = sobreJugador ? this.jugador : e;
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
         await this.ui.fxEstado(obj, estado, n);

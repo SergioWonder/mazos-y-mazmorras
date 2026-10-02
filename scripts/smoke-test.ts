@@ -162,7 +162,8 @@ async function simular(
   await combate.iniciar();
 
   let turnos = 0;
-  while (!combate.terminado && turnos < 60) {
+  // a generous cap: it only has to catch fights that never end (the pícaro bot needs ~120 turns against Vexis)
+  while (!combate.terminado && turnos < 150) {
     turnos++;
     let jugadas = 0;
     while (jugadas < 15) {
@@ -8823,6 +8824,98 @@ console.log('\n💀 Muertes en paralelo');
   const muerte = /async fxMuerte\(e, causa\) \{([\s\S]*?)\n      \},/.exec(uiComb)?.[1] ?? '';
   check(/causa === 'condena'/.test(muerte) && /fx\.hechizo\('almaCondenada'/.test(muerte),
     'quien muere por Condena suelta su alma, y unas cadenas la retienen hasta que se deshace');
+}
+
+// ── Vexis: your attacks on him land on him or on his illusions, at random ────
+console.log('\n🃏 Las ilusiones de Vexis');
+{
+  const E = ENEMIGOS;
+  const montarVexis = async (semilla: number, ilusiones = 2) => {
+    const run = nuevaRun('barbaro', semilla);
+    run.reliquias = [];
+    const comb = new Combate(run, [E.EMBAUCADOR_ARCANO], crearRng(semilla), uiSilenciosa);
+    await comb.iniciar();
+    for (let i = 0; i < ilusiones; i++) comb.enemigos.push(E.crearEnemigo(E.IMAGEN_ILUSORIA, crearRng(semilla + i)));
+    for (const e of comb.enemigos) { e.pv = e.pvMax = 999; e.bloqueo = 0; e.estados = {}; }
+    comb.jugador.energia = 99;
+    comb.jugador.estados = {};
+    return comb;
+  };
+  const golpeA = async (comb: Combate, id: string, objetivo: EnemigoCombate) => {
+    const inst = instanciar(cartaPorId(id)!);
+    comb.jugador.mano.push(inst);
+    const antes = comb.enemigos.map((e) => e.pv);
+    await comb.jugarCarta(inst, objetivo);
+    return comb.enemigos.findIndex((e, i) => e.pv < antes[i]);
+  };
+  const { cartaPorId } = await import('../src/core/cartas.ts');
+  let aVexis = 0, aIlusion = 0;
+  for (let s = 0; s < 40; s++) {
+    const comb = await montarVexis(500 + s);
+    const quien = await golpeA(comb, 'golpe', comb.enemigos[0]);
+    if (quien === 0) aVexis++; else if (quien > 0) aIlusion++;
+  }
+  check(aVexis > 0 && aIlusion > 0 && aVexis + aIlusion === 40,
+    `con sus ilusiones en pie, un ataque a Vexis cae al azar sobre él o sobre una ilusión (${aVexis} a Vexis, ${aIlusion} a ilusiones)`);
+  check(aIlusion >= 15, `y las ilusiones se llevan su parte (unos dos tercios: ${aIlusion}/40)`);
+  {
+    let siempre = true;
+    for (let s = 0; s < 10; s++) {
+      const comb = await montarVexis(600 + s, 0);
+      if ((await golpeA(comb, 'golpe', comb.enemigos[0])) !== 0) siempre = false;
+    }
+    check(siempre, 'sin ilusiones, el ataque llega siempre a Vexis');
+  }
+  {
+    let coincide = 0;
+    for (let s = 0; s < 10; s++) {
+      const comb = await montarVexis(700 + s);
+      const inst = instanciar(cartaPorId('golpe')!);
+      const previsto = comb.objetivoReal(inst, comb.enemigos[0]);
+      comb.jugador.mano.push(inst);
+      const antes = comb.enemigos.map((e) => e.pv);
+      await comb.jugarCarta(inst, comb.enemigos[0]);
+      const golpeado = comb.enemigos.find((e, i) => e.pv < antes[i]);
+      if (golpeado === previsto) coincide++;
+    }
+    check(coincide === 10, 'el objetivo que la interfaz prevé (adonde vuela la carta) es el que recibe el golpe');
+  }
+  {
+    const comb = await montarVexis(800);
+    const inst = instanciar(cartaPorId('golpe')!);
+    check(comb.objetivoReal(inst, comb.enemigos[1]) === comb.enemigos[1], 'atacar directamente a una ilusión la golpea a ella');
+  }
+  const parpadeo = E.IMAGEN_ILUSORIA.ia(1, () => 0, {} as EnemigoCombate, []); // rng 0: Parpadeo
+  check((parpadeo?.bloqueo ?? 0) > 4, `las ilusiones se protegen más con Parpadeo (${parpadeo?.bloqueo} de bloqueo)`);
+}
+
+// ── An enemy's poisoned hit only poisons if it gets past your block and summon ──
+console.log('\n🧪 Veneno de los ataques');
+{
+  const venenoso: EnemigoDef = {
+    id: 'muneco-venenoso', nombre: 'Muñeco', arte: '🎯', pv: [200, 200],
+    ia: () => ({ nombre: 'Daga Untada', intencion: 'ataque', dano: 5, efectos: [['veneno', 3, true]] }),
+  };
+  const nube: EnemigoDef = {
+    id: 'muneco-nube', nombre: 'Muñeco', arte: '🎯', pv: [200, 200],
+    ia: () => ({ nombre: 'Nube', intencion: 'perjuicio', efectos: [['veneno', 2, true]] }),
+  };
+  const turno = async (def: EnemigoDef, preparar: (c: Combate) => void | Promise<void>) => {
+    const run = nuevaRun('druida', 4321);
+    run.reliquias = [];
+    const comb = new Combate(run, [def], crearRng(4321), uiSilenciosa);
+    await comb.iniciar();
+    comb.jugador.estados = {};
+    await preparar(comb);
+    await comb.terminarTurno();
+    // the poison ticks once at the start of your turn (and drops by 1): add it back
+    return (comb.jugador.estados.veneno ?? 0) + (comb.jugador.estados.veneno ? 1 : 0);
+  };
+  check(await turno(venenoso, (c) => { c.jugador.bloqueo = 10; }) === 0, 'si tu bloqueo para todo el golpe, el veneno no entra');
+  check(await turno(venenoso, (c) => { c.jugador.bloqueo = 2; }) === 3, 'si el golpe atraviesa el bloqueo, te envenena');
+  check(await turno(venenoso, async (c) => { c.jugador.bloqueo = 0; await c.contexto().invocar('lobo', 10); }) === 0,
+    'si tu invocación se lo traga entero, tampoco');
+  check(await turno(nube, () => {}) === 2, 'el veneno que no viene con un golpe se aplica como siempre');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

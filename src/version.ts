@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.5.1';
+export const VERSION = '8.6.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.6.0',
+    fecha: '2026-10-02',
+    cambios: [
+      '🃏 Vexis engaña de verdad: mientras sus ilusiones sigan en pie, tus ataques contra él caen al azar sobre él o sobre una de ellas («¡Era una ilusión!»). Y sus copias se protegen más: Parpadeo da 6 de bloqueo.',
+      '🧪 El veneno de los ataques enemigos solo entra si el golpe atraviesa tu bloqueo y tu invocación.',
+    ],
+  },
   {
     version: '8.5.1',
     fecha: '2026-10-02',

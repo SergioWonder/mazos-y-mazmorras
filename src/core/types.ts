@@ -169,6 +169,8 @@ export interface EnemigoDef {
   escala?: number;       // tamaño relativo del sprite
   /** Rasgo único visible (jefes): nombre + descripción para el tooltip. */
   rasgo?: { nombre: string; texto: string };
+  /** Ids of its decoys: an attack card aimed at it lands at random on it or on one of them (Vexis). */
+  senuelos?: string[];
   /** Estados con los que entra en combate (pasivas: espinas, etc.). */
   estadosIniciales?: Partial<Record<EstadoId, number>>;
   /** Pasiva especial: 'filacteria' = al morir, su sitio lo ocupa su filacteria (`filacteria`). */

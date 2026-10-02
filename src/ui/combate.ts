@@ -1157,6 +1157,8 @@ export function pantallaCombate(
         cartaPendiente = null;
         modoObjetivo = false;
       }
+      // Vexis' illusions: the card flies where the blow will really land
+      objetivo = combate.objetivoReal(inst, objetivo);
       const elem = raiz.querySelector(
         `.carta[data-mano="${combate.jugador.mano.indexOf(inst)}"]`,
       ) as HTMLElement | null;
