@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.4.0';
+export const VERSION = '8.4.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.4.1',
+    fecha: '2026-10-02',
+    cambios: [
+      "⚱️ La Filacteria de Vol'guth es más resistente: 60 PV en vez de 40.",
+      '👁️ El Contemplador tiene un 20 % más de vida: 336 PV.',
+    ],
+  },
   {
     version: '8.4.0',
     fecha: '2026-10-02',

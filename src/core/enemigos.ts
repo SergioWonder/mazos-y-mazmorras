@@ -186,7 +186,7 @@ export const MOMIA_REAL: EnemigoDef = {
 /** Vol'guth's phylactery: takes his place when he falls and, if it survives a full turn,
  *  brings him back at full health. Its health carries over between deaths; breaking it ends him. */
 export const FILACTERIA_VOLGUTH: EnemigoDef = {
-  id: 'filacteria-volguth', nombre: "Filacteria de Vol'guth", arte: '⚱️', pv: [40, 40], escala: 1.1, esJefe: true,
+  id: 'filacteria-volguth', nombre: "Filacteria de Vol'guth", arte: '⚱️', pv: [60, 60], escala: 1.1, esJefe: true,
   rasgo: {
     nombre: 'Alma encadenada',
     texto: "Guarda el alma de Vol'guth. Si sigue en pie al acabar su segundo turno, lo devuelve a la no-vida con toda su vida. Rómpela y el liche muere para siempre.",
@@ -712,7 +712,7 @@ const RAYOS_CONTEMPLADOR: Movimiento[] = [
 const RAYO_DESINTEGRADOR: Movimiento = { nombre: 'RAYO DESINTEGRADOR', intencion: 'ataque', dano: 45, fx: 'aliento' };
 
 export const CONTEMPLADOR: EnemigoDef = {
-  id: 'contemplador', nombre: 'El Contemplador', arte: '👁️', pv: [280, 280], escala: 2.3, esJefe: true,
+  id: 'contemplador', nombre: 'El Contemplador', arte: '👁️', pv: [336, 336], escala: 2.3, esJefe: true,
   rasgo: {
     nombre: 'Ojos del Caos',
     texto: 'Diez tallos oculares, diez magias distintas. Cada rayo tuerce las reglas de tu próximo turno, sus Observadores nunca dejan de mirar… y cuando abre del todo su ojo central, su Rayo Desintegrador te deshace de un solo golpe.',

@@ -8259,6 +8259,8 @@ console.log('\n👁️ Dificultad de enemigos (Contemplador, élites y normales 
     return perdidos / n;
   };
   const [cIgn, cCon] = [await coste(E.IGNIFAX), await coste(E.CONTEMPLADOR)];
+  check(E.CONTEMPLADOR.pv[0] === 336 && E.CONTEMPLADOR.pv[1] === 336, 'el Contemplador tiene 336 PV (un 20 % más que los 280 de antes)');
+  check(E.FILACTERIA_VOLGUTH.pv[0] === 60 && E.FILACTERIA_VOLGUTH.pv[1] === 60, "la filacteria de Vol'guth tiene 60 PV");
   check(cCon >= cIgn * 0.8, `el Contemplador cuesta casi tanta vida como Ignifax (${Math.round(cCon)} frente a ${Math.round(cIgn)} PV)`);
 
   // Unique abilities: every Act II/III elite and every Act III normal has one (★ trait)
