@@ -128,10 +128,16 @@ export function pesoRaroEfectivo(run: EstadoRun, base: number): number {
   return run.reliquias.reduce((peso, r) => peso * (r.pesoRaroMult ?? 1), base);
 }
 
-/** Prepara la run para el siguiente capítulo: nuevo mapa y respiro. */
-export function avanzarCapitulo(run: EstadoRun, rng: () => number) {
+/** The scenario of the next act, drawn at random (one of its two maps). */
+export function sortearEscenario(rng: () => number): number {
+  return Math.floor(rng() * 2);
+}
+
+/** Prepara la run para el siguiente capítulo: nuevo mapa y respiro. `escenario` is the
+ *  map already drawn (and foretold by Síbila); without it, one is drawn now. */
+export function avanzarCapitulo(run: EstadoRun, rng: () => number, escenario = sortearEscenario(rng)) {
   run.capitulo++;
-  run.escenario = Math.floor(rng() * 2); // uno de los dos escenarios del nuevo acto
+  run.escenario = escenario; // uno de los dos escenarios del nuevo acto
   run.mapa = generarMapa(rng);
   run.mision = null; // the old map's tavern quest cannot be followed any more
   run.nodoActual = -1;

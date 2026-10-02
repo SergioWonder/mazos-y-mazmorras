@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1790941819.2112088,
-    "ast_hash": "ec1e184b0c19c86067d4e37fd4ffa00e",
+    "mtime": 1790954255.9977665,
+    "ast_hash": "cc03ac0e47dbefb2597b14dba43e90bd",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1790941720.7403028,
-    "ast_hash": "f78f7b052ea3cf47410fe892a5cc4a63",
+    "mtime": 1790954199.948209,
+    "ast_hash": "67a5bbe50f51447b0c935db247df1770",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/run.ts": {
-    "mtime": 1790719288.9869423,
-    "ast_hash": "9538ae1b7327d2097679a1bd9be35183",
+    "mtime": 1790954199.9492779,
+    "ast_hash": "08c008c39a475a1de3391609690f3a24",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/types.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1790847290.976135,
-    "ast_hash": "5aa36292149c98287ad5c949c14fcdb1",
+    "mtime": 1790954206.742936,
+    "ast_hash": "943b178db814503411c0a2d070bc52b6",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
@@ -100,8 +100,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/bendicion.ts": {
-    "mtime": 1790544237.9465916,
-    "ast_hash": "8a7d2134ec2269143d64f4500d735211",
+    "mtime": 1790954214.2797525,
+    "ast_hash": "62b9b7c139fff2b877a9b58b350805eb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/capitulo.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1790941819.2065947,
-    "ast_hash": "245501bcb0df42b25bb8721336e7a126",
+    "mtime": 1790954255.9935892,
+    "ast_hash": "adcc5f69d36d80130972249f991778bb",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -1855,8 +1855,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/bendiciones.ts": {
-    "mtime": 1790719255.5569458,
-    "ast_hash": "031f77fbe89e45963c220aed5393a144",
+    "mtime": 1790954199.9487698,
+    "ast_hash": "19aae63995d1bbf249941a1f3c609bbf",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias-bendicion.ts": {

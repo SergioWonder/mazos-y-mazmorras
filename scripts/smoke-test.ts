@@ -8500,5 +8500,28 @@ console.log('\n🔮 Reequilibrio del mago');
   }
 }
 
+// ── The Senescal and Síbila speak of the map that was actually drawn ─────────
+console.log('\n🗺️ Discursos según el mapa');
+{
+  const BD = await import('../src/core/bendiciones.ts');
+  const fs = await import('node:fs');
+  const [ogro, contrabandistas] = [BD.discursoSenescal(0), BD.discursoSenescal(1)];
+  check(/Gorzug/.test(ogro) && !/Vexis/.test(ogro), 'el Senescal habla de Gorzug en el Asentamiento Ogro');
+  check(/Vexis/.test(contrabandistas) && !/Gorzug/.test(contrabandistas), 'el Senescal habla de Vexis en la Guarida de los Contrabandistas');
+  check([ogro, contrabandistas].every((t) => !/muertos|cripta|Vol'guth|Malachar/i.test(t)),
+    'el Senescal no adelanta el Acto II (aún no se ha sorteado)');
+  const sibila = [[1, 0, /Vol'guth/], [1, 1, /Malachar/], [2, 0, /Ignifax/], [2, 1, /Contemplador/]] as const;
+  for (const [cap, esc, jefe] of sibila) {
+    check(jefe.test(BD.discursoSibila(cap, esc)), `Síbila anuncia al jefe del Acto ${cap + 1}, escenario ${esc + 1} (${jefe.source})`);
+  }
+  check(new Set(sibila.map(([cap, esc]) => BD.discursoSibila(cap, esc))).size === 4, 'cada mapa de los Actos II y III tiene su propio mensaje de Síbila');
+  const run = nuevaRun('mago', 31);
+  avanzarCapitulo(run, crearRng(5), 1);
+  check(run.capitulo === 1 && run.escenario === 1, 'avanzarCapitulo respeta el escenario ya sorteado (el que anunció Síbila)');
+  const main = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  check(/pantallaBendicion\(run, rng, 'entreActos', siguiente\)[\s\S]*avanzarCapitulo\(run, rng, siguiente\)/.test(main),
+    'el mapa del acto siguiente se sortea antes de Síbila y es el mismo que se juega');
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);

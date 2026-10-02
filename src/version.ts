@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.4.1';
+export const VERSION = '8.4.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.4.2',
+    fecha: '2026-10-02',
+    cambios: [
+      '📜 Aldric, el Senescal, te habla del enemigo que de verdad te espera: Gorzug en el Asentamiento Ogro o Vexis en la Guarida de los Contrabandistas.',
+      '💧 Síbila te anuncia el mapa del acto siguiente: la Cripta de Vol\'guth o el Templo de Malachar, y después la guarida de Ignifax o el laberinto del Contemplador.',
+    ],
+  },
   {
     version: '8.4.1',
     fecha: '2026-10-02',

@@ -1,6 +1,6 @@
 import type { EstadoRun, TipoBendicion } from '../core/types.ts';
 import {
-  ofrecerBendicionInicial, ofrecerBendicionEntreActos, aplicarBendicion, type OfertaBendicion,
+  ofrecerBendicionInicial, ofrecerBendicionEntreActos, aplicarBendicion, discursoSenescal, discursoSibila, type OfertaBendicion,
 } from '../core/bendiciones.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
@@ -34,7 +34,7 @@ function contenidoOpcion(o: OfertaBendicion): string {
  * - `entreActos`: full heal plus the unique-card relics and other blessing relics up to 3 options.
  */
 export function pantallaBendicion(
-  run: EstadoRun, rng: () => number, momento: MomentoBendicion = 'entreActos',
+  run: EstadoRun, rng: () => number, momento: MomentoBendicion = 'entreActos', escenarioSiguiente = 0,
 ): Promise<void> {
   return new Promise((resolver) => {
     const inicial = momento === 'inicial';
@@ -53,9 +53,7 @@ export function pantallaBendicion(
       <p class="titulo-sub">El encargo</p>
       ${sceneArt('aldric', '🧓', 'bendicion-arte', 'Aldric, Senescal del Valle')}
       <h1 class="fin-titulo capitulo-nombre">Aldric, Senescal del Valle</h1>
-      <p class="fin-texto">«Los goblins de Gorzug queman nuestras granjas, y bajo sus ruinas
-      algo peor remueve a los muertos. Acaba con ambos y el valle no lo olvidará. El
-      torreón guarda viejos tesoros bendecidos: llévate el que mejor te sirva.»</p>
+      <p class="fin-texto">«${discursoSenescal(run.escenario)}»</p>
       <div class="evento-opciones bendicion-opciones"></div>
     `
       : `
@@ -63,8 +61,7 @@ export function pantallaBendicion(
       ${sceneArt('sibila', '🧝‍♀️', 'bendicion-arte', 'Síbila, la Vidente del Manantial')}
       <h1 class="fin-titulo capitulo-nombre">Síbila, la Vidente del Manantial</h1>
       <p class="fin-texto">La encuentras donde el agua nace de la roca, como si llevara
-      siglos esperándote. «Has hecho retroceder a la oscuridad, peregrino. Descansa:
-      el manantial cerrará tus heridas… y yo te daré algo más para el camino.»</p>
+      siglos esperándote. «${discursoSibila(run.capitulo + 1, escenarioSiguiente)}»</p>
       <p class="bendicion-cura">✨ Te cura por completo (${run.pv} → ${run.pvMax} PV)</p>
       <div class="evento-opciones bendicion-opciones"></div>
     `;

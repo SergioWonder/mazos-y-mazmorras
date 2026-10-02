@@ -69,3 +69,50 @@ export function ofrecerBendicionEntreActos(run: EstadoRun, rng: () => number): O
 export function aplicarBendicion(run: EstadoRun, oferta: OfertaBendicion, rng: () => number) {
   otorgarReliquia(run, oferta.reliquia, rng);
 }
+
+// ── What the Senescal and Síbila say: each speaks of the map that was drawn ──
+
+const OFRENDA = 'El torreón guarda viejos tesoros bendecidos: llévate el que mejor te sirva.';
+
+/** The Senescal's task, by the Act I scenario. He knows nothing yet of what lies below. */
+const SENESCAL = [
+  // El Asentamiento Ogro
+  'Los goblins de Gorzug queman nuestras granjas y sus tambores ya se oyen desde el torreón. ' +
+    'Ese ogro no se detendrá hasta que el condado entero arda. Acaba con él y el valle no lo olvidará.',
+  // La Guarida de los Contrabandistas
+  'Las caravanas desaparecen en el camino y nadie ve a los ladrones: dicen que una hermandad de ' +
+    'ninjas se esconde bajo la posada vieja, y que la guía Vexis, un embaucador que juega con las sombras. ' +
+    'Desenmascáralo y el valle no lo olvidará.',
+];
+
+/** Síbila's prophecy, by the act about to start (1 = Act II, 2 = Act III) and its scenario. */
+const SIBILA: Record<number, string[]> = {
+  1: [
+    // La Cripta
+    "Pero el agua me muestra algo peor: bajo las ruinas, Vol'guth despierta a los muertos y ata " +
+      'su alma a una urna. Si cae, rompe la filacteria antes de que lo devuelva a la no-vida.',
+    // El Templo Oscuro
+    'Pero el agua se tiñe de negro: bajo la tierra, Malachar y su culto cantan para abrir la puerta ' +
+      'del Abismo. Si cae el Heraldo, guárdate de lo que salga por ella.',
+  ],
+  2: [
+    // La Guarida del Dragón
+    'Pero el agua hierve: más abajo duerme Ignifax, el dragón rojo, señor oculto del valle. ' +
+      'Cuando alce el vuelo, protégete de su aliento… o no quedará de ti ni la ceniza.',
+    // El Laberinto del Contemplador
+    'Pero el agua se arremolina y mil ojos me devuelven la mirada: en el corazón del laberinto ' +
+      'aguarda el Contemplador. Cada uno de sus rayos tuerce las reglas de tu siguiente paso.',
+  ],
+};
+
+/** The Senescal's words at the start, for the Act I scenario that was drawn. */
+export function discursoSenescal(escenario: number): string {
+  return `${SENESCAL[escenario] ?? SENESCAL[0]} ${OFRENDA}`;
+}
+
+/** Síbila's words between acts, for the act about to start and its scenario. */
+export function discursoSibila(capitulo: number, escenario: number): string {
+  const profecia = SIBILA[capitulo]?.[escenario] ?? SIBILA[capitulo]?.[0] ?? '';
+  return `Has hecho retroceder a la oscuridad, peregrino. ${profecia} ` +
+    'Descansa: el manantial cerrará tus heridas… y yo te daré algo más para el camino.';
+}

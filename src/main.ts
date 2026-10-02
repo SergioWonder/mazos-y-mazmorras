@@ -5,7 +5,7 @@ import './estilos/pantallas.css';
 import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
-import { nuevaRun, avanzarCapitulo, entrarEnSala, cartaExtraEnSala } from './core/run.ts';
+import { nuevaRun, avanzarCapitulo, sortearEscenario, entrarEnSala, cartaExtraEnSala } from './core/run.ts';
 import { ACTOS, DUNGEON_MASTER } from './core/enemigos.ts';
 import { desenlaceCampana } from './core/escena-final.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
@@ -133,8 +133,10 @@ async function juego() {
             // botín de jefe, bendición de la Vidente y siguiente capítulo
             await obtenerReliquia(run, rng, 'jefe');
             await elegirCarta(run, rng, 100); // garantiza elección de rara
-            await pantallaBendicion(run, rng);
-            avanzarCapitulo(run, rng);
+            // the next act's map is drawn first, so Síbila can foretell it
+            const siguiente = sortearEscenario(rng);
+            await pantallaBendicion(run, rng, 'entreActos', siguiente);
+            avanzarCapitulo(run, rng, siguiente);
             await pantallaCapitulo(ACTOS[run.capitulo][run.escenario]);
           } else {
             // Final joke: the Dungeon Master has the last word. The run is already
