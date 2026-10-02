@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 94,
+      "community": 189,
       "norm_label": ".uid()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 96,
+      "community": 189,
       "norm_label": ".dot()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 189,
+      "community": 195,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 189,
+      "community": 195,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 96,
+      "community": 189,
       "norm_label": "broadleaf()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 189,
+      "community": 195,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 96,
+      "community": 189,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 189,
+      "community": 195,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 189,
+      "community": 195,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 96,
+      "community": 189,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -18358,7 +18358,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L80",
       "id": "acto2_volguth_compose_p",
-      "community": 134,
+      "community": 159,
       "norm_label": "p()"
     },
     {
@@ -18367,7 +18367,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "acto2_volguth_compose_name_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "name_of()"
     },
     {
@@ -18376,7 +18376,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "scripts_musica_acto2_volguth_compose_py_str",
-      "community": 159,
+      "community": 134,
       "norm_label": "str"
     },
     {
@@ -18412,7 +18412,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L156",
       "id": "acto2_volguth_compose_segments",
-      "community": 162,
+      "community": 158,
       "norm_label": "segments()"
     },
     {
@@ -18475,7 +18475,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L206",
       "id": "acto2_volguth_compose_part_tied",
-      "community": 160,
+      "community": 162,
       "norm_label": ".tied()"
     },
     {
@@ -18610,7 +18610,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L440",
       "id": "acto2_volguth_compose_pedal",
-      "community": 162,
+      "community": 158,
       "norm_label": "pedal()"
     },
     {
@@ -18619,7 +18619,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L455",
       "id": "acto2_volguth_compose_timp_root",
-      "community": 158,
+      "community": 159,
       "norm_label": "timp_root()"
     },
     {
@@ -18763,7 +18763,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L756",
       "id": "acto2_volguth_compose_son",
-      "community": 159,
+      "community": 134,
       "norm_label": "son()"
     },
     {
@@ -18817,7 +18817,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L833",
       "id": "acto2_volguth_compose_celli_cost",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli_cost()"
     },
     {
@@ -18826,7 +18826,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L846",
       "id": "acto2_volguth_compose_celli",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli()"
     },
     {
@@ -18880,7 +18880,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1054",
       "id": "acto2_volguth_compose_bar_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "bar_of()"
     },
     {
@@ -18889,7 +18889,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1058",
       "id": "acto2_volguth_compose_role",
-      "community": 159,
+      "community": 134,
       "norm_label": "role()"
     },
     {
@@ -18898,7 +18898,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
       "id": "acto2_volguth_compose_parallels",
-      "community": 159,
+      "community": 134,
       "norm_label": "parallels()"
     },
     {
@@ -18907,7 +18907,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1097",
       "id": "acto2_volguth_compose_repetitions",
-      "community": 159,
+      "community": 134,
       "norm_label": "repetitions()"
     },
     {
@@ -18916,7 +18916,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1107",
       "id": "acto2_volguth_compose_sfz_keys",
-      "community": 159,
+      "community": 134,
       "norm_label": "sfz_keys()"
     },
     {
@@ -18934,7 +18934,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "acto2_volguth_compose_verify",
-      "community": 159,
+      "community": 134,
       "norm_label": "verify()"
     },
     {
@@ -18943,7 +18943,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "scripts_musica_acto2_volguth_compose_py_bool",
-      "community": 159,
+      "community": 134,
       "norm_label": "bool"
     },
     {
@@ -18970,7 +18970,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L81",
       "id": "acto2_volguth_compose_rationale_81",
-      "community": 134,
+      "community": 159,
       "norm_label": "f#4' / 'bb2' / 66 -> midi number (c4 = 60)."
     },
     {
@@ -18988,7 +18988,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L157",
       "id": "acto2_volguth_compose_rationale_157",
-      "community": 162,
+      "community": 158,
       "norm_label": "[(first eighth, last eighth + 1, chord, bass pc)] of a bar."
     },
     {
@@ -19006,7 +19006,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L207",
       "id": "acto2_volguth_compose_rationale_207",
-      "community": 160,
+      "community": 162,
       "norm_label": "events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present"
     },
     {
@@ -19105,7 +19105,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L441",
       "id": "acto2_volguth_compose_rationale_441",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo"
     },
     {
@@ -19249,7 +19249,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L834",
       "id": "acto2_volguth_compose_rationale_834",
-      "community": 160,
+      "community": 158,
       "norm_label": "root + fifth is the brief's figure; the root alone costs a little, root + third"
     },
     {
@@ -19258,7 +19258,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L847",
       "id": "acto2_volguth_compose_rationale_847",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm"
     },
     {
@@ -19276,7 +19276,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1065",
       "id": "acto2_volguth_compose_rationale_1065",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i"
     },
     {
@@ -19285,7 +19285,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1098",
       "id": "acto2_volguth_compose_rationale_1098",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than"
     },
     {
@@ -38282,7 +38282,7 @@
       "label": "PICARO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2180",
+      "source_location": "L2178",
       "id": "core_cartas_picaro",
       "community": 85,
       "norm_label": "picaro"
@@ -38291,7 +38291,7 @@
       "label": "maldicionesEnCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2981",
+      "source_location": "L2979",
       "id": "core_cartas_maldicionesencartas",
       "community": 85,
       "norm_label": "maldicionesencartas()"
@@ -38300,7 +38300,7 @@
       "label": "MALDICIONES_DEL_PACTO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2987",
+      "source_location": "L2985",
       "id": "core_cartas_maldiciones_del_pacto",
       "community": 85,
       "norm_label": "maldiciones_del_pacto"
@@ -38309,7 +38309,7 @@
       "label": "maldicionDelPacto()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2992",
+      "source_location": "L2990",
       "id": "core_cartas_maldiciondelpacto",
       "community": 85,
       "norm_label": "maldiciondelpacto()"
@@ -38318,7 +38318,7 @@
       "label": "danoExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L2998",
+      "source_location": "L2996",
       "id": "core_cartas_danoexplosion",
       "community": 85,
       "norm_label": "danoexplosion()"
@@ -38327,7 +38327,7 @@
       "label": "lanzarExplosion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3010",
+      "source_location": "L3008",
       "id": "core_cartas_lanzarexplosion",
       "community": 85,
       "norm_label": "lanzarexplosion()"
@@ -38336,7 +38336,7 @@
       "label": "BRUJO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3039",
+      "source_location": "L3037",
       "id": "core_cartas_brujo",
       "community": 85,
       "norm_label": "brujo"
@@ -38345,7 +38345,7 @@
       "label": "resolverSeducir()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3906",
+      "source_location": "L3904",
       "id": "core_cartas_resolverseducir",
       "community": 85,
       "norm_label": "resolverseducir()"
@@ -38354,7 +38354,7 @@
       "label": "resolverDeseo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3939",
+      "source_location": "L3937",
       "id": "core_cartas_resolverdeseo",
       "community": 85,
       "norm_label": "resolverdeseo()"
@@ -38363,7 +38363,7 @@
       "label": "NEUTRALES_ESPECIALES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L3976",
+      "source_location": "L3974",
       "id": "core_cartas_neutrales_especiales",
       "community": 85,
       "norm_label": "neutrales_especiales"
@@ -38372,7 +38372,7 @@
       "label": "maldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4032",
+      "source_location": "L4030",
       "id": "core_cartas_maldicion",
       "community": 85,
       "norm_label": "maldicion()"
@@ -38381,7 +38381,7 @@
       "label": "MALDICIONES",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4040",
+      "source_location": "L4038",
       "id": "core_cartas_maldiciones",
       "community": 85,
       "norm_label": "maldiciones"
@@ -38390,7 +38390,7 @@
       "label": "nuevaMaldicion()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4137",
+      "source_location": "L4135",
       "id": "core_cartas_nuevamaldicion",
       "community": 75,
       "norm_label": "nuevamaldicion()"
@@ -38399,7 +38399,7 @@
       "label": "fervorDe()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4147",
+      "source_location": "L4145",
       "id": "core_cartas_fervorde",
       "community": 85,
       "norm_label": "fervorde()"
@@ -38408,7 +38408,7 @@
       "label": "familiaEnMano()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4149",
+      "source_location": "L4147",
       "id": "core_cartas_familiaenmano",
       "community": 85,
       "norm_label": "familiaenmano()"
@@ -38417,7 +38417,7 @@
       "label": "castigo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4152",
+      "source_location": "L4150",
       "id": "core_cartas_castigo",
       "community": 85,
       "norm_label": "castigo()"
@@ -38426,7 +38426,7 @@
       "label": "valorCastigo()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4160",
+      "source_location": "L4158",
       "id": "core_cartas_valorcastigo",
       "community": 85,
       "norm_label": "valorcastigo()"
@@ -38435,7 +38435,7 @@
       "label": "GOLPE_SAGRADO",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4164",
+      "source_location": "L4162",
       "id": "core_cartas_golpe_sagrado",
       "community": 85,
       "norm_label": "golpe_sagrado"
@@ -38444,7 +38444,7 @@
       "label": "DEFENSA_SAGRADA",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4184",
+      "source_location": "L4182",
       "id": "core_cartas_defensa_sagrada",
       "community": 85,
       "norm_label": "defensa_sagrada"
@@ -38453,7 +38453,7 @@
       "label": "PALADIN",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4203",
+      "source_location": "L4201",
       "id": "core_cartas_paladin",
       "community": 85,
       "norm_label": "paladin"
@@ -38462,7 +38462,7 @@
       "label": "INICIALES_DE_CLASE",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4754",
+      "source_location": "L4752",
       "id": "core_cartas_iniciales_de_clase",
       "community": 85,
       "norm_label": "iniciales_de_clase"
@@ -38471,7 +38471,7 @@
       "label": "POOLS",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4770",
+      "source_location": "L4768",
       "id": "core_cartas_pools",
       "community": 85,
       "norm_label": "pools"
@@ -38480,7 +38480,7 @@
       "label": "mazoInicial()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4774",
+      "source_location": "L4772",
       "id": "core_cartas_mazoinicial",
       "community": 85,
       "norm_label": "mazoinicial()"
@@ -38489,7 +38489,7 @@
       "label": "poolDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4785",
+      "source_location": "L4783",
       "id": "core_cartas_pooldeclase",
       "community": 86,
       "norm_label": "pooldeclase()"
@@ -38498,7 +38498,7 @@
       "label": "cartaUnicaDeClase()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4792",
+      "source_location": "L4790",
       "id": "core_cartas_cartaunicadeclase",
       "community": 75,
       "norm_label": "cartaunicadeclase()"
@@ -38507,7 +38507,7 @@
       "label": "cartaPorId()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4797",
+      "source_location": "L4795",
       "id": "core_cartas_cartaporid",
       "community": 46,
       "norm_label": "cartaporid()"
@@ -38516,7 +38516,7 @@
       "label": "recompensaCartas()",
       "file_type": "code",
       "source_file": "src/core/cartas.ts",
-      "source_location": "L4807",
+      "source_location": "L4805",
       "id": "core_cartas_recompensacartas",
       "community": 86,
       "norm_label": "recompensacartas()"
@@ -42649,7 +42649,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1849",
       "id": "fx_card_spells_entry",
-      "community": 106,
+      "community": 197,
       "norm_label": "entry"
     },
     {
@@ -42856,7 +42856,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L1",
       "id": "fx_chains",
-      "community": 115,
+      "community": 10,
       "norm_label": "chains.ts"
     },
     {
@@ -42865,7 +42865,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L20",
       "id": "fx_chains_pt",
-      "community": 115,
+      "community": 10,
       "norm_label": "pt"
     },
     {
@@ -42874,7 +42874,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L28",
       "id": "fx_chains_chain_defaults",
-      "community": 115,
+      "community": 10,
       "norm_label": "chain_defaults"
     },
     {
@@ -42892,7 +42892,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L59",
       "id": "fx_chains_chainrun",
-      "community": 115,
+      "community": 10,
       "norm_label": "chainrun"
     },
     {
@@ -42919,7 +42919,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L110",
       "id": "fx_chains_rigidjoints",
-      "community": 115,
+      "community": 10,
       "norm_label": "rigidjoints()"
     },
     {
@@ -42928,7 +42928,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L119",
       "id": "fx_chains_anglebetween",
-      "community": 115,
+      "community": 10,
       "norm_label": "anglebetween()"
     },
     {
@@ -42937,7 +42937,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L122",
       "id": "fx_chains_constrain",
-      "community": 115,
+      "community": 10,
       "norm_label": "constrain()"
     },
     {
@@ -42946,7 +42946,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L139",
       "id": "fx_chains_steprun",
-      "community": 115,
+      "community": 10,
       "norm_label": "steprun()"
     },
     {
@@ -42955,7 +42955,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L161",
       "id": "fx_chains_rigidsampler",
-      "community": 115,
+      "community": 10,
       "norm_label": "rigidsampler"
     },
     {
@@ -42964,7 +42964,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L170",
       "id": "fx_chains_stepchains",
-      "community": 115,
+      "community": 10,
       "norm_label": "stepchains()"
     },
     {
@@ -42973,7 +42973,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L217",
       "id": "fx_chains_strandoptions",
-      "community": 115,
+      "community": 10,
       "norm_label": "strandoptions"
     },
     {
@@ -42982,7 +42982,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L226",
       "id": "fx_chains_round",
-      "community": 115,
+      "community": 10,
       "norm_label": "round()"
     },
     {
@@ -46168,7 +46168,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L102",
       "id": "fx_particulas_motorparticulas_iniciar",
-      "community": 67,
+      "community": 26,
       "norm_label": ".iniciar()"
     },
     {
@@ -46285,7 +46285,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L200",
       "id": "fx_particulas_motorparticulas_contadorfps",
-      "community": 67,
+      "community": 26,
       "norm_label": ".contadorfps()"
     },
     {
@@ -46456,7 +46456,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L14",
       "id": "fx_puppet_chainbone",
-      "community": 115,
+      "community": 10,
       "norm_label": "chainbone"
     },
     {
@@ -46537,7 +46537,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L64",
       "id": "fx_puppet_wingside",
-      "community": 10,
+      "community": 191,
       "norm_label": "wingside"
     },
     {
@@ -46546,7 +46546,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L66",
       "id": "fx_puppet_wingjoints",
-      "community": 10,
+      "community": 191,
       "norm_label": "wingjoints"
     },
     {
@@ -46555,7 +46555,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L77",
       "id": "fx_puppet_chainspec",
-      "community": 115,
+      "community": 10,
       "norm_label": "chainspec"
     },
     {
@@ -46798,7 +46798,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L280",
       "id": "fx_puppet_applymatrix",
-      "community": 115,
+      "community": 10,
       "norm_label": "applymatrix()"
     },
     {
@@ -46906,7 +46906,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L348",
       "id": "fx_puppet_smoothstep",
-      "community": 10,
+      "community": 191,
       "norm_label": "smoothstep()"
     },
     {
@@ -46915,7 +46915,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L352",
       "id": "fx_puppet_actionhold",
-      "community": 10,
+      "community": 191,
       "norm_label": "actionhold()"
     },
     {
@@ -46933,7 +46933,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L452",
       "id": "fx_puppet_emitterworld",
-      "community": 115,
+      "community": 10,
       "norm_label": "emitterworld()"
     },
     {
@@ -47050,7 +47050,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L11",
       "id": "fx_spell_fx_point",
-      "community": 92,
+      "community": 106,
       "norm_label": "point"
     },
     {
@@ -47077,7 +47077,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L30",
       "id": "fx_spell_fx_build",
-      "community": 92,
+      "community": 106,
       "norm_label": "build"
     },
     {
@@ -47086,7 +47086,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L31",
       "id": "fx_spell_fx_spelldef",
-      "community": 106,
+      "community": 197,
       "norm_label": "spelldef"
     },
     {
@@ -47419,7 +47419,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L162",
       "id": "fx_spell_fx_vinepath",
-      "community": 92,
+      "community": 161,
       "norm_label": "vinepath()"
     },
     {
@@ -47428,7 +47428,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L177",
       "id": "fx_spell_fx_vinefront",
-      "community": 92,
+      "community": 106,
       "norm_label": "vinefront()"
     },
     {
@@ -47446,7 +47446,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L208",
       "id": "fx_spell_fx_zarpa",
-      "community": 92,
+      "community": 106,
       "norm_label": "zarpa()"
     },
     {
@@ -47482,7 +47482,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L323",
       "id": "fx_spell_fx_condena",
-      "community": 106,
+      "community": 92,
       "norm_label": "condena()"
     },
     {
@@ -47536,7 +47536,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L504",
       "id": "fx_spell_fx_raices",
-      "community": 92,
+      "community": 161,
       "norm_label": "raices()"
     },
     {
@@ -47545,7 +47545,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L538",
       "id": "fx_spell_fx_tierra",
-      "community": 161,
+      "community": 92,
       "norm_label": "tierra()"
     },
     {
@@ -47581,7 +47581,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L653",
       "id": "fx_spell_fx_oscuridad",
-      "community": 106,
+      "community": 92,
       "norm_label": "oscuridad()"
     },
     {
@@ -48022,7 +48022,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L1",
       "id": "fx_wing",
-      "community": 10,
+      "community": 191,
       "norm_label": "wing.ts"
     },
     {
@@ -48031,7 +48031,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L10",
       "id": "fx_wing_pt",
-      "community": 10,
+      "community": 191,
       "norm_label": "pt"
     },
     {
@@ -48040,7 +48040,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L13",
       "id": "fx_wing_wingbone",
-      "community": 10,
+      "community": 191,
       "norm_label": "wingbone"
     },
     {
@@ -48049,7 +48049,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L14",
       "id": "fx_wing_wing_bones",
-      "community": 10,
+      "community": 191,
       "norm_label": "wing_bones"
     },
     {
@@ -48058,7 +48058,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L29",
       "id": "fx_wing_wingspec",
-      "community": 10,
+      "community": 191,
       "norm_label": "wingspec"
     },
     {
@@ -48067,7 +48067,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L48",
       "id": "fx_wing_sub",
-      "community": 10,
+      "community": 191,
       "norm_label": "sub()"
     },
     {
@@ -48076,7 +48076,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L49",
       "id": "fx_wing_lerp",
-      "community": 10,
+      "community": 191,
       "norm_label": "lerp()"
     },
     {
@@ -48085,7 +48085,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L50",
       "id": "fx_wing_len",
-      "community": 10,
+      "community": 191,
       "norm_label": "len()"
     },
     {
@@ -48094,7 +48094,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L51",
       "id": "fx_wing_angleof",
-      "community": 10,
+      "community": 191,
       "norm_label": "angleof()"
     },
     {
@@ -48103,7 +48103,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L53",
       "id": "fx_wing_turn",
-      "community": 10,
+      "community": 191,
       "norm_label": "turn()"
     },
     {
@@ -48112,7 +48112,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L54",
       "id": "fx_wing_round",
-      "community": 10,
+      "community": 191,
       "norm_label": "round()"
     },
     {
@@ -48121,7 +48121,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L57",
       "id": "fx_wing_scallop",
-      "community": 10,
+      "community": 191,
       "norm_label": "scallop()"
     },
     {
@@ -48130,7 +48130,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L70",
       "id": "fx_wing_poly",
-      "community": 10,
+      "community": 191,
       "norm_label": "poly()"
     },
     {
@@ -48139,7 +48139,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L71",
       "id": "fx_wing_line",
-      "community": 10,
+      "community": 191,
       "norm_label": "line()"
     },
     {
@@ -48148,7 +48148,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L74",
       "id": "fx_wing_buildwing",
-      "community": 10,
+      "community": 191,
       "norm_label": "buildwing()"
     },
     {
@@ -48157,7 +48157,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L120",
       "id": "fx_wing_buildwings",
-      "community": 10,
+      "community": 191,
       "norm_label": "buildwings()"
     },
     {
@@ -48166,7 +48166,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L126",
       "id": "fx_wing_plateau",
-      "community": 10,
+      "community": 191,
       "norm_label": "plateau()"
     },
     {
@@ -48175,7 +48175,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L141",
       "id": "fx_wing_articulatewings",
-      "community": 10,
+      "community": 191,
       "norm_label": "articulatewings()"
     },
     {
@@ -48184,7 +48184,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L178",
       "id": "fx_wing_wingspan",
-      "community": 10,
+      "community": 191,
       "norm_label": "wingspan()"
     },
     {
@@ -55023,7 +55023,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L434",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo",
       "id": "acto2_volguth_compose_rationale_434"
     },
@@ -55158,7 +55158,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L823",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm",
       "id": "acto2_volguth_compose_rationale_823"
     },
@@ -55176,7 +55176,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1031",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i",
       "id": "acto2_volguth_compose_rationale_1031"
     },
@@ -55185,7 +55185,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than",
       "id": "acto2_volguth_compose_rationale_1064"
     },
@@ -56994,7 +56994,7 @@
       "file_type": "code",
       "source_file": "src/fx/wing.ts",
       "source_location": "L51",
-      "community": 10,
+      "community": 191,
       "norm_label": "clamp()",
       "id": "fx_wing_clamp"
     },
@@ -168821,9 +168821,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L8380",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "scripts_smoke_test_jugar",
-      "confidence_score": 1.0
+      "target": "scripts_smoke_test_jugar"
     },
     {
       "relation": "contains",
@@ -168881,9 +168881,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L8368",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "scripts_smoke_test_montarmago",
-      "confidence_score": 1.0
+      "target": "scripts_smoke_test_montarmago"
     },
     {
       "relation": "contains",
@@ -170745,9 +170745,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_extradefensas",
-      "confidence_score": 1.0
+      "target": "core_cartas_extradefensas"
     },
     {
       "relation": "contains",
@@ -170755,9 +170755,9 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_cartas",
-      "target": "core_cartas_extragolpes",
-      "confidence_score": 1.0
+      "target": "core_cartas_extragolpes"
     },
     {
       "relation": "contains",
@@ -223967,5 +223967,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "638ec4bd05f7deca77adf3dd1e1471dddd851edb"
+  "built_at_commit": "7a5a2e85264a7109ac7c9ecb55dc7d67e3dafd7c"
 }

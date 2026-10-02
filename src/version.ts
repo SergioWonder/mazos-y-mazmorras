@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.3.0';
+export const VERSION = '8.3.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.3.1',
+    fecha: '2026-10-02',
+    cambios: [
+      '🔣 Glifo Mordiente pasa a ser una habilidad poco común: ya no hace daño, solo escribe 4/5 y aplica 1/2 de Débil a todos los enemigos.',
+      '✍️ Dictado Veloz pasa a ser común.',
+    ],
+  },
   {
     version: '8.3.0',
     fecha: '2026-10-02',

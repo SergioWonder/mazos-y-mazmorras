@@ -1923,21 +1923,19 @@ export const MAGO: CartaDef[] = [
     id: 'glifo-mordiente',
     nombre: 'Glifo Mordiente',
     clase: 'mago',
-    tipo: 'ataque',
-    rareza: 'comun',
+    tipo: 'habilidad',
+    rareza: 'infrecuente',
     coste: 1,
-    objetivo: 'enemigo',
+    objetivo: 'todos',
     fx: 'impacto',
-    texto: 'Inflige 5 de daño. Escribir 4.\nAplica 1 de Débil a TODOS\nlos enemigos.',
+    texto: 'Escribir 4.\nAplica 1 de Débil a TODOS\nlos enemigos.',
     jugar: async (c) => {
-      await c.atacar(c.objetivo!, 5, 1, 'impacto');
       await c.escribir(4);
       for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 1);
     },
     mejora: {
-      texto: 'Inflige 7 de daño. Escribir 5.\nAplica 2 de Débil a TODOS\nlos enemigos.',
+      texto: 'Escribir 5.\nAplica 2 de Débil a TODOS\nlos enemigos.',
       jugar: async (c) => {
-        await c.atacar(c.objetivo!, 7, 1, 'impacto');
         await c.escribir(5);
         for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'debil', 2);
       },
@@ -1948,7 +1946,7 @@ export const MAGO: CartaDef[] = [
     nombre: 'Dictado Veloz',
     clase: 'mago',
     tipo: 'ataque',
-    rareza: 'infrecuente',
+    rareza: 'comun',
     coste: 1,
     objetivo: 'enemigo',
     fx: 'estrellas',

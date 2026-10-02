@@ -8431,6 +8431,9 @@ console.log('\n🔮 Reequilibrio del mago');
     const m = await montarMago(6, 2);
     await jugar(m, 'glifo-mordiente', true);
     check(m.jugador.conjuroEscrito === 5 && m.enemigos.every((e) => e.estados.debil === 2), 'Glifo Mordiente+: Escribir 5 y 2 de Débil a todos');
+    check(m.enemigos.every((e) => e.pv === 300) && comb.enemigos.every((e) => e.pv === 300), 'Glifo Mordiente ya no hace daño');
+    check(def('glifo-mordiente').tipo === 'habilidad' && def('glifo-mordiente').rareza === 'infrecuente', 'Glifo Mordiente es una habilidad poco común');
+    check(def('dictado-veloz').rareza === 'comun', 'Dictado Veloz es común');
   }
   check(await danoDe('manos-ardientes') === 10 && await danoDe('manos-ardientes', true) === 13, 'Manos Ardientes: 4 / 7 (+2 por nivel)');
   check(await danoDe('rayo-escarcha') === 7 && await danoDe('rayo-escarcha', true) === 8, 'Rayo de Escarcha: 7 / 8 de daño');
