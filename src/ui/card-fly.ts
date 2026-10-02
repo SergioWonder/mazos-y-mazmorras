@@ -1,14 +1,15 @@
 /**
  * Flying cards on screen: draw, play, discard and reshuffle. Every flight runs on
  * a `position: fixed` clone animated with WAAPI (transform and opacity only), so
- * the real hand is never moved and nothing repaints continuously. Trajectories
- * and timings come from the pure card-motion module.
+ * the real hand is never moved and nothing repaints continuously. The only motion
+ * of the real hand is the reflow glide (`translate`/`rotate`, see glideToSlot).
+ * Trajectories and timings come from the pure card-motion module.
  */
 import {
   DISCARD_MS, DISCARD_STAGGER_MS, DRAW_MS, EXHAUST_HOP_MS, REDUCED_MS, SHUFFLE_MS, SHUFFLE_STAGGER_MS,
   centerOf, discardFrames, dissolveBudget, dissolveDelays, dissolvePlan, distance, drawFrames, exhaustFrames, exhaustPose,
-  playDuration, playFrames, shuffleCount, shuffleFrames,
-  type ClipFrame, type DissolveOptions, type MotionFrame, type Point,
+  playDuration, playFrames, reflowDelta, reflowDuration, reflowFrames, shuffleCount, shuffleFrames,
+  type ClipFrame, type DissolveOptions, type MotionFrame, type Point, type SlotPose,
 } from './card-motion.ts';
 import { audio } from '../fx/audio.ts';
 import { fx, menosParticulas } from '../fx/particulas.ts';
@@ -273,4 +274,30 @@ export function flyShuffle(discardPile: HTMLElement, drawPile: HTMLElement, card
     void run(back, shuffleFrames(from, to, i), SHUFFLE_MS, i * SHUFFLE_STAGGER_MS);
   }
   return SHUFFLE_MS + (n - 1) * SHUFFLE_STAGGER_MS;
+}
+
+// ── Hand reflow ──────────────────────────────────────────────────────────────
+
+const px = (v: string) => (v && v !== 'none' ? v.split(' ').map((p) => parseFloat(p) || 0) : []);
+
+/** Where the hand card `el` is seen now: its layout slot plus any reflow still under way. */
+export function slotPose(el: HTMLElement): SlotPose {
+  const cs = getComputedStyle(el);
+  const [tx = 0, ty = 0] = px(cs.translate);
+  const [rot = 0] = px(cs.rotate);
+  return {
+    x: el.offsetLeft + tx,
+    y: el.offsetTop + ty,
+    ang: (parseFloat(el.style.getPropertyValue('--ang')) || 0) + rot,
+    alza: parseFloat(el.style.getPropertyValue('--alza')) || 0,
+  };
+}
+
+/** The card `el`, just placed in its new slot, glides there from where it was seen before. */
+export function glideToSlot(el: HTMLElement, before: SlotPose): void {
+  const duration = reflowDuration(reducedMotion());
+  if (!duration || typeof el.animate !== 'function') return;
+  const delta = reflowDelta(before, slotPose(el));
+  if (!delta) return;
+  el.animate(reflowFrames(delta) as unknown as Keyframe[], { duration });
 }

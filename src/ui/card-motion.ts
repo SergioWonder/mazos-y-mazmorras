@@ -29,6 +29,8 @@ export const PLAY_MIN_MS = 260;
 export const PLAY_MAX_MS = 520;
 /** Fade that replaces every flight under prefers-reduced-motion. */
 export const REDUCED_MS = 140;
+/** Glide of the cards left in the hand to their new slots (after a play, a draw…). */
+export const REFLOW_MS = 260;
 
 export const centerOf = (b: Box): Point => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 });
 export const distance = (a: Point, b: Point): number => Math.hypot(b.x - a.x, b.y - a.y);
@@ -400,4 +402,39 @@ export function exhaustsWhenPlayed(def: ExhaustRules, playerStates: { cartasAgot
   if (def.tipo === 'maldicion' || def.unUso) return true;
   if (def.alTopeDelMazo) return false;
   return !!def.exhumar || def.tipo === 'poder' || (playerStates.cartasAgotan ?? 0) > 0;
+}
+
+// ── Hand reflow ──────────────────────────────────────────────────────────────
+// When the hand changes, the cards that stay glide from their old slot to the new
+// one (FLIP) instead of jumping: a card sliding under a still pointer is easy to
+// follow, a card popping there gets clicked by mistake.
+
+/** Where a card sits in the fan: its layout position and its fan pose (--ang, --alza). */
+export interface SlotPose { x: number; y: number; ang: number; alza: number }
+/** How far a card must be pushed back to look like it is still in its old slot. */
+export interface ReflowDelta { dx: number; dy: number; dAng: number }
+/** A reflow keyframe: individual transform properties, composed over the fan's CSS transform. */
+export interface ReflowFrame { translate: string; rotate: string; offset?: number; easing?: string }
+
+/** Offset from the new slot back to the old one, or null when the card did not move. */
+export function reflowDelta(before: SlotPose, now: SlotPose): ReflowDelta | null {
+  const dx = before.x - now.x;
+  // the fan's lift is a translateY inside the (small) fan rotation: close enough to vertical
+  const dy = before.y - now.y + (before.alza - now.alza);
+  const dAng = before.ang - now.ang;
+  if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(dAng) < 0.2) return null;
+  return { dx: Math.round(dx * 10) / 10, dy: Math.round(dy * 10) / 10, dAng: Math.round(dAng * 100) / 100 };
+}
+
+/** From the old slot to the new one, easing out so the card settles softly. */
+export function reflowFrames(d: ReflowDelta): ReflowFrame[] {
+  return [
+    { translate: `${d.dx}px ${d.dy}px`, rotate: `${d.dAng}deg`, easing: 'cubic-bezier(0.25, 0.5, 0.35, 1)' },
+    { translate: '0px 0px', rotate: '0deg' },
+  ];
+}
+
+/** Length of the reflow: none under prefers-reduced-motion (the cards just appear in place). */
+export function reflowDuration(reduced: boolean): number {
+  return reduced ? 0 : REFLOW_MS;
 }

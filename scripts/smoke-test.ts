@@ -4284,6 +4284,19 @@ console.log('— Taberna y misiones —');
   const sh = CM.shuffleFrames({ x: 960, y: 760 }, { x: 40, y: 760 }, 0);
   check(soloCompositor(sh) && sh[sh.length - 1].transform.includes('translate(-920px, 0px)'),
     'al barajar, las cartas van del descarte a la pila de robo');
+  // reflow: the cards left in the hand glide to their new slot instead of jumping
+  const antes = { x: 300, y: 10, ang: -6, alza: 4 }, ahora = { x: 260, y: 10, ang: -3, alza: 1 };
+  const dr = CM.reflowDelta(antes, ahora)!;
+  check(dr.dx === 40 && dr.dy === 3 && dr.dAng === -3, 'al reordenar la mano, cada carta sale desde donde estaba');
+  check(CM.reflowDelta(ahora, { ...ahora, x: ahora.x + 0.4 }) === null, 'una carta que no se mueve no se anima');
+  const rf = CM.reflowFrames(dr);
+  check(rf.length === 2 && rf[0].translate === '40px 3px' && rf[0].rotate === '-3deg'
+    && rf[1].translate === '0px 0px' && rf[1].rotate === '0deg',
+    'el recolocado desliza la carta (translate y rotate) hasta su hueco');
+  check(Object.keys(rf[0]).every((k) => ['translate', 'rotate', 'offset', 'easing'].includes(k)),
+    'el recolocado solo anima translate y rotate (compositor)');
+  check(CM.REFLOW_MS >= 180 && CM.REFLOW_MS <= 320, `el recolocado es corto pero visible (${CM.REFLOW_MS} ms)`);
+  check(CM.reflowDuration(false) === CM.REFLOW_MS && CM.reflowDuration(true) === 0, 'con movimiento reducido la mano se recoloca sin animar');
 }
 
 // ── Exhausted cards disintegrate (src/ui/card-motion.ts + card-fly.ts) ──────────

@@ -19654,7 +19654,7 @@
       "source_file": "scripts/musica/acto2-volguth/test_compose.py",
       "source_location": "L247",
       "id": "acto2_volguth_test_compose_volguthscore_test_retrograde_is_the_hymn_backwards",
-      "community": 188,
+      "community": 102,
       "norm_label": ".test_retrograde_is_the_hymn_backwards()"
     },
     {
@@ -19825,7 +19825,7 @@
       "source_file": "scripts/musica/acto2-volguth/test_compose.py",
       "source_location": "L248",
       "id": "acto2_volguth_test_compose_rationale_248",
-      "community": 188,
+      "community": 102,
       "norm_label": "b plays the augmented motif (breve ending) reversed in pitch and rhythm."
     },
     {
@@ -21661,7 +21661,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L1",
       "id": "acto3_contemplador_test_compose",
-      "community": 186,
+      "community": 144,
       "norm_label": "test_compose.py"
     },
     {
@@ -21670,7 +21670,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L34",
       "id": "acto3_contemplador_test_compose_bar_beat",
-      "community": 186,
+      "community": 144,
       "norm_label": "bar_beat()"
     },
     {
@@ -21679,7 +21679,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L46",
       "id": "acto3_contemplador_test_compose_bar_len",
-      "community": 186,
+      "community": 144,
       "norm_label": "bar_len()"
     },
     {
@@ -21688,7 +21688,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L50",
       "id": "acto3_contemplador_test_compose_bar_start",
-      "community": 186,
+      "community": 144,
       "norm_label": "bar_start()"
     },
     {
@@ -21697,7 +21697,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L54",
       "id": "acto3_contemplador_test_compose_bar_of",
-      "community": 196,
+      "community": 144,
       "norm_label": "bar_of()"
     },
     {
@@ -21706,7 +21706,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L61",
       "id": "acto3_contemplador_test_compose_notes_between",
-      "community": 186,
+      "community": 144,
       "norm_label": "notes_between()"
     },
     {
@@ -21715,7 +21715,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L66",
       "id": "acto3_contemplador_test_compose_pos16",
-      "community": 186,
+      "community": 144,
       "norm_label": "pos16()"
     },
     {
@@ -21733,7 +21733,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L78",
       "id": "acto3_contemplador_test_compose_eighth_beat",
-      "community": 186,
+      "community": 144,
       "norm_label": "eighth_beat()"
     },
     {
@@ -21742,7 +21742,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L123",
       "id": "acto3_contemplador_test_compose_halves",
-      "community": 186,
+      "community": 144,
       "norm_label": "halves()"
     },
     {
@@ -21805,7 +21805,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L188",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_tempo_meters_and_length",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_tempo_meters_and_length()"
     },
     {
@@ -21823,7 +21823,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L211",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_ranges_and_registers",
-      "community": 196,
+      "community": 144,
       "norm_label": ".test_ranges_and_registers()"
     },
     {
@@ -21832,7 +21832,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L225",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_nothing_high_is_held",
-      "community": 196,
+      "community": 144,
       "norm_label": ".test_nothing_high_is_held()"
     },
     {
@@ -21841,7 +21841,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L235",
       "id": "acto3_contemplador_test_compose_contempladorscore_written",
-      "community": 196,
+      "community": 144,
       "norm_label": ".written()"
     },
     {
@@ -21850,7 +21850,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L239",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_leitmotif_transformations",
-      "community": 196,
+      "community": 144,
       "norm_label": ".test_leitmotif_transformations()"
     },
     {
@@ -21868,7 +21868,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L252",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_legato_lines",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_legato_lines()"
     },
     {
@@ -21877,7 +21877,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L263",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_ceilings_and_climax",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_ceilings_and_climax()"
     },
     {
@@ -21958,7 +21958,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L368",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_seven_eight",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_seven_eight()"
     },
     {
@@ -21967,7 +21967,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L385",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_blast_and_tom_fall",
-      "community": 194,
+      "community": 144,
       "norm_label": ".test_blast_and_tom_fall()"
     },
     {
@@ -21976,7 +21976,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L394",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_five_four_storm",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_five_four_storm()"
     },
     {
@@ -21985,7 +21985,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L408",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_risers_and_swells_land_on_their_downbeats",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_risers_and_swells_land_on_their_downbeats()"
     },
     {
@@ -22003,7 +22003,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L427",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_lowest_note_on_beat_1_is_the_bass",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_lowest_note_on_beat_1_is_the_bass()"
     },
     {
@@ -22021,7 +22021,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L451",
       "id": "acto3_contemplador_test_compose_contempladorscore_test_no_guitar_two_bar_phrase_repeated_more_than_twice",
-      "community": 186,
+      "community": 144,
       "norm_label": ".test_no_guitar_two_bar_phrase_repeated_more_than_twice()"
     },
     {
@@ -22030,7 +22030,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L1",
       "id": "acto3_contemplador_test_compose_rationale_1",
-      "community": 186,
+      "community": 144,
       "norm_label": "acceptance tests for el contemplador's boss theme \u00abmirada del abismo / caos crom"
     },
     {
@@ -22039,7 +22039,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L35",
       "id": "acto3_contemplador_test_compose_rationale_35",
-      "community": 186,
+      "community": 144,
       "norm_label": "beat (from 0) where `bar` starts."
     },
     {
@@ -22057,7 +22057,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L79",
       "id": "acto3_contemplador_test_compose_rationale_79",
-      "community": 186,
+      "community": 144,
       "norm_label": "position inside the bar in beats, rounded to the eighth."
     },
     {
@@ -22066,7 +22066,7 @@
       "source_file": "scripts/musica/acto3-contemplador/test_compose.py",
       "source_location": "L226",
       "id": "acto3_contemplador_test_compose_rationale_226",
-      "community": 196,
+      "community": 144,
       "norm_label": "nada agudo tenido: ninguna nota de negra o mas por encima de f5 (77)."
     },
     {
@@ -28357,7 +28357,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L16",
       "id": "dm_metal_peak_mag",
-      "community": 194,
+      "community": 89,
       "norm_label": "peak_mag()"
     },
     {
@@ -28438,7 +28438,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L103",
       "id": "dm_metal_cab_sim",
-      "community": 194,
+      "community": 89,
       "norm_label": "cab_sim()"
     },
     {
@@ -28456,7 +28456,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L127",
       "id": "dm_metal_bass_amp",
-      "community": 194,
+      "community": 89,
       "norm_label": "bass_amp()"
     },
     {
@@ -28474,7 +28474,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L154",
       "id": "dm_metal_snare",
-      "community": 194,
+      "community": 89,
       "norm_label": "snare()"
     },
     {
@@ -28501,7 +28501,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L197",
       "id": "dm_metal_china",
-      "community": 194,
+      "community": 89,
       "norm_label": "china()"
     },
     {
@@ -28582,7 +28582,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L17",
       "id": "dm_metal_rationale_17",
-      "community": 194,
+      "community": 89,
       "norm_label": "bell eq magnitude on a log-frequency axis (bw_oct = std-dev in octaves)."
     },
     {
@@ -28609,7 +28609,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L104",
       "id": "dm_metal_rationale_104",
-      "community": 194,
+      "community": 89,
       "norm_label": "4x12 cabinet: tight low end, scooped low-mids, presence, steep top cut."
     },
     {
@@ -28636,7 +28636,7 @@
       "source_file": "scripts/musica/dm/metal.py",
       "source_location": "L198",
       "id": "dm_metal_rationale_198",
-      "community": 194,
+      "community": 89,
       "norm_label": "trashy china: ring-modulated inharmonic partials over mid-heavy noise."
     },
     {
@@ -37733,7 +37733,7 @@
       "label": "montarM()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4449",
+      "source_location": "L4462",
       "id": "scripts_smoke_test_montarm",
       "community": 86,
       "norm_label": "montarm()"
@@ -37742,7 +37742,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5150",
+      "source_location": "L5163",
       "id": "scripts_smoke_test_montarb",
       "community": 86,
       "norm_label": "montarb()"
@@ -37751,7 +37751,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6325",
+      "source_location": "L6338",
       "id": "scripts_smoke_test_sprite2",
       "community": 86,
       "norm_label": "sprite2"
@@ -37760,7 +37760,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6733",
+      "source_location": "L6746",
       "id": "scripts_smoke_test_escenario",
       "community": 86,
       "norm_label": "escenario"
@@ -37769,7 +37769,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6994",
+      "source_location": "L7007",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 86,
       "norm_label": "montarnumeros()"
@@ -37778,7 +37778,7 @@
       "label": "montarP()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7231",
+      "source_location": "L7244",
       "id": "scripts_smoke_test_montarp",
       "community": 86,
       "norm_label": "montarp()"
@@ -37787,7 +37787,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L8368",
+      "source_location": "L8381",
       "id": "scripts_smoke_test_montarmago",
       "community": 86,
       "norm_label": "montarmago()"
@@ -37796,9 +37796,9 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L8380",
+      "source_location": "L8393",
       "id": "scripts_smoke_test_jugar",
-      "community": 46,
+      "community": 75,
       "norm_label": "jugar()"
     },
     {
@@ -37933,7 +37933,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L70",
       "id": "core_ajustes_gananciasfx",
-      "community": 26,
+      "community": 4,
       "norm_label": "gananciasfx()"
     },
     {
@@ -37978,7 +37978,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L90",
       "id": "core_ajustes_alcambiarajustes",
-      "community": 26,
+      "community": 18,
       "norm_label": "alcambiarajustes()"
     },
     {
@@ -38563,7 +38563,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L60",
       "id": "core_combate_previsionataque",
-      "community": 84,
+      "community": 19,
       "norm_label": "previsionataque"
     },
     {
@@ -38581,7 +38581,7 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L114",
       "id": "core_combate_combate_constructor",
-      "community": 0,
+      "community": 75,
       "norm_label": ".constructor()"
     },
     {
@@ -39139,7 +39139,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L1",
       "id": "core_conjuros",
-      "community": 86,
+      "community": 84,
       "norm_label": "conjuros.ts"
     },
     {
@@ -39148,7 +39148,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L19",
       "id": "core_conjuros_orden_niveles",
-      "community": 86,
+      "community": 84,
       "norm_label": "orden_niveles"
     },
     {
@@ -39418,7 +39418,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L345",
       "id": "core_enemigos_ignifax",
-      "community": 86,
+      "community": 0,
       "norm_label": "ignifax"
     },
     {
@@ -39706,7 +39706,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L714",
       "id": "core_enemigos_contemplador",
-      "community": 0,
+      "community": 86,
       "norm_label": "contemplador"
     },
     {
@@ -39751,7 +39751,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L1",
       "id": "core_epitafio",
-      "community": 13,
+      "community": 6,
       "norm_label": "epitafio.ts"
     },
     {
@@ -39760,7 +39760,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L5",
       "id": "core_epitafio_datoscaida",
-      "community": 13,
+      "community": 6,
       "norm_label": "datoscaida"
     },
     {
@@ -39769,7 +39769,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L70",
       "id": "core_epitafio_lapida",
-      "community": 13,
+      "community": 6,
       "norm_label": "lapida"
     },
     {
@@ -39778,7 +39778,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L30",
       "id": "core_epitafio_nombre_clase",
-      "community": 13,
+      "community": 6,
       "norm_label": "nombre_clase"
     },
     {
@@ -39787,7 +39787,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L35",
       "id": "core_epitafio_epitafios",
-      "community": 13,
+      "community": 6,
       "norm_label": "epitafios"
     },
     {
@@ -39796,7 +39796,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L54",
       "id": "core_epitafio_pick",
-      "community": 13,
+      "community": 6,
       "norm_label": "pick()"
     },
     {
@@ -39805,7 +39805,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L60",
       "id": "core_epitafio_plural",
-      "community": 13,
+      "community": 6,
       "norm_label": "plural()"
     },
     {
@@ -39814,7 +39814,7 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L63",
       "id": "core_epitafio_elegirepitafio",
-      "community": 13,
+      "community": 6,
       "norm_label": "elegirepitafio()"
     },
     {
@@ -39823,7 +39823,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 167,
+      "community": 18,
       "norm_label": "escena-final.ts"
     },
     {
@@ -39832,7 +39832,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L8",
       "id": "core_escena_final_frases_dm",
-      "community": 167,
+      "community": 18,
       "norm_label": "frases_dm"
     },
     {
@@ -39841,7 +39841,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 167,
+      "community": 18,
       "norm_label": "intencion_dm"
     },
     {
@@ -39859,7 +39859,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 167,
+      "community": 18,
       "norm_label": "dias_agenda"
     },
     {
@@ -39868,7 +39868,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 167,
+      "community": 18,
       "norm_label": "diaagenda"
     },
     {
@@ -39877,7 +39877,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 167,
+      "community": 18,
       "norm_label": "lineaagenda"
     },
     {
@@ -39886,7 +39886,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 167,
+      "community": 18,
       "norm_label": "guion_agenda"
     },
     {
@@ -39895,7 +39895,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L98",
       "id": "core_escena_final_almacensimple",
-      "community": 167,
+      "community": 18,
       "norm_label": "almacensimple"
     },
     {
@@ -39904,7 +39904,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L103",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 167,
+      "community": 18,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -39913,7 +39913,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L112",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 167,
+      "community": 18,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -40507,7 +40507,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L600",
       "id": "core_reliquias_pool_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "pool_reliquias"
     },
     {
@@ -40894,7 +40894,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "id": "core_types_claseid",
-      "community": 46,
+      "community": 6,
       "norm_label": "claseid"
     },
     {
@@ -41011,7 +41011,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L164",
       "id": "core_types_enemigodef",
-      "community": 0,
+      "community": 84,
       "norm_label": "enemigodef"
     },
     {
@@ -41029,7 +41029,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L232",
       "id": "core_types_espacioconjuro",
-      "community": 85,
+      "community": 84,
       "norm_label": "espacioconjuro"
     },
     {
@@ -41038,7 +41038,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L237",
       "id": "core_types_jugadorcombate",
-      "community": 23,
+      "community": 84,
       "norm_label": "jugadorcombate"
     },
     {
@@ -41119,7 +41119,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L397",
       "id": "core_types_contextoefecto",
-      "community": 85,
+      "community": 84,
       "norm_label": "contextoefecto"
     },
     {
@@ -41200,7 +41200,7 @@
       "source_file": "src/core/types.ts",
       "source_location": "L595",
       "id": "core_types_reliquiadef",
-      "community": 75,
+      "community": 84,
       "norm_label": "reliquiadef"
     },
     {
@@ -41515,7 +41515,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L114",
       "id": "fx_audio_temas",
-      "community": 87,
+      "community": 46,
       "norm_label": "temas"
     },
     {
@@ -41560,7 +41560,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L224",
       "id": "fx_audio_motoraudio_reproducirarchivo",
-      "community": 4,
+      "community": 157,
       "norm_label": ".reproducirarchivo()"
     },
     {
@@ -42649,7 +42649,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1849",
       "id": "fx_card_spells_entry",
-      "community": 197,
+      "community": 106,
       "norm_label": "entry"
     },
     {
@@ -42694,7 +42694,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1935",
       "id": "fx_card_spells_volleytiming",
-      "community": 67,
+      "community": 87,
       "norm_label": "volleytiming()"
     },
     {
@@ -42703,7 +42703,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1942",
       "id": "fx_card_spells_cardshake",
-      "community": 67,
+      "community": 87,
       "norm_label": "cardshake()"
     },
     {
@@ -42856,7 +42856,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L1",
       "id": "fx_chains",
-      "community": 10,
+      "community": 115,
       "norm_label": "chains.ts"
     },
     {
@@ -42865,7 +42865,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L20",
       "id": "fx_chains_pt",
-      "community": 10,
+      "community": 115,
       "norm_label": "pt"
     },
     {
@@ -42874,7 +42874,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L28",
       "id": "fx_chains_chain_defaults",
-      "community": 10,
+      "community": 115,
       "norm_label": "chain_defaults"
     },
     {
@@ -42892,7 +42892,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L59",
       "id": "fx_chains_chainrun",
-      "community": 10,
+      "community": 115,
       "norm_label": "chainrun"
     },
     {
@@ -42919,7 +42919,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L110",
       "id": "fx_chains_rigidjoints",
-      "community": 10,
+      "community": 115,
       "norm_label": "rigidjoints()"
     },
     {
@@ -42928,7 +42928,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L119",
       "id": "fx_chains_anglebetween",
-      "community": 10,
+      "community": 115,
       "norm_label": "anglebetween()"
     },
     {
@@ -42937,7 +42937,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L122",
       "id": "fx_chains_constrain",
-      "community": 10,
+      "community": 115,
       "norm_label": "constrain()"
     },
     {
@@ -42946,7 +42946,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L139",
       "id": "fx_chains_steprun",
-      "community": 10,
+      "community": 115,
       "norm_label": "steprun()"
     },
     {
@@ -42955,7 +42955,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L161",
       "id": "fx_chains_rigidsampler",
-      "community": 10,
+      "community": 115,
       "norm_label": "rigidsampler"
     },
     {
@@ -42964,7 +42964,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L170",
       "id": "fx_chains_stepchains",
-      "community": 10,
+      "community": 115,
       "norm_label": "stepchains()"
     },
     {
@@ -42973,7 +42973,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L217",
       "id": "fx_chains_strandoptions",
-      "community": 10,
+      "community": 115,
       "norm_label": "strandoptions"
     },
     {
@@ -42982,7 +42982,7 @@
       "source_file": "src/fx/chains.ts",
       "source_location": "L226",
       "id": "fx_chains_round",
-      "community": 10,
+      "community": 115,
       "norm_label": "round()"
     },
     {
@@ -44071,7 +44071,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1545",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 167,
+      "community": 6,
       "norm_label": "enemy_rigs"
     },
     {
@@ -44242,7 +44242,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L38",
       "id": "fx_hero_rig_formfromlabel",
-      "community": 19,
+      "community": 86,
       "norm_label": "formfromlabel()"
     },
     {
@@ -44251,7 +44251,7 @@
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L44",
       "id": "fx_hero_rig_currentform",
-      "community": 19,
+      "community": 86,
       "norm_label": "currentform()"
     },
     {
@@ -45772,7 +45772,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L1",
       "id": "fx_music_tracks",
-      "community": 19,
+      "community": 157,
       "norm_label": "music-tracks.ts"
     },
     {
@@ -45781,7 +45781,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L5",
       "id": "fx_music_tracks_musictrack",
-      "community": 19,
+      "community": 157,
       "norm_label": "musictrack"
     },
     {
@@ -45790,7 +45790,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L19",
       "id": "fx_music_tracks_music_tracks",
-      "community": 19,
+      "community": 157,
       "norm_label": "music_tracks"
     },
     {
@@ -45799,7 +45799,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L53",
       "id": "fx_music_tracks_combattheme",
-      "community": 19,
+      "community": 157,
       "norm_label": "combattheme()"
     },
     {
@@ -45808,7 +45808,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L66",
       "id": "fx_music_tracks_exploretheme",
-      "community": 19,
+      "community": 157,
       "norm_label": "exploretheme()"
     },
     {
@@ -45817,7 +45817,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L73",
       "id": "fx_music_tracks_themeaftercombat",
-      "community": 19,
+      "community": 157,
       "norm_label": "themeaftercombat()"
     },
     {
@@ -45835,7 +45835,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L91",
       "id": "fx_music_tracks_loopposition",
-      "community": 19,
+      "community": 157,
       "norm_label": "loopposition()"
     },
     {
@@ -45844,7 +45844,7 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L104",
       "id": "fx_music_tracks_loopwindow",
-      "community": 19,
+      "community": 157,
       "norm_label": "loopwindow()"
     },
     {
@@ -45853,7 +45853,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L1",
       "id": "fx_particle_gl",
-      "community": 45,
+      "community": 67,
       "norm_label": "particle-gl.ts"
     },
     {
@@ -45862,7 +45862,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L166",
       "id": "fx_particle_gl_shape_code",
-      "community": 45,
+      "community": 67,
       "norm_label": "shape_code"
     },
     {
@@ -46087,7 +46087,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L16",
       "id": "fx_particulas_movimientoreducido",
-      "community": 67,
+      "community": 87,
       "norm_label": "movimientoreducido()"
     },
     {
@@ -46096,7 +46096,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L18",
       "id": "fx_particulas_menosparticulas",
-      "community": 76,
+      "community": 87,
       "norm_label": "menosparticulas()"
     },
     {
@@ -46105,7 +46105,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L20",
       "id": "fx_particulas_sacudidasactivas",
-      "community": 67,
+      "community": 87,
       "norm_label": "sacudidasactivas()"
     },
     {
@@ -46159,7 +46159,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L85",
       "id": "fx_particulas_motorparticulas",
-      "community": 67,
+      "community": 87,
       "norm_label": "motorparticulas"
     },
     {
@@ -46168,7 +46168,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L102",
       "id": "fx_particulas_motorparticulas_iniciar",
-      "community": 26,
+      "community": 87,
       "norm_label": ".iniciar()"
     },
     {
@@ -46177,7 +46177,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L114",
       "id": "fx_particulas_motorparticulas_ambiente",
-      "community": 67,
+      "community": 87,
       "norm_label": ".ambiente()"
     },
     {
@@ -46186,7 +46186,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L118",
       "id": "fx_particulas_motorparticulas_emitir",
-      "community": 67,
+      "community": 87,
       "norm_label": ".emitir()"
     },
     {
@@ -46195,7 +46195,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L129",
       "id": "fx_particulas_motorparticulas_tienehechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".tienehechizo()"
     },
     {
@@ -46204,7 +46204,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L134",
       "id": "fx_particulas_motorparticulas_anclahechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".anclahechizo()"
     },
     {
@@ -46213,7 +46213,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L139",
       "id": "fx_particulas_motorparticulas_receptorhechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".receptorhechizo()"
     },
     {
@@ -46222,7 +46222,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L144",
       "id": "fx_particulas_motorparticulas_sacudidahechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".sacudidahechizo()"
     },
     {
@@ -46231,7 +46231,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L149",
       "id": "fx_particulas_motorparticulas_rafagahechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".rafagahechizo()"
     },
     {
@@ -46240,7 +46240,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L155",
       "id": "fx_particulas_motorparticulas_hechizo",
-      "community": 67,
+      "community": 87,
       "norm_label": ".hechizo()"
     },
     {
@@ -46249,7 +46249,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L163",
       "id": "fx_particulas_motorparticulas_fuentecarta",
-      "community": 67,
+      "community": 87,
       "norm_label": ".fuentecarta()"
     },
     {
@@ -46267,7 +46267,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L186",
       "id": "fx_particulas_motorparticulas_capa",
-      "community": 67,
+      "community": 87,
       "norm_label": ".capa()"
     },
     {
@@ -46276,7 +46276,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L192",
       "id": "fx_particulas_motorparticulas_estallido",
-      "community": 67,
+      "community": 87,
       "norm_label": ".estallido()"
     },
     {
@@ -46285,7 +46285,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L200",
       "id": "fx_particulas_motorparticulas_contadorfps",
-      "community": 26,
+      "community": 87,
       "norm_label": ".contadorfps()"
     },
     {
@@ -46303,7 +46303,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L251",
       "id": "fx_particulas_fx",
-      "community": 0,
+      "community": 6,
       "norm_label": "fx"
     },
     {
@@ -46393,7 +46393,7 @@
       "source_file": "src/fx/puppet-gpu.ts",
       "source_location": "L56",
       "id": "fx_puppet_gpu_shapebbox",
-      "community": 86,
+      "community": 45,
       "norm_label": "shapebbox()"
     },
     {
@@ -46438,7 +46438,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L11",
       "id": "fx_puppet_chain_slots",
-      "community": 45,
+      "community": 115,
       "norm_label": "chain_slots"
     },
     {
@@ -46456,7 +46456,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L14",
       "id": "fx_puppet_chainbone",
-      "community": 10,
+      "community": 115,
       "norm_label": "chainbone"
     },
     {
@@ -46537,7 +46537,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L64",
       "id": "fx_puppet_wingside",
-      "community": 191,
+      "community": 10,
       "norm_label": "wingside"
     },
     {
@@ -46546,7 +46546,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L66",
       "id": "fx_puppet_wingjoints",
-      "community": 191,
+      "community": 10,
       "norm_label": "wingjoints"
     },
     {
@@ -46555,7 +46555,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L77",
       "id": "fx_puppet_chainspec",
-      "community": 10,
+      "community": 115,
       "norm_label": "chainspec"
     },
     {
@@ -46798,7 +46798,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L280",
       "id": "fx_puppet_applymatrix",
-      "community": 10,
+      "community": 115,
       "norm_label": "applymatrix()"
     },
     {
@@ -46906,7 +46906,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L348",
       "id": "fx_puppet_smoothstep",
-      "community": 191,
+      "community": 10,
       "norm_label": "smoothstep()"
     },
     {
@@ -46915,7 +46915,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L352",
       "id": "fx_puppet_actionhold",
-      "community": 191,
+      "community": 10,
       "norm_label": "actionhold()"
     },
     {
@@ -46933,7 +46933,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L452",
       "id": "fx_puppet_emitterworld",
-      "community": 10,
+      "community": 115,
       "norm_label": "emitterworld()"
     },
     {
@@ -47041,7 +47041,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L10",
       "id": "fx_spell_fx_box",
-      "community": 67,
+      "community": 87,
       "norm_label": "box"
     },
     {
@@ -47050,7 +47050,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L11",
       "id": "fx_spell_fx_point",
-      "community": 106,
+      "community": 92,
       "norm_label": "point"
     },
     {
@@ -47077,7 +47077,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L30",
       "id": "fx_spell_fx_build",
-      "community": 106,
+      "community": 92,
       "norm_label": "build"
     },
     {
@@ -47086,7 +47086,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L31",
       "id": "fx_spell_fx_spelldef",
-      "community": 197,
+      "community": 106,
       "norm_label": "spelldef"
     },
     {
@@ -47419,7 +47419,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L162",
       "id": "fx_spell_fx_vinepath",
-      "community": 161,
+      "community": 92,
       "norm_label": "vinepath()"
     },
     {
@@ -47428,7 +47428,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L177",
       "id": "fx_spell_fx_vinefront",
-      "community": 106,
+      "community": 92,
       "norm_label": "vinefront()"
     },
     {
@@ -47446,7 +47446,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L208",
       "id": "fx_spell_fx_zarpa",
-      "community": 106,
+      "community": 92,
       "norm_label": "zarpa()"
     },
     {
@@ -47482,7 +47482,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L323",
       "id": "fx_spell_fx_condena",
-      "community": 92,
+      "community": 106,
       "norm_label": "condena()"
     },
     {
@@ -47536,7 +47536,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L504",
       "id": "fx_spell_fx_raices",
-      "community": 161,
+      "community": 92,
       "norm_label": "raices()"
     },
     {
@@ -47545,7 +47545,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L538",
       "id": "fx_spell_fx_tierra",
-      "community": 92,
+      "community": 161,
       "norm_label": "tierra()"
     },
     {
@@ -47581,7 +47581,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L653",
       "id": "fx_spell_fx_oscuridad",
-      "community": 92,
+      "community": 106,
       "norm_label": "oscuridad()"
     },
     {
@@ -48022,7 +48022,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L1",
       "id": "fx_wing",
-      "community": 191,
+      "community": 10,
       "norm_label": "wing.ts"
     },
     {
@@ -48031,7 +48031,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L10",
       "id": "fx_wing_pt",
-      "community": 191,
+      "community": 10,
       "norm_label": "pt"
     },
     {
@@ -48040,7 +48040,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L13",
       "id": "fx_wing_wingbone",
-      "community": 191,
+      "community": 10,
       "norm_label": "wingbone"
     },
     {
@@ -48049,7 +48049,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L14",
       "id": "fx_wing_wing_bones",
-      "community": 191,
+      "community": 10,
       "norm_label": "wing_bones"
     },
     {
@@ -48058,7 +48058,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L29",
       "id": "fx_wing_wingspec",
-      "community": 191,
+      "community": 10,
       "norm_label": "wingspec"
     },
     {
@@ -48067,7 +48067,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L48",
       "id": "fx_wing_sub",
-      "community": 191,
+      "community": 10,
       "norm_label": "sub()"
     },
     {
@@ -48076,7 +48076,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L49",
       "id": "fx_wing_lerp",
-      "community": 191,
+      "community": 10,
       "norm_label": "lerp()"
     },
     {
@@ -48085,7 +48085,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L50",
       "id": "fx_wing_len",
-      "community": 191,
+      "community": 10,
       "norm_label": "len()"
     },
     {
@@ -48094,7 +48094,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L51",
       "id": "fx_wing_angleof",
-      "community": 191,
+      "community": 10,
       "norm_label": "angleof()"
     },
     {
@@ -48103,7 +48103,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L53",
       "id": "fx_wing_turn",
-      "community": 191,
+      "community": 10,
       "norm_label": "turn()"
     },
     {
@@ -48112,7 +48112,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L54",
       "id": "fx_wing_round",
-      "community": 191,
+      "community": 10,
       "norm_label": "round()"
     },
     {
@@ -48121,7 +48121,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L57",
       "id": "fx_wing_scallop",
-      "community": 191,
+      "community": 10,
       "norm_label": "scallop()"
     },
     {
@@ -48130,7 +48130,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L70",
       "id": "fx_wing_poly",
-      "community": 191,
+      "community": 10,
       "norm_label": "poly()"
     },
     {
@@ -48139,7 +48139,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L71",
       "id": "fx_wing_line",
-      "community": 191,
+      "community": 10,
       "norm_label": "line()"
     },
     {
@@ -48148,7 +48148,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L74",
       "id": "fx_wing_buildwing",
-      "community": 191,
+      "community": 10,
       "norm_label": "buildwing()"
     },
     {
@@ -48157,7 +48157,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L120",
       "id": "fx_wing_buildwings",
-      "community": 191,
+      "community": 104,
       "norm_label": "buildwings()"
     },
     {
@@ -48166,7 +48166,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L126",
       "id": "fx_wing_plateau",
-      "community": 191,
+      "community": 10,
       "norm_label": "plateau()"
     },
     {
@@ -48175,7 +48175,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L141",
       "id": "fx_wing_articulatewings",
-      "community": 191,
+      "community": 10,
       "norm_label": "articulatewings()"
     },
     {
@@ -48184,7 +48184,7 @@
       "source_file": "src/fx/wing.ts",
       "source_location": "L178",
       "id": "fx_wing_wingspan",
-      "community": 191,
+      "community": 10,
       "norm_label": "wingspan()"
     },
     {
@@ -48454,7 +48454,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L75",
       "id": "ui_actualizacion_avisosdisponibles",
-      "community": 26,
+      "community": 18,
       "norm_label": "avisosdisponibles()"
     },
     {
@@ -48499,7 +48499,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L140",
       "id": "ui_actualizacion_mostraravisoactualizar",
-      "community": 19,
+      "community": 18,
       "norm_label": "mostraravisoactualizar()"
     },
     {
@@ -48587,7 +48587,7 @@
       "label": "HAND_CLASSES",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L17",
+      "source_location": "L18",
       "id": "ui_card_fly_hand_classes",
       "community": 76,
       "norm_label": "hand_classes"
@@ -48596,7 +48596,7 @@
       "label": "reducedMotion()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L19",
+      "source_location": "L20",
       "id": "ui_card_fly_reducedmotion",
       "community": 76,
       "norm_label": "reducedmotion()"
@@ -48605,7 +48605,7 @@
       "label": "run()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L28",
+      "source_location": "L29",
       "id": "ui_card_fly_run",
       "community": 76,
       "norm_label": "run()"
@@ -48614,7 +48614,7 @@
       "label": "runAndHold()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L45",
+      "source_location": "L46",
       "id": "ui_card_fly_runandhold",
       "community": 76,
       "norm_label": "runandhold()"
@@ -48623,7 +48623,7 @@
       "label": "BurnPose",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L64",
+      "source_location": "L65",
       "id": "ui_card_fly_burnpose",
       "community": 76,
       "norm_label": "burnpose"
@@ -48632,16 +48632,16 @@
       "label": "burn()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L73",
+      "source_location": "L74",
       "id": "ui_card_fly_burn",
-      "community": 76,
+      "community": 87,
       "norm_label": "burn()"
     },
     {
       "label": "pose()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L120",
+      "source_location": "L121",
       "id": "ui_card_fly_pose",
       "community": 76,
       "norm_label": "pose()"
@@ -48650,7 +48650,7 @@
       "label": "cardClone()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L134",
+      "source_location": "L135",
       "id": "ui_card_fly_cardclone",
       "community": 76,
       "norm_label": "cardclone()"
@@ -48659,7 +48659,7 @@
       "label": "pileCenter()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L143",
+      "source_location": "L144",
       "id": "ui_card_fly_pilecenter",
       "community": 76,
       "norm_label": "pilecenter()"
@@ -48668,7 +48668,7 @@
       "label": "flyPlay()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L152",
+      "source_location": "L153",
       "id": "ui_card_fly_flyplay",
       "community": 76,
       "norm_label": "flyplay()"
@@ -48677,7 +48677,7 @@
       "label": "flyShowcase()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L174",
+      "source_location": "L175",
       "id": "ui_card_fly_flyshowcase",
       "community": 76,
       "norm_label": "flyshowcase()"
@@ -48686,25 +48686,25 @@
       "label": "burnSolo()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L190",
+      "source_location": "L191",
       "id": "ui_card_fly_burnsolo",
-      "community": 76,
+      "community": 87,
       "norm_label": "burnsolo()"
     },
     {
       "label": "flyExhaust()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L202",
+      "source_location": "L203",
       "id": "ui_card_fly_flyexhaust",
-      "community": 76,
+      "community": 87,
       "norm_label": "flyexhaust()"
     },
     {
       "label": "flyDraw()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L221",
+      "source_location": "L222",
       "id": "ui_card_fly_flydraw",
       "community": 76,
       "norm_label": "flydraw()"
@@ -48713,7 +48713,7 @@
       "label": "flyDiscard()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L247",
+      "source_location": "L248",
       "id": "ui_card_fly_flydiscard",
       "community": 76,
       "norm_label": "flydiscard()"
@@ -48722,10 +48722,37 @@
       "label": "flyShuffle()",
       "file_type": "code",
       "source_file": "src/ui/card-fly.ts",
-      "source_location": "L262",
+      "source_location": "L263",
       "id": "ui_card_fly_flyshuffle",
       "community": 76,
       "norm_label": "flyshuffle()"
+    },
+    {
+      "label": "px()",
+      "file_type": "code",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L281",
+      "id": "ui_card_fly_px",
+      "community": 76,
+      "norm_label": "px()"
+    },
+    {
+      "label": "slotPose()",
+      "file_type": "code",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L284",
+      "id": "ui_card_fly_slotpose",
+      "community": 76,
+      "norm_label": "slotpose()"
+    },
+    {
+      "label": "glideToSlot()",
+      "file_type": "code",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L297",
+      "id": "ui_card_fly_glidetoslot",
+      "community": 76,
+      "norm_label": "glidetoslot()"
     },
     {
       "label": "card-looks.ts",
@@ -48839,7 +48866,7 @@
       "label": "centerOf()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L33",
+      "source_location": "L35",
       "id": "ui_card_motion_centerof",
       "community": 76,
       "norm_label": "centerof()"
@@ -48848,7 +48875,7 @@
       "label": "distance()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L34",
+      "source_location": "L36",
       "id": "ui_card_motion_distance",
       "community": 76,
       "norm_label": "distance()"
@@ -48857,7 +48884,7 @@
       "label": "PlayScene",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L36",
+      "source_location": "L38",
       "id": "ui_card_motion_playscene",
       "community": 76,
       "norm_label": "playscene"
@@ -48866,7 +48893,7 @@
       "label": "Aim",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L51",
+      "source_location": "L53",
       "id": "ui_card_motion_aim",
       "community": 76,
       "norm_label": "aim"
@@ -48875,7 +48902,7 @@
       "label": "Destination",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L52",
+      "source_location": "L54",
       "id": "ui_card_motion_destination",
       "community": 76,
       "norm_label": "destination"
@@ -48884,7 +48911,7 @@
       "label": "playDestination()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L59",
+      "source_location": "L61",
       "id": "ui_card_motion_playdestination",
       "community": 76,
       "norm_label": "playdestination()"
@@ -48893,7 +48920,7 @@
       "label": "drawDelays()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L74",
+      "source_location": "L76",
       "id": "ui_card_motion_drawdelays",
       "community": 76,
       "norm_label": "drawdelays()"
@@ -48902,7 +48929,7 @@
       "label": "playDuration()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L84",
+      "source_location": "L86",
       "id": "ui_card_motion_playduration",
       "community": 76,
       "norm_label": "playduration()"
@@ -48911,7 +48938,7 @@
       "label": "px()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L90",
+      "source_location": "L92",
       "id": "ui_card_motion_px",
       "community": 76,
       "norm_label": "px()"
@@ -48920,7 +48947,7 @@
       "label": "move()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L91",
+      "source_location": "L93",
       "id": "ui_card_motion_move",
       "community": 76,
       "norm_label": "move()"
@@ -48929,7 +48956,7 @@
       "label": "fadeFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L94",
+      "source_location": "L96",
       "id": "ui_card_motion_fadeframes",
       "community": 76,
       "norm_label": "fadeframes()"
@@ -48938,7 +48965,7 @@
       "label": "playFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L106",
+      "source_location": "L108",
       "id": "ui_card_motion_playframes",
       "community": 76,
       "norm_label": "playframes()"
@@ -48947,7 +48974,7 @@
       "label": "drawFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L129",
+      "source_location": "L131",
       "id": "ui_card_motion_drawframes",
       "community": 76,
       "norm_label": "drawframes()"
@@ -48956,7 +48983,7 @@
       "label": "discardFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L142",
+      "source_location": "L144",
       "id": "ui_card_motion_discardframes",
       "community": 76,
       "norm_label": "discardframes()"
@@ -48965,7 +48992,7 @@
       "label": "shuffleCount()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L152",
+      "source_location": "L154",
       "id": "ui_card_motion_shufflecount",
       "community": 76,
       "norm_label": "shufflecount()"
@@ -48974,7 +49001,7 @@
       "label": "shuffleFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L157",
+      "source_location": "L159",
       "id": "ui_card_motion_shuffleframes",
       "community": 76,
       "norm_label": "shuffleframes()"
@@ -48983,7 +49010,7 @@
       "label": "ClipFrame",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L188",
+      "source_location": "L190",
       "id": "ui_card_motion_clipframe",
       "community": 76,
       "norm_label": "clipframe"
@@ -48992,7 +49019,7 @@
       "label": "EmberPreset",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L189",
+      "source_location": "L191",
       "id": "ui_card_motion_emberpreset",
       "community": 76,
       "norm_label": "emberpreset"
@@ -49001,7 +49028,7 @@
       "label": "EmberBurst",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L191",
+      "source_location": "L193",
       "id": "ui_card_motion_emberburst",
       "community": 76,
       "norm_label": "emberburst"
@@ -49010,7 +49037,7 @@
       "label": "dissolvePlan",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L288",
+      "source_location": "L290",
       "id": "ui_card_motion_dissolveplan",
       "community": 76,
       "norm_label": "dissolveplan"
@@ -49019,7 +49046,7 @@
       "label": "DissolveOptions",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L210",
+      "source_location": "L212",
       "id": "ui_card_motion_dissolveoptions",
       "community": 76,
       "norm_label": "dissolveoptions"
@@ -49028,7 +49055,7 @@
       "label": "r1()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L227",
+      "source_location": "L229",
       "id": "ui_card_motion_r1",
       "community": 76,
       "norm_label": "r1()"
@@ -49037,7 +49064,7 @@
       "label": "clip()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L228",
+      "source_location": "L230",
       "id": "ui_card_motion_clip",
       "community": 76,
       "norm_label": "clip()"
@@ -49046,7 +49073,7 @@
       "label": "flicker()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L230",
+      "source_location": "L232",
       "id": "ui_card_motion_flicker",
       "community": 76,
       "norm_label": "flicker()"
@@ -49055,7 +49082,7 @@
       "label": "edgeJitter()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L233",
+      "source_location": "L235",
       "id": "ui_card_motion_edgejitter",
       "community": 76,
       "norm_label": "edgejitter()"
@@ -49064,7 +49091,7 @@
       "label": "dissolveProgress()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L235",
+      "source_location": "L237",
       "id": "ui_card_motion_dissolveprogress",
       "community": 76,
       "norm_label": "dissolveprogress()"
@@ -49073,7 +49100,7 @@
       "label": "dissolveEdge()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L245",
+      "source_location": "L247",
       "id": "ui_card_motion_dissolveedge",
       "community": 76,
       "norm_label": "dissolveedge()"
@@ -49082,7 +49109,7 @@
       "label": "band()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L256",
+      "source_location": "L258",
       "id": "ui_card_motion_band",
       "community": 76,
       "norm_label": "band()"
@@ -49091,7 +49118,7 @@
       "label": "edgeYAt()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L262",
+      "source_location": "L264",
       "id": "ui_card_motion_edgeyat",
       "community": 76,
       "norm_label": "edgeyat()"
@@ -49100,25 +49127,25 @@
       "label": "dissolveBudget()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L273",
+      "source_location": "L275",
       "id": "ui_card_motion_dissolvebudget",
-      "community": 76,
+      "community": 87,
       "norm_label": "dissolvebudget()"
     },
     {
       "label": "dissolveDelays()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L279",
+      "source_location": "L281",
       "id": "ui_card_motion_dissolvedelays",
-      "community": 76,
+      "community": 87,
       "norm_label": "dissolvedelays()"
     },
     {
       "label": "exhaustPose()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L363",
+      "source_location": "L365",
       "id": "ui_card_motion_exhaustpose",
       "community": 76,
       "norm_label": "exhaustpose()"
@@ -49127,7 +49154,7 @@
       "label": "exhaustFrames()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L373",
+      "source_location": "L375",
       "id": "ui_card_motion_exhaustframes",
       "community": 76,
       "norm_label": "exhaustframes()"
@@ -49136,7 +49163,7 @@
       "label": "ExhaustRules",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L391",
+      "source_location": "L393",
       "id": "ui_card_motion_exhaustrules",
       "community": 76,
       "norm_label": "exhaustrules"
@@ -49145,10 +49172,55 @@
       "label": "exhaustsWhenPlayed()",
       "file_type": "code",
       "source_file": "src/ui/card-motion.ts",
-      "source_location": "L399",
+      "source_location": "L401",
       "id": "ui_card_motion_exhaustswhenplayed",
       "community": 76,
       "norm_label": "exhaustswhenplayed()"
+    },
+    {
+      "label": "SlotPose",
+      "file_type": "code",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L413",
+      "id": "ui_card_motion_slotpose",
+      "community": 76,
+      "norm_label": "slotpose"
+    },
+    {
+      "label": "reflowDelta",
+      "file_type": "code",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L420",
+      "id": "ui_card_motion_reflowdelta",
+      "community": 76,
+      "norm_label": "reflowdelta"
+    },
+    {
+      "label": "ReflowFrame",
+      "file_type": "code",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L417",
+      "id": "ui_card_motion_reflowframe",
+      "community": 76,
+      "norm_label": "reflowframe"
+    },
+    {
+      "label": "reflowFrames()",
+      "file_type": "code",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L430",
+      "id": "ui_card_motion_reflowframes",
+      "community": 76,
+      "norm_label": "reflowframes()"
+    },
+    {
+      "label": "reflowDuration()",
+      "file_type": "code",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L438",
+      "id": "ui_card_motion_reflowduration",
+      "community": 76,
+      "norm_label": "reflowduration()"
     },
     {
       "label": "card-svgs.ts",
@@ -49408,7 +49480,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L1",
       "id": "ui_castigo_ficha",
-      "community": 84,
+      "community": 19,
       "norm_label": "castigo-ficha.ts"
     },
     {
@@ -49417,7 +49489,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L7",
       "id": "ui_castigo_ficha_icono",
-      "community": 84,
+      "community": 19,
       "norm_label": "icono"
     },
     {
@@ -49426,7 +49498,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L13",
       "id": "ui_castigo_ficha_llamasdecastigo",
-      "community": 84,
+      "community": 19,
       "norm_label": "llamasdecastigo()"
     },
     {
@@ -49435,7 +49507,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L20",
       "id": "ui_castigo_ficha_resumencastigo",
-      "community": 84,
+      "community": 19,
       "norm_label": "resumencastigo"
     },
     {
@@ -49514,7 +49586,7 @@
       "label": "BACKGROUND_URLS",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1483",
+      "source_location": "L1490",
       "id": "ui_combate_background_urls",
       "community": 19,
       "norm_label": "background_urls"
@@ -49523,7 +49595,7 @@
       "label": "montarFondo()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1491",
+      "source_location": "L1498",
       "id": "ui_combate_montarfondo",
       "community": 19,
       "norm_label": "montarfondo()"
@@ -49588,7 +49660,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L52",
       "id": "ui_compendio_pantallacompendio",
-      "community": 18,
+      "community": 85,
       "norm_label": "pantallacompendio()"
     },
     {
@@ -49597,7 +49669,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L142",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 19,
+      "community": 85,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -49642,7 +49714,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L1",
       "id": "ui_fin",
-      "community": 13,
+      "community": 6,
       "norm_label": "fin.ts"
     },
     {
@@ -49651,7 +49723,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L14",
       "id": "ui_fin_eleccionfin",
-      "community": 13,
+      "community": 6,
       "norm_label": "eleccionfin"
     },
     {
@@ -49660,7 +49732,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L17",
       "id": "ui_fin_siluetacaida",
-      "community": 13,
+      "community": 6,
       "norm_label": "siluetacaida()"
     },
     {
@@ -49669,7 +49741,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L31",
       "id": "ui_fin_epilogo",
-      "community": 13,
+      "community": 6,
       "norm_label": "epilogo"
     },
     {
@@ -49687,7 +49759,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 167,
+      "community": 6,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -49696,7 +49768,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 167,
+      "community": 6,
       "norm_label": "nombre_clase"
     },
     {
@@ -49705,7 +49777,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 167,
+      "community": 6,
       "norm_label": "izquierda"
     },
     {
@@ -49714,7 +49786,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 167,
+      "community": 6,
       "norm_label": "derecha"
     },
     {
@@ -49867,7 +49939,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L35",
       "id": "ui_gallery_showgallery",
-      "community": 18,
+      "community": 13,
       "norm_label": "showgallery()"
     },
     {
@@ -49957,7 +50029,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L1",
       "id": "ui_instalar",
-      "community": 19,
+      "community": 46,
       "norm_label": "instalar.ts"
     },
     {
@@ -49966,7 +50038,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L10",
       "id": "ui_instalar_avisoinstalacion",
-      "community": 19,
+      "community": 46,
       "norm_label": "avisoinstalacion()"
     },
     {
@@ -49975,7 +50047,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L1",
       "id": "ui_lapida",
-      "community": 13,
+      "community": 6,
       "norm_label": "lapida.ts"
     },
     {
@@ -49984,7 +50056,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L7",
       "id": "ui_lapida_escape",
-      "community": 13,
+      "community": 6,
       "norm_label": "escape()"
     },
     {
@@ -49993,7 +50065,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L11",
       "id": "ui_lapida_tituloletras",
-      "community": 13,
+      "community": 6,
       "norm_label": "tituloletras()"
     },
     {
@@ -50002,7 +50074,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L17",
       "id": "ui_lapida_htmlderrota",
-      "community": 13,
+      "community": 6,
       "norm_label": "htmlderrota()"
     },
     {
@@ -50209,7 +50281,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L1",
       "id": "ui_menu_ajustes",
-      "community": 26,
+      "community": 18,
       "norm_label": "menu-ajustes.ts"
     },
     {
@@ -50218,7 +50290,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L12",
       "id": "ui_menu_ajustes_interruptor",
-      "community": 26,
+      "community": 18,
       "norm_label": "interruptor"
     },
     {
@@ -50227,7 +50299,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L13",
       "id": "ui_menu_ajustes_deslizador",
-      "community": 26,
+      "community": 18,
       "norm_label": "deslizador"
     },
     {
@@ -50236,7 +50308,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L14",
       "id": "ui_menu_ajustes_opcion",
-      "community": 26,
+      "community": 18,
       "norm_label": "opcion"
     },
     {
@@ -50245,7 +50317,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L16",
       "id": "ui_menu_ajustes_secciones",
-      "community": 26,
+      "community": 18,
       "norm_label": "secciones"
     },
     {
@@ -50254,7 +50326,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L40",
       "id": "ui_menu_ajustes_accesosmenuprincipal",
-      "community": 26,
+      "community": 18,
       "norm_label": "accesosmenuprincipal"
     },
     {
@@ -50263,7 +50335,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L44",
       "id": "ui_menu_ajustes_registraraccesosmenuprincipal",
-      "community": 26,
+      "community": 18,
       "norm_label": "registraraccesosmenuprincipal()"
     },
     {
@@ -50272,7 +50344,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L49",
       "id": "ui_menu_ajustes_crearmenuajustes",
-      "community": 26,
+      "community": 18,
       "norm_label": "crearmenuajustes()"
     },
     {
@@ -50281,7 +50353,7 @@
       "source_file": "src/ui/menu-ajustes.ts",
       "source_location": "L60",
       "id": "ui_menu_ajustes_abrirmenuajustes",
-      "community": 26,
+      "community": 18,
       "norm_label": "abrirmenuajustes()"
     },
     {
@@ -51064,7 +51136,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L16",
       "id": "ui_util_espera",
-      "community": 167,
+      "community": 19,
       "norm_label": "espera()"
     },
     {
@@ -51091,7 +51163,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L41",
       "id": "ui_util_sacudir",
-      "community": 19,
+      "community": 4,
       "norm_label": "sacudir()"
     },
     {
@@ -51100,7 +51172,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L50",
       "id": "ui_util_anuncio",
-      "community": 46,
+      "community": 19,
       "norm_label": "anuncio()"
     },
     {
@@ -51658,7 +51730,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme",
-      "community": 87,
+      "community": 85,
       "norm_label": "readme.md"
     },
     {
@@ -51667,7 +51739,7 @@
       "source_file": "README.md",
       "source_location": "L1",
       "id": "readme_dracs_rogues",
-      "community": 87,
+      "community": 85,
       "norm_label": "dracs & rogues"
     },
     {
@@ -51676,7 +51748,7 @@
       "source_file": "README.md",
       "source_location": "L11",
       "id": "readme_ejecutar",
-      "community": 87,
+      "community": 85,
       "norm_label": "ejecutar"
     },
     {
@@ -51685,7 +51757,7 @@
       "source_file": "README.md",
       "source_location": "L19",
       "id": "readme_tests_del_motor_sin_navegador",
-      "community": 87,
+      "community": 85,
       "norm_label": "tests del motor (sin navegador)"
     },
     {
@@ -51694,7 +51766,7 @@
       "source_file": "README.md",
       "source_location": "L37",
       "id": "readme_controles",
-      "community": 87,
+      "community": 85,
       "norm_label": "controles"
     },
     {
@@ -51703,7 +51775,7 @@
       "source_file": "README.md",
       "source_location": "L47",
       "id": "readme_dise\u00f1o",
-      "community": 87,
+      "community": 85,
       "norm_label": "diseno"
     },
     {
@@ -51712,7 +51784,7 @@
       "source_file": "README.md",
       "source_location": "L256",
       "id": "readme_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "reliquias"
     },
     {
@@ -51721,7 +51793,7 @@
       "source_file": "README.md",
       "source_location": "L335",
       "id": "readme_bendiciones",
-      "community": 75,
+      "community": 85,
       "norm_label": "bendiciones"
     },
     {
@@ -51730,7 +51802,7 @@
       "source_file": "README.md",
       "source_location": "L397",
       "id": "readme_estructura",
-      "community": 87,
+      "community": 85,
       "norm_label": "estructura"
     },
     {
@@ -51739,7 +51811,7 @@
       "source_file": "README.md",
       "source_location": "L444",
       "id": "readme_arte_de_las_cartas",
-      "community": 87,
+      "community": 85,
       "norm_label": "arte de las cartas"
     },
     {
@@ -51748,7 +51820,7 @@
       "source_file": "README.md",
       "source_location": "L455",
       "id": "readme_mapa_a_tinta",
-      "community": 87,
+      "community": 85,
       "norm_label": "mapa a tinta"
     },
     {
@@ -51757,7 +51829,7 @@
       "source_file": "README.md",
       "source_location": "L480",
       "id": "readme_actualizaciones_y_avisos",
-      "community": 87,
+      "community": 85,
       "norm_label": "actualizaciones y avisos"
     },
     {
@@ -51766,7 +51838,7 @@
       "source_file": "README.md",
       "source_location": "L490",
       "id": "readme_motor_gr\u00e1fico_webgl2",
-      "community": 87,
+      "community": 85,
       "norm_label": "motor grafico (webgl2)"
     },
     {
@@ -55212,7 +55284,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/test_compose.py",
       "source_location": "L244",
-      "community": 188,
+      "community": 102,
       "norm_label": "b plays the augmented motif (breve ending) reversed in pitch and rhythm.",
       "id": "acto2_volguth_test_compose_rationale_244"
     },
@@ -56058,7 +56130,7 @@
       "file_type": "document",
       "source_file": "README.md",
       "source_location": "L1",
-      "community": 87,
+      "community": 85,
       "norm_label": "mazo y mazmorra",
       "id": "readme_mazo_y_mazmorra"
     },
@@ -56103,7 +56175,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L245",
-      "community": 6,
+      "community": 86,
       "norm_label": "form_rigs",
       "id": "fx_hero_rig_form_rigs"
     },
@@ -56994,7 +57066,7 @@
       "file_type": "code",
       "source_file": "src/fx/wing.ts",
       "source_location": "L51",
-      "community": 191,
+      "community": 10,
       "norm_label": "clamp()",
       "id": "fx_wing_clamp"
     },
@@ -57309,7 +57381,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L66",
-      "community": 13,
+      "community": 6,
       "norm_label": "action_duration",
       "id": "fx_hero_rig_action_duration"
     },
@@ -57808,7 +57880,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 85,
       "norm_label": "roguelike de construccion de mazos",
       "id": "readme_deckbuilder_roguelike"
     },
@@ -57821,7 +57893,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 85,
       "norm_label": "slay the spire (referencia de diseno)",
       "id": "readme_slay_the_spire"
     },
@@ -57834,7 +57906,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 85,
       "norm_label": "ambientacion fantasia medieval d&d",
       "id": "readme_ambientacion_dnd"
     },
@@ -57847,7 +57919,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 46,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -58081,7 +58153,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 85,
       "norm_label": "subclases de d&d 2024 como cartas raras",
       "id": "readme_subclases_dnd_2024"
     },
@@ -58133,7 +58205,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 23,
+      "community": 85,
       "norm_label": "energia, bloqueo y vulnerable/debil/fragil al estilo sts",
       "id": "readme_sistema_energia"
     },
@@ -58289,7 +58361,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 19,
+      "community": 46,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -58302,7 +58374,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 46,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -58315,7 +58387,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 46,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -58510,7 +58582,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 85,
       "norm_label": "subclases del brujo: archifata, celestial, infernal, gran antiguo",
       "id": "readme_subclases_brujo"
     }
@@ -211265,6 +211337,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/card-fly.ts",
+      "source_location": "L297",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_fly_glidetoslot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
       "source_location": "L14",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -211295,6 +211377,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/card-fly.ts",
+      "source_location": "L281",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_fly_px",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
       "source_location": "L16",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -211320,6 +211412,16 @@
       "confidence_score": 1.0,
       "source": "ui_card_fly",
       "target": "ui_card_fly_runandhold"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_fly_slotpose",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -211502,6 +211604,39 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/card-fly.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_motion_reflowdelta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_motion_reflowduration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_motion_reflowframes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
       "source_location": "L7",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -211518,6 +211653,17 @@
       "confidence_score": 1.0,
       "source": "ui_card_fly",
       "target": "ui_card_motion_shuffleframes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "ui_card_fly",
+      "target": "ui_card_motion_slotpose",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -211606,6 +211752,17 @@
       "confidence_score": 1.0,
       "source": "ui_card_fly_flyshuffle",
       "target": "ui_card_fly_reducedmotion"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "ui_card_fly_glidetoslot",
+      "target": "ui_card_fly_reducedmotion",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -212136,6 +212293,72 @@
       "target": "ui_card_fly_flyshuffle"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L286",
+      "weight": 1.0,
+      "source": "ui_card_fly_slotpose",
+      "target": "ui_card_fly_px",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L300",
+      "weight": 1.0,
+      "source": "ui_card_fly_glidetoslot",
+      "target": "ui_card_fly_slotpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_card_fly_slotpose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L298",
+      "weight": 1.0,
+      "source": "ui_card_fly_glidetoslot",
+      "target": "ui_card_motion_reflowduration"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/ui/card-fly.ts",
+      "source_location": "L302",
+      "weight": 1.0,
+      "source": "ui_card_fly_glidetoslot",
+      "target": "ui_card_motion_reflowframes"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_card_fly_glidetoslot",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/card-looks.ts",
@@ -212614,6 +212837,46 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/card-motion.ts",
+      "source_location": "L420",
+      "weight": 1.0,
+      "source": "ui_card_motion",
+      "target": "ui_card_motion_reflowdelta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L438",
+      "weight": 1.0,
+      "source": "ui_card_motion",
+      "target": "ui_card_motion_reflowduration",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L417",
+      "weight": 1.0,
+      "source": "ui_card_motion",
+      "target": "ui_card_motion_reflowframe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L430",
+      "weight": 1.0,
+      "source": "ui_card_motion",
+      "target": "ui_card_motion_reflowframes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-motion.ts",
       "source_location": "L152",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -212629,6 +212892,16 @@
       "confidence_score": 1.0,
       "source": "ui_card_motion",
       "target": "ui_card_motion_shuffleframes"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/card-motion.ts",
+      "source_location": "L413",
+      "weight": 1.0,
+      "source": "ui_card_motion",
+      "target": "ui_card_motion_slotpose",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -212914,6 +213187,17 @@
       "confidence_score": 1.0,
       "source": "ui_combate",
       "target": "ui_card_motion_exhaustswhenplayed"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_card_motion_slotpose",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -223967,5 +224251,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "7a5a2e85264a7109ac7c9ecb55dc7d67e3dafd7c"
+  "built_at_commit": "895e3596a5694d7aaeaad49a88a95722e66ce857"
 }

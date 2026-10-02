@@ -21,8 +21,8 @@ import { currentForm, type FormId } from '../fx/hero-rig.ts';
 import { layoutSlots } from './enemy-slots.ts';
 import { relicIcon } from './relic-art.ts';
 import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
-import { playDestination, drawDelays, exhaustsWhenPlayed, type Point } from './card-motion.ts';
-import { flyDiscard, flyDraw, flyExhaust, flyPlay, flyShowcase, flyShuffle, reducedMotion } from './card-fly.ts';
+import { playDestination, drawDelays, exhaustsWhenPlayed, type Point, type SlotPose } from './card-motion.ts';
+import { flyDiscard, flyDraw, flyExhaust, flyPlay, flyShowcase, flyShuffle, glideToSlot, reducedMotion, slotPose } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
@@ -1009,6 +1009,9 @@ export function pantallaCombate(
       const origenes = nuevas.map((c) => (descartePrevio.has(c) && barajados === 0 ? $('.pila-descarte') : $('.pila-robo')));
       for (const c of nuevas) llegando.add(c);
       descartePrevio = new Set(jugador.descarte);
+      // the cards that stay glide to their new slot instead of jumping under the pointer
+      const posePrevia = new Map<CartaInstancia, SlotPose>();
+      for (const [inst, viejo] of elemPorCarta) if (enMano.has(inst) && viejo.isConnected) posePrevia.set(inst, slotPose(viejo));
       elemPorCarta = new Map();
       mano.innerHTML = '';
       if (seleccion >= cartas.length) seleccion = Math.max(0, cartas.length - 1);
@@ -1042,6 +1045,10 @@ export function pantallaCombate(
         elemPorCarta.set(inst, c);
         mano.appendChild(c);
       });
+      for (const [inst, antes] of posePrevia) {
+        const c = elemPorCarta.get(inst);
+        if (c) glideToSlot(c, antes);
+      }
       // new cards fly in from their pile, one after another
       nuevas.forEach((inst, k) => {
         const c = elemPorCarta.get(inst);
