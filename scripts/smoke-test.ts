@@ -5387,6 +5387,14 @@ try {
     await lanzar(comb, exp(comb), a);
     check(b.pv === 297, 'solo la primera Explosión de cada turno');
   }
+  {
+    // with Explosión Trifurcada the Blast already hits everyone: the echo then reaches them all
+    const { comb } = await montarB(['eco-sobrenatural'], [quietoB, quietoB]);
+    const [a, b] = comb.enemigos;
+    comb.jugador.estados.explosionArea = 1;
+    await lanzar(comb, exp(comb), a);
+    check(a.pv === 300 - 7 - 3 && b.pv === 300 - 7 - 3, `Eco Sobrenatural + Explosión Trifurcada: todos reciben los 3 de más (${300 - a.pv}, ${300 - b.pv})`);
+  }
   // — Relics: Libro de las Sombras —
   {
     const run = nuevaRun('brujo', 6061);

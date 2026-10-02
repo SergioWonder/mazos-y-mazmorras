@@ -231,11 +231,13 @@ const DE_CLASE: ReliquiaDef[] = [
   // Brujo
   {
     id: 'eco-sobrenatural', nombre: 'Bendición del Eco Sobrenatural', icono: '🌀', rareza: 'bendicion', tipoBendicion: 'clase', soloClase: 'brujo',
-    texto: 'La primera Explosión Sobrenatural de cada turno resuena: inflige 3 de daño a todos los demás enemigos.',
+    texto: 'La primera Explosión Sobrenatural de cada turno resuena: inflige 3 de daño a todos los demás enemigos (a todos, si ya los golpea a todos).',
     alLanzarExplosion: async (ctx, golpeados) => {
       if (!primeraDelTurno(ctx, 'eco-sobrenatural')) return;
-      // a flat echo on the enemies the Blast missed (it no longer scales with the Blast)
-      for (const e of vivos(ctx)) if (!golpeados.includes(e)) await ctx.danar(e, 3, 'abisal');
+      // a flat echo on the enemies the Blast missed (it no longer scales with the Blast);
+      // when the Blast already hits everyone (Explosión Trifurcada), it echoes on them all
+      const enArea = (ctx.jugador.estados.explosionArea ?? 0) > 0;
+      for (const e of vivos(ctx)) if (enArea || !golpeados.includes(e)) await ctx.danar(e, 3, 'abisal');
     },
   },
   {

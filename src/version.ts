@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.5.0';
+export const VERSION = '8.5.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.5.1',
+    fecha: '2026-10-02',
+    cambios: [
+      '🌀 Corregido: con Explosión Trifurcada, la Bendición del Eco Sobrenatural ya no se anula; todos los enemigos reciben los 3 de daño adicionales.',
+    ],
+  },
   {
     version: '8.5.0',
     fecha: '2026-10-02',
