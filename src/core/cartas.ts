@@ -3015,10 +3015,11 @@ async function lanzarExplosion(c: ContextoEfecto, base: number) {
   const golpeados: EnemigoCombate[] = [];
   const marcar = (e: EnemigoCombate) => { if (!golpeados.includes(e)) golpeados.push(e); };
   for (let i = 0; i < golpes; i++) {
-    if (area) {
+    if (area && i === 0) {
       c.enemigos.filter((e) => e.vivo).forEach(marcar);
       await c.atacarTodos(dmg, 'abisal');
     } else {
+      // the extra beams of an area Blast only strike the marked target
       const obj = c.objetivo?.vivo ? c.objetivo : c.enemigos.find((e) => e.vivo);
       if (!obj) break;
       marcar(obj);
@@ -3072,13 +3073,13 @@ export const BRUJO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'bloqueo',
-    texto: 'Gana 8 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+    texto: 'Gana 8 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve al enemigo que te golpea.',
     jugar: async (c) => {
       await c.ganarBloqueo(8);
       await c.aplicarEstado(c.jugador, 'agathys', 1);
     },
     mejora: {
-      texto: 'Gana 11 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
+      texto: 'Gana 11 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve al enemigo que te golpea.',
       jugar: async (c) => {
         await c.ganarBloqueo(11);
         await c.aplicarEstado(c.jugador, 'agathys', 1);
@@ -3344,13 +3345,13 @@ export const BRUJO: CartaDef[] = [
     texto: 'Gana 14 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
     jugar: async (c) => {
       await c.ganarBloqueo(14);
-      await c.aplicarEstado(c.jugador, 'agathys', 1);
+      await c.aplicarEstado(c.jugador, 'agathysArea', 1);
     },
     mejora: {
       texto: 'Gana 18 de bloqueo.\nEste turno, el daño que bloquees\nse devuelve a TODOS los enemigos.',
       jugar: async (c) => {
         await c.ganarBloqueo(18);
-        await c.aplicarEstado(c.jugador, 'agathys', 1);
+        await c.aplicarEstado(c.jugador, 'agathysArea', 1);
       },
     },
   },
@@ -3833,13 +3834,13 @@ export const BRUJO: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'abisal',
     animRara: 'anim-psionico',
-    texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
+    texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más (si golpea en área,\nel golpe extra va solo a tu objetivo).',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
     },
     mejora: {
       coste: 1,
-      texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más.',
+      texto: 'Poder: tu Explosión Sobrenatural\ngolpea 1 vez más (si golpea en área,\nel golpe extra va solo a tu objetivo).',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'explosionVeces', 1);
       },

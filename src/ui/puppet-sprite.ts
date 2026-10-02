@@ -14,10 +14,14 @@ import {
   type Action, type ActionType, type BoneId, type Burst, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
 } from '../fx/puppet.ts';
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
-import { lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
+import { bodyScreenBox, lighten, shadowOf, spriteMatrix } from '../fx/puppet-gpu.ts';
 import { fx as particles, menosParticulas } from '../fx/particulas.ts';
 import { FlameFade, flameAnchors, flameLayerFor, flameScreenPoints, holyFlameFrame, type FlameAnchor, type FlameKind, type FlameSprite } from '../fx/holy-flames.ts';
 import { stages, type GpuView, type PuppetStage } from './puppet-stage.ts';
+
+/** Sprites wrapped round a figure each frame, from its body's screen box, its opacity and
+ *  whether back sprites are hidden behind it (`front` ones always go over it). */
+export type OverlayProvider = (box: { x: number; y: number; w: number; h: number }, opacity: number, layered: boolean) => FlameSprite[];
 
 const NS = 'http://www.w3.org/2000/svg';
 const BLACK = '#0b0910';
@@ -311,6 +315,10 @@ export class PuppetSprite {
   private flameReduced = false;
   /** Flames lit or still fading out. */
   private burning = false;
+  // sprites wrapped round the figure every frame (Doom's chains)
+  private overlay: OverlayProvider | null = null;
+  private overlaySprites: FlameSprite[] = [];
+  private overlayLayer: (() => void) | null = null;
 
   constructor(rig: PuppetRig, opts: PuppetOptions) {
     this.rig = rig;
@@ -395,7 +403,35 @@ export class PuppetSprite {
     if (this.gpu) this.gpu.flames = list.length ? list : null;
   }
 
+  /** Sprites drawn round the figure every frame (Doom's chains): the provider gets the
+   *  screen box of the body, the figure's opacity and whether the back sprites really go
+   *  behind it (WebGL stage) or over it (the fx canvas, without a stage). */
+  setOverlay(provider: OverlayProvider | null) {
+    this.overlay = provider;
+    if (!provider) {
+      this.overlayLayer?.();
+      this.overlayLayer = null;
+      this.setOverlaySprites([]);
+      return;
+    }
+    if (!this.gpu && !this.overlayLayer) {
+      this.overlayLayer = particles.capa(() => (this.element.isConnected && this.visible ? this.overlaySprites : []));
+    }
+  }
+
+  /** Screen box of the figure's body (idle pose, down to the ground line). */
+  bodyBox(): { x: number; y: number; w: number; h: number } {
+    const r = this.element.getBoundingClientRect();
+    return bodyScreenBox(this.rig, { x: r.left, y: r.top, w: r.width }, this.mirrored);
+  }
+
+  private setOverlaySprites(list: FlameSprite[]) {
+    this.overlaySprites = list;
+    if (this.gpu) this.gpu.overlay = list.length ? list : null;
+  }
+
   destroy() {
+    this.setOverlay(null);
     this.flameLayer?.();
     this.flameLayer = null;
     active.delete(this);
@@ -417,6 +453,11 @@ export class PuppetSprite {
     } else this.svg!.render(p, fx, bones, geo, this.gone, ghosts);
     this.emit(t, bones);
     if (this.burning) this.burn(t, bones, fx.opacity);
+    if (this.overlay) {
+      const r = this.element.getBoundingClientRect();
+      this.setOverlaySprites(this.gone || r.width < 2 ? []
+        : this.overlay(bodyScreenBox(this.rig, { x: r.left, y: r.top, w: r.width }, this.mirrored), fx.opacity, !!this.gpu));
+    }
   }
 
   /** Rebuilds this frame's flames on the current pose; drops the layer once faded out. */

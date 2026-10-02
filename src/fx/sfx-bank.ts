@@ -18,6 +18,9 @@ export const SFX_NAMES: readonly string[] = [
   'martillo', 'escudoSagrado', 'bendicion', 'expulsar', 'rayoSagrado',
   'castigoDivino', 'castigoTrueno', 'castigoCegador', 'castigoFuego', 'castigoResplandor', 'castigoDestierro',
   'cargaDivina', 'cargaTrueno', 'cargaCegadora', 'cargaFuego', 'cargaResplandor', 'cargaDestierro',
+  // warlock Doom (Condena): a funeral bell when it is applied, spectral chains that
+  // drag the soul of a foe it kills down into the underworld
+  'campanaCondena', 'cadenasCondena',
   // flourish layered on top when a rare card is played
   'rara',
   // interface: cards drawn, zoomed, played, discarded, shuffled and button clicks
@@ -27,6 +30,7 @@ export const SFX_NAMES: readonly string[] = [
 /** Sounds heard many times per fight: they ship several variations each. */
 export const FREQUENT_SFX: readonly string[] = [
   'tajo', 'impacto', 'golpeEnemigo', 'carta', 'bloqueo', 'martillo', 'click', 'robar', 'jugarCarta',
+  'campanaCondena',
 ];
 
 /** Synthesised recipe that stands in for a sound without one of its own while its MP3
@@ -37,6 +41,7 @@ export const SFX_RECIPE_ALIAS: Readonly<Record<string, string>> = {
   castigoResplandor: 'divino', castigoDestierro: 'furiaPerdida',
   cargaDivina: 'estado', cargaTrueno: 'estado', cargaCegadora: 'estado', cargaFuego: 'estado',
   cargaResplandor: 'estado', cargaDestierro: 'estado',
+  campanaCondena: 'tierra', cadenasCondena: 'muerte',
   click: 'ui', robar: 'carta', verCarta: 'carta', jugarCarta: 'carta', descartar: 'carta', barajar: 'carta',
 };
 

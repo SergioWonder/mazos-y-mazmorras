@@ -3,7 +3,10 @@ import { FRASES_DM } from '../core/escena-final.ts';
 import type {
   CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
 } from '../core/types.ts';
-import { fx } from '../fx/particulas.ts';
+import { fx, menosParticulas } from '../fx/particulas.ts';
+import {
+  DOOMED_SOUL_DURATION, DOOM_DRAG_AT, DOOM_TOLL_AT, DoomChainTracker, doomChainSprites, isDoomConsumption,
+} from '../fx/doom-chains.ts';
 import { audio } from '../fx/audio.ts';
 import { combatTheme, themeAfterCombat } from '../fx/music-tracks.ts';
 import { rodarDado, rodarDados } from '../fx/dado.ts';
@@ -131,12 +134,38 @@ export function pantallaCombate(
     // illustrated enemies and invocations (bosses keep their emoji for now)
     const luzLuna = LUZ_LUNA[run.capitulo] ?? LUZ_LUNA[0];
     const spritesEnemigo = new Map<EnemigoCombate, PuppetSprite>();
+    /** Doom's chains on each enemy: kept here, apart from the DOM rebuilt on every render. */
+    const cadenas = new DoomChainTracker<EnemigoCombate>();
+    const ahora = () => performance.now() / 1000;
+    /** Until when a death by Doom is still dragging its soul under (the end screen waits). */
+    let almaHasta = 0;
     const spriteEnemigo = (e: EnemigoCombate): PuppetSprite | null => {
       const rig = ENEMY_RIGS[e.def.id];
       if (!rig) return null;
       let s = spritesEnemigo.get(e);
-      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', mirrored: true, rim: luzLuna, stage }); spritesEnemigo.set(e, s); }
+      if (!s) {
+        s = new PuppetSprite(rig, { style: 'illustrated', mirrored: true, rim: luzLuna, stage });
+        spritesEnemigo.set(e, s);
+        // the chains climb its body as its Condena nears its health (drawn by the puppet)
+        s.setOverlay((caja, opacidad, capas) => {
+          const t = ahora(), v = cadenas.step(e, t);
+          return v ? doomChainSprites(caja, { ...v, alpha: v.alpha * opacidad }, t, { reduced: menosParticulas(), layered: capas }) : [];
+        });
+      }
       return s;
+    };
+    /** The figure's body when it has a puppet (Doom's bell and chains hug it), else its box. */
+    const cuerpoDe = (obj: Luchador) => {
+      const s = obj === combate.jugador ? undefined : spritesEnemigo.get(obj as EnemigoCombate);
+      return s ? s.bodyBox() : cajaDe(elemDe(obj));
+    };
+    /** The funeral bell of Doom, heard once for every enemy it tolls over at the same time. */
+    let ultimaCampana = 0;
+    const tanerCampana = () => {
+      const t = performance.now();
+      if (t - ultimaCampana < 400) return;
+      ultimaCampana = t;
+      setTimeout(() => audio.sfx('campanaCondena'), DOOM_TOLL_AT * 1000);
     };
     const spritesInvocacion = new Map<string, PuppetSprite>();
     const spriteInvocacion = (): PuppetSprite | null => {
@@ -206,9 +235,15 @@ export function pantallaCombate(
     /** Casts spell `clave` on a fighter (from the hero when the receiver is an enemy). */
     const lanzarHechizo = (clave: string, obj: Luchador, desde?: { x: number; y: number }, tinte?: string) => {
       const heroe = obj === combate.jugador;
-      const ok = fx.hechizo(clave, cajaDe(elemDe(obj)), {
+      const campana = clave === 'condena';
+      const ok = fx.hechizo(clave, campana ? cuerpoDe(obj) : cajaDe(elemDe(obj)), {
         desde: desde ?? (heroe ? undefined : centroDe(elemDe(combate.jugador))), mirando: heroe ? 1 : -1, tinte,
       });
+      // Doom: the bell tolls, and the enemy's chains wait for the toll to climb
+      if (ok && campana) {
+        tanerCampana();
+        if (!heroe) cadenas.toll(obj as EnemigoCombate, ahora() + DOOM_TOLL_AT);
+      }
       // rare sequences may ask for a brief shake at their climax (never with reduced motion)
       const sacudida = ok ? fx.sacudidaHechizo(clave) : null;
       if (sacudida) setTimeout(() => sacudir(sacudida.level), sacudida.delayMs);
@@ -321,7 +356,10 @@ export function pantallaCombate(
         // shake wait for it to land. Any other hit first lets the pending darts land.
         let rafaga = actor ? null : fx.rafagaHechizo(hitSpell(hechizoCarta, efecto));
         if (!rafaga) await impactos.settle();
-        if (!hechizoGolpe(obj, efecto)) {
+        // Doom consuming an enemy: nothing lands on it, its death by Doom plays instead
+        const remate = obj !== combate.jugador && isDoomConsumption(efecto, !!hechizoCarta);
+        if (remate) rafaga = null;
+        else if (!hechizoGolpe(obj, efecto)) {
           const { x, y } = centroDe(elemDe(obj));
           fx.emitir(efecto, x, y);
           rafaga = null; // no dart to wait for
@@ -333,8 +371,10 @@ export function pantallaCombate(
             if (!vuelo.queue.length) vidaEnVuelo.delete(obj);
           }
           const elem = elemDe(obj);
-          audio.sfx(dano > 0 ? efecto : 'bloqueo');
-          if (dano > 0) {
+          if (!remate) audio.sfx(dano > 0 ? efecto : 'bloqueo');
+          if (remate && dano > 0) {
+            numeroFlotante(elem, `${dano}`, 'dano');
+          } else if (dano > 0) {
             if (obj === combate.jugador) spriteActual().play('hit');
             else spriteEnemigo(obj as EnemigoCombate)?.play('hit');
             numeroFlotante(elem, `${dano}`, 'dano');
@@ -402,12 +442,17 @@ export function pantallaCombate(
         await impactos.settle();
         const elem = elemDe(e);
         const { x, y } = centroDe(elem);
-        fx.emitir('muerte', x, y);
-        audio.sfx('muerte');
-        // consumed by Doom: its soul leaves the body and chains hold it down until it fades
-        if (causa === 'condena') fx.hechizo('almaCondenada', cajaDe(elem));
-        // the body falls in parallel: the rest of an area attack or a multi-hit does not wait
         const s = spriteEnemigo(e);
+        audio.sfx('muerte');
+        if (causa === 'condena') {
+          // consumed by Doom: its chains close on it, the soul flees and is dragged under
+          const caja = s ? s.bodyBox() : cajaDe(elem);
+          cadenas.drop(e);
+          fx.hechizo('almaCondenada', caja);
+          setTimeout(() => audio.sfx('cadenasCondena'), DOOM_DRAG_AT * 1000);
+          almaHasta = Math.max(almaHasta, performance.now() + DOOMED_SOUL_DURATION * 1000);
+        } else fx.emitir('muerte', x, y);
+        // the body falls in parallel: the rest of an area attack or a multi-hit does not wait
         if (s) s.play('death');
         else elem?.classList.add('muriendo');
         muertes.start(e, s ? MUERTE_SPRITE_MS : MUERTE_CSS_MS, () => {
@@ -674,6 +719,8 @@ export function pantallaCombate(
       renderBarra();
       renderJugador();
       renderEnemigos();
+      // Doom's chains follow each enemy's Condena against its health
+      for (const e of combate.enemigos) cadenas.set(e, e.vivo ? e.estados.condena ?? 0 : 0, e.pv, ahora());
       renderMano();
       renderBotonFinTurno();
       renderEnergia();
@@ -1417,7 +1464,8 @@ export function pantallaCombate(
       if (calma) audio.reproducirTema(calma);
       // a real defeat plays the hero's death (the Dungeon Master's ray has its own scene)
       const muerte = playsDefeatSequence(combate.terminado, defs) ? muerteHeroe() : null;
-      const pausa = muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700); // time to read the DM's last line
+      // time to read the DM's last line; a soul dragged under by Doom is seen to the end
+      const pausa = Math.max(muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700), almaHasta - performance.now());
       // the last enemies finish falling before the screen goes
       void Promise.all([espera(pausa), muertes.settle()]).then(() => {
         muerte?.();

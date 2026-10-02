@@ -423,6 +423,87 @@ def condena(v):
     return finish(reverb(mix(bell, strike, drone, sub), 0.3, 1.4, 0.5, 3000), -4.5, top=6000)
 
 
+# Doom (Condena): a funeral bell tolls when it is applied (often several times a turn,
+# so it is warm, dark and quick to fade) and spectral chains drag the soul of a foe it
+# kills down into the underworld. Both keep their top end smooth: no pings, no shimmer.
+
+def funeral_bell(f, dur, r, scale=1.0):
+    """Big bronze bell: hum, prime, minor third, fifth, nominal and a few dark upper
+    partials, each a slowly beating doublet; the upper partials die first."""
+    ratios = [0.5, 1.0, 1.19, 1.5, 2.0, 2.51, 2.66, 3.01, 4.02, 5.33]
+    taus = [0.8, 0.6, 0.45, 0.32, 0.38, 0.2, 0.17, 0.13, 0.08, 0.05]
+    amps = [0.45, 0.8, 0.6, 0.25, 1.0, 0.3, 0.25, 0.18, 0.1, 0.04]
+    return modal([f * k for k in ratios], [t * scale for t in taus], amps, dur, r, beat=0.004)
+
+
+def campana_condena(v):
+    r = rng(5100 + v)
+    dur = 1.8
+    f = [110.0, 103.8][v]  # A2 / G#2 prime: the nominal sits an octave above
+    bell = funeral_bell(f, dur, r) * 0.8
+    # padded clapper: a soft, dark thump instead of a bright click
+    strike = lowpass(noise(0.06, 'brown', r), 500) * env_ad(0.06, 0.002, 0.015) * 1.2
+    strike = mix(strike, thud(f * 2, f * 1.6, 0.12, 0.03, 0.5, 300, 0.6, r, knock=0.25, knock_fc=300))
+    # the air of the bell tower: a faint low swell under the hum
+    air = lowpass(noise(dur, 'brown', r), 180) * env_swell(dur, 0.35, 1.5, 2.0) * 0.12
+    out = lowpass(mix(bell, strike, air), 1400, 2)
+    return finish(reverb(out, 0.22, 1.0, 0.35, 2000, seed=5150 + v), -5.0, top=3000, max_dur=1.8, fout=0.3)
+
+
+def chain_link(r, pitch=1.0, bright=1.0):
+    """One heavy iron link knocking another: short, dull inharmonic modes."""
+    base = r.uniform(380, 720) * pitch
+    ratios = [1, 1.62, 2.31, 3.07]
+    taus = [r.uniform(0.03, 0.06), 0.03, 0.02, 0.012]
+    amps = [1, 0.6 * bright, 0.35 * bright, 0.15 * bright]
+    d = 0.18
+    ring = modal([base * k for k in ratios], taus, amps, d, r, beat=0.006)
+    knock = lowpass(noise(d, 'white', r), 1500) * env_ad(d, 0.0005, 0.004) * 0.8
+    return (ring + knock) * r.uniform(0.35, 1.0)
+
+
+def rattle(r, pitch, bright):
+    """A link jostling its neighbours: two to four knocks a few ms apart."""
+    out = np.zeros(n_of(0.3))
+    at = 0.0
+    for _ in range(r.integers(2, 5)):
+        out = place(out, chain_link(r, pitch * r.uniform(0.9, 1.1), bright) * r.uniform(0.4, 1.0), at)
+        at += r.uniform(0.012, 0.045)
+    return out
+
+
+def cadenas_condena(v):
+    r = rng(5200)
+    dur = 1.8
+    n = n_of(dur)
+    links = np.zeros(n)
+    # the chain is hauled down in heaves: each one shakes a cluster of links, lower,
+    # duller and quieter than the last as the soul sinks
+    for at in [0.0, 0.42, 0.8, 1.14]:
+        k = at / dur
+        for _ in range(r.integers(3, 6)):
+            hit = rattle(r, 1 - 0.4 * k, 1 - 0.6 * k) * (1 - 0.7 * k)
+            links = place(links, hit, at + r.uniform(0, 0.12))
+    # a few loose links knocking between the heaves
+    for at in r.uniform(0.15, 1.35, 5):
+        links = place(links, chain_link(r, 0.8, 0.5) * 0.35, at)
+    # the grab: chains snapping taut around the soul
+    links = place(links, thud(95, 50, 0.25, 0.06, 1.6, 300, 0.8, r, knock=0.5, knock_fc=420), 0.0)
+    links = links[:n] * 1.5
+    # links dragged over stone and over each other: a filtered, gritty scrape
+    scrape = sweep_bandpass(noise(dur, 'pink', r), glide(dur, 900, 380), 2.5) * rough(n, r, 0.8, 40)
+    scrape *= env_swell(dur, 0.35, 1.2, 1.6) * 5.0
+    # the downward pull: a falling whoosh and a sinking rumble from below
+    pull = sweep_bandpass(noise(dur, 'pink', r), interp_curve(dur, [(0, 700), (0.5, 420), (dur, 110)]), 1.4)
+    pull *= env_swell(dur, 0.6, 1.6, 1.3) * 9.0
+    rumble = lowpass(noise(dur, 'brown', r), 160) * env_swell(dur, 0.7, 1.4, 1.4)
+    sub = osc(glide(dur, 70, 36)) * env_swell(dur, 0.6, 1.5, 1.5) * 0.4
+    # a hollow moan of the underworld, low and far away
+    moan = formants(glottal(glide(dur, 82, 58), dur, r, 0.01, 0.1), 'u', 0.9) * env_swell(dur, 0.8, 1.6, 1.4) * 1.4
+    out = lowpass(mix(links, scrape, pull, rumble, sub, moan), 2600, 2)
+    return finish(reverb(out, 0.3, 1.2, 0.38, 2000, seed=5250), -5.0, top=3500, max_dur=1.9, fout=0.25)
+
+
 def oscuridad(v):
     r = rng(2600)
     dur = 1.1
@@ -822,6 +903,8 @@ SOUNDS = {
     'furiaPerdida': (furia_perdida, 1, -21), 'ui': (ui, 1, -28),
     'estrellas': (estrellas, 1, -17), 'sangre': (sangre, 1, -17), 'abisal': (abisal, 1, -17),
     'luna': (luna, 1, -17), 'condena': (condena, 1, -16), 'veneno': (veneno, 1, -17),
+    # Doom: the bell may toll several times a turn, so it sits a little lower
+    'campanaCondena': (campana_condena, 2, -18), 'cadenasCondena': (cadenas_condena, 1, -17),
     'transformacion': (transformacion, 1, -17), 'ola': (ola, 1, -17), 'zarpa': (zarpa, 1, -16),
     'oscuridad': (oscuridad, 1, -18), 'hojas': (hojas, 1, -20), 'aullido': (aullido, 1, -16),
     'corazones': (corazones, 1, -18), 'aliento': (aliento, 1, -15), 'rara': (rara, 1, -21),

@@ -46,7 +46,8 @@ export type EstadoId =
   | 'ventajaFurtiva' // (pícaro/Oportunista) tus ataques hacen +N a quien no pretende atacar
   | 'condena'        // (enemigo) al final de su turno muere si su Condena ≥ sus PV actuales (brujo)
   | 'oscuridad'      // (enemigo) reduce su ataque esta cantidad; baja 1 por turno (brujo)
-  | 'agathys'        // (jugador) este turno el daño que bloquees se devuelve a TODOS los enemigos
+  | 'agathys'        // (jugador) este turno el daño que bloquees se devuelve al enemigo que te golpea
+  | 'agathysArea'    // (jugador) este turno el daño que bloquees se devuelve a TODOS los enemigos
   | 'explosionFuerza'// (jugador) tu Explosión Sobrenatural inflige +N de daño todo el combate
   | 'explosionTurno' // (jugador) tu Explosión Sobrenatural inflige +N de daño SOLO este turno
   | 'explosionVeces' // (jugador) tu Explosión Sobrenatural golpea N veces más

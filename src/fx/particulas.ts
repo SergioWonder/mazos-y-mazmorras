@@ -9,6 +9,8 @@ import { ParticleRendererGL } from './particle-gl.ts';
 import { SpellSystem, SPELLS, MAX_LIVE_SPRITES, type Box, type Point } from './spell-fx.ts';
 // registers the rare and unique cards' own sequences in SPELLS
 import { cardShake, volleyTiming } from './card-spells.ts';
+// registers the death by Doom (the chained soul) in SPELLS
+import './doom-chains.ts';
 
 import { ajustes, alCambiarAjustes } from '../core/ajustes.ts';
 

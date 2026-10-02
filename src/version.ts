@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.6.0';
+export const VERSION = '8.7.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.7.0',
+    fecha: '2026-10-03',
+    cambios: [
+      '🔔 La Condena tiene efecto nuevo: tañe una campana fúnebre y unas cadenas brotan del suelo alrededor del enemigo, más altas cuanto más cerca está la Condena de su vida, hasta casi cubrirlo cuando ya es letal.',
+      '⛓️ Al morir por Condena, las cadenas lo atrapan, su alma sin rostro intenta escapar… y la arrastran despacio al inframundo.',
+      '🩸 La Armadura de Agathys devuelve el daño bloqueado solo al enemigo que te golpea; el Blindaje Infernal (coste 2) sigue devolviéndolo a todos.',
+      '🟣 Explosión Sobrenatural en área con Haz Desdoblado: el rayo extra va solo a tu objetivo, en vez de golpear dos veces a todos.',
+    ],
+  },
   {
     version: '8.6.0',
     fecha: '2026-10-02',

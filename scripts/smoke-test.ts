@@ -1471,8 +1471,30 @@ console.log('— Brujo: mecánicas nuevas —');
     b.bloqueo = 0;
     await comb.terminarTurno();
     check(60 - a.pv === 5, 'el atacante recibe de vuelta los 5 que bloqueaste');
-    check(60 - b.pv === 5, 'y el otro enemigo también (rebota a todos)');
+    check(60 - b.pv === 0, 'y el otro enemigo no (la Armadura solo castiga a quien te golpea)');
     check((comb.jugador.estados.agathys ?? 0) === 0, 'Agathys solo dura ese turno');
+  }
+  // Blindaje Infernal (coste 2): the blocked damage still bounces to EVERY enemy
+  {
+    const run = nuevaRun('brujo', 5006);
+    const comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(5006), uiSilenciosa);
+    await comb.iniciar();
+    const [a, b] = comb.enemigos;
+    a.pv = a.pvMax = 60; b.pv = b.pvMax = 60;
+    comb.jugador.mano = [];
+    comb.jugador.bloqueo = 0;
+    sinOscuridad(comb);
+    const blindaje = carta('blindaje-infernal');
+    check(blindaje.coste === 2 && /TODOS/.test(blindaje.texto), 'Blindaje Infernal cuesta 2 y rebota a TODOS');
+    await blindaje.jugar(comb.contexto());
+    a.intencion = { nombre: 'Puñalada', intencion: 'ataque', dano: 5 };
+    b.intencion = { nombre: 'Esperar', intencion: 'mejora' };
+    b.bloqueo = 0;
+    await comb.terminarTurno();
+    check(60 - a.pv === 5 && 60 - b.pv === 5, 'Blindaje Infernal: el daño bloqueado rebota a todos los enemigos');
+    check(!comb.jugador.estados.agathysArea, 'y también dura solo ese turno');
+    check(!/TODOS/.test(carta('armadura-agathys').texto) && /te ataca|te golpea/.test(carta('armadura-agathys').texto),
+      'el texto de la Armadura de Agathys dice que el daño vuelve a quien te golpea');
   }
 
   // Condena: mata al final del turno enemigo cuando iguala sus PV actuales
@@ -2515,8 +2537,8 @@ console.log('\n🔊 Efectos de sonido');
     const peso = (f: string) => fs.statSync(new URL(f, carpeta)).size;
     const pesados = mp3.filter((f: string) => peso(f) > 32_000);
     const total = mp3.reduce((s: number, f: string) => s + peso(f), 0);
-    // budget grown with the paladin's 17 sounds (about 170 KB)
-    check(mp3.length > 0 && pesados.length === 0 && total < 800_000, `los MP3 pesan poco (${Math.round(total / 1024)} KB en total) ${pesados.join(', ')}`);
+    // budget grown with the paladin's 17 sounds (about 170 KB) and the Doom bell and chains (about 67 KB)
+    check(mp3.length > 0 && pesados.length === 0 && total < 900_000, `los MP3 pesan poco (${Math.round(total / 1024)} KB en total) ${pesados.join(', ')}`);
     check(resolveSfx('tajo') === 'tajo' && resolveSfx('noExiste') === SFX_FALLBACK && SFX_NAMES.includes(SFX_FALLBACK),
       'un nombre desconocido suena con el efecto de respaldo');
     check(pickVariant(3, 1, () => 0.4) !== 1 && pickVariant(1, 0, Math.random) === 0, 'las variaciones no repiten la anterior');
@@ -2524,6 +2546,29 @@ console.log('\n🔊 Efectos de sonido');
     check(extremos.every((j) => j.rate > 0.9 && j.rate < 1.1 && j.gain > 0.8 && j.gain <= 1), 'la variación de tono y volumen es pequeña');
     check(grupos.get('tajo')?.every((u: string) => u.startsWith('/a/tajo')) === true, 'las variaciones se agrupan por nombre de archivo');
   }
+}
+
+// ── Doom (Condena) sounds: funeral bell when applied, spectral chains when it kills ──
+console.log('\n🔔 Sonidos de la Condena');
+{
+  const fs = await import('node:fs');
+  const bank = await import('../src/fx/sfx-bank.ts');
+  const carpeta = new URL('../src/audio/sfx/', import.meta.url);
+  const mp3 = fs.readdirSync(carpeta).filter((f: string) => f.endsWith('.mp3'));
+  const grupos = bank.groupSfxFiles(Object.fromEntries(mp3.map((f: string) => [`../audio/sfx/${f}`, `${f}`])));
+  const nuevos = ['campanaCondena', 'cadenasCondena'];
+  check(nuevos.every((n) => bank.SFX_NAMES.includes(n) && bank.resolveSfx(n) === n), 'la campana y las cadenas de la Condena están en la tabla de sonidos');
+  check(nuevos.every((n) => (grupos.get(n)?.length ?? 0) >= 1), 'la campana y las cadenas de la Condena tienen su MP3');
+  check((grupos.get('campanaCondena')?.length ?? 0) >= 2, 'la campana de la Condena alterna variaciones (puede sonar varias veces por turno)');
+  const motor = ['tajo', 'impacto', 'golpeEnemigo', 'bloqueo', 'cura', 'muerte', 'furia', 'divino', 'tierra',
+    'raices', 'carta', 'estado', 'furiaPerdida', 'ui'];
+  check(nuevos.every((n) => motor.includes(bank.SFX_RECIPE_ALIAS[n])), 'mientras cargan, la campana y las cadenas suenan con una receta grave parecida');
+  // 96 kbps CBR: the size gives the length in seconds
+  const segundos = (f: string) => (fs.statSync(new URL(f, carpeta)).size * 8) / 96_000;
+  const dura = (n: string, min: number, max: number) => (grupos.get(n) ?? []).length > 0
+    && (grupos.get(n) ?? []).every((f: string) => segundos(f) >= min && segundos(f) <= max);
+  check(dura('campanaCondena', 1.4, 2.6), 'la campana fúnebre resuena entre 1,5 y 2,5 s');
+  check(dura('cadenasCondena', 1.4, 2.1), 'las cadenas arrastran el alma entre 1,5 y 2 s');
 }
 
 // ── Articulated wings: shoulder, forearm and fingers with a travelling wave ──
@@ -2795,10 +2840,21 @@ console.log('\n✨ Efectos de hechizos');
   const escudo = spellFrame('bloqueo', heroe, SPELLS.bloqueo.duration * 0.5).filter((s) => s.shape === 'escudo');
   check(escudo.length > 0 && escudo.every((s) => s.x > heroe.box.x + heroe.box.w / 2), 'el escudo se materializa delante del héroe');
   check(spellFrame('divino', ctx, SPELLS.divino.duration * 0.4).some((s) => s.shape === 'haz' && s.y - s.size * (s.stretch ?? 1) < box.y), 'el haz divino baja desde arriba');
-  const runa = (t: number) => spellFrame('condena', ctx, t).filter((s) => s.shape === 'runa').sort((a, b) => b.size - a.size)[0];
-  check(!!runa(0.05) && runa(0.05).y < box.y, 'la runa de condena empieza por encima del objetivo');
-  const tImp = SPELLS.condena.duration * SPELLS.condena.phases[0] + 0.02;
-  check(!!runa(tImp) && Math.abs(runa(tImp).y - (box.y + box.h / 2)) < box.h * 0.3, 'la runa de condena cae sobre el objetivo');
+  // Doom: a spectral bell tolls over the target (the falling rune, «la estrella que cae», is gone)
+  const dCond = SPELLS.condena, tToll = dCond.duration * dCond.phases[0];
+  const campana = (t: number) => sf.spellMarks('condena', ctx, t).find((m) => m.kind === 'campana');
+  check(!!campana(0.08) && campana(0.08)!.y < box.y + box.h * 0.2 && Math.abs(campana(0.08)!.x - (box.x + box.w / 2)) < box.w * 0.25,
+    'la condena hace aparecer una campana espectral sobre el objetivo');
+  check([...Array(45).keys()].every((i) => spellFrame('condena', ctx, (i / 44) * dCond.duration).every((s) => s.shape !== 'runa')),
+    'ya no cae ninguna runa sobre el objetivo');
+  check(sf.spellMarks('condena', ctx, tToll + 0.01).some((m) => m.kind === 'tanido')
+    && !sf.spellMarks('condena', ctx, tToll - 0.08).some((m) => m.kind === 'tanido'), 'la campana tañe al final de la anticipación');
+  const ondaMax = (t: number) => Math.max(0, ...spellFrame('condena', ctx, t).filter((s) => s.shape === 'anillo').map((s) => s.size * Math.max(1, s.stretch ?? 1)));
+  check(ondaMax(tToll + 0.3) > ondaMax(tToll + 0.06) * 1.4 && ondaMax(tToll + 0.3) > box.w * 0.4, 'el tañido expande ondas');
+  const labio = [0.05, 0.12, 0.2, 0.28].map((d) => campana(tToll + d)?.x ?? NaN);
+  check(labio.every(Number.isFinite) && Math.max(...labio) - Math.min(...labio) > 4, 'la campana se balancea al tañer');
+  const { DOOM_TOLL_AT } = await import('../src/fx/doom-chains.ts').catch(() => ({ DOOM_TOLL_AT: NaN }));
+  check(Math.abs(DOOM_TOLL_AT - tToll) < 0.02, `el sonido y las cadenas esperan al tañido (${Math.round(DOOM_TOLL_AT * 1000)} ms)`);
   const cresta = (t: number) => { const f = spellFrame('ola', ctx, t).filter((s) => s.shape === 'capsula'); return f.reduce((m, s) => m + s.x, 0) / Math.max(1, f.length); };
   check(cresta(0.45) > cresta(0.15), 'la ola avanza desde el lanzador hacia el objetivo');
   check(spellFrame('zarpa', ctx, SPELLS.zarpa.duration * 0.4).filter((s) => s.shape === 'capsula' && (s.param ?? 0) > 0.5 && (s.stretch ?? 1) > 4).length >= 3, 'la zarpa deja tres surcos');
@@ -5380,6 +5436,16 @@ try {
     check(a.estados.condena === 10 && b.estados.condena === 10, 'en área condena a todos los que golpea');
   }
   {
+    // area + a second beam: the marked target takes both, the rest only the first
+    const { comb } = await montarB([], [quietoB, quietoB, quietoB]);
+    const [a, b, c] = comb.enemigos;
+    comb.jugador.estados.explosionArea = 1;
+    comb.jugador.estados.explosionVeces = 1;
+    await lanzar(comb, exp(comb), b);
+    check(300 - b.pv === 14 && 300 - a.pv === 7 && 300 - c.pv === 7,
+      `en área y con dos rayos, el objetivo marcado recibe los dos y el resto uno (${300 - a.pv}/${300 - b.pv}/${300 - c.pv})`);
+  }
+  {
     const { comb } = await montarB(['eco-sobrenatural'], [quietoB, quietoB]);
     const [a, b] = comb.enemigos;
     comb.jugador.estados.explosionFuerza = 5;
@@ -6270,74 +6336,213 @@ try {
   check(false, `las pruebas del proyectil de la Explosión Sobrenatural revientan: ${(e as Error).stack ?? e}`);
 }
 
-// ── Death by Doom: the soul tries to rise, spectral chains hold it down ──────
-console.log('\n⛓️ Muerte por Condena: el alma encadenada');
+// ── Doom chains: they climb the enemy the closer its Condena gets to its health ──
+console.log('\n⛓️ Condena: cadenas que trepan según la amenaza');
+try {
+  const dc = await import('../src/fx/doom-chains.ts');
+  const { MAX_LIVE_SPRITES } = await import('../src/fx/spell-fx.ts');
+  const {
+    doomChainLevel: nivel, DOOM_LEVEL_LETHAL: LETAL, doomChainPath, DOOM_CHAIN_COUNT: N, doomChainSprites,
+    DoomChainTracker, MAX_DOOM_CHAIN_SPRITES: TOPE, isDoomConsumption,
+  } = dc;
+  // ratio → height
+  check(nivel(0, 40) === 0 && nivel(-3, 40) === 0, 'sin Condena no hay cadenas');
+  check(nivel(1, 60) >= 0.1 && nivel(1, 60) <= 0.25, `con poca Condena asoman alrededor de los pies (${nivel(1, 60).toFixed(2)})`);
+  const serie = [2, 6, 10, 14, 18, 19].map((c) => nivel(c, 20));
+  check(serie.every((v, i) => i === 0 || v > serie[i - 1]), `cuanto menor es la diferencia entre Condena y PV, más suben (${serie.map((v) => v.toFixed(2)).join(' → ')})`);
+  check(nivel(20, 20) === LETAL && LETAL >= 0.88 && LETAL < 1 && nivel(35, 20) === LETAL, `con Condena ≥ PV casi lo cubren por completo (${LETAL})`);
+  check(LETAL - nivel(19, 20) >= 0.08, 'la Condena letal se distingue de la que se queda a un punto');
+  check(Math.abs(nivel(5, 50) - nivel(1, 10)) < 1e-9, 'depende de la proporción, no de las cifras');
+  check(nivel(10, 20) > nivel(10, 30), 'si bajan los PV, las cadenas suben');
+  // paths: from the ground, coiled round the target, ending inside it at the level's height
+  const box = { x: 600, y: 200, w: 140, h: 180 }, suelo = box.y + box.h, cx = box.x + box.w / 2;
+  check(N >= 3 && N <= 5, `${N} cadenas alrededor del enemigo`);
+  for (let i = 0; i < N; i++) for (const lv of [0.3, LETAL]) {
+    const p = doomChainPath(box, i, lv), base = p[0], punta = p[p.length - 1];
+    check(base.y >= suelo - box.h * 0.03 && base.x >= box.x - box.w * 0.1 && base.x <= box.x + box.w * 1.1, `cadena ${i}: brota del suelo bajo el enemigo`);
+    check(Math.abs(punta.y - (suelo - lv * box.h)) <= box.h * 0.04 && punta.x >= box.x && punta.x <= box.x + box.w,
+      `cadena ${i} al ${Math.round(lv * 100)} %: acaba a esa altura, dentro del enemigo`);
+  }
+  check([...Array(N).keys()].every((i) => {
+    const p = doomChainPath(box, i, LETAL);
+    return p.some((q) => q.x < cx - box.w * 0.15) && p.some((q) => q.x > cx + box.w * 0.15);
+  }), 'las cadenas se enroscan alrededor del enemigo');
+  const corta = doomChainPath(box, 1, 0.4), larga = doomChainPath(box, 1, 0.8);
+  check(corta.slice(0, -1).every((q) => larga.some((r) => Math.hypot(r.x - q.x, r.y - q.y) < 0.5)), 'al crecer, los eslabones de abajo no se mueven');
+  const apretada = doomChainPath(box, 0, LETAL, 0.6);
+  const anchoDe = (l: { x: number }[]) => Math.max(...l.map((q) => q.x)) - Math.min(...l.map((q) => q.x));
+  check(anchoDe(apretada) < anchoDe(doomChainPath(box, 0, LETAL)) * 0.8, 'pueden cerrarse sobre el enemigo');
+  // the persistent overlay
+  const vista = (level: number, lethal = level >= LETAL) => ({ level, lethal, flash: 0, alpha: 1 });
+  const fr = (lv: number, extra: { reduced?: boolean; layered?: boolean } = {}, t = 1.3) => doomChainSprites(box, vista(lv), t, extra);
+  const cima = (l: { y: number }[]) => Math.min(...l.map((s) => s.y));
+  check(cima(fr(0.25)) > cima(fr(0.6)) + box.h * 0.2 && cima(fr(0.6)) > cima(fr(LETAL)) + box.h * 0.1, 'más Condena, cadenas más altas');
+  check(cima(fr(LETAL)) <= box.y + box.h * 0.15, 'cuando es letal llegan casi hasta arriba');
+  check(cima(fr(0.2)) >= suelo - 0.32 * box.h, 'con poca Condena se quedan abajo');
+  let roto = 0, fuera = 0, maximo = 0;
+  for (const lv of [0.15, 0.4, 0.7, LETAL]) for (const t of [0, 0.7, 2.1, 5.3]) {
+    const l = doomChainSprites(box, { level: lv, lethal: lv >= LETAL, flash: t === 0.7 ? 1 : 0, alpha: 1 }, t, {});
+    maximo = Math.max(maximo, l.length);
+    for (const s of l) {
+      if (![s.x, s.y, s.size, s.angle, s.alpha, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || s.size <= 0 || s.alpha > 1 || s.alpha < 0) roto++;
+      if (s.x < box.x - box.w * 0.2 || s.x > box.x + box.w * 1.2 || s.y < box.y - box.h * 0.1 || s.y > suelo + box.h * 0.14) fuera++;
+    }
+  }
+  check(roto === 0, `las cadenas solo dibujan elementos válidos (${roto} rotos)`);
+  check(fuera === 0, `y se quedan pegadas al enemigo (${fuera} fuera)`);
+  check(maximo <= TOPE && TOPE <= 110, `cada enemigo condenado cuesta poco (${maximo} ≤ ${TOPE} elementos)`);
+  check(fr(0.6).some((s) => s.front) && fr(0.6).some((s) => !s.front), 'unos eslabones pasan por delante del enemigo y otros por detrás');
+  check(fr(LETAL, { reduced: true }).length < fr(LETAL).length, 'con menos partículas, menos elementos');
+  const sinCapas = fr(0.6, { layered: false }), conCapas = fr(0.6, { layered: true });
+  const alfaDetras = (l: typeof sinCapas) => l.filter((s) => !s.front).reduce((a, s) => a + s.alpha, 0);
+  check(alfaDetras(sinCapas) < alfaDetras(conCapas), 'sin escenario WebGL, los eslabones de detrás se atenúan');
+  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const colores = fr(LETAL).map((s) => rgb(s.colour));
+  check(colores.every(([, G, B]) => B >= G - 4) && colores.some(([R, G, B]) => Math.max(R, G, B) < 70) && colores.some(([R, G, B]) => R > 150 && B > 200),
+    'cadenas negro-violeta con brillo violeta');
+  const brillo = (l: typeof sinCapas) => l.filter((s) => s.glow).reduce((a, s) => a + s.alpha * s.size, 0);
+  const latido = [0.2, 0.6, 1.0, 1.4].map((t) => brillo(doomChainSprites(box, vista(LETAL, true), t, {})));
+  check(Math.min(...latido) > brillo(doomChainSprites(box, vista(LETAL, false), 0.2, {})) && Math.max(...latido) - Math.min(...latido) > 1,
+    'cuando la Condena es letal, las cadenas laten con un brillo violeta');
+  check(brillo(doomChainSprites(box, { ...vista(0.5), flash: 1 }, 1, {})) > brillo(doomChainSprites(box, vista(0.5), 1, {})) * 1.3, 'el tañido hace destellar las cadenas');
+  check(doomChainSprites(box, { ...vista(0.6), alpha: 0 }, 1, {}).length === 0, 'invisibles no dibujan nada');
+  check(maximo * 5 <= MAX_LIVE_SPRITES * 0.6, `cinco enemigos condenados caben en el tope (${maximo * 5})`);
+  // the tracker: it survives re-renders, grows smoothly and waits for the toll
+  const tr = new DoomChainTracker<string>();
+  check(tr.step('nadie', 0) === null, 'sin Condena no hay nada que seguir');
+  tr.set('a', 10, 40, 0);
+  const obj = nivel(10, 40);
+  let prev = 0, salto = 0, llega = NaN, renders = true;
+  for (let t = 0; t <= 2.5; t += 1 / 60) {
+    if (Math.abs(t - 0.4) < 1 / 120) { const antes = tr.step('a', t)!.level; tr.set('a', 10, 40, t); if (tr.step('a', t)!.level < antes - 1e-9) renders = false; }
+    const v = tr.step('a', t)!.level;
+    salto = Math.max(salto, Math.abs(v - prev));
+    if (Number.isNaN(llega) && Math.abs(v - obj) < 0.01) llega = t;
+    prev = v;
+  }
+  check(salto < 0.04, `las cadenas crecen suaves, sin saltos (${salto.toFixed(3)} por fotograma)`);
+  check(llega >= 0.25 && llega <= 1.6, `y se ve cómo suben (${Math.round(llega * 1000)} ms)`);
+  check(renders, 'volver a pintar al enemigo no reinicia su crecimiento');
+  const antesBajar = tr.step('a', 3)!.level;
+  tr.set('a', 10, 12, 3);
+  check(Math.abs(tr.step('a', 3.02)!.level - antesBajar) < 0.04 && tr.step('a', 5)!.level > antesBajar + 0.2, 'si le bajan los PV, suben desde donde estaban');
+  tr.toll('b', 0.5);
+  tr.set('b', 10, 20, 0);
+  check(tr.step('b', 0.45)!.level < 0.01 && tr.step('b', 0.9)!.level > 0.05, 'esperan al tañido de la campana para crecer');
+  check(tr.step('b', 0.6)!.flash > 0.4 && tr.step('b', 2)!.flash === 0, 'y destellan con él');
+  tr.set('c', 20, 20, 0);
+  check(tr.step('c', 0.1)!.lethal === false && tr.step('c', 3)!.lethal === true, 'el latido letal llega cuando terminan de subir');
+  tr.set('a', 0, 20, 6);
+  const quitar = [6.05, 6.3, 6.6].map((t) => tr.step('a', t)?.level ?? 0);
+  check(quitar[0] > quitar[1] && quitar[1] > quitar[2], 'si se va la Condena, las cadenas se hunden en el suelo');
+  check(tr.step('a', 9) === null && !tr.has('a'), 'y desaparecen');
+  tr.drop('c');
+  check(tr.step('c', 3.1) === null, 'al morir por Condena, el alma toma el relevo de las cadenas');
+  // the chains hug the figure's body, from the ground line up, whatever its rig
+  const { bodyScreenBox } = await import('../src/fx/puppet-gpu.ts');
+  const { ENEMY_RIGS: rigs } = await import('../src/fx/enemy-rigs.ts');
+  const marco = { x: 100, y: 50, w: 140 };
+  let malCaja: string[] = [];
+  for (const [id, rig] of Object.entries(rigs)) {
+    const fb = bodyScreenBox(rig, marco, true), suelo2 = marco.y + (129 / 140) * marco.w;
+    const ok = [fb.x, fb.y, fb.w, fb.h].every(Number.isFinite) && fb.w >= marco.w * 0.2 && fb.h >= marco.w * 0.3
+      && Math.abs(fb.y + fb.h - suelo2) < marco.w * 0.03 && fb.x >= marco.x - marco.w * 0.6 && fb.x + fb.w <= marco.x + marco.w * 1.6;
+    if (!ok) malCaja.push(id);
+  }
+  check(malCaja.length === 0, `las cadenas abrazan el cuerpo de cada enemigo, desde el suelo ${malCaja.join(', ')}`);
+  // the killing blow by Doom shows nothing falling on the target: the death plays its own
+  check(isDoomConsumption('condena', false) && !isDoomConsumption('condena', true) && !isDoomConsumption('tajo', false),
+    'el golpe con que la Condena remata no lanza ningún efecto encima');
+  const fs = await import('node:fs');
+  const ui = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/isDoomConsumption\(/.test(ui) && /DoomChainTracker/.test(ui), 'el combate sigue las cadenas de cada enemigo y omite el golpe de la Condena');
+  check(ui.includes("'campanaCondena'") && ui.includes("'cadenasCondena'"), 'suena la campana al condenar y las cadenas al arrastrar el alma');
+} catch (e) {
+  check(false, `las pruebas de las cadenas de la Condena revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Death by Doom: the chains close, the soul tries to flee and is dragged under ──
+console.log('\n⛓️ Muerte por Condena: las cadenas arrastran el alma al inframundo');
 try {
   const sf = await import('../src/fx/spell-fx.ts');
   await import('../src/fx/card-spells.ts');
-  const { SPELLS, spellFrame, spellMarks, spellSignature, soulPose, MAX_LIVE_SPRITES, SpellSystem } = sf;
+  await import('../src/fx/hero-death.ts');
+  const dc = await import('../src/fx/doom-chains.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, MAX_LIVE_SPRITES, SpellSystem } = sf;
+  const { doomSoulPose, doomChainPath, DOOM_LEVEL_LETHAL, DOOM_DRAG_AT, DOOM_CHAIN_COUNT, DOOMED_SOUL_DURATION } = dc;
   const def = SPELLS.almaCondenada;
   check(!!def, 'la muerte por Condena tiene su efecto propio («almaCondenada»)');
   check(def.anchor === 'target', 'se dibuja sobre el enemigo que muere');
-  check(def.duration >= 1.2 && def.duration <= 1.6, `dura entre 1,2 y 1,6 s (${def.duration})`);
-  check(def.phases[0] > 0 && def.phases[0] < def.phases[1] && def.phases[1] < 1, 'el alma sale < las cadenas la atrapan < se disuelve');
+  check(def.duration === DOOMED_SOUL_DURATION && def.duration >= 2.2 && def.duration <= 3.2, `dura entre 2,2 y 3,2 s: el arrastre es lento (${def.duration})`);
+  check(def.phases[0] > 0 && def.phases[0] < def.phases[1] && def.phases[1] < 1, 'las cadenas lo atrapan < lo arrastran < se cierra el suelo');
+  check(Math.abs(DOOM_DRAG_AT - def.phases[1] * def.duration) < 0.02, `el sonido de las cadenas entra con el arrastre (${Math.round(DOOM_DRAG_AT * 1000)} ms)`);
   const otras = Object.keys(SPELLS).filter((x) => x !== 'almaCondenada');
   check(otras.every((x) => SPELLS[x].build !== def.build), 'se compone con su propia función');
-  check(!new Set(otras.map((x) => spellSignature(x))).has(spellSignature('almaCondenada')), 'se ve distinta de los demás efectos (también de «muerte» y «condena»)');
-  const box = { x: 600, y: 200, w: 140, h: 180 };
+  check(!new Set(otras.map((x) => spellSignature(x))).has(spellSignature('almaCondenada')), 'se ve distinta de los demás efectos (también de «muerte», «condena» y el alma del héroe)');
+  const box = { x: 600, y: 200, w: 140, h: 180 }, suelo = box.y + box.h, cx = box.x + box.w / 2;
   const ctx = (b = box, seed = 7) => ({ box: b, from: { x: 200, y: 300 }, facing: -1 as const, seed });
   const D = def.duration, tA = def.phases[0] * D, tB = def.phases[1] * D;
-  const almaEn = (t: number, b = box) => spellMarks('almaCondenada', ctx(b), t).find((m) => m.kind === 'alma');
-  // the soul leaves the body and rises
-  const inicio = almaEn(0.06)!, enAtrapar = almaEn(tA)!;
-  check(!!inicio && inicio.y > box.y + box.h * 0.25 && inicio.y < box.y + box.h && Math.abs(inicio.x - (box.x + box.w / 2)) < box.w * 0.25,
-    'el alma sale del cuerpo del enemigo');
-  check(!!enAtrapar && enAtrapar.y < inicio.y - box.h * 0.15, `el alma asciende antes de que la atrapen (${Math.round(inicio?.y ?? 0)} → ${Math.round(enAtrapar?.y ?? 0)})`);
-  // chains: from the ground or the sides, they latch onto the soul
-  const anclas = spellMarks('almaCondenada', ctx(), (tA + tB) / 2).filter((m) => m.kind === 'anclaCadena');
-  check(anclas.length >= 3, `varias cadenas la sujetan (${anclas.length})`);
-  check(anclas.every((a) => a.y >= box.y + box.h * 0.85 || a.x <= box.x || a.x >= box.x + box.w), 'las cadenas salen del suelo o de los lados');
-  const primerGrillete = [...Array(200).keys()].map((i) => (i / 200) * D).find((t) => spellMarks('almaCondenada', ctx(), t).some((m) => m.kind === 'grillete'));
-  check(primerGrillete !== undefined && primerGrillete >= D * 0.12 && primerGrillete <= tA + 0.05,
-    `las cadenas atrapan al alma cuando ya sube (${Math.round((primerGrillete ?? 0) * 1000)} ms)`);
-  let pegadas = true, sujeta = true, mas = Infinity, menos = -Infinity, cambios = 0, prevDy = 0, prevY = NaN;
-  for (let t = tA + 0.02; t <= tB; t += 1 / 60) {
-    const marcas = spellMarks('almaCondenada', ctx(), t);
-    const alma = marcas.find((m) => m.kind === 'alma')!;
-    const pose = soulPose(box, t / D);
-    for (const gr of marcas.filter((m) => m.kind === 'grillete')) {
-      if (Math.abs(gr.x - pose.x) > pose.width * 0.8 || gr.y < pose.y - pose.headR * 1.5 || gr.y > pose.y + pose.height) pegadas = false;
+  const marcas = (t: number, b = box) => spellMarks('almaCondenada', ctx(b), t);
+  // 1. the chains that already surrounded it close on it
+  const eslabones = (t: number) => marcas(t).filter((m) => m.kind === 'eslabon');
+  const inicio = eslabones(0.01);
+  check(inicio.length >= 12, `empieza con las cadenas que ya lo rodeaban (${inicio.length} eslabones)`);
+  check(Math.min(...inicio.map((m) => m.y)) <= suelo - (DOOM_LEVEL_LETHAL - 0.06) * box.h, 'a la altura de la Condena letal');
+  const caminos = [...Array(DOOM_CHAIN_COUNT).keys()].map((i) => doomChainPath(box, i, DOOM_LEVEL_LETHAL));
+  const cerca = (m: { x: number; y: number }) => caminos.some((p) => p.some((q, j) => j > 0 && Math.hypot(q.x - m.x, q.y - m.y) < box.w * 0.08));
+  check(inicio.every(cerca), 'en el mismo sitio que las cadenas persistentes: no hay salto');
+  const ancho = (l: { x: number }[]) => l.reduce((a, m) => a + Math.abs(m.x - cx), 0) / Math.max(1, l.length);
+  check(ancho(eslabones(tA * 0.8)) < ancho(inicio) * 0.8, 'las cadenas se cierran sobre él');
+  // 2. a faceless soul rises out and tries to escape
+  const alma = (t: number) => marcas(t).find((m) => m.kind === 'alma');
+  const primera = [...Array(120).keys()].map((i) => (i / 120) * D).find((t) => !!alma(t));
+  check(primera !== undefined && primera < tA + 0.1, 'el alma sale mientras las cadenas lo aprietan');
+  const sale = alma(primera!)!;
+  check(sale.y > box.y + box.h * 0.2 && sale.y < suelo && Math.abs(sale.x - cx) < box.w * 0.25, 'el alma sale del cuerpo del enemigo');
+  const subida = [...Array(40).keys()].map((i) => alma(primera! + ((tB - primera!) * i) / 39)).filter((m) => !!m) as { x: number; y: number }[];
+  check(Math.min(...subida.map((m) => m.y)) < box.y + box.h * 0.1, 'sube por encima del enemigo intentando escapar');
+  check(Math.max(...subida.map((m) => m.x)) - Math.min(...subida.map((m) => m.x)) >= box.w * 0.15, 'se revuelve a los lados buscando salida');
+  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  let conCara = 0;
+  for (let t = primera!; t < D * 0.9; t += 0.1) {
+    const p = doomSoulPose(box, t / D);
+    if (p.alpha < 0.2 || p.y > suelo - box.h * 0.15) continue;
+    for (const s of spellFrame('almaCondenada', ctx(), t)) {
+      if (Math.hypot(s.x - p.x, s.y - p.y) < p.core * 0.9 && Math.max(...rgb(s.colour)) < 110) conCara++;
     }
-    if (alma.y < enAtrapar.y - box.h * 0.12) sujeta = false;
-    mas = Math.min(mas, alma.y); menos = Math.max(menos, alma.y);
-    if (!Number.isNaN(prevY)) {
-      const dy = alma.y - prevY;
-      if (Math.abs(dy) > 0.05 && prevDy !== 0 && Math.sign(dy) !== Math.sign(prevDy)) cambios++;
-      if (Math.abs(dy) > 0.05) prevDy = dy;
-    }
-    prevY = alma.y;
   }
-  check(pegadas, 'los grilletes se cierran sobre el alma');
-  check(sujeta, 'las cadenas la retienen: el alma no logra ascender');
-  check(cambios >= 2 && menos - mas >= 3, `el alma forcejea hacia arriba (${cambios} tirones, ${Math.round(menos - mas)} px)`);
-  // then it dissolves while chained and the chains crumble away
-  const pFin = soulPose(box, 0.97), pMedio = soulPose(box, (def.phases[0] + def.phases[1]) / 2);
-  check(pMedio.alpha > 0.7 && pFin.alpha < 0.25, `el alma se desvanece al final (${pMedio.alpha.toFixed(2)} → ${pFin.alpha.toFixed(2)})`);
-  check(spellMarks('almaCondenada', ctx(), D * 0.97).every((m) => m.kind !== 'grillete'), 'al final las cadenas ya se han soltado');
-  const trozos = (t: number) => spellMarks('almaCondenada', ctx(), t).filter((m) => m.kind === 'eslabonRoto');
-  const t1 = trozos(tB + (D - tB) * 0.3), t2 = trozos(tB + (D - tB) * 0.7);
-  const ym = (l: { y: number }[]) => l.reduce((a, b) => a + b.y, 0) / Math.max(1, l.length);
-  check(t1.length >= 6 && t2.length > 0 && ym(t2) > ym(t1), `las cadenas se desmoronan en eslabones que caen (${t1.length} trozos)`);
-  // legible at real size: the soul is a big figure over the enemy, not a speck
+  check(conCara === 0, `el alma no tiene cara: nada oscuro sobre su cabeza (${conCara})`);
+  const coloresAlma = new Set(spellFrame('almaCondenada', ctx(), (primera! + tB) / 2).map((s) => s.colour));
+  check(coloresAlma.has('#9fe8ff') && coloresAlma.has('#ffffff'), 'el alma es la misma estela pálida que la del héroe');
+  // 3. the chains latch onto it and drag it down, slowly, into the ground
+  const grilletes = (t: number) => marcas(t).filter((m) => m.kind === 'grillete');
+  const enArrastre = (tB + D) / 2;
+  const pM = doomSoulPose(box, enArrastre / D);
+  check(grilletes(enArrastre).length >= 2 && grilletes(enArrastre).every((g) => Math.hypot(g.x - pM.x, g.y - pM.y) < pM.halo * 2.5),
+    'las cadenas atrapan el alma');
+  check(grilletes(primera!).length === 0, 'al principio aún no la sujetan');
+  const ys: number[] = [];
+  for (let t = tB; t <= D; t += 1 / 30) ys.push(doomSoulPose(box, t / D).y);
+  let tirones = 0;
+  for (let i = 2; i < ys.length; i++) if (ys[i] < ys[i - 1] - 0.3 && ys[i - 1] >= ys[i - 2] - 0.3) tirones++;
+  check(ys[ys.length - 1] >= suelo && ys[0] < suelo - box.h * 0.5, `la arrastran hasta meterla bajo tierra (${Math.round(ys[0])} → ${Math.round(ys[ys.length - 1])})`);
+  check(tirones >= 2, `forcejea hacia arriba mientras la arrastran (${tirones} tirones)`);
+  const llegaSuelo = [...Array(200).keys()].map((i) => tB + ((D - tB) * i) / 199).find((t) => doomSoulPose(box, t / D).y >= suelo);
+  check(llegaSuelo !== undefined && llegaSuelo - tB >= 1.1, `despacio: tarda ${Math.round(((llegaSuelo ?? tB) - tB) * 1000)} ms en hundirse`);
+  check(marcas(enArrastre).some((m) => m.kind === 'grieta' && Math.abs(m.y - suelo) < box.h * 0.08), 'se abre una grieta al inframundo bajo el enemigo');
+  let bajoTierra = 0;
+  for (let t = tB; t <= D; t += 0.05) {
+    for (const s of spellFrame('almaCondenada', ctx(), t)) if ((s.colour === '#9fe8ff' || s.colour === '#d8fff0' || s.colour === '#ffffff') && s.y > suelo + box.h * 0.08) bajoTierra++;
+  }
+  check(bajoTierra === 0, `lo que se hunde bajo tierra deja de verse (${bajoTierra})`);
+  check(doomSoulPose(box, 0.5).alpha > 0.7 && doomSoulPose(box, 0.99).alpha < 0.2, 'el alma se desvanece al final');
+  // legible at real size
   for (const h of [100, 150, 200]) {
     const b = { x: 300, y: 200, w: h * 0.75, h };
-    const p = soulPose(b, (def.phases[0] + def.phases[1]) / 2);
-    check(p.height >= h * 0.5 && p.width >= b.w * 0.35 && p.headR >= Math.max(9, h * 0.09),
-      `el alma se lee a tamaño real sobre un enemigo de ${h} px (alto ${Math.round(p.height)}, ancho ${Math.round(p.width)}, cabeza ${Math.round(p.headR)} px)`);
-    const fr = spellFrame('almaCondenada', ctx(b), (tA + tB) / 2);
-    const cabeza = fr.filter((s) => s.shape === 'disco' && Math.hypot(s.x - p.x, s.y - p.y) < p.headR && s.size >= p.headR * 0.85);
-    const cola = spellMarks('almaCondenada', ctx(b), (tA + tB) / 2).find((m) => m.kind === 'almaCola');
-    check(cabeza.length > 0 && !!cola && cola.y - p.y >= h * 0.4, `y se dibuja así de grande (cabeza y estela de ${Math.round((cola?.y ?? 0) - p.y)} px)`);
+    const p = doomSoulPose(b, (def.phases[0] + def.phases[1]) / 2);
+    check(p.core >= h * 0.055 && p.halo >= h * 0.14, `el alma se lee sobre un enemigo de ${h} px (núcleo ${Math.round(p.core)}, halo ${Math.round(p.halo)} px)`);
+    const cola = marcas((def.phases[0] + def.phases[1]) / 2 * D, b).find((m) => m.kind === 'almaCola');
+    check(!!cola && Math.hypot(cola.x - p.x, cola.y - p.y) >= h * 0.3, `con una estela larga (${Math.round(cola ? Math.hypot(cola.x - p.x, cola.y - p.y) : 0)} px)`);
   }
   // valid, capped, fewer with reduced motion, gone at the end
   let maximo = 0, roto = 0, reducido = 0;
@@ -6351,17 +6556,13 @@ try {
   check(maximo > 60 && maximo <= (def.cap ?? 220) && maximo <= 260, `tiene cuerpo pero con tope (${maximo})`);
   check(reducido < maximo, `con movimiento reducido dibuja menos (${reducido} < ${maximo})`);
   check(spellFrame('almaCondenada', ctx(), D + 0.01).length === 0, 'desaparece al terminar');
-  // violet and dark: pale violet soul, purple-black chains
-  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
-  const cols = spellFrame('almaCondenada', ctx(), (tA + tB) / 2).map((s) => rgb(s.colour));
-  check(cols.some(([R, G, B]) => Math.max(R, G, B) < 60 && B >= G) && cols.some(([R, G, B]) => R > 200 && G > 190 && B > 230),
-    'cadenas negro-violeta y un alma pálida');
-  check(cols.every(([R, G, B]) => B >= G - 4), 'todo en la paleta violeta de la condena');
-  // three dooms at once with a volley in flight still fit the live budget
+  const cadenas = spellFrame('almaCondenada', ctx(), enArrastre).map((s) => rgb(s.colour)).filter(([R, G, B]) => !(G > 200 && B > 230));
+  check(cadenas.length > 10 && cadenas.every(([, G, B]) => B >= G - 4) && cadenas.some(([R, G, B]) => Math.max(R, G, B) < 60), 'cadenas y grieta en la paleta violeta de la condena');
+  // three dooms at once still fit the live budget
   const sys = new SpellSystem();
   for (let i = 0; i < 3; i++) sys.add('almaCondenada', { ...ctx({ x: 300 + i * 180, y: 200, w: 140, h: 180 }), seed: i + 1 }, i * 0.1);
   let pico = 0;
-  for (let t = 0; t < 2; t += 1 / 30) pico = Math.max(pico, sys.frame(t).length);
+  for (let t = 0; t < D + 0.3; t += 1 / 30) pico = Math.max(pico, sys.frame(t).length);
   check(pico <= MAX_LIVE_SPRITES * 0.75, `tres almas condenadas a la vez caben en el tope (${pico})`);
 } catch (e) {
   check(false, `las pruebas del alma condenada revientan: ${(e as Error).stack ?? e}`);

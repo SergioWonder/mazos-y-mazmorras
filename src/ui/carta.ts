@@ -71,7 +71,7 @@ const CLAVES_EXTRA: Array<Clave & { test: (def: CartaDef, txt: string) => boolea
   { test: (d, t) => d.alTopeDelMazo === true || t.includes('lo alto de tu mazo'), icono: '🔁', nombre: 'Vuelve a lo alto del mazo',
     desc: 'Al jugarse no va al descarte: vuelve a lo alto de tu pila de robo, así que la robarás en tu próximo turno. Aguanta incluso el Rayo Áureo del Contemplador.' },
   { test: (_d, t) => t.includes('agathys') || t.includes('daño que bloquees'), icono: '🩸', nombre: 'Armadura de Agathys',
-    desc: 'Este turno, cada punto de daño que absorba tu bloqueo se devuelve a TODOS los enemigos. Cuanto más bloqueo acumules y más te peguen, más devuelves.' },
+    desc: 'Este turno, cada punto de daño que absorba tu bloqueo se devuelve al enemigo que te golpea (con Blindaje Infernal, a TODOS los enemigos). Cuanto más bloqueo acumules y más te peguen, más devuelves.' },
   { test: (_d, t) => t.includes('no pretende atacar') || t.includes('intención'), icono: '🎭', nombre: 'Intención',
     desc: 'Lo que el enemigo hará en su turno (el icono sobre su cabeza). Varios ataques del pícaro golpean más fuerte si el enemigo no pretende atacar (defenderse, potenciarse, quedarse desconcertado o perder el turno). Cambiazo le fuerza una intención sin ataque.' },
 ];

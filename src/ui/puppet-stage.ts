@@ -239,6 +239,8 @@ export interface GpuView {
   echoes: boolean;
   /** Holy flames in screen CSS px: painted behind the figure, `front` ones over it. */
   flames: FlameSprite[] | null;
+  /** Other sprites wrapped round the figure (Doom's chains), same convention, one plain pass. */
+  overlay?: FlameSprite[] | null;
   frame: GpuFrame | null;
   visible: boolean;
 }
@@ -366,6 +368,9 @@ export class PuppetStage {
     const flames = v.flames ?? [];
     const behind = flames.filter((s) => !s.front), inFront = flames.filter((s) => s.front);
     if (behind.length) this.drawFlames(behind, cw, ch);
+    const overlay = v.overlay ?? [];
+    const under = overlay.filter((s) => !s.front), over = overlay.filter((s) => s.front);
+    if (under.length) this.drawFlames(under, cw, ch, true);
 
     gl.useProgram(this.piece);
     gl.activeTexture(gl.TEXTURE0);
@@ -443,6 +448,7 @@ export class PuppetStage {
     }
 
     if (inFront.length) this.drawFlames(inFront, cw, ch);
+    if (over.length) this.drawFlames(over, cw, ch, true);
 
     // attack effects
     const g = f.geo;
@@ -467,8 +473,10 @@ export class PuppetStage {
     }
   }
 
-  /** Holy flames (and any sprite list) in this stage's GL context, then back to the puppet state. */
-  private drawFlames(list: Sprite[], cw: number, ch: number) {
+  /** Holy flames (and any sprite list) in this stage's GL context, then back to the puppet state.
+   *  `plain`: a single covering pass, for lists with dark normal-blended pieces (chain links)
+   *  that the second, additive pass would darken twice. */
+  private drawFlames(list: Sprite[], cw: number, ch: number, plain = false) {
     const gl = this.gl;
     if (this.flameBroken) return;
     try {
@@ -482,7 +490,7 @@ export class PuppetStage {
     // has not written alpha, clipping the flames to a band around the silhouette. A second,
     // additive pass then brightens them like light, now over pixels that do have alpha.
     this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top, 1);
-    this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top, 0);
+    if (!plain) this.flameBatch.draw(list, cw, ch, this.dpr, this.origin.left, this.origin.top, 0);
     gl.bindVertexArray(this.quad);
     gl.useProgram(this.piece);
   }

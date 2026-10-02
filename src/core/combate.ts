@@ -1058,8 +1058,10 @@ export class Combate {
         if (obj !== this.jugador && this.jugador.vivo) await this.ganchos((r, c) => r.alMatar?.(c, e));
       }
     }
-    // Armadura de Agathys (brujo): lo que tu bloqueo absorbe se devuelve a TODOS
-    if (obj === this.jugador && absorbido > 0 && (this.jugador.estados.agathys ?? 0) > 0) {
+    // Armadura de Agathys (brujo): lo que tu bloqueo absorbe vuelve a quien te golpea;
+    // Blindaje Infernal, a TODOS
+    const est = this.jugador.estados;
+    if (obj === this.jugador && absorbido > 0 && ((est.agathys ?? 0) > 0 || (est.agathysArea ?? 0) > 0)) {
       await this.rebotarAgathys(absorbido);
     }
     await this.comprobarFin();
@@ -1129,15 +1131,23 @@ export class Combate {
     }
   }
 
-  /** Devuelve `n` de daño a todos los enemigos vivos (Armadura de Agathys).
-   *  El flag evita reentrar si el rebote mata y desencadena más daño. */
+  /** Enemy whose attack is hitting the player right now (Armor of Agathys hits it back). */
+  private atacanteActual: EnemigoCombate | null = null;
+
+  /** Devuelve `n` de daño: al atacante (Armadura de Agathys) o a todos los enemigos vivos
+   *  (Blindaje Infernal). El flag evita reentrar si el rebote mata y desencadena más daño. */
   private rebotandoAgathys = false;
   private async rebotarAgathys(n: number) {
     if (this.rebotandoAgathys || n <= 0) return;
+    const enArea = (this.jugador.estados.agathysArea ?? 0) > 0;
+    const blancos = enArea
+      ? this.enemigos.filter((x) => x.vivo)
+      : this.atacanteActual?.vivo ? [this.atacanteActual] : [];
+    if (blancos.length === 0) return;
     this.rebotandoAgathys = true;
     try {
-      await this.ui.fxMensaje(`🩸 Armadura de Agathys: ${n} a todos`);
-      for (const e of this.enemigos.filter((x) => x.vivo)) {
+      await this.ui.fxMensaje(enArea ? `🩸 Blindaje Infernal: ${n} a todos` : `🩸 Armadura de Agathys: ${n} a ${blancos[0].nombre}`);
+      for (const e of blancos) {
         if (this.terminado) break;
         await this.infligir(e, n, 'agathys');
       }
@@ -1827,6 +1837,7 @@ export class Combate {
 
     // Armadura de Agathys y las mejoras de un solo turno de la Explosión
     delete j.estados.agathys;
+    delete j.estados.agathysArea;
     delete j.estados.explosionTurno;
 
     // Furia del bárbaro: se rompe si la ronda acaba sin recibir daño real
@@ -1928,7 +1939,13 @@ export class Combate {
         const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
         const bloqueoAntes = this.jugador.bloqueo;
         // piercing hits go through the block without breaking it
-        const real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+        this.atacanteActual = e;
+        let real = 0;
+        try {
+          real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+        } finally {
+          this.atacanteActual = null;
+        }
         if (real > 0) atraveso = true;
         // Vampiric: it heals part of the damage that got through
         const sorbo = Math.floor(real * (e.def.vampirico ?? 0));

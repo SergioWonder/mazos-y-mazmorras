@@ -1,7 +1,9 @@
 // Pure helpers for the WebGL puppet renderer (no DOM, testable in node): colour
 // maths, the per-piece data texture layout and the viewBox → pixel transform.
 
-import { CHAIN_BONES, CHAIN_SLOTS, EMISSIVE, EYES, type BoneId, type Matrix, type PuppetRig, type Shape } from './puppet.ts';
+import {
+  CHAIN_BONES, CHAIN_SLOTS, EMISSIVE, EYES, applyMatrix, puppetBones, puppetPose, type BoneId, type Matrix, type PuppetRig, type Shape,
+} from './puppet.ts';
 
 /** Texels (RGBA32F) per piece row in the data texture. */
 export const PIECE_TEXELS = 14;
@@ -121,3 +123,40 @@ export const multiply = (m: Matrix, n: Matrix): Matrix => [
   m[0] * n[2] + m[2] * n[3], m[1] * n[2] + m[3] * n[3],
   m[0] * n[4] + m[2] * n[5] + m[4], m[1] * n[4] + m[3] * n[5] + m[5],
 ];
+
+/** Bones of the body proper: no weapon, cape, wings or hanging chains. */
+const BODY_BONES: BoneId[] = ['legB', 'legF', 'torso', 'armB', 'offhand', 'armF', 'head'];
+/** Ground line of every sprite (the feet the art scale pivots on), viewBox units. */
+const GROUND_Y = 129;
+const bounds = new WeakMap<PuppetRig, { x0: number; y0: number; x1: number; y1: number }>();
+
+/** Bounds of the figure's body in its idle pose (viewBox units before the art scale), down
+ *  to the ground line: what effects that wrap the figure (Doom's chains) hug. */
+export function bodyBounds(rig: PuppetRig): { x0: number; y0: number; x1: number; y1: number } {
+  const cached = bounds.get(rig);
+  if (cached) return cached;
+  const bones = puppetBones(rig, puppetPose(rig, 0, null).p);
+  const inked = rig.shapes.filter((s) => s.k !== 'ink');
+  const body = inked.filter((s) => BODY_BONES.includes(s.b));
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const s of body.length ? body : inked) {
+    const pts: [number, number][] = s.t === 'p' ? s.pts
+      : s.t === 'l' ? [[s.x1 - s.w / 2, s.y1 - s.w / 2], [s.x2 + s.w / 2, s.y2 + s.w / 2], [s.x1 + s.w / 2, s.y1 + s.w / 2], [s.x2 - s.w / 2, s.y2 - s.w / 2]]
+        : s.t === 'c' ? [[s.x - s.r, s.y - s.r], [s.x + s.r, s.y + s.r]] : [[s.x - s.rx, s.y - s.ry], [s.x + s.rx, s.y + s.ry]];
+    for (const [px, py] of pts) {
+      const [x, y] = applyMatrix(bones[s.b], px, py);
+      x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y);
+    }
+  }
+  const out = Number.isFinite(x0 + x1 + y0 + y1) ? { x0, y0, x1, y1: Math.max(y1, GROUND_Y) } : { x0: 30, y0: 20, x1: 90, y1: GROUND_Y };
+  out.y1 = Math.min(out.y1, GROUND_Y + 2);
+  bounds.set(rig, out);
+  return out;
+}
+
+/** Screen box (left, top, width, height) of the body of a sprite drawn in `rect`. */
+export function bodyScreenBox(rig: PuppetRig, rect: { x: number; y: number; w: number }, mirrored: boolean): { x: number; y: number; w: number; h: number } {
+  const b = bodyBounds(rig), M = spriteMatrix(rect, mirrored, rig.art ?? 1);
+  const [ax, ay] = applyMatrix(M, b.x0, b.y0), [bx, by] = applyMatrix(M, b.x1, b.y1);
+  return { x: Math.min(ax, bx), y: Math.min(ay, by), w: Math.abs(bx - ax), h: Math.abs(by - ay) };
+}
