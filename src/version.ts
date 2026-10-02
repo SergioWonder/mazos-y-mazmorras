@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.4.2';
+export const VERSION = '8.5.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.5.0',
+    fecha: '2026-10-02',
+    cambios: [
+      '⛓️ Quien muere por Condena suelta su alma… y unas cadenas espectrales la arrastran hacia abajo hasta que se deshace.',
+      '🟣 La Explosión Sobrenatural es ahora un proyectil de energía oscura, morado y negro con destellos blancos, que serpentea como el Proyectil Mágico pero mucho más grueso.',
+      '💀 Cuando un ataque en área o de varios golpes mata a un enemigo, el resto del ataque sigue sin esperar: los enemigos caen a la vez.',
+      '📱 En el móvil apaisado la pirámide de espacios de conjuro va junto al orbe de energía y es más pequeña, para que quepa entera.',
+    ],
+  },
   {
     version: '8.4.2',
     fecha: '2026-10-02',

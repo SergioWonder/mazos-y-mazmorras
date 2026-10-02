@@ -6127,6 +6127,237 @@ try {
   check(false, `las pruebas de Proyectil Mágico revientan: ${(e as Error).stack ?? e}`);
 }
 
+// ── Eldritch Blast: a thick dart of dark energy along Magic Missile's routes ──
+console.log('\n🟣 Explosión Sobrenatural: proyectil de energía oscura en ráfaga');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const cs = await import('../src/fx/card-spells.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, MAX_LIVE_SPRITES } = sf;
+  const { CARD_FX, cardSpellKey, hitSpell, volleyTiming } = cs;
+  const carta = BRUJO.find((d) => d.id === 'explosion-sobrenatural')!;
+  const k = cardSpellKey(carta.id, carta.fx);
+  const kM = cardSpellKey('proyectil-magico', 'estrellas');
+  const def = SPELLS[k], defM = SPELLS[kM];
+  check(!!CARD_FX[carta.id] && !!def && k === 'carta:explosion-sobrenatural', 'Explosión Sobrenatural tiene su propio proyectil');
+  check(cardSpellKey('explosion-sobrenatural', 'abisal') === k && hitSpell({ id: carta.id, fx: 'abisal' }, 'abisal') === k,
+    'cada golpe «abisal» de la Explosión lanza su proyectil');
+  check(hitSpell({ id: 'sacudida-abisal', fx: 'abisal' }, 'abisal') === 'abisal' && hitSpell(null, 'abisal') === 'abisal',
+    'el resto de golpes abisales conservan su grieta');
+  check(!!def && def.anchor === 'target' && def.build !== SPELLS.abisal.build && def.build !== defM.build,
+    'el proyectil se dibuja sobre el objetivo con su propia composición');
+  const firmasOtras = new Set(Object.keys(SPELLS).filter((x) => x !== k).map((x) => spellSignature(x)));
+  check(!firmasOtras.has(spellSignature(k)), 'el proyectil oscuro se ve distinto de los demás efectos (también del Proyectil Mágico)');
+  check(def.duration >= 0.4 && def.duration <= 1.4 && def.phases[0] < def.phases[1] && def.phases[1] < 1,
+    `dura entre 0,4 y 1,4 s y va vuelo < impacto < disipación (${def.duration})`);
+  // same volley rhythm as Magic Missile: numbers wait for each impact
+  const r = volleyTiming(k, false), rM = volleyTiming(kM, false), rr = volleyTiming(k, true);
+  check(!!r && !!rM && r.impactMs === rM.impactMs && r.gapMs === rM.gapMs, `sale en ráfaga con el ritmo del Proyectil Mágico (${r?.impactMs} ms de vuelo, ${r?.gapMs} ms entre golpes)`);
+  check(!!rr && !!r && rr.gapMs > r.gapMs, 'con movimiento reducido los golpes se espacian');
+  check(volleyTiming('abisal', false) === null, 'la grieta abisal genérica conserva su ritmo');
+  const vuelo = def.phases[0] * def.duration;
+  // the same route: the head follows Magic Missile's path exactly, lane by lane
+  const box = { x: 620, y: 180, w: 150, h: 200 }, from = { x: 180, y: 330 }, view = { w: 800, h: 450 };
+  const ctx = (seed: number, lane?: number, b = box) => ({ box: b, from, facing: -1 as const, seed, lane, view });
+  let igual = 0, total = 0;
+  for (let s = 1; s <= 12; s++) {
+    for (let t = 0.02; t < vuelo; t += vuelo / 20) {
+      const a = spellMarks(k, ctx(s, s % 5), t).find((q) => q.kind === 'dardo');
+      const b2 = spellMarks(kM, ctx(s, s % 5), t).find((q) => q.kind === 'dardo');
+      total++;
+      if (a && b2 && Math.hypot(a.x - b2.x, a.y - b2.y) < 0.5) igual++;
+    }
+  }
+  check(total > 0 && igual === total, `sigue la misma ruta serpenteante que el Proyectil Mágico (${igual}/${total})`);
+  let dentro = 0;
+  for (let s = 1; s <= 12; s++) {
+    const imp = spellMarks(k, ctx(s, s % 5), vuelo + 0.01).find((m) => m.kind === 'impacto');
+    if (imp && imp.x >= box.x && imp.x <= box.x + box.w && imp.y >= box.y && imp.y <= box.y + box.h) dentro++;
+  }
+  check(dentro === 12, `impacta dentro de la caja del objetivo al final del vuelo (${dentro}/12)`);
+  // thicker than the magic missile: bolder trail and core
+  const grosor = (key: string) => {
+    let max = 0, nucleo = 0;
+    for (let t = vuelo * 0.3; t < vuelo * 0.9; t += vuelo / 12) {
+      for (const sp of spellFrame(key, ctx(3, 0), t)) {
+        if (sp.shape === 'capsula') max = Math.max(max, sp.size);
+        if (sp.shape === 'capsula' && !sp.glow) nucleo = Math.max(nucleo, sp.size);
+      }
+    }
+    return { max, nucleo };
+  };
+  const gB = grosor(k), gM = grosor(kM);
+  check(gB.max >= gM.max * 1.8, `la estela es mucho más gruesa que la del Proyectil Mágico (${gB.max.toFixed(1)} vs ${gM.max.toFixed(1)} px)`);
+  check(gB.nucleo >= gM.nucleo * 2, `el núcleo también es más grueso (${gB.nucleo.toFixed(1)} vs ${gM.nucleo.toFixed(1)} px)`);
+  // dark energy: purple and black, with some white flashes
+  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  let violeta = 0, negro = 0, blanco = 0, otros = 0;
+  for (let t = 0; t <= def.duration; t += 1 / 30) {
+    for (const sp of spellFrame(k, ctx(5, 1), t)) {
+      const [R, G, B] = rgb(sp.colour);
+      if (R > 235 && G > 235 && B > 235) blanco++;
+      else if (Math.max(R, G, B) < 70) negro++;
+      else if (B >= G + 40 && R >= G) violeta++;
+      else otros++;
+    }
+  }
+  check(violeta > 0 && negro > 0 && blanco > 0, `violeta, negro y destellos blancos (${violeta} violeta, ${negro} negro, ${blanco} blanco)`);
+  check(otros <= (violeta + negro + blanco) * 0.05, `sin colores ajenos a la energía oscura (${otros})`);
+  // budget: a volley of five fits easily; reduced motion draws less
+  let maximo = 0, roto = 0, reducido = 0, rafaga = 0;
+  for (let t = 0; t <= def.duration; t += 1 / 60) {
+    const fr = spellFrame(k, ctx(4, 2), t);
+    maximo = Math.max(maximo, fr.length);
+    reducido = Math.max(reducido, spellFrame(k, { ...ctx(4, 2), reduced: true }, t).length);
+    for (const s of fr) if (![s.x, s.y, s.size, s.angle, s.alpha ?? 1, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || s.size <= 0 || (s.alpha ?? 1) > 1) roto++;
+  }
+  for (let t = 0; t <= def.duration + 0.8; t += 1 / 60) {
+    let s = 0;
+    for (let i = 0; i < 5; i++) s += spellFrame(k, ctx(i + 1, i), t - (i * (r?.gapMs ?? 150)) / 1000).length;
+    rafaga = Math.max(rafaga, s);
+  }
+  check(roto === 0, `solo dibuja elementos válidos (${roto} rotos)`);
+  check(maximo > 20 && maximo <= (def.cap ?? 0) && maximo <= 140, `pocas partículas por proyectil (${maximo} ≤ ${def.cap})`);
+  check(reducido < maximo, `con movimiento reducido dibuja menos (${reducido} < ${maximo})`);
+  check(rafaga <= MAX_LIVE_SPRITES / 2, `una ráfaga de cinco proyectiles cabe de sobra en el tope (${rafaga})`);
+  check(spellFrame(k, ctx(4), def.duration + 0.01).length === 0, 'el proyectil desaparece al terminar');
+  // on screen also on phones
+  const escenas = [
+    { nombre: 'móvil apaisado', view: { w: 640, h: 300 }, from: { x: 80, y: 200 }, box: { x: 520, y: 40, w: 100, h: 130 } },
+    { nombre: 'móvil vertical', view: { w: 390, h: 760 }, from: { x: 70, y: 470 }, box: { x: 250, y: 300, w: 120, h: 160 } },
+  ];
+  for (const e of escenas) {
+    let fuera = 0;
+    for (let sd = 1; sd <= 20; sd++) for (let t = 0; t <= def.duration; t += 1 / 60) {
+      for (const sp of spellFrame(k, { box: e.box, from: e.from, facing: -1, seed: sd, lane: sd % 5, view: e.view }, t)) {
+        if (sp.shape === 'disco' && sp.size > 10) continue;
+        if (sp.x < 0 || sp.x > e.view.w || sp.y < 0 || sp.y > e.view.h) fuera++;
+      }
+    }
+    check(fuera === 0, `el proyectil no se sale de la pantalla (${e.nombre}: ${fuera} fuera)`);
+  }
+  // in a real fight: every hit of a repeated or area Blast is an «abisal» hit that draws the dart
+  const muneco: EnemigoDef = { id: 'muneco-rafaga', nombre: 'Muñeco', arte: '🎯', pv: [300, 300], ia: () => ({ nombre: 'Esperar', intencion: 'desconocido' }) };
+  const golpesDe = async (estados: Record<string, number>, n: number) => {
+    const golpes: string[] = [];
+    const ui: Presentador = { ...uiSilenciosa, fxGolpe: async (obj, _d, fx) => { if (obj !== comb.jugador) golpes.push(hitSpell({ id: carta.id, fx: carta.fx }, fx ?? '')); } };
+    const run = nuevaRun('brujo', 7070);
+    run.reliquias = [];
+    const comb = new Combate(run, Array(n).fill(muneco), crearRng(7070), ui);
+    await comb.iniciar();
+    Object.assign(comb.jugador.estados, estados);
+    const inst = instanciar(carta);
+    comb.jugador.mano = [inst];
+    comb.jugador.energia = 3;
+    await comb.jugarCarta(inst, comb.enemigos[0]);
+    return golpes;
+  };
+  const tres = await golpesDe({ explosionVeces: 2 }, 1);
+  check(tres.length === 3 && tres.every((x) => x === k), `con dos golpes extra salen tres proyectiles en ráfaga (${tres.length})`);
+  const area = await golpesDe({ explosionArea: 1 }, 3);
+  check(area.length === 3 && area.every((x) => x === k), `en área sale un proyectil hacia cada enemigo (${area.length})`);
+  const { prodigiousPool } = await import('../src/ui/prodigious-fx.ts');
+  check((['basic', 'rare', 'unique', 'dm'] as const).every((t) => !prodigiousPool(t).includes(k)), 'el Conjuro Prodigioso no saca el proyectil de la Explosión');
+} catch (e) {
+  check(false, `las pruebas del proyectil de la Explosión Sobrenatural revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Death by Doom: the soul tries to rise, spectral chains hold it down ──────
+console.log('\n⛓️ Muerte por Condena: el alma encadenada');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  await import('../src/fx/card-spells.ts');
+  const { SPELLS, spellFrame, spellMarks, spellSignature, soulPose, MAX_LIVE_SPRITES, SpellSystem } = sf;
+  const def = SPELLS.almaCondenada;
+  check(!!def, 'la muerte por Condena tiene su efecto propio («almaCondenada»)');
+  check(def.anchor === 'target', 'se dibuja sobre el enemigo que muere');
+  check(def.duration >= 1.2 && def.duration <= 1.6, `dura entre 1,2 y 1,6 s (${def.duration})`);
+  check(def.phases[0] > 0 && def.phases[0] < def.phases[1] && def.phases[1] < 1, 'el alma sale < las cadenas la atrapan < se disuelve');
+  const otras = Object.keys(SPELLS).filter((x) => x !== 'almaCondenada');
+  check(otras.every((x) => SPELLS[x].build !== def.build), 'se compone con su propia función');
+  check(!new Set(otras.map((x) => spellSignature(x))).has(spellSignature('almaCondenada')), 'se ve distinta de los demás efectos (también de «muerte» y «condena»)');
+  const box = { x: 600, y: 200, w: 140, h: 180 };
+  const ctx = (b = box, seed = 7) => ({ box: b, from: { x: 200, y: 300 }, facing: -1 as const, seed });
+  const D = def.duration, tA = def.phases[0] * D, tB = def.phases[1] * D;
+  const almaEn = (t: number, b = box) => spellMarks('almaCondenada', ctx(b), t).find((m) => m.kind === 'alma');
+  // the soul leaves the body and rises
+  const inicio = almaEn(0.06)!, enAtrapar = almaEn(tA)!;
+  check(!!inicio && inicio.y > box.y + box.h * 0.25 && inicio.y < box.y + box.h && Math.abs(inicio.x - (box.x + box.w / 2)) < box.w * 0.25,
+    'el alma sale del cuerpo del enemigo');
+  check(!!enAtrapar && enAtrapar.y < inicio.y - box.h * 0.15, `el alma asciende antes de que la atrapen (${Math.round(inicio?.y ?? 0)} → ${Math.round(enAtrapar?.y ?? 0)})`);
+  // chains: from the ground or the sides, they latch onto the soul
+  const anclas = spellMarks('almaCondenada', ctx(), (tA + tB) / 2).filter((m) => m.kind === 'anclaCadena');
+  check(anclas.length >= 3, `varias cadenas la sujetan (${anclas.length})`);
+  check(anclas.every((a) => a.y >= box.y + box.h * 0.85 || a.x <= box.x || a.x >= box.x + box.w), 'las cadenas salen del suelo o de los lados');
+  const primerGrillete = [...Array(200).keys()].map((i) => (i / 200) * D).find((t) => spellMarks('almaCondenada', ctx(), t).some((m) => m.kind === 'grillete'));
+  check(primerGrillete !== undefined && primerGrillete >= D * 0.12 && primerGrillete <= tA + 0.05,
+    `las cadenas atrapan al alma cuando ya sube (${Math.round((primerGrillete ?? 0) * 1000)} ms)`);
+  let pegadas = true, sujeta = true, mas = Infinity, menos = -Infinity, cambios = 0, prevDy = 0, prevY = NaN;
+  for (let t = tA + 0.02; t <= tB; t += 1 / 60) {
+    const marcas = spellMarks('almaCondenada', ctx(), t);
+    const alma = marcas.find((m) => m.kind === 'alma')!;
+    const pose = soulPose(box, t / D);
+    for (const gr of marcas.filter((m) => m.kind === 'grillete')) {
+      if (Math.abs(gr.x - pose.x) > pose.width * 0.8 || gr.y < pose.y - pose.headR * 1.5 || gr.y > pose.y + pose.height) pegadas = false;
+    }
+    if (alma.y < enAtrapar.y - box.h * 0.12) sujeta = false;
+    mas = Math.min(mas, alma.y); menos = Math.max(menos, alma.y);
+    if (!Number.isNaN(prevY)) {
+      const dy = alma.y - prevY;
+      if (Math.abs(dy) > 0.05 && prevDy !== 0 && Math.sign(dy) !== Math.sign(prevDy)) cambios++;
+      if (Math.abs(dy) > 0.05) prevDy = dy;
+    }
+    prevY = alma.y;
+  }
+  check(pegadas, 'los grilletes se cierran sobre el alma');
+  check(sujeta, 'las cadenas la retienen: el alma no logra ascender');
+  check(cambios >= 2 && menos - mas >= 3, `el alma forcejea hacia arriba (${cambios} tirones, ${Math.round(menos - mas)} px)`);
+  // then it dissolves while chained and the chains crumble away
+  const pFin = soulPose(box, 0.97), pMedio = soulPose(box, (def.phases[0] + def.phases[1]) / 2);
+  check(pMedio.alpha > 0.7 && pFin.alpha < 0.25, `el alma se desvanece al final (${pMedio.alpha.toFixed(2)} → ${pFin.alpha.toFixed(2)})`);
+  check(spellMarks('almaCondenada', ctx(), D * 0.97).every((m) => m.kind !== 'grillete'), 'al final las cadenas ya se han soltado');
+  const trozos = (t: number) => spellMarks('almaCondenada', ctx(), t).filter((m) => m.kind === 'eslabonRoto');
+  const t1 = trozos(tB + (D - tB) * 0.3), t2 = trozos(tB + (D - tB) * 0.7);
+  const ym = (l: { y: number }[]) => l.reduce((a, b) => a + b.y, 0) / Math.max(1, l.length);
+  check(t1.length >= 6 && t2.length > 0 && ym(t2) > ym(t1), `las cadenas se desmoronan en eslabones que caen (${t1.length} trozos)`);
+  // legible at real size: the soul is a big figure over the enemy, not a speck
+  for (const h of [100, 150, 200]) {
+    const b = { x: 300, y: 200, w: h * 0.75, h };
+    const p = soulPose(b, (def.phases[0] + def.phases[1]) / 2);
+    check(p.height >= h * 0.5 && p.width >= b.w * 0.35 && p.headR >= Math.max(9, h * 0.09),
+      `el alma se lee a tamaño real sobre un enemigo de ${h} px (alto ${Math.round(p.height)}, ancho ${Math.round(p.width)}, cabeza ${Math.round(p.headR)} px)`);
+    const fr = spellFrame('almaCondenada', ctx(b), (tA + tB) / 2);
+    const cabeza = fr.filter((s) => s.shape === 'disco' && Math.hypot(s.x - p.x, s.y - p.y) < p.headR && s.size >= p.headR * 0.85);
+    const cola = spellMarks('almaCondenada', ctx(b), (tA + tB) / 2).find((m) => m.kind === 'almaCola');
+    check(cabeza.length > 0 && !!cola && cola.y - p.y >= h * 0.4, `y se dibuja así de grande (cabeza y estela de ${Math.round((cola?.y ?? 0) - p.y)} px)`);
+  }
+  // valid, capped, fewer with reduced motion, gone at the end
+  let maximo = 0, roto = 0, reducido = 0;
+  for (let t = 0; t <= D; t += 1 / 30) {
+    const fr = spellFrame('almaCondenada', ctx(), t);
+    maximo = Math.max(maximo, fr.length);
+    reducido = Math.max(reducido, spellFrame('almaCondenada', { ...ctx(), reduced: true }, t).length);
+    for (const s of fr) if (![s.x, s.y, s.size, s.angle, s.alpha ?? 1, s.stretch ?? 1, s.param ?? 0].every(Number.isFinite) || s.size <= 0 || (s.alpha ?? 1) > 1) roto++;
+  }
+  check(roto === 0, `solo dibuja elementos válidos (${roto} rotos)`);
+  check(maximo > 60 && maximo <= (def.cap ?? 220) && maximo <= 260, `tiene cuerpo pero con tope (${maximo})`);
+  check(reducido < maximo, `con movimiento reducido dibuja menos (${reducido} < ${maximo})`);
+  check(spellFrame('almaCondenada', ctx(), D + 0.01).length === 0, 'desaparece al terminar');
+  // violet and dark: pale violet soul, purple-black chains
+  const rgb = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const cols = spellFrame('almaCondenada', ctx(), (tA + tB) / 2).map((s) => rgb(s.colour));
+  check(cols.some(([R, G, B]) => Math.max(R, G, B) < 60 && B >= G) && cols.some(([R, G, B]) => R > 200 && G > 190 && B > 230),
+    'cadenas negro-violeta y un alma pálida');
+  check(cols.every(([R, G, B]) => B >= G - 4), 'todo en la paleta violeta de la condena');
+  // three dooms at once with a volley in flight still fit the live budget
+  const sys = new SpellSystem();
+  for (let i = 0; i < 3; i++) sys.add('almaCondenada', { ...ctx({ x: 300 + i * 180, y: 200, w: 140, h: 180 }), seed: i + 1 }, i * 0.1);
+  let pico = 0;
+  for (let t = 0; t < 2; t += 1 / 30) pico = Math.max(pico, sys.frame(t).length);
+  check(pico <= MAX_LIVE_SPRITES * 0.75, `tres almas condenadas a la vez caben en el tope (${pico})`);
+} catch (e) {
+  check(false, `las pruebas del alma condenada revientan: ${(e as Error).stack ?? e}`);
+}
+
 // ── Actions blend in and out of the idle breathing (no pop at the edges) ─────
 console.log('\n🫁 Transición suave entre reposo y acción');
 {
@@ -8521,6 +8752,69 @@ console.log('\n🗺️ Discursos según el mapa');
   const main = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
   check(/pantallaBendicion\(run, rng, 'entreActos', siguiente\)[\s\S]*avanzarCapitulo\(run, rng, siguiente\)/.test(main),
     'el mapa del acto siguiente se sortea antes de Síbila y es el mismo que se juega');
+}
+
+// ── Phones in landscape: the spell pyramid fits in the 88 px hand strip ─────
+console.log('\n📱 Pirámide de conjuros en el móvil');
+{
+  const fs = await import('node:fs');
+  const movil = fs.readFileSync(new URL('../src/estilos/movil.css', import.meta.url), 'utf8');
+  const apaisado = [...movil.matchAll(/@media \(orientation: landscape\) and \(max-height: 540px\) \{([\s\S]*?)\n\}/g)].map((m) => m[1]).join('\n');
+  check(/\.energia\s*\{[^}]*flex-direction:\s*row/.test(apaisado), 'en el móvil apaisado la pirámide va al lado del orbe, no debajo');
+  const tam = (sel: string) => Number(new RegExp(`${sel.replace('.', '\\.')}\\s*\\{[^}]*font-size:\\s*([\\d.]+)rem`).exec(apaisado)?.[1] ?? 99);
+  check(tam('.espacio.nivel-3') <= 1.3 && tam('.espacio.nivel-2') <= 1.15 && tam('.espacio') <= 1,
+    'y sus espacios son más pequeños, para que la pirámide entera quepa en la franja de la mano');
+}
+
+// ── Deaths in parallel: a kill does not hold up the rest of an area or multi-hit ──
+console.log('\n💀 Muertes en paralelo');
+{
+  const { DeathQueue } = await import('../src/ui/death-queue.ts');
+  const q = new DeathQueue();
+  const fin: string[] = [];
+  const t0 = performance.now();
+  q.start('a', 40, () => fin.push('a'));
+  q.start('b', 20, () => fin.push('b'));
+  check(q.dying('a') && q.dying('b') && fin.length === 0, 'dos enemigos pueden estar muriendo a la vez');
+  check(q.elapsed('a') >= 0 && q.elapsed('a') < 40 && q.elapsed('zz') === 0, 'se sabe cuánto lleva cada muerte (para retomar su animación)');
+  await q.wait('b');
+  check(fin.join('') === 'b' && q.dying('a') && !q.dying('b'), 'esperar una muerte no espera a las demás');
+  await q.settle();
+  check(fin.join('') === 'ba' && !q.dying('a') && performance.now() - t0 >= 38, 'asentar espera a que terminen todas las muertes');
+  await q.wait('nadie');
+  check(true, 'esperar a quien no está muriendo termina al instante');
+
+  // the engine names the cause of death and waits for a body to fall before another takes its slot
+  const registro: string[] = [];
+  const ui: Presentador = {
+    ...uiSilenciosa,
+    fxMuerte: async (e: EnemigoCombate, causa?: string) => { registro.push(`muere:${e.def.id}:${causa ?? ''}`); },
+    fxEsperarMuerte: async (e: EnemigoCombate) => { registro.push(`espera:${e.def.id}`); },
+    fxMensaje: async (t: string) => { if (/se alza/.test(t)) registro.push('alza'); },
+  } as Presentador;
+  const run = nuevaRun('brujo', 77);
+  run.reliquias = [];
+  const comb = new Combate(run, [HERALDO_CULTO], crearRng(77), ui);
+  await comb.iniciar();
+  const [heraldo] = comb.enemigos;
+  heraldo.estados.condena = 999;
+  await comb.infligir(heraldo, heraldo.pv, 'condena', true, true);
+  check(registro[0] === 'muere:heraldo-culto:condena', `la muerte por Condena llega a la interfaz con su causa (${registro[0]})`);
+  check(registro.indexOf('espera:heraldo-culto') > 0 && registro.indexOf('espera:heraldo-culto') < registro.indexOf('alza'),
+    'Abaddon no ocupa el hueco de Malachar hasta que este termina de caer');
+  const run2 = nuevaRun('brujo', 78);
+  run2.reliquias = [];
+  const comb2 = new Combate(run2, [SENOR_CRIPTA], crearRng(78), ui);
+  await comb2.iniciar();
+  registro.length = 0;
+  await comb2.infligir(comb2.enemigos[0], 999);
+  check(registro[0] === 'muere:senor-cripta:' && registro[1] === 'espera:senor-cripta',
+    "la filacteria no ocupa el sitio de Vol'guth hasta que su cuerpo termina de caer");
+  const fs = await import('node:fs');
+  const uiComb = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  const muerte = /async fxMuerte\(e, causa\) \{([\s\S]*?)\n      \},/.exec(uiComb)?.[1] ?? '';
+  check(/causa === 'condena'/.test(muerte) && /fx\.hechizo\('almaCondenada'/.test(muerte),
+    'quien muere por Condena suelta su alma, y unas cadenas la retienen hasta que se deshace');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

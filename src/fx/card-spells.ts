@@ -1,5 +1,5 @@
 // Rare and unique card VFX: every rare or class-unique card (and a few signature
-// commons, like Magic Missile's volley of darts) plays its own hand-authored
+// commons, like Magic Missile's and Eldritch Blast's volleys of darts) plays its own hand-authored
 // sequence instead of the generic effect of its `fx` key (a storm whose bolts
 // strike each enemy, a whirlwind of phantom daggers, an infernal circle with
 // chains…). Each card also gets a prelude that gathers over its
@@ -9,7 +9,7 @@
 
 import {
   Painter, SPELLS, MAX_CARD_SPRITES, geo, span, lerp, easeOut, easeIn, easeInOut, easeOutBack, bell, dropAngle,
-  zigzag, smooth, clamp01, TAU, hash01, lightHammer, vinePath, vineFront, type Build, type Point, type SpellDef,
+  zigzag, smooth, clamp01, TAU, hash01, lightHammer, vinePath, vineFront, type Build, type Point, type SpellCtx, type SpellDef,
 } from './spell-fx.ts';
 
 // ── palettes ────────────────────────────────────────────────────────────────
@@ -1309,27 +1309,37 @@ const pactoFinal: Build = (g, u, c, D) => {
   rise(g, u, { x: cx, y: ground, w: rx * 2, h: H * 1.2, u0: 0.3, u1: 1, n: 40, cols: ['#c21f3a', '#b46bff', '#ff5a2a'], salt: 60, size: 7 * k });
 };
 
-/** Seconds a Magic Missile dart flies before it strikes. */
+/** Seconds a volley dart (Magic Missile, Eldritch Blast) flies before it strikes. */
 const DART_FLIGHT = 0.45;
 /** Seconds its impact burst lingers after the strike. */
 const DART_FADE = 0.26;
 /** Seconds between two darts of the same volley: quick, but each one reads on its own. */
 const DART_GAP = 0.15;
+/** Seconds the Eldritch Blast's bigger burst lingers after the strike. */
+const BLAST_FADE = 0.32;
 
 /** Lane of the i-th dart of a volley: how high it flies over the caster→target line
  *  (+1 the highest arc, -1 the lowest swing below it). Any first 3, 4 or 5 darts
  *  spread over both sides and keep apart. */
 const DART_LANES = [0.5, -0.45, 1, -1, 0.05];
 
-/** Magic Missile: one glowing force dart per hit. Each dart of a volley takes its
- *  own lane above or below the line to the target and weaves along it in a damped
- *  wobble with its own amplitude, frequency and phase; now and then one loops the
- *  loop halfway. Every dart ends in an arc diving onto the target, shedding
- *  sparkles, and bursts in a violet flash. Routes stay inside the viewport and
- *  over the floor. Few sprites: a whole volley fits a phone's budget. */
-const proyectilMagico: Build = (g, u, c, D) => {
+/** Route of one volley dart from the caster's staff tip to the target. */
+interface DartRoute {
+  /** Launch point (the staff tip) and impact point (inside the target). */
+  S: Point; E: Point;
+  /** Point of the route at progress s (0 launch … 1 impact). */
+  at: (s: number) => Point;
+  /** Whether this dart loops the loop, where the loop starts and how much of the route it takes. */
+  loops: boolean; l0: number; lw: number;
+}
+
+/** Weaving route shared by every volley dart. Each dart of a volley takes its own lane
+ *  above or below the line to the target and weaves along it in a damped wobble with
+ *  its own amplitude, frequency and phase; now and then one loops the loop halfway.
+ *  Every route ends in an arc diving onto the target, and stays inside the viewport
+ *  and over the floor. Deterministic by seed (it draws on g.r(1…13)). */
+function dartRoute(g: Painter, c: SpellCtx): DartRoute {
   const { b, cx, cy, k, W, H, dir, ground } = geo(c);
-  const t = u * D;
   const src = c.from ?? { x: b.x - dir * W * 2.5, y: cy };
   // born at the staff tip: ahead of and above the caster's centre
   const S = { x: src.x + dir * 26 * k, y: src.y - 22 * k };
@@ -1415,8 +1425,41 @@ const proyectilMagico: Build = (g, u, c, D) => {
     if (view) { x = Math.min(view.w - m, Math.max(m, x)); y = Math.min(view.h - m, Math.max(m, y)); }
     return { x, y };
   };
+  return { S, E, at, loops, l0, lw };
+}
+
+/** Where a dart's trail runs at `t` seconds (route progress of its head and tail) and
+ *  whether it has struck: the head eases in, the tail catches up on the strike. */
+function dartTrail(t: number, tailLen = 0.28) {
   const uf = Math.min(1, t / DART_FLIGHT), head = uf * (0.75 + 0.25 * uf), hit = t >= DART_FLIGHT;
-  const tailLen = 0.28, tail = hit ? lerp(Math.max(0, 1 - tailLen), 1, easeOut(span(t, DART_FLIGHT, DART_FLIGHT + 0.12))) : Math.max(0, head - tailLen);
+  const tail = hit ? lerp(Math.max(0, 1 - tailLen), 1, easeOut(span(t, DART_FLIGHT, DART_FLIGHT + 0.12))) : Math.max(0, head - tailLen);
+  return { head, tail, hit };
+}
+/** Seconds after the launch when the head passes route progress `s` (inverse of dartTrail). */
+const dartTimeAt = (s: number) => DART_FLIGHT * (Math.sqrt(0.5625 + s) - 0.75) / 0.5;
+/** Points of the trail from its tail to its head; a trail running through the loop gets
+ *  more samples, so it stays round. */
+function trailPoints(g: Painter, r: DartRoute, tail: number, head: number, samples: number): Point[] {
+  const n = Math.max(4, g.n(r.loops && tail < r.l0 + r.lw && head > r.l0 ? Math.round(samples * 5 / 3) : samples));
+  const pts: Point[] = [];
+  for (let j = 0; j <= n; j++) pts.push(r.at(lerp(tail, head, j / n)));
+  return pts;
+}
+/** Unit heading of the route at progress s. */
+function headingAt(r: DartRoute, s: number) {
+  const h = r.at(s), a2 = r.at(Math.max(0, s - 0.02));
+  const hx = h.x - a2.x, hy = h.y - a2.y, hl = Math.hypot(hx, hy) || 1;
+  return { ux: hx / hl, uy: hy / hl };
+}
+
+/** Magic Missile: one glowing force dart per hit, flying its own weaving lane of the
+ *  volley (dartRoute), shedding sparkles, diving onto the target in an arc and
+ *  bursting in a violet flash. Few sprites: a whole volley fits a phone's budget. */
+const proyectilMagico: Build = (g, u, c, D) => {
+  const { k } = geo(c);
+  const t = u * D;
+  const route = dartRoute(g, c), { S, E, at } = route;
+  const { head, tail, hit } = dartTrail(t);
   // launch flash at the staff tip
   const lf = bell(t, 0, 0.12);
   if (lf > 0) {
@@ -1424,11 +1467,8 @@ const proyectilMagico: Build = (g, u, c, D) => {
     g.ring(S.x, S.y, (4 + 14 * span(t, 0, 0.12)) * k, (4 + 14 * span(t, 0, 0.12)) * k, 1.4 * k, '#9fd8ff', 0.8 * lf);
   }
   // glowing trail: violet halo, blue body, white core, tapering to the tail
-  // a trail running through the loop gets more samples, so it stays round
-  const n = Math.max(4, g.n(loops && tail < l0 + lw && head > l0 ? 20 : 12));
   if (head - tail > 0.004) {
-    const pts: Point[] = [];
-    for (let j = 0; j <= n; j++) pts.push(at(lerp(tail, head, j / n)));
+    const pts = trailPoints(g, route, tail, head, 12), n = pts.length - 1;
     const fade = hit ? 1 - span(t, DART_FLIGHT, DART_FLIGHT + 0.12) : 1;
     const w = (i: number) => (i / n) ** 1.3;
     g.strip(pts, (i) => 9 * k * w(i) + 1, '#6c3cff', 0.2 * fade);
@@ -1437,8 +1477,7 @@ const proyectilMagico: Build = (g, u, c, D) => {
   }
   // the dart itself: a bright arrowhead with a twinkle
   if (!hit) {
-    const h = at(head), a2 = at(Math.max(0, head - 0.02));
-    const hx = h.x - a2.x, hy = h.y - a2.y, hl = Math.hypot(hx, hy) || 1, ux = hx / hl, uy = hy / hl;
+    const h = at(head), { ux, uy } = headingAt(route, head);
     g.dot(h.x, h.y, 9 * k, '#7a5cff', 0.3);
     g.fang(h.x - ux * 13 * k, h.y - uy * 13 * k, h.x + ux * 6 * k, h.y + uy * 6 * k, 6 * k, '#9fd8ff', 0.9);
     g.dot(h.x, h.y, 2.4 * k, '#ffffff', 1, false);
@@ -1447,7 +1486,7 @@ const proyectilMagico: Build = (g, u, c, D) => {
   }
   // sparkles shed along the way, drifting and fading
   each(g, 7, (i) => {
-    const s0 = 0.08 + 0.8 * ((i + g.r(20 + i) * 0.8) / 7), born = DART_FLIGHT * (Math.sqrt(0.5625 + s0) - 0.75) / 0.5;
+    const s0 = 0.08 + 0.8 * ((i + g.r(20 + i) * 0.8) / 7), born = dartTimeAt(s0);
     const q = span(t, born, born + 0.2);
     if (q <= 0 || q >= 1) return;
     const p = at(s0), dr = (g.r(30 + i) - 0.5) * 20 * k;
@@ -1471,6 +1510,109 @@ const proyectilMagico: Build = (g, u, c, D) => {
       if (q <= 0 || q >= 1) return;
       const a = inAng + Math.PI + (g.r(50 + i) - 0.5) * 3.4, d = easeOut(q) * (20 + 32 * g.r(60 + i)) * k;
       g.spark(E.x + Math.cos(a) * d, E.y + Math.sin(a) * d, 9 * k * (1 - q) + 2, a, i % 3 ? '#b8ecff' : '#c9a8ff', 1 - q);
+    });
+  }
+};
+
+/** Eldritch Blast: a thick bolt of dark energy flying Magic Missile's weaving routes
+ *  (same lanes, same volley rhythm). A black orb in a violet corona crackling with white
+ *  arcs drags a heavy trail (violet haze, a black core, a violet vein and a flickering
+ *  white filament) that sheds dark smoke; on the strike the void implodes and bursts
+ *  in a violet shockwave, a white flash, shards of darkness and white sparks. */
+const explosionSobrenatural: Build = (g, u, c, D) => {
+  const { k } = geo(c);
+  const t = u * D, T = DART_FLIGHT;
+  const route = dartRoute(g, c), { S, E, at } = route;
+  const { head, tail, hit } = dartTrail(t, 0.32);
+  // decorations near the edges stay on screen, like the route itself
+  const view = c.view;
+  const clampX = (x: number) => (view ? Math.min(view.w - 6, Math.max(6, x)) : x);
+  const clampY = (y: number) => (view ? Math.min(view.h - 6, Math.max(6, y)) : y);
+  // launch: the staff tip flares dark with a violet ring
+  const lf = bell(t, 0, 0.14);
+  if (lf > 0) {
+    const rr = (6 + 20 * span(t, 0, 0.14)) * k;
+    g.dot(S.x, S.y, 16 * k * lf, '#6c2fb5', 0.45 * lf);
+    g.dot(S.x, S.y, 7 * k * lf, '#12041f', 0.85 * lf, false);
+    g.ring(S.x, S.y, rr, rr, 2.6 * k, '#b46bff', 0.85 * lf);
+  }
+  // heavy trail: violet haze, black core, violet vein, white filament near the head
+  if (head - tail > 0.004) {
+    const pts = trailPoints(g, route, tail, head, 12), n = pts.length - 1;
+    const fade = hit ? 1 - span(t, T, T + 0.14) : 1;
+    const w = (i: number) => (i / n) ** 1.1;
+    g.strip(pts, (i) => 26 * k * w(i) + 2, '#5a1f9e', 0.42 * fade);
+    g.strip(pts, (i) => 14 * k * w(i) + 1.4, '#14051f', 0.95 * fade, false);
+    // the vein runs inside the black core without a glow of its own, so the core stays dark
+    g.strip(pts, (i) => 3 * k * w(i) + 0.5, '#9a4dff', 0.9 * fade, false);
+    const flick = 0.55 + 0.45 * Math.sin(t * 90 + g.r(14) * 6);
+    const half = pts.slice(Math.floor(n * 0.45));
+    g.strip(half, (i) => 1.5 * k * (i / Math.max(1, half.length - 1)) + 0.4, '#ffffff', 0.75 * flick * fade, false);
+  }
+  // dark smoke torn off the trail, swelling and fading
+  each(g, 8, (i) => {
+    const s0 = 0.06 + 0.86 * ((i + g.r(20 + i) * 0.8) / 8), born = dartTimeAt(s0);
+    const q = span(t, born, born + 0.3);
+    if (q <= 0 || q >= 1) return;
+    const p = at(s0), dr = (g.r(30 + i) - 0.5) * 22 * k;
+    const x = clampX(p.x + dr * q), y = clampY(p.y + dr * 0.4 * q - 10 * k * q);
+    g.dot(x, y, (5 + 7 * q) * k, '#1a0830', 0.35 * (1 - q));
+    if (i % 2) g.dot(x, y, 2.2 * k * (1 - q) + 0.6, i % 4 === 1 ? '#ffffff' : '#c79bff', 1 - q);
+  });
+  // the orb: corona, rim, black heart and a white glint, with crackling white arcs
+  if (!hit) {
+    const h = at(head), { ux, uy } = headingAt(route, head);
+    const pulse = 1 + 0.12 * Math.sin(t * 50 + g.r(10) * 9);
+    g.dot(h.x, h.y, 22 * k * pulse, '#6c2fb5', 0.45);
+    g.dot(h.x, h.y, 13 * k, '#b46bff', 0.9);
+    g.dot(h.x, h.y, 9.5 * k, '#0d0217', 1, false);
+    g.dot(h.x + ux * 3 * k, h.y + uy * 3 * k, 2.8 * k, '#ffffff', 0.95, false);
+    const fr = Math.floor(t * 24);
+    for (let j = 0; j < 2; j++) {
+      const a = hash01(fr * 7 + j, 101 + g.r(15) * 1000) * TAU, a0 = { x: h.x + Math.cos(a) * 9 * k, y: h.y + Math.sin(a) * 9 * k };
+      const len = (12 + 10 * hash01(fr * 7 + j, 202)) * k, b = { x: clampX(a0.x + Math.cos(a) * len - ux * 8 * k), y: clampY(a0.y + Math.sin(a) * len - uy * 8 * k) };
+      g.strip(zigzag(a0, b, 3, 3 * k, fr, j + 5), () => 1.5 * k, '#f4ecff', 0.9);
+    }
+    g.mark('dardo', h.x, h.y);
+  }
+  // the strike: the void implodes, then bursts
+  if (hit) {
+    if (t <= T + 0.05) g.mark('impacto', E.x, E.y);
+    const a1 = at(0.97), inAng = Math.atan2(E.y - a1.y, E.x - a1.x);
+    const fl = bell(t, T - 0.01, T + 0.18);
+    g.dot(E.x, E.y, 36 * k * fl + 1, '#6c2fb5', 0.38 * fl);
+    const core = easeOutBack(span(t, T, T + 0.08)) * (1 - easeIn(span(t, T + 0.1, T + 0.3)));
+    if (core > 0.01) {
+      g.dot(E.x, E.y, 15 * k * core, '#0d0217', 0.95, false);
+      g.ring(E.x, E.y, 15 * k * core + 1, 15 * k * core + 1, 3 * k, '#b46bff', core);
+    }
+    const st = easeOutBack(span(t, T, T + 0.08)) * (1 - span(t, T + 0.06, T + 0.2));
+    g.star(E.x, E.y, 30 * k * st, '#8a3cff', 0.5 * st, inAng + Math.PI / 4);
+    g.star(E.x, E.y, 18 * k * st, '#ffffff', st, inAng);
+    g.dot(E.x, E.y, 6 * k * fl + 0.5, '#ffffff', fl, false);
+    for (let i = 0; i < 2; i++) {
+      const rs = span(t, T + 0.02 + 0.06 * i, T + 0.3 + 0.02 * i);
+      if (rs > 0 && rs < 1) {
+        const rx = (10 + (52 - 16 * i) * easeOut(rs)) * k, ry = rx * 0.78;
+        g.ring(E.x, E.y, rx, ry, (5 - 2 * i) * k * (1 - rs) + 0.8, i ? '#e8d0ff' : '#8a3cff', 1 - rs);
+      }
+    }
+    // shards of darkness flung out, with a violet edge
+    each(g, 7, (i) => {
+      const q = span(t, T, T + 0.2 + 0.06 * g.r(70 + i));
+      if (q <= 0 || q >= 1) return;
+      const a = (i / 7) * TAU + g.r(80 + i) * 0.7, r0 = 8 * k, len = easeOut(q) * (22 + 18 * g.r(90 + i)) * k * (1 - 0.4 * q);
+      const x0 = E.x + Math.cos(a) * (r0 + 14 * k * q), y0 = E.y + Math.sin(a) * (r0 + 14 * k * q);
+      const x1 = x0 + Math.cos(a) * len, y1 = y0 + Math.sin(a) * len;
+      g.fang(x0, y0, x1, y1, 9 * k, '#a35cff', 0.5 * (1 - q));
+      g.fang(x0, y0, x1, y1, 6 * k, '#14051f', 0.9 * (1 - q), false);
+    });
+    // white and violet sparks
+    each(g, 12, (i) => {
+      const q = span(t, T, T + 0.18 + 0.1 * g.r(40 + i));
+      if (q <= 0 || q >= 1) return;
+      const a = inAng + Math.PI + (g.r(50 + i) - 0.5) * 4, d = easeOut(q) * (24 + 40 * g.r(60 + i)) * k;
+      g.spark(E.x + Math.cos(a) * d, E.y + Math.sin(a) * d, 11 * k * (1 - q) + 2, a, i % 3 ? '#ffffff' : '#c79bff', 1 - q);
     });
   }
 };
@@ -1897,6 +2039,11 @@ export const CARD_FX: Record<string, Entry> = {
   celestial: entry({ duration: 1.3, phases: [0.3, 0.72], anchor: 'self', build: bendicionCelestial }, [GOLD, 'star', '#ffd166']),
   infernal: entry({ duration: 1.2, phases: [0.3, 0.7], anchor: 'self', build: pactoInfernal }, [HELL, 'spark', '#c21f3a']),
   'gran-antiguo': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: menteGranAntiguo }, [VOID, 'rune', '#6c2fb5']),
+  // the starter Eldritch Blast: a thick dark dart per hit, on Magic Missile's routes and volley
+  'explosion-sobrenatural': entry({
+    duration: DART_FLIGHT + BLAST_FADE, phases: [DART_FLIGHT / (DART_FLIGHT + BLAST_FADE), (DART_FLIGHT + 0.16) / (DART_FLIGHT + BLAST_FADE)],
+    anchor: 'target', cap: 140, volley: { gap: DART_GAP }, build: explosionSobrenatural,
+  }, [VOID, 'spark', '#b46bff']),
   'explosion-trifurcada': entry({ duration: 1.0, phases: [0.3, 0.65], anchor: 'self', build: explosionTrifurcada }, [VOID, 'spark', '#b46bff']),
   'haz-desdoblado': entry({ duration: 1.0, phases: [0.25, 0.7], anchor: 'self', build: hazDesdoblado }, [['#b46bff', '#ff5ad8', '#e8d0ff'], 'spark', '#ff5ad8']),
   'verbo-aniquilacion': entry({ duration: 1.2, phases: [0.4, 0.72], anchor: 'target', build: verboAniquilacion }, [VOID, 'rune', '#e8d0ff']),

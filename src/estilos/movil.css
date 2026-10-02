@@ -213,6 +213,15 @@
   .mano .carta { transform: rotate(var(--ang, 0deg)) translateY(calc(var(--alza, 0px) + 86px)); }
   .mano .carta.en-cola { transform: rotate(0deg) translateY(calc(var(--alza, 0px) + 48px)); }
   .orbe { width: 48px; height: 48px; font-size: 1.3rem; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.85)); }
+  /* the spell pyramid sits beside the orb and shrinks: under it, it fell off the screen */
+  .energia { flex-direction: row; align-items: center; gap: 4px; }
+  .conjuros { padding: 2px 5px; max-width: 96px; }
+  .conjuros.piramide { gap: 0; }
+  .fila-conjuro { gap: 2px; flex-wrap: wrap; }
+  .espacio { font-size: 1rem; }
+  .espacio.nivel-2 { font-size: 1.15rem; }
+  .espacio.nivel-3 { font-size: 1.3rem; }
+  .espacio i { font-size: 0.45rem; }
   .btn-fin-turno { padding: 0.4rem 0.7rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.75); }
   .pila {
     opacity: 1;

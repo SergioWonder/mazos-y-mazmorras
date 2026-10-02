@@ -239,6 +239,12 @@ body.arrastre-activo .zona-mano,
 /* a dead enemy leaves an invisible gap of its own size: the rest keep their place */
 .enemigo-hueco { visibility: hidden; pointer-events: none; }
 .enemigo-hueco * { animation: none !important; }
+/* an enemy still falling (deaths run in parallel) keeps its body visible in its gap */
+.enemigo-hueco.hueco-muriendo .sprite { visibility: visible; }
+.enemigo-hueco.hueco-muriendo .sprite:not(.sprite-ilustrado) {
+  animation: morir 0.55s ease-in forwards !important;
+  animation-delay: var(--retraso-muerte, 0ms) !important;
+}
 
 .enemigo.targeteable { cursor: crosshair; }
 .enemigo.targeteable .sprite { filter: drop-shadow(0 10px 12px rgba(0,0,0,0.65)) brightness(1.12); }

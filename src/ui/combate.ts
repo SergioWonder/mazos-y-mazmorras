@@ -25,6 +25,7 @@ import { playDestination, drawDelays, exhaustsWhenPlayed, type Point, type SlotP
 import { flyDiscard, flyDraw, flyExhaust, flyPlay, flyShowcase, flyShuffle, glideToSlot, reducedMotion, slotPose } from './card-fly.ts';
 import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
 import { ImpactQueue } from './impact-queue.ts';
+import { DeathQueue } from './death-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
 import { llamasDeCastigo, resumenCastigo } from './castigo-ficha.ts';
 import {
@@ -33,6 +34,10 @@ import {
 import { setSpriteTimeScale } from './puppet-sprite.ts';
 import { verCartas } from './visor-mazo.ts';
 import '../estilos/muerte.css';
+
+/** How long an enemy takes to fall: its puppet's death, or the CSS one of the emoji enemies. */
+const MUERTE_SPRITE_MS = 750;
+const MUERTE_CSS_MS = 550;
 
 /** How the hero fell in the last lost combat (for the tombstone). */
 let ultimaCaida: { asesino: string | null; turnos: number } | null = null;
@@ -270,6 +275,8 @@ export function pantallaCombate(
     };
     /** Feedback of volley darts still in flight (Magic Missile): each hit's runs when its dart lands. */
     const impactos = new ImpactQueue();
+    /** Enemies still falling: their death plays on while the fight goes on. */
+    const muertes = new DeathQueue<EnemigoCombate>();
     /** Health each fighter shows while darts fly at it, and its value after each pending dart. */
     const vidaEnVuelo = new Map<Luchador, { shown: number; queue: number[] }>();
     /** Health last drawn on each bar (where a volley's bar starts from). */
@@ -390,24 +397,29 @@ export function pantallaCombate(
         render();
         await espera(220);
       },
-      async fxMuerte(e) {
+      async fxMuerte(e, causa) {
         // the darts already cast land (and show their numbers) before it falls
         await impactos.settle();
         const elem = elemDe(e);
         const { x, y } = centroDe(elem);
         fx.emitir('muerte', x, y);
         audio.sfx('muerte');
+        // consumed by Doom: its soul leaves the body and chains hold it down until it fades
+        if (causa === 'condena') fx.hechizo('almaCondenada', cajaDe(elem));
+        // the body falls in parallel: the rest of an area attack or a multi-hit does not wait
         const s = spriteEnemigo(e);
-        if (s) {
-          s.play('death');
-          await espera(750);
-          s.destroy();
-          spritesEnemigo.delete(e);
-        } else {
-          elem?.classList.add('muriendo');
-          await espera(550);
-        }
-        render();
+        if (s) s.play('death');
+        else elem?.classList.add('muriendo');
+        muertes.start(e, s ? MUERTE_SPRITE_MS : MUERTE_CSS_MS, () => {
+          if (s) {
+            s.destroy();
+            spritesEnemigo.delete(e);
+          }
+          render();
+        });
+      },
+      async fxEsperarMuerte(e) {
+        await muertes.wait(e);
       },
       async fxMensaje(txt) {
         await impactos.settle();
@@ -584,6 +596,8 @@ export function pantallaCombate(
         }
         else if (a.kind === 'endTurn') await combate.terminarTurno();
         else await jugar(a.card, a.target);
+        // the next action starts once the enemies it killed have finished falling
+        await muertes.settle();
       },
       onDiscard: (a, motivo) => {
         if (a.kind === 'card') anuncio(motivo, 'anuncio-error');
@@ -902,6 +916,12 @@ export function pantallaCombate(
       const div = el('div', 'enemigo enemigo-hueco');
       div.setAttribute('aria-hidden', 'true');
       const escala = e.def.escala ?? 1;
+      // still falling: its body stays visible in the gap until the death ends
+      const cayendo = muertes.dying(e);
+      if (cayendo) {
+        div.classList.add('hueco-muriendo');
+        div.style.setProperty('--retraso-muerte', `-${Math.round(muertes.elapsed(e))}ms`);
+      }
       div.innerHTML = `
         <div class="intencion">·</div>
         ${ENEMY_RIGS[e.def.id]
@@ -911,6 +931,8 @@ export function pantallaCombate(
         ${e.def.rasgo ? `<div class="rasgo-jefe">★ ${e.def.rasgo.nombre}</div>` : ''}
         ${barraVida(e)}
         <div class="estados"></div>`;
+      const se = cayendo ? spritesEnemigo.get(e) : undefined;
+      if (se) div.querySelector('.sprite-marioneta')?.replaceWith(se.element); // the stand-in makes way for the body
       return div;
     }
 
@@ -1393,7 +1415,9 @@ export function pantallaCombate(
       if (calma) audio.reproducirTema(calma);
       // a real defeat plays the hero's death (the Dungeon Master's ray has its own scene)
       const muerte = playsDefeatSequence(combate.terminado, defs) ? muerteHeroe() : null;
-      setTimeout(() => {
+      const pausa = muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700); // time to read the DM's last line
+      // the last enemies finish falling before the screen goes
+      void Promise.all([espera(pausa), muertes.settle()]).then(() => {
         muerte?.();
         run.pv = Math.max(0, combate.jugador.pv);
         if (combate.terminado === 'victoria') {
@@ -1406,7 +1430,7 @@ export function pantallaCombate(
         stage?.destroy();
         medirEscenario.disconnect();
         resolver(combate.terminado!);
-      }, muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700)); // time to read the DM's last line
+      });
     }
 
     /**

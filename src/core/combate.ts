@@ -20,7 +20,9 @@ export interface Presentador {
   fxBloqueo(obj: Luchador, n: number): Promise<void>;
   fxEstado(obj: Luchador, estado: EstadoId, n: number): Promise<void>;
   fxCura(obj: Luchador, n: number): Promise<void>;
-  fxMuerte(e: EnemigoCombate): Promise<void>;
+  /** An enemy falls; `causa` is the effect that killed it ('condena' plays its own death).
+   *  The UI may let the body fall while the fight goes on (see fxEsperarMuerte). */
+  fxMuerte(e: EnemigoCombate, causa?: string): Promise<void>;
   fxMensaje(txt: string): Promise<void>;
   fxEnemigoActua(e: EnemigoCombate): Promise<void>;
   fxFuriaPerdida(): Promise<void>;
@@ -44,6 +46,8 @@ export interface Presentador {
   fxDialogo?(e: EnemigoCombate, txt: string): Promise<void>;
   /** (optional) The hero falls for good (the Dungeon Master's ray). */
   fxMuerteHeroe?(): Promise<void>;
+  /** (optional) Waits for `e` to finish falling: before another enemy takes its place. */
+  fxEsperarMuerte?(e: EnemigoCombate): Promise<void>;
 }
 
 /** Effect drawn on the enemy when a Smite of each element lands. */
@@ -1029,10 +1033,10 @@ export class Combate {
       const e = obj as EnemigoCombate;
       // The lich does not die: his phylactery takes his place
       if (obj !== this.jugador && e.def.pasiva === 'filacteria' && e.def.filacteria) {
-        await this.refugiarseEnFilacteria(e);
+        await this.refugiarseEnFilacteria(e, fx);
       } else {
         obj.vivo = false;
-        if (obj !== this.jugador) await this.ui.fxMuerte(e);
+        if (obj !== this.jugador) await this.ui.fxMuerte(e, fx);
         // Pacto Infernal (brujo): cada muerte enemiga te blinda
         const bend = this.jugador.estados.bendicionOscura ?? 0;
         if (obj !== this.jugador && bend > 0 && this.jugador.vivo) {
@@ -1042,6 +1046,7 @@ export class Combate {
         if (obj !== this.jugador) await this.disparadoresDeMuerte(e);
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
         if (obj !== this.jugador && e.def.invocaAlMorir) {
+          await this.ui.fxEsperarMuerte?.(e); // the newcomer takes the slot once the body has fallen
           const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
           this.enemigos.push(liberado);
           await this.ui.fxMensaje(`¡De las entrañas de ${e.nombre} se alza ${liberado.nombre}!`);
@@ -1061,10 +1066,11 @@ export class Combate {
 
   /** Vol'guth falls: his body crumbles and his phylactery takes his slot, with the health it
    *  had left the last time (full the first time). */
-  private async refugiarseEnFilacteria(e: EnemigoCombate) {
+  private async refugiarseEnFilacteria(e: EnemigoCombate, causa?: string) {
     const vasija = e.def.filacteria!;
     e.vivo = false;
-    await this.ui.fxMuerte(e);
+    await this.ui.fxMuerte(e, causa);
+    await this.ui.fxEsperarMuerte?.(e); // the phylactery takes his slot once the body has fallen
     const fil = crearEnemigo(vasija, this.rng);
     fil.pv = Math.min(fil.pvMax, e.filacteriaPv ?? fil.pvMax);
     fil.alma = { def: e.def, resurrecciones: e.alma?.resurrecciones ?? 0 };

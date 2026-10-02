@@ -14,8 +14,8 @@ export const PRODIGIOUS_THRESHOLDS = { rare: 30, unique: 50, dm: 80 } as const;
 
 /** Plain magic effects that land on the target (no physical hits, enemy moves or status-only looks). */
 const BASIC = ['estrellas', 'divino', 'ola', 'luna', 'abisal', 'oscuridad', 'tierra', 'hojas', 'sangre', 'condena'];
-/** Card sequences that would read as something else on an enemy (a charm). */
-const EXCLUDED_CARDS = new Set(['seducir', 'proyectil-magico']);
+/** Card sequences that would read as something else on an enemy (a charm, a volley dart). */
+const EXCLUDED_CARDS = new Set(['seducir', 'proyectil-magico', 'explosion-sobrenatural']);
 
 export function prodigiousTier(damage: number): ProdigiousTier {
   if (damage >= PRODIGIOUS_THRESHOLDS.dm) return 'dm';

@@ -649,6 +649,201 @@ const muerte: Build = (g, u, c) => {
   }
 };
 
+// ── death by Doom: the soul tries to rise, spectral chains hold it down ─────
+
+/** Seconds of the doomed soul's sequence (fxMuerte waits for nothing: it plays over the fall). */
+export const DOOMED_SOUL_DURATION = 1.5;
+/** When the chains have latched (end of the rise) and when they crumble, as fractions. */
+const SOUL_LATCH = 0.24, SOUL_RELEASE = 0.72;
+/** Pale violet of the soul (halo, body, core) and the purple-black of the chains. */
+const SOUL = { halo: '#8a5cd6', body: '#b9a6f0', core: '#ece4ff', eye: '#2a0c45' };
+const CHAIN = { link: '#1c0d2e', rim: '#b48ae0', glow: '#6c2fb5', flash: '#cfa8ff' };
+
+/** Pose of the doomed soul over `box` at u (0..1): head centre, head radius, arm span,
+ *  head-to-tail height, opacity, how far the arms reach up and the strain of each jerk.
+ *  It leaves the body and rises, is yanked back down when the chains latch, strains
+ *  upwards in jerks while held, and dissolves. Sized on the target so it reads on phones. */
+export function soulPose(box: Box, u: number) {
+  const cx = box.x + box.w / 2, cy = box.y + box.h / 2, H = box.h;
+  const base = Math.min(box.h, box.w * 1.5);
+  const grow = 0.7 + 0.3 * easeOut(span(u, 0.02, 0.2));
+  const headR = 0.12 * base * grow, height = 0.62 * base * grow;
+  const yPeak = cy - 0.55 * H, yHold = cy - 0.4 * H;
+  // three jerks upwards (fast pull, slow give), weaker as it dissolves
+  const sw = span(u, 0.34, SOUL_RELEASE) * 3, fr = sw - Math.floor(sw);
+  const jerk = u < 0.34 || u >= SOUL_RELEASE ? 0 : fr < 0.35 ? easeOut(fr / 0.35) : 1 - smooth((fr - 0.35) / 0.65);
+  const strain = jerk * (1 - 0.5 * span(u, 0.58, SOUL_RELEASE));
+  let y = lerp(cy + 0.05 * H, yPeak, easeOut(span(u, 0.02, 0.26)));
+  if (u > 0.25) y = lerp(yPeak, yHold, easeOutBack(span(u, 0.25, 0.34))) - 0.08 * H * strain;
+  const x = cx + 0.04 * box.w * Math.sin(u * 30) * (0.3 + strain);
+  const alpha = smooth(span(u, 0.01, 0.12)) * (1 - smooth(span(u, 0.58, 0.88)));
+  return { x, y, headR, width: 3.6 * headR, height, alpha, reach: smooth(span(u, 0.26, 0.36)), strain };
+}
+
+/** Where chain i (of 4) comes from: two from the ground under the target, two from rifts at its sides. */
+function chainAnchor(box: Box, i: number): Point {
+  const ground = box.y + box.h;
+  if (i === 0) return { x: box.x + box.w * 0.08, y: ground };
+  if (i === 1) return { x: box.x + box.w * 0.92, y: ground };
+  if (i === 2) return { x: box.x - box.w * 0.28, y: box.y + box.h * 0.58 };
+  return { x: box.x + box.w * 1.28, y: box.y + box.h * 0.42 };
+}
+/** Where chain i grips the soul: the ground chains its waist, the side chains its chest. */
+function chainGrip(p: ReturnType<typeof soulPose>, i: number): Point {
+  const sx = i % 2 ? 1 : -1, waist = i < 2;
+  return { x: p.x + sx * (waist ? 0.55 : 0.75) * p.headR, y: p.y + (waist ? 2.6 : 1.4) * p.headR };
+}
+/** Point s (0 anchor … 1 tip) of a chain from a to b with a sideways sag. */
+function chainPoint(a: Point, b: Point, s: number, sag: number): Point {
+  const dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, o = sag * Math.sin(Math.PI * s);
+  return { x: a.x + dx * s - (dy / L) * o, y: a.y + dy * s + (dx / L) * o };
+}
+
+/** One chain link at (x, y) along `ang`: face-on links are open rings, edge-on ones bars. */
+function chainLink(g: Painter, x: number, y: number, ang: number, Lk: number, face: boolean, a: number) {
+  if (face) {
+    g.put(x, y, 0.3 * Lk, 'anillo', CHAIN.link, a, ang, false, 2, 0.34);
+    g.put(x, y, 0.3 * Lk, 'anillo', CHAIN.rim, 0.45 * a, ang, true, 2, 0.1);
+  } else {
+    g.seg(x - Math.cos(ang) * 0.5 * Lk, y - Math.sin(ang) * 0.5 * Lk, x + Math.cos(ang) * 0.5 * Lk, y + Math.sin(ang) * 0.5 * Lk, 0.24 * Lk, CHAIN.link, a, 0, false);
+  }
+}
+
+/** Doomed soul: when Doom consumes an enemy, its pale violet soul leaves the body and
+ *  rises, but spectral purple-black chains shoot from the ground and from rifts at its
+ *  sides, snap onto it and wrap it; the soul strains upwards, cannot break free and
+ *  dissolves into motes dragged down along the chains, which then crumble link by link. */
+const almaCondenada: Build = (g, u, c, D) => {
+  const { b, cx, k, W, H, ground } = geo(c);
+  const t = u * D;
+  const p = soulPose(b, u), pr = p.headR;
+  const base = Math.min(H, W * 1.5), Lk = Math.min(18, Math.max(8, 0.075 * base));
+  // the doom sigil on the ground the chains come from
+  const sig = easeOut(span(u, 0.1, 0.24)) * (1 - span(u, 0.82, 1));
+  if (sig > 0) {
+    g.ring(cx, ground, 0.62 * W * sig, 0.14 * W * sig + 2, 0.14 * W * sig + 2, CHAIN.link, 0.55 * sig, false);
+    // no shader glow on such a flat ellipse: its halo would show the quad's edges
+    g.ring(cx, ground, 0.62 * W * sig, 0.14 * W * sig + 2, 3.5 * k, '#7a3fc7', 0.9 * sig, false);
+    g.ring(cx, ground, 0.56 * W * sig, 0.12 * W * sig + 2, 1.5 * k, CHAIN.rim, 0.7 * sig, false);
+  }
+  // the side rifts open as their chains shoot out
+  for (const i of [2, 3]) {
+    const a = chainAnchor(b, i), op = easeOutBack(span(u, 0.1, 0.18)) * (1 - easeIn(span(u, 0.86, 1)));
+    if (op <= 0.01) continue;
+    g.put(a.x, a.y, 0.16 * H * op + 1, 'anillo', CHAIN.link, 0.8, 0, false, 0.4, 0.5);
+    g.put(a.x, a.y, 0.16 * H * op + 1, 'anillo', CHAIN.glow, 0.9, 0, true, 0.4, 0.12);
+  }
+  // wrap bands around chest and waist: the back half goes behind the soul
+  const bands = [{ dy: 1.4, rx: 0.95 }, { dy: 2.6, rx: 0.8 }], N = 10;
+  const wrap = easeOut(span(u, SOUL_LATCH, SOUL_LATCH + 0.08));
+  const freeze = soulPose(b, Math.min(u, SOUL_RELEASE));
+  const bandLinks = (front: boolean) => {
+    if (wrap <= 0) return;
+    bands.forEach((bd, bi) => {
+      const q = u < SOUL_RELEASE ? p : freeze, rx = bd.rx * q.headR, ry = 0.3 * rx, by = q.y + bd.dy * q.headR;
+      for (let j = 0; j < N; j++) {
+        const th = (j / N) * TAU * wrap + bi * 1.3 + t * 0.6 * (u < SOUL_RELEASE ? 1 : 0);
+        if ((Math.sin(th) > 0) !== front) continue;
+        const x = q.x + Math.cos(th) * rx, y = by + Math.sin(th) * ry, ang = Math.atan2(Math.cos(th) * ry, -Math.sin(th) * rx);
+        const ub = SOUL_RELEASE + 0.04 * g.r(300 + bi * 20 + j);
+        if (u < ub) { chainLink(g, x, y, ang, Lk * 0.8, j % 2 === 0, front ? 1 : 0.55); continue; }
+        const tau = (u - ub) * D, fa = 1 - span(u, ub, ub + 0.2);
+        const f = fly(x, y, (g.r(320 + bi * 20 + j) - 0.5) * 140 * k, -(30 + 50 * g.r(340 + bi * 20 + j)) * k, tau, 900 * k);
+        if (fa > 0) { chainLink(g, f.x, f.y, ang + tau * 9, Lk * 0.8, j % 2 === 0, fa); g.mark('eslabonRoto', f.x, f.y); }
+      }
+    });
+  };
+  bandLinks(false);
+  // the soul: halo, a tapering wavy body, arms reaching up, the head with a wailing face
+  if (p.alpha > 0.01) {
+    const a = p.alpha;
+    g.dot(p.x, p.y + pr, 1.9 * pr, SOUL.halo, 0.32 * a);
+    const spine: Point[] = [];
+    for (let j = 0; j <= 6; j++) {
+      const s = j / 6;
+      spine.push({ x: p.x + Math.sin(t * 7 - j * 0.9) * 0.35 * pr * s, y: p.y + 0.7 * pr + s * (p.height - 0.7 * pr) });
+    }
+    const th = (j: number) => lerp(1.6, 0.18, (j / 6) ** 0.8) * pr;
+    g.strip(spine, (j) => th(j) * 1.25, SOUL.body, 0.45 * a);
+    g.strip(spine, th, SOUL.core, 0.8 * a);
+    for (const sx of [-1, 1]) {
+      const sh = { x: p.x + sx * 0.7 * pr, y: p.y + 1.1 * pr };
+      const down = { x: p.x + sx * 1.0 * pr, y: p.y + 2.4 * pr };
+      const flail = Math.sin(t * 13 + sx) * 0.25 * pr;
+      const up = { x: p.x + sx * (1.5 + 0.3 * p.strain) * pr + flail, y: p.y - (0.6 + 0.8 * p.strain) * pr };
+      const hand = { x: lerp(down.x, up.x, p.reach), y: lerp(down.y, up.y, p.reach) };
+      const elbow = { x: lerp(sh.x, hand.x, 0.5) + sx * 0.45 * pr, y: lerp(sh.y, hand.y, 0.5) + 0.2 * pr };
+      g.strip([sh, elbow, hand], (j) => (j === 1 ? 0.44 : 0.3) * pr * 1.3, SOUL.body, 0.4 * a);
+      g.strip([sh, elbow, hand], (j) => (j === 1 ? 0.44 : 0.3) * pr, SOUL.core, 0.8 * a);
+      g.dot(hand.x, hand.y, 0.22 * pr, SOUL.core, 0.9 * a);
+    }
+    g.dot(p.x, p.y, pr, SOUL.core, 0.92 * a);
+    for (const sx of [-1, 1]) g.put(p.x + sx * 0.36 * pr, p.y - 0.05 * pr, 0.17 * pr, 'capsula', SOUL.eye, 0.9 * a, Math.PI / 2 - sx * 0.25, false, 1.5, 0);
+    g.put(p.x, p.y + 0.48 * pr, 0.16 * pr * (1 + 0.5 * p.strain), 'capsula', SOUL.eye, 0.85 * a, Math.PI / 2, false, 1.4 + 0.6 * p.strain, 0);
+    g.mark('alma', p.x, p.y);
+    g.mark('almaCola', spine[6].x, spine[6].y);
+  }
+  // the chains: they shoot out, snap onto the soul, go taut and shiver, then crumble
+  for (let i = 0; i < 4; i++) {
+    const A = chainAnchor(b, i), ul = 0.18 + 0.02 * i, u0 = ul - 0.08;
+    if (u < u0) continue;
+    const q = u < SOUL_RELEASE ? p : freeze, P = chainGrip(q, i);
+    const out = easeIn(span(u, u0, ul)), latched = u >= ul;
+    const tip = { x: lerp(A.x, P.x, out), y: lerp(A.y, P.y, out) };
+    const len = Math.hypot(P.x - A.x, P.y - A.y);
+    const shiver = latched && u < SOUL_RELEASE ? (1.2 + 2.5 * q.strain) * k * Math.sin(t * 70 + i * 2) : 0;
+    const sag = (i % 2 ? 1 : -1) * (0.14 * len * (1 - out) + 0.03 * len * (1 - q.strain)) + shiver;
+    const nL = Math.max(5, Math.min(14, Math.round(len / Lk)));
+    const vis = Math.max(1, Math.ceil(nL * out));
+    // violet glow under the links
+    if (u < SOUL_RELEASE + 0.04) {
+      const ga = 0.32 * (1 - span(u, SOUL_RELEASE - 0.02, SOUL_RELEASE + 0.04));
+      for (let j = 0; j < 4; j++) {
+        const p0 = chainPoint(A, tip, j / 4, sag), p1 = chainPoint(A, tip, (j + 1) / 4, sag);
+        g.seg(p0.x, p0.y, p1.x, p1.y, 0.75 * Lk, CHAIN.glow, ga);
+      }
+    }
+    for (let j = 0; j < vis; j++) {
+      const s = (j + 0.5) / vis, lp = chainPoint(A, tip, s, sag), nx = chainPoint(A, tip, Math.min(1, s + 0.02), sag);
+      const ang = Math.atan2(nx.y - lp.y, nx.x - lp.x), face = (nL - vis + j) % 2 === 0;
+      const ub = SOUL_RELEASE + 0.12 * (1 - s) + 0.03 * g.r(200 + i * 20 + j);
+      if (u < ub) { chainLink(g, lp.x, lp.y, ang, Lk, face, 1); continue; }
+      const tau = (u - ub) * D, fa = 1 - span(u, ub, ub + 0.2);
+      if (fa <= 0) continue;
+      const f = fly(lp.x, lp.y, (g.r(240 + i * 20 + j) - 0.5) * 120 * k, -(30 + 60 * g.r(260 + i * 20 + j)) * k, tau, 900 * k);
+      chainLink(g, f.x, f.y, ang + tau * (g.r(280 + i * 20 + j) - 0.5) * 16, Lk, face, fa);
+      g.mark('eslabonRoto', f.x, f.y);
+    }
+    // the snap: a flash where the shackle closes
+    const sn = bell(u, ul, ul + 0.07);
+    if (sn > 0) {
+      g.ring(P.x, P.y, (0.3 + 0.5 * span(u, ul, ul + 0.07)) * pr, (0.3 + 0.5 * span(u, ul, ul + 0.07)) * pr, 2 * k, CHAIN.flash, sn);
+      g.star(P.x, P.y, 0.9 * pr * sn, CHAIN.flash, sn, i);
+    }
+    if (latched && u < SOUL_RELEASE) g.mark('grillete', P.x, P.y);
+    g.mark('anclaCadena', A.x, A.y);
+  }
+  bandLinks(true);
+  // ghostly wisps while it rises, then the soul dissolves into motes dragged down the chains
+  const nw = g.n(6);
+  for (let i = 0; i < nw; i++) {
+    const q = span(u, 0.04 + 0.03 * i, 0.3 + 0.03 * i);
+    if (q <= 0 || q >= 1) continue;
+    const x = p.x + (g.r(400 + i) - 0.5) * 2.4 * pr, y = p.y + (0.5 + 2 * g.r(410 + i)) * pr - q * 1.6 * pr;
+    g.dot(x, y, 0.13 * pr * (1 - q) + 0.8, SOUL.body, 0.7 * (1 - q));
+  }
+  const nm = g.n(16);
+  for (let i = 0; i < nm; i++) {
+    const ub = 0.58 + 0.26 * g.r(420 + i), q = span(u, ub, ub + 0.16);
+    if (q <= 0 || q >= 1) continue;
+    const src = soulPose(b, ub), s = g.r(440 + i);
+    const x0 = src.x + (g.r(460 + i) - 0.5) * 1.6 * src.headR * (1 - s * 0.7), y0 = src.y + s * src.height;
+    const A = chainAnchor(b, i % 4);
+    const x = lerp(x0, A.x, easeIn(q) * 0.55) + Math.sin(q * 9 + i) * 0.3 * pr, y = lerp(y0, A.y, easeIn(q) * 0.55) - (1 - q) * q * 0.8 * pr;
+    g.dot(x, y, 0.12 * pr * (1 - 0.5 * q) + 0.8, i % 3 ? SOUL.core : CHAIN.flash, 0.9 * (1 - q));
+  }
+};
+
 /** Darkness: shadow blobs and tendrils close in, eyes open in the gloom, it disperses. */
 const oscuridad: Build = (g, u, c, D) => {
   const { cx, cy, R, k, W, H } = geo(c);
@@ -1747,6 +1942,8 @@ export const SPELLS: Record<string, SpellDef> = {
   castigoFuego: { duration: 0.95, phases: [0.15, 0.6], anchor: 'target', build: castigoFuego },
   castigoResplandor: { duration: 1.0, phases: [0.15, 0.62], anchor: 'target', build: castigoResplandor },
   castigoDestierro: { duration: 1.1, phases: [0.16, 0.72], anchor: 'target', build: castigoDestierro },
+  // status deaths: an enemy consumed by Doom (fxMuerte)
+  almaCondenada: { duration: DOOMED_SOUL_DURATION, phases: [SOUL_LATCH, SOUL_RELEASE], anchor: 'target', cap: 240, build: almaCondenada },
 };
 
 /** Sprites of spell `key` at `t` seconds after it was cast ([] once it is over). */
