@@ -3,7 +3,7 @@ import type {
   EstadoId, EstadoRun, JugadorCombate, Luchador, Movimiento, ReliquiaDef,
 } from './types.ts';
 import { barajar } from './rng.ts';
-import { crearEnemigo } from './enemigos.ts';
+import { crearEnemigo, resolverVariantes } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
@@ -145,7 +145,7 @@ export class Combate {
       bloqueoAplazado: [],
       castigos: [],
     };
-    this.enemigos = defs.map((d) => crearEnemigo(d, rng));
+    this.enemigos = resolverVariantes(defs, rng).map((d) => crearEnemigo(d, rng));
   }
 
   // ── Cálculo de daño/bloqueo (reglas StS) ──────────────────────────────────
@@ -292,7 +292,12 @@ export class Combate {
    *  Uses the Vulnerable the hero will have when the enemy strikes, not now. */
   danoIntencion(e: EnemigoCombate): number {
     if (e.intencion.dano === undefined) return 0;
-    return this.danoRecibido(this.jugador, this.danoDeAtaque(e, e.intencion.dano), this.vulnerableAlGolpe());
+    return this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(e.intencion)), this.vulnerableAlGolpe());
+  }
+
+  /** Base damage of each hit of an enemy move: rat bites add the hero's Poison. */
+  baseDeGolpe(m: Movimiento): number {
+    return (m.dano ?? 0) + (m.masPorVeneno ? this.jugador.estados.veneno ?? 0 : 0);
   }
 
   /** The hero's Vulnerable when the enemies strike: it lasts until the end of
@@ -341,7 +346,7 @@ export class Combate {
     const raices = e.estados.raices ?? 0;
     if (m.dano === undefined || raices <= 0) return null;
     // Darkness lowers the attack too, so it counts towards the crush
-    let efectivo = m.dano + (e.estados.fuerza ?? 0) - raices - (e.estados.oscuridad ?? 0);
+    let efectivo = this.baseDeGolpe(m) + (e.estados.fuerza ?? 0) - raices - (e.estados.oscuridad ?? 0);
     if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
     return efectivo > 0 ? null : Math.min(raices, -efectivo);
   }
@@ -351,7 +356,7 @@ export class Combate {
    *  "aprietan" cuando hay un ataque real que neutralizar. */
   ataqueAnulado(e: EnemigoCombate): boolean {
     if (e.intencion.dano === undefined) return false; // no ataca este turno
-    return this.danoDeAtaque(e, e.intencion.dano) <= 0;
+    return this.danoDeAtaque(e, this.baseDeGolpe(e.intencion)) <= 0;
   }
 
   /** true si hay alguna Transformación activa (efecto temporal del druida). */
@@ -727,19 +732,7 @@ export class Combate {
         return Math.max(a, b);
       },
       async forzarAccion(e) {
-        if (!e.vivo || self.terminado) return;
-        await self.ejecutarMovimiento(e);
-        if (e.vivo && !self.terminado) {
-          e.turnosVisto++;
-          if (e.intencionForzada) {
-            e.intencion = e.intencionForzada;
-            delete e.intencionForzada;
-          } else {
-            e.intencion = e.def.ia(e.turnosVisto, self.rng, e, self.enemigos.filter((x) => x.vivo && x !== e));
-          }
-          e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
-          self.ui.render();
-        }
+        await self.actuarYa(e);
       },
       saltarAccion(e) {
         e.saltaAccion = true;
@@ -858,10 +851,12 @@ export class Combate {
         if (!e.vivo) return;
         // instant kills (Vorpal Talisman, Wish, Charm…) do not work like that on the DM
         if (esDungeonMaster(e)) { await self.pantallaDM(e); return; }
+        if (self.inmortalAhora(e)) { await self.ui.fxMensaje(`🔥 ${e.nombre} no puede morir mientras viva su guardián`); return; }
         e.pv = 0;
         e.vivo = false;
         await self.ui.fxMuerte(e);
         await self.ganchos((r, c) => r.alMatar?.(c, e));
+        await self.extinguirLigados();
         await self.comprobarFin();
       },
       async sanar(obj, n) {
@@ -1024,6 +1019,8 @@ export class Combate {
         }
       }
     }
+    // bound to its guardians: it cannot fall while one of them lives
+    if (obj !== this.jugador && this.inmortalAhora(obj as EnemigoCombate)) real = Math.min(real, obj.pv - 1);
     obj.pv = Math.max(0, obj.pv - real);
     if (obj !== this.jugador) {
       this.danoHechoEsteTurno += real;
@@ -1047,7 +1044,7 @@ export class Combate {
         }
         if (obj !== this.jugador) await this.disparadoresDeMuerte(e);
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
-        if (obj !== this.jugador && e.def.invocaAlMorir) {
+        if (obj !== this.jugador && e.def.invocaAlMorir && this.tieneGuardianes(e.def.invocaAlMorir)) {
           await this.ui.fxEsperarMuerte?.(e); // the newcomer takes the slot once the body has fallen
           const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
           this.enemigos.push(liberado);
@@ -1056,8 +1053,11 @@ export class Combate {
         }
         // Relics that feed on kills
         if (obj !== this.jugador && this.jugador.vivo) await this.ganchos((r, c) => r.alMatar?.(c, e));
+        if (obj !== this.jugador) await this.extinguirLigados();
       }
     }
+    // A sleeper (the mimic) wakes up as soon as it gets hurt
+    if (obj !== this.jugador && real > 0 && obj.vivo) await this.despertar(obj as EnemigoCombate);
     // Armadura de Agathys (brujo): lo que tu bloqueo absorbe vuelve a quien te golpea;
     // Blindaje Infernal, a TODOS
     const est = this.jugador.estados;
@@ -1128,6 +1128,66 @@ export class Combate {
         aliado.pv += cura;
         await this.ui.fxCura(aliado, cura);
       }
+    }
+  }
+
+  /** Bound to guardians that still live: it cannot drop below 1 HP (see EnemigoDef.inmortalMientras). */
+  inmortalAhora(e: EnemigoCombate): boolean {
+    const ids = e.def.inmortalMientras;
+    return !!ids?.length && this.enemigos.some((x) => x.vivo && x !== e && ids.includes(x.def.id));
+  }
+
+  /** A bound creature is only worth summoning while one of its guardians still lives. */
+  private tieneGuardianes(def: EnemigoDef): boolean {
+    const ids = def.inmortalMientras;
+    return !ids?.length || this.enemigos.some((x) => x.vivo && ids.includes(x.def.id));
+  }
+
+  /** Its guardians are all gone: whatever was bound to them burns out. */
+  private async extinguirLigados() {
+    for (const e of this.enemigos) {
+      if (!e.vivo || this.terminado || !e.def.inmortalMientras?.length || this.inmortalAhora(e)) continue;
+      await this.ui.fxMensaje(`🔥 Sin nadie que la ate, ${e.nombre} se extingue`);
+      await this.infligir(e, e.pv, 'fuego', true);
+    }
+  }
+
+  /** A sleeper wakes (hurt, or its time is up): it turns on the hero, and the creatures
+   *  hiding with it join the fight and strike at once, by surprise. */
+  private async despertar(e: EnemigoCombate) {
+    const sueno = e.def.durmiente;
+    if (!sueno || e.despierto || !e.vivo || this.terminado) return;
+    e.despierto = true;
+    e.intencion = e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e));
+    e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+    await this.ui.fxMensaje(`😱 ¡${e.nombre} despierta!`);
+    this.ui.render();
+    const llegan: EnemigoCombate[] = [];
+    for (const def of sueno.despertar) {
+      if (this.enemigos.filter((x) => x.vivo).length >= 5) break; // campo lleno
+      const nuevo = crearEnemigo(def, this.rng);
+      this.enemigos.push(nuevo);
+      llegan.push(nuevo);
+      await this.ui.fxMensaje(`¡${nuevo.nombre} también era un mímico!`);
+      this.ui.render();
+    }
+    for (const nuevo of llegan) await this.actuarYa(nuevo);
+  }
+
+  /** The enemy acts right now, out of turn, and then picks its next move. */
+  private async actuarYa(e: EnemigoCombate) {
+    if (!e.vivo || this.terminado) return;
+    await this.ejecutarMovimiento(e);
+    if (e.vivo && !this.terminado) {
+      e.turnosVisto++;
+      if (e.intencionForzada) {
+        e.intencion = e.intencionForzada;
+        delete e.intencionForzada;
+      } else {
+        e.intencion = e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e));
+      }
+      e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+      this.ui.render();
     }
   }
 
@@ -1816,6 +1876,8 @@ export class Combate {
         );
       }
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+      // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
+      if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
       this.ui.render();
       await this.ui.espera(250);
     }
@@ -1936,7 +1998,7 @@ export class Combate {
           if (veces > 1) await this.ui.espera(220);
           continue;
         }
-        const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, m.dano));
+        const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(m)));
         const bloqueoAntes = this.jugador.bloqueo;
         // piercing hits go through the block without breaking it
         this.atacanteActual = e;
@@ -1981,6 +2043,14 @@ export class Combate {
       if (real > 0) {
         e.pv += real;
         await this.ui.fxCura(e, real);
+      }
+    }
+    if (m.curaAliados) {
+      for (const aliado of this.enemigos.filter((x) => x.vivo)) {
+        const cura = Math.min(m.curaAliados, aliado.pvMax - aliado.pv);
+        if (cura <= 0) continue;
+        aliado.pv += cura;
+        await this.ui.fxCura(aliado, cura);
       }
     }
     if (m.fuerzaAliados) {

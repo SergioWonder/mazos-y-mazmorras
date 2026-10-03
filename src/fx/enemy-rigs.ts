@@ -11,6 +11,7 @@ import {
 import { buildWings, type WingSpec } from './wing.ts';
 import { strandShapes, type ChainSpec } from './chains.ts';
 import { EASE } from './motion.ts';
+import { mimicChest, mimicChair, mimicDoor, type RigDraft } from './mimic-rigs.ts';
 
 type Pt = [number, number];
 
@@ -39,9 +40,98 @@ function finish(id: string, rig: Omit<PuppetRig, 'phase' | 'palette'> & { palett
 // ── Heads (local frame: centre 0,0, radius ≈10, facing right) ────────────────
 export type HeadType =
   | 'goblin' | 'orc' | 'ogre' | 'skull' | 'zombie' | 'ghoul' | 'hood' | 'mask' | 'human' | 'kobold'
-  | 'imp' | 'demon' | 'tentacle' | 'mummy' | 'helm' | 'rock' | 'capirote' | 'bark';
+  | 'imp' | 'demon' | 'tentacle' | 'mummy' | 'helm' | 'rock' | 'capirote' | 'bark' | 'fiend'
+  | 'dragonborn';
 
-interface HeadOpts { beard?: boolean; bandana?: boolean; hat?: boolean; bald?: boolean; crown?: boolean; hornCrown?: boolean; scar?: boolean }
+/** Class headwear of the skeletal adventurers (drawn on a 'skull' head). */
+type SkullGear = 'nasal' | 'wizard' | 'mitre' | 'hoodMask' | 'horned' | 'winged' | 'hood' | 'cowl' | 'plume';
+
+interface HeadOpts {
+  beard?: boolean; bandana?: boolean; hat?: boolean; bald?: boolean; crown?: boolean; hornCrown?: boolean; scar?: boolean;
+  /** Skull: class headwear. */
+  gear?: SkullGear;
+  /** Goblin: feathers stuck in the hair (war-crier). */
+  feathers?: boolean;
+  /** Fiend: long hair flowing down the back. */
+  longHair?: boolean;
+}
+
+type HeadDraw = {
+  P: (k: string, pts: Pt[]) => Shape;
+  L: (k: string, x1: number, y1: number, x2: number, y2: number, w: number) => Shape;
+  C: (k: string, x: number, y: number, r: number) => Shape;
+};
+
+/** Headwear of a skull (local head frame): `back` goes behind the skull, `over` on top of it. */
+function skullGear(gear: SkullGear, { P: hP, L: hL, C: hC }: HeadDraw): { back: Shape[]; over: Shape[] } {
+  const hoodBack = [
+    hP('hood', [[-13, 9], [-13, -4], [-6, -13], [5, -13], [12, -6], [13, 2], [4, -4], [-4, 2], [-6, 13]]),
+    hP('hood', [[-11, -6], [-19, -1], [-12, 1]]),
+  ];
+  const hoodBrim = hP('hood', [[-11, -2], [-9, -10], [0, -14], [9, -11], [14, -3], [10, -5], [2, -8], [-6, -6], [-9, 1]]);
+  switch (gear) {
+    case 'nasal': // warrior: dome helm with a nose guard and a mail aventail
+      return {
+        back: [hP('mail', [[-11, -2], [-6, 0], [-5, 10], [-8, 8], [-10, 12], [-12, 8]])],
+        over: [
+          hP('metal', [[-11, -1], [-9, -9], [-2, -13], [6, -12], [11, -6], [11, -3], [-10, 0]]),
+          hL('ink', -10, -1, 11, -4, 0.8), hL('ink', 0, -12.5, 1, -3, 0.5), hL('metal', 8.5, -4, 9.5, 4, 1.8),
+        ],
+      };
+    case 'wizard': // mage: crooked pointy hat with a glowing rune
+      return {
+        back: [],
+        over: [
+          hP('hat', [[-9, -5], [-7, -14], [-10, -22], [-17, -29], [-4, -20], [2, -12], [8, -6]]),
+          hP('hat', [[-16, -4], [15, -7], [12, -3], [-13, -1]]),
+          hL('band', -8, -6, 8, -7, 1.5), hC('magic', -2, -13, 1.2),
+        ],
+      };
+    case 'mitre': // cleric: tall mitre with a gold cross and lappets
+      return {
+        back: [hL('hat', -7, -3, -10, 9, 2)],
+        over: [
+          hP('hat', [[-8, -4], [-8, -14], [-1, -24], [7, -15], [8, -5]]),
+          hL('gold', -0.5, -21, 0, -5, 1.4), hL('gold', -6, -11, 6, -11, 1.2), hL('gold', -8, -5, 8, -5.5, 1.3),
+        ],
+      };
+    case 'hoodMask': // rogue: hood and a scarf over the jaw
+      return { back: hoodBack, over: [hoodBrim, hP('band', [[-6, 5], [9, 3], [11, 9], [3, 13], [-5, 11]]), hL('ink', -4, 8, 9, 6.5, 0.5)] };
+    case 'hood': // ranger: plain hood
+      return { back: hoodBack, over: [hoodBrim, hL('ink', -6, -6, 8, -9, 0.5)] };
+    case 'cowl': // warlock: hood pierced by two small horns, an eldritch rune on the brow
+      return {
+        back: [hP('horn', [[-6, -10], [-13, -18], [-15, -25], [-9, -18], [-2, -12]]), ...hoodBack],
+        over: [hoodBrim, hP('horn', [[2, -12], [3, -20], [0, -26], [6, -20], [6, -11]]), hC('magic', 7, -6.5, 1)],
+      };
+    case 'horned': // barbarian: fur cap with two horns
+      return {
+        back: [hP('horn', [[-4, -10], [-10, -12], [-13, -15], [-14, -22], [-16.5, -13], [-12, -8], [-6, -6]])],
+        over: [
+          hP('fur', [[-11, 0], [-12, -6], [-8, -11], [-2, -13], [5, -12], [10, -8], [12, -3], [8, -4], [0, -6], [-8, -3]]),
+          hL('ink', -9, -5, -6, -9, 0.5), hL('ink', -3, -7, 0, -11, 0.5), hL('ink', 3, -7, 6, -10, 0.5),
+          hP('horn', [[4, -10], [10, -12], [14, -16], [15, -23], [17.5, -15], [14, -9], [7, -6]]),
+        ],
+      };
+    case 'winged': // paladin: open-faced helm with gold wings and a holy glow
+      return {
+        back: [hP('gold', [[-7, -7], [-17, -17], [-14, -11], [-20, -11], [-14, -6], [-18, -3], [-10, -2]])],
+        over: [
+          hP('metal', [[-11, 3], [-10, -7], [-3, -13], [6, -12], [11, -6], [11, -3], [3, -5], [-5, -3], [-7, 4]]),
+          hL('gold', -10, -3, 11, -4.5, 1.1), hC('magic', 7, -8.5, 1.3),
+        ],
+      };
+    case 'plume': // bard: wide-brimmed hat with a long feather
+      return {
+        back: [hP('plume', [[-4, -11], [-12, -19], [-24, -24], [-16, -15], [-6, -8]]), hL('ink', -5, -10, -20, -21.5, 0.5)],
+        over: [
+          hP('hat', [[-8, -5], [-7, -12], [0, -14], [7, -12], [8, -6]]),
+          hP('hat', [[-16, -4], [-6, -7], [16, -9], [12, -4], [-12, -1]]),
+          hL('band', -7, -7, 7, -8, 1.6),
+        ],
+      };
+  }
+}
 
 function head(type: HeadType, hc: Pt, s: number, o: HeadOpts = {}): Shape[] {
   const X = (x: number) => hc[0] + x * s, Y = (y: number) => hc[1] + y * s;
@@ -56,6 +146,7 @@ function head(type: HeadType, hc: Pt, s: number, o: HeadOpts = {}): Shape[] {
         hP('skin', [[-10, -5], [-2, -11], [8, -9], [14, -1], [12, 7], [4, 11], [-6, 9], [-11, 3]]),
         hP('skin', [[10, -4], [21, 1], [12, 5]]),
         hP('hair', [[-10, -6], [-14, -15], [-8, -9], [-6, -16], [-3, -9]]),
+        ...(o.feathers ? [hP('plume', [[-7, -9], [-13, -25], [-4, -11]]), hP('band', [[-4, -10], [0, -23], [0, -9]]), hL('ink', -6, -10, -11, -22, 0.4)] : []),
         hP('skin', [[0, 7], [13, 5], [11, 11], [2, 12]]),
         hP('teeth', [[3, 7], [4, 10], [5, 7]]), hP('teeth', [[7.5, 6.5], [8.5, 9.5], [9.5, 6.5]]),
         hL('ink', 1, 7.2, 13, 5.6, 0.9), hL('ink', -1, -4.5, 10, -3.2, 1.1),
@@ -85,16 +176,20 @@ function head(type: HeadType, hc: Pt, s: number, o: HeadOpts = {}): Shape[] {
         hL('ink', -1, 8, 12, 8, 0.8), hL('ink', -3, -7, 3, -9, 0.6),
         hC('eyeGlow', 8, -2, 1.3),
       ];
-    case 'skull':
+    case 'skull': {
+      const gear = o.gear ? skullGear(o.gear, { P: hP, L: hL, C: hC }) : { back: [], over: [] };
       return [
+        ...gear.back,
         hC('bone', 0, 0, 10),
         hP('bone', [[-6, 6], [8, 4], [9, 12], [-2, 14], [-6, 10]]),
         hC('socket', 4, 0, 3), hP('socket', [[8, 3], [10.5, 6.5], [7, 6.5]]),
         hL('ink', -1, 8.2, 8.5, 7, 0.7), hL('ink', 1, 6.5, 1, 9.5, 0.6), hL('ink', 4, 6, 4, 9, 0.6), hL('ink', 6.5, 5.6, 6.5, 8.4, 0.6),
         hL('ink', -5, -7, -1, -1.5, 0.7),
         ...(o.hat ? [hP('metal', [[-11, -1], [-8, -11], [0, -14], [8, -12], [11, -6], [0, -7], [-10, 1]]), hL('ink', -10, -1, 11, -6, 0.9)] : []),
+        ...gear.over,
         hC('eyeGlow', 4.5, 0, 1.3),
       ];
+    }
     case 'zombie':
       return [
         hC('skin', 0, 0, 9.8),
@@ -195,6 +290,20 @@ function head(type: HeadType, hc: Pt, s: number, o: HeadOpts = {}): Shape[] {
         hP('lava', [[3, 4], [10, 3], [9, 6]]),
         hC('eyeGlow', 6, -2.5, 1.8),
       ];
+    case 'dragonborn': // long scaled snout, swept-back horns, neck frill and fangs
+      return [
+        hP('horn', [[-3, -7], [-19, -15], [-24, -13], [-7, -3]]),
+        hP('skin', [[-7, 0], [-17, 3], [-14, 6], [-8, 7]]),
+        hP('skin', [[-9, -5], [-3, -10], [6, -9.5], [12, -5.5], [22, -3.5], [23.5, 0.5], [14, 3], [6, 9], [-4, 10], [-10, 4]]),
+        hP('skin', [[3, 3.5], [21, 2.6], [19, 7], [7, 10]]),
+        hP('teeth', [[9, 3.3], [10, 6.4], [11, 3.2]]), hP('teeth', [[15.5, 3], [16.4, 5.6], [17.3, 2.9]]),
+        hP('horn', [[1, -9], [-11, -20], [-15, -19.5], [-3, -6]]),
+        hP('horn', [[14, -5], [16.5, -9], [18, -4.5]]),
+        hL('ink', 6, 3.1, 21.5, 2.3, 0.8), hL('ink', 2, -4.8, 12.5, -3.8, 1.2),
+        hL('ink', -6, -4, -3, 4, 0.6), hL('ink', -2, 3, 3, 8, 0.6), hL('ink', 8, -8, 15, -5.5, 0.5),
+        hC('ink', 21, -1.6, 0.6),
+        hC('eyeGlow', 8, -1.8, 1.5),
+      ];
     case 'capirote':
       return [
         hP('hood', [[-9, 7], [-8, -6], [-2, -27], [4, -7], [11, -3], [12, 8]]),
@@ -208,19 +317,36 @@ function head(type: HeadType, hc: Pt, s: number, o: HeadOpts = {}): Shape[] {
         hL('ink', -4, -4, -2, 6, 0.7), hL('ink', 4, 2, 6, 8, 0.6),
         hC('eyeGlow', 6, -2, 1.5),
       ];
+    case 'fiend': // seductive demon: fine features, swept-back horns, pointed ear, a sly smile
+      return [
+        ...(o.longHair ? [hP('hair', [[-8, -8], [-13, 0], [-15, 12], [-12, 22], [-8, 16], [-5, 22], [-3, 8], [-3, 0]])] : []),
+        hP('horn', [[-3, -8], [-9, -15], [-18, -16], [-11, -12], [-6, -5]]),
+        hE('skin', 1.5, 0, 9, 10),
+        hP('skin', [[9, -1], [12.5, 3], [9, 4]]),
+        hP('hair', [[-9, -1], [-8, -9], [0, -12], [9, -9], [11, -5], [4, -7], [-3, -5], [-6, 4]]),
+        hP('skin', [[-5, -1], [-14, -6], [-6, 4]]),
+        hP('horn', [[2, -9], [0, -17], [-6, -23], [-2, -15], [-2, -8]]),
+        ...(o.beard ? [hP('hair', [[5, 7], [10, 6], [8, 12]])] : []),
+        hL('ink', 3, -4.5, 10, -2.5, 1), hL('ink', 5, 6, 10, 4.8, 0.7),
+        hC('eyeGlow', 6.5, -1, 1.4),
+      ];
   }
 }
 
 // ── Weapons and off-hand items (relative to the hand, bind pose pointing up) ──
 export type WeaponType =
   | 'cleaver' | 'sword' | 'katana' | 'axe' | 'club' | 'flail' | 'spear' | 'dagger' | 'poisonDagger'
-  | 'staff' | 'skullStaff' | 'dragonStaff' | 'bow' | 'crossbow' | 'orb' | 'claws' | 'fists';
-type OffhandType = 'shield' | 'kite' | 'dagger' | 'book' | 'lantern' | 'orb' | 'vial' | 'none';
+  | 'staff' | 'skullStaff' | 'dragonStaff' | 'bow' | 'crossbow' | 'orb' | 'claws' | 'fists'
+  | 'halberd'
+  | 'hatchet' | 'totem' | 'mace' | 'greataxe' | 'warhammer' | 'rapier' | 'talons';
+type OffhandType = 'tower' | 'shield' | 'kite' | 'dagger' | 'book' | 'lantern' | 'orb' | 'vial' | 'drum' | 'holySymbol' | 'heater' | 'lute' | 'none';
 
 type Grip = 'swing' | 'thrust' | 'cast' | 'castHand' | 'shoot' | 'crossbow';
 const GRIP: Record<WeaponType, Grip> = {
   cleaver: 'swing', sword: 'swing', katana: 'swing', axe: 'swing', club: 'swing', flail: 'swing', claws: 'swing', fists: 'swing',
-  spear: 'thrust', dagger: 'thrust', poisonDagger: 'thrust',
+  halberd: 'swing',
+  hatchet: 'swing', totem: 'swing', mace: 'swing', greataxe: 'swing', warhammer: 'swing', talons: 'swing',
+  spear: 'thrust', dagger: 'thrust', poisonDagger: 'thrust', rapier: 'thrust',
   staff: 'cast', skullStaff: 'cast', dragonStaff: 'cast', orb: 'castHand', bow: 'shoot', crossbow: 'crossbow',
 };
 
@@ -230,6 +356,15 @@ function weapon(type: WeaponType, [hx, hy]: Pt): { shapes: Shape[]; focus: Pt } 
   const WC = (k: string, x: number, y: number, r: number) => C('weapon', k, hx + x, hy + y, r);
   const WE = (k: string, x: number, y: number, rx: number, ry: number) => E('weapon', k, hx + x, hy + y, rx, ry);
   switch (type) {
+    case 'halberd': // long pole with an axe blade, a back hook and a top spike
+      return { focus: [hx + 7, hy - 40], shapes: [
+        W('wood', 0, 22, 0, -52, 2.6),
+        WP('metal', [[0.5, -47], [9, -51], [12.5, -43], [12, -34], [9, -29], [0.5, -35]]),
+        W('edge', 10.4, -49.6, 12.2, -31, 0.8), W('ink', 4, -46, 4, -36, 0.5),
+        WP('metal', [[-0.5, -45], [-7, -42], [-8.5, -38], [-0.5, -40]]),
+        WP('metal', [[-1.6, -52], [0, -63], [1.6, -52]]),
+        WP('band', [[-2, -52], [2, -52], [2.6, -48], [-2.6, -48]]),
+      ] };
     case 'cleaver':
       return { focus: [hx + 6, hy - 14], shapes: [
         W('wood', 0, 5, 0, -4, 2.6),
@@ -308,6 +443,47 @@ function weapon(type: WeaponType, [hx, hy]: Pt): { shapes: Shape[]; focus: Pt } 
       ] };
     case 'fists':
       return { focus: [hx + 3, hy], shapes: [WC('metal', 1.5, 0, 2.2)] };
+    case 'hatchet': // short rusty hand axe
+      return { focus: [hx + 6, hy - 12], shapes: [
+        W('wood', 0, 5, 0, -18, 2.6),
+        WP('metal', [[-1, -18], [8, -22], [12, -14], [9, -5], [-1, -11]]),
+        W('edge', 9.2, -21, 11.2, -6, 0.8), WC('rust', 4.5, -13.5, 2),
+      ] };
+    case 'totem': // pole topped with a skull and dangling feathers
+      return { focus: [hx + 1, hy - 25], shapes: [
+        W('wood', 0, 18, 0, -21, 2.4),
+        WP('plume', [[-1, -21], [-9, -15], [-4, -22]]), WP('plume', [[0, -19], [-6, -9], [-2, -18]]),
+        W('band', -1.8, -18, 1.8, -18, 1.6),
+        WC('bone', 1, -25.5, 4.2), WP('bone', [[-1, -23], [5, -23], [4.5, -19.5], [0, -20]]), WC('socket', 2.6, -26, 1.2),
+      ] };
+    case 'mace': // flanged mace
+      return { focus: [hx, hy - 21], shapes: [
+        W('wood', 0, 5, 0, -18, 2.4),
+        WP('metal', [[-1.6, -24], [0, -29], [1.6, -24]]), WP('metal', [[2.5, -23.5], [7, -21], [2.5, -18.5]]), WP('metal', [[-2.5, -23.5], [-7, -21], [-2.5, -18.5]]),
+        WC('metal', 0, -21, 4), W('ink', -2.5, -21, 2.5, -21, 0.5),
+      ] };
+    case 'greataxe': // long-hafted double-bitted axe
+      return { focus: [hx + 6, hy - 30], shapes: [
+        W('wood', 0, 14, 0, -34, 3),
+        WP('metal', [[1, -36], [10, -42], [13.5, -31], [10, -20], [1, -26]]),
+        WP('metal', [[-1, -36], [-8.5, -40], [-11, -31], [-8.5, -22], [-1, -26]]),
+        W('edge', 10.6, -41, 13, -21, 0.8), WP('metal', [[-1.3, -36], [0, -41], [1.3, -36]]),
+      ] };
+    case 'warhammer': // blessed war hammer with a back spike
+      return { focus: [hx + 3, hy - 32], shapes: [
+        W('wood', 0, 10, 0, -29, 2.6),
+        WP('metal', [[-5, -37], [6.5, -37], [6.5, -28], [-5, -28]]), WP('metal', [[-5, -35], [-11, -32.5], [-5, -30]]),
+        W('gold', -4.5, -32.5, 6, -32.5, 1.1), WP('metal', [[-1.2, -37], [0.6, -41], [2.4, -37]]),
+      ] };
+    case 'rapier': // slender blade with a swept gold guard
+      return { focus: [hx, hy - 34], shapes: [
+        W('leather', 0, 4, 0, -2, 2), W('gold', -3.5, -2, 3.5, -2, 1.2), W('gold', 3.5, -2, 2.8, 4.5, 0.9),
+        WP('metal', [[-0.9, -2], [0.9, -2], [0.3, -43], [-0.3, -43]]),
+      ] };
+    case 'talons': // long, slender claws
+      return { focus: [hx + 6, hy + 2], shapes: [
+        WP('teeth', [[1, -1], [12, -1], [2, 1.5]]), WP('teeth', [[0, 1.5], [11, 4], [1, 3.5]]), WP('teeth', [[-1, 3], [8, 8], [-1, 5]]),
+      ] };
   }
 }
 
@@ -317,6 +493,16 @@ function offhand(type: OffhandType, [bx, by]: Pt): Shape[] {
   const OC = (k: string, x: number, y: number, r: number) => C('offhand', k, bx + x, by + y, r);
   const OE = (k: string, x: number, y: number, rx: number, ry: number) => E('offhand', k, bx + x, by + y, rx, ry);
   switch (type) {
+    case 'tower': // tall bronze-rimmed tower shield with a dragon crest, held in front of the body
+      return [
+        OP('armor', [[-2.5, -21.5], [7, -23.5], [16, -21.5], [17.5, -1], [16, 18], [7, 20.5], [-2.5, 18], [-4, -1]]),
+        OP('wood', [[-1, -19.8], [7, -21.6], [14.5, -19.8], [15.8, -1], [14.5, 16.4], [7, 18.6], [-1, 16.4], [-2.3, -1]]),
+        OP('band', [[3.6, -21], [10.4, -21], [10.4, 18], [3.6, 18]]),
+        O('ink', 3.6, -20.4, 3.6, 17.6, 0.5), O('ink', 10.4, -20.4, 10.4, 17.6, 0.5),
+        OP('gold', [[3, -9], [8, -14], [12.5, -11], [9.5, -9.5], [12, -5], [9, -6], [10, -1], [7, -3.5], [4.5, 0], [5.5, -5.5]]),
+        OC('armor', 7, 6, 2.6), OC('ink', 7, 6, 0.8),
+        OC('ink', 0, -17, 0.6), OC('ink', 14, -17, 0.6), OC('ink', 0, 14, 0.6), OC('ink', 14, 14, 0.6),
+      ];
     case 'shield':
       return [OE('metal', 0, -1, 10, 12), OE('wood', 0, -1, 8.4, 10.4), O('ink', -4, -11, -4, 9, 0.7), O('ink', 4, -11, 4, 9, 0.7), O('ink', -7, -6, -1, 5, 0.8), OC('metal', 0, -1, 2.8)];
     case 'kite':
@@ -331,6 +517,29 @@ function offhand(type: OffhandType, [bx, by]: Pt): Shape[] {
       return [OC('magic', 0, -5, 3.4)];
     case 'vial':
       return [OP('sclera', [[-2, -2], [2, -2], [3.5, 6], [-3.5, 6]]), OE('poison', 0, 3.5, 3, 2.5), O('wood', 0, -4, 0, -1.5, 2)];
+    case 'drum': // war drum held by its rim
+      return [
+        OP('wood', [[-6.5, 0], [6.5, 0], [5.5, 11], [-5.5, 11]]), OE('hide', 0, 0, 6.5, 2.2),
+        O('ink', -5.5, 1.5, -2, 10, 0.5), O('ink', -2, 10, 1.5, 1.5, 0.5), O('ink', 1.5, 1.5, 5, 10, 0.5),
+        O('band', -6, 7.5, 6, 7.5, 1.2),
+      ];
+    case 'holySymbol': // sun amulet dangling from its chain
+      return [
+        O('gold', 0, 0, 0, 5, 0.6),
+        OP('gold', [[0, 3.5], [1.5, 6.5], [4.5, 5.5], [3.5, 8.5], [6.5, 10], [3.5, 11.5], [4.5, 14.5], [1.5, 13.5], [0, 16.5], [-1.5, 13.5], [-4.5, 14.5], [-3.5, 11.5], [-6.5, 10], [-3.5, 8.5], [-4.5, 5.5], [-1.5, 6.5]]),
+        OC('magic', 0, 10, 2.4),
+      ];
+    case 'heater': // heater shield with a holy sigil
+      return [
+        OP('metal', [[-9, -12], [9, -12], [9, -2], [4.5, 7], [0, 12], [-4.5, 7], [-9, -2]]),
+        OP('heraldry', [[-7.5, -10.5], [7.5, -10.5], [7.5, -2.2], [3.6, 5.8], [0, 10], [-3.6, 5.8], [-7.5, -2.2]]),
+        O('gold', 0, -8.5, 0, 6.5, 1.8), O('gold', -5, -4, 5, -4, 1.8), OC('magic', 0, -4, 1.3),
+      ];
+    case 'lute': // lute held by the neck, hanging at the side
+      return [
+        O('wood', 0, -8, 0, 7, 1.6), O('wood', 0, -8, -3, -11.5, 2),
+        OE('wood', 0, 12.5, 5.6, 7.5), OC('ink', 0, 12, 1.6), O('ink', -2.5, 16.5, 2.5, 16.5, 0.6), O('edge', 0, -7, 0, 16.5, 0.35),
+      ];
     case 'none':
       return [];
   }
@@ -365,6 +574,14 @@ interface BipedOpts {
   wings?: boolean;
   tail?: boolean;
   quiver?: boolean;
+  /** The off-hand item goes over the body (just under the head) instead of behind it: a tower shield. */
+  shieldFront?: boolean;
+  /** Ragged tunic, tabard or mail shirt over the torso, painted with this palette key. */
+  tabard?: string;
+  /** Cross emblem on the chest (over the tabard), painted with this palette key. */
+  sigil?: string;
+  /** Extra torso details (trims, sashes, necklaces), drawn over the clothing. */
+  torsoDetail?: Shape[];
   /** Extra forward stoop at rest (degrees). */
   hunch?: number;
   art?: number;
@@ -394,7 +611,8 @@ function biped(id: string, o: BipedOpts): PuppetRig {
   if (wings) shapes.push(...wings.back);
   // back arm + off-hand
   shapes.push(L('armB', armKey, shB[0], shB[1], shB[0] - 3, shB[1] + 11, b.aw), L('armB', armKey, shB[0] - 3, shB[1] + 11, handB[0], handB[1], b.aw * 0.9));
-  shapes.push(...offhand(o.offhand ?? 'none', handB));
+  const held = offhand(o.offhand ?? 'none', handB);
+  if (!o.shieldFront) shapes.push(...held);
   shapes.push(C('armB', o.weapon === 'claws' ? 'skin' : 'skin', handB[0], handB[1], b.aw * 0.62));
   // legs
   const leg = (bone: BoneId, [px, py]: Pt, kx: number, fx: number) => {
@@ -419,11 +637,17 @@ function biped(id: string, o: BipedOpts): PuppetRig {
     shapes.push(P('torso', 'armor', [[58 - b.sw + 1.5, sy + 1], [58 + b.sw - 1, sy + 1], [58 + b.ww - 1, 95], [58 - b.ww + 1, 95]]));
     shapes.push(L('torso', 'ink', 59, sy + 3, 59, 94, 0.6), L('torso', 'ink', 58 - b.ww + 2, 88, 58 + b.ww - 2, 88, 0.6));
   }
+  if (o.tabard) {
+    shapes.push(P('torso', o.tabard, [[58 - b.sw + 1.5, sy + 1], [58 + b.sw - 1.5, sy + 1], [58 + b.ww + 1, 104], [63.5, 101], [61, 108], [57, 102], [54, 106.5], [58 - b.ww - 1, 102]]));
+  }
+  if (o.sigil) shapes.push(L('torso', o.sigil, 59.5, 82, 59.5, 93, 1.4), L('torso', o.sigil, 55.5, 85.5, 63.5, 85.5, 1.4));
+  if (o.torsoDetail) shapes.push(...o.torsoDetail);
   if (o.belt || o.loincloth) shapes.push(L('torso', 'belt', 58 - b.ww, 98, 58 + b.ww, 97.5, 3), C('torso', 'metal', 60, 97.7, 1.5));
   if (o.loincloth) shapes.push(P('torso', 'cloth', [[56, 99], [66, 98.5], [65, 112], [62, 108], [59, 113]]));
   // near wing over the body but always behind the head (it hangs from the back)
   if (wings) shapes.push(...wings.front);
   // head
+  if (o.shieldFront) shapes.push(...held);
   shapes.push(...head(o.head, hc, b.hr / 10, o.headOpts));
   // front arm, weapon, hand
   if (o.armor) shapes.push(E('armF', 'armor', shF[0], shF[1] + 1, b.aw * 0.95, b.aw * 0.8));
@@ -626,6 +850,58 @@ function crawler(id: string, palette: Record<string, string>): PuppetRig {
       L('head', 'flesh', 92, 102, 100, 112, 1.6), L('head', 'flesh', 95, 101, 104, 108, 1.6), L('head', 'flesh', 90, 103, 94, 114, 1.6), L('head', 'flesh', 96, 99, 106, 102, 1.4),
       P('head', 'teeth', [[94, 100], [98, 99], [96, 103]]),
       C('head', 'eyeGlow', 91, 95, 1.3), C('head', 'eyeGlow', 94.5, 95.5, 1.1),
+    ],
+  });
+}
+
+/**
+ * Mangy sewer rat: arched back, pointed snout with buck teeth and venomous
+ * drool, and a long naked tail on a spring chain. `giant` makes the swarm's
+ * queen: scarred, torn ear, spikier back and glowing pustules.
+ */
+function rodent(id: string, o: { palette: Record<string, string>; giant?: boolean; art?: number }): PuppetRig {
+  const tail: ChainSpec = {
+    slot: 'A', parent: 'torso', joints: o.giant ? [[34, 112], [19, 119], [5, 116], [-4, 103]] : [[34, 112], [21, 118], [9, 115], [1, 106]],
+    freq: 2.2, damping: 0.25, taper: 0.5, sag: 1.2, sway: 2.2,
+  };
+  const g = o.giant;
+  return finish(id, {
+    accent: o.palette.eyeGlow ?? '#b6ff5a', style: 'melee', focus: [100, 108], focusBone: 'head', slash: [12, 24], slashAt: ['head', [100, 110]],
+    art: o.art ?? 1.15,
+    palette: { fur: '#5a5048', furD: '#3e3630', mane: '#3a332d', belly: '#7a6e62', paw: '#c08a88', tail: '#b0827e', mange: '#9a6a64', teeth: '#d8c890', eyeGlow: '#b6ff5a', poison: '#8fe36a', ...o.palette },
+    pivots: { torso: [44, 114], head: [74, 108], legB: [42, 114], legF: [41, 112], armB: [72, 114], armF: [72, 113], cape: [34, 112] },
+    chains: [tail],
+    rest: { head: 4 },
+    windup: { rootX: -6, torso: -6, head: -12, armF: -15, legF: 10 },
+    strike: { rootX: 16, torso: 6, head: 14, armF: -40, armB: -25, legF: 25, legB: 20 },
+    shapes: [
+      ...strandShapes(tail, 'tail', g ? [4, 2.8, 1.6, 0.5] : [3.4, 2.4, 1.4, 0.5]),
+      L('legB', 'furD', 42, 114, 46, 120, 4), L('legB', 'furD', 46, 120, 42, 125, 3.2), E('legB', 'paw', 45, 126.8, 4, 1.6),
+      L('armB', 'furD', 72, 114, 74, 125, 3.2), E('armB', 'paw', 76, 126.8, 3.2, 1.5),
+      P('torso', 'fur', [[30, 113], [33, 103], [43, 96], [56, 95.5], [68, 99], [76, 106], [76, 114], [67, 121], [44, 122.5], [33, 120]]),
+      P('torso', 'mane', g
+        ? [[33, 102], [35, 92], [40, 98], [43, 88], [48, 96], [52, 87], [56, 96], [61, 90], [63, 99], [70, 96], [68, 103], [48, 101]]
+        : [[33, 103], [36, 96], [40, 99], [44, 93], [48, 98], [52, 94], [56, 99], [61, 97], [64, 101], [70, 100], [66, 104], [48, 102]]),
+      E('torso', 'belly', 56, 119, 13, 3.2),
+      E('torso', 'mange', 60, 109, 4, 2.4), C('torso', 'mange', 36, 110, 2),
+      L('torso', 'ink', 48, 106, 54, 105, 0.6), L('torso', 'ink', 62, 113, 68, 112, 0.6), L('torso', 'ink', 52, 114, 57, 113, 0.6),
+      ...(g ? [
+        L('torso', 'ink', 50, 101, 57, 111, 0.8), L('torso', 'ink', 54, 100, 60, 108, 0.7),
+        C('torso', 'poison', 44, 100, 1.5), C('torso', 'poison', 66, 104, 1.2), C('torso', 'poison', 58, 101, 1),
+      ] : []),
+      E('legF', 'fur', 41, 112, 7.5, 8.5), L('legF', 'fur', 40, 116, 44, 121, 4.2), L('legF', 'fur', 44, 121, 40, 125.5, 3.4), E('legF', 'paw', 43, 126.8, 4.5, 1.7),
+      C('head', 'furD', 73, 96, 4.2),
+      P('head', 'fur', [[67, 101], [76, 96], [86, 98], [96, 104], [103, 107.5], [101.5, 111.5], [90, 115], [76, 116], [67, 112]]),
+      P('head', 'fur', g ? [[75, 98], [74, 92], [77, 88.5], [80, 91], [82, 89], [84, 93], [83, 98]] : [[75, 98], [74, 92], [78, 89], [83, 91], [84, 98]]),
+      P('head', 'paw', [[77, 96.5], [77, 92.5], [79.5, 91], [82, 93.5], [82, 96.5]]),
+      C('head', 'paw', 103, 108.8, 1.7),
+      P('head', 'teeth', g ? [[95, 112.5], [99.5, 112], [97, 118]] : [[96, 112.4], [99, 112], [97.6, 116]]),
+      L('head', 'ink', 89, 112.6, 100.5, 111.6, 0.6),
+      P('head', 'poison', [[92.5, 113.5], [95, 113.5], [94.2, 119], [93.6, 119]]), C('head', 'poison', 93.9, 120, 1),
+      L('head', 'ink', 99, 107, 109, 103.5, 0.35), L('head', 'ink', 99, 109.2, 110, 109, 0.35),
+      ...(g ? [L('head', 'ink', 84, 100, 92, 106, 0.7)] : []),
+      C('head', 'eyeGlow', 89, 103, g ? 1.8 : 1.6),
+      L('armF', 'fur', 72, 113, 77, 124, 3.8), E('armF', 'paw', 79, 126.8, 3.6, 1.6),
     ],
   });
 }
@@ -886,6 +1162,120 @@ function elemental(id: string, kind: 'fire' | 'water' | 'wind', palette: Record<
     ],
   });
 }
+
+/**
+ * Fire elemental bound to the dragonborn guards: a swirling pillar of living flame
+ * (no rock, unlike the magma elemental) with a white-hot core, ember eyes in a dark
+ * face and flame arms. Its crown, shoulders and tail are flame tongues on their own
+ * bones that flicker out of step; glowing rune bands, like links of a fiery chain,
+ * ring its waist and wrists.
+ */
+function fireElemental(id: string, palette: Record<string, string>): PuppetRig {
+  const phase = phaseOf(id);
+  /** A flame tongue standing on (x, y), `h` tall, its tip leaning `lean` units. */
+  const lick = (b: BoneId, k: string, x: number, y: number, h: number, w: number, lean: number): Shape =>
+    P(b, k, [[x - w, y], [round2(x - w * 0.5 + lean * 0.3), round2(y - h * 0.5)], [x + lean, y - h], [round2(x + w * 0.4 + lean * 0.4), round2(y - h * 0.45)], [x + w, y]]);
+  // [bone, base, height, half width, lean]
+  const tongues: [PoseBone, Pt, number, number, number][] = [
+    ['chA1', [56, 63], 17, 4.5, -7], ['chB1', [50, 81], 12, 3.6, -6], ['chF1', [52, 106], 11, 3.4, -9],
+    ['chC1', [61.5, 60], 19, 4.6, -3], ['chD1', [67, 61], 13, 3.6, -1], ['chE1', [71, 81], 10, 3.2, -4],
+  ];
+  const flame = (i: number): Shape[] => {
+    const [b, [x, y], h, w, lean] = tongues[i];
+    return [lick(b, 'flameD', x, y, h, w, lean), lick(b, 'fire', x + 0.3, y, h * 0.62, w * 0.5, lean * 0.6)];
+  };
+  // a ring of runes around the waist, its far half behind the body
+  const band = { x: 59, y: 100, rx: 17, ry: 4.4 };
+  const rune = (deg: number): Shape => {
+    const at = (a: number): Pt => [round2(band.x + band.rx * Math.cos((a * Math.PI) / 180)), round2(band.y + band.ry * Math.sin((a * Math.PI) / 180))];
+    const [a, b] = [at(deg - 10), at(deg + 10)];
+    return L('torso', 'magic', a[0], a[1], b[0], b[1], 1.4);
+  };
+  const shackle = (b: BoneId, x: number, y: number, dx: number, dy: number): Shape[] =>
+    [L(b, 'magic', x - dx, y - dy, x + dx, y + dy, 1.3), L(b, 'magic', x - dx + 1.6, y - dy + 2.2, x + dx + 1.6, y + dy + 2.2, 1.2)];
+  const flames = tongues.map(([b]) => b);
+  return finish(id, {
+    accent: palette.fire ?? '#ff8a2a', style: 'magic', focus: [81, 100], focusBone: 'armF', hover: 3.5, art: 1.3,
+    palette,
+    pivots: {
+      torso: [58, 102], head: [61, 76], armB: [52, 82], armF: [68, 82], cape: [58, 102],
+      ...Object.fromEntries(tongues.map(([b, at]) => [b, at])),
+    },
+    rest: { armF: -30, armB: 10 },
+    windup: { rootX: -4, torso: -8, armF: 20, armB: 30 },
+    strike: { rootX: 6, torso: 10, armF: -90, armB: -20 },
+    emitters: [
+      { bone: 'chC1', at: [59, 44], effect: 'llama', rate: 1.6, spread: 4 },
+      { bone: 'torso', at: [58, 98], effect: 'ascua', rate: 2.5, spread: 12 },
+    ],
+    animate: (p, t, action) => {
+      const { fury, flinch, dead } = actionMoods(action);
+      // every flame tongue flickers at its own pace, wilder when it attacks
+      flames.forEach((b, i) => {
+        const f = 1.5 + 0.23 * i, ph = phase + i * 1.9;
+        const flicker = Math.sin(2 * Math.PI * f * t + ph) + 0.45 * Math.sin(2 * Math.PI * 2.6 * f * t + 2 * ph);
+        p[b] = (6 + 6 * fury) * flicker * (1 - 0.6 * dead) + 10 * flinch - 30 * dead;
+      });
+      // the vortex under it swirls; the head stays on the body so the crown follows it
+      p.cape = 5 * (1 + fury) * Math.sin(2 * Math.PI * 0.9 * t + phase) - 6 * flinch;
+      p.head = 0;
+    },
+    shapes: [
+      // — behind: far crown and shoulder flames, far arm and the far half of the rune band —
+      ...flame(0), ...flame(1),
+      P('armB', 'flameD', [[49, 80], [55, 83], [51, 93], [46, 102], [41, 106], [42.5, 98], [45.5, 89]]),
+      P('armB', 'fire', [[50, 84], [52.5, 85], [48.5, 94], [44, 101], [46, 93]]),
+      ...shackle('armB', 44.5, 98.5, 2.6, 1.2),
+      ...[200, 235, 270, 305, 340].map(rune),
+      // — the swirling vortex it stands on —
+      P('cape', 'flameD', [[46, 100], [70, 100], [69, 107], [64, 113], [60, 119], [57, 126], [55.5, 119], [51, 112], [47, 106]]),
+      P('cape', 'fire', [[50, 102], [66, 102], [62, 109], [58.5, 116], [56.5, 122], [55, 113], [51, 107]]),
+      L('cape', 'ink', 51, 106, 63, 104, 0.6), L('cape', 'ink', 54, 112, 62, 109, 0.5),
+      ...flame(2),
+      // — the body: flame over a white-hot core —
+      P('torso', 'flameD', [[47, 79], [54, 75], [61, 73], [68, 75], [74, 80], [76, 88], [73, 97], [70, 103], [48, 103], [44, 96], [44, 87]]),
+      P('torso', 'fire', [[50, 81], [60, 76.5], [70, 81], [72, 89], [68, 99], [52, 99], [47, 90]]),
+      L('torso', 'ink', 45.5, 91, 49.5, 97, 0.6), L('torso', 'ink', 74, 84, 71.5, 91, 0.6), L('torso', 'ink', 52, 77.5, 57, 75.5, 0.5),
+      E('torso', 'flame', 60, 89, 7, 8),
+      C('torso', 'flameCore', 60, 89, 4),
+      ...[20, 55, 90, 125, 160].map(rune),
+      // — the head: a dark face in the flame, ember eyes and a burning mouth —
+      P('head', 'flameD', [[53, 78], [52, 70], [54, 63], [58, 59.5], [64, 58.5], [69, 61], [71, 67], [71, 74], [68, 79]]),
+      P('head', 'fire', [[55, 76], [55, 68], [59, 62.5], [65, 62.5], [68, 67], [68, 74], [66, 77]]),
+      P('head', 'socket', [[59.6, 67], [63, 66.2], [66.4, 68.4], [65.8, 70.8], [61.6, 70.4]]),
+      P('head', 'socket', [[66.4, 66.6], [70.8, 66.2], [71, 69], [68.2, 70]]),
+      slitEye('head', 'eyeGlow', [60.6, 67.4], [65.2, 69.2], 1.6), slitEye('head', 'eyeGlow', [66.8, 67.2], [70.2, 68.6], 1.3),
+      P('head', 'flameCore', [[62, 73.6], [69.4, 73], [68, 75.4], [65, 74.6], [63, 75.6]]),
+      ...flame(3), ...flame(4), ...flame(5),
+      // — the near arm, a flame claw bound by a rune shackle —
+      P('armF', 'flameD', [[65.5, 79.5], [72, 82], [76, 90], [79, 97], [83, 102], [77.5, 101.5], [72, 94], [66.5, 88]]),
+      P('armF', 'fire', [[68, 83], [71.5, 85], [75, 92], [78.5, 99], [74.5, 95], [69.5, 89]]),
+      P('armF', 'flame', [[77, 99], [85, 98.5], [80.5, 101.5], [84, 104], [77.5, 102.5]]),
+      ...shackle('armF', 75, 94.5, 2.2, -1.6),
+    ],
+  });
+}
+
+/** Dragonborn guard: a biped with a dragon head, bronze armour and a halberd, behind a
+ *  tower shield held over its body; the shield barely moves when it strikes and goes
+ *  up when it covers its comrades (the generic 'spell' raises the back arm). */
+function dragonbornGuard(id: string, palette: Record<string, string>): PuppetRig {
+  const rig = biped(id, {
+    build: 'normal', head: 'dragonborn', weapon: 'halberd', offhand: 'tower', shieldFront: true,
+    palette, arms: 'armor', armor: true, belt: true, cloak: true, art: 1.28,
+  });
+  // at rest the halberd stands upright at arm's length, clear of the snout; it is cocked
+  // back over the shoulder and chopped down in front, never through the floor
+  return {
+    ...rig,
+    rest: { armF: -50, weapon: 50, armB: -4 },
+    windup: { rootX: -4, torso: -8, head: -6, armF: -150, weapon: 120, armB: 4, legF: -6, legB: 6 },
+    strike: { rootX: 13, torso: 12, head: 6, armF: -70, weapon: 175, armB: -12, legF: -14, legB: 10 },
+  };
+}
+
+/** Mimic rigs (mimic-rigs.ts) get the default palette and their phase here. */
+const mimic = (id: string, build: (phase: number) => RigDraft) => finish(id, build(phaseOf(id)));
 
 // ── Bosses ───────────────────────────────────────────────────────────────────
 interface BossExtras {
@@ -1541,6 +1931,10 @@ function dungeonMaster(id: string): PuppetRig {
 const G = { skin: '#6f7d4a', leather: '#56422f', cloth: '#6a3b2a', hair: '#2e2a22', eyeGlow: '#ffd75a', body: '#56422f', legs: '#6f7d4a', boots: '#3e2e20' };
 const BONE = { skin: '#cdc3a6', bone: '#cdc3a6', body: '#cdc3a6', legs: '#cdc3a6', boots: '#cdc3a6', arms: '#cdc3a6', eyeGlow: '#9fe8ff', cloth: '#3e4a52', metal: '#7f858a', rust: '#6b4a34' };
 const KOBOLD = { skin: '#7a5a3a', body: '#5a3a2a', legs: '#7a5a3a', boots: '#4a3322', horn: '#d8c7a0', eyeGlow: '#ffb347' };
+/** Skeletal adventurers (La Cripta): bones plus the tattered gear of their class. */
+const ADV = { ...BONE, mail: '#6a7076', leather: '#4a3a2c', hide: '#d8c8a0', heraldry: '#e8e0cc', plume: '#b02a2a', fur: '#6a5040', gold: '#c9a040', edge: '#e8e0c8' };
+const adventurer = (id: string, o: Omit<BipedOpts, 'head' | 'build' | 'palette'> & { gear: SkullGear; palette: Record<string, string>; build?: Build }) =>
+  biped(id, { build: 'thin', head: 'skull', arms: 'bone', legs: 'bone', ribs: true, ...o, headOpts: { gear: o.gear }, palette: { ...ADV, ...o.palette } });
 
 export const ENEMY_RIGS: Record<string, PuppetRig> = {
   // Act I · Asentamiento Ogro
@@ -1578,6 +1972,40 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   flagelante: biped('flagelante', { build: 'normal', head: 'human', headOpts: { bald: true, scar: true }, weapon: 'flail', palette: { skin: '#a88466', body: '#a88466', legs: '#3a2a26', cloth: '#5a1e1a' }, arms: 'skin', ribs: true, loincloth: true, hunch: 8 }),
   'demonio-menor': biped('demonio-menor', { build: 'hulking', head: 'demon', weapon: 'claws', palette: { skin: '#7a2a22', body: '#7a2a22', legs: '#5a1e1a', boots: '#2a1210', horn: '#2a1e1a', wing: '#3a1412', eyeGlow: '#ffb347' }, arms: 'skin', wings: true, tail: true, hunch: 6 }),
   'inquisidor-oscuro': biped('inquisidor-oscuro', { build: 'normal', head: 'capirote', weapon: 'sword', offhand: 'lantern', palette: { hood: '#1e1a1e', body: '#2a2226', armor: '#4a4448', legs: '#1e1a1e', cloak: '#3a1418', magic: '#ffd07a', eyeGlow: '#ffd07a' }, armor: true, cloak: true, belt: true }),
+  // Act II · Templo Oscuro: incubus and succubus (elegant, menacing seducers)
+  incubo: biped('incubo', {
+    build: 'normal', head: 'fiend', headOpts: { beard: true }, weapon: 'claws', wings: true, tail: true, cloak: true, belt: true,
+    palette: { skin: '#8a5a7a', hair: '#1a1020', horn: '#2a1a24', body: '#2a1a2e', legs: '#1e1424', boots: '#140c14', cloak: '#3a0e2a', wing: '#3a1030', belt: '#3a2a30', teeth: '#e8dcc8', gold: '#c9a040', magic: '#e070ff', eyeGlow: '#e070ff' },
+    torsoDetail: [L('torso', 'gold', 52, 78, 59, 88, 0.9), L('torso', 'gold', 66, 78, 59, 88, 0.9), C('torso', 'magic', 59, 88.5, 1.3)],
+  }),
+  sucubo: biped('sucubo', {
+    build: 'thin', head: 'fiend', headOpts: { longHair: true }, weapon: 'talons', wings: true, tail: true, robe: true, arms: 'skin',
+    palette: { skin: '#b07a94', hair: '#2a0e1e', horn: '#1e1218', robe: '#3a0e24', body: '#3a0e24', boots: '#1a0610', wing: '#4a1030', teeth: '#f0e4d8', gold: '#c9a040', magic: '#ff6ab0', eyeGlow: '#ff6ab0' },
+    torsoDetail: [L('torso', 'gold', 53.5, 79, 65, 79, 0.8), C('torso', 'magic', 59.5, 81, 1.2), L('torso', 'gold', 52, 97, 66, 95, 1.2)],
+  }),
+  // Act I · Asentamiento Ogro: the goblin horde (raiders and war-criers)
+  'goblin-saqueador': biped('goblin-saqueador', {
+    build: 'small', head: 'goblin', headOpts: { scar: true }, weapon: 'hatchet', offhand: 'dagger', arms: 'skin', tabard: 'cloth', belt: true, hunch: 10,
+    palette: { ...G, skin: '#6a7a46', legs: '#6a7a46', cloth: '#5a3a26', rust: '#7a4a2a', eyeGlow: '#ff8a3a' },
+  }),
+  'goblin-jaleador': biped('goblin-jaleador', {
+    build: 'small', head: 'goblin', headOpts: { feathers: true }, weapon: 'totem', offhand: 'drum', arms: 'skin', belt: true, loincloth: true, hunch: 3,
+    palette: { ...G, skin: '#74804e', legs: '#74804e', body: '#4a3a2a', plume: '#c84a2a', band: '#d8c060', hide: '#d8c8a0', bone: '#d8ccaa', eyeGlow: '#ffd75a' },
+    torsoDetail: [C('torso', 'bone', 55, 80.5, 1.2), C('torso', 'bone', 58.5, 82, 1.2), C('torso', 'bone', 62, 81, 1.2)],
+  }),
+  // Act I · Guarida de los Contrabandistas: the rat swarm and its queen
+  'rata-alcantarilla': rodent('rata-alcantarilla', { palette: {} }),
+  'rata-gigante': rodent('rata-gigante', { giant: true, art: 1.45, palette: { fur: '#4a423c', furD: '#302a26', mane: '#2a2420', belly: '#6a6056', eyeGlow: '#d8ff4a' } }),
+  // Act II · La Cripta: skeletons of fallen adventurers, one per class
+  'aventurero-guerrero': adventurer('aventurero-guerrero', { gear: 'nasal', weapon: 'sword', offhand: 'shield', tabard: 'mail', belt: true, palette: { eyeGlow: '#ff9a4a' } }),
+  'aventurero-mago': adventurer('aventurero-mago', { gear: 'wizard', weapon: 'staff', robe: true, palette: { hat: '#2a3a6a', robe: '#2a3460', band: '#c9a040', magic: '#7ac8ff', eyeGlow: '#7ac8ff' } }),
+  'aventurero-clerigo': adventurer('aventurero-clerigo', { gear: 'mitre', weapon: 'mace', offhand: 'holySymbol', tabard: 'heraldry', sigil: 'gold', belt: true, palette: { hat: '#d8cfb8', gold: '#d9b04a', magic: '#ffd36a', eyeGlow: '#ffc94a' } }),
+  'aventurero-picaro': adventurer('aventurero-picaro', { gear: 'hoodMask', weapon: 'dagger', offhand: 'dagger', tabard: 'leather', cloak: true, belt: true, hunch: 8, palette: { hood: '#2e2a28', band: '#3a3330', cloak: '#24221f', eyeGlow: '#d8e0e8' } }),
+  'aventurero-barbaro': adventurer('aventurero-barbaro', { build: 'normal', gear: 'horned', weapon: 'greataxe', cloak: true, loincloth: true, hunch: 6, palette: { cloth: '#5a4232', cloak: '#5a4232', horn: '#d8c7a0', eyeGlow: '#ff4a3a' } }),
+  'aventurero-paladin': adventurer('aventurero-paladin', { gear: 'winged', weapon: 'warhammer', offhand: 'heater', armor: true, cloak: true, belt: true, palette: { armor: '#8a8e94', metal: '#8a8e94', gold: '#d9b04a', cloak: '#22305a', heraldry: '#2e4a8a', magic: '#ffe9a8', eyeGlow: '#ffe9a8' } }),
+  'aventurero-explorador': adventurer('aventurero-explorador', { gear: 'hood', weapon: 'bow', quiver: true, cloak: true, tabard: 'leather', belt: true, palette: { hood: '#2e4a2a', cloak: '#2a3e26', band: '#5a7a3a', eyeGlow: '#9dff7a' } }),
+  'aventurero-brujo': adventurer('aventurero-brujo', { gear: 'cowl', weapon: 'orb', offhand: 'book', robe: true, palette: { hood: '#241a34', robe: '#241a34', horn: '#3a3040', leather: '#3a2230', gold: '#8a6a9a', magic: '#c77dff', eyeGlow: '#c77dff' } }),
+  'aventurero-bardo': adventurer('aventurero-bardo', { gear: 'plume', weapon: 'rapier', offhand: 'lute', tabard: 'doublet', cloak: true, belt: true, palette: { hat: '#4a2030', plume: '#e04a4a', band: '#c9a040', doublet: '#6a1e3a', cloak: '#6a1e3a', wood: '#8a5a30', eyeGlow: '#ff8ad8' } }),
   // Act III · Guarida del Dragón
   'kobold-lancero': biped('kobold-lancero', { build: 'small', head: 'kobold', weapon: 'spear', offhand: 'kite', palette: { ...KOBOLD }, arms: 'skin', belt: true, loincloth: true, tail: true, hunch: 6, art: 1.2 }),
   'kobold-hechicero': biped('kobold-hechicero', { build: 'small', head: 'kobold', weapon: 'staff', palette: { ...KOBOLD, robe: '#6a2a1e', magic: '#ff9a3a', eyeGlow: '#ffb347' }, arms: 'skin', robe: true, tail: true, hunch: 6, art: 1.2 }),
@@ -1599,6 +2027,18 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
     magic: '#c77dff', eyeGlow: '#d4ff5a', teeth: '#d6cba8',
   }),
   observador: floatingEye('observador', { flesh: '#7a4a5a', magic: '#ff9ad0', eyeGlow: '#ffd75a' }, 2),
+  // Act III · Guarida del Dragón: the dragonborn guards and the fire elemental bound to them
+  'guardia-draconido': dragonbornGuard('guardia-draconido', {
+    skin: '#a04a2a', horn: '#e0cfa0', teeth: '#ece0c4', armor: '#9a7038', metal: '#a3a7ab', edge: '#dadde0', wood: '#5a4030',
+    band: '#8a1e14', gold: '#d4a84a', body: '#5a1e16', legs: '#6a5032', boots: '#2e241c', cloak: '#6a1a12', belt: '#4a3020', eyeGlow: '#ffb347',
+  }),
+  'elemental-fuego': fireElemental('elemental-fuego', {
+    flameD: '#a8321a', fire: '#ff7a1e', flame: '#ffc23a', flameCore: '#fff3c0', magic: '#ffd27a', socket: '#3a0c06', eyeGlow: '#fff1a8',
+  }),
+  // Act III · Laberinto del Contemplador: mimics disguised as a chest, a chair and a door
+  'mimico-cofre': mimic('mimico-cofre', mimicChest),
+  'mimico-silla': mimic('mimico-silla', mimicChair),
+  'mimico-puerta': mimic('mimico-puerta', mimicDoor),
   ...BOSSES,
   // final scene
   'dungeon-master': dungeonMaster('dungeon-master'),

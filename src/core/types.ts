@@ -160,6 +160,10 @@ export interface Movimiento {
   perforante?: boolean;
   /** Block for every living enemy, itself included. */
   bloqueoAliados?: number;
+  /** Heals every living enemy, itself included, by this much (a cleric's prayer). */
+  curaAliados?: number;
+  /** Its hits deal as much extra damage as the Poison the hero has (rat bites). */
+  masPorVeneno?: boolean;
 }
 
 export interface EnemigoDef {
@@ -172,6 +176,15 @@ export interface EnemigoDef {
   rasgo?: { nombre: string; texto: string };
   /** Ids of its decoys: an attack card aimed at it lands at random on it or on one of them (Vexis). */
   senuelos?: string[];
+  /** A slot filled at random from these when the fight starts, never repeating one already
+   *  in the fight (the skeletal adventurers). The def itself is only a placeholder. */
+  variantes?: EnemigoDef[];
+  /** It cannot drop below 1 HP while any enemy with one of these ids lives; once they are
+   *  all dead it dies too (the fire elemental bound to the dragonborn guards). */
+  inmortalMientras?: string[];
+  /** It sleeps (doing nothing) for `turnos` turns or until it takes damage; when it wakes,
+   *  `despertar` join the fight and act at once, by surprise (the mimic chest). */
+  durmiente?: { turnos: number; despertar: EnemigoDef[] };
   /** Estados con los que entra en combate (pasivas: espinas, etc.). */
   estadosIniciales?: Partial<Record<EstadoId, number>>;
   /** Pasiva especial: 'filacteria' = al morir, su sitio lo ocupa su filacteria (`filacteria`). */
@@ -220,6 +233,8 @@ export interface EnemigoCombate extends Luchador {
   alma?: { def: EnemigoDef; resurrecciones: number };
   /** Rasgo único de un solo uso ya gastado (enfurecerse, etc.). */
   rasgoUsado?: boolean;
+  /** (a sleeper) It has woken up (see EnemigoDef.durmiente). */
+  despierto?: boolean;
   /** Si está activo, este enemigo se salta su próxima acción (Seducir/Deseo). */
   saltaAccion?: boolean;
   /** Instancias de Raíces activas: cada carta aporta su cantidad y su duración. */

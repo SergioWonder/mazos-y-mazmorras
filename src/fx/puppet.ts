@@ -146,6 +146,9 @@ export interface PuppetRig {
   backlit?: string[];
   /** Extra per-frame motion on top of the generic one (drumming fingers…). */
   animate?: (p: Pose, t: number, action: ActionProgress | null) => void;
+  /** Replaces the idle blink: the eyes stay shut whenever it returns true (a mimic
+   *  playing dead opens them only to bite). They still go out late in the death. */
+  eyesShut?: (t: number, action: ActionProgress | null) => boolean;
   pivots: Partial<Record<BoneId, [number, number]>>;
   /** Secondary-motion spring chains (hair, cloth, fur, tails). */
   chains?: ChainSpec[];
@@ -443,7 +446,8 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   // cape/scarf/tail hangs from its pivot and trails behind forward motion
   p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
   // blink now and then; the eyes go out for good near the end of the death
-  fx.blink = (action?.type === 'death' && action.p >= EYES_OUT) || ((t + rig.phase) % 3.7) < 0.13;
+  fx.blink = (action?.type === 'death' && action.p >= EYES_OUT)
+    || (rig.eyesShut ? rig.eyesShut(t, action) : ((t + rig.phase) % 3.7) < 0.13);
   rig.animate?.(p, t, action);
   return { p, fx };
 }

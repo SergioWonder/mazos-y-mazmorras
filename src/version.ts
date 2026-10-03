@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.7.0';
+export const VERSION = '8.8.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.8.0',
+    fecha: '2026-10-03',
+    cambios: [
+      '👥 Un élite nuevo en cada escenario, todos de grupo: la Horda Goblin, que se jalea por turnos; un enjambre de ratas cuyos mordiscos crecen con tu Veneno; y tres aventureros esqueléticos de clases al azar, cada uno con su poder.',
+      '😈 En el Templo, un íncubo y una súcubo: mientras uno te seduce, el otro clava sus garras. En la Guarida del Dragón, guardas dracónidos que se escudan y, al caer, liberan elementales de fuego inmortales mientras quede alguno en pie.',
+      '🧰 En el Laberinto, un cofre que duerme… hasta que lo golpeas: entonces la silla y la puerta de la sala también resultan ser mímicos y atacan por sorpresa.',
+    ],
+  },
   {
     version: '8.7.0',
     fecha: '2026-10-03',

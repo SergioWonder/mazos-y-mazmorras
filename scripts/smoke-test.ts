@@ -30,7 +30,7 @@ import { MUSIC_TRACKS, loopWindow, MP3_DELAY_SAMPLES } from '../src/fx/music-tra
 import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent } from '../src/fx/puppet.ts';
 import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
-import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef } from '../src/core/types.ts';
+import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as ClaseId[];
 
@@ -2191,7 +2191,8 @@ console.log('\n👹 Bestiario ilustrado');
   const defs = Object.values(ENEMIGOS).filter(
     (v): v is EnemigoDef => typeof v === 'object' && v !== null && 'id' in v && 'pv' in v && 'ia' in v,
   );
-  const normales = defs.filter((d) => !d.esJefe);
+  // a placeholder slot (the skeletal adventurers) is drawn as each of its variants
+  const normales = defs.filter((d) => !d.esJefe).flatMap((d) => d.variantes ?? [d]);
   check(normales.length >= 40, `hay ${normales.length} enemigos normales y de élite`);
   for (const d of normales) {
     const rig = ENEMY_RIGS[d.id];
@@ -2266,6 +2267,197 @@ console.log('\n👹 Bestiario ilustrado');
   const chaman = ENEMY_RIGS['goblin-chaman'];
   const c2 = puppetPose(chaman, 0, { type: 'attack', p: 0.6 });
   check(!!puppetEffects(chaman, puppetBones(chaman, c2.p), c2.fx).orb && chaman.projectile !== 'arrow', 'el Chamán lanza energía');
+}
+
+// ── New enemies of Acts I-II: goblin horde, rat swarm, skeletal adventurers, incubus and succubus ──
+console.log('\n💀 Marionetas nuevas: horda goblin, ratas, aventureros esqueléticos, íncubo y súcubo');
+try {
+  const { MAX_FIGURE_PIECES, bodyScreenBox } = await import('../src/fx/puppet-gpu.ts');
+  const marco = { x: 100, y: 50, w: 140 }, suelo = marco.y + (129 / 140) * marco.w;
+  const aventureros = ['guerrero', 'mago', 'clerigo', 'picaro', 'barbaro', 'paladin', 'explorador', 'brujo', 'bardo'].map((c) => `aventurero-${c}`);
+  const nuevos = ['goblin-saqueador', 'goblin-jaleador', 'rata-alcantarilla', 'rata-gigante', ...aventureros, 'incubo', 'sucubo'];
+  for (const id of nuevos) {
+    const rig = ENEMY_RIGS[id];
+    const n = rig?.shapes.length ?? 0;
+    check(!!rig && n >= 10 && n <= MAX_FIGURE_PIECES, `${id}: tiene marioneta ilustrada (${n} piezas, tope ${MAX_FIGURE_PIECES})`);
+    // every painted key exists in the palette (a missing one renders magenta)
+    const sinColor = [...new Set((rig?.shapes ?? []).map((s) => s.k))].filter((k) => k !== 'ink' && !rig?.palette[k]);
+    check(!!rig && sinColor.length === 0, `${id}: todos sus colores están en la paleta ${sinColor.join(', ')}`);
+    // the body box (Doom chains, hit flashes) stands on the ground and is big enough to hold them
+    const fb = rig ? bodyScreenBox(rig, marco, true) : null;
+    check(!!fb && fb.w >= marco.w * 0.2 && fb.h >= marco.w * 0.3 && Math.abs(fb.y + fb.h - suelo) < marco.w * 0.03, `${id}: su cuerpo se apoya en el suelo`);
+  }
+  // each adventurer reads as its class: its own gear (weapon, off-hand, headwear) and its own eye glow
+  const firma = (id: string) => JSON.stringify((ENEMY_RIGS[id]?.shapes ?? []).filter((s) => s.b === 'weapon' || s.b === 'offhand' || s.b === 'head'));
+  const firmas = aventureros.map(firma);
+  check(new Set(firmas).size === aventureros.length, 'los 9 aventureros llevan cada uno su arma, mano secundaria y tocado');
+  const ojos = aventureros.map((id) => ENEMY_RIGS[id]?.palette.eyeGlow);
+  check(new Set(ojos).size === aventureros.length, 'y cada uno brilla con el color de su clase');
+  const conCalavera = aventureros.filter((id) => (ENEMY_RIGS[id]?.shapes ?? []).some((s) => s.b === 'head' && s.k === 'socket')
+    && (ENEMY_RIGS[id]?.shapes ?? []).some((s) => s.b === 'armF' && s.k === 'bone'));
+  check(conCalavera.length === aventureros.length, `todos son esqueletos: calavera y brazos de hueso (${conCalavera.length}/9)`);
+  const arqueros = aventureros.filter((id) => ENEMY_RIGS[id]?.projectile === 'arrow');
+  check(arqueros.length === 1 && arqueros[0] === 'aventurero-explorador', 'solo el explorador dispara flechas');
+  const magos = ['aventurero-mago', 'aventurero-brujo'].filter((id) => ENEMY_RIGS[id]?.style === 'magic');
+  check(magos.length === 2, 'el mago y el brujo lanzan conjuros');
+  // the two goblins of the horde are told apart at a glance
+  check(firma('goblin-saqueador') !== firma('goblin-jaleador'), 'el saqueador y el jaleador de la horda se distinguen');
+  // rats: quadrupeds with a long tail that sways (spring chain) and venom in the mouth
+  for (const id of ['rata-alcantarilla', 'rata-gigante']) {
+    const rig = ENEMY_RIGS[id];
+    check(!!rig?.chains?.length && rig.shapes.some((s) => s.k === 'poison'), `${id}: cola larga con muelle y babas venenosas`);
+  }
+  check((ENEMY_RIGS['rata-gigante']?.art ?? 0) > (ENEMY_RIGS['rata-alcantarilla']?.art ?? 0), 'la rata gigante es más grande que las de alcantarilla');
+  // incubus and succubus: horns, bat wings and tail; different silhouettes
+  for (const id of ['incubo', 'sucubo']) {
+    const rig = ENEMY_RIGS[id];
+    check(!!rig?.wings?.B && !!rig?.wings?.F && rig.shapes.some((s) => s.b === 'head' && s.k === 'horn'), `${id}: cuernos y alas de murciélago`);
+  }
+  check(firma('incubo') !== firma('sucubo'), 'el íncubo y la súcubo no son la misma figura');
+} catch (e) {
+  check(false, `las pruebas de las marionetas nuevas revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── New enemies of Act III: dragonborn guards, their bound fire elemental and the mimics ──
+console.log('\n📦 Marionetas nuevas: guardas dracónidos, elemental de fuego y mímicos');
+try {
+  const { MAX_FIGURE_PIECES, bodyScreenBox } = await import('../src/fx/puppet-gpu.ts');
+  const { EMISSIVE, applyMatrix, puppetImpact } = await import('../src/fx/puppet.ts');
+  type Rig = (typeof ENEMY_RIGS)[string];
+  type Piece = Rig['shapes'][number];
+  type Act = Parameters<typeof puppetPose>[2];
+  const marco = { x: 100, y: 50, w: 140 }, suelo = marco.y + (129 / 140) * marco.w;
+  const mimicos = ['mimico-cofre', 'mimico-silla', 'mimico-puerta'];
+  for (const id of ['guardia-draconido', 'elemental-fuego', ...mimicos]) {
+    const rig = ENEMY_RIGS[id];
+    const n = rig?.shapes.length ?? 0;
+    check(!!rig && n >= 10 && n <= MAX_FIGURE_PIECES, `${id}: tiene marioneta ilustrada (${n} piezas, tope ${MAX_FIGURE_PIECES})`);
+    // every painted key exists in the palette (a missing one renders magenta)
+    const sinColor = [...new Set((rig?.shapes ?? []).map((s) => s.k))].filter((k) => k !== 'ink' && !rig?.palette[k]);
+    check(!!rig && sinColor.length === 0, `${id}: todos sus colores están en la paleta ${sinColor.join(', ')}`);
+    if (id === 'elemental-fuego') continue; // it hovers
+    const fb = rig ? bodyScreenBox(rig, marco, true) : null;
+    check(!!fb && fb.w >= marco.w * 0.2 && fb.h >= marco.w * 0.2 && Math.abs(fb.y + fb.h - suelo) < marco.w * 0.03, `${id}: se apoya en el suelo`);
+  }
+  // bind-pose box of a piece
+  const caja = (s: Piece) => {
+    const pts: [number, number][] = s.t === 'p' ? s.pts : s.t === 'l' ? [[s.x1 - s.w / 2, s.y1 - s.w / 2], [s.x2 + s.w / 2, s.y2 + s.w / 2]]
+      : s.t === 'c' ? [[s.x - s.r, s.y - s.r], [s.x + s.r, s.y + s.r]] : [[s.x - s.rx, s.y - s.ry], [s.x + s.rx, s.y + s.ry]];
+    return { y0: Math.min(...pts.map((p) => p[1])), y1: Math.max(...pts.map((p) => p[1])) };
+  };
+  const alto = (ss: Piece[]) => ss.length ? Math.max(...ss.map((s) => caja(s).y1)) - Math.min(...ss.map((s) => caja(s).y0)) : 0;
+
+  // — Dragonborn guard: dragon head, halberd and a tower shield over the body —
+  const guardia = ENEMY_RIGS['guardia-draconido'];
+  if (guardia) {
+    const de = (b: string) => guardia.shapes.filter((s) => s.b === b);
+    check(de('head').filter((s) => s.k === 'horn').length >= 2 && de('head').some((s) => s.k === 'eyeGlow') && de('head').some((s) => s.k === 'teeth'),
+      'el guarda dracónido tiene cabeza de dragón con cuernos, colmillos y ojos ardientes');
+    check(alto(de('weapon')) >= 55, `empuña una alabarda larga (${alto(de('weapon')).toFixed(0)} de alto)`);
+    const escudo = guardia.shapes.findIndex((s) => s.b === 'offhand'), cuerpo = guardia.shapes.findIndex((s) => s.b === 'torso' && s.k === 'body');
+    check(alto(de('offhand')) >= 30 && escudo > cuerpo, `y un escudo torre por delante del cuerpo (${alto(de('offhand')).toFixed(0)} de alto)`);
+    check(guardia.shapes.filter((s) => s.k === 'armor').length >= 2, 'con armadura pesada');
+  }
+
+  // — Fire elemental: living flame, not rock —
+  const fuego = ENEMY_RIGS['elemental-fuego'];
+  if (fuego) {
+    const brillan = fuego.shapes.filter((s) => EMISSIVE.has(s.k)).length;
+    check(brillan >= fuego.shapes.length * 0.3 && !fuego.shapes.some((s) => s.k === 'rock'), `el elemental de fuego es llama viva (${brillan} piezas que brillan, sin roca)`);
+    check(!!fuego.hover && fuego.shapes.some((s) => s.k === 'flameCore') && fuego.shapes.filter((s) => s.k === 'eyeGlow').length >= 2,
+      'flota, con un núcleo ardiente y ojos de ascua');
+    check(fuego.shapes.filter((s) => s.k === 'magic').length >= 4, 'y bandas de runas que lo atan a los guardas');
+    const huesos = [...new Set(fuego.shapes.map((s) => s.b))];
+    const vivos = huesos.filter((b) => {
+      const v = Array.from({ length: 90 }, (_, i) => puppetPose(fuego, i / 30, null).p[b as 'torso']);
+      return v.every(Number.isFinite) && Math.max(...v) - Math.min(...v) > 4;
+    });
+    check(vivos.length >= 4, `las lenguas de fuego se agitan en reposo (${vivos.length} huesos)`);
+    const efectos = (fuego.emitters ?? []).map((e) => e.effect);
+    check(efectos.length >= 1 && efectos.every((e) => !!EFFECTS[e]), 'suelta ascuas y llamas');
+  }
+
+  // — Mimics: the maw hides behind the furniture at rest —
+  // sample points of a piece (bind pose), pushed `grow` units outwards
+  const muestras = (s: Piece, grow: number): [number, number][] => {
+    if (s.t === 'c' || s.t === 'e') {
+      const rx = (s.t === 'c' ? s.r : s.rx) + grow, ry = (s.t === 'c' ? s.r : s.ry) + grow;
+      return Array.from({ length: 12 }, (_, i) => [s.x + rx * Math.cos((i * Math.PI) / 6), s.y + ry * Math.sin((i * Math.PI) / 6)]);
+    }
+    if (s.t === 'l') {
+      const len = Math.hypot(s.x2 - s.x1, s.y2 - s.y1) || 1, ux = (s.x2 - s.x1) / len, uy = (s.y2 - s.y1) / len, r = s.w / 2 + grow;
+      const out: [number, number][] = [[s.x1 - ux * r, s.y1 - uy * r], [s.x2 + ux * r, s.y2 + uy * r]];
+      for (let k = 0; k <= 6; k++) {
+        const x = s.x1 + ((s.x2 - s.x1) * k) / 6, y = s.y1 + ((s.y2 - s.y1) * k) / 6;
+        out.push([x - uy * r, y + ux * r], [x + uy * r, y - ux * r]);
+      }
+      return out;
+    }
+    const cx = s.pts.reduce((a, p) => a + p[0], 0) / s.pts.length, cy = s.pts.reduce((a, p) => a + p[1], 0) / s.pts.length;
+    const pts = s.pts.flatMap((p, i): [number, number][] => { const q = s.pts[(i + 1) % s.pts.length]; return [p, [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2]]; });
+    return pts.map(([x, y]) => { const d = Math.hypot(x - cx, y - cy) || 1; return [x + ((x - cx) / d) * grow, y + ((y - cy) / d) * grow]; });
+  };
+  // is a world point inside a piece drawn with the bone matrix m?
+  const dentro = (s: Piece, m: number[], wx: number, wy: number) => {
+    const det = m[0] * m[3] - m[1] * m[2], dx = wx - m[4], dy = wy - m[5];
+    const x = (m[3] * dx - m[2] * dy) / det, y = (-m[1] * dx + m[0] * dy) / det;
+    if (s.t === 'c') return Math.hypot(x - s.x, y - s.y) <= s.r;
+    if (s.t === 'e') return ((x - s.x) / s.rx) ** 2 + ((y - s.y) / s.ry) ** 2 <= 1;
+    if (s.t === 'l') {
+      const ex = s.x2 - s.x1, ey = s.y2 - s.y1, k = Math.max(0, Math.min(1, ((x - s.x1) * ex + (y - s.y1) * ey) / (ex * ex + ey * ey || 1)));
+      return Math.hypot(x - s.x1 - ex * k, y - s.y1 - ey * k) <= s.w / 2;
+    }
+    let inside = false;
+    for (let i = 0, j = s.pts.length - 1; i < s.pts.length; j = i++) {
+      const [xi, yi] = s.pts[i], [xj, yj] = s.pts[j];
+      if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    }
+    return inside;
+  };
+  const OCULTOS = new Set(['maw', 'teeth', 'tongue', 'pod']);
+  /** Maw pieces that show in a pose: their fill is not covered by the opaque pieces drawn
+   *  after them, or their outline (1.3 units, painted under every fill) peeks out of the figure. */
+  const asoman = (rig: Rig, t: number, act: Act) => {
+    const huesos = puppetBones(rig, puppetPose(rig, t, act).p);
+    const opaca = (o: Piece) => o.k !== 'ink' && !EMISSIVE.has(o.k);
+    const tapado = (wx: number, wy: number, cubre: (o: Piece, j: number) => boolean) =>
+      rig.shapes.some((o, j) => cubre(o, j) && opaca(o) && dentro(o, huesos[o.b], wx, wy));
+    const fuera = (s: Piece, grow: number, cubre: (o: Piece, j: number) => boolean) =>
+      muestras(s, grow).some(([x, y]) => { const [wx, wy] = applyMatrix(huesos[s.b], x, y); return !tapado(wx, wy, cubre); });
+    return rig.shapes.filter((s, i) => OCULTOS.has(s.k) && (fuera(s, 0, (_, j) => j > i) || fuera(s, 1.3, (o) => !OCULTOS.has(o.k))));
+  };
+  // rightmost world x of some pieces (the hero is to the right before mirroring)
+  const frente = (rig: Rig, act: Act, cual: (s: Piece) => boolean) => {
+    const huesos = puppetBones(rig, puppetPose(rig, 0, act).p);
+    return Math.max(...rig.shapes.filter(cual).flatMap((s) => muestras(s, 0).map(([x, y]) => applyMatrix(huesos[s.b], x, y)[0])));
+  };
+  for (const id of mimicos) {
+    const rig = ENEMY_RIGS[id];
+    if (!rig) continue;
+    const acciones = rig.actions ?? {};
+    check(!!acciones.attack && !!acciones.hit && !!acciones.death, `${id}: tiene sus propias animaciones de ataque, golpe y muerte`);
+    const dientes = rig.shapes.filter((s) => s.k === 'teeth').length;
+    check(dientes >= 8 && rig.shapes.some((s) => s.k === 'tongue') && rig.shapes.some((s) => s.k === 'maw'), `${id}: esconde unas fauces con ${dientes} dientes y una lengua`);
+    const reposo = [0, 0.7, 1.3, 2.1, 2.9, 3.6].map((t) => asoman(rig, t, null).length);
+    check(reposo.every((n) => n === 0), `${id}: en reposo parece un mueble normal (piezas de la boca a la vista: ${reposo.join(', ')})`);
+    check([0, 1.1, 2.4, 3.3].every((t) => puppetPose(rig, t, null).fx.blink), `${id}: en reposo tiene los ojos cerrados`);
+    const impacto = puppetImpact(rig);
+    const ataque = asoman(rig, 0, { type: 'attack', p: impacto });
+    const vistos = ataque.filter((s) => s.k === 'teeth').length;
+    check(vistos >= 6 && ataque.some((s) => s.k === 'tongue') && ataque.some((s) => s.k === 'maw'), `${id}: al atacar abre las fauces (${vistos} dientes a la vista) y saca la lengua`);
+    check(!puppetPose(rig, 0, { type: 'attack', p: impacto }).fx.blink, `${id}: y abre los ojos`);
+    const mueble = frente(rig, null, (s) => !OCULTOS.has(s.k)), lengua = frente(rig, { type: 'attack', p: impacto }, (s) => s.k === 'tongue');
+    check(lengua > mueble + 10, `${id}: la lengua azota hacia el héroe (${(lengua - mueble).toFixed(0)} u por delante)`);
+    check(asoman(rig, 0, { type: 'hit', p: 0.2 }).some((s) => s.k === 'teeth') && !puppetPose(rig, 0, { type: 'hit', p: 0.2 }).fx.blink,
+      `${id}: un golpe le abre la boca y los ojos un instante`);
+    check(asoman(rig, 0, { type: 'death', p: 0.5 }).some((s) => s.k === 'tongue') && puppetPose(rig, 0, { type: 'death', p: 0.95 }).fx.opacity === 0,
+      `${id}: al morir se le escapa la lengua y se desvanece`);
+  }
+  const cofre = ENEMY_RIGS['mimico-cofre'];
+  const patas = cofre ? asoman(cofre, 0, { type: 'attack', p: puppetImpact(cofre) }).filter((s) => s.k === 'pod').length : 0;
+  check(patas >= 2, `el cofre saca patitas de pseudópodo al atacar (${patas})`);
+} catch (e) {
+  check(false, `las pruebas de los guardas dracónidos y los mímicos revientan: ${(e as Error).stack ?? e}`);
 }
 
 // ── Galería de sprites del menú principal ────────────────────────────────────
@@ -7270,6 +7462,7 @@ console.log('\n🎯 Intención = daño real');
         e.bloqueo = 0;
         e.saltaAccion = false;
         e.intencion = { ...mov };
+        if (e.def.durmiente) e.despierto = true; // a sleeping mimic never attacks: measure it awake
         await esc.prep?.(comb, e);
         // What the player is shown during their turn
         const mostrado = comb.danoIntencion(e);
@@ -8705,7 +8898,7 @@ console.log('\n👁️ Dificultad de enemigos (Contemplador, élites y normales 
   check(cCon >= cIgn * 0.8, `el Contemplador cuesta casi tanta vida como Ignifax (${Math.round(cCon)} frente a ${Math.round(cIgn)} PV)`);
 
   // Unique abilities: every Act II/III elite and every Act III normal has one (★ trait)
-  const elites = ACTOS.slice(1).flatMap((a) => a.flatMap((c) => c.elites.flat()));
+  const elites = [...new Set(ACTOS.slice(1).flatMap((a) => a.flatMap((c) => c.elites.flat())))]; // a group may repeat a def
   const normales3 = [...new Set(ACTOS[2].flatMap((c) => c.normales.flat()))];
   for (const d of [...elites, ...normales3]) check(!!d.rasgo?.nombre && !!d.rasgo?.texto, `${d.nombre}: tiene una habilidad única (★)`);
   const nombresRasgo = [...elites, ...normales3].map((d) => d.rasgo?.nombre);
@@ -9117,6 +9310,156 @@ console.log('\n🧪 Veneno de los ataques');
   check(await turno(venenoso, async (c) => { c.jugador.bloqueo = 0; await c.contexto().invocar('lobo', 10); }) === 0,
     'si tu invocación se lo traga entero, tampoco');
   check(await turno(nube, () => {}) === 2, 'el veneno que no viene con un golpe se aplica como siempre');
+}
+
+// ── A third elite per scenario: multi-enemy elites with their own mechanics ──
+console.log('\n👥 Élites de grupo');
+{
+  const E = ENEMIGOS;
+  const quieta = { nombre: 'Esperar', intencion: 'defensa' as const };
+  const montarG = async (defs: EnemigoDef[], semilla = 9100, clase: ClaseId = 'barbaro') => {
+    const run = nuevaRun(clase, semilla);
+    run.reliquias = [];
+    const comb = new Combate(run, defs, crearRng(semilla), uiSilenciosa, true);
+    await comb.iniciar();
+    comb.jugador.estados = {};
+    comb.jugador.mano = [];
+    return comb;
+  };
+  for (const [acto, esc, nombre] of [[0, 0, 'Asentamiento'], [0, 1, 'Contrabandistas'], [1, 0, 'Cripta'], [1, 1, 'Templo'], [2, 0, 'Dragón'], [2, 1, 'Laberinto']] as const) {
+    const elites = ACTOS[acto][esc].elites;
+    // the mimic chest comes alone, but wakes with a chair and a door
+    const cuantos = elites[2].length + elites[2].reduce((n, d) => n + (d.durmiente?.despertar.length ?? 0), 0);
+    check(elites.length === 3 && cuantos >= 2, `${nombre}: tiene un tercer élite, de varios enemigos (${elites[2].map((d) => d.id).join(', ')})`);
+  }
+
+  // Act I · Goblin horde: 4 weak goblins that take turns attacking and cheering
+  {
+    const horda = ACTOS[0][0].elites[2];
+    check(horda.length === 4 && horda.every((d) => d.pv[1] <= 25), 'Horda Goblin: 4 goblins débiles (cada uno, poca vida)');
+    for (const turno of [0, 1, 2]) {
+      const movs = horda.map((d) => d.ia(turno, () => 0.5, {} as EnemigoCombate, []));
+      const atacan = movs.filter((m) => m.intencion === 'ataque').length;
+      const jalean = movs.filter((m) => (m.fuerzaAliados ?? 0) > 0).length;
+      check(atacan === 2 && jalean === 2, `turno ${turno}: dos atacan y dos se dan Fuerza`);
+    }
+    const [a, b] = horda;
+    check(a.ia(0, () => 0.5, {} as EnemigoCombate, []).intencion !== a.ia(1, () => 0.5, {} as EnemigoCombate, []).intencion
+      && a.ia(0, () => 0.5, {} as EnemigoCombate, []).intencion !== b.ia(0, () => 0.5, {} as EnemigoCombate, []).intencion,
+      'y se van alternando: el que atacó jalea al turno siguiente');
+  }
+
+  // Act I · Rat swarm: poison, and bites that grow with your poison
+  {
+    const enjambre = ACTOS[0][1].elites[2];
+    check(enjambre.length >= 4 && enjambre.every((d) => /rata/.test(d.id)), `Enjambre de ratas (${enjambre.length} ratas)`);
+    const rata = enjambre[0];
+    const movs = Array.from({ length: 12 }, (_, i) => rata.ia(i, () => i / 12, {} as EnemigoCombate, []));
+    check(movs.some((m) => m.efectos?.some(([e]) => e === 'veneno')), 'las ratas envenenan');
+    const roer = movs.find((m) => m.masPorVeneno)!;
+    check(!!roer, 'y tienen un mordisco que crece con tu veneno');
+    const comb = await montarG([rata]);
+    const r = comb.enemigos[0];
+    r.intencion = { ...roer };
+    comb.jugador.estados.veneno = 4;
+    comb.jugador.bloqueo = 0;
+    check(comb.danoIntencion(r) === (roer.dano ?? 0) + 4, `la intención ya cuenta tu veneno (${comb.danoIntencion(r)})`);
+    const pv = comb.jugador.pv;
+    await comb.terminarTurno();
+    // the hero's poison ticks 4 at the start of the turn
+    check(pv - comb.jugador.pv === (roer.dano ?? 0) + 4 + 4, `el mordisco hace ${(roer.dano ?? 0)} + tu veneno (4) de daño`);
+  }
+
+  // Act II · Skeletal adventurers: three different classes out of a bigger pool
+  {
+    const grupo = ACTOS[1][0].elites[2];
+    check(grupo.length === 3 && grupo.every((d) => (d.variantes?.length ?? 0) >= 8), 'Aventureros esqueléticos: tres huecos que salen de un conjunto de 8+ clases');
+    const vistos = new Set<string>();
+    let distintos = true;
+    for (let s = 0; s < 12; s++) {
+      const comb = await montarG(grupo, 9200 + s);
+      const ids = comb.enemigos.map((e) => e.def.id);
+      ids.forEach((id) => vistos.add(id));
+      if (new Set(ids).size !== 3 || ids.some((id) => !/^aventurero-/.test(id))) distintos = false;
+    }
+    check(distintos, 'cada combate trae tres clases distintas');
+    check(vistos.size >= 6, `y van variando entre combates (${vistos.size} clases vistas en 12)`);
+    const variantes = grupo[0].variantes!;
+    check(variantes.every((d) => !!d.rasgo?.nombre) && new Set(variantes.map((d) => d.rasgo!.nombre)).size === variantes.length,
+      'cada clase tiene su poder único (★)');
+    const clerigo = variantes.find((d) => d.id === 'aventurero-clerigo')!;
+    const cura = Array.from({ length: 6 }, (_, i) => clerigo.ia(i, () => 0.5, {} as EnemigoCombate, [])).find((m) => (m.curaAliados ?? 0) > 0)!;
+    const comb = await montarG([clerigo, E.CABALLERO_TUMBARIO]);
+    const [c, aliado] = comb.enemigos;
+    aliado.pv = aliado.pvMax - 20;
+    c.intencion = { ...cura };
+    aliado.intencion = quieta as any;
+    comb.jugador.bloqueo = 999;
+    await comb.terminarTurno();
+    check(aliado.pvMax - aliado.pv < 20, 'el clérigo cura a sus compañeros');
+  }
+
+  // Act II · Incubus and succubus: while one seduces you, the other strikes
+  {
+    const pareja = ACTOS[1][1].elites[2];
+    check(pareja.map((d) => d.id).sort().join() === 'incubo,sucubo', 'Íncubo y Súcubo');
+    let alternan = true;
+    for (let t = 0; t < 6; t++) {
+      const [m1, m2] = pareja.map((d) => d.ia(t, () => 0.5, {} as EnemigoCombate, []));
+      const seduce = (m: Movimiento) => m.intencion === 'perjuicio';
+      if (!((seduce(m1) && m2.intencion === 'ataque') || (seduce(m2) && m1.intencion === 'ataque'))) alternan = false;
+    }
+    check(alternan, 'cada turno uno te seduce y el otro clava sus garras, por turnos');
+  }
+
+  // Act III · Dragonborn guards and the fire elemental bound to them
+  {
+    const guardas = ACTOS[2][0].elites[2];
+    check(guardas.length === 3 && guardas.every((d) => d.id === 'guardia-draconido'), 'Guardas dracónidos: tres');
+    const comb = await montarG(guardas);
+    const [g1, g2, g3] = comb.enemigos;
+    await comb.infligir(g1, 999);
+    const ele = comb.enemigos.find((e) => e.def.id === 'elemental-fuego' && e.vivo);
+    check(!!ele, 'al caer un dracónido aparece un elemental de fuego');
+    await comb.infligir(ele!, 999);
+    check(ele!.vivo && ele!.pv >= 1, 'el elemental no muere mientras quede algún dracónido');
+    await comb.contexto().matar(ele!);
+    check(ele!.vivo, 'ni siquiera con una muerte instantánea');
+    await comb.infligir(g2, 999);
+    const vivosEle = () => comb.enemigos.filter((e) => e.def.id === 'elemental-fuego' && e.vivo).length;
+    check(vivosEle() === 2, 'cada dracónido que cae suelta su elemental');
+    await comb.infligir(g3, 999);
+    check(vivosEle() === 0 && comb.terminado === 'victoria', 'al caer el último dracónido, los elementales se extinguen (y ninguno nuevo)');
+  }
+
+  // Act III · The mimic: a chest that sleeps until hit, then the chair and the door attack too
+  {
+    const mimico = ACTOS[2][1].elites[2];
+    check(mimico[0]?.id === 'mimico-cofre', 'Mímico: empieza siendo un cofre');
+    const comb = await montarG(mimico);
+    const cofre = comb.enemigos[0];
+    check(/dormid/i.test(cofre.intencion.nombre) && cofre.intencion.dano === undefined, `está dormido (${cofre.intencion.nombre})`);
+    const pv0 = comb.jugador.pv;
+    await comb.terminarTurno();
+    check(comb.jugador.pv === pv0 && comb.enemigos.length === 1, 'dormido no hace nada');
+    const pv1 = comb.jugador.pv;
+    comb.jugador.bloqueo = 0;
+    await comb.infligir(cofre, 5);
+    const ids = comb.enemigos.map((e) => e.def.id);
+    check(ids.includes('mimico-silla') && ids.includes('mimico-puerta'), 'al golpearlo despierta y acuden la silla y la puerta mímicas');
+    check(comb.jugador.pv < pv1, 'que atacan por sorpresa en el acto');
+    check(cofre.intencion.intencion === 'ataque', 'y el cofre ya va a por ti');
+    // without being hit, it wakes by itself after 3 turns
+    const otro = await montarG(mimico, 9301);
+    for (let t = 0; t < 3; t++) { otro.jugador.bloqueo = 999; await otro.terminarTurno(); }
+    check(otro.enemigos.some((e) => e.def.id === 'mimico-silla'), 'si no lo tocas, despierta solo a los 3 turnos');
+  }
+
+  // Every new elite is in the gallery with its puppet (variants and summons included)
+  const galeria = galleryCatalogue().flatMap((s) => s.cards).map((c) => c.id);
+  const nuevos = ['goblin-saqueador', 'goblin-jaleador', 'rata-alcantarilla', 'rata-gigante', 'incubo', 'sucubo', 'guardia-draconido', 'elemental-fuego',
+    'mimico-cofre', 'mimico-silla', 'mimico-puerta', ...ACTOS[1][0].elites[2][0].variantes!.map((d) => d.id)];
+  check(nuevos.every((id) => galeria.includes(id)), `los enemigos nuevos salen en la galería (faltan: ${nuevos.filter((id) => !galeria.includes(id)).join(', ') || '—'})`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

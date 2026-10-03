@@ -2,7 +2,7 @@
 // smoke test can check that every illustrated enemy is listed exactly once.
 
 import type { ClaseId, EnemigoDef } from '../core/types.ts';
-import { ACTOS, DUNGEON_MASTER, FILACTERIA_VOLGUTH, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR } from '../core/enemigos.ts';
+import { ACTOS, DUNGEON_MASTER, FILACTERIA_VOLGUTH, GOBLIN_FAMELICO, IMAGEN_ILUSORIA, OBSERVADOR, enemigosRelacionados } from '../core/enemigos.ts';
 import { ENEMY_RIGS, INVOCATION_RIGS } from '../fx/enemy-rigs.ts';
 import type { FormId } from '../fx/hero-rig.ts';
 
@@ -60,7 +60,8 @@ export function galleryCatalogue(): GallerySection[] {
     };
     cap.normales.flat().forEach((d) => add(d, false));
     (BOSS_SUMMONS[`${act}-${esc}`] ?? []).forEach((d) => add(d, false));
-    cap.elites.flat().forEach((d) => add(d, true));
+    // an elite brings its variants, what it frees on death and what wakes with it
+    cap.elites.flat().forEach((d) => enemigosRelacionados(d).forEach((x) => add(x, true)));
     // the boss, and whatever it unleashes on death (Malachar → Abaddon)
     // the boss, and whatever takes its place on death (Malachar → Abaddon, Vol'guth → his phylactery)
     cap.jefe.forEach((d) => { add(d, false); if (d.invocaAlMorir) add(d.invocaAlMorir, false); if (d.filacteria) add(d.filacteria, false); });
