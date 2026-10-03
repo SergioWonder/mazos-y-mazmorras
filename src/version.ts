@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.8.1';
+export const VERSION = '8.8.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.8.2',
+    fecha: '2026-10-03',
+    cambios: [
+      '😈 El íncubo lleva un arnés de cuero con hebillas, anillas y remaches, y se le marcan los abdominales; la súcubo tiene más curvas y se le ve el ombligo. Los dos son algo más grandes para que se aprecie el detalle.',
+    ],
+  },
   {
     version: '8.8.1',
     fecha: '2026-10-03',

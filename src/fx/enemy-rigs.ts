@@ -1973,15 +1973,29 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   'demonio-menor': biped('demonio-menor', { build: 'hulking', head: 'demon', weapon: 'claws', palette: { skin: '#7a2a22', body: '#7a2a22', legs: '#5a1e1a', boots: '#2a1210', horn: '#2a1e1a', wing: '#3a1412', eyeGlow: '#ffb347' }, arms: 'skin', wings: true, tail: true, hunch: 6 }),
   'inquisidor-oscuro': biped('inquisidor-oscuro', { build: 'normal', head: 'capirote', weapon: 'sword', offhand: 'lantern', palette: { hood: '#1e1a1e', body: '#2a2226', armor: '#4a4448', legs: '#1e1a1e', cloak: '#3a1418', magic: '#ffd07a', eyeGlow: '#ffd07a' }, armor: true, cloak: true, belt: true }),
   // Act II · Templo Oscuro: incubus and succubus (elegant, menacing seducers)
-  // barely dressed fiends: bare skin, leather underwear; he wears a very thin leather harness
+  // barely dressed fiends: bare skin and leather underwear; he wears a bulldog harness
   incubo: biped('incubo', {
     build: 'normal', head: 'fiend', headOpts: { beard: true }, weapon: 'claws', wings: true, tail: true, arms: 'skin',
-    palette: { skin: '#8a5a7a', hair: '#1a1020', horn: '#2a1a24', body: '#8a5a7a', legs: '#8a5a7a', boots: '#1e1214', leather: '#2a1418', wing: '#3a1030', teeth: '#e8dcc8', gold: '#c9a040', magic: '#e070ff', eyeGlow: '#e070ff' },
+    palette: { skin: '#8a5a7a', hair: '#1a1020', horn: '#2a1a24', body: '#8a5a7a', legs: '#8a5a7a', boots: '#1e1214', leather: '#1e1014', metal: '#b9b6c2', wing: '#3a1030', teeth: '#e8dcc8', gold: '#c9a040', magic: '#e070ff', eyeGlow: '#e070ff' },
     torsoDetail: [
-      // harness: two thin straps from the shoulders to a ring, one down to the waist band
-      L('torso', 'leather', 52, 77, 59, 87, 0.9), L('torso', 'leather', 65.5, 77, 59, 87, 0.9), L('torso', 'leather', 59, 87, 59, 97, 0.9),
-      L('torso', 'leather', 51.5, 97.5, 64.5, 97.5, 1.1), C('torso', 'gold', 59, 87, 1.2),
-      // leather briefs
+      // subtle abs: the midline and two pairs of fine creases, and the lower edge of the pecs
+      L('torso', 'ink', 59, 89.5, 59.2, 97, 0.35),
+      L('torso', 'ink', 56.3, 92, 58.6, 92.3, 0.3), L('torso', 'ink', 59.6, 92.3, 61.9, 92, 0.3),
+      L('torso', 'ink', 56.6, 94.8, 58.6, 95, 0.3), L('torso', 'ink', 59.6, 95, 61.6, 94.8, 0.3),
+      L('torso', 'ink', 54, 88.6, 57.6, 89.2, 0.3), L('torso', 'ink', 60.6, 89.2, 64.2, 88.6, 0.3),
+      // bulldog harness: two shoulder straps with buckles down to a studded chest bar…
+      L('torso', 'leather', 53.5, 77, 53.8, 86, 1.7), L('torso', 'leather', 64, 77, 63.8, 86, 1.7),
+      P('torso', 'metal', [[52.5, 79.6], [54.8, 79.6], [54.8, 81.6], [52.5, 81.6]]), P('torso', 'leather', [[53.1, 80.1], [54.2, 80.1], [54.2, 81.1], [53.1, 81.1]]),
+      P('torso', 'metal', [[63, 79.6], [65.2, 79.6], [65.2, 81.6], [63, 81.6]]), P('torso', 'leather', [[63.6, 80.1], [64.6, 80.1], [64.6, 81.1], [63.6, 81.1]]),
+      P('torso', 'leather', [[54.6, 85.2], [63, 85.2], [63, 88], [54.6, 88]]),
+      C('torso', 'metal', 56.3, 86, 0.3), C('torso', 'metal', 56.3, 87.2, 0.3), C('torso', 'metal', 61.3, 86, 0.3), C('torso', 'metal', 61.3, 87.2, 0.3),
+      // …O-rings at its ends with straps running under the arms, and a ring hanging below
+      L('torso', 'leather', 54, 86.8, 50.6, 89.6, 1.5), L('torso', 'leather', 63.6, 86.8, 66.2, 89.4, 1.5),
+      C('torso', 'metal', 54.2, 86.6, 1), C('torso', 'skin', 54.2, 86.6, 0.5),
+      C('torso', 'metal', 63.4, 86.6, 1), C('torso', 'skin', 63.4, 86.6, 0.5),
+      L('torso', 'leather', 58.8, 87.6, 58.8, 89, 1.1), C('torso', 'metal', 58.8, 90.2, 1.2), C('torso', 'skin', 58.8, 90.2, 0.65),
+      // leather briefs on a narrow band
+      L('torso', 'leather', 51.5, 97.5, 64.5, 97.5, 1.1),
       P('torso', 'leather', [[51, 98], [65, 98], [63.5, 103.5], [59, 106], [54.5, 103.5]]),
     ],
   }),
@@ -1989,9 +2003,12 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
     build: 'thin', head: 'fiend', headOpts: { longHair: true }, weapon: 'talons', wings: true, tail: true, arms: 'skin',
     palette: { skin: '#b07a94', hair: '#2a0e1e', horn: '#1e1218', body: '#b07a94', legs: '#b07a94', boots: '#1a0610', leather: '#2a0e18', wing: '#4a1030', teeth: '#f0e4d8', gold: '#c9a040', magic: '#ff6ab0', eyeGlow: '#ff6ab0' },
     torsoDetail: [
-      // leather band across the chest on thin shoulder straps
-      L('torso', 'leather', 53, 77, 53, 80.5, 0.8), L('torso', 'leather', 63.5, 77, 63.5, 80.5, 0.8),
-      P('torso', 'leather', [[51.5, 80], [65, 80], [64.5, 85], [52, 85]]), C('torso', 'magic', 58.5, 82.5, 1),
+      // a fuller bust held in leather cups on thin shoulder straps
+      L('torso', 'leather', 53.5, 77, 54.2, 80.5, 0.7), L('torso', 'leather', 63.5, 77, 62.8, 80.5, 0.7),
+      E('torso', 'leather', 55.2, 83, 3.9, 3.2), E('torso', 'leather', 62.2, 82.8, 4.1, 3.3),
+      L('torso', 'ink', 58.7, 81.2, 58.7, 85, 0.35), C('torso', 'magic', 58.7, 82.5, 0.9),
+      // navel
+      L('torso', 'ink', 58.4, 94.4, 58.6, 95.4, 0.4),
       // leather briefs and a thin gold chain at the hips
       P('torso', 'leather', [[53, 97.5], [63, 97.5], [62, 102.5], [58, 105], [54, 102.5]]),
       L('torso', 'gold', 53, 99, 63, 99, 0.6),

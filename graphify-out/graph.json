@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 96,
+      "community": 94,
       "norm_label": ".uid()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 96,
+      "community": 196,
       "norm_label": ".dot()"
     },
     {
@@ -4012,7 +4012,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L403",
       "id": "mapa_comun_map_kit_scribble",
-      "community": 189,
+      "community": 96,
       "norm_label": "scribble()"
     },
     {
@@ -4021,7 +4021,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L440",
       "id": "mapa_comun_map_kit_scribble_block",
-      "community": 189,
+      "community": 96,
       "norm_label": "scribble_block()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 96,
+      "community": 196,
       "norm_label": "broadleaf()"
     },
     {
@@ -4210,7 +4210,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L889",
       "id": "mapa_comun_map_kit_label",
-      "community": 189,
+      "community": 96,
       "norm_label": "label()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 96,
+      "community": 196,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4435,7 +4435,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L404",
       "id": "mapa_comun_map_kit_rationale_404",
-      "community": 189,
+      "community": 96,
       "norm_label": "illegible cursive handwriting along a baseline from x to x+w (h = x-height)."
     },
     {
@@ -4507,7 +4507,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L890",
       "id": "mapa_comun_map_kit_rationale_890",
-      "community": 189,
+      "community": 96,
       "norm_label": "small illegible place name."
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 96,
+      "community": 196,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -18358,7 +18358,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L80",
       "id": "acto2_volguth_compose_p",
-      "community": 159,
+      "community": 134,
       "norm_label": "p()"
     },
     {
@@ -18367,7 +18367,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "acto2_volguth_compose_name_of",
-      "community": 134,
+      "community": 159,
       "norm_label": "name_of()"
     },
     {
@@ -18376,7 +18376,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "scripts_musica_acto2_volguth_compose_py_str",
-      "community": 134,
+      "community": 159,
       "norm_label": "str"
     },
     {
@@ -18412,7 +18412,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L156",
       "id": "acto2_volguth_compose_segments",
-      "community": 158,
+      "community": 162,
       "norm_label": "segments()"
     },
     {
@@ -18475,7 +18475,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L206",
       "id": "acto2_volguth_compose_part_tied",
-      "community": 162,
+      "community": 160,
       "norm_label": ".tied()"
     },
     {
@@ -18610,7 +18610,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L440",
       "id": "acto2_volguth_compose_pedal",
-      "community": 158,
+      "community": 162,
       "norm_label": "pedal()"
     },
     {
@@ -18619,7 +18619,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L455",
       "id": "acto2_volguth_compose_timp_root",
-      "community": 159,
+      "community": 158,
       "norm_label": "timp_root()"
     },
     {
@@ -18763,7 +18763,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L756",
       "id": "acto2_volguth_compose_son",
-      "community": 134,
+      "community": 159,
       "norm_label": "son()"
     },
     {
@@ -18817,7 +18817,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L833",
       "id": "acto2_volguth_compose_celli_cost",
-      "community": 158,
+      "community": 160,
       "norm_label": "celli_cost()"
     },
     {
@@ -18826,7 +18826,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L846",
       "id": "acto2_volguth_compose_celli",
-      "community": 158,
+      "community": 160,
       "norm_label": "celli()"
     },
     {
@@ -18880,7 +18880,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1054",
       "id": "acto2_volguth_compose_bar_of",
-      "community": 134,
+      "community": 159,
       "norm_label": "bar_of()"
     },
     {
@@ -18889,7 +18889,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1058",
       "id": "acto2_volguth_compose_role",
-      "community": 134,
+      "community": 159,
       "norm_label": "role()"
     },
     {
@@ -18898,7 +18898,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
       "id": "acto2_volguth_compose_parallels",
-      "community": 134,
+      "community": 159,
       "norm_label": "parallels()"
     },
     {
@@ -18907,7 +18907,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1097",
       "id": "acto2_volguth_compose_repetitions",
-      "community": 134,
+      "community": 159,
       "norm_label": "repetitions()"
     },
     {
@@ -18916,7 +18916,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1107",
       "id": "acto2_volguth_compose_sfz_keys",
-      "community": 134,
+      "community": 159,
       "norm_label": "sfz_keys()"
     },
     {
@@ -18934,7 +18934,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "acto2_volguth_compose_verify",
-      "community": 134,
+      "community": 159,
       "norm_label": "verify()"
     },
     {
@@ -18943,7 +18943,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "scripts_musica_acto2_volguth_compose_py_bool",
-      "community": 134,
+      "community": 159,
       "norm_label": "bool"
     },
     {
@@ -18970,7 +18970,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L81",
       "id": "acto2_volguth_compose_rationale_81",
-      "community": 159,
+      "community": 134,
       "norm_label": "f#4' / 'bb2' / 66 -> midi number (c4 = 60)."
     },
     {
@@ -18988,7 +18988,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L157",
       "id": "acto2_volguth_compose_rationale_157",
-      "community": 158,
+      "community": 162,
       "norm_label": "[(first eighth, last eighth + 1, chord, bass pc)] of a bar."
     },
     {
@@ -19006,7 +19006,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L207",
       "id": "acto2_volguth_compose_rationale_207",
-      "community": 162,
+      "community": 160,
       "norm_label": "events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present"
     },
     {
@@ -19105,7 +19105,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L441",
       "id": "acto2_volguth_compose_rationale_441",
-      "community": 158,
+      "community": 162,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo"
     },
     {
@@ -19249,7 +19249,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L834",
       "id": "acto2_volguth_compose_rationale_834",
-      "community": 158,
+      "community": 160,
       "norm_label": "root + fifth is the brief's figure; the root alone costs a little, root + third"
     },
     {
@@ -19258,7 +19258,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L847",
       "id": "acto2_volguth_compose_rationale_847",
-      "community": 158,
+      "community": 160,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm"
     },
     {
@@ -19276,7 +19276,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1065",
       "id": "acto2_volguth_compose_rationale_1065",
-      "community": 134,
+      "community": 159,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i"
     },
     {
@@ -19285,7 +19285,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1098",
       "id": "acto2_volguth_compose_rationale_1098",
-      "community": 134,
+      "community": 159,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than"
     },
     {
@@ -32632,7 +32632,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L190",
       "id": "leitmotivs_acto3_bocetos_mas_alla",
-      "community": 179,
+      "community": 156,
       "norm_label": "mas_alla()"
     },
     {
@@ -32659,7 +32659,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L282",
       "id": "leitmotivs_acto3_bocetos_ruinas_oro",
-      "community": 194,
+      "community": 179,
       "norm_label": "ruinas_oro()"
     },
     {
@@ -32713,7 +32713,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L326",
       "id": "leitmotivs_acto3_bocetos_garras_magma",
-      "community": 200,
+      "community": 194,
       "norm_label": "garras_magma()"
     },
     {
@@ -32848,7 +32848,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L191",
       "id": "leitmotivs_acto3_bocetos_rationale_191",
-      "community": 179,
+      "community": 156,
       "norm_label": "\u00abmas alla de las estrellas\u00bb (alternating 5/4 and 7/8 at 140): a galloping e riff"
     },
     {
@@ -32875,7 +32875,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L283",
       "id": "leitmotivs_acto3_bocetos_rationale_283",
-      "community": 194,
+      "community": 179,
       "norm_label": "\u00abruinas de oro\u00bb (e phrygian, 3/4 at 84): a solo cello mourns over a low harp ost"
     },
     {
@@ -32929,7 +32929,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L327",
       "id": "leitmotivs_acto3_bocetos_rationale_327",
-      "community": 200,
+      "community": 194,
       "norm_label": "\u00abgarras de magma\u00bb (d aeolian, 4/4 at 104): the dragon walks \u2014 trombones and tuba"
     },
     {
@@ -37733,7 +37733,7 @@
       "label": "Piece",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2337",
+      "source_location": "L2351",
       "id": "scripts_smoke_test_piece",
       "community": 101,
       "norm_label": "piece"
@@ -37742,7 +37742,7 @@
       "label": "E",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2672",
+      "source_location": "L2686",
       "id": "scripts_smoke_test_e",
       "community": 101,
       "norm_label": "e"
@@ -37751,7 +37751,7 @@
       "label": "Bone",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2854",
+      "source_location": "L2868",
       "id": "scripts_smoke_test_bone",
       "community": 101,
       "norm_label": "bone"
@@ -37760,7 +37760,7 @@
       "label": "RelicLike",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3094",
+      "source_location": "L3108",
       "id": "scripts_smoke_test_reliclike",
       "community": 101,
       "norm_label": "reliclike"
@@ -37769,7 +37769,7 @@
       "label": "Mov",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3149",
+      "source_location": "L3163",
       "id": "scripts_smoke_test_mov",
       "community": 101,
       "norm_label": "mov"
@@ -37778,7 +37778,7 @@
       "label": "Reliquia",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3150",
+      "source_location": "L3164",
       "id": "scripts_smoke_test_reliquia",
       "community": 101,
       "norm_label": "reliquia"
@@ -37787,7 +37787,7 @@
       "label": "montar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3165",
+      "source_location": "L3179",
       "id": "scripts_smoke_test_montar",
       "community": 101,
       "norm_label": "montar()"
@@ -37796,7 +37796,7 @@
       "label": "T",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3765",
+      "source_location": "L3779",
       "id": "scripts_smoke_test_t",
       "community": 101,
       "norm_label": "t"
@@ -37805,7 +37805,7 @@
       "label": "Accion",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3795",
+      "source_location": "L3809",
       "id": "scripts_smoke_test_accion",
       "community": 101,
       "norm_label": "accion"
@@ -37814,7 +37814,7 @@
       "label": "montarM()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4721",
+      "source_location": "L4735",
       "id": "scripts_smoke_test_montarm",
       "community": 101,
       "norm_label": "montarm()"
@@ -37823,7 +37823,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5422",
+      "source_location": "L5436",
       "id": "scripts_smoke_test_montarb",
       "community": 101,
       "norm_label": "montarb()"
@@ -37832,7 +37832,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6981",
+      "source_location": "L6995",
       "id": "scripts_smoke_test_sprite2",
       "community": 101,
       "norm_label": "sprite2"
@@ -37841,7 +37841,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7389",
+      "source_location": "L7403",
       "id": "scripts_smoke_test_escenario",
       "community": 101,
       "norm_label": "escenario"
@@ -37850,7 +37850,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7651",
+      "source_location": "L7665",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 101,
       "norm_label": "montarnumeros()"
@@ -37859,7 +37859,7 @@
       "label": "montarP()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7888",
+      "source_location": "L7902",
       "id": "scripts_smoke_test_montarp",
       "community": 101,
       "norm_label": "montarp()"
@@ -37868,7 +37868,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9027",
+      "source_location": "L9041",
       "id": "scripts_smoke_test_montarmago",
       "community": 101,
       "norm_label": "montarmago()"
@@ -37877,7 +37877,7 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9039",
+      "source_location": "L9053",
       "id": "scripts_smoke_test_jugar",
       "community": 46,
       "norm_label": "jugar()"
@@ -44807,7 +44807,7 @@
       "label": "INVOCATION_RIGS",
       "file_type": "code",
       "source_file": "src/fx/enemy-rigs.ts",
-      "source_location": "L2062",
+      "source_location": "L2079",
       "id": "fx_enemy_rigs_invocation_rigs",
       "community": 157,
       "norm_label": "invocation_rigs"
@@ -48589,7 +48589,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L841",
       "id": "fx_spell_fx_engulf",
-      "community": 92,
+      "community": 106,
       "norm_label": "engulf()"
     },
     {
@@ -48598,7 +48598,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L852",
       "id": "fx_spell_fx_aliento",
-      "community": 92,
+      "community": 106,
       "norm_label": "aliento()"
     },
     {
@@ -50443,7 +50443,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L1",
       "id": "ui_castigo_ficha",
-      "community": 199,
+      "community": 76,
       "norm_label": "castigo-ficha.ts"
     },
     {
@@ -50452,7 +50452,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L7",
       "id": "ui_castigo_ficha_icono",
-      "community": 199,
+      "community": 76,
       "norm_label": "icono"
     },
     {
@@ -50461,7 +50461,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L13",
       "id": "ui_castigo_ficha_llamasdecastigo",
-      "community": 199,
+      "community": 76,
       "norm_label": "llamasdecastigo()"
     },
     {
@@ -50470,7 +50470,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L20",
       "id": "ui_castigo_ficha_resumencastigo",
-      "community": 199,
+      "community": 76,
       "norm_label": "resumencastigo"
     },
     {
@@ -56085,7 +56085,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L159",
-      "community": 179,
+      "community": 156,
       "norm_label": "\u00abmas alla de las estrellas\u00bb (alternating 5/4 and 7/8 at 140): a galloping e riff",
       "id": "leitmotivs_acto3_bocetos_rationale_159"
     },
@@ -56103,7 +56103,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L224",
-      "community": 194,
+      "community": 179,
       "norm_label": "\u00abruinas de oro\u00bb (e phrygian, 3/4 at 84): a solo cello mourns over a low harp ost",
       "id": "leitmotivs_acto3_bocetos_rationale_224"
     },
@@ -56112,7 +56112,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L253",
-      "community": 200,
+      "community": 194,
       "norm_label": "\u00abgarras de magma\u00bb (d aeolian, 4/4 at 104): the dragon walks \u2014 trombones and tuba",
       "id": "leitmotivs_acto3_bocetos_rationale_253"
     },
@@ -56301,7 +56301,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L434",
-      "community": 158,
+      "community": 162,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo",
       "id": "acto2_volguth_compose_rationale_434"
     },
@@ -56436,7 +56436,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L823",
-      "community": 158,
+      "community": 160,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm",
       "id": "acto2_volguth_compose_rationale_823"
     },
@@ -56454,7 +56454,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1031",
-      "community": 134,
+      "community": 159,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i",
       "id": "acto2_volguth_compose_rationale_1031"
     },
@@ -56463,7 +56463,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
-      "community": 134,
+      "community": 159,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than",
       "id": "acto2_volguth_compose_rationale_1064"
     },
@@ -229748,5 +229748,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "3548aedd3804fd77af1814c0a61379a026bcec4e"
+  "built_at_commit": "8958a51a6d444b024105ec4ce367c7648ff28c30"
 }

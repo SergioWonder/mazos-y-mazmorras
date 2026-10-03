@@ -2322,8 +2322,22 @@ try {
       `${id}: sin capa ni túnica, con la piel al descubierto`);
     check(de('leather').some((s) => s.t === 'p' && s.b === 'torso'), `${id}: lleva ropa interior de cuero`);
   }
-  const arnes = ENEMY_RIGS['incubo']!.shapes.filter((s) => s.k === 'leather' && s.t === 'l' && s.b === 'torso');
-  check(arnes.length >= 3 && arnes.every((s) => s.t === 'l' && s.w <= 1.2), `el íncubo lleva un arnés de cuero muy fino (${arnes.length} correas)`);
+  // his harness is a bulldog one: two shoulder straps with buckles down to a studded chest bar,
+  // O-rings at its ends with side straps, and a ring hanging under the bar
+  const inc = ENEMY_RIGS['incubo']!.shapes.filter((s) => s.b === 'torso');
+  const tirantes = inc.filter((s) => s.t === 'l' && s.k === 'leather' && Math.abs(s.x1 - s.x2) < 1.5 && s.y2 - s.y1 > 5);
+  const barra = inc.filter((s) => s.t === 'p' && s.k === 'leather' && s.pts.every(([, y]) => y > 84 && y < 90));
+  const metal = inc.filter((s) => s.k === 'metal');
+  check(tirantes.length >= 2 && barra.length === 1 && metal.length >= 6,
+    `el arnés del íncubo: dos tirantes con hebillas hasta una barra en el pecho con anillas (${tirantes.length} tirantes, ${metal.length} piezas de metal)`);
+  const abdominales = inc.filter((s) => s.t === 'l' && s.k === 'ink' && s.w <= 0.5 && Math.min(s.y1, s.y2) >= 88 && Math.max(s.y1, s.y2) <= 98);
+  check(abdominales.length >= 3, `y unas líneas sutiles marcan sus abdominales (${abdominales.length})`);
+  const suc = ENEMY_RIGS['sucubo']!.shapes.filter((s) => s.b === 'torso');
+  const busto = suc.filter((s) => s.t === 'e' && s.k === 'leather' && s.y > 79 && s.y < 86);
+  check(busto.length === 2 && busto.every((s) => s.t === 'e' && s.rx >= 3), 'la súcubo tiene más pecho, cubierto por la banda de cuero');
+  check(suc.some((s) => s.k === 'ink' && ((s.t === 'c' && s.y > 92 && s.y < 97) || (s.t === 'l' && s.y1 > 92 && s.y1 < 97))), 'y se le dibuja el ombligo');
+  check(['incubo', 'sucubo'].every((id) => (ENEMIGOS.ACTOS[1][1].elites[2].find((d) => d.id === id)?.escala ?? 0) >= 1.3),
+    'los dos son algo más grandes, para que se aprecie el detalle');
 } catch (e) {
   check(false, `las pruebas de las marionetas nuevas revientan: ${(e as Error).stack ?? e}`);
 }

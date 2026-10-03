@@ -852,7 +852,7 @@ export const AVENTURERO_ESQUELETICO: EnemigoDef = {
 const seducir = (nombre: string): Movimiento => ({ nombre, intencion: 'perjuicio', efectos: [['vulnerable', 2, true], ['debil', 1, true]] });
 
 export const INCUBO: EnemigoDef = {
-  id: 'incubo', nombre: 'Íncubo', arte: '😈', pv: [50, 54], escala: 1.15,
+  id: 'incubo', nombre: 'Íncubo', arte: '😈', pv: [50, 54], escala: 1.35,
   alMorirAliado: { efectos: [['fuerza', 4]] },
   rasgo: {
     nombre: 'Danza Seductora',
@@ -862,7 +862,7 @@ export const INCUBO: EnemigoDef = {
 };
 
 export const SUCUBO: EnemigoDef = {
-  id: 'sucubo', nombre: 'Súcubo', arte: '😈', pv: [50, 54], escala: 1.15,
+  id: 'sucubo', nombre: 'Súcubo', arte: '😈', pv: [50, 54], escala: 1.3,
   alMorirAliado: { efectos: [['fuerza', 4]] },
   rasgo: {
     nombre: 'Abrazo Letal',
