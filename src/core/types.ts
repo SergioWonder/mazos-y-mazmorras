@@ -718,6 +718,8 @@ export interface EstadoRun {
   };
   /** Ids de eventos ya vividos (para no repetirlos). */
   eventosVistos: string[];
+  /** Elites already fought this run, as `acto.escenario.índice` (none repeats until the others came out). */
+  elitesVistos?: string[];
   /** Active tavern quest (null/absent when there is none). */
   mision?: MisionTaberna | null;
 }

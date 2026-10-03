@@ -20,6 +20,8 @@ export interface Guardado {
   /** Parcial: los guardados antiguos pueden no tener los campos más nuevos. */
   permanentes: Partial<EstadoRun['permanentes']>;
   eventosVistos: string[];
+  /** Elites already fought (older saves lack it). */
+  elitesVistos?: string[];
   mazo: Array<{ id: string; mejorada: boolean }>;
   reliquias: string[];
   mapa: NodoMapa[];
@@ -41,6 +43,7 @@ export function serializarRun(run: EstadoRun): Guardado {
     espaciosConjuro: run.espaciosConjuro,
     permanentes: { ...run.permanentes },
     eventosVistos: [...run.eventosVistos],
+    elitesVistos: [...(run.elitesVistos ?? [])],
     mazo: run.mazo.map((c) => ({ id: c.def.id, mejorada: c.mejorada })),
     reliquias: run.reliquias.map((r) => r.id),
     mapa: structuredClone(run.mapa),
@@ -83,6 +86,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
       ...g.permanentes,
     },
     eventosVistos: [...g.eventosVistos],
+    elitesVistos: [...(g.elitesVistos ?? [])],
     mision: g.mision ? { ...g.mision } : null,
   };
 }

@@ -25,6 +25,8 @@ export interface SpellCtx {
   view?: { w: number; h: number };
   /** Index of this cast within a volley (0, 1, 2…), so each dart takes its own lane. */
   lane?: number;
+  /** Boxes of every receiver of a sweep (one wave across all the enemies; `box` spans them). */
+  targets?: Box[];
 }
 export type Anchor = 'self' | 'target';
 export type Build = (g: Painter, u: number, c: SpellCtx, dur: number) => void;
@@ -45,6 +47,10 @@ export interface SpellDef {
   /** Its hits come in a quick volley (Magic Missile's darts): the next hit is cast `gap`
    *  seconds later and each hit's feedback waits for the impact at `phases[0]`. */
   volley?: { gap: number };
+  /** One cast sweeps across every enemy (`box` spans them, `targets` holds each one): the
+   *  hits do not cast it again, and each hit's feedback waits for the sweep to reach it.
+   *  Returns the seconds since the cast until the sweep reaches screen column `x`. */
+  sweep?: (c: SpellCtx, x: number) => number;
 }
 
 export const MAX_SPELL_SPRITES = 220;
@@ -478,6 +484,75 @@ const divino: Build = (g, u, c) => {
   }
 };
 
+export interface WaveCrest {
+  /** Front of the crest (where its lip curls over). */
+  x: number;
+  ground: number;
+  /** Crest height over the ground. */
+  height: number;
+  /** Length of the back slope behind the front. */
+  back: number;
+  /** Travel direction (+1 rightwards). */
+  dir: number;
+  /** How far the lip has curled over (0 upright … ~1.5 crashing). */
+  curl: number;
+  /** Scale of the line thicknesses (geo's k for a target-sized wave). */
+  k: number;
+  /** Width of each column of the water body. */
+  colW: number;
+  alpha: number;
+  /** Opacity of the white foam tips on the lip. */
+  tips: number;
+  /** Number of foam tips, and the salt of their random numbers. */
+  tipCount?: number;
+  salt?: number;
+  /** Segments of the crest line (14: a target-sized wave; more keep a big one smooth). */
+  segments?: number;
+  /** How far below the ground the body columns reach (hides their round ends). */
+  sink?: number;
+  /** Colour of the deep water darkening the lower part of the body (none by default). */
+  deep?: string;
+  /** How far forward (in crest heights) the foot of the face runs ahead of the crest, so
+   *  the face slopes under the lip instead of standing upright (0 by default). */
+  lean?: number;
+}
+/** A breaking wave (Wave, Wrath of the Sea): water body columns down to the ground,
+ *  the crest strip with its lighter rim and foam line, and white tips on the lip.
+ *  Returns the crest line (back to front, the last points curl over). */
+export function waveCrest(g: Painter, w: WaveCrest): Point[] {
+  const { x: X, ground, height: Hh, back, dir, curl, k, alpha: a } = w;
+  // n segments: the back slope up to 3/4 of them, the curling lip after
+  const n = w.segments ?? 14, body = Math.floor(n * 0.75), taper = 0.18 * (14 / n);
+  const pts: Point[] = [];
+  for (let j = 0; j <= n; j++) {
+    const s = j / n;
+    if (s <= 0.75) {
+      const q = s / 0.75;
+      pts.push({ x: X - dir * (1 - q) * back, y: ground - Hh * smooth(q) ** 1.2 });
+    } else {
+      const q = (s - 0.75) / 0.25, phi = q * Math.PI * (0.6 + 0.9 * curl), rc = 0.22 * Hh;
+      pts.push({ x: X + dir * Math.sin(phi) * rc, y: ground - Hh + rc - Math.cos(phi) * rc });
+    }
+  }
+  // water body: overlapping columns from the crest line down to the ground
+  const foot = (j: number) => pts[j].x + dir * (w.lean ?? 0) * Hh * (j / body) ** 4;
+  for (let j = 0; j <= body; j++) g.seg(pts[j].x, pts[j].y + 8 * k, foot(j), ground + (w.sink ?? 0), w.colW, '#2a6896', 0.8 * a, 0, false);
+  if (w.deep) for (let j = 0; j <= body; j++) {
+    const y0 = Math.max(pts[j].y + 8 * k + w.colW, ground - 0.42 * Hh), f = (y0 - pts[j].y) / Math.max(1, ground - pts[j].y);
+    if (y0 < ground) g.seg(lerp(pts[j].x, foot(j), f), y0, foot(j), ground + (w.sink ?? 0), w.colW, w.deep, 0.45 * a, 0, false);
+  }
+  const th = (base: number) => (j: number) => base * k * (j <= body ? 1 : 1 - (j - body) * taper);
+  g.strip(pts, th(24), '#3b82b8', 0.95 * a, false);
+  g.strip(pts.map((q) => ({ x: q.x, y: q.y - 5 * k })), th(10), '#5aa7d6', 0.55 * a);
+  g.strip(pts.map((q) => ({ x: q.x, y: q.y - 9 * k })), th(3.5), '#e6f6ff', 0.85 * a);
+  const salt = w.salt ?? 120, lip0 = Math.round((9 * n) / 14);
+  for (let i = 0; i < (w.tipCount ?? 8); i++) {
+    const q = pts[Math.min(n, lip0 + Math.floor(g.r(i + salt) * (n - lip0 + 1)))];
+    g.dot(q.x + (g.r(i + salt + 10) - 0.5) * 16 * k, q.y - 8 * k - g.r(i + salt + 20) * 8 * k, (2 + 2 * g.r(i + salt + 30)) * k, '#ffffff', 0.8 * a * w.tips);
+  }
+  return pts;
+}
+
 /** Wave: a crest rolls in from the caster's side, curls over and crashes. */
 const ola: Build = (g, u, c, D) => {
   const { cx, cy, k, W, H, ground, dir } = geo(c);
@@ -485,27 +560,7 @@ const ola: Build = (g, u, c, D) => {
   const X = cx - dir * 1.0 * W + dir * 1.05 * W * p;
   const Hh = H * (0.35 + 0.8 * span(u, 0, 0.4)) * (1 - 0.7 * easeIn(span(u, 0.5, 0.85)));
   const curl = span(u, 0.25, 0.55) + 0.6 * span(u, 0.5, 0.8), a = 1 - span(u, 0.7, 1);
-  const pts: Point[] = [];
-  for (let j = 0; j <= 14; j++) {
-    const s = j / 14;
-    if (s <= 0.75) {
-      const q = s / 0.75;
-      pts.push({ x: X - dir * (1 - q) * 0.95 * W, y: ground - Hh * smooth(q) ** 1.2 });
-    } else {
-      const q = (s - 0.75) / 0.25, phi = q * Math.PI * (0.6 + 0.9 * curl), rc = 0.22 * Hh;
-      pts.push({ x: X + dir * Math.sin(phi) * rc, y: ground - Hh + rc - Math.cos(phi) * rc });
-    }
-  }
-  // water body: overlapping columns from the crest line down to the ground
-  for (let j = 0; j <= 10; j++) g.seg(pts[j].x, pts[j].y + 8 * k, pts[j].x, ground, 0.17 * W, '#2a6896', 0.8 * a, 0, false);
-  const th = (base: number) => (j: number) => base * k * (j < 11 ? 1 : 1 - (j - 10) * 0.18);
-  g.strip(pts, th(24), '#3b82b8', 0.95 * a, false);
-  g.strip(pts.map((q) => ({ x: q.x, y: q.y - 5 * k })), th(10), '#5aa7d6', 0.55 * a);
-  g.strip(pts.map((q) => ({ x: q.x, y: q.y - 9 * k })), th(3.5), '#e6f6ff', 0.85 * a);
-  for (let i = 0; i < 8; i++) {
-    const q = pts[Math.min(14, 9 + Math.floor(g.r(i + 120) * 6))];
-    g.dot(q.x + (g.r(i + 130) - 0.5) * 16 * k, q.y - 8 * k - g.r(i + 140) * 8 * k, (2 + 2 * g.r(i + 150)) * k, '#ffffff', 0.8 * a * span(u, 0.2, 0.3));
-  }
+  waveCrest(g, { x: X, ground, height: Hh, back: 0.95 * W, dir, curl, k, colW: 0.17 * W, alpha: a, tips: span(u, 0.2, 0.3) });
   if (u > 0.5) {
     const tau = (u - 0.5) * D;
     for (let i = 0; i < 22; i++) {

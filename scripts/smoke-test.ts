@@ -5928,6 +5928,135 @@ try {
   check(false, `las pruebas de las secuencias raras revientan: ${(e as Error).stack ?? e}`);
 }
 
+// ── Wrath of the Sea: one big wave sweeps across every enemy ────────────────
+console.log('\n🌊 Cólera del Mar: una sola ola barre a todos los enemigos');
+try {
+  const sf = await import('../src/fx/spell-fx.ts');
+  const cs = await import('../src/fx/card-spells.ts');
+  const { SPELLS, spellFrame, spellMarks, MAX_CARD_SPRITES } = sf;
+  const { CARD_FX, cardSpellKey, preludeKey, volleyTiming, sweepArrival, sweepImpactMs } = cs;
+  const carta = DRUIDA.find((d) => d.id === 'circulo-mar')!;
+  const k = cardSpellKey(carta.id, carta.fx);
+  const def = SPELLS[k];
+  check(!!def?.sweep && carta.objetivo === 'todos', 'Cólera del Mar lanza una sola ola que barre a todos los enemigos');
+  check(volleyTiming(k, false) === null && !!preludeKey(carta.id) && !!SPELLS[preludeKey(carta.id)!] && !!CARD_FX[carta.id].prelude,
+    'conserva su anticipación durante el escaparate y no es una ráfaga');
+  type Caja = { x: number; y: number; w: number; h: number };
+  const union = (bs: Caja[]) => {
+    const x0 = Math.min(...bs.map((b) => b.x)), y0 = Math.min(...bs.map((b) => b.y));
+    return { x: x0, y: y0, w: Math.max(...bs.map((b) => b.x + b.w)) - x0, h: Math.max(...bs.map((b) => b.y + b.h)) - y0 };
+  };
+  const base = { x: 0, y: 0, w: 10, h: 10 };
+  check(!SPELLS.ola.sweep && sweepArrival('ola', { box: base }, 5) === null
+    && sweepArrival(cardSpellKey('tormenta-venganza', 'raices'), { box: base }, 5) === null && sweepImpactMs('ola', { box: base }, base, 0) === null,
+  'la ola genérica y los demás golpes de área siguen lanzando un efecto por golpe');
+  // the look of the other wave: the same crest, body and foam line, only bigger
+  const colores = (fr: { colour: string }[]) => new Set(fr.map((s) => s.colour));
+  const cGen = colores(spellFrame('ola', { box: { x: 600, y: 200, w: 160, h: 200 }, from: { x: 200, y: 300 }, seed: 2 }, 0.45));
+  const escenas: [string, Caja[], { x: number; y: number }, { w: number; h: number }][] = [
+    ['1 enemigo', [{ x: 760, y: 300, w: 170, h: 220 }], { x: 260, y: 430 }, { w: 1280, h: 720 }],
+    ['3 enemigos', [{ x: 600, y: 320, w: 150, h: 200 }, { x: 800, y: 280, w: 190, h: 240 }, { x: 1040, y: 330, w: 140, h: 190 }], { x: 260, y: 430 }, { w: 1280, h: 720 }],
+    ['5 enemigos', [0, 1, 2, 3, 4].map((i) => ({ x: 470 + i * 160, y: 300 + (i % 2) * 30, w: 130, h: 200 - (i % 2) * 30 })), { x: 220, y: 430 }, { w: 1366, h: 768 }],
+    ['5 en móvil horizontal', [0, 1, 2, 3, 4].map((i) => ({ x: 330 + i * 96, y: 120, w: 80, h: 110 })), { x: 140, y: 190 }, { w: 844, h: 390 }],
+    ['3 en móvil vertical', [0, 1, 2].map((i) => ({ x: 20 + i * 125, y: 160, w: 100, h: 130 })), { x: 90, y: 480 }, { w: 390, h: 844 }],
+    ['héroe a la derecha', [{ x: 120, y: 300, w: 150, h: 200 }, { x: 330, y: 300, w: 150, h: 200 }], { x: 1000, y: 420 }, { w: 1280, h: 720 }],
+  ];
+  const near = (s: { x: number; y: number }, b: Caja, m: number) => s.x >= b.x - m && s.x <= b.x + b.w + m && s.y >= b.y - m && s.y <= b.y + b.h + m;
+  for (const [nombre, cajas, from, view] of escenas) {
+    const ctx = { box: union(cajas), targets: cajas, from, facing: -1 as const, seed: 5, view };
+    const centro = (b: Caja) => b.x + b.w / 2;
+    const dir = Math.sign(centro(ctx.box) - from.x) || 1;
+    const orden = [...cajas].sort((a, b) => dir * (centro(a) - centro(b)));
+    const llegadas = orden.map((b) => sweepArrival(k, ctx, centro(b)) ?? NaN);
+    check(llegadas.every(Number.isFinite) && llegadas.every((t, i) => i === 0 || t > llegadas[i - 1]),
+      `${nombre}: la ola llega a cada enemigo uno tras otro desde el lado del héroe (${llegadas.map((t) => Math.round(t * 1000)).join(', ')} ms)`);
+    check(llegadas[0] > 0.05 && llegadas[0] <= 0.2, `${nombre}: rompe sobre el primero enseguida, con el escaparate ya hecho (${Math.round(llegadas[0] * 1000)} ms)`);
+    check(llegadas[llegadas.length - 1] <= def.duration - 0.45, `${nombre}: le da tiempo a romper y disiparse tras el último`);
+    // the crest is over each enemy when its hit lands, a bit taller than the tallest one
+    const alto = Math.min(...cajas.map((b) => b.y));
+    let encima = 0, cubre = 0, salpica = 0, antes = 0, gotas = 0;
+    orden.forEach((b, i) => {
+      const t = llegadas[i];
+      const cresta = spellMarks(k, ctx, t).filter((m) => m.kind === 'cresta');
+      if (cresta.length === 1 && Math.abs(cresta[0].x - centro(b)) <= b.w * 0.15) encima++;
+      if (cresta.length === 1 && cresta[0].y <= alto && cresta[0].y >= Math.max(0, alto - b.h * 0.6)) cubre++;
+      if (spellMarks(k, ctx, t + 0.06).some((m) => m.kind === 'salpicadura' && near(m, b, 2))) salpica++;
+      if (!spellMarks(k, ctx, t - 0.05).some((m) => m.kind === 'salpicadura' && near(m, b, 2))) antes++;
+      if (spellFrame(k, ctx, t + 0.12).filter((s) => s.shape === 'gota' && near(s, b, b.w * 0.5)).length >= 5) gotas++;
+    });
+    const n = cajas.length;
+    check(encima === n, `${nombre}: la cresta pasa sobre cada enemigo cuando le llega el golpe (${encima}/${n})`);
+    check(cubre === n, `${nombre}: la ola es algo más alta que el enemigo más alto (${cubre}/${n})`);
+    check(salpica === n && antes === n && gotas === n, `${nombre}: salpica sobre cada enemigo justo cuando la cresta pasa (${salpica}, ${antes}, ${gotas} de ${n})`);
+    // one wave, not one per enemy; it crashes past the last one and fades out
+    let unaSola = true, maximo = 0, roto = 0, fuera = 0;
+    for (let t = 0; t <= def.duration; t += 1 / 60) {
+      const cr = spellMarks(k, ctx, t).filter((m) => m.kind === 'cresta');
+      if (cr.length > 1) unaSola = false;
+      const fr = spellFrame(k, ctx, t);
+      maximo = Math.max(maximo, fr.length);
+      for (const s of fr) {
+        if (![s.x, s.y, s.size, s.angle, s.alpha ?? 1, s.stretch ?? 1].every(Number.isFinite)) roto++;
+        if (s.y < -60 || s.y > view.h + 60) fuera++;
+      }
+    }
+    check(unaSola, `${nombre}: una sola ola para todos los enemigos`);
+    check(roto === 0 && fuera === 0, `${nombre}: elementos válidos y dentro de la pantalla (${roto} rotos, ${fuera} fuera)`);
+    check(maximo > 60 && maximo < (def.cap ?? 0) && (def.cap ?? 0) <= MAX_CARD_SPRITES, `${nombre}: con tope de partículas, sin recortar nada (${maximo} < ${def.cap})`);
+    const tUlt = llegadas[llegadas.length - 1];
+    const fin = spellMarks(k, ctx, tUlt + 0.25).find((m) => m.kind === 'cresta');
+    const ultimo = orden[orden.length - 1];
+    check(!!fin && dir * (fin.x - centro(ultimo)) > ultimo.w * 0.25, `${nombre}: la ola rompe más allá del último enemigo`);
+    check(spellFrame(k, ctx, def.duration - 0.02).length === 0 || spellFrame(k, ctx, def.duration - 0.02).every((s) => (s.alpha ?? 1) < 0.2),
+      `${nombre}: se disipa al terminar`);
+    check([...colores(spellFrame(k, ctx, llegadas[0]))].filter((c) => cGen.has(c)).length >= 4, `${nombre}: es la misma ola de agua, en grande`);
+    // the feedback of each hit waits for the crest (the clock of the cast runs since it was cast)
+    const ms = orden.map((b) => sweepImpactMs(k, ctx, b, 0) ?? NaN);
+    check(ms.every((m, i) => Math.abs(m - llegadas[i] * 1000) <= 1), `${nombre}: el número de daño de cada enemigo sale cuando la cresta le llega`);
+    check(orden.every((b) => sweepImpactMs(k, ctx, b, 5000) === 0), `${nombre}: si la ola ya pasó, el golpe se muestra en el acto`);
+  }
+  // the wave never rolls over the hero, even when he stands right beside the enemies
+  const juntos: [string, number[][], { x: number; y: number }, { w: number; h: number }][] = [
+    ['tableta', [[248, 318, 122, 117], [405, 300, 140, 135], [591, 341, 97, 94], [736, 289, 152, 147], [919, 300, 140, 135]], { x: 153, y: 381 }, { w: 1024, h: 768 }],
+    ['móvil vertical en dos filas', [[178, 536, 86, 83], [279, 523, 99, 96], [169, 331, 69, 67], [266, 293, 108, 104], [279, 72, 99, 96]], { x: 77, y: 151 }, { w: 390, h: 844 }],
+    ['móvil vertical, tres', [[285, 314, 86, 83], [154, 72, 121, 117], [287, 105, 86, 83]], { x: 77, y: 151 }, { w: 390, h: 844 }],
+  ];
+  for (const [nombre, bs, from, view] of juntos) {
+    const cajas = bs.map(([x, y, w, h]) => ({ x, y, w, h }));
+    const ctx = { box: union(cajas), targets: cajas, from, facing: -1 as const, seed: 4, view };
+    let tapa = 0;
+    for (let t = 0; t <= def.duration; t += 1 / 60)
+      tapa += spellFrame(k, ctx, t).filter((s) => Math.abs(s.x - from.x) < 30 && Math.abs(s.y - from.y) < 45 && (s.alpha ?? 1) > 0.1).length;
+    const llegadas = cajas.map((b) => sweepArrival(k, ctx, b.x + b.w / 2) ?? NaN);
+    check(tapa === 0, `${nombre}: la ola no pasa por encima del héroe (${tapa})`);
+    check(Math.min(...llegadas) >= 0.1 && Math.max(...llegadas) <= def.duration - 0.45, `${nombre}: aun así rompe sobre cada enemigo a su tiempo (${llegadas.map((t) => Math.round(t * 1000)).join(', ')} ms)`);
+  }
+  // with reduced motion it draws far less, and without a list of targets it covers its box
+  const solo = { box: { x: 600, y: 200, w: 160, h: 200 }, from: { x: 200, y: 300 }, facing: -1 as const, seed: 7 };
+  const pico = (c: typeof solo & { reduced?: boolean }) => Math.max(...[...Array(80).keys()].map((i) => spellFrame(k, c, (i / 79) * def.duration).length));
+  check(pico({ ...solo, reduced: true }) < pico(solo) * 0.75, 'con movimiento reducido la ola dibuja menos');
+  const tSolo = sweepArrival(k, solo, 680) ?? NaN;
+  check(Number.isFinite(tSolo) && spellMarks(k, solo, tSolo + 0.06).some((m) => m.kind === 'salpicadura'), 'sin lista de enemigos, salpica sobre su caja');
+  // five enemies hit one after another: the wave's live elements stay within the global budget
+  const cinco = escenas[2][1];
+  const c5 = { box: union(cinco), targets: cinco, from: escenas[2][2], seed: 9, view: escenas[2][3] };
+  const max5 = Math.max(...[...Array(90).keys()].map((i) => spellFrame(k, c5, (i / 89) * def.duration).length));
+  check(max5 < (def.cap ?? 0) && max5 <= MAX_CARD_SPRITES, `cinco enemigos a la vez caben en el presupuesto sin recortar (${max5})`);
+  // in combat: the first hit casts the wave, the others join it (and wait for its crest)
+  const { SweepClock } = await import('../src/ui/impact-queue.ts');
+  const reloj = new SweepClock();
+  const [e1, e2, e3] = [{}, {}, {}];
+  const g1 = reloj.hit(k, e1, 1000, 1350), g2 = reloj.hit(k, e2, 1040, 1350), g3 = reloj.hit(k, e3, 1300, 1350);
+  check(g1.cast && !g2.cast && !g3.cast, 'el primer golpe lanza la ola y los demás enemigos se suman a ella');
+  check(g1.elapsedMs === 0 && g2.elapsedMs === 40 && g3.elapsedMs === 300, 'cada golpe sabe cuánto lleva la ola en marcha');
+  check(reloj.hit(k, e1, 1400, 1350).cast, 'un segundo barrido sobre el mismo enemigo lanza otra ola');
+  check(reloj.hit(k, e2, 1400 + 1351, 1350).cast && reloj.hit('carta:otra', e3, 2800, 1350).cast, 'una ola terminada u otro efecto empiezan de nuevo');
+  reloj.reset();
+  check(reloj.hit(k, e2, 2900, 1350).cast, 'al resolver la carta se olvida la ola');
+} catch (e) {
+  check(false, `las pruebas de Cólera del Mar revientan: ${(e as Error).stack ?? e}`);
+}
+
 // ── Paladin VFX: hammers of light, holy rays and elemental smites ────────────
 console.log('\n🔨 Efectos del paladín');
 try {
@@ -9504,6 +9633,28 @@ console.log('\n👥 Élites de grupo');
   const nuevos = ['goblin-saqueador', 'goblin-jaleador', 'rata-alcantarilla', 'rata-gigante', 'incubo', 'sucubo', 'guardia-draconido', 'elemental-fuego',
     'mimico-cofre', 'mimico-silla', 'mimico-puerta', ...ACTOS[1][0].elites[2][0].variantes!.map((d) => d.id)];
   check(nuevos.every((id) => galeria.includes(id)), `los enemigos nuevos salen en la galería (faltan: ${nuevos.filter((id) => !galeria.includes(id)).join(', ') || '—'})`);
+}
+
+// ── Elites: none repeats in a run until the other ones of its scenario have come out ──
+console.log('\n🎲 Élites sin repetir');
+{
+  const RUN = await import('../src/core/run.ts');
+  for (let semilla = 1; semilla <= 30; semilla++) {
+    const run = nuevaRun('druida', semilla);
+    const elites = ACTOS[run.capitulo][run.escenario].elites;
+    const rng = crearRng(semilla);
+    const salidos = [0, 1, 2].map(() => RUN.elegirElite(run, rng));
+    if (new Set(salidos).size !== 3) { check(false, `semilla ${semilla}: los tres primeros élites del escenario son distintos (${salidos.map((g) => g[0].id).join(', ')})`); break; }
+    const cuarto = RUN.elegirElite(run, rng);
+    if (!elites.includes(cuarto) || cuarto === salidos[2]) { check(false, `semilla ${semilla}: tras verlos todos vuelve a sortear, sin repetir el último`); break; }
+    if (semilla === 30) check(true, 'en una partida, un élite no se repite hasta que han salido los otros dos de su escenario');
+  }
+  const run = nuevaRun('mago', 77);
+  RUN.elegirElite(run, crearRng(1));
+  const restaurada = rehidratarRun(JSON.parse(JSON.stringify(serializarRun(run))))!;
+  check(restaurada.elitesVistos?.length === 1 && restaurada.elitesVistos[0] === run.elitesVistos![0], 'los élites ya vistos se conservan al guardar la partida');
+  check(rehidratarRun({ ...JSON.parse(JSON.stringify(serializarRun(run))), elitesVistos: undefined })!.elitesVistos!.length === 0,
+    'los guardados antiguos empiezan sin élites vistos');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

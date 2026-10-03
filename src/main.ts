@@ -5,7 +5,7 @@ import './estilos/pantallas.css';
 import './estilos/movil.css';
 
 import { crearRng, elegir } from './core/rng.ts';
-import { nuevaRun, avanzarCapitulo, sortearEscenario, entrarEnSala, cartaExtraEnSala } from './core/run.ts';
+import { nuevaRun, avanzarCapitulo, sortearEscenario, entrarEnSala, cartaExtraEnSala, elegirElite } from './core/run.ts';
 import { ACTOS, DUNGEON_MASTER } from './core/enemigos.ts';
 import { desenlaceCampana } from './core/escena-final.ts';
 import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
@@ -104,7 +104,7 @@ async function juego() {
           break;
         }
         case 'elite': {
-          const grupo = elegir(rng, cap.elites);
+          const grupo = elegirElite(run, rng); // none repeats until the others have come out
           const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre, true);
           if (resultado === 'derrota') vivo = false;
           else {

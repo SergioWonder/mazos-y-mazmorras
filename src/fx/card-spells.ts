@@ -9,7 +9,7 @@
 
 import {
   Painter, SPELLS, MAX_CARD_SPRITES, geo, span, lerp, easeOut, easeIn, easeInOut, easeOutBack, bell, dropAngle,
-  zigzag, smooth, clamp01, TAU, hash01, lightHammer, vinePath, vineFront, type Build, type Point, type SpellCtx, type SpellDef,
+  zigzag, smooth, clamp01, TAU, hash01, lightHammer, vinePath, vineFront, waveCrest, fly, type Box, type Build, type Point, type SpellCtx, type SpellDef,
 } from './spell-fx.ts';
 
 // ── palettes ────────────────────────────────────────────────────────────────
@@ -300,49 +300,203 @@ const formaLunar: Build = (g, u, c) => {
   each(g, 22, (i) => { const tw = bell(u, 0.2 + 0.5 * g.r(i + 80), 1); g.star(cx + (g.r(i + 90) - 0.5) * W * 2.4, b.y - H * 0.4 + g.r(i + 99) * H * 1.2, 7 * k * tw, '#ffffff', tw); });
 };
 
-/** Wrath of the Sea: a whirlpool opens under the target while a thick wave rears up
- *  behind it; the wave breaks over it on the hit, a geyser erupts, spray and foam. */
-const coleraMar: Build = (g, u, c, D) => {
-  const { b, cx, cy, R, k, W, H, ground, dir } = geo(c);
-  for (let i = 0; i < 3; i++) {
-    const s = span(u, 0, 0.3), rr = W * (0.7 - i * 0.18) * (1 - 0.4 * s);
-    if (s > 0 && s < 1) g.arc(cx, ground, rr, 4 * k, u * D * (6 + i * 3), 2.2, SEA[i], 0.8 * (1 - s));
+// ── Wrath of the Sea: one big wave sweeps across every enemy ───────────────
+
+/** Seconds until the crest reaches the first enemy (the showcase prelude did the build-up). */
+const SEA_FIRST = 0.16;
+/** Longest crossing from the first enemy to the last (seconds). */
+const SEA_CROSS = 0.6;
+/** Crest speed, in enemy heights per second (a wide spread crosses faster, within SEA_CROSS). */
+const SEA_SPEED = 5.5;
+/** Life of the splash on each enemy (seconds). */
+const SEA_SPLASH = 0.5;
+/** Long enough for the slowest sweep (SEA_FIRST + SEA_CROSS) to crash and fade out. */
+const SEA_DURATION = 1.4;
+
+interface SeaPlan {
+  dir: number; ground: number; Hh: number;
+  /** Enemy boxes in the order the crest reaches them. */
+  targets: Box[];
+  /** Crest front at the cast, at the first and at the last enemy (px); crest speed (px/s). */
+  x0: number; xFirst: number; xLast: number; speed: number;
+  /** When it reaches the last enemy; how far and how long it runs on before crashing. */
+  tLast: number; runOut: number; runT: number;
+  /** The hero's column when he stands within the wave's height (it keeps clear of him), and
+   *  how far: about half a figure's width. */
+  heroX?: number; clear: number;
+  /** Rough height of the hero's feet: the back slope may run under him if it stays lower. */
+  heroFeet: number;
+}
+
+/** The sweep of one cast: the crest rolls from the caster's side over every target box at
+ *  a steady speed, reaching the first one at SEA_FIRST, then runs out and crashes. */
+function seaPlan(c: SpellCtx): SeaPlan {
+  const targets = c.targets?.length ? c.targets : [c.box];
+  const centre = (b: Box) => b.x + b.w / 2;
+  const ground = Math.max(...targets.map((b) => b.y + b.h)), top = Math.min(...targets.map((b) => b.y));
+  // a bit taller than the tallest enemy, but never above the top of the screen
+  const Hh = Math.max(24, Math.min(1.12 * (ground - top), ground - 6));
+  const mean = (f: (b: Box) => number) => targets.reduce((m, b) => m + f(b), 0) / targets.length;
+  const left = Math.min(...targets.map((b) => b.x)), right = Math.max(...targets.map((b) => b.x + b.w));
+  const dir = c.from ? Math.sign((left + right) / 2 - c.from.x) || 1 : 1;
+  const sorted = [...targets].sort((p, q) => dir * (centre(p) - centre(q)));
+  const xFirst = centre(sorted[0]), last = sorted[sorted.length - 1], xLast = centre(last);
+  const dist = Math.abs(xLast - xFirst);
+  // paced by the size of the figures (stacked rows on a phone make a far taller wave)
+  const speed = Math.max(SEA_SPEED * 1.12 * Math.max(...targets.map((b) => b.h)), dist / SEA_CROSS);
+  // past the last enemy it runs on, slowing down, and crashes (kept on screen)
+  let runOut = last.w * 0.5 + 0.45 * Hh;
+  if (c.view) runOut = Math.min(runOut, Math.max(last.w * 0.35, dir > 0 ? c.view.w - 0.2 * Hh - xLast : xLast - 0.2 * Hh));
+  // it rises in front of the hero when he stands within its height (beside the enemies on a
+  // narrow screen): the run-up to the first enemy is shorter, and slower, than the crossing
+  const heroX = c.from && c.from.y > ground - 1.1 * Hh && c.from.y < ground + 0.5 * Hh ? c.from.x : undefined;
+  const clear = 0.6 * mean((b) => b.w);
+  let run = speed * SEA_FIRST;
+  if (heroX !== undefined) run = Math.min(run, Math.max(0, dir * (xFirst - heroX) - clear));
+  return {
+    dir, ground, Hh, targets: sorted, x0: xFirst - dir * run, xFirst, xLast, speed,
+    tLast: SEA_FIRST + dist / speed, runOut, runT: Math.min(0.3, Math.max(0.16, (2 * runOut) / speed)), heroX, clear,
+    heroFeet: (c.from?.y ?? ground) + 0.6 * mean((b) => b.h),
+  };
+}
+
+/** Crest front `t` seconds after the cast: a run-up to the first enemy, steady across the
+ *  enemies, then easing out (with the same speed where both meet). */
+function seaX(p: SeaPlan, t: number): number {
+  if (t <= SEA_FIRST) return lerp(p.x0, p.xFirst, Math.max(0, t) / SEA_FIRST);
+  if (t <= p.tLast) return p.xFirst + p.dir * p.speed * (t - SEA_FIRST);
+  const s = clamp01((t - p.tLast) / p.runT);
+  return p.xLast + p.dir * p.runOut * (1 - (1 - s) ** 2);
+}
+
+/** Seconds until the crest reaches screen column `x` (0 if it starts past it). */
+function seaArrival(p: SeaPlan, x: number): number {
+  let lo = 0, hi = p.tLast + p.runT;
+  if (p.dir * (x - seaX(p, 0)) <= 0) return 0;
+  if (p.dir * (x - seaX(p, hi)) >= 0) return hi;
+  for (let i = 0; i < 40; i++) {
+    const mid = (lo + hi) / 2;
+    if (p.dir * (seaX(p, mid) - x) < 0) lo = mid; else hi = mid;
   }
-  const rear = easeOut(span(u, 0, 0.12)), crash = easeIn(span(u, 0.08, 0.26)), vis = 1 - span(u, 0.28, 0.42);
-  if (rear > 0 && vis > 0) {
-    const hgt = H * 1.25 * rear * (1 - 0.55 * crash), rho = W * 0.55;
-    const Q = { x: cx + dir * W * 0.55, y: ground - hgt }, Qc = { x: Q.x - dir * rho, y: Q.y };
-    const pts: Point[] = [];
-    for (let j = 0; j <= 5; j++) {
-      const f = j / 5;
-      pts.push({ x: lerp(cx + dir * W * 1.4, Q.x, f) + dir * Math.sin(f * Math.PI) * W * 0.15, y: lerp(ground, Q.y, easeOut(f)) });
+  return (lo + hi) / 2;
+}
+
+/** Wrath of the Sea: one big wave (the crest, body and foam of Wave, scaled up) rolls in
+ *  from the hero's side across every enemy, a bit taller than the tallest; spray, drops
+ *  and foam burst on each enemy as the crest breaks over it, and past the last one it
+ *  curls over and crashes into foam. */
+const coleraMar: Build = (g, u, c, D) => {
+  const p = seaPlan(c), t = u * D, { dir, ground, Hh } = p;
+  const tEnd = p.tLast + p.runT;
+  const X = seaX(p, t), kw = Math.min(2.6, Math.max(0.6, Hh / 170));
+  const rise = easeOut(span(t, 0, 0.12)), collapse = easeIn(span(t, p.tLast + 0.04, tEnd + 0.15));
+  let height = Hh * (0.4 + 0.6 * rise) * (1 - 0.72 * collapse);
+  // the lip hangs over the enemies as it rolls, then curls right over as it crashes
+  const curl = 0.3 + 0.3 * span(t, 0, SEA_FIRST) + 0.7 * span(t, p.tLast, tEnd + 0.1);
+  const a = span(t, 0, 0.05) * (1 - span(t, tEnd - 0.05, tEnd + 0.25));
+  // its back slope keeps clear of the hero standing level with it
+  let back = 1.15 * Hh, reach = Hh;
+  if (p.heroX !== undefined) {
+    // where the hero stands, the slope must stay below his feet (on his ground: end before him)
+    const d = dir * (X - p.heroX) - p.clear, allow = clamp01((ground - p.heroFeet) / Math.max(1, height));
+    let lo = 0, hi = 1;
+    for (let i = 0; i < 12; i++) { const m = (lo + hi) / 2; if (smooth(m) ** 1.2 < allow) lo = m; else hi = m; }
+    back = Math.max(0.12 * Hh, Math.min(back, d / Math.max(0.05, 1 - lo)));
+    reach = Math.max(0, 1.6 * d); // nor does the spray thrown back off the crest reach him
+  }
+  // a wave cannot stand much taller than its base: squeezed by the hero, it rises as it rolls on
+  height = Math.min(height, 2.2 * back);
+  const tail = X - dir * back;
+  if (a > 0.01) {
+    // the flood it leaves behind: a shallow sheet of water with foam, draining away
+    const len = Math.min(1.3 * Hh, Math.max(0, dir * (tail - p.x0)));
+    if (len > 4) {
+      g.seg(tail, ground - 0.02 * Hh, tail - dir * len, ground - 0.01 * Hh, 0.07 * Hh, '#2a6896', 0.4 * a, 1, false);
+      each(g, 10, (i) => {
+        const f = g.r(i + 600);
+        g.bubble(tail - dir * f * len, ground - 0.03 * Hh - g.r(i + 610) * 0.04 * Hh, (1.5 + 2 * g.r(i + 620)) * kw, '#e6f6ff', 0.6 * a * (1 - f));
+      });
     }
-    const sweep = Math.PI * (0.25 + 0.95 * crash);
-    for (let j = 1; j <= 9; j++) {
-      const th = (j / 9) * sweep, rr = rho * (1 - 0.3 * (j / 9) * crash);
-      pts.push({ x: Qc.x + dir * Math.cos(th) * rr, y: Qc.y - Math.sin(th) * rr });
+    const colW = (back / 21) * 2.4;
+    const pts = waveCrest(g, {
+      x: X, ground, height, back, dir, curl, k: kw, colW, alpha: a, tips: rise, tipCount: g.n(14), salt: 400,
+      segments: 28, sink: colW * 0.45, deep: '#17507e', lean: 0.16,
+    });
+    // sheen inside the face: lighter streaks following the crest, deeper down
+    for (const [dy, al] of [[0.22, 0.2], [0.42, 0.12]]) {
+      const sheen: Point[] = [];
+      for (let j = 4; j <= 21; j += 3) sheen.push({ x: pts[j].x + dir * dy * 0.1 * Hh, y: Math.min(ground - 6 * kw, pts[j].y + dy * height) });
+      g.strip(sheen, () => 5 * kw, '#7cc4ee', al * a, false, 1);
     }
-    // the body: the crest line repeated inwards and downwards, darker with depth
-    const T = H * 0.16;
-    for (let l = 3; l >= 0; l--) {
-      const lay = pts.map((q, j) => ({ x: q.x - dir * l * T * 0.55 * Math.min(1, j / 4), y: q.y + l * T * 0.6 * Math.min(1, j / 3) }));
-      g.strip(lay, (j) => T * (1 - j / 22), ['#4fb3e8', '#1f6fa8', '#17507e', '#123f66'][l], 0.85 * vis, l === 0);
-    }
-    g.strip(pts, () => 2.5 * k, '#dff6ff', 0.9 * vis);
+    g.mark('cresta', X, ground - height);
+    // a flat base hides the round ends of the body columns, foam churns along it
+    g.seg(tail + dir * colW, ground + colW * 0.25, X + dir * 0.16 * Hh, ground + colW * 0.25, colW * 1.1, '#17507e', 0.5 * a, 0, false);
+    g.seg(tail + dir * 0.2 * back, ground - 0.5 * colW, X + dir * 0.22 * Hh, ground - 0.5 * colW, 3 * kw, '#e6f6ff', 0.45 * a, 1);
+    // the lip pours down in front of the face: a curtain of whitewater and churning foam
+    const lip = pts[28], pour = (1 - collapse) * a;
+    g.seg(lip.x, lip.y, lip.x + dir * 0.06 * Hh, ground, 0.1 * Hh, '#bfeaff', 0.22 * pour, 1);
+    each(g, 14, (i) => {
+      const f = (t * 3.2 + g.r(i + 530)) % 1;
+      g.dot(lerp(lip.x, X + dir * (0.05 + 0.15 * g.r(i + 540)) * Hh, f), lerp(lip.y, ground - 4 * kw, f * f),
+        (2 + 2.5 * g.r(i + 550)) * kw, i % 3 ? '#e6f6ff' : '#ffffff', 0.7 * pour * Math.min(1, f * 4));
+    });
+    // spray streams off the crest and falls back behind it
+    const top = pts[21];
     each(g, 16, (i) => {
-      const q = pts[7 + (i % 8)];
-      g.dot(q.x + (g.r(i) - 0.5) * 14 * k, q.y - 4 * k + (g.r(i + 30) - 0.5) * 8 * k, (2 + 2.5 * g.r(i + 5)) * k, '#ffffff', 0.6 * vis);
+      const f = (t * 2.6 + g.r(i + 500)) % 1;
+      const x = top.x - dir * f * Math.min(reach, 1.2 * back) * (0.25 + 0.3 * g.r(i + 510)), y = top.y - f * 0.25 * Hh + f * f * 0.5 * Hh;
+      g.dot(x, y, (1.6 + 1.6 * g.r(i + 520)) * kw, i % 3 ? '#bfeaff' : '#ffffff', 0.8 * a * (1 - f) * (1 - collapse));
     });
   }
-  const gy = span(u, 0.14, 0.22) * (1 - span(u, 0.45, 0.7));
-  g.beam(cx, ground, cx, lerp(ground, b.y - H * 0.4, gy), W * 0.5 * gy + 2, '#4fb3e8', 0.45 * gy);
-  g.beam(cx, ground, cx, lerp(ground, b.y - H * 0.4, gy), W * 0.18 * gy + 1, '#ffffff', 0.7 * gy);
-  const fl = bell(u, 0.16, 0.4);
-  g.dot(cx, cy, R * 0.8 * fl + 1, '#bfeaff', 0.35 * fl);
-  const s = span(u, 0.18, 0.7);
-  if (s > 0 && s < 1) g.ring(cx, ground, W * (0.3 + 0.9 * s), W * 0.12 * (0.3 + 0.9 * s) + 2, 5 * k, '#bfeaff', 1 - s);
-  burst(g, u, cx, cy - H * 0.2, { u0: 0.16, u1: 0.9, n: 70, dist: R * 1.9, cols: SEA, salt: 20, kind: 'drop', len: 10 * k, grav: 260 * k, dir: -Math.PI / 2, spread: 3.4 });
-  rise(g, u, { x: cx, y: ground, w: W * 1.3, h: H * 0.9, u0: 0.25, u1: 1, n: 34, cols: ['#bfeaff', '#ffffff'], salt: 80, size: 8 * k, kind: 'bubble' });
+  // the splash on each enemy as the crest breaks over it
+  for (let e = 0; e < p.targets.length; e++) {
+    const b = p.targets[e], bx = b.x + b.w / 2, tau = t - seaArrival(p, bx);
+    if (tau < 0 || tau > SEA_SPLASH) continue;
+    const s = tau / SEA_SPLASH, kb = Math.min(1.8, Math.max(0.6, Math.min(b.w, b.h) / 120)), salt = 1000 + e * 97;
+    const by = b.y + b.h * 0.4;
+    g.mark('salpicadura', bx, by);
+    // foam spreads at its feet
+    g.ring(bx, b.y + b.h, b.w * (0.35 + 0.6 * easeOut(s)), b.w * 0.1 * (0.5 + 0.8 * s) + 2, 2.5 * kb, '#e6f6ff', 0.5 * (1 - s));
+    // the blow: streaks of spray burst from the body, mostly upwards and onwards
+    each(g, 10, (i) => {
+      const ang = -Math.PI / 2 + dir * 0.35 + (g.r(salt + i + 210) - 0.5) * 2.6;
+      const d = easeOut(span(tau, 0, 0.22)) * (0.35 + 0.4 * g.r(salt + i + 240)) * b.h;
+      g.spark(bx + Math.cos(ang) * d, by + Math.sin(ang) * d, 12 * kb, ang, '#ffffff', 0.9 * (1 - span(tau, 0.04, 0.24)));
+    });
+    // droplets thrown up and forward, falling back
+    each(g, 22, (i) => {
+      const life = 0.3 + 0.2 * g.r(salt + i);
+      if (tau > life) return;
+      const vx = dir * (30 + 170 * g.r(salt + i + 30)) * kb + (g.r(salt + i + 60) - 0.5) * 140 * kb;
+      const vy = -(260 + 300 * g.r(salt + i + 90)) * kb, grav = 1300 * kb;
+      const q = fly(bx + (g.r(salt + i + 120) - 0.5) * 0.7 * b.w, b.y + b.h * (0.2 + 0.5 * g.r(salt + i + 150)), vx, vy, tau, grav);
+      g.drop(q.x, q.y, (2.8 + 2.4 * g.r(salt + i + 180)) * kb, dropAngle(vx, vy + grav * tau), ['#bfeaff', '#ffffff', '#4fb3e8'][i % 3], 1 - tau / life);
+    });
+    each(g, 10, (i) => {
+      const q = span(tau, 0.05 + 0.15 * g.r(salt + i + 270), SEA_SPLASH);
+      if (q <= 0 || q >= 1) return;
+      g.bubble(bx + (g.r(salt + i + 300) - 0.5) * 0.9 * b.w + Math.sin(q * 6 + i) * 4 * kb, b.y + b.h * (0.35 + 0.6 * g.r(salt + i + 330)) - q * 0.35 * b.h,
+        (2 + 3 * g.r(salt + i + 360)) * kb, '#e6f6ff', Math.min(1, q * 5) * (1 - q));
+    });
+  }
+  // past the last enemy it curls over and crashes: a sheet of spray, foam spreading out
+  const tc = t - (p.tLast + 0.05);
+  if (tc > 0) {
+    const xc = seaX(p, p.tLast + 0.05);
+    each(g, 30, (i) => {
+      const q = fly(xc + dir * (0.05 + 0.25 * g.r(i + 700)) * Hh, ground - Hh * (0.45 + 0.4 * g.r(i + 710)),
+        dir * (80 + 220 * g.r(i + 720)) * kw, -(150 + 230 * g.r(i + 730)) * kw, tc, 1000 * kw);
+      if (q.y < ground + 10 && q.y > -50) g.dot(q.x, q.y, (2 + 1.5 * g.r(i + 740)) * kw, i % 3 ? '#bfeaff' : '#ffffff', span(tc, 0, 0.06) * (1 - span(tc, 0.2, 0.55)));
+    });
+    const sf = span(t, tEnd - 0.08, tEnd + 0.3);
+    if (sf > 0 && sf < 1) g.ring(seaX(p, tEnd), ground, Hh * (0.3 + 0.9 * easeOut(sf)), Hh * 0.07 * (0.5 + sf) + 2, 4 * kw, '#bfeaff', 1 - sf);
+    each(g, 16, (i) => {
+      const q = span(t, tEnd - 0.1 + 0.1 * g.r(i + 760), tEnd + 0.3);
+      if (q <= 0 || q >= 1) return;
+      g.bubble(seaX(p, tEnd) + dir * (g.r(i + 770) - 0.45) * Hh * (0.4 + 0.8 * q), ground - 4 * kw - g.r(i + 780) * 0.12 * Hh,
+        (2 + 3 * g.r(i + 790)) * kw * (0.4 + 0.6 * q), '#e6f6ff', Math.min(1, q * 6) * (1 - q));
+    });
+  }
 };
 
 /** Starry Form: shooting stars land on the hero's outline and link into a
@@ -2000,7 +2154,11 @@ export const CARD_FX: Record<string, Entry> = {
   'corazon-cambiante': entry({ duration: 1.3, phases: [0.3, 0.72], anchor: 'self', build: corazonCambiante }, [LEAF, 'leaf', '#7dba4e']),
   'circulo-tierra': entry({ duration: 1.2, phases: [0.3, 0.7], anchor: 'self', build: raicesProfundas }, [EARTH, 'rune', '#b8863b']),
   'circulo-luna': entry({ duration: 1.3, phases: [0.3, 0.7], anchor: 'self', build: formaLunar }, [MOON, 'star', '#9bb4ff']),
-  'circulo-mar': entry({ duration: 1.1, phases: [0.15, 0.55], anchor: 'target', cap: MULTI, build: coleraMar }, [SEA, 'bubble', '#4fb3e8']),
+  // one wave across every enemy: the hits do not cast it again, each one lands as the crest reaches it
+  'circulo-mar': entry({
+    duration: SEA_DURATION, phases: [SEA_FIRST / SEA_DURATION, 0.6], anchor: 'target', build: coleraMar,
+    sweep: (c, x) => seaArrival(seaPlan(c), x),
+  }, [SEA, 'bubble', '#4fb3e8']),
   'circulo-estrellas': entry({ duration: 1.3, phases: [0.35, 0.7], anchor: 'self', build: formaEstelar }, [STAR, 'star', '#ffd166']),
   'guardian-roble': entry({ duration: 1.3, phases: [0.35, 0.72], anchor: 'self', build: guardianRoble }, [LEAF, 'leaf', '#b8863b']),
   'elemental-tierra': entry({ duration: 1.2, phases: [0.35, 0.7], anchor: 'self', shake: { at: 0.4, level: 1 }, build: elementalTierra }, [EARTH, 'drop', '#8a6a3a']),
@@ -2083,6 +2241,20 @@ export function volleyTiming(key: string, reduced: boolean): { impactMs: number;
   const d = SPELLS[key];
   if (!d?.volley) return null;
   return { impactMs: Math.round(d.phases[0] * d.duration * 1000), gapMs: Math.round(d.volley.gap * (reduced ? 2 : 1) * 1000) };
+}
+
+/** Seconds since spell `key` was cast until its sweep reaches screen column `x`, or null
+ *  when the spell is not a sweep (each hit casts its own). */
+export function sweepArrival(key: string, ctx: SpellCtx, x: number): number | null {
+  const d = SPELLS[key];
+  return d?.sweep ? d.sweep(ctx, x) : null;
+}
+
+/** Milliseconds a hit on `target` waits for sweep `key`, cast `elapsedMs` ago, to reach the
+ *  middle of its box (0 once the sweep has passed); null when `key` is not a sweep. */
+export function sweepImpactMs(key: string, ctx: SpellCtx, target: Box, elapsedMs: number): number | null {
+  const t = sweepArrival(key, ctx, target.x + target.w / 2);
+  return t === null ? null : Math.max(0, Math.round(t * 1000 - elapsedMs));
 }
 
 /** Screen shake of spell `key` (delay since it was cast), or null with reduced motion. */

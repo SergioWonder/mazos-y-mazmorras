@@ -26,8 +26,9 @@ import { relicIcon } from './relic-art.ts';
 import { ActionQueue, checkCardAction, forecastEnergy } from './action-queue.ts';
 import { playDestination, drawDelays, exhaustsWhenPlayed, type Point, type SlotPose } from './card-motion.ts';
 import { flyDiscard, flyDraw, flyExhaust, flyPlay, flyShowcase, flyShuffle, glideToSlot, reducedMotion, slotPose } from './card-fly.ts';
-import { cardSpellKey, hitSpell, preludeKey } from '../fx/card-spells.ts';
-import { ImpactQueue } from './impact-queue.ts';
+import { cardSpellKey, hitSpell, preludeKey, sweepImpactMs } from '../fx/card-spells.ts';
+import type { SpellCtx } from '../fx/spell-fx.ts';
+import { ImpactQueue, SweepClock } from './impact-queue.ts';
 import { DeathQueue } from './death-queue.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
 import { llamasDeCastigo, resumenCastigo } from './castigo-ficha.ts';
@@ -232,6 +233,13 @@ export function pantallaCombate(
       const r = (elem.querySelector('.sprite') ?? elem).getBoundingClientRect();
       return { x: r.left, y: r.top, w: r.width, h: r.height };
     };
+    /** Smallest screen box around all of `cajas`. */
+    const unirCajas = (cajas: { x: number; y: number; w: number; h: number }[]) => {
+      if (!cajas.length) return cajaDe(null);
+      const x0 = Math.min(...cajas.map((b) => b.x)), y0 = Math.min(...cajas.map((b) => b.y));
+      const x1 = Math.max(...cajas.map((b) => b.x + b.w)), y1 = Math.max(...cajas.map((b) => b.y + b.h));
+      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+    };
     /** Casts spell `clave` on a fighter (from the hero when the receiver is an enemy). */
     const lanzarHechizo = (clave: string, obj: Luchador, desde?: { x: number; y: number }, tinte?: string) => {
       const heroe = obj === combate.jugador;
@@ -266,6 +274,7 @@ export function pantallaCombate(
     /** Card starts resolving: defences and buffs light up on the hero at once. */
     const abrirHechizoCarta = (def: CartaDef, objetivo?: EnemigoCombate) => {
       actor = null;
+      barrido.reset();
       hechizoCarta = def.fx
         ? { clave: cardSpellKey(def.id, def.fx), id: def.id, fx: def.fx, tipo: def.tipo, modo: def.objetivo, objetivo, hecho: new Set() }
         : null;
@@ -278,6 +287,7 @@ export function pantallaCombate(
       const h = hechizoCarta;
       hechizoCarta = null;
       hechizoProdigio = null;
+      barrido.reset();
       if (!h || h.hecho.size > 0 || !fx.tieneHechizo(h.clave)) return;
       if (hechizoAlHeroe(h)) lanzarHechizo(h.clave, combate.jugador);
       else if (h.modo === 'enemigo' && h.objetivo) lanzarHechizo(h.clave, h.objetivo);
@@ -310,6 +320,24 @@ export function pantallaCombate(
     };
     /** Feedback of volley darts still in flight (Magic Missile): each hit's runs when its dart lands. */
     const impactos = new ImpactQueue();
+    /** The card's area sweep (Wrath of the Sea's wave): cast once, over every enemy. */
+    const barrido = new SweepClock();
+    let ctxBarrido: SpellCtx | null = null;
+    /** A hit of sweep `clave` on `obj`: the first one casts the wave across every living enemy,
+     *  the rest join it. Returns the ms until its crest reaches `obj`. */
+    const golpeDeBarrido = (clave: string, obj: EnemigoCombate, duracionMs: number): number => {
+      const h = barrido.hit(clave, obj, performance.now(), duracionMs);
+      if (h.cast || !ctxBarrido) {
+        const cajas = combate.enemigos.filter((e) => e.vivo || e === obj).map((e) => cajaDe(elemDe(e)));
+        ctxBarrido = {
+          box: unirCajas(cajas), targets: cajas, from: centroDe(elemDe(combate.jugador)), view: { w: window.innerWidth, h: window.innerHeight },
+        };
+        fx.hechizo(clave, ctxBarrido.box, { desde: ctxBarrido.from, mirando: -1, objetivos: cajas });
+        const sacudida = fx.sacudidaHechizo(clave);
+        if (sacudida) setTimeout(() => sacudir(sacudida.level), sacudida.delayMs);
+      }
+      return sweepImpactMs(clave, ctxBarrido, cajaDe(elemDe(obj)), h.elapsedMs) ?? 0;
+    };
     /** Enemies still falling: their death plays on while the fight goes on. */
     const muertes = new DeathQueue<EnemigoCombate>();
     /** Health each fighter shows while darts fly at it, and its value after each pending dart. */
@@ -354,12 +382,19 @@ export function pantallaCombate(
       async fxGolpe(obj, dano, efecto = 'tajo') {
         // volley darts (Magic Missile) fly one right after another: each one's number, hit and
         // shake wait for it to land. Any other hit first lets the pending darts land.
-        let rafaga = actor ? null : fx.rafagaHechizo(hitSpell(hechizoCarta, efecto));
-        if (!rafaga) await impactos.settle();
+        // An area sweep (Wrath of the Sea) casts one wave for every enemy: each hit joins it
+        // and its feedback waits for the crest to reach that enemy.
+        const clave = actor ? '' : hitSpell(hechizoCarta, efecto);
+        let rafaga = actor ? null : fx.rafagaHechizo(clave);
         // Doom consuming an enemy: nothing lands on it, its death by Doom plays instead
         const remate = obj !== combate.jugador && isDoomConsumption(efecto, !!hechizoCarta);
+        const barre = obj !== combate.jugador && !actor && !remate ? fx.barridoHechizo(clave) : null;
+        if (!rafaga && barre === null) await impactos.settle();
         if (remate) rafaga = null;
-        else if (!hechizoGolpe(obj, efecto)) {
+        else if (barre !== null) {
+          hechizoCarta?.hecho.add(obj);
+          rafaga = { impactMs: golpeDeBarrido(clave, obj as EnemigoCombate, barre), gapMs: 0 };
+        } else if (!hechizoGolpe(obj, efecto)) {
           const { x, y } = centroDe(elemDe(obj));
           fx.emitir(efecto, x, y);
           rafaga = null; // no dart to wait for
@@ -1154,11 +1189,7 @@ export function pantallaCombate(
         && (fx.anclaHechizo(clave) === 'self' || def.objetivo === 'ninguno' || def.objetivo === 'propio');
       const quienes: Luchador[] = alHeroe ? [combate.jugador]
         : def.objetivo === 'enemigo' && objetivo ? [objetivo] : combate.enemigos.filter((e) => e.vivo);
-      const cajas = quienes.map((q) => cajaDe(elemDe(q)));
-      if (!cajas.length) return cajaDe(null);
-      const x0 = Math.min(...cajas.map((b) => b.x)), y0 = Math.min(...cajas.map((b) => b.y));
-      const x1 = Math.max(...cajas.map((b) => b.x + b.w)), y1 = Math.max(...cajas.map((b) => b.y + b.h));
-      return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+      return unirCajas(quienes.map((q) => cajaDe(elemDe(q))));
     }
 
     /** The card flies to its target and vanishes on arrival, when its effect goes off. */

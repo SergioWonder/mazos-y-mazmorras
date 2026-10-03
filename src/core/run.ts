@@ -1,8 +1,9 @@
-import type { CartaDef, CartaInstancia, ClaseId, EstadoRun, TipoNodo } from './types.ts';
+import type { CartaDef, CartaInstancia, ClaseId, EnemigoDef, EstadoRun, TipoNodo } from './types.ts';
 import { DEFENSA_SAGRADA, GOLPE_SAGRADO, instanciar, mazoInicial, nuevaMaldicion } from './cartas.ts';
 import { reliquiaInicial } from './reliquias.ts';
 import { generarMapa } from './mapa.ts';
-import { crearRng } from './rng.ts';
+import { crearRng, elegir } from './rng.ts';
+import { ACTOS } from './enemigos.ts';
 
 export const PV_POR_CLASE: Record<ClaseId, number> = {
   druida: 70,
@@ -32,6 +33,7 @@ export function nuevaRun(clase: ClaseId, semilla = Date.now()): EstadoRun {
     espaciosConjuro: clase === 'mago' ? 1 : 0,
     permanentes: { fuerza: 0, destreza: 0, energia: 0, energiaElite: 0, energiaInicial: 0, robo: 0 },
     eventosVistos: [],
+    elitesVistos: [],
     mision: null,
   };
 }
@@ -143,4 +145,26 @@ export function avanzarCapitulo(run: EstadoRun, rng: () => number, escenario = s
   run.nodoActual = -1;
   run.piso = 0;
   run.pv = Math.min(run.pvMax, run.pv + Math.floor(run.pvMax * 0.35));
+}
+
+/** The elite group of the next elite room: drawn at random among the scenario's elites not
+ *  fought yet this run; once all have come out it draws again, never the last one twice. */
+export function elegirElite(run: EstadoRun, rng: () => number): EnemigoDef[] {
+  const elites = ACTOS[run.capitulo][run.escenario].elites;
+  const clave = (i: number) => `${run.capitulo}.${run.escenario}.${i}`;
+  const vistos = (run.elitesVistos ??= []);
+  let libres = elites.map((_, i) => i).filter((i) => !vistos.includes(clave(i)));
+  if (libres.length === 0) {
+    // all seen: start a new round, without repeating the one just fought
+    const ultimo = vistos[vistos.length - 1];
+    for (let i = 0; i < elites.length; i++) {
+      const k = vistos.lastIndexOf(clave(i));
+      if (k >= 0) vistos.splice(k, 1);
+    }
+    libres = elites.map((_, i) => i).filter((i) => elites.length === 1 || clave(i) !== ultimo);
+    if (ultimo) vistos.push(ultimo); // it stays seen for this new round
+  }
+  const i = elegir(rng, libres);
+  vistos.push(clave(i));
+  return elites[i];
 }

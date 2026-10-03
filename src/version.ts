@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.8.5';
+export const VERSION = '8.9.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.9.0',
+    fecha: '2026-10-03',
+    cambios: [
+      '🌊 Cólera del Mar levanta una única ola enorme que barre a todos los enemigos de un lado a otro, salpicando a cada uno cuando le pasa por encima (y el daño llega justo entonces).',
+      '🎲 Los élites no se repiten en una partida hasta que hayan salido los demás de su escenario.',
+    ],
+  },
   {
     version: '8.8.5',
     fecha: '2026-10-03',

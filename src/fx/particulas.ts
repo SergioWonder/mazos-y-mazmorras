@@ -152,11 +152,17 @@ class MotorParticulas {
     return volleyTiming(nombre, movimientoReducido());
   }
 
+  /** Duration (ms) of a sweep spell (one cast crosses every enemy: Wrath of the Sea's wave), or null. */
+  barridoHechizo(nombre: string): number | null {
+    const d = SPELLS[nombre];
+    return d?.sweep ? Math.round(d.duration * 1000) : null;
+  }
+
   /** Lanza el efecto de hechizo `nombre` sobre la caja de pantalla `caja`
    *  (origen opcional para alientos, rayos, aullidos…). */
-  hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string } = {}): boolean {
+  hechizo(nombre: string, caja: Box, opciones: { desde?: Point; mirando?: 1 | -1; tinte?: string; objetivos?: Box[] } = {}): boolean {
     return this.hechizos.add(nombre, {
-      box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, reduced: menosParticulas(),
+      box: caja, from: opciones.desde, facing: opciones.mirando, tint: opciones.tinte, targets: opciones.objetivos, reduced: menosParticulas(),
       view: { w: window.innerWidth, h: window.innerHeight },
     }, this.reloj);
   }
