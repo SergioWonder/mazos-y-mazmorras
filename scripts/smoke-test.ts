@@ -7958,12 +7958,12 @@ console.log('\n🔨 Paladín');
     check((comb.jugador.estados.castigo ?? 0) === 1, 'el Castigo queda preparado (indicador)');
     check(e.pv === pv0, 'preparar un Castigo no hace daño');
     const golpe = CT.cartaPorId('golpe')!;
-    check(comb.valoresDeCarta(golpe, e)[0].real === 16, `el Golpe en la mano muestra el Castigo preparado (${comb.valoresDeCarta(golpe, e)[0].real})`);
+    check(comb.valoresDeCarta(golpe, e)[0].real === 18, `el Golpe en la mano muestra el Castigo preparado (${comb.valoresDeCarta(golpe, e)[0].real})`);
     await jugar(comb, 'defender');
     check(comb.jugador.castigos.length === 1, 'una habilidad no descarga el Castigo');
     const antes = e.pv;
     await jugar(comb, 'golpe');
-    check(antes - e.pv === 16, `Castigo Divino con 2 de Fervor: el Golpe inflige 6 + 6 + 2×2 = 16 (${antes - e.pv})`);
+    check(antes - e.pv === 18, `Castigo Divino con 2 de Fervor: el Golpe inflige 6 + 8 + 2×2 = 18 (${antes - e.pv})`);
     check(comb.jugador.castigos.length === 0 && !(comb.jugador.estados.castigo), 'el ataque descarga y gasta el Castigo');
     const d2 = e.pv;
     await jugar(comb, 'golpe');
@@ -8036,7 +8036,20 @@ console.log('\n🔨 Paladín');
     await jugar(comb, 'castigo-divino');
     await jugar(comb, 'expulsar-mal');
     const danos = comb.enemigos.map((e) => 300 - e.pv);
-    check(danos.join() === '16,16,16', `Castigo Divino + ataque de área: el daño extra a cada enemigo (${danos.join('/')})`);
+    check(danos.join() === '18,18,18', `Castigo Divino + ataque de área: el daño extra a cada enemigo (${danos.join('/')})`);
+  }
+  {
+    // the upgrade raises the base (9 → 11) but keeps +3 per Fervor
+    const { comb } = await montarP();
+    const e = comb.enemigos[0];
+    comb.jugador.estados.fervor = 2;
+    const div = instanciar(CT.cartaPorId('castigo-divino')!);
+    div.mejorada = true;
+    comb.jugador.mano.push(div);
+    await comb.jugarCarta(div);
+    const antes = e.pv;
+    await jugar(comb, 'golpe');
+    check(antes - e.pv === 6 + 11 + 3 * 2, `Castigo Divino+ con 2 de Fervor: 6 + 11 + 3×2 = 23 (${antes - e.pv})`);
   }
   {
     const { comb } = await montarP([dummy(), dummy()]);

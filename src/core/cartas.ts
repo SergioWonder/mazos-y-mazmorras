@@ -4211,12 +4211,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     castigo: true,
     fx: 'cargaDivina',
-    texto: 'Castigo: tu próximo ataque inflige 6 de\ndaño más (aplica +2 por Fervor gastado).',
+    texto: 'Castigo: tu próximo ataque inflige 8 de\ndaño más (aplica +2 por Fervor gastado).',
     valores: valorCastigo(),
-    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 6 + 2 * f })),
+    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 2 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige 9 de\ndaño más (aplica +3 por Fervor gastado).',
-      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 9 + 3 * f })),
+      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +3 por Fervor gastado).',
+      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 3 * f })),
     },
   },
   {
