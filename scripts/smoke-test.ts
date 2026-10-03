@@ -7992,7 +7992,7 @@ console.log('\n🔨 Paladín');
     const [a, b, c] = comb.enemigos;
     await jugar(comb, 'castigo-abrasador');
     await jugar(comb, 'golpe', a);
-    check(300 - a.pv === 10 && 300 - b.pv === 4 && 300 - c.pv === 4,
+    check(300 - a.pv === 12 && 300 - b.pv === 6 && 300 - c.pv === 6,
       `Castigo Abrasador: el objetivo recibe el Golpe y la llamarada; los demás, la llamarada (${300 - a.pv}/${300 - b.pv}/${300 - c.pv})`);
   }
   {
@@ -8029,7 +8029,7 @@ console.log('\n🔨 Paladín');
     await jugar(comb, 'castigo-abrasador');
     await jugar(comb, 'expulsar-mal');
     const danos = comb.enemigos.map((e) => 300 - e.pv);
-    check(danos.every((d) => d === 14), `Castigo Abrasador + Expulsar el Mal: 10 del ataque y la llamarada una sola vez a cada uno (${danos.join('/')})`);
+    check(danos.every((d) => d === 16), `Castigo Abrasador + Expulsar el Mal: 10 del ataque y la llamarada una sola vez a cada uno (${danos.join('/')})`);
   }
   {
     const { comb } = await montarP([dummy(), dummy(), dummy()]);

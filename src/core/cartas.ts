@@ -4284,12 +4284,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     castigo: true,
     fx: 'cargaFuego',
-    texto: 'Castigo: tu próximo ataque inflige además\n4 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
+    texto: 'Castigo: tu próximo ataque inflige además\n6 a TODOS los enemigos (aplica +3\npor Fervor gastado).',
     valores: valorCastigo(),
-    jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 4 + 2 * f })),
+    jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 3 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige además\n6 a TODOS los enemigos (aplica +3\npor Fervor gastado).',
-      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 3 * f })),
+      texto: 'Castigo: tu próximo ataque inflige además\n9 a TODOS los enemigos (aplica +4\npor Fervor gastado).',
+      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 9 + 4 * f })),
     },
   },
   {

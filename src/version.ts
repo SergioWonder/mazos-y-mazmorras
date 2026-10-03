@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.8.2';
+export const VERSION = '8.8.3';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.8.3',
+    fecha: '2026-10-03',
+    cambios: [
+      '🔥 Castigo Abrasador quema más: su llamarada hace 6 a todos los enemigos (+3 por Fervor gastado); mejorado, 9 (+4).',
+    ],
+  },
   {
     version: '8.8.2',
     fecha: '2026-10-03',
