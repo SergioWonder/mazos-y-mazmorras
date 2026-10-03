@@ -961,10 +961,14 @@ export function pantallaCombate(
           ataque: 'Pretende atacarte', defensa: 'Va a defenderse',
           mejora: 'Va a potenciarse', perjuicio: 'Va a debilitarte', desconocido: '…',
         };
-        div.innerHTML = `
-          <div class="intencion" data-tip="<strong>${e.intencion.nombre}</strong><br>${
+        // its next move is only revealed when the player's turn begins
+        const intencion = combate.intencionOculta(e)
+          ? '<div class="intencion intencion-oculta" data-tip="Ya ha actuado: verás qué trama cuando empiece tu turno.">…</div>'
+          : `<div class="intencion" data-tip="<strong>${e.intencion.nombre}</strong><br>${
             tipInt[e.intencion.intencion]
-          }.${desgloseIntencion(e, prevision.get(e))}${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}${e.intencion.perforante ? '<br>🎯 Atraviesa tu bloqueo (sin romperlo).' : ''}${e.intencion.bloqueoAliados ? `<br>🛡️ Da ${e.intencion.bloqueoAliados} de bloqueo a todos los enemigos.` : ''}">${textoIntencion(e, prevision.get(e))}</div>
+          }.${desgloseIntencion(e, prevision.get(e))}${e.intencion.maldicion ? '<br>☠️ Te mete una maldición entre tus cartas (solo este combate).' : ''}${e.intencion.perforante ? '<br>🎯 Atraviesa tu bloqueo (sin romperlo).' : ''}${e.intencion.bloqueoAliados ? `<br>🛡️ Da ${e.intencion.bloqueoAliados} de bloqueo a todos los enemigos.` : ''}">${textoIntencion(e, prevision.get(e))}</div>`;
+        div.innerHTML = `
+          ${intencion}
           ${esDungeonMaster(e)
             ? '<div class="bloqueo-ficha bloqueo-dm" data-tip="<strong>🛡️ Pantalla del DM</strong><br>Bloqueo infinito: nada de lo que hagas le llega.">🛡️∞ <small>Pantalla del DM</small></div>'
             : e.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${e.bloqueo}</div>` : ''}
@@ -1099,7 +1103,12 @@ export function pantallaCombate(
         if (enMano.has(inst)) continue;
         llegando.delete(inst);
         if (lanzadas.delete(inst)) continue;
-        if (jugador.descarte.includes(inst)) flyDiscard(viejo, $('.pila-descarte'), nDescartes++);
+        if (jugador.descarte.includes(inst)) {
+          // what you could not afford (or a curse you cannot play) flies dimmed, as it was in hand
+          const def = defDe(inst);
+          const apagada = combate.costeEfectivo(def) > jugador.energia || (def.tipo === 'maldicion' && def.purgar === undefined);
+          flyDiscard(viejo, $('.pila-descarte'), nDescartes++, apagada);
+        }
         else if (jugador.agotadas.includes(inst)) agotadas.push(viejo);
       }
       agotadas.forEach((viejo, k) => flyExhaust(viejo, k, agotadas.length));

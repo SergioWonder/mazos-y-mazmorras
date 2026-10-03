@@ -131,10 +131,10 @@ function pose(node: HTMLElement): { center: Point; angle: number; scale: number;
   return { center: { x: r.left + r.width / 2, y: r.top + r.height / 2 }, angle, scale, w: node.offsetWidth, h: node.offsetHeight };
 }
 
-/** A bare copy of a hand card, fixed with its centre on `center`. */
-function cardClone(card: HTMLElement, center: Point, w: number, h: number): HTMLElement {
+/** A bare copy of a hand card, fixed with its centre on `center` (`keep`: hand states it keeps). */
+function cardClone(card: HTMLElement, center: Point, w: number, h: number, keep: string[] = []): HTMLElement {
   const clone = card.cloneNode(true) as HTMLElement;
-  clone.classList.remove(...HAND_CLASSES);
+  clone.classList.remove(...HAND_CLASSES.filter((c) => !keep.includes(c)));
   clone.removeAttribute('data-mano');
   clone.classList.add('carta-clon');
   clone.style.cssText = `left:${center.x - w / 2}px;top:${center.y - h / 2}px;width:${w}px;height:${h}px;`;
@@ -244,14 +244,15 @@ export function flyDraw(card: HTMLElement, pile: HTMLElement, delay: number, onL
   void run(wrap, frames, reduced ? REDUCED_MS : DRAW_MS, delay).then(onLand);
 }
 
-/** A card left in hand drops into the discard pile (`card` is its old element, still on screen). */
-export function flyDiscard(card: HTMLElement, pile: HTMLElement, index: number): void {
+/** A card left in hand drops into the discard pile (`card` is its old element, still on screen);
+ *  `apagada`: you could not afford it, so it flies dimmed. */
+export function flyDiscard(card: HTMLElement, pile: HTMLElement, index: number, apagada = false): void {
   if (!card.isConnected) return;
   if (index === 0) audio.sfx('descartar'); // one sweep for the whole batch
   const reduced = reducedMotion();
   if (reduced) return; // the pile counter says it; no motion needed
   const p = pose(card);
-  const clone = cardClone(card, p.center, p.w, p.h);
+  const clone = cardClone(card, p.center, p.w, p.h, apagada ? ['sin-energia'] : []);
   document.body.appendChild(clone);
   void run(clone, discardFrames(p.center, pileCenter(pile), { startAngle: p.angle }), DISCARD_MS, index * DISCARD_STAGGER_MS);
 }

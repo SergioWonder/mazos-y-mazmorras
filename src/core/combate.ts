@@ -90,6 +90,13 @@ export class Combate {
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero = false;
   enResolucion = false;
+  /** Enemies that already picked their next move during the enemy turn: it stays hidden
+   *  until the player's turn begins. */
+  private intencionesOcultas = new Set<EnemigoCombate>();
+  intencionOculta(e: EnemigoCombate): boolean {
+    return this.intencionesOcultas.has(e);
+  }
+
   /** Decoy roll the UI already made for a card (so it flies where the blow will land). */
   private desvioPrevisto: { carta: CartaInstancia; desde: EnemigoCombate; hacia: EnemigoCombate } | null = null;
   /** The hero's end-of-turn countdown already ran: the enemies are about to act. */
@@ -1458,6 +1465,7 @@ export class Combate {
   async inicioTurnoJugador(primero = false) {
     this.turno++;
     this.faseEnemiga = false;
+    this.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
@@ -1876,6 +1884,7 @@ export class Combate {
         );
       }
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+      this.intencionesOcultas.add(e); // hidden until the player's turn begins
       // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
       if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
       this.ui.render();

@@ -1,4 +1,4 @@
-import { MUSIC_TRACKS, loopPosition, loopWindow, sameSong } from './music-tracks.ts';
+import { MUSIC_TRACKS, loopPosition, loopWindow, retryDelayMs, sameSong, tracksToKeep } from './music-tracks.ts';
 
 /** Crossfade between the map and combat versions of a song (seconds). */
 const CRUCE_VERSIONES = 1.6;
@@ -9,8 +9,9 @@ import { ajustes, alCambiarAjustes, gananciaMusica, gananciaSfx, type Ajustes } 
 // by `scripts/sfx/make_sfx.py`, see `fx/sfx-bank.ts`) and the game's original
 // soundtrack from `src/audio/` (see `fx/music-tracks.ts`), looped sample-exactly with
 // Web Audio. If an effect file has not loaded yet, a Web Audio recipe plays instead; if
-// a track fails to load, a chiptune loop generated on the fly takes over, so the game
-// is never silent. Everything starts after the player's first gesture, as browsers
+// a track fails to load, the music stays silent and the track is retried a few times
+// (nothing else ever plays in its place). Only the playing track and its other versions
+// stay decoded. Everything starts after the player's first gesture, as browsers
 // require, and the mute state is remembered.
 
 // Music and effects each follow their own switch and volume in the settings menu
@@ -99,66 +100,6 @@ const RECETAS: Record<string, Capa[]> = {
   // Botón de la interfaz
   ui: [{ tipo: 'triangle', freq: 520, dur: 0.07, vol: 0.07 }],
 };
-
-/** Tema chiptune (8-bit): secuenciador de pasos con bajo, melodía y batería. */
-interface TemaChip {
-  bpm: number;        // velocidad; los pasos son corcheas (bpm/2)
-  bajo: number[];     // patrón de bajo en notas MIDI (0 = silencio)
-  melodia: number[];  // patrón de melodía/arpegio (0 = silencio)
-  bateria?: boolean;  // bombo + charles
-  epico?: boolean;    // duplica la melodía en quintas y sube el volumen (jefes)
-}
-
-// 0 = silencio. Menú + (normal / jefe) único por acto. Los jefes son rápidos y épicos.
-// These loops are only the fallback when a soundtrack file (MUSIC_TRACKS) fails to load.
-const TEMAS: Record<string, TemaChip> = {
-  // Menú principal: misterioso, tempo medio (La menor)
-  'menu': {
-    bpm: 104,
-    bajo:    [45, 0, 45, 0, 41, 0, 43, 0, 45, 0, 45, 0, 40, 0, 43, 0],
-    melodia: [69, 72, 76, 72, 65, 69, 72, 69, 67, 71, 74, 71, 64, 67, 71, 0],
-  },
-  // Cap. I — El Asentamiento Ogro (La menor): marcha decidida
-  'cap1': {
-    bpm: 128, bateria: true,
-    bajo:    [45, 45, 0, 45, 41, 41, 0, 43, 45, 45, 0, 45, 43, 0, 41, 0],
-    melodia: [69, 76, 72, 69, 65, 72, 69, 65, 67, 74, 71, 67, 64, 71, 67, 64],
-  },
-  'cap1-jefe': {
-    bpm: 152, bateria: true, epico: true,
-    bajo:    [45, 45, 52, 45, 41, 41, 48, 41, 43, 43, 50, 43, 40, 40, 47, 40],
-    melodia: [81, 76, 72, 76, 77, 72, 69, 72, 79, 74, 71, 74, 76, 72, 69, 67],
-  },
-  // Cap. II — La Cripta (Re menor): oscuro, reptante
-  'cap2': {
-    bpm: 116, bateria: true,
-    bajo:    [38, 0, 38, 41, 36, 0, 36, 38, 34, 0, 34, 38, 33, 0, 36, 0],
-    melodia: [62, 65, 69, 65, 60, 65, 62, 60, 58, 62, 65, 62, 57, 60, 62, 0],
-  },
-  'cap2-jefe': {
-    bpm: 146, bateria: true, epico: true,
-    bajo:    [38, 38, 45, 38, 36, 36, 43, 36, 34, 34, 41, 34, 33, 33, 40, 33],
-    melodia: [74, 69, 65, 69, 70, 65, 62, 65, 72, 67, 65, 67, 69, 65, 62, 60],
-  },
-  // Cap. III — La Guarida del Dragón (Mi menor): tenso, amenazante
-  'cap3': {
-    bpm: 132, bateria: true,
-    bajo:    [40, 40, 0, 40, 43, 0, 38, 0, 45, 0, 43, 0, 40, 0, 35, 0],
-    melodia: [64, 71, 67, 64, 67, 74, 71, 67, 69, 76, 72, 69, 71, 67, 64, 62],
-  },
-  'cap3-jefe': {
-    bpm: 164, bateria: true, epico: true,
-    bajo:    [40, 40, 47, 40, 35, 35, 42, 35, 43, 43, 50, 43, 38, 38, 45, 38],
-    melodia: [76, 71, 67, 71, 72, 67, 64, 67, 79, 74, 71, 74, 71, 67, 64, 71],
-  },
-  // Dungeon Master (G phrygian): fast, relentless chugs on the low G with a tritone stab
-  'dm': {
-    bpm: 172, bateria: true, epico: true,
-    bajo:    [43, 43, 0, 43, 43, 44, 0, 43, 43, 43, 0, 49, 43, 0, 46, 44],
-    melodia: [67, 0, 70, 67, 68, 0, 67, 74, 73, 0, 70, 67, 68, 67, 62, 0],
-  },
-};
-
 
 class MotorAudio {
   private ctx: AudioContext | null = null;
@@ -307,11 +248,6 @@ class MotorAudio {
     this.reproducirTema('menu');
   }
 
-  /** Pone la música del capítulo (0-based); `jefe` usa el tema épico del acto. */
-  musica(capitulo: number, jefe = false) {
-    this.reproducirTema(`cap${capitulo + 1}${jefe ? '-jefe' : ''}`);
-  }
-
   /** Conmuta al tema indicado (idempotente: no reinicia si ya suena). */
   reproducirTema(id: string) {
     this.engancharVisibilidad();
@@ -340,7 +276,7 @@ class MotorAudio {
 
   private detenerMusica() {
     if (this.temporizadorMusica !== null) {
-      clearInterval(this.temporizadorMusica);
+      clearTimeout(this.temporizadorMusica); // a pending retry of a track that failed to load
       this.temporizadorMusica = null;
     }
     this.generacion++;
@@ -397,16 +333,16 @@ class MotorAudio {
     }
   }
 
-  private arrancarTema(id: string) {
+  private arrancarTema(id: string, intento = 0) {
     const ctx = this.ctx;
     if (!ctx) return;
     this.sonando = true;
     // a new theme undoes a previous fade (the hero's death)
     this.busMusica.gain.cancelScheduledValues(ctx.currentTime);
     this.busMusica.gain.setValueAtTime(gananciaMusica(ajustes()), ctx.currentTime);
-    const tema = TEMAS[id] ?? TEMAS.menu;
     const pista = MUSIC_TRACKS[id];
-    if (!pista) { this.chiptune(tema); return; }
+    if (!pista) { this.sonando = false; return; } // an unknown theme: silence, never a stand-in
+    this.liberarPistas(id);
     const gen = this.generacion;
     this.cargarPista(pista.file).then((buf) => {
       if (gen !== this.generacion || !this.ctx) return;
@@ -427,8 +363,22 @@ class MotorAudio {
       this.reloj = { t0: t, begin, start, end };
       this.precargarVersiones(id);
     }).catch(() => {
-      if (gen === this.generacion) this.chiptune(tema);
+      if (gen !== this.generacion) return;
+      // it failed (network, or a phone short of memory to decode it): stay quiet and retry
+      const espera = retryDelayMs(intento);
+      if (espera === null) { this.sonando = false; return; } // a later call to this theme tries again
+      this.temporizadorMusica = window.setTimeout(() => {
+        this.temporizadorMusica = null;
+        if (gen === this.generacion && this.temaActual === id && this.ctx) this.arrancarTema(id, intento + 1);
+      }, espera);
     });
+  }
+
+  /** Lets go of every decoded track except `id` and its other versions (each weighs tens of MB:
+   *  piling them up can leave a phone without memory to decode the next one). */
+  private liberarPistas(id: string) {
+    const conservar = new Set(tracksToKeep(id));
+    for (const archivo of [...this.buffers.keys()]) if (!conservar.has(archivo)) this.buffers.delete(archivo);
   }
 
   /** Downloads and decodes a track once (the service worker caches the file). */
@@ -443,82 +393,6 @@ class MotorAudio {
       this.buffers.set(archivo, buf);
     }
     return buf;
-  }
-
-  /** Secuenciador 8-bit: bajo (triángulo) + melodía (cuadrada) + batería. */
-  private chiptune(tema: TemaChip) {
-    if (!this.ctx) return;
-    const pasoDur = 60 / tema.bpm / 2; // corchea
-    const volMel = tema.epico ? 0.09 : 0.07;
-    let paso = 0;
-    const tick = () => {
-      if (!this.ctx) return;
-      const t = this.ctx.currentTime + 0.06;
-      const i = paso++;
-      const nb = tema.bajo[i % tema.bajo.length];
-      if (nb) this.notaChip(nb, t, pasoDur * 0.95, 'triangle', 0.11, 1400);
-      const nm = tema.melodia[i % tema.melodia.length];
-      if (nm) {
-        this.notaChip(nm, t, pasoDur * 0.85, 'square', volMel, 5000);
-        if (tema.epico) this.notaChip(nm + 7, t, pasoDur * 0.85, 'square', volMel * 0.5, 5000);
-      }
-      if (tema.bateria) {
-        if (i % 4 === 0) this.bombo(t);
-        if (i % 4 === 2) this.charles(t);
-      }
-    };
-    tick();
-    this.temporizadorMusica = window.setInterval(tick, pasoDur * 1000);
-  }
-
-  /** Nota corta con envolvente de pluck (estilo chip). */
-  private notaChip(midi: number, t: number, dur: number, onda: OscillatorType, vol: number, filtro: number) {
-    const ctx = this.ctx!;
-    const osc = ctx.createOscillator();
-    osc.type = onda;
-    osc.frequency.value = 440 * Math.pow(2, (midi - 69) / 12);
-    const f = ctx.createBiquadFilter();
-    f.type = 'lowpass';
-    f.frequency.value = filtro;
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(vol, t + 0.008);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-    osc.connect(f).connect(g).connect(this.busMusica);
-    osc.start(t);
-    osc.stop(t + dur + 0.02);
-  }
-
-  /** Charles (hi-hat): ráfaga breve de ruido agudo. */
-  private charles(t: number) {
-    const ctx = this.ctx!;
-    const s = ctx.createBufferSource();
-    s.buffer = this.bufferRuido(0.05);
-    const f = ctx.createBiquadFilter();
-    f.type = 'highpass';
-    f.frequency.value = 7000;
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.05, t);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
-    s.connect(f).connect(g).connect(this.busMusica);
-    s.start(t);
-    s.stop(t + 0.06);
-  }
-
-  /** Golpe de bombo grave para la percusión. */
-  private bombo(t: number) {
-    const ctx = this.ctx!;
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(120, t);
-    osc.frequency.exponentialRampToValueAtTime(45, t + 0.12);
-    const g = ctx.createGain();
-    g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.12, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
-    osc.connect(g).connect(this.busMusica);
-    osc.start(t);
-    osc.stop(t + 0.2);
   }
 
   // ── Pausa en segundo plano ──────────────────────────────────────────────────

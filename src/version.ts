@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.9.0';
+export const VERSION = '8.9.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.9.1',
+    fecha: '2026-10-03',
+    cambios: [
+      '🎵 Corregido: a veces, sobre todo en los jefes, sonaba la música provisional de los primeros tiempos en lugar de la pista que tocaba. Ahora, si una pista tarda en cargar, se espera y se reintenta, y el juego libera las pistas que ya no suenan para que el móvil no se quede sin memoria.',
+      '🂠 Al acabar el turno, las cartas que no podías pagar vuelan al descarte sombreadas, como estaban en tu mano.',
+      '👁️ Mientras los enemigos actúan, la próxima intención de cada uno ya no se ve hasta que empieza tu turno.',
+    ],
+  },
   {
     version: '8.9.0',
     fecha: '2026-10-03',

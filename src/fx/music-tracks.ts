@@ -18,7 +18,6 @@ export const MP3_DELAY_SAMPLES = 1105;
 
 export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'menu': { file: 'menu.mp3', loopSamples: 3528000 },       // main theme «Brasas» (fantasy and magic), D minor, 84 BPM, 28 bars
-  'cap1': { file: 'cap1.mp3', loopSamples: 3386880 },      // «Taberna y travesura»
   // Act I, sample-based (scripts/musica/acto1-*): each scenario's song in two synced versions
   'cap1-e0': { file: 'cap1-e0.mp3', loopSamples: 3528000, group: 'cap1-e0' },          // «Tambores en el valle», map
   'cap1-e0-combate': { file: 'cap1-e0-combate.mp3', loopSamples: 3528000, group: 'cap1-e0' }, // same song, combat
@@ -26,8 +25,6 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap1-e1': { file: 'cap1-e1.mp3', loopSamples: 3528000, group: 'cap1-e1' },          // «Bajo la posada vieja», map
   'cap1-e1-combate': { file: 'cap1-e1-combate.mp3', loopSamples: 3528000, group: 'cap1-e1' }, // same song, combat
   'cap1-e1-jefe': { file: 'cap1-e1-jefe.mp3', loopSamples: 3528000 },                 // «La función de medianoche» (Vexis)
-  'cap1-jefe': { file: 'jefe1.mp3', loopSamples: 3024000 }, // «Señor de la guerra»
-  'cap2': { file: 'cap2.mp3', loopSamples: 3256615 },      // «Marcha de los huesos»
   // Act II, sample-based (scripts/musica/acto2-*), on leitmotif 7 «Sombra»
   'cap2-e0': { file: 'cap2-e0.mp3', loopSamples: 3528000, group: 'cap2-e0' },          // «Nana para los que no duermen», map
   'cap2-e0-combate': { file: 'cap2-e0-combate.mp3', loopSamples: 3528000, group: 'cap2-e0' }, // same song, combat
@@ -36,8 +33,6 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap2-e1-combate': { file: 'cap2-e1-combate.mp3', loopSamples: 3704400, group: 'cap2-e1' }, // same song, combat
   'cap2-e1-jefe': { file: 'cap2-e1-jefe.mp3', loopSamples: 3704400, group: 'cap2-e1-jefe' },  // «El pacto»: Malachar, the ritual
   'cap2-e1-jefe-fase2': { file: 'cap2-e1-jefe-fase2.mp3', loopSamples: 3704400, group: 'cap2-e1-jefe' }, // same song: Abaddon, chaos
-  'cap2-jefe': { file: 'jefe2.mp3', loopSamples: 3207273 }, // «Presagio»
-  'cap3': { file: 'cap3.mp3', loopSamples: 3528000 },      // «Brasas y locura», E phrygian, 90 BPM
   // Act III, sample-based: La Guarida del Dragón (e0) on «Tesoro maldito», El Laberinto (e1) on «Fractura»
   'cap3-e0': { file: 'cap3-e0.mp3', loopSamples: 3402000, group: 'cap3-e0' },          // «Tesoro maldito», map
   'cap3-e0-combate': { file: 'cap3-e0-combate.mp3', loopSamples: 3402000, group: 'cap3-e0' }, // same song: Saqueo and Derrumbe
@@ -45,11 +40,10 @@ export const MUSIC_TRACKS: Record<string, MusicTrack> = {
   'cap3-e1-combate': { file: 'cap3-e1-combate.mp3', loopSamples: 3628800, group: 'cap3-e1' }, // same song: Asalto and Espiral
   'cap3-e0-jefe': { file: 'cap3-e0-jefe.mp3', loopSamples: 3549000 },                  // «Llamarada / Trono de ceniza» (Ignifax): 168 ⇄ 126
   'cap3-e1-jefe': { file: 'cap3-e1-jefe.mp3', loopSamples: 3553200 },                  // «El ojo abierto» (Contemplador): metalcore with synths
-  'cap3-jefe': { file: 'jefe3.mp3', loopSamples: 3316320 }, // final battle, C harmonic minor
   'dm': { file: 'dm.mp3', loopSamples: 5065200, introSamples: 604800 }, // «Behind the Screen», G minor metalcore, 140 BPM
 };
 
-/** Theme of a combat: the Dungeon Master has his own track; the rest use the act's theme. */
+/** Theme of a combat: the Dungeon Master has his own track; the rest use their scenario's. */
 export function combatTheme(
   chapter: number, boss: boolean, enemies: { dungeonMaster?: boolean; faseMusical?: number }[], scenario = 0,
   tracks: Record<string, MusicTrack> = MUSIC_TRACKS,
@@ -59,13 +53,25 @@ export function combatTheme(
   // a boss's second phase (Abaddon rising from Malachar) has its own version of the song
   const phase = Math.max(1, ...enemies.map((e) => e.faseMusical ?? 1));
   if (boss && phase > 1 && tracks[`${own}-fase${phase}`]) return `${own}-fase${phase}`;
-  return tracks[own] ? own : `cap${chapter + 1}${boss ? '-jefe' : ''}`;
+  return own;
 }
 
-/** Map and events: the scenario's own exploration version, or the act's theme. */
-export function exploreTheme(chapter: number, scenario = 0, tracks: Record<string, MusicTrack> = MUSIC_TRACKS): string {
-  const own = `cap${chapter + 1}-e${scenario}`;
-  return tracks[own] ? own : `cap${chapter + 1}`;
+/** Map and events: the scenario's own exploration version. */
+export function exploreTheme(chapter: number, scenario = 0): string {
+  return `cap${chapter + 1}-e${scenario}`;
+}
+
+/** Pause before retrying a track that failed to load (`attempt` from 0), or null to give up.
+ *  Meanwhile the music stays silent: nothing else plays in its place. */
+export function retryDelayMs(attempt: number): number | null {
+  return [1500, 4000, 10000][attempt] ?? null;
+}
+
+/** Files worth keeping decoded while `id` plays: itself and its other versions (map ↔ combat,
+ *  boss phases). A decoded track weighs tens of MB, so the rest are let go. */
+export function tracksToKeep(id: string, tracks: Record<string, MusicTrack> = MUSIC_TRACKS): string[] {
+  if (!tracks[id]) return [];
+  return [tracks[id].file, ...Object.keys(tracks).filter((o) => sameSong(id, o, tracks)).map((o) => tracks[o].file)];
 }
 
 /** Music once a fight is over: a victory brings back the scenario's calm version right

@@ -227,7 +227,8 @@
   outline: 2px solid var(--brasa-viva);
   outline-offset: 3px;
 }
-.mano .carta.sin-energia { filter: grayscale(0.7) brightness(0.7); }
+.mano .carta.sin-energia,
+.carta-clon.sin-energia { filter: grayscale(0.7) brightness(0.7); } /* also while flying to the discard pile */
 /* queued while another action resolves: lifted out of the fan, translucent, numbered */
 .mano .carta.en-cola {
   transform: rotate(0deg) translateY(-34px) scale(1.04);

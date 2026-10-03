@@ -2631,15 +2631,34 @@ console.log('\n🌙 Fondos pintados y partículas de cartas');
 console.log('\n🎵 Banda sonora');
 {
   const fs = await import('node:fs');
-  const temas = ['menu', 'cap1', 'cap1-jefe', 'cap2', 'cap2-jefe', 'cap3', 'cap3-jefe'];
-  check(temas.every((t) => MUSIC_TRACKS[t]), 'hay pista para el menú y para cada acto y su jefe');
+  const MT = await import('../src/fx/music-tracks.ts');
+  // every scenario: its map version, its combat version and its boss
+  const temas = ['menu', 'dm', ...[0, 1, 2].flatMap((c) => [0, 1].flatMap((e) => [
+    MT.exploreTheme(c, e), MT.combatTheme(c, false, [], e), MT.combatTheme(c, true, [], e),
+  ]))];
+  check(temas.every((t) => MUSIC_TRACKS[t]), `hay pista para el menú y para cada escenario, su combate y su jefe (faltan: ${temas.filter((t) => !MUSIC_TRACKS[t]).join(', ') || '—'})`);
   check(temas.every((t) => fs.existsSync(new URL(`../src/audio/${MUSIC_TRACKS[t].file}`, import.meta.url))), 'todas las pistas existen en src/audio');
   check(temas.every((t) => MUSIC_TRACKS[t].file.endsWith('.mp3') && MUSIC_TRACKS[t].loopSamples > 44100 * 30), 'las pistas son MP3 (suenan en Safari) con la longitud exacta del bucle');
-  check(new Set(['cap1', 'cap2', 'cap3', 'menu'].map((t) => MUSIC_TRACKS[t].file)).size === 4, 'cada acto y el menú tienen su propia música');
+  // the discarded first soundtrack (synthesised with numpy) is gone for good
+  const descartadas = ['cap1.mp3', 'cap2.mp3', 'cap3.mp3', 'jefe1.mp3', 'jefe2.mp3', 'jefe3.mp3'];
+  check(descartadas.every((f) => !fs.existsSync(new URL(`../src/audio/${f}`, import.meta.url)))
+    && !Object.values(MUSIC_TRACKS).some((t) => descartadas.includes(t.file)) && !['cap1', 'cap1-jefe', 'cap2', 'cap2-jefe', 'cap3', 'cap3-jefe'].some((k) => MUSIC_TRACKS[k]),
+    'la música descartada ya no está: ni sus ficheros ni sus pistas');
+  const enCarpeta = fs.readdirSync(new URL('../src/audio/', import.meta.url)).filter((f) => f.endsWith('.mp3'));
+  const usados = new Set(Object.values(MUSIC_TRACKS).map((t) => t.file));
+  check(enCarpeta.every((f) => usados.has(f)), `cada MP3 de src/audio es una pista en uso (sobran: ${enCarpeta.filter((f) => !usados.has(f)).join(', ') || '—'})`);
+  check(new Set(temas.filter((t) => !t.endsWith('-combate')).map((t) => MUSIC_TRACKS[t].file)).size === temas.filter((t) => !t.endsWith('-combate')).length,
+    'cada escenario, cada jefe y el menú tienen su propia música');
   // the main theme «Brasas» (scripts/musica/menu-brasas): 28 bars of 4/4 at 84 BPM = 80 s
   check(MUSIC_TRACKS.menu.loopSamples === 3528000, 'el tema del menú «Brasas» dura su bucle exacto de 80 s');
   check(fs.statSync(new URL('../src/audio/menu.mp3', import.meta.url)).size > 1_400_000, 'y el MP3 del menú es el nuevo (VBR de calidad 2)');
-  check(MUSIC_TRACKS['cap1-jefe'].file !== MUSIC_TRACKS['cap2-jefe'].file && MUSIC_TRACKS['cap2-jefe'].file !== MUSIC_TRACKS['cap3-jefe'].file, 'cada acto tiene su música de jefe');
+  // a track that fails to load is retried a few times, never swapped for an old placeholder
+  check(MT.retryDelayMs(0) > 0 && MT.retryDelayMs(1) > MT.retryDelayMs(0) && MT.retryDelayMs(3) === null, 'si una pista no carga, se reintenta unas veces con pausas crecientes');
+  const audioSrc = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
+  check(!/chiptune|TEMAS\b/.test(audioSrc), 'ya no hay loop chiptune de respaldo que pueda sonar en lugar de la pista');
+  // only the playing track and its other versions stay decoded (each one weighs tens of MB)
+  check(MT.tracksToKeep('cap2-e1-jefe').sort().join() === ['cap2-e1-jefe-fase2.mp3', 'cap2-e1-jefe.mp3'].sort().join()
+    && MT.tracksToKeep('menu').join() === 'menu.mp3', 'en memoria solo queda la pista que suena y sus otras versiones');
   const bucle = 44100 * 60;
   const recortado = loopWindow(60, bucle);
   check(recortado.start === 0 && Math.abs(recortado.end - 60) < 1e-9, 'si el navegador ya quita el relleno del MP3, el bucle es la pista entera');
@@ -4697,7 +4716,7 @@ console.log('\n— Cartas agotadas: se desintegran —');
   const mano = trozo(combateUi, 'function renderMano()');
   check(/agotadas\.includes\(inst\)[\s\S]{0,120}flyExhaust\(/.test(mano),
     'las cartas que se agotan desde la mano se desintegran en su sitio');
-  check(/descarte\.includes\(inst\)\) flyDiscard/.test(mano), 'las descartadas siguen volando al descarte');
+  check(/descarte\.includes\(inst\)\)[\s\S]{0,400}flyDiscard\(/.test(mano), 'las descartadas siguen volando al descarte');
   const lanz = trozo(combateUi, 'async function animarLanzamiento');
   check(/exhaustsWhenPlayed\(/.test(lanz) && /flyPlay\([^;]*exhaust/.test(lanz) && /flyShowcase\([^;]*exhaust/.test(lanz),
     'al jugar una carta que se agota, su vuelo termina desintegrándose en vez de desvanecerse');
@@ -7252,7 +7271,7 @@ console.log('\n🎸 Música del DM');
   const dm = tracks['dm'];
   const ruta = (t: string) => new URL(`../src/audio/${tracks[t].file}`, import.meta.url);
   check(!!dm && dm.file === 'dm.mp3' && fs.existsSync(ruta('dm')), 'existe la pista exclusiva del Dungeon Master (dm.mp3)');
-  const otros = ['menu', 'cap1', 'cap1-jefe', 'cap2', 'cap2-jefe', 'cap3', 'cap3-jefe'];
+  const otros = Object.keys(tracks).filter((t) => t !== 'dm');
   const segundos = (t: string) => (tracks[t].loopSamples + (tracks[t].introSamples ?? 0)) / 44100;
   const bytesPorSegundo = (t: string) => fs.statSync(ruta(t)).size / segundos(t);
   const maxOtros = Math.max(...otros.map(bytesPorSegundo));
@@ -7262,20 +7281,15 @@ console.log('\n🎸 Música del DM');
   const combatTheme = mt.combatTheme as ((c: number, jefe: boolean, defs: EnemigoDef[]) => string) | undefined;
   const DMdef = (ENEMIGOS as unknown as Record<string, EnemigoDef>).DUNGEON_MASTER;
   check(typeof combatTheme === 'function' && combatTheme(2, true, [DMdef]) === 'dm', 'el combate contra el Dungeon Master suena con su propia pista');
-  const sinActoIII = Object.fromEntries(Object.entries(mt.MUSIC_TRACKS as Record<string, unknown>).filter(([k]) => !k.startsWith('cap3-')));
   check(typeof combatTheme === 'function' && combatTheme(0, true, [ENEMIGOS.JEFE_OGRO]) === 'cap1-e0-jefe'
-    && mt.combatTheme(2, true, [ENEMIGOS.JEFE_OGRO], 0, sinActoIII) === 'cap3-jefe' && mt.combatTheme(2, false, [ENEMIGOS.JEFE_OGRO], 0, sinActoIII) === 'cap3',
-    'los jefes normales y los combates de cada acto siguen con su pista');
+    && mt.combatTheme(2, false, [ENEMIGOS.JEFE_OGRO], 1) === 'cap3-e1-combate',
+    'los jefes normales y los combates de cada escenario siguen con su pista');
   if (dm) {
     const intro = (dm.introSamples ?? 0) / 44100, bucle = dm.loopSamples / 44100;
     const w = loopWindow(intro + bucle + (MP3_DELAY_SAMPLES + 900) / 44100, dm.loopSamples, dm.introSamples ?? 0) as { start: number; end: number; begin?: number };
     check(intro > 0 && Math.abs(w.start - (MP3_DELAY_SAMPLES / 44100 + intro)) < 1e-9 && Math.abs(w.end - w.start - bucle) < 1e-9
       && Math.abs((w.begin ?? -1) - MP3_DELAY_SAMPLES / 44100) < 1e-9, 'la intro atmosférica del DM suena una vez y queda fuera del bucle');
   } else check(false, 'la intro atmosférica del DM suena una vez y queda fuera del bucle');
-  const audioSrc = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
-  const chip = /'dm':\s*\{([^}]*)\}/.exec(audioSrc)?.[1] ?? '';
-  const bpmChip = Number(/bpm:\s*(\d+)/.exec(chip)?.[1] ?? 0);
-  check(bpmChip >= 150 && /bateria:\s*true/.test(chip) && /epico:\s*true/.test(chip), 'hay chiptune agresivo de respaldo para el DM si falla el archivo');
   const combateSrc = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   check(/audio\.reproducirTema\(combatTheme\(run\.capitulo, esJefe, defs, run\.escenario\)\)/.test(combateSrc), 'la pantalla de combate elige la música con combatTheme');
   const mainSrc = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
@@ -8898,10 +8912,8 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
     const conEscenario = { ...mt.MUSIC_TRACKS, 'cap1-e1': { file: 'x.mp3', loopSamples: 1 }, 'cap1-e1-combate': { file: 'y.mp3', loopSamples: 1 }, 'cap1-e1-jefe': { file: 'z.mp3', loopSamples: 1 } };
     check(mt.exploreTheme(0, 1, conEscenario) === 'cap1-e1' && mt.combatTheme(0, false, [], 1, conEscenario) === 'cap1-e1-combate'
       && mt.combatTheme(0, true, [], 1, conEscenario) === 'cap1-e1-jefe', 'cada escenario puede tener su exploración, su combate y su jefe');
-    const sinEscenarios = Object.fromEntries(Object.entries(mt.MUSIC_TRACKS as Record<string, unknown>).filter(([k]) => !k.startsWith('cap3-')));
-    check(mt.exploreTheme(2, 0, sinEscenarios) === 'cap3' && mt.combatTheme(2, false, [], 0, sinEscenarios) === 'cap3'
-      && mt.combatTheme(2, true, [], 0, sinEscenarios) === 'cap3-jefe',
-      'si un escenario aún no tiene música propia, suena la del acto');
+    check(mt.exploreTheme(2, 0) === 'cap3-e0' && mt.combatTheme(2, false, [], 0) === 'cap3-e0-combate' && mt.combatTheme(2, true, [], 0) === 'cap3-e0-jefe',
+      'cada escenario suena con su propia música, sin caer nunca en la del acto antigua');
   }
   // Act I: each scenario has its song in two versions plus its own boss (sample-based)
   const T = mt.MUSIC_TRACKS as Record<string, { file: string; loopSamples: number; group?: string }>;
@@ -9655,6 +9667,41 @@ console.log('\n🎲 Élites sin repetir');
   check(restaurada.elitesVistos?.length === 1 && restaurada.elitesVistos[0] === run.elitesVistos![0], 'los élites ya vistos se conservan al guardar la partida');
   check(rehidratarRun({ ...JSON.parse(JSON.stringify(serializarRun(run))), elitesVistos: undefined })!.elitesVistos!.length === 0,
     'los guardados antiguos empiezan sin élites vistos');
+}
+
+// ── End of turn: unaffordable cards stay dimmed while they fly to the discard pile ──
+console.log('\n🂠 Descarte al acabar el turno');
+{
+  const fs = await import('node:fs');
+  const fly = fs.readFileSync(new URL('../src/ui/card-fly.ts', import.meta.url), 'utf8');
+  const css = fs.readFileSync(new URL('../src/estilos/cartas.css', import.meta.url), 'utf8');
+  const descarte = /export function flyDiscard[\s\S]*?\n\}/.exec(fly)?.[0] ?? '';
+  check(/cardClone\([^)]*'sin-energia'/.test(descarte), 'la carta que vuela al descarte conserva su sombreado de «sin energía»');
+  check(/\.carta-clon\.sin-energia\s*\{[^}]*filter/.test(css), 'y el clon que vuela se ve sombreado fuera de la mano');
+}
+
+// ── An enemy's next intention only shows once your turn begins ───────────────
+console.log('\n👁️ Intenciones ocultas durante el turno enemigo');
+{
+  const visto: boolean[] = [];
+  let comb: Combate;
+  const ui: Presentador = {
+    ...uiSilenciosa,
+    // when the second enemy acts, the first one has already picked its next move
+    fxEnemigoActua: async (e: EnemigoCombate) => { if (e === comb.enemigos[1]) visto.push(comb.intencionOculta(comb.enemigos[0])); },
+  } as Presentador;
+  const run = nuevaRun('barbaro', 4040);
+  run.reliquias = [];
+  comb = new Combate(run, [GOBLIN_CORTADOR, GOBLIN_ARQUERO], crearRng(4040), ui);
+  await comb.iniciar();
+  check(comb.enemigos.every((e) => !comb.intencionOculta(e)), 'en tu turno ves todas las intenciones');
+  comb.jugador.bloqueo = 999;
+  await comb.terminarTurno();
+  check(visto.length === 1 && visto[0] === true, 'en el turno enemigo, la nueva intención del que ya actuó queda oculta');
+  check(comb.enemigos.every((e) => !comb.intencionOculta(e)), 'y se desvela al empezar tu turno');
+  const fs = await import('node:fs');
+  const uiSrc = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
+  check(/combate\.intencionOculta\(e\)/.test(uiSrc), 'la pantalla de combate respeta las intenciones ocultas');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
