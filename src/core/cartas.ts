@@ -4211,12 +4211,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     castigo: true,
     fx: 'cargaDivina',
-    texto: 'Castigo: tu próximo ataque inflige 8 de\ndaño más (aplica +2 por Fervor gastado).',
+    texto: 'Castigo: tu próximo ataque inflige 8 de\ndaño más (aplica +3 por Fervor gastado).',
     valores: valorCastigo(),
-    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 2 * f })),
+    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 3 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +3 por Fervor gastado).',
-      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 3 * f })),
+      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +4 por Fervor gastado).',
+      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 4 * f })),
     },
   },
   {
@@ -4229,12 +4229,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'escudoSagrado',
     // spends the Fervor on defence: the other way out besides the Smites
-    texto: 'Gana 5 de bloqueo (aplica +2\npor Fervor gastado).',
+    texto: 'Gana 5 de bloqueo (aplica +3\npor Fervor gastado).',
     valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + n[1] * fervorDe(c) }],
-    jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 2 * f); },
+    jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 3 * f); },
     mejora: {
-      texto: 'Gana 7 de bloqueo (aplica +3\npor Fervor gastado).',
-      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 3 * f); },
+      texto: 'Gana 7 de bloqueo (aplica +4\npor Fervor gastado).',
+      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 4 * f); },
     },
   },
   // — Comunes —

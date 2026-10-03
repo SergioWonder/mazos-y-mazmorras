@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-10-03)
 
 ## Corpus Check
-- 241 files · ~1,339,740 words
+- 241 files · ~1,339,802 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 6610 nodes · 16022 edges · 200 communities (185 shown, 15 thin omitted)
+- 6610 nodes · 16022 edges · 201 communities (185 shown, 16 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 656 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9e75c521`
+- Built from commit: `898f7540`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -211,6 +211,7 @@
 - [[_COMMUNITY_Community 197|Community 197]]
 - [[_COMMUNITY_Community 198|Community 198]]
 - [[_COMMUNITY_Community 199|Community 199]]
+- [[_COMMUNITY_Community 200|Community 200]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `span()` - 115 edges
@@ -246,7 +247,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (200 total, 15 thin omitted)
+## Communities (201 total, 16 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.03
@@ -309,8 +310,8 @@ Cohesion: 0.22
 Nodes (27): bool, float, background(), build_svg(), card(), d20(), defs(), dm() (+19 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.13
-Nodes (23): blur(), clear_mask(), compose(), fbm(), forest(), from_f(), grade(), meander() (+15 more)
+Cohesion: 0.11
+Nodes (28): blur(), clear_mask(), compose(), fbm(), forest(), from_f(), grade(), grid_texture() (+20 more)
 
 ### Community 16 - "Community 16"
 Cohesion: 0.08
@@ -521,8 +522,8 @@ Cohesion: 0.04
 Nodes (67): aplicarBendicion(), bendicionesDisponibles(), cartasUnicas(), discursoSenescal(), discursoSibila(), DONES_POR_ACTO, donesDeCartaUnica(), elegirPorHuecos() (+59 more)
 
 ### Community 76 - "Community 76"
-Cohesion: 0.05
-Nodes (83): PrevisionAtaque, preludeKey(), isDoomConsumption(), currentForm(), formFromLabel(), Controles de ratón y modo mando por teclado, burn(), BurnPose (+75 more)
+Cohesion: 0.07
+Nodes (54): PrevisionAtaque, preludeKey(), isDoomConsumption(), currentForm(), formFromLabel(), Controles de ratón y modo mando por teclado, burn(), BurnPose (+46 more)
 
 ### Community 77 - "Community 77"
 Cohesion: 0.07
@@ -576,20 +577,16 @@ Nodes (31): amp_sim(), bass_amp(), bass_di(), cab_sim(), china(), downsample2(),
 Cohesion: 0.05
 Nodes (109): arch(), bar_of(), bass_at(), _bass_events(), bridge(), build(), cajon(), cc_value() (+101 more)
 
-### Community 91 - "Community 91"
-Cohesion: 0.23
-Nodes (5): hexc(), neatline(), Double map border with alternating graduated blocks., scale_bar(), Sketch
-
 ### Community 92 - "Community 92"
 Cohesion: 0.10
 Nodes (63): ParticleShape, aliento(), almaCondenada(), Anchor, aullido(), BANISH, bendicion(), BLIND (+55 more)
 
 ### Community 93 - "Community 93"
-Cohesion: 0.15
-Nodes (17): grid_texture(), hill(), house(), massif(), mountain(), mountain_range(), pine(), A random angular rune glyph inside an s x 1.4s cell centred on (x, y). (+9 more)
+Cohesion: 0.16
+Nodes (18): broadleaf(), cartouche(), compass_rose(), crossbones(), dagger(), eye_glyph(), hill(), house() (+10 more)
 
 ### Community 94 - "Community 94"
-Cohesion: 0.22
+Cohesion: 0.20
 Nodes (5): densify(), Plan, Dungeon-style floor plan: rooms and tunnels with solid walls, rock hatching outs, Wall points with outward normals., SVG elements for every floor piece grown by `grow` px, filled/stroked with col.
 
 ### Community 95 - "Community 95"
@@ -597,8 +594,8 @@ Cohesion: 0.09
 Nodes (45): _bands_abs(), capture_parts(), check_shared_seating(), checks(), cross_checks(), cross_out(), crossfade(), decode() (+37 more)
 
 ### Community 96 - "Community 96"
-Cohesion: 0.22
-Nodes (9): cartouche(), compass_rose(), crossbones(), label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Ornamental scroll cartouche with illegible lettering., Small illegible place name., scribble() (+1 more)
+Cohesion: 0.40
+Nodes (5): label(), Illegible cursive handwriting along a baseline from x to x+w (h = x-height)., Small illegible place name., scribble(), scribble_block()
 
 ### Community 97 - "Community 97"
 Cohesion: 0.10
@@ -957,25 +954,29 @@ Cohesion: 0.13
 Nodes (15): arrange_ruinas(), «Ruinas de oro» (E phrygian, 3/4 at 84): a solo cello mourns over a low harp ost, The «Ruinas de oro» arrangement (3/4 at 84) for any motif of (note, beats) addin, «Ruinas de oro» (E phrygian, 3/4 at 84): a solo cello mourns over a low harp ost, Ceniza's horn melody, C harmonic minor., Garras de magma's horn call, D aeolian, answered a step higher., Corazón del volcán's choir line, C# Hungarian minor., New — «Tesoro maldito»: A minor lament that sinks a step at a time onto the lead (+7 more)
 
 ### Community 196 - "Community 196"
-Cohesion: 0.22
-Nodes (8): broadleaf(), dagger(), eye_glyph(), group(), A dagger from its pommel at (x, y) pointing along `ang` (degrees), total length, A drawn eye: almond, radiating iris, pupil (slit or round) and a catch light., Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+Cohesion: 0.50
+Nodes (3): group(), Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
 
 ### Community 197 - "Community 197"
 Cohesion: 0.29
 Nodes (4): paint(), spellFrame(), spellMarks(), SpellSystem
 
 ### Community 198 - "Community 198"
-Cohesion: 0.33
-Nodes (5): mockup(), offset_line(), Review mock-up with node markers where the UI draws them (not delivered).      t, Double-banked river along pts; width may be a function of t., river()
+Cohesion: 0.18
+Nodes (11): massif(), mountain(), mountain_range(), offset_line(), Catmull-Rom spline through points, as an SVG path string., Double-banked river along pts; width may be a function of t., A mountain mass: peaks scattered inside box=(x0, y0, x1, y1) (base line y), back, river() (+3 more)
 
 ### Community 199 - "Community 199"
 Cohesion: 0.67
 Nodes (3): garras_magma(), «Garras de magma» (D aeolian, 4/4 at 104): the dragon walks — trombones and tuba, «Garras de magma» (D aeolian, 4/4 at 104): the dragon walks — trombones and tuba
 
+### Community 200 - "Community 200"
+Cohesion: 0.09
+Nodes (29): Aim, band(), Box, CardKind, clip(), ClipFrame, Destination, discardFrames() (+21 more)
+
 ## Knowledge Gaps
 - **807 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+802 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **16 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

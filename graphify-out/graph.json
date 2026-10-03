@@ -3733,7 +3733,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L33",
       "id": "mapa_comun_map_kit_smooth_path",
-      "community": 93,
+      "community": 198,
       "norm_label": "smooth_path()"
     },
     {
@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 196,
+      "community": 94,
       "norm_label": ".uid()"
     },
     {
@@ -3787,7 +3787,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L77",
       "id": "mapa_comun_map_kit_sketch_line",
-      "community": 198,
+      "community": 93,
       "norm_label": ".line()"
     },
     {
@@ -3796,7 +3796,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L80",
       "id": "mapa_comun_map_kit_sketch_fill",
-      "community": 91,
+      "community": 93,
       "norm_label": ".fill()"
     },
     {
@@ -3823,7 +3823,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L90",
       "id": "mapa_comun_map_kit_sketch_circle",
-      "community": 96,
+      "community": 93,
       "norm_label": ".circle()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 196,
+      "community": 93,
       "norm_label": ".dot()"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L360",
       "id": "mapa_comun_map_kit_mockup",
-      "community": 198,
+      "community": 15,
       "norm_label": "mockup()"
     },
     {
@@ -4030,7 +4030,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L446",
       "id": "mapa_comun_map_kit_mountain",
-      "community": 93,
+      "community": 198,
       "norm_label": "mountain()"
     },
     {
@@ -4039,7 +4039,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L469",
       "id": "mapa_comun_map_kit_mountain_range",
-      "community": 93,
+      "community": 198,
       "norm_label": "mountain_range()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 196,
+      "community": 93,
       "norm_label": "broadleaf()"
     },
     {
@@ -4093,7 +4093,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L596",
       "id": "mapa_comun_map_kit_compass_rose",
-      "community": 96,
+      "community": 93,
       "norm_label": "compass_rose()"
     },
     {
@@ -4102,7 +4102,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L642",
       "id": "mapa_comun_map_kit_cartouche",
-      "community": 96,
+      "community": 93,
       "norm_label": "cartouche()"
     },
     {
@@ -4111,7 +4111,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L682",
       "id": "mapa_comun_map_kit_scale_bar",
-      "community": 91,
+      "community": 93,
       "norm_label": "scale_bar()"
     },
     {
@@ -4120,7 +4120,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L701",
       "id": "mapa_comun_map_kit_neatline",
-      "community": 91,
+      "community": 93,
       "norm_label": "neatline()"
     },
     {
@@ -4138,7 +4138,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L746",
       "id": "mapa_comun_map_kit_crossbones",
-      "community": 96,
+      "community": 93,
       "norm_label": "crossbones()"
     },
     {
@@ -4174,7 +4174,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L812",
       "id": "mapa_comun_map_kit_road",
-      "community": 93,
+      "community": 198,
       "norm_label": "road()"
     },
     {
@@ -4183,7 +4183,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L816",
       "id": "mapa_comun_map_kit_grid_texture",
-      "community": 93,
+      "community": 15,
       "norm_label": "grid_texture()"
     },
     {
@@ -4201,7 +4201,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L870",
       "id": "mapa_comun_map_kit_massif",
-      "community": 93,
+      "community": 198,
       "norm_label": "massif()"
     },
     {
@@ -4273,7 +4273,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L931",
       "id": "mapa_comun_map_kit_plan_circle",
-      "community": 96,
+      "community": 93,
       "norm_label": ".circle()"
     },
     {
@@ -4318,7 +4318,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1031",
       "id": "mapa_comun_map_kit_dagger",
-      "community": 196,
+      "community": 93,
       "norm_label": "dagger()"
     },
     {
@@ -4327,7 +4327,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1069",
       "id": "mapa_comun_map_kit_spiral",
-      "community": 93,
+      "community": 198,
       "norm_label": "spiral()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 196,
+      "community": 93,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4345,7 +4345,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1113",
       "id": "mapa_comun_map_kit_rune",
-      "community": 93,
+      "community": 15,
       "norm_label": "rune()"
     },
     {
@@ -4363,7 +4363,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L34",
       "id": "mapa_comun_map_kit_rationale_34",
-      "community": 93,
+      "community": 198,
       "norm_label": "catmull-rom spline through points, as an svg path string."
     },
     {
@@ -4426,7 +4426,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L361",
       "id": "mapa_comun_map_kit_rationale_361",
-      "community": 198,
+      "community": 15,
       "norm_label": "review mock-up with node markers where the ui draws them (not delivered).      t"
     },
     {
@@ -4453,7 +4453,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L643",
       "id": "mapa_comun_map_kit_rationale_643",
-      "community": 96,
+      "community": 93,
       "norm_label": "ornamental scroll cartouche with illegible lettering."
     },
     {
@@ -4462,7 +4462,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L702",
       "id": "mapa_comun_map_kit_rationale_702",
-      "community": 91,
+      "community": 93,
       "norm_label": "double map border with alternating graduated blocks."
     },
     {
@@ -4498,7 +4498,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L871",
       "id": "mapa_comun_map_kit_rationale_871",
-      "community": 93,
+      "community": 198,
       "norm_label": "a mountain mass: peaks scattered inside box=(x0, y0, x1, y1) (base line y), back"
     },
     {
@@ -4552,7 +4552,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1032",
       "id": "mapa_comun_map_kit_rationale_1032",
-      "community": 196,
+      "community": 93,
       "norm_label": "a dagger from its pommel at (x, y) pointing along `ang` (degrees), total length"
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 196,
+      "community": 93,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -4570,7 +4570,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1114",
       "id": "mapa_comun_map_kit_rationale_1114",
-      "community": 93,
+      "community": 15,
       "norm_label": "a random angular rune glyph inside an s x 1.4s cell centred on (x, y)."
     },
     {
@@ -37868,7 +37868,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9054",
+      "source_location": "L9061",
       "id": "scripts_smoke_test_montarmago",
       "community": 101,
       "norm_label": "montarmago()"
@@ -37877,7 +37877,7 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9066",
+      "source_location": "L9073",
       "id": "scripts_smoke_test_jugar",
       "community": 46,
       "norm_label": "jugar()"
@@ -49777,7 +49777,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L1",
       "id": "ui_card_motion",
-      "community": 76,
+      "community": 200,
       "norm_label": "card-motion.ts"
     },
     {
@@ -49795,7 +49795,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L9",
       "id": "ui_card_motion_box",
-      "community": 76,
+      "community": 200,
       "norm_label": "box"
     },
     {
@@ -49804,7 +49804,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L10",
       "id": "ui_card_motion_targetmode",
-      "community": 76,
+      "community": 200,
       "norm_label": "targetmode"
     },
     {
@@ -49813,7 +49813,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L11",
       "id": "ui_card_motion_cardkind",
-      "community": 76,
+      "community": 200,
       "norm_label": "cardkind"
     },
     {
@@ -49822,7 +49822,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L14",
       "id": "ui_card_motion_motionframe",
-      "community": 76,
+      "community": 200,
       "norm_label": "motionframe"
     },
     {
@@ -49849,7 +49849,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L38",
       "id": "ui_card_motion_playscene",
-      "community": 76,
+      "community": 200,
       "norm_label": "playscene"
     },
     {
@@ -49858,7 +49858,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L53",
       "id": "ui_card_motion_aim",
-      "community": 76,
+      "community": 200,
       "norm_label": "aim"
     },
     {
@@ -49867,7 +49867,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L54",
       "id": "ui_card_motion_destination",
-      "community": 76,
+      "community": 200,
       "norm_label": "destination"
     },
     {
@@ -49885,7 +49885,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L76",
       "id": "ui_card_motion_drawdelays",
-      "community": 76,
+      "community": 200,
       "norm_label": "drawdelays()"
     },
     {
@@ -49903,7 +49903,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L92",
       "id": "ui_card_motion_px",
-      "community": 76,
+      "community": 200,
       "norm_label": "px()"
     },
     {
@@ -49912,7 +49912,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L93",
       "id": "ui_card_motion_move",
-      "community": 76,
+      "community": 200,
       "norm_label": "move()"
     },
     {
@@ -49921,7 +49921,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L96",
       "id": "ui_card_motion_fadeframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "fadeframes()"
     },
     {
@@ -49939,7 +49939,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L131",
       "id": "ui_card_motion_drawframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "drawframes()"
     },
     {
@@ -49948,7 +49948,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L144",
       "id": "ui_card_motion_discardframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "discardframes()"
     },
     {
@@ -49966,7 +49966,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L159",
       "id": "ui_card_motion_shuffleframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "shuffleframes()"
     },
     {
@@ -49975,7 +49975,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L190",
       "id": "ui_card_motion_clipframe",
-      "community": 76,
+      "community": 200,
       "norm_label": "clipframe"
     },
     {
@@ -49984,7 +49984,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L191",
       "id": "ui_card_motion_emberpreset",
-      "community": 76,
+      "community": 200,
       "norm_label": "emberpreset"
     },
     {
@@ -49993,7 +49993,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L193",
       "id": "ui_card_motion_emberburst",
-      "community": 76,
+      "community": 200,
       "norm_label": "emberburst"
     },
     {
@@ -50002,7 +50002,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L290",
       "id": "ui_card_motion_dissolveplan",
-      "community": 76,
+      "community": 200,
       "norm_label": "dissolveplan"
     },
     {
@@ -50020,7 +50020,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L229",
       "id": "ui_card_motion_r1",
-      "community": 76,
+      "community": 200,
       "norm_label": "r1()"
     },
     {
@@ -50029,7 +50029,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L230",
       "id": "ui_card_motion_clip",
-      "community": 76,
+      "community": 200,
       "norm_label": "clip()"
     },
     {
@@ -50038,7 +50038,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L232",
       "id": "ui_card_motion_flicker",
-      "community": 76,
+      "community": 200,
       "norm_label": "flicker()"
     },
     {
@@ -50047,7 +50047,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L235",
       "id": "ui_card_motion_edgejitter",
-      "community": 76,
+      "community": 200,
       "norm_label": "edgejitter()"
     },
     {
@@ -50056,7 +50056,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L237",
       "id": "ui_card_motion_dissolveprogress",
-      "community": 76,
+      "community": 200,
       "norm_label": "dissolveprogress()"
     },
     {
@@ -50065,7 +50065,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L247",
       "id": "ui_card_motion_dissolveedge",
-      "community": 76,
+      "community": 200,
       "norm_label": "dissolveedge()"
     },
     {
@@ -50074,7 +50074,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L258",
       "id": "ui_card_motion_band",
-      "community": 76,
+      "community": 200,
       "norm_label": "band()"
     },
     {
@@ -50083,7 +50083,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L264",
       "id": "ui_card_motion_edgeyat",
-      "community": 76,
+      "community": 200,
       "norm_label": "edgeyat()"
     },
     {
@@ -50128,7 +50128,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L393",
       "id": "ui_card_motion_exhaustrules",
-      "community": 76,
+      "community": 200,
       "norm_label": "exhaustrules"
     },
     {
@@ -50137,7 +50137,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L401",
       "id": "ui_card_motion_exhaustswhenplayed",
-      "community": 76,
+      "community": 200,
       "norm_label": "exhaustswhenplayed()"
     },
     {
@@ -50155,7 +50155,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L420",
       "id": "ui_card_motion_reflowdelta",
-      "community": 76,
+      "community": 200,
       "norm_label": "reflowdelta"
     },
     {
@@ -50164,7 +50164,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L417",
       "id": "ui_card_motion_reflowframe",
-      "community": 76,
+      "community": 200,
       "norm_label": "reflowframe"
     },
     {
@@ -229748,5 +229748,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "9e75c52140fa12ac9b4f5bf2813b881cbe4880ef"
+  "built_at_commit": "898f7540fe08e2c9371ddc35bc3c879a0819bf69"
 }

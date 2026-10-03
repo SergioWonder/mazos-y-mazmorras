@@ -7958,12 +7958,12 @@ console.log('\n🔨 Paladín');
     check((comb.jugador.estados.castigo ?? 0) === 1, 'el Castigo queda preparado (indicador)');
     check(e.pv === pv0, 'preparar un Castigo no hace daño');
     const golpe = CT.cartaPorId('golpe')!;
-    check(comb.valoresDeCarta(golpe, e)[0].real === 18, `el Golpe en la mano muestra el Castigo preparado (${comb.valoresDeCarta(golpe, e)[0].real})`);
+    check(comb.valoresDeCarta(golpe, e)[0].real === 20, `el Golpe en la mano muestra el Castigo preparado (${comb.valoresDeCarta(golpe, e)[0].real})`);
     await jugar(comb, 'defender');
     check(comb.jugador.castigos.length === 1, 'una habilidad no descarga el Castigo');
     const antes = e.pv;
     await jugar(comb, 'golpe');
-    check(antes - e.pv === 18, `Castigo Divino con 2 de Fervor: el Golpe inflige 6 + 8 + 2×2 = 18 (${antes - e.pv})`);
+    check(antes - e.pv === 20, `Castigo Divino con 2 de Fervor: el Golpe inflige 6 + 8 + 3×2 = 20 (${antes - e.pv})`);
     check(comb.jugador.castigos.length === 0 && !(comb.jugador.estados.castigo), 'el ataque descarga y gasta el Castigo');
     const d2 = e.pv;
     await jugar(comb, 'golpe');
@@ -8039,7 +8039,7 @@ console.log('\n🔨 Paladín');
     check(danos.join() === '18,18,18', `Castigo Divino + ataque de área: el daño extra a cada enemigo (${danos.join('/')})`);
   }
   {
-    // the upgrade raises the base (9 → 11) but keeps +3 per Fervor
+    // the upgrade: 11 plus 4 per Fervor (the same scaling as Castigo Abrasador+)
     const { comb } = await montarP();
     const e = comb.enemigos[0];
     comb.jugador.estados.fervor = 2;
@@ -8049,7 +8049,7 @@ console.log('\n🔨 Paladín');
     await comb.jugarCarta(div);
     const antes = e.pv;
     await jugar(comb, 'golpe');
-    check(antes - e.pv === 6 + 11 + 3 * 2, `Castigo Divino+ con 2 de Fervor: 6 + 11 + 3×2 = 23 (${antes - e.pv})`);
+    check(antes - e.pv === 6 + 11 + 4 * 2, `Castigo Divino+ con 2 de Fervor: 6 + 11 + 4×2 = 25 (${antes - e.pv})`);
   }
   {
     const { comb } = await montarP([dummy(), dummy()]);
@@ -8123,9 +8123,16 @@ console.log('\n🔨 Paladín');
     const { comb } = await montarP();
     comb.jugador.estados.fervor = 3;
     comb.jugador.bloqueo = 0;
-    check(comb.valoresDeCarta(CT.cartaPorId('escudo-fe')!)[0].real === 11, 'Escudo de la Fe muestra 5 + 2×3 de bloqueo');
+    check(comb.valoresDeCarta(CT.cartaPorId('escudo-fe')!)[0].real === 14, 'Escudo de la Fe muestra 5 + 3×3 de bloqueo');
     await jugar(comb, 'escudo-fe');
-    check(comb.jugador.bloqueo === 11 && fervor(comb) === 0, `Escudo de la Fe: 5 de bloqueo más 2 por Fervor gastado (${comb.jugador.bloqueo})`);
+    check(comb.jugador.bloqueo === 14 && fervor(comb) === 0, `Escudo de la Fe: 5 de bloqueo más 3 por Fervor gastado (${comb.jugador.bloqueo})`);
+    const mas = instanciar(CT.cartaPorId('escudo-fe')!);
+    mas.mejorada = true;
+    comb.jugador.estados.fervor = 3;
+    comb.jugador.bloqueo = 0;
+    comb.jugador.mano.push(mas);
+    await comb.jugarCarta(mas);
+    check(comb.jugador.bloqueo === 7 + 4 * 3, `Escudo de la Fe+: 7 más 4 por Fervor gastado (${comb.jugador.bloqueo})`);
   }
   {
     const { comb } = await montarP();
