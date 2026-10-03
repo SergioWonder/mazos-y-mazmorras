@@ -2314,6 +2314,16 @@ try {
     check(!!rig?.wings?.B && !!rig?.wings?.F && rig.shapes.some((s) => s.b === 'head' && s.k === 'horn'), `${id}: cuernos y alas de murciélago`);
   }
   check(firma('incubo') !== firma('sucubo'), 'el íncubo y la súcubo no son la misma figura');
+  // barely dressed: bare skin, no cloak or robe, just leather underwear (and a thin harness on him)
+  for (const id of ['incubo', 'sucubo']) {
+    const rig = ENEMY_RIGS[id]!;
+    const de = (k: string) => rig.shapes.filter((s) => s.k === k);
+    check(!rig.shapes.some((s) => s.k === 'cloak' || s.k === 'robe') && rig.palette.body === rig.palette.skin,
+      `${id}: sin capa ni túnica, con la piel al descubierto`);
+    check(de('leather').some((s) => s.t === 'p' && s.b === 'torso'), `${id}: lleva ropa interior de cuero`);
+  }
+  const arnes = ENEMY_RIGS['incubo']!.shapes.filter((s) => s.k === 'leather' && s.t === 'l' && s.b === 'torso');
+  check(arnes.length >= 3 && arnes.every((s) => s.t === 'l' && s.w <= 1.2), `el íncubo lleva un arnés de cuero muy fino (${arnes.length} correas)`);
 } catch (e) {
   check(false, `las pruebas de las marionetas nuevas revientan: ${(e as Error).stack ?? e}`);
 }

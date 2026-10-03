@@ -3760,7 +3760,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L63",
       "id": "mapa_comun_map_kit_sketch_uid",
-      "community": 94,
+      "community": 96,
       "norm_label": ".uid()"
     },
     {
@@ -3778,7 +3778,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L71",
       "id": "mapa_comun_map_kit_sketch_stroke",
-      "community": 96,
+      "community": 93,
       "norm_label": ".stroke()"
     },
     {
@@ -3787,7 +3787,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L77",
       "id": "mapa_comun_map_kit_sketch_line",
-      "community": 96,
+      "community": 198,
       "norm_label": ".line()"
     },
     {
@@ -3796,7 +3796,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L80",
       "id": "mapa_comun_map_kit_sketch_fill",
-      "community": 96,
+      "community": 91,
       "norm_label": ".fill()"
     },
     {
@@ -3805,7 +3805,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L83",
       "id": "mapa_comun_map_kit_sketch_white",
-      "community": 96,
+      "community": 93,
       "norm_label": ".white()"
     },
     {
@@ -3877,7 +3877,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L115",
       "id": "mapa_comun_map_kit_sketch_hatch",
-      "community": 96,
+      "community": 93,
       "norm_label": ".hatch()"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L360",
       "id": "mapa_comun_map_kit_mockup",
-      "community": 15,
+      "community": 198,
       "norm_label": "mockup()"
     },
     {
@@ -4048,7 +4048,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L480",
       "id": "mapa_comun_map_kit_hill",
-      "community": 96,
+      "community": 93,
       "norm_label": "hill()"
     },
     {
@@ -4057,7 +4057,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L497",
       "id": "mapa_comun_map_kit_pine",
-      "community": 96,
+      "community": 93,
       "norm_label": "pine()"
     },
     {
@@ -4084,7 +4084,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L565",
       "id": "mapa_comun_map_kit_house",
-      "community": 96,
+      "community": 93,
       "norm_label": "house()"
     },
     {
@@ -4111,7 +4111,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L682",
       "id": "mapa_comun_map_kit_scale_bar",
-      "community": 96,
+      "community": 91,
       "norm_label": "scale_bar()"
     },
     {
@@ -4120,7 +4120,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L701",
       "id": "mapa_comun_map_kit_neatline",
-      "community": 96,
+      "community": 91,
       "norm_label": "neatline()"
     },
     {
@@ -4129,7 +4129,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L729",
       "id": "mapa_comun_map_kit_skull",
-      "community": 96,
+      "community": 93,
       "norm_label": "skull()"
     },
     {
@@ -4156,7 +4156,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L772",
       "id": "mapa_comun_map_kit_offset_line",
-      "community": 93,
+      "community": 198,
       "norm_label": "offset_line()"
     },
     {
@@ -4165,7 +4165,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L784",
       "id": "mapa_comun_map_kit_river",
-      "community": 93,
+      "community": 198,
       "norm_label": "river()"
     },
     {
@@ -4183,7 +4183,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L816",
       "id": "mapa_comun_map_kit_grid_texture",
-      "community": 15,
+      "community": 93,
       "norm_label": "grid_texture()"
     },
     {
@@ -4318,7 +4318,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1031",
       "id": "mapa_comun_map_kit_dagger",
-      "community": 96,
+      "community": 196,
       "norm_label": "dagger()"
     },
     {
@@ -4345,7 +4345,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1113",
       "id": "mapa_comun_map_kit_rune",
-      "community": 198,
+      "community": 93,
       "norm_label": "rune()"
     },
     {
@@ -4372,7 +4372,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L84",
       "id": "mapa_comun_map_kit_rationale_84",
-      "community": 96,
+      "community": 93,
       "norm_label": "paper-coloured occluder (white is neutral under the multiply blend)."
     },
     {
@@ -4381,7 +4381,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L116",
       "id": "mapa_comun_map_kit_rationale_116",
-      "community": 96,
+      "community": 93,
       "norm_label": "parallel pen lines clipped to a shape."
     },
     {
@@ -4426,7 +4426,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L361",
       "id": "mapa_comun_map_kit_rationale_361",
-      "community": 15,
+      "community": 198,
       "norm_label": "review mock-up with node markers where the ui draws them (not delivered).      t"
     },
     {
@@ -4462,7 +4462,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L702",
       "id": "mapa_comun_map_kit_rationale_702",
-      "community": 96,
+      "community": 91,
       "norm_label": "double map border with alternating graduated blocks."
     },
     {
@@ -4480,7 +4480,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L785",
       "id": "mapa_comun_map_kit_rationale_785",
-      "community": 93,
+      "community": 198,
       "norm_label": "double-banked river along pts; width may be a function of t."
     },
     {
@@ -4552,7 +4552,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1032",
       "id": "mapa_comun_map_kit_rationale_1032",
-      "community": 96,
+      "community": 196,
       "norm_label": "a dagger from its pommel at (x, y) pointing along `ang` (degrees), total length"
     },
     {
@@ -4570,7 +4570,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1114",
       "id": "mapa_comun_map_kit_rationale_1114",
-      "community": 198,
+      "community": 93,
       "norm_label": "a random angular rune glyph inside an s x 1.4s cell centred on (x, y)."
     },
     {
@@ -32632,7 +32632,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L190",
       "id": "leitmotivs_acto3_bocetos_mas_alla",
-      "community": 156,
+      "community": 179,
       "norm_label": "mas_alla()"
     },
     {
@@ -32659,7 +32659,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L282",
       "id": "leitmotivs_acto3_bocetos_ruinas_oro",
-      "community": 179,
+      "community": 194,
       "norm_label": "ruinas_oro()"
     },
     {
@@ -32713,7 +32713,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L326",
       "id": "leitmotivs_acto3_bocetos_garras_magma",
-      "community": 194,
+      "community": 200,
       "norm_label": "garras_magma()"
     },
     {
@@ -32848,7 +32848,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L191",
       "id": "leitmotivs_acto3_bocetos_rationale_191",
-      "community": 156,
+      "community": 179,
       "norm_label": "\u00abmas alla de las estrellas\u00bb (alternating 5/4 and 7/8 at 140): a galloping e riff"
     },
     {
@@ -32875,7 +32875,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L283",
       "id": "leitmotivs_acto3_bocetos_rationale_283",
-      "community": 179,
+      "community": 194,
       "norm_label": "\u00abruinas de oro\u00bb (e phrygian, 3/4 at 84): a solo cello mourns over a low harp ost"
     },
     {
@@ -32929,7 +32929,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L327",
       "id": "leitmotivs_acto3_bocetos_rationale_327",
-      "community": 194,
+      "community": 200,
       "norm_label": "\u00abgarras de magma\u00bb (d aeolian, 4/4 at 104): the dragon walks \u2014 trombones and tuba"
     },
     {
@@ -37733,7 +37733,7 @@
       "label": "Piece",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2327",
+      "source_location": "L2337",
       "id": "scripts_smoke_test_piece",
       "community": 101,
       "norm_label": "piece"
@@ -37742,7 +37742,7 @@
       "label": "E",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2662",
+      "source_location": "L2672",
       "id": "scripts_smoke_test_e",
       "community": 101,
       "norm_label": "e"
@@ -37751,7 +37751,7 @@
       "label": "Bone",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L2844",
+      "source_location": "L2854",
       "id": "scripts_smoke_test_bone",
       "community": 101,
       "norm_label": "bone"
@@ -37760,7 +37760,7 @@
       "label": "RelicLike",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3084",
+      "source_location": "L3094",
       "id": "scripts_smoke_test_reliclike",
       "community": 101,
       "norm_label": "reliclike"
@@ -37769,7 +37769,7 @@
       "label": "Mov",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3139",
+      "source_location": "L3149",
       "id": "scripts_smoke_test_mov",
       "community": 101,
       "norm_label": "mov"
@@ -37778,7 +37778,7 @@
       "label": "Reliquia",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3140",
+      "source_location": "L3150",
       "id": "scripts_smoke_test_reliquia",
       "community": 101,
       "norm_label": "reliquia"
@@ -37787,7 +37787,7 @@
       "label": "montar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3155",
+      "source_location": "L3165",
       "id": "scripts_smoke_test_montar",
       "community": 101,
       "norm_label": "montar()"
@@ -37796,7 +37796,7 @@
       "label": "T",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3755",
+      "source_location": "L3765",
       "id": "scripts_smoke_test_t",
       "community": 101,
       "norm_label": "t"
@@ -37805,7 +37805,7 @@
       "label": "Accion",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L3785",
+      "source_location": "L3795",
       "id": "scripts_smoke_test_accion",
       "community": 101,
       "norm_label": "accion"
@@ -37814,7 +37814,7 @@
       "label": "montarM()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L4711",
+      "source_location": "L4721",
       "id": "scripts_smoke_test_montarm",
       "community": 101,
       "norm_label": "montarm()"
@@ -37823,7 +37823,7 @@
       "label": "montarB()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L5412",
+      "source_location": "L5422",
       "id": "scripts_smoke_test_montarb",
       "community": 101,
       "norm_label": "montarb()"
@@ -37832,7 +37832,7 @@
       "label": "Sprite2",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L6971",
+      "source_location": "L6981",
       "id": "scripts_smoke_test_sprite2",
       "community": 101,
       "norm_label": "sprite2"
@@ -37841,7 +37841,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7379",
+      "source_location": "L7389",
       "id": "scripts_smoke_test_escenario",
       "community": 101,
       "norm_label": "escenario"
@@ -37850,7 +37850,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7641",
+      "source_location": "L7651",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 101,
       "norm_label": "montarnumeros()"
@@ -37859,7 +37859,7 @@
       "label": "montarP()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7878",
+      "source_location": "L7888",
       "id": "scripts_smoke_test_montarp",
       "community": 101,
       "norm_label": "montarp()"
@@ -37868,7 +37868,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9017",
+      "source_location": "L9027",
       "id": "scripts_smoke_test_montarmago",
       "community": 101,
       "norm_label": "montarmago()"
@@ -37877,7 +37877,7 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9029",
+      "source_location": "L9039",
       "id": "scripts_smoke_test_jugar",
       "community": 46,
       "norm_label": "jugar()"
@@ -44807,7 +44807,7 @@
       "label": "INVOCATION_RIGS",
       "file_type": "code",
       "source_file": "src/fx/enemy-rigs.ts",
-      "source_location": "L2048",
+      "source_location": "L2062",
       "id": "fx_enemy_rigs_invocation_rigs",
       "community": 157,
       "norm_label": "invocation_rigs"
@@ -50443,7 +50443,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L1",
       "id": "ui_castigo_ficha",
-      "community": 76,
+      "community": 199,
       "norm_label": "castigo-ficha.ts"
     },
     {
@@ -50452,7 +50452,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L7",
       "id": "ui_castigo_ficha_icono",
-      "community": 76,
+      "community": 199,
       "norm_label": "icono"
     },
     {
@@ -50461,7 +50461,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L13",
       "id": "ui_castigo_ficha_llamasdecastigo",
-      "community": 76,
+      "community": 199,
       "norm_label": "llamasdecastigo()"
     },
     {
@@ -50470,7 +50470,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L20",
       "id": "ui_castigo_ficha_resumencastigo",
-      "community": 76,
+      "community": 199,
       "norm_label": "resumencastigo"
     },
     {
@@ -56085,7 +56085,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L159",
-      "community": 156,
+      "community": 179,
       "norm_label": "\u00abmas alla de las estrellas\u00bb (alternating 5/4 and 7/8 at 140): a galloping e riff",
       "id": "leitmotivs_acto3_bocetos_rationale_159"
     },
@@ -56103,7 +56103,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L224",
-      "community": 179,
+      "community": 194,
       "norm_label": "\u00abruinas de oro\u00bb (e phrygian, 3/4 at 84): a solo cello mourns over a low harp ost",
       "id": "leitmotivs_acto3_bocetos_rationale_224"
     },
@@ -56112,7 +56112,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L253",
-      "community": 194,
+      "community": 200,
       "norm_label": "\u00abgarras de magma\u00bb (d aeolian, 4/4 at 104): the dragon walks \u2014 trombones and tuba",
       "id": "leitmotivs_acto3_bocetos_rationale_253"
     },
@@ -169953,9 +169953,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "core_types_movimiento",
-      "confidence_score": 1.0
+      "target": "core_types_movimiento"
     },
     {
       "relation": "imports_from",
@@ -170689,9 +170689,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L2327",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "scripts_smoke_test_piece",
-      "confidence_score": 1.0
+      "target": "scripts_smoke_test_piece"
     },
     {
       "relation": "contains",
@@ -174270,9 +174270,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_enemigos_resolvervariantes",
-      "confidence_score": 1.0
+      "target": "core_enemigos_resolvervariantes"
     },
     {
       "relation": "imports_from",
@@ -174652,9 +174652,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_actuarya",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_actuarya"
     },
     {
       "relation": "method",
@@ -174692,9 +174692,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L299",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_basedegolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_basedegolpe"
     },
     {
       "relation": "method",
@@ -174912,9 +174912,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_despertar",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_despertar"
     },
     {
       "relation": "method",
@@ -175022,9 +175022,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1147",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_extinguirligados",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_extinguirligados"
     },
     {
       "relation": "method",
@@ -175082,9 +175082,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_inmortalahora",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_inmortalahora"
     },
     {
       "relation": "method",
@@ -175282,9 +175282,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_tieneguardianes",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_tieneguardianes"
     },
     {
       "relation": "method",
@@ -175891,9 +175891,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L295",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_danointencion",
-      "target": "core_combate_combate_basedegolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_basedegolpe"
     },
     {
       "relation": "calls",
@@ -175945,9 +175945,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L359",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_ataqueanulado",
-      "target": "core_combate_combate_basedegolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_basedegolpe"
     },
     {
       "relation": "references",
@@ -175956,9 +175956,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L299",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_basedegolpe",
-      "target": "core_types_movimiento",
-      "confidence_score": 1.0
+      "target": "core_types_movimiento"
     },
     {
       "relation": "calls",
@@ -175967,9 +175967,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L349",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_dolorraices",
-      "target": "core_combate_combate_basedegolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_basedegolpe"
     },
     {
       "relation": "calls",
@@ -175978,9 +175978,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L2001",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_ejecutarmovimiento",
-      "target": "core_combate_combate_basedegolpe",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_basedegolpe"
     },
     {
       "relation": "calls",
@@ -176687,9 +176687,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_extinguirligados",
-      "target": "core_combate_combate_infligir",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_infligir"
     },
     {
       "relation": "calls",
@@ -176720,9 +176720,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1060",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_infligir",
-      "target": "core_combate_combate_despertar",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_despertar"
     },
     {
       "relation": "calls",
@@ -176731,9 +176731,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1023",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_infligir",
-      "target": "core_combate_combate_inmortalahora",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_inmortalahora"
     },
     {
       "relation": "calls",
@@ -176764,9 +176764,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1047",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_infligir",
-      "target": "core_combate_combate_tieneguardianes",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_tieneguardianes"
     },
     {
       "relation": "calls",
@@ -176884,9 +176884,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_extinguirligados",
-      "target": "core_combate_combate_inmortalahora",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_inmortalahora"
     },
     {
       "relation": "references",
@@ -176895,9 +176895,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1135",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_inmortalahora",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "references",
@@ -176906,9 +176906,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_tieneguardianes",
-      "target": "core_types_enemigodef",
-      "confidence_score": 1.0
+      "target": "core_types_enemigodef"
     },
     {
       "relation": "calls",
@@ -176917,9 +176917,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1174",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_despertar",
-      "target": "core_combate_combate_actuarya",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_actuarya"
     },
     {
       "relation": "calls",
@@ -176939,9 +176939,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_despertar",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "calls",
@@ -176950,9 +176950,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1880",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_terminarturno",
-      "target": "core_combate_combate_despertar",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_despertar"
     },
     {
       "relation": "calls",
@@ -176961,9 +176961,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1180",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_actuarya",
-      "target": "core_combate_combate_ejecutarmovimiento",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_ejecutarmovimiento"
     },
     {
       "relation": "references",
@@ -176972,9 +176972,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1178",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_actuarya",
-      "target": "core_types_enemigocombate",
-      "confidence_score": 1.0
+      "target": "core_types_enemigocombate"
     },
     {
       "relation": "implements",
@@ -177499,9 +177499,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L843",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_aventurero_esqueletico",
-      "confidence_score": 1.0
+      "target": "core_enemigos_aventurero_esqueletico"
     },
     {
       "relation": "contains",
@@ -177509,9 +177509,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L791",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_aventureros",
-      "confidence_score": 1.0
+      "target": "core_enemigos_aventureros"
     },
     {
       "relation": "contains",
@@ -177669,9 +177669,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L914",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_dormido",
-      "confidence_score": 1.0
+      "target": "core_enemigos_dormido"
     },
     {
       "relation": "contains",
@@ -177709,9 +177709,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L877",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_elemental_fuego",
-      "confidence_score": 1.0
+      "target": "core_enemigos_elemental_fuego"
     },
     {
       "relation": "contains",
@@ -177739,9 +177739,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L1116",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_enemigosrelacionados",
-      "confidence_score": 1.0
+      "target": "core_enemigos_enemigosrelacionados"
     },
     {
       "relation": "contains",
@@ -177839,9 +177839,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L754",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_goblin_jaleador",
-      "confidence_score": 1.0
+      "target": "core_enemigos_goblin_jaleador"
     },
     {
       "relation": "contains",
@@ -177849,9 +177849,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L745",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_goblin_saqueador",
-      "confidence_score": 1.0
+      "target": "core_enemigos_goblin_saqueador"
     },
     {
       "relation": "contains",
@@ -177859,9 +177859,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L887",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_guardia_draconido",
-      "confidence_score": 1.0
+      "target": "core_enemigos_guardia_draconido"
     },
     {
       "relation": "contains",
@@ -177919,9 +177919,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L854",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_incubo",
-      "confidence_score": 1.0
+      "target": "core_enemigos_incubo"
     },
     {
       "relation": "contains",
@@ -178019,9 +178019,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L916",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_mimico_cofre",
-      "confidence_score": 1.0
+      "target": "core_enemigos_mimico_cofre"
     },
     {
       "relation": "contains",
@@ -178029,9 +178029,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L908",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_mimico_puerta",
-      "confidence_score": 1.0
+      "target": "core_enemigos_mimico_puerta"
     },
     {
       "relation": "contains",
@@ -178039,9 +178039,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L902",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_mimico_silla",
-      "confidence_score": 1.0
+      "target": "core_enemigos_mimico_silla"
     },
     {
       "relation": "contains",
@@ -178129,9 +178129,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L765",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_rata_alcantarilla",
-      "confidence_score": 1.0
+      "target": "core_enemigos_rata_alcantarilla"
     },
     {
       "relation": "contains",
@@ -178139,9 +178139,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L776",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_rata_gigante",
-      "confidence_score": 1.0
+      "target": "core_enemigos_rata_gigante"
     },
     {
       "relation": "contains",
@@ -178179,9 +178179,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L1102",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_resolvervariantes",
-      "confidence_score": 1.0
+      "target": "core_enemigos_resolvervariantes"
     },
     {
       "relation": "contains",
@@ -178209,9 +178209,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L852",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_seducir",
-      "confidence_score": 1.0
+      "target": "core_enemigos_seducir"
     },
     {
       "relation": "contains",
@@ -178229,9 +178229,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L864",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_sucubo",
-      "confidence_score": 1.0
+      "target": "core_enemigos_sucubo"
     },
     {
       "relation": "contains",
@@ -178249,9 +178249,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L743",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_vitorear",
-      "confidence_score": 1.0
+      "target": "core_enemigos_vitorear"
     },
     {
       "relation": "contains",
@@ -178607,9 +178607,9 @@
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_gallery_catalogue",
-      "target": "core_enemigos_enemigosrelacionados",
-      "confidence_score": 1.0
+      "target": "core_enemigos_enemigosrelacionados"
     },
     {
       "relation": "contains",
@@ -192268,9 +192268,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L878",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_chains_strandshapes",
-      "confidence_score": 1.0
+      "target": "fx_chains_strandshapes"
     },
     {
       "relation": "imports",
@@ -195256,9 +195256,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1935",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_adv",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_adv"
     },
     {
       "relation": "contains",
@@ -195266,9 +195266,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1936",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_adventurer",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_adventurer"
     },
     {
       "relation": "contains",
@@ -195486,9 +195486,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1262",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_dragonbornguard",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_dragonbornguard"
     },
     {
       "relation": "contains",
@@ -195566,9 +195566,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1173",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_fireelemental",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_fireelemental"
     },
     {
       "relation": "contains",
@@ -195616,9 +195616,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L59",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_headdraw",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_headdraw"
     },
     {
       "relation": "contains",
@@ -195686,9 +195686,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1278",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_mimic",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_mimic"
     },
     {
       "relation": "contains",
@@ -195756,9 +195756,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L862",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_rodent",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_rodent"
     },
     {
       "relation": "contains",
@@ -195786,9 +195786,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_enemy_rigs_skullgear",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_skullgear"
     },
     {
       "relation": "contains",
@@ -195857,9 +195857,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_mimic_rigs",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs"
     },
     {
       "relation": "imports",
@@ -195868,9 +195868,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_mimic_rigs_mimicchair",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicchair"
     },
     {
       "relation": "imports",
@@ -195879,9 +195879,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_mimic_rigs_mimicchest",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicchest"
     },
     {
       "relation": "imports",
@@ -195890,9 +195890,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_mimic_rigs_mimicdoor",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicdoor"
     },
     {
       "relation": "imports",
@@ -195901,9 +195901,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs",
-      "target": "fx_mimic_rigs_rigdraft",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_rigdraft"
     },
     {
       "relation": "imports_from",
@@ -196242,9 +196242,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1174",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_enemy_rigs_phaseof",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_phaseof"
     },
     {
       "relation": "calls",
@@ -196253,9 +196253,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1278",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_mimic",
-      "target": "fx_enemy_rigs_phaseof",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_phaseof"
     },
     {
       "relation": "calls",
@@ -196385,9 +196385,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_enemy_rigs_finish",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_finish"
     },
     {
       "relation": "calls",
@@ -196418,9 +196418,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1278",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_mimic",
-      "target": "fx_enemy_rigs_finish",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_finish"
     },
     {
       "relation": "calls",
@@ -196440,9 +196440,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L868",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_enemy_rigs_finish",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_finish"
     },
     {
       "relation": "calls",
@@ -196660,9 +196660,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L584",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_bipedopts",
-      "target": "fx_puppet_shape",
-      "confidence_score": 1.0
+      "target": "fx_puppet_shape"
     },
     {
       "relation": "calls",
@@ -196671,9 +196671,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1937",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_adventurer",
-      "target": "fx_enemy_rigs_biped",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_biped"
     },
     {
       "relation": "calls",
@@ -196737,9 +196737,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1263",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_dragonbornguard",
-      "target": "fx_enemy_rigs_biped",
-      "confidence_score": 1.0
+      "target": "fx_enemy_rigs_biped"
     },
     {
       "relation": "calls",
@@ -196935,9 +196935,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L886",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "calls",
@@ -196946,9 +196946,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L879",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "calls",
@@ -196957,9 +196957,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L879",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -196968,9 +196968,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L881",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_rodent",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -197276,9 +197276,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1240",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "calls",
@@ -197287,9 +197287,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1239",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "calls",
@@ -197298,9 +197298,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1192",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -197309,9 +197309,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1177",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -197320,9 +197320,9 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1247",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_enemy_rigs_fireelemental",
-      "target": "fx_puppet_sliteye",
-      "confidence_score": 1.0
+      "target": "fx_puppet_sliteye"
     },
     {
       "relation": "references",
@@ -202379,9 +202379,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L101",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_breathe",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_breathe"
     },
     {
       "relation": "contains",
@@ -202389,9 +202389,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L97",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_eyesshut",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_eyesshut"
     },
     {
       "relation": "contains",
@@ -202399,9 +202399,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L164",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_fang",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_fang"
     },
     {
       "relation": "contains",
@@ -202409,9 +202409,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_fangx",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_fangx"
     },
     {
       "relation": "contains",
@@ -202419,9 +202419,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_key",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_key"
     },
     {
       "relation": "contains",
@@ -202429,9 +202429,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_mawstate",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mawstate"
     },
     {
       "relation": "contains",
@@ -202439,9 +202439,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L276",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_mimicchair",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicchair"
     },
     {
       "relation": "contains",
@@ -202449,9 +202449,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L191",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_mimicchest",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicchest"
     },
     {
       "relation": "contains",
@@ -202459,9 +202459,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L367",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_mimicdoor",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicdoor"
     },
     {
       "relation": "contains",
@@ -202469,9 +202469,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L171",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_mimicrig",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicrig"
     },
     {
       "relation": "contains",
@@ -202479,9 +202479,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L132",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_posetongue",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_posetongue"
     },
     {
       "relation": "contains",
@@ -202489,9 +202489,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_pt",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_pt"
     },
     {
       "relation": "contains",
@@ -202499,9 +202499,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_r2",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_r2"
     },
     {
       "relation": "contains",
@@ -202509,9 +202509,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_rigdraft",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_rigdraft"
     },
     {
       "relation": "contains",
@@ -202519,9 +202519,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_shake",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_shake"
     },
     {
       "relation": "contains",
@@ -202529,9 +202529,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_throat",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_throat"
     },
     {
       "relation": "contains",
@@ -202539,9 +202539,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_tongue",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tongue"
     },
     {
       "relation": "contains",
@@ -202549,9 +202549,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_tonguepivots",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tonguepivots"
     },
     {
       "relation": "contains",
@@ -202559,9 +202559,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L119",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_tongueshapes",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tongueshapes"
     },
     {
       "relation": "contains",
@@ -202569,9 +202569,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_mimic_rigs_track",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_track"
     },
     {
       "relation": "imports_from",
@@ -202580,9 +202580,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_motion",
-      "confidence_score": 1.0
+      "target": "fx_motion"
     },
     {
       "relation": "imports",
@@ -202591,9 +202591,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_motion_ease",
-      "confidence_score": 1.0
+      "target": "fx_motion_ease"
     },
     {
       "relation": "imports_from",
@@ -202602,9 +202602,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet",
-      "confidence_score": 1.0
+      "target": "fx_puppet"
     },
     {
       "relation": "imports",
@@ -202613,9 +202613,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_actionprogress",
-      "confidence_score": 1.0
+      "target": "fx_puppet_actionprogress"
     },
     {
       "relation": "imports",
@@ -202624,9 +202624,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_boneid",
-      "confidence_score": 1.0
+      "target": "fx_puppet_boneid"
     },
     {
       "relation": "imports",
@@ -202635,9 +202635,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_c",
-      "confidence_score": 1.0
+      "target": "fx_puppet_c"
     },
     {
       "relation": "imports",
@@ -202646,9 +202646,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_chainbone",
-      "confidence_score": 1.0
+      "target": "fx_puppet_chainbone"
     },
     {
       "relation": "imports",
@@ -202657,9 +202657,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_e",
-      "confidence_score": 1.0
+      "target": "fx_puppet_e"
     },
     {
       "relation": "imports",
@@ -202668,9 +202668,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "imports",
@@ -202679,9 +202679,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "imports",
@@ -202690,9 +202690,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_pose",
-      "confidence_score": 1.0
+      "target": "fx_puppet_pose"
     },
     {
       "relation": "imports",
@@ -202701,9 +202701,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_puppetrig",
-      "confidence_score": 1.0
+      "target": "fx_puppet_puppetrig"
     },
     {
       "relation": "imports",
@@ -202712,9 +202712,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_shape",
-      "confidence_score": 1.0
+      "target": "fx_puppet_shape"
     },
     {
       "relation": "imports",
@@ -202723,9 +202723,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs",
-      "target": "fx_puppet_sliteye",
-      "confidence_score": 1.0
+      "target": "fx_puppet_sliteye"
     },
     {
       "relation": "calls",
@@ -202734,9 +202734,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_fang",
-      "target": "fx_mimic_rigs_r2",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_r2"
     },
     {
       "relation": "calls",
@@ -202745,9 +202745,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L168",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_fangx",
-      "target": "fx_mimic_rigs_r2",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_r2"
     },
     {
       "relation": "calls",
@@ -202756,9 +202756,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L57",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mawstate",
-      "target": "fx_mimic_rigs_track",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_track"
     },
     {
       "relation": "calls",
@@ -202778,9 +202778,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L108",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_tongue",
-      "target": "fx_puppet_chainbone",
-      "confidence_score": 1.0
+      "target": "fx_puppet_chainbone"
     },
     {
       "relation": "calls",
@@ -202789,9 +202789,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L326",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchair",
-      "target": "fx_mimic_rigs_tongueshapes",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tongueshapes"
     },
     {
       "relation": "calls",
@@ -202800,9 +202800,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L239",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchest",
-      "target": "fx_mimic_rigs_tongueshapes",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tongueshapes"
     },
     {
       "relation": "calls",
@@ -202811,9 +202811,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L435",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicdoor",
-      "target": "fx_mimic_rigs_tongueshapes",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tongueshapes"
     },
     {
       "relation": "calls",
@@ -202822,9 +202822,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L122",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_tongueshapes",
-      "target": "fx_puppet_l",
-      "confidence_score": 1.0
+      "target": "fx_puppet_l"
     },
     {
       "relation": "calls",
@@ -202833,9 +202833,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L126",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_tongueshapes",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -202844,9 +202844,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L291",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchair",
-      "target": "fx_mimic_rigs_tonguepivots",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tonguepivots"
     },
     {
       "relation": "calls",
@@ -202855,9 +202855,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L209",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchest",
-      "target": "fx_mimic_rigs_tonguepivots",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tonguepivots"
     },
     {
       "relation": "calls",
@@ -202866,9 +202866,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L390",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicdoor",
-      "target": "fx_mimic_rigs_tonguepivots",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_tonguepivots"
     },
     {
       "relation": "calls",
@@ -202877,9 +202877,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L325",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchair",
-      "target": "fx_mimic_rigs_throat",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_throat"
     },
     {
       "relation": "calls",
@@ -202888,9 +202888,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchest",
-      "target": "fx_mimic_rigs_throat",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_throat"
     },
     {
       "relation": "calls",
@@ -202899,9 +202899,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L157",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_throat",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -202910,9 +202910,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L165",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_fang",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -202921,9 +202921,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L328",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchair",
-      "target": "fx_mimic_rigs_fang",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_fang"
     },
     {
       "relation": "calls",
@@ -202932,9 +202932,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L241",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchest",
-      "target": "fx_mimic_rigs_fang",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_fang"
     },
     {
       "relation": "calls",
@@ -202943,9 +202943,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L168",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_fangx",
-      "target": "fx_puppet_p",
-      "confidence_score": 1.0
+      "target": "fx_puppet_p"
     },
     {
       "relation": "calls",
@@ -202954,9 +202954,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L285",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchair",
-      "target": "fx_mimic_rigs_mimicrig",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicrig"
     },
     {
       "relation": "calls",
@@ -202965,9 +202965,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L203",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicchest",
-      "target": "fx_mimic_rigs_mimicrig",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicrig"
     },
     {
       "relation": "calls",
@@ -202976,9 +202976,9 @@
       "source_file": "src/fx/mimic-rigs.ts",
       "source_location": "L383",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_mimic_rigs_mimicdoor",
-      "target": "fx_mimic_rigs_mimicrig",
-      "confidence_score": 1.0
+      "target": "fx_mimic_rigs_mimicrig"
     },
     {
       "relation": "calls",
@@ -229748,5 +229748,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "d92e692f43aae00a2722e5d161167611ddb1373a"
+  "built_at_commit": "3548aedd3804fd77af1814c0a61379a026bcec4e"
 }

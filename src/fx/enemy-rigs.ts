@@ -1973,15 +1973,29 @@ export const ENEMY_RIGS: Record<string, PuppetRig> = {
   'demonio-menor': biped('demonio-menor', { build: 'hulking', head: 'demon', weapon: 'claws', palette: { skin: '#7a2a22', body: '#7a2a22', legs: '#5a1e1a', boots: '#2a1210', horn: '#2a1e1a', wing: '#3a1412', eyeGlow: '#ffb347' }, arms: 'skin', wings: true, tail: true, hunch: 6 }),
   'inquisidor-oscuro': biped('inquisidor-oscuro', { build: 'normal', head: 'capirote', weapon: 'sword', offhand: 'lantern', palette: { hood: '#1e1a1e', body: '#2a2226', armor: '#4a4448', legs: '#1e1a1e', cloak: '#3a1418', magic: '#ffd07a', eyeGlow: '#ffd07a' }, armor: true, cloak: true, belt: true }),
   // Act II · Templo Oscuro: incubus and succubus (elegant, menacing seducers)
+  // barely dressed fiends: bare skin, leather underwear; he wears a very thin leather harness
   incubo: biped('incubo', {
-    build: 'normal', head: 'fiend', headOpts: { beard: true }, weapon: 'claws', wings: true, tail: true, cloak: true, belt: true,
-    palette: { skin: '#8a5a7a', hair: '#1a1020', horn: '#2a1a24', body: '#2a1a2e', legs: '#1e1424', boots: '#140c14', cloak: '#3a0e2a', wing: '#3a1030', belt: '#3a2a30', teeth: '#e8dcc8', gold: '#c9a040', magic: '#e070ff', eyeGlow: '#e070ff' },
-    torsoDetail: [L('torso', 'gold', 52, 78, 59, 88, 0.9), L('torso', 'gold', 66, 78, 59, 88, 0.9), C('torso', 'magic', 59, 88.5, 1.3)],
+    build: 'normal', head: 'fiend', headOpts: { beard: true }, weapon: 'claws', wings: true, tail: true, arms: 'skin',
+    palette: { skin: '#8a5a7a', hair: '#1a1020', horn: '#2a1a24', body: '#8a5a7a', legs: '#8a5a7a', boots: '#1e1214', leather: '#2a1418', wing: '#3a1030', teeth: '#e8dcc8', gold: '#c9a040', magic: '#e070ff', eyeGlow: '#e070ff' },
+    torsoDetail: [
+      // harness: two thin straps from the shoulders to a ring, one down to the waist band
+      L('torso', 'leather', 52, 77, 59, 87, 0.9), L('torso', 'leather', 65.5, 77, 59, 87, 0.9), L('torso', 'leather', 59, 87, 59, 97, 0.9),
+      L('torso', 'leather', 51.5, 97.5, 64.5, 97.5, 1.1), C('torso', 'gold', 59, 87, 1.2),
+      // leather briefs
+      P('torso', 'leather', [[51, 98], [65, 98], [63.5, 103.5], [59, 106], [54.5, 103.5]]),
+    ],
   }),
   sucubo: biped('sucubo', {
-    build: 'thin', head: 'fiend', headOpts: { longHair: true }, weapon: 'talons', wings: true, tail: true, robe: true, arms: 'skin',
-    palette: { skin: '#b07a94', hair: '#2a0e1e', horn: '#1e1218', robe: '#3a0e24', body: '#3a0e24', boots: '#1a0610', wing: '#4a1030', teeth: '#f0e4d8', gold: '#c9a040', magic: '#ff6ab0', eyeGlow: '#ff6ab0' },
-    torsoDetail: [L('torso', 'gold', 53.5, 79, 65, 79, 0.8), C('torso', 'magic', 59.5, 81, 1.2), L('torso', 'gold', 52, 97, 66, 95, 1.2)],
+    build: 'thin', head: 'fiend', headOpts: { longHair: true }, weapon: 'talons', wings: true, tail: true, arms: 'skin',
+    palette: { skin: '#b07a94', hair: '#2a0e1e', horn: '#1e1218', body: '#b07a94', legs: '#b07a94', boots: '#1a0610', leather: '#2a0e18', wing: '#4a1030', teeth: '#f0e4d8', gold: '#c9a040', magic: '#ff6ab0', eyeGlow: '#ff6ab0' },
+    torsoDetail: [
+      // leather band across the chest on thin shoulder straps
+      L('torso', 'leather', 53, 77, 53, 80.5, 0.8), L('torso', 'leather', 63.5, 77, 63.5, 80.5, 0.8),
+      P('torso', 'leather', [[51.5, 80], [65, 80], [64.5, 85], [52, 85]]), C('torso', 'magic', 58.5, 82.5, 1),
+      // leather briefs and a thin gold chain at the hips
+      P('torso', 'leather', [[53, 97.5], [63, 97.5], [62, 102.5], [58, 105], [54, 102.5]]),
+      L('torso', 'gold', 53, 99, 63, 99, 0.6),
+    ],
   }),
   // Act I · Asentamiento Ogro: the goblin horde (raiders and war-criers)
   'goblin-saqueador': biped('goblin-saqueador', {
