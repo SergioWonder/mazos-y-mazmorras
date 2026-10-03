@@ -743,7 +743,7 @@ export const CONTEMPLADOR: EnemigoDef = {
 const vitorear = (nombre: string): Movimiento => ({ nombre, intencion: 'mejora', fuerzaAliados: 1 });
 
 export const GOBLIN_SAQUEADOR: EnemigoDef = {
-  id: 'goblin-saqueador', nombre: 'Goblin Saqueador', arte: '👺', pv: [19, 22], escala: 0.9,
+  id: 'goblin-saqueador', nombre: 'Goblin Saqueador', arte: '👺', pv: [22, 26], escala: 0.9,
   rasgo: {
     nombre: 'Horda Bulliciosa',
     texto: 'Sueltos no valen nada, juntos son una plaga: por turnos, mientras dos atacan, los otros dos jalean a toda la horda y les dan Fuerza.',
@@ -752,7 +752,7 @@ export const GOBLIN_SAQUEADOR: EnemigoDef = {
 };
 
 export const GOBLIN_JALEADOR: EnemigoDef = {
-  id: 'goblin-jaleador', nombre: 'Goblin Jaleador', arte: '📯', pv: [19, 22], escala: 0.9,
+  id: 'goblin-jaleador', nombre: 'Goblin Jaleador', arte: '📯', pv: [22, 26], escala: 0.9,
   rasgo: {
     nombre: 'Tambor de Guerra',
     texto: 'Aporrea su tambor para enardecer a la horda: cuando no ataca, da Fuerza a todos los goblins.',
@@ -763,7 +763,7 @@ export const GOBLIN_JALEADOR: EnemigoDef = {
 // Act I · Guarida de los Contrabandistas — the rat swarm: their bites poison you and
 // gnaw harder the more poison you already carry.
 export const RATA_ALCANTARILLA: EnemigoDef = {
-  id: 'rata-alcantarilla', nombre: 'Rata de Alcantarilla', arte: '🐀', pv: [14, 16], escala: 0.75,
+  id: 'rata-alcantarilla', nombre: 'Rata de Alcantarilla', arte: '🐀', pv: [17, 19], escala: 0.75,
   rasgo: {
     nombre: 'Peste del Enjambre',
     texto: 'Sus mordiscos te envenenan, y cuanto más Veneno llevas encima, más hondo roen: su Roer suma tu Veneno al daño.',
@@ -774,7 +774,7 @@ export const RATA_ALCANTARILLA: EnemigoDef = {
 };
 
 export const RATA_GIGANTE: EnemigoDef = {
-  id: 'rata-gigante', nombre: 'Rata Gigante', arte: '🐀', pv: [34, 38], escala: 1,
+  id: 'rata-gigante', nombre: 'Rata Gigante', arte: '🐀', pv: [40, 44], escala: 1,
   rasgo: {
     nombre: 'Reina de la Cloaca',
     texto: 'La madre del enjambre: su mordisco te envenena más que el de sus crías y su Desgarro se ceba con todo el Veneno que llevas.',
@@ -790,50 +790,50 @@ export const RATA_GIGANTE: EnemigoDef = {
 // fills three slots with three different classes out of the nine.
 const AVENTUREROS: EnemigoDef[] = [
   {
-    id: 'aventurero-guerrero', nombre: 'Guerrero Esquelético', arte: '⚔️', pv: [40, 44], escala: 1.05,
+    id: 'aventurero-guerrero', nombre: 'Guerrero Esquelético', arte: '⚔️', pv: [50, 55], escala: 1.05,
     rasgo: { nombre: 'Oleada de Acción', texto: 'Un veterano que nunca se cansa: cada uno de sus ataques golpea dos veces, y de vez en cuando recupera el aliento.' },
     ia: (turno) => (turno % 3 === 2 ? { nombre: 'Segundo Aliento', intencion: 'defensa', bloqueo: 10, cura: 6 } : atk('Acción Súbita', 6, 2)),
   },
   {
-    id: 'aventurero-mago', nombre: 'Mago Esquelético', arte: '🪄', pv: [34, 38], escala: 1,
+    id: 'aventurero-mago', nombre: 'Mago Esquelético', arte: '🪄', pv: [43, 48], escala: 1,
     rasgo: { nombre: 'Proyectil Mágico', texto: 'Sus proyectiles nunca fallan: atraviesan tu bloqueo sin romperlo.' },
     ia: (turno) => (turno % 3 === 2 ? atk('Bola de Fuego', 14) : { nombre: 'Proyectil Mágico', intencion: 'ataque', dano: 3, veces: 3, perforante: true }),
   },
   {
-    id: 'aventurero-clerigo', nombre: 'Clérigo Esquelético', arte: '✝️', pv: [38, 42], escala: 1,
+    id: 'aventurero-clerigo', nombre: 'Clérigo Esquelético', arte: '✝️', pv: [48, 53], escala: 1,
     rasgo: { nombre: 'Palabra Sanadora', texto: 'Aún reza a un dios que lo abandonó: cada dos turnos cura a todos sus compañeros.' },
     ia: (turno) => (turno % 2 === 1 ? { nombre: 'Palabra Sanadora', intencion: 'mejora', curaAliados: 8 } : atk('Llama Sagrada', 9)),
   },
   {
-    id: 'aventurero-picaro', nombre: 'Pícaro Esquelético', arte: '🗡️', pv: [36, 40], escala: 1,
+    id: 'aventurero-picaro', nombre: 'Pícaro Esquelético', arte: '🗡️', pv: [45, 50], escala: 1,
     rasgo: { nombre: 'Hoja Untada', texto: 'Sus dagas siguen untadas después de tantos siglos: casi cada golpe te envenena.' },
     ia: (turno, rng) => (rng() < 0.3 ? def('Esconderse', 9) : atk('Ataque Furtivo', 6, 1, [['veneno', 2, true]])),
   },
   {
-    id: 'aventurero-barbaro', nombre: 'Bárbaro Esquelético', arte: '🪓', pv: [44, 48], escala: 1.1,
+    id: 'aventurero-barbaro', nombre: 'Bárbaro Esquelético', arte: '🪓', pv: [55, 60], escala: 1.1,
     alMorirAliado: { efectos: [['fuerza', 3]] },
     rasgo: { nombre: 'Furia del Caído', texto: 'Cada vez que cae uno de sus compañeros, su rabia crece: gana 3 de Fuerza.' },
     ia: (turno, rng) => (rng() < 0.35 ? atk('Golpe Temerario', 15) : atk('Hachazo', 10)),
   },
   {
-    id: 'aventurero-paladin', nombre: 'Paladín Esquelético', arte: '🛡️', pv: [42, 46], escala: 1.05,
+    id: 'aventurero-paladin', nombre: 'Paladín Esquelético', arte: '🛡️', pv: [53, 58], escala: 1.05,
     rasgo: { nombre: 'Aura de Protección', texto: 'Su juramento aún protege a los suyos: cada pocos turnos da bloqueo a todo el grupo.' },
     ia: (turno) => (turno % 3 === 0 ? { nombre: 'Aura de Protección', intencion: 'defensa', bloqueoAliados: 6 } : atk('Castigo Divino', 9, 1, [['vulnerable', 1, true]])),
   },
   {
-    id: 'aventurero-explorador', nombre: 'Explorador Esquelético', arte: '🏹', pv: [36, 40], escala: 1,
+    id: 'aventurero-explorador', nombre: 'Explorador Esquelético', arte: '🏹', pv: [45, 50], escala: 1,
     rasgo: { nombre: 'Marca del Cazador', texto: 'Te marca como presa: su Marca te deja Vulnerable para que el resto del grupo te remate.' },
     ia: (turno) => (turno % 2 === 0 ? atk('Marca del Cazador', 6, 1, [['vulnerable', 2, true]]) : atk('Lluvia de Flechas', 3, 3)),
   },
   {
-    id: 'aventurero-brujo', nombre: 'Brujo Esquelético', arte: '📕', pv: [36, 40], escala: 1,
+    id: 'aventurero-brujo', nombre: 'Brujo Esquelético', arte: '📕', pv: [45, 50], escala: 1,
     rasgo: { nombre: 'Maleficio', texto: 'Su pacto sobrevivió a la muerte: cada pocos turnos te echa un maleficio que mete unos Grilletes en tu descarte.' },
     ia: (turno) => (turno % 3 === 1
       ? { nombre: 'Maleficio', intencion: 'perjuicio', efectos: [['debil', 1, true]], maldicion: { id: 'grilletes', destino: 'descarte' } }
       : atk('Explosión Sobrenatural', 9)),
   },
   {
-    id: 'aventurero-bardo', nombre: 'Bardo Esquelético', arte: '🪕', pv: [34, 38], escala: 1,
+    id: 'aventurero-bardo', nombre: 'Bardo Esquelético', arte: '🪕', pv: [43, 48], escala: 1,
     rasgo: { nombre: 'Inspiración Bárdica', texto: 'Su laúd desafinado aún inspira a los suyos: cada dos turnos da Fuerza a todo el grupo.' },
     ia: (turno) => (turno % 2 === 0 ? { nombre: 'Balada Macabra', intencion: 'mejora', fuerzaAliados: 2 } : atk('Burla Cruel', 7, 1, [['debil', 1, true]])),
   },
@@ -852,7 +852,7 @@ export const AVENTURERO_ESQUELETICO: EnemigoDef = {
 const seducir = (nombre: string): Movimiento => ({ nombre, intencion: 'perjuicio', efectos: [['vulnerable', 2, true], ['debil', 1, true]] });
 
 export const INCUBO: EnemigoDef = {
-  id: 'incubo', nombre: 'Íncubo', arte: '😈', pv: [50, 54], escala: 1.35,
+  id: 'incubo', nombre: 'Íncubo', arte: '😈', pv: [63, 68], escala: 1.35,
   alMorirAliado: { efectos: [['fuerza', 4]] },
   rasgo: {
     nombre: 'Danza Seductora',
@@ -862,7 +862,7 @@ export const INCUBO: EnemigoDef = {
 };
 
 export const SUCUBO: EnemigoDef = {
-  id: 'sucubo', nombre: 'Súcubo', arte: '😈', pv: [50, 54], escala: 1.3,
+  id: 'sucubo', nombre: 'Súcubo', arte: '😈', pv: [63, 68], escala: 1.3,
   alMorirAliado: { efectos: [['fuerza', 4]] },
   rasgo: {
     nombre: 'Abrazo Letal',
@@ -875,7 +875,7 @@ export const SUCUBO: EnemigoDef = {
 // that falls frees a fire elemental bound to the others, which cannot die while any
 // guard still stands.
 export const ELEMENTAL_FUEGO: EnemigoDef = {
-  id: 'elemental-fuego', nombre: 'Elemental de Fuego', arte: '🔥', pv: [22, 22], escala: 1.1,
+  id: 'elemental-fuego', nombre: 'Elemental de Fuego', arte: '🔥', pv: [29, 29], escala: 1.1,
   inmortalMientras: ['guardia-draconido'],
   rasgo: {
     nombre: 'Llama Atada',
@@ -885,7 +885,7 @@ export const ELEMENTAL_FUEGO: EnemigoDef = {
 };
 
 export const GUARDIA_DRACONIDO: EnemigoDef = {
-  id: 'guardia-draconido', nombre: 'Guardia Dracónido', arte: '🐲', pv: [36, 40], escala: 1.15,
+  id: 'guardia-draconido', nombre: 'Guardia Dracónido', arte: '🐲', pv: [47, 52], escala: 1.15,
   invocaAlMorir: ELEMENTAL_FUEGO,
   rasgo: {
     nombre: 'Escudo del Clan',
@@ -900,13 +900,13 @@ export const GUARDIA_DRACONIDO: EnemigoDef = {
 // Act III · Laberinto del Contemplador — the mimic: a chest that sleeps 3 turns or until
 // hit; then the chair and the door of the room turn out to be mimics too, and strike.
 export const MIMICO_SILLA: EnemigoDef = {
-  id: 'mimico-silla', nombre: 'Silla Mímica', arte: '🪑', pv: [18, 20], escala: 0.9,
+  id: 'mimico-silla', nombre: 'Silla Mímica', arte: '🪑', pv: [24, 26], escala: 0.9,
   rasgo: { nombre: 'Asiento Traicionero', texto: 'Nadie sospecha de una silla. Ataca por sorpresa en cuanto el cofre despierta.' },
   ia: (turno, rng) => (turno === 0 ? atk('Emboscada', 6) : rng() < 0.5 ? atk('Patas Astilladas', 5, 2) : atk('Mordisco del Respaldo', 9)),
 };
 
 export const MIMICO_PUERTA: EnemigoDef = {
-  id: 'mimico-puerta', nombre: 'Puerta Mímica', arte: '🚪', pv: [24, 28], escala: 1.15,
+  id: 'mimico-puerta', nombre: 'Puerta Mímica', arte: '🚪', pv: [32, 37], escala: 1.15,
   rasgo: { nombre: 'Portazo', texto: 'La salida también tenía dientes. Ataca por sorpresa en cuanto el cofre despierta.' },
   ia: (turno, rng) => (turno === 0 ? atk('Portazo Sorpresa', 8) : rng() < 0.35 ? def('Cerrojo', 12) : atk('Portazo', 13)),
 };
@@ -914,7 +914,7 @@ export const MIMICO_PUERTA: EnemigoDef = {
 const DORMIDO: Movimiento = { nombre: 'Dormido 💤', intencion: 'desconocido' };
 
 export const MIMICO_COFRE: EnemigoDef = {
-  id: 'mimico-cofre', nombre: 'Cofre Sospechoso', arte: '🧰', pv: [66, 72], escala: 1.15,
+  id: 'mimico-cofre', nombre: 'Cofre Sospechoso', arte: '🧰', pv: [86, 94], escala: 1.15,
   durmiente: { turnos: 3, despertar: [MIMICO_SILLA, MIMICO_PUERTA] },
   rasgo: {
     nombre: 'Cofre Dormido',

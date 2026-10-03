@@ -9521,7 +9521,7 @@ console.log('\n👥 Élites de grupo');
   // Act I · Goblin horde: 4 weak goblins that take turns attacking and cheering
   {
     const horda = ACTOS[0][0].elites[2];
-    check(horda.length === 4 && horda.every((d) => d.pv[1] <= 25), 'Horda Goblin: 4 goblins débiles (cada uno, poca vida)');
+    check(horda.length === 4 && horda.every((d) => d.pv[1] <= 30), 'Horda Goblin: 4 goblins débiles (cada uno, poca vida)');
     for (const turno of [0, 1, 2]) {
       const movs = horda.map((d) => d.ia(turno, () => 0.5, {} as EnemigoCombate, []));
       const atacan = movs.filter((m) => m.intencion === 'ataque').length;
@@ -9702,6 +9702,24 @@ console.log('\n👁️ Intenciones ocultas durante el turno enemigo');
   const fs = await import('node:fs');
   const uiSrc = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   check(/combate\.intencionOculta\(e\)/.test(uiSrc), 'la pantalla de combate respeta las intenciones ocultas');
+}
+
+// ── Group elites are sturdier, above all in Acts II and III ──────────────────
+console.log('\n💪 Vida de los élites de grupo');
+{
+  // average HP of each group (variants and what wakes or is freed count too) before this change
+  const antes: Record<string, number> = {
+    'goblin-saqueador': 20.5, 'goblin-jaleador': 20.5, 'rata-alcantarilla': 15, 'rata-gigante': 36,
+    'aventurero-guerrero': 42, 'aventurero-mago': 36, 'aventurero-clerigo': 40, 'aventurero-picaro': 38, 'aventurero-barbaro': 46,
+    'aventurero-paladin': 44, 'aventurero-explorador': 38, 'aventurero-brujo': 38, 'aventurero-bardo': 36,
+    incubo: 52, sucubo: 52, 'guardia-draconido': 38, 'elemental-fuego': 22, 'mimico-cofre': 69, 'mimico-silla': 19, 'mimico-puerta': 26,
+  };
+  const subida: [number, number][] = [[0, 1.12], [1, 1.2], [2, 1.25]];
+  for (const [acto, factor] of subida) {
+    const defs = ACTOS[acto].flatMap((c) => ENEMIGOS.enemigosRelacionados ? c.elites[2].flatMap((d) => ENEMIGOS.enemigosRelacionados(d)) : []);
+    const flojos = [...new Set(defs)].filter((d) => (d.pv[0] + d.pv[1]) / 2 < antes[d.id] * factor);
+    check(flojos.length === 0, `Acto ${acto + 1}: los élites de grupo tienen al menos un ${Math.round((factor - 1) * 100)} % más de vida (flojos: ${flojos.map((d) => d.id).join(', ') || '—'})`);
+  }
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

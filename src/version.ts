@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.9.1';
+export const VERSION = '8.9.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.9.2',
+    fecha: '2026-10-03',
+    cambios: [
+      '💪 Los élites de grupo aguantan más: +15 % de vida en el Acto I, +25 % en el II (aventureros esqueléticos, íncubo y súcubo) y +30 % en el III (dracónidos, elementales y mímicos).',
+    ],
+  },
   {
     version: '8.9.1',
     fecha: '2026-10-03',
