@@ -8402,7 +8402,7 @@ console.log('\n🔨 Paladín');
     check(danos.join() === '18,18,18', `Castigo Divino + ataque de área: el daño extra a cada enemigo (${danos.join('/')})`);
   }
   {
-    // the upgrade: 11 plus 2 per Fervor (the upgrade raises the base, not the scaling)
+    // the upgrade: 12 plus 2 per Fervor (the upgrade raises the base, not the scaling)
     const { comb } = await montarP();
     const e = comb.enemigos[0];
     comb.jugador.estados.fervor = 2;
@@ -8412,7 +8412,7 @@ console.log('\n🔨 Paladín');
     await comb.jugarCarta(div);
     const antes = e.pv;
     await jugar(comb, 'golpe');
-    check(antes - e.pv === 6 + 11 + 2 * 2, `Castigo Divino+ con 2 de Fervor: 6 + 11 + 2×2 = 21 (${antes - e.pv})`);
+    check(antes - e.pv === 6 + 12 + 2 * 2, `Castigo Divino+ con 2 de Fervor: 6 + 12 + 2×2 = 22 (${antes - e.pv})`);
   }
   {
     const { comb } = await montarP([dummy(), dummy()]);
@@ -8495,7 +8495,7 @@ console.log('\n🔨 Paladín');
     comb.jugador.bloqueo = 0;
     comb.jugador.mano.push(mas);
     await comb.jugarCarta(mas);
-    check(comb.jugador.bloqueo === 7 + 2 * 3, `Escudo de la Fe+: 7 más 2 por Fervor gastado (${comb.jugador.bloqueo})`);
+    check(comb.jugador.bloqueo === 8 + 2 * 3, `Escudo de la Fe+: 8 más 2 por Fervor gastado (${comb.jugador.bloqueo})`);
     // Castigo Abrasador scales +2 per Fervor too, upgraded or not
     const { comb: c2 } = await montarP([dummy(), dummy()]);
     c2.jugador.estados.fervor = 3;
@@ -8506,7 +8506,7 @@ console.log('\n🔨 Paladín');
     const [, otro] = c2.enemigos;
     const pvOtro = otro.pv;
     await jugar(c2, 'golpe', c2.enemigos[0]);
-    check(pvOtro - otro.pv === 9 + 2 * 3, `Castigo Abrasador+ con 3 de Fervor: 9 + 2×3 a los demás (${pvOtro - otro.pv})`);
+    check(pvOtro - otro.pv === 10 + 2 * 3, `Castigo Abrasador+ con 3 de Fervor: 10 + 2×3 a los demás (${pvOtro - otro.pv})`);
   }
   {
     const { comb } = await montarP();

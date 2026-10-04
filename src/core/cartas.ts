@@ -4215,8 +4215,8 @@ export const PALADIN: CartaDef[] = [
     valores: valorCastigo(),
     jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 2 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +2 por Fervor gastado).',
-      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 2 * f })),
+      texto: 'Castigo: tu próximo ataque inflige 12 de\ndaño más (aplica +2 por Fervor gastado).',
+      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 12 + 2 * f })),
     },
   },
   {
@@ -4233,8 +4233,8 @@ export const PALADIN: CartaDef[] = [
     valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + n[1] * fervorDe(c) }],
     jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 2 * f); },
     mejora: {
-      texto: 'Gana 7 de bloqueo (aplica +2\npor Fervor gastado).',
-      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 2 * f); },
+      texto: 'Gana 8 de bloqueo (aplica +2\npor Fervor gastado).',
+      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(8 + 2 * f); },
     },
   },
   // — Comunes —
@@ -4288,8 +4288,8 @@ export const PALADIN: CartaDef[] = [
     valores: valorCastigo(),
     jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 2 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige además\n9 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
-      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 9 + 2 * f })),
+      texto: 'Castigo: tu próximo ataque inflige además\n10 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
+      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 10 + 2 * f })),
     },
   },
   {

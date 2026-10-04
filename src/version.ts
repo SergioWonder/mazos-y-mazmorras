@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.10.1';
+export const VERSION = '8.10.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.10.2',
+    fecha: '2026-10-04',
+    cambios: [
+      '⚖️ Paladín: las mejoras de Castigo Divino, Castigo Abrasador y Escudo de la Fe suben un punto su base (12, 10 y 8).',
+    ],
+  },
   {
     version: '8.10.1',
     fecha: '2026-10-04',
