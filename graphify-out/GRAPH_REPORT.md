@@ -1,16 +1,16 @@
 # Graph Report - videogame  (2026-10-04)
 
 ## Corpus Check
-- 218 files · ~1,301,481 words
+- 218 files · ~1,301,696 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 5973 nodes · 14819 edges · 178 communities (168 shown, 10 thin omitted)
+- 5973 nodes · 14819 edges · 180 communities (168 shown, 12 thin omitted)
 - Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 714 edges (avg confidence: 0.77)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9f0b92e6`
+- Built from commit: `2d99493d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -69,10 +69,12 @@
 - [[_COMMUNITY_Community 52|Community 52]]
 - [[_COMMUNITY_Community 53|Community 53]]
 - [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 55|Community 55]]
 - [[_COMMUNITY_Community 56|Community 56]]
 - [[_COMMUNITY_Community 57|Community 57]]
 - [[_COMMUNITY_Community 58|Community 58]]
 - [[_COMMUNITY_Community 59|Community 59]]
+- [[_COMMUNITY_Community 60|Community 60]]
 - [[_COMMUNITY_Community 61|Community 61]]
 - [[_COMMUNITY_Community 62|Community 62]]
 - [[_COMMUNITY_Community 63|Community 63]]
@@ -224,7 +226,7 @@
 - **Identidad mecánica del Brujo** — readme_clase_brujo, readme_explosion_sobrenatural, readme_condena, readme_invocacion_efimera, readme_armadura_agathys, readme_oscuridad [EXTRACTED 1.00]
 - **Bucle bloqueo → daño devuelto → Condena** — readme_armadura_agathys, readme_condena, core_combate_combate_rebotaragathys, core_cartas_brujo [INFERRED 0.85]
 
-## Communities (178 total, 10 thin omitted)
+## Communities (180 total, 12 thin omitted)
 
 ### Community 0 - "Bestiario de enemigos"
 Cohesion: 0.02
@@ -287,8 +289,8 @@ Cohesion: 0.22
 Nodes (27): bool, float, background(), build_svg(), card(), d20(), defs(), dm() (+19 more)
 
 ### Community 15 - "Community 15"
-Cohesion: 0.11
-Nodes (28): blur(), clear_mask(), compose(), fbm(), forest(), from_f(), grade(), grid_texture() (+20 more)
+Cohesion: 0.12
+Nodes (26): blur(), clear_mask(), compose(), fbm(), forest(), from_f(), grade(), grid_texture() (+18 more)
 
 ### Community 16 - "Community 16"
 Cohesion: 0.18
@@ -434,6 +436,10 @@ Nodes (3): qHaciaCamara(), qNorm(), qSlerp()
 Cohesion: 0.06
 Nodes (77): arch(), bar_of(), bass_segments(), build(), cbsn_pitch(), cc_value(), chant(), chant_pitch() (+69 more)
 
+### Community 55 - "Community 55"
+Cohesion: 0.50
+Nodes (3): group(), Open a transformed group in both the ink and the wash layers (close with ungroup, ungroup()
+
 ### Community 56 - "Community 56"
 Cohesion: 0.05
 Nodes (73): abaddon(), bar_of(), build(), chant(), chord_at(), chord_pcs(), common_layers(), contour() (+65 more)
@@ -513,10 +519,6 @@ Nodes (79): BARBARO, BASICAS, BRUJO, cargaProyectil(), CARTAS_RETIRADAS, CONJURO
 ### Community 90 - "Community 90"
 Cohesion: 0.05
 Nodes (109): arch(), bar_of(), bass_at(), _bass_events(), bridge(), build(), cajon(), cc_value() (+101 more)
-
-### Community 91 - "Community 91"
-Cohesion: 0.21
-Nodes (5): group(), hexc(), Open a transformed group in both the ink and the wash layers (close with ungroup, Sketch, ungroup()
 
 ### Community 92 - "Community 92"
 Cohesion: 0.10
@@ -885,7 +887,7 @@ Nodes (64): menosParticulas(), burn(), BurnPose, burnSolo(), cardClone(), flyDis
 ## Knowledge Gaps
 - **814 isolated node(s):** `version`, `configurations`, `name`, `private`, `version` (+809 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_

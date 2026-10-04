@@ -3769,7 +3769,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L68",
       "id": "mapa_comun_map_kit_sketch_add",
-      "community": 91,
+      "community": 55,
       "norm_label": ".add()"
     },
     {
@@ -4219,7 +4219,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L897",
       "id": "mapa_comun_map_kit_group",
-      "community": 91,
+      "community": 55,
       "norm_label": "group()"
     },
     {
@@ -4228,7 +4228,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L904",
       "id": "mapa_comun_map_kit_ungroup",
-      "community": 91,
+      "community": 55,
       "norm_label": "ungroup()"
     },
     {
@@ -4345,7 +4345,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1113",
       "id": "mapa_comun_map_kit_rune",
-      "community": 15,
+      "community": 60,
       "norm_label": "rune()"
     },
     {
@@ -4516,7 +4516,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L898",
       "id": "mapa_comun_map_kit_rationale_898",
-      "community": 91,
+      "community": 55,
       "norm_label": "open a transformed group in both the ink and the wash layers (close with ungroup"
     },
     {
@@ -4570,7 +4570,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1114",
       "id": "mapa_comun_map_kit_rationale_1114",
-      "community": 15,
+      "community": 60,
       "norm_label": "a random angular rune glyph inside an s x 1.4s cell centred on (x, y)."
     },
     {
@@ -31901,7 +31901,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9422",
+      "source_location": "L9433",
       "id": "scripts_smoke_test_montarmago",
       "community": 18,
       "norm_label": "montarmago()"
@@ -31910,7 +31910,7 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9434",
+      "source_location": "L9445",
       "id": "scripts_smoke_test_jugar",
       "community": 23,
       "norm_label": "jugar()"
@@ -154833,9 +154833,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_enemigos_rasgoactual",
-      "confidence_score": 1.0
+      "target": "core_enemigos_rasgoactual"
     },
     {
       "relation": "imports",
@@ -154877,9 +154877,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate",
-      "target": "core_estadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas"
     },
     {
       "relation": "imports_from",
@@ -155597,9 +155597,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L129",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_estadisticas",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_estadisticas"
     },
     {
       "relation": "method",
@@ -155627,9 +155627,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L134",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_fuerzaenemiga",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_fuerzaenemiga"
     },
     {
       "relation": "method",
@@ -156025,9 +156025,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1894",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_terminarturno",
-      "target": "core_combate_combate_fuerzaenemiga",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_fuerzaenemiga"
     },
     {
       "relation": "calls",
@@ -158387,9 +158387,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L855",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_embrujo",
-      "confidence_score": 1.0
+      "target": "core_enemigos_embrujo"
     },
     {
       "relation": "contains",
@@ -158787,9 +158787,9 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L1151",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_enemigos",
-      "target": "core_enemigos_rasgoactual",
-      "confidence_score": 1.0
+      "target": "core_enemigos_rasgoactual"
     },
     {
       "relation": "contains",
@@ -159058,9 +159058,9 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_combate",
-      "target": "core_enemigos",
-      "confidence_score": 1.0
+      "target": "core_enemigos"
     },
     {
       "relation": "imports_from",
@@ -159319,9 +159319,9 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_combate",
-      "target": "core_enemigos_rasgoactual",
-      "confidence_score": 1.0
+      "target": "core_enemigos_rasgoactual"
     },
     {
       "relation": "contains",
@@ -159349,9 +159349,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_epitafio",
-      "confidence_score": 1.0
+      "target": "core_epitafio_epitafio"
     },
     {
       "relation": "contains",
@@ -159359,9 +159359,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L215",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_epitafiode",
-      "confidence_score": 1.0
+      "target": "core_epitafio_epitafiode"
     },
     {
       "relation": "contains",
@@ -159379,9 +159379,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L82",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_epitafios_habito",
-      "confidence_score": 1.0
+      "target": "core_epitafio_epitafios_habito"
     },
     {
       "relation": "contains",
@@ -159389,9 +159389,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L136",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_epitafios_jefe",
-      "confidence_score": 1.0
+      "target": "core_epitafio_epitafios_jefe"
     },
     {
       "relation": "contains",
@@ -159399,9 +159399,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L46",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_fuenteepitafio",
-      "confidence_score": 1.0
+      "target": "core_epitafio_fuenteepitafio"
     },
     {
       "relation": "contains",
@@ -159429,9 +159429,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L199",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_nombrecorto",
-      "confidence_score": 1.0
+      "target": "core_epitafio_nombrecorto"
     },
     {
       "relation": "contains",
@@ -159459,9 +159459,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L202",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_epitafio_rellenables",
-      "confidence_score": 1.0
+      "target": "core_epitafio_rellenables"
     },
     {
       "relation": "imports_from",
@@ -159470,9 +159470,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_estadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas"
     },
     {
       "relation": "imports",
@@ -159481,9 +159481,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "imports",
@@ -159492,9 +159492,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_estadisticas_habito",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_habito"
     },
     {
       "relation": "imports",
@@ -159503,9 +159503,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio",
-      "target": "core_estadisticas_peorhabito",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_peorhabito"
     },
     {
       "relation": "imports_from",
@@ -159536,9 +159536,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L30",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_datoscaida",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "imports",
@@ -159602,9 +159602,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L51",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_epitafio",
-      "target": "core_estadisticas_habito",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_habito"
     },
     {
       "relation": "calls",
@@ -159624,9 +159624,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L229",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_epitafiode",
-      "target": "core_epitafio_pick",
-      "confidence_score": 1.0
+      "target": "core_epitafio_pick"
     },
     {
       "relation": "calls",
@@ -159635,9 +159635,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L204",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_rellenables",
-      "target": "core_epitafio_nombrecorto",
-      "confidence_score": 1.0
+      "target": "core_epitafio_nombrecorto"
     },
     {
       "relation": "calls",
@@ -159646,9 +159646,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L218",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_epitafiode",
-      "target": "core_epitafio_rellenables",
-      "confidence_score": 1.0
+      "target": "core_epitafio_rellenables"
     },
     {
       "relation": "calls",
@@ -159657,9 +159657,9 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L239",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_epitafio_elegirepitafio",
-      "target": "core_epitafio_epitafiode",
-      "confidence_score": 1.0
+      "target": "core_epitafio_epitafiode"
     },
     {
       "relation": "calls",
@@ -159942,9 +159942,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L99",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_bloqueoobtenido",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_bloqueoobtenido"
     },
     {
       "relation": "contains",
@@ -159952,9 +159952,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L80",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_cartajugada",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_cartajugada"
     },
     {
       "relation": "contains",
@@ -159962,9 +159962,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L131",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_contextohabitos",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_contextohabitos"
     },
     {
       "relation": "contains",
@@ -159972,9 +159972,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L86",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_danoinfligido",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_danoinfligido"
     },
     {
       "relation": "contains",
@@ -159982,9 +159982,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_empezarcombate",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_empezarcombate"
     },
     {
       "relation": "contains",
@@ -159992,9 +159992,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L71",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_empezarturno",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_empezarturno"
     },
     {
       "relation": "contains",
@@ -160002,9 +160002,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L117",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_enemigoserefuerza",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_enemigoserefuerza"
     },
     {
       "relation": "contains",
@@ -160012,9 +160012,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L10",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "contains",
@@ -160022,9 +160022,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L142",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_evaluarhabitos",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_evaluarhabitos"
     },
     {
       "relation": "contains",
@@ -160032,9 +160032,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L91",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_golperecibido",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_golperecibido"
     },
     {
       "relation": "contains",
@@ -160042,9 +160042,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L128",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_habito",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_habito"
     },
     {
       "relation": "contains",
@@ -160052,9 +160052,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_habitos",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_habitos"
     },
     {
       "relation": "contains",
@@ -160062,9 +160062,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L111",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_herirse",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_herirse"
     },
     {
       "relation": "contains",
@@ -160072,9 +160072,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L52",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_normalizarestadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_normalizarestadisticas"
     },
     {
       "relation": "contains",
@@ -160082,9 +160082,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L43",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_nuevasestadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_nuevasestadisticas"
     },
     {
       "relation": "contains",
@@ -160092,9 +160092,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_origengolpe",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_origengolpe"
     },
     {
       "relation": "contains",
@@ -160102,9 +160102,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L191",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_peorhabito",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_peorhabito"
     },
     {
       "relation": "contains",
@@ -160112,9 +160112,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L104",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_perdidaporestado",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_perdidaporestado"
     },
     {
       "relation": "contains",
@@ -160122,9 +160122,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L76",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_estadisticas_terminarturno",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_terminarturno"
     },
     {
       "relation": "imports_from",
@@ -160133,9 +160133,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_types",
-      "confidence_score": 1.0
+      "target": "core_types"
     },
     {
       "relation": "imports",
@@ -160144,9 +160144,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas",
-      "target": "core_types_tipocarta",
-      "confidence_score": 1.0
+      "target": "core_types_tipocarta"
     },
     {
       "relation": "imports_from",
@@ -160155,9 +160155,9 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_guardado",
-      "target": "core_estadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas"
     },
     {
       "relation": "imports",
@@ -160166,9 +160166,9 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_guardado",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "references",
@@ -160177,9 +160177,9 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L32",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_guardado_guardado",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "imports",
@@ -160188,9 +160188,9 @@
       "source_file": "src/core/types.ts",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_types",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "references",
@@ -160199,9 +160199,9 @@
       "source_file": "src/core/types.ts",
       "source_location": "L730",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_types_estadorun",
-      "target": "core_estadisticas_estadisticasrun",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_estadisticasrun"
     },
     {
       "relation": "calls",
@@ -160210,9 +160210,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L53",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas_normalizarestadisticas",
-      "target": "core_estadisticas_nuevasestadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_nuevasestadisticas"
     },
     {
       "relation": "imports",
@@ -160221,9 +160221,9 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_guardado",
-      "target": "core_estadisticas_normalizarestadisticas",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_normalizarestadisticas"
     },
     {
       "relation": "calls",
@@ -160254,9 +160254,9 @@
       "source_file": "src/core/estadisticas.ts",
       "source_location": "L192",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_estadisticas_peorhabito",
-      "target": "core_estadisticas_evaluarhabitos",
-      "confidence_score": 1.0
+      "target": "core_estadisticas_evaluarhabitos"
     },
     {
       "relation": "contains",
@@ -201015,9 +201015,9 @@
       "source_file": "src/ui/combate.ts",
       "source_location": "L48",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_combate",
-      "target": "ui_combate_caidaheroe",
-      "confidence_score": 1.0
+      "target": "ui_combate_caidaheroe"
     },
     {
       "relation": "contains",
@@ -211392,5 +211392,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "9f0b92e6e7c92eed8bd3f91bb66e610b70fcd031"
+  "built_at_commit": "2d99493db6dcc7449c45a6861eb908af724e9449"
 }

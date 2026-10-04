@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.10.0';
+export const VERSION = '8.10.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.10.1',
+    fecha: '2026-10-04',
+    cambios: [
+      '⚖️ Paladín: Castigo Divino, Castigo Abrasador y Escudo de la Fe vuelven a +2 por Fervor gastado, mejorados o no.',
+      '🔨 Golpe Sagrado baja a 11/16 de daño y Defensa Sagrada a 8/13 de bloqueo.',
+    ],
+  },
   {
     version: '8.10.0',
     fecha: '2026-10-04',

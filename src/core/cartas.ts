@@ -4170,12 +4170,12 @@ export const GOLPE_SAGRADO: CartaDef = {
   objetivo: 'enemigo',
   familia: 'golpe',
   fx: 'martillo',
-  texto: 'Inflige 14 de daño.',
+  texto: 'Inflige 11 de daño.',
   valores: (c, n) => [{ tipo: 'ataque', indice: 0, base: n[0] + extraGolpes(c) }],
-  jugar: async (c) => { await c.atacar(c.objetivo!, 14 + extraGolpes(c), 1, 'martillo'); },
+  jugar: async (c) => { await c.atacar(c.objetivo!, 11 + extraGolpes(c), 1, 'martillo'); },
   mejora: {
-    texto: 'Inflige 20 de daño.',
-    jugar: async (c) => { await c.atacar(c.objetivo!, 20 + extraGolpes(c), 1, 'martillo'); },
+    texto: 'Inflige 16 de daño.',
+    jugar: async (c) => { await c.atacar(c.objetivo!, 16 + extraGolpes(c), 1, 'martillo'); },
   },
 };
 
@@ -4190,12 +4190,12 @@ export const DEFENSA_SAGRADA: CartaDef = {
   objetivo: 'ninguno',
   familia: 'defensa',
   fx: 'escudoSagrado',
-  texto: 'Gana 11 de bloqueo.',
+  texto: 'Gana 8 de bloqueo.',
   valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + extraDefensas(c) }],
-  jugar: async (c) => { await c.ganarBloqueo(11 + extraDefensas(c)); },
+  jugar: async (c) => { await c.ganarBloqueo(8 + extraDefensas(c)); },
   mejora: {
-    texto: 'Gana 16 de bloqueo.',
-    jugar: async (c) => { await c.ganarBloqueo(16 + extraDefensas(c)); },
+    texto: 'Gana 13 de bloqueo.',
+    jugar: async (c) => { await c.ganarBloqueo(13 + extraDefensas(c)); },
   },
 };
 
@@ -4211,12 +4211,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     castigo: true,
     fx: 'cargaDivina',
-    texto: 'Castigo: tu próximo ataque inflige 8 de\ndaño más (aplica +3 por Fervor gastado).',
+    texto: 'Castigo: tu próximo ataque inflige 8 de\ndaño más (aplica +2 por Fervor gastado).',
     valores: valorCastigo(),
-    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 3 * f })),
+    jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 8 + 2 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +4 por Fervor gastado).',
-      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 4 * f })),
+      texto: 'Castigo: tu próximo ataque inflige 11 de\ndaño más (aplica +2 por Fervor gastado).',
+      jugar: castigo('Castigo Divino', 'divino', (f) => ({ dano: 11 + 2 * f })),
     },
   },
   {
@@ -4229,12 +4229,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     fx: 'escudoSagrado',
     // spends the Fervor on defence: the other way out besides the Smites
-    texto: 'Gana 5 de bloqueo (aplica +3\npor Fervor gastado).',
+    texto: 'Gana 5 de bloqueo (aplica +2\npor Fervor gastado).',
     valores: (c, n) => [{ tipo: 'bloqueo', indice: 0, base: n[0] + n[1] * fervorDe(c) }],
-    jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 3 * f); },
+    jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(5 + 2 * f); },
     mejora: {
-      texto: 'Gana 7 de bloqueo (aplica +4\npor Fervor gastado).',
-      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 4 * f); },
+      texto: 'Gana 7 de bloqueo (aplica +2\npor Fervor gastado).',
+      jugar: async (c) => { const f = c.consumirFervor(); await c.ganarBloqueo(7 + 2 * f); },
     },
   },
   // — Comunes —
@@ -4284,12 +4284,12 @@ export const PALADIN: CartaDef[] = [
     objetivo: 'ninguno',
     castigo: true,
     fx: 'cargaFuego',
-    texto: 'Castigo: tu próximo ataque inflige además\n6 a TODOS los enemigos (aplica +3\npor Fervor gastado).',
+    texto: 'Castigo: tu próximo ataque inflige además\n6 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
     valores: valorCastigo(),
-    jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 3 * f })),
+    jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 6 + 2 * f })),
     mejora: {
-      texto: 'Castigo: tu próximo ataque inflige además\n9 a TODOS los enemigos (aplica +4\npor Fervor gastado).',
-      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 9 + 4 * f })),
+      texto: 'Castigo: tu próximo ataque inflige además\n9 a TODOS los enemigos (aplica +2\npor Fervor gastado).',
+      jugar: castigo('Castigo Abrasador', 'fuego', (f) => ({ salpicadura: 9 + 2 * f })),
     },
   },
   {
