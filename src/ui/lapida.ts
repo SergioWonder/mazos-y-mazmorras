@@ -23,7 +23,7 @@ export function htmlDerrota(l: Lapida): string {
       <div class="lapida" role="group" aria-label="Lápida">
         <p class="lapida-rip">R.I.P.</p>
         <p class="lapida-clase">${escape(l.clase)}</p>
-        <p class="lapida-lugar">${escape(l.lugar)}</p>
+        <p class="lapida-lugar">${escape(l.lugar).replace(/ (\S+)$/, '&nbsp;$1')}</p>
         ${l.asesino ? `<p class="lapida-asesino">${escape(l.asesino)}</p>` : ''}
         <p class="lapida-cuenta">${escape(l.cuenta)}</p>
         <p class="lapida-epitafio">${escape(l.epitafio)}</p>

@@ -3733,7 +3733,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L33",
       "id": "mapa_comun_map_kit_smooth_path",
-      "community": 93,
+      "community": 198,
       "norm_label": "smooth_path()"
     },
     {
@@ -3769,7 +3769,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L68",
       "id": "mapa_comun_map_kit_sketch_add",
-      "community": 196,
+      "community": 91,
       "norm_label": ".add()"
     },
     {
@@ -3787,7 +3787,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L77",
       "id": "mapa_comun_map_kit_sketch_line",
-      "community": 198,
+      "community": 93,
       "norm_label": ".line()"
     },
     {
@@ -3796,7 +3796,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L80",
       "id": "mapa_comun_map_kit_sketch_fill",
-      "community": 91,
+      "community": 93,
       "norm_label": ".fill()"
     },
     {
@@ -3823,7 +3823,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L90",
       "id": "mapa_comun_map_kit_sketch_circle",
-      "community": 96,
+      "community": 93,
       "norm_label": ".circle()"
     },
     {
@@ -3832,7 +3832,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L94",
       "id": "mapa_comun_map_kit_sketch_dot",
-      "community": 196,
+      "community": 93,
       "norm_label": ".dot()"
     },
     {
@@ -4003,7 +4003,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L360",
       "id": "mapa_comun_map_kit_mockup",
-      "community": 198,
+      "community": 15,
       "norm_label": "mockup()"
     },
     {
@@ -4030,7 +4030,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L446",
       "id": "mapa_comun_map_kit_mountain",
-      "community": 93,
+      "community": 198,
       "norm_label": "mountain()"
     },
     {
@@ -4039,7 +4039,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L469",
       "id": "mapa_comun_map_kit_mountain_range",
-      "community": 93,
+      "community": 198,
       "norm_label": "mountain_range()"
     },
     {
@@ -4066,7 +4066,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L522",
       "id": "mapa_comun_map_kit_broadleaf",
-      "community": 196,
+      "community": 93,
       "norm_label": "broadleaf()"
     },
     {
@@ -4093,7 +4093,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L596",
       "id": "mapa_comun_map_kit_compass_rose",
-      "community": 96,
+      "community": 93,
       "norm_label": "compass_rose()"
     },
     {
@@ -4102,7 +4102,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L642",
       "id": "mapa_comun_map_kit_cartouche",
-      "community": 96,
+      "community": 93,
       "norm_label": "cartouche()"
     },
     {
@@ -4111,7 +4111,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L682",
       "id": "mapa_comun_map_kit_scale_bar",
-      "community": 91,
+      "community": 93,
       "norm_label": "scale_bar()"
     },
     {
@@ -4120,7 +4120,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L701",
       "id": "mapa_comun_map_kit_neatline",
-      "community": 91,
+      "community": 93,
       "norm_label": "neatline()"
     },
     {
@@ -4138,7 +4138,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L746",
       "id": "mapa_comun_map_kit_crossbones",
-      "community": 96,
+      "community": 93,
       "norm_label": "crossbones()"
     },
     {
@@ -4174,7 +4174,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L812",
       "id": "mapa_comun_map_kit_road",
-      "community": 93,
+      "community": 198,
       "norm_label": "road()"
     },
     {
@@ -4183,7 +4183,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L816",
       "id": "mapa_comun_map_kit_grid_texture",
-      "community": 93,
+      "community": 15,
       "norm_label": "grid_texture()"
     },
     {
@@ -4201,7 +4201,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L870",
       "id": "mapa_comun_map_kit_massif",
-      "community": 93,
+      "community": 198,
       "norm_label": "massif()"
     },
     {
@@ -4219,7 +4219,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L897",
       "id": "mapa_comun_map_kit_group",
-      "community": 196,
+      "community": 91,
       "norm_label": "group()"
     },
     {
@@ -4228,7 +4228,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L904",
       "id": "mapa_comun_map_kit_ungroup",
-      "community": 196,
+      "community": 91,
       "norm_label": "ungroup()"
     },
     {
@@ -4273,7 +4273,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L931",
       "id": "mapa_comun_map_kit_plan_circle",
-      "community": 96,
+      "community": 93,
       "norm_label": ".circle()"
     },
     {
@@ -4318,7 +4318,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1031",
       "id": "mapa_comun_map_kit_dagger",
-      "community": 196,
+      "community": 93,
       "norm_label": "dagger()"
     },
     {
@@ -4327,7 +4327,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1069",
       "id": "mapa_comun_map_kit_spiral",
-      "community": 93,
+      "community": 198,
       "norm_label": "spiral()"
     },
     {
@@ -4336,7 +4336,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1081",
       "id": "mapa_comun_map_kit_eye_glyph",
-      "community": 196,
+      "community": 93,
       "norm_label": "eye_glyph()"
     },
     {
@@ -4345,7 +4345,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1113",
       "id": "mapa_comun_map_kit_rune",
-      "community": 93,
+      "community": 15,
       "norm_label": "rune()"
     },
     {
@@ -4363,7 +4363,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L34",
       "id": "mapa_comun_map_kit_rationale_34",
-      "community": 93,
+      "community": 198,
       "norm_label": "catmull-rom spline through points, as an svg path string."
     },
     {
@@ -4426,7 +4426,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L361",
       "id": "mapa_comun_map_kit_rationale_361",
-      "community": 198,
+      "community": 15,
       "norm_label": "review mock-up with node markers where the ui draws them (not delivered).      t"
     },
     {
@@ -4453,7 +4453,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L643",
       "id": "mapa_comun_map_kit_rationale_643",
-      "community": 96,
+      "community": 93,
       "norm_label": "ornamental scroll cartouche with illegible lettering."
     },
     {
@@ -4462,7 +4462,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L702",
       "id": "mapa_comun_map_kit_rationale_702",
-      "community": 91,
+      "community": 93,
       "norm_label": "double map border with alternating graduated blocks."
     },
     {
@@ -4498,7 +4498,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L871",
       "id": "mapa_comun_map_kit_rationale_871",
-      "community": 93,
+      "community": 198,
       "norm_label": "a mountain mass: peaks scattered inside box=(x0, y0, x1, y1) (base line y), back"
     },
     {
@@ -4516,7 +4516,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L898",
       "id": "mapa_comun_map_kit_rationale_898",
-      "community": 196,
+      "community": 91,
       "norm_label": "open a transformed group in both the ink and the wash layers (close with ungroup"
     },
     {
@@ -4552,7 +4552,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1032",
       "id": "mapa_comun_map_kit_rationale_1032",
-      "community": 196,
+      "community": 93,
       "norm_label": "a dagger from its pommel at (x, y) pointing along `ang` (degrees), total length"
     },
     {
@@ -4561,7 +4561,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1082",
       "id": "mapa_comun_map_kit_rationale_1082",
-      "community": 196,
+      "community": 93,
       "norm_label": "a drawn eye: almond, radiating iris, pupil (slit or round) and a catch light."
     },
     {
@@ -4570,7 +4570,7 @@
       "source_file": "scripts/fondos/mapa-comun/map_kit.py",
       "source_location": "L1114",
       "id": "mapa_comun_map_kit_rationale_1114",
-      "community": 93,
+      "community": 15,
       "norm_label": "a random angular rune glyph inside an s x 1.4s cell centred on (x, y)."
     },
     {
@@ -10177,7 +10177,7 @@
       "source_file": "scripts/musica/acto1-gorzug/test_compose.py",
       "source_location": "L163",
       "id": "acto1_gorzug_test_compose_gorzugscore_test_one_named_track_per_instrument",
-      "community": 126,
+      "community": 161,
       "norm_label": ".test_one_named_track_per_instrument()"
     },
     {
@@ -16432,7 +16432,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L65",
       "id": "acto2_templo_compose_t",
-      "community": 34,
+      "community": 54,
       "norm_label": "t()"
     },
     {
@@ -16441,7 +16441,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L65",
       "id": "scripts_musica_acto2_templo_compose_py_int",
-      "community": 37,
+      "community": 54,
       "norm_label": "int"
     },
     {
@@ -16477,7 +16477,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L139",
       "id": "acto2_templo_compose_p",
-      "community": 37,
+      "community": 54,
       "norm_label": "p()"
     },
     {
@@ -16495,7 +16495,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L154",
       "id": "acto2_templo_compose_in_range",
-      "community": 37,
+      "community": 54,
       "norm_label": "in_range()"
     },
     {
@@ -16513,7 +16513,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L205",
       "id": "acto2_templo_compose_h",
-      "community": 34,
+      "community": 54,
       "norm_label": "h()"
     },
     {
@@ -16522,7 +16522,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L210",
       "id": "acto2_templo_compose_bass_segments",
-      "community": 37,
+      "community": 54,
       "norm_label": "bass_segments()"
     },
     {
@@ -16531,7 +16531,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L223",
       "id": "acto2_templo_compose_cbsn_pitch",
-      "community": 37,
+      "community": 54,
       "norm_label": "cbsn_pitch()"
     },
     {
@@ -16540,7 +16540,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L227",
       "id": "acto2_templo_compose_pedal_pitch",
-      "community": 37,
+      "community": 54,
       "norm_label": "pedal_pitch()"
     },
     {
@@ -16549,7 +16549,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L231",
       "id": "acto2_templo_compose_chant_pitch",
-      "community": 37,
+      "community": 54,
       "norm_label": "chant_pitch()"
     },
     {
@@ -16558,7 +16558,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L235",
       "id": "acto2_templo_compose_ostinato_pitch",
-      "community": 37,
+      "community": 54,
       "norm_label": "ostinato_pitch()"
     },
     {
@@ -16567,7 +16567,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L267",
       "id": "acto2_templo_compose_phrase",
-      "community": 37,
+      "community": 54,
       "norm_label": "phrase()"
     },
     {
@@ -16576,7 +16576,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L281",
       "id": "acto2_templo_compose_ref_events",
-      "community": 37,
+      "community": 54,
       "norm_label": "ref_events()"
     },
     {
@@ -16603,7 +16603,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L294",
       "id": "acto2_templo_compose_note",
-      "community": 34,
+      "community": 54,
       "norm_label": "note"
     },
     {
@@ -16612,7 +16612,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L312",
       "id": "acto2_templo_compose_note_we",
-      "community": 34,
+      "community": 54,
       "norm_label": ".we()"
     },
     {
@@ -16639,7 +16639,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L328",
       "id": "acto2_templo_compose_part_sfz_path",
-      "community": 161,
+      "community": 54,
       "norm_label": ".sfz_path()"
     },
     {
@@ -16648,7 +16648,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L331",
       "id": "acto2_templo_compose_part_add",
-      "community": 34,
+      "community": 54,
       "norm_label": ".add()"
     },
     {
@@ -16657,7 +16657,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L336",
       "id": "acto2_templo_compose_part_ticks",
-      "community": 34,
+      "community": 54,
       "norm_label": ".ticks()"
     },
     {
@@ -16666,7 +16666,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L341",
       "id": "acto2_templo_compose_part_mel",
-      "community": 34,
+      "community": 54,
       "norm_label": ".mel()"
     },
     {
@@ -16675,7 +16675,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L353",
       "id": "acto2_templo_compose_part_curve",
-      "community": 34,
+      "community": 54,
       "norm_label": ".curve()"
     },
     {
@@ -16684,7 +16684,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L381",
       "id": "acto2_templo_compose_arch",
-      "community": 41,
+      "community": 54,
       "norm_label": "arch()"
     },
     {
@@ -16702,7 +16702,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L421",
       "id": "acto2_templo_compose_common_layers",
-      "community": 37,
+      "community": 54,
       "norm_label": "common_layers()"
     },
     {
@@ -16711,7 +16711,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L469",
       "id": "acto2_templo_compose_organ",
-      "community": 34,
+      "community": 54,
       "norm_label": "organ()"
     },
     {
@@ -16720,7 +16720,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L488",
       "id": "acto2_templo_compose_explora",
-      "community": 34,
+      "community": 54,
       "norm_label": "explora()"
     },
     {
@@ -16729,7 +16729,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L550",
       "id": "acto2_templo_compose_ostinato",
-      "community": 34,
+      "community": 54,
       "norm_label": "ostinato()"
     },
     {
@@ -16738,7 +16738,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L579",
       "id": "acto2_templo_compose_chant",
-      "community": 34,
+      "community": 54,
       "norm_label": "chant()"
     },
     {
@@ -16747,7 +16747,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L594",
       "id": "acto2_templo_compose_stabs",
-      "community": 34,
+      "community": 54,
       "norm_label": "stabs()"
     },
     {
@@ -16756,7 +16756,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L611",
       "id": "acto2_templo_compose_drums",
-      "community": 34,
+      "community": 54,
       "norm_label": "drums()"
     },
     {
@@ -16765,7 +16765,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L635",
       "id": "acto2_templo_compose_daggers",
-      "community": 34,
+      "community": 54,
       "norm_label": "daggers()"
     },
     {
@@ -16774,7 +16774,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L646",
       "id": "acto2_templo_compose_combate",
-      "community": 34,
+      "community": 54,
       "norm_label": "combate()"
     },
     {
@@ -16981,7 +16981,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L66",
       "id": "acto2_templo_compose_rationale_66",
-      "community": 34,
+      "community": 54,
       "norm_label": "tick of sixteenth `s` (0-15) of `bar` (1-based)."
     },
     {
@@ -16990,7 +16990,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L140",
       "id": "acto2_templo_compose_rationale_140",
-      "community": 37,
+      "community": 54,
       "norm_label": "f#4' / 'bb2' / 66 -> midi number (c4 = 60)."
     },
     {
@@ -16999,7 +16999,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L155",
       "id": "acto2_templo_compose_rationale_155",
-      "community": 37,
+      "community": 54,
       "norm_label": "the single pitch of pitch class `pc` in [lo, lo + 11] (hi only bounds the check)"
     },
     {
@@ -17008,7 +17008,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L206",
       "id": "acto2_templo_compose_rationale_206",
-      "community": 34,
+      "community": 54,
       "norm_label": "chord sounding on sixteenth s of bar."
     },
     {
@@ -17017,7 +17017,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L211",
       "id": "acto2_templo_compose_rationale_211",
-      "community": 37,
+      "community": 54,
       "norm_label": "[(first sixteenth, length in sixteenths, bass pitch class)]: chords with the sam"
     },
     {
@@ -17026,7 +17026,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L268",
       "id": "acto2_templo_compose_rationale_268",
-      "community": 37,
+      "community": 54,
       "norm_label": "bb3:2 c4:2 | ...' (durations in sixteenths, r = rest) -> [(bar, sixteenth, pitch"
     },
     {
@@ -17035,7 +17035,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L282",
       "id": "acto2_templo_compose_rationale_282",
-      "community": 37,
+      "community": 54,
       "norm_label": "[(tick, pitch, ticks)] of a reference passage, rests dropped."
     },
     {
@@ -17044,7 +17044,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L342",
       "id": "acto2_templo_compose_rationale_342",
-      "community": 34,
+      "community": 54,
       "norm_label": "the reference passage `key` (section 5), tagged so that every track and both ver"
     },
     {
@@ -17053,7 +17053,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L354",
       "id": "acto2_templo_compose_rationale_354",
-      "community": 34,
+      "community": 54,
       "norm_label": "controller `num` over the whole loop from breakpoints [(bar, sixteenth, value)]:"
     },
     {
@@ -17062,7 +17062,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L382",
       "id": "acto2_templo_compose_rationale_382",
-      "community": 41,
+      "community": 54,
       "norm_label": "velocities of an n-note phrase: rise from base to top at `peak`, fall to `end`."
     },
     {
@@ -17080,7 +17080,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L422",
       "id": "acto2_templo_compose_rationale_422",
-      "community": 37,
+      "community": 54,
       "norm_label": "organ pedal, contrabassoon (with its cc1) and frame drum: the same in both versi"
     },
     {
@@ -17089,7 +17089,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L470",
       "id": "acto2_templo_compose_rationale_470",
-      "community": 34,
+      "community": 54,
       "norm_label": "organ chords of organ in bars first..last, tied by voice where a voice keeps its"
     },
     {
@@ -17098,7 +17098,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L551",
       "id": "acto2_templo_compose_rationale_551",
-      "community": 34,
+      "community": 54,
       "norm_label": "cellos (and basses an octave down) in spiccato 16ths on the bass, the fifth on 6"
     },
     {
@@ -17107,7 +17107,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L580",
       "id": "acto2_templo_compose_rationale_580",
-      "community": 34,
+      "community": 54,
       "norm_label": "the shouted invocation on the bass of section 4 (g2-gb3), syllables on 0 3 6 8 1"
     },
     {
@@ -17116,7 +17116,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L595",
       "id": "acto2_templo_compose_rationale_595",
-      "community": 34,
+      "community": 54,
       "norm_label": "horns marcato: root + fifth of the chord (41-55) on eighths 0, 3 and 6."
     },
     {
@@ -17125,7 +17125,7 @@
       "source_file": "scripts/musica/acto2-templo/compose.py",
       "source_location": "L636",
       "id": "acto2_templo_compose_rationale_636",
-      "community": 34,
+      "community": 54,
       "norm_label": "semitone dyads in spiccato, 0.1 s, never in the octave of the choir that sings."
     },
     {
@@ -17881,7 +17881,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L80",
       "id": "acto2_volguth_compose_p",
-      "community": 134,
+      "community": 159,
       "norm_label": "p()"
     },
     {
@@ -17890,7 +17890,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "acto2_volguth_compose_name_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "name_of()"
     },
     {
@@ -17899,7 +17899,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "scripts_musica_acto2_volguth_compose_py_str",
-      "community": 159,
+      "community": 134,
       "norm_label": "str"
     },
     {
@@ -17935,7 +17935,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L156",
       "id": "acto2_volguth_compose_segments",
-      "community": 162,
+      "community": 158,
       "norm_label": "segments()"
     },
     {
@@ -17998,7 +17998,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L206",
       "id": "acto2_volguth_compose_part_tied",
-      "community": 160,
+      "community": 162,
       "norm_label": ".tied()"
     },
     {
@@ -18133,7 +18133,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L440",
       "id": "acto2_volguth_compose_pedal",
-      "community": 162,
+      "community": 158,
       "norm_label": "pedal()"
     },
     {
@@ -18142,7 +18142,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L455",
       "id": "acto2_volguth_compose_timp_root",
-      "community": 158,
+      "community": 159,
       "norm_label": "timp_root()"
     },
     {
@@ -18286,7 +18286,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L756",
       "id": "acto2_volguth_compose_son",
-      "community": 159,
+      "community": 134,
       "norm_label": "son()"
     },
     {
@@ -18340,7 +18340,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L833",
       "id": "acto2_volguth_compose_celli_cost",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli_cost()"
     },
     {
@@ -18349,7 +18349,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L846",
       "id": "acto2_volguth_compose_celli",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli()"
     },
     {
@@ -18403,7 +18403,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1054",
       "id": "acto2_volguth_compose_bar_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "bar_of()"
     },
     {
@@ -18412,7 +18412,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1058",
       "id": "acto2_volguth_compose_role",
-      "community": 159,
+      "community": 134,
       "norm_label": "role()"
     },
     {
@@ -18421,7 +18421,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
       "id": "acto2_volguth_compose_parallels",
-      "community": 159,
+      "community": 134,
       "norm_label": "parallels()"
     },
     {
@@ -18430,7 +18430,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1097",
       "id": "acto2_volguth_compose_repetitions",
-      "community": 159,
+      "community": 134,
       "norm_label": "repetitions()"
     },
     {
@@ -18439,7 +18439,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1107",
       "id": "acto2_volguth_compose_sfz_keys",
-      "community": 159,
+      "community": 134,
       "norm_label": "sfz_keys()"
     },
     {
@@ -18457,7 +18457,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "acto2_volguth_compose_verify",
-      "community": 159,
+      "community": 134,
       "norm_label": "verify()"
     },
     {
@@ -18466,7 +18466,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "scripts_musica_acto2_volguth_compose_py_bool",
-      "community": 159,
+      "community": 134,
       "norm_label": "bool"
     },
     {
@@ -18493,7 +18493,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L81",
       "id": "acto2_volguth_compose_rationale_81",
-      "community": 134,
+      "community": 159,
       "norm_label": "f#4' / 'bb2' / 66 -> midi number (c4 = 60)."
     },
     {
@@ -18511,7 +18511,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L157",
       "id": "acto2_volguth_compose_rationale_157",
-      "community": 162,
+      "community": 158,
       "norm_label": "[(first eighth, last eighth + 1, chord, bass pc)] of a bar."
     },
     {
@@ -18529,7 +18529,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L207",
       "id": "acto2_volguth_compose_rationale_207",
-      "community": 160,
+      "community": 162,
       "norm_label": "events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present"
     },
     {
@@ -18628,7 +18628,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L441",
       "id": "acto2_volguth_compose_rationale_441",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo"
     },
     {
@@ -18772,7 +18772,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L834",
       "id": "acto2_volguth_compose_rationale_834",
-      "community": 160,
+      "community": 158,
       "norm_label": "root + fifth is the brief's figure; the root alone costs a little, root + third"
     },
     {
@@ -18781,7 +18781,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L847",
       "id": "acto2_volguth_compose_rationale_847",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm"
     },
     {
@@ -18799,7 +18799,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1065",
       "id": "acto2_volguth_compose_rationale_1065",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i"
     },
     {
@@ -18808,7 +18808,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1098",
       "id": "acto2_volguth_compose_rationale_1098",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than"
     },
     {
@@ -22804,7 +22804,7 @@
       "source_file": "scripts/musica/acto3-ignifax/compose.py",
       "source_location": "L182",
       "id": "acto3_ignifax_compose_score_cc1",
-      "community": 39,
+      "community": 173,
       "norm_label": ".cc1()"
     },
     {
@@ -22966,7 +22966,7 @@
       "source_file": "scripts/musica/acto3-ignifax/compose.py",
       "source_location": "L415",
       "id": "acto3_ignifax_compose_dynamics",
-      "community": 39,
+      "community": 173,
       "norm_label": "dynamics()"
     },
     {
@@ -23074,7 +23074,7 @@
       "source_file": "scripts/musica/acto3-ignifax/compose.py",
       "source_location": "L183",
       "id": "acto3_ignifax_compose_rationale_183",
-      "community": 39,
+      "community": 173,
       "norm_label": "cc1 keyframes (bar, beat, value), interpolated beat by beat."
     },
     {
@@ -23119,7 +23119,7 @@
       "source_file": "scripts/musica/acto3-ignifax/compose.py",
       "source_location": "L416",
       "id": "acto3_ignifax_compose_rationale_416",
-      "community": 39,
+      "community": 173,
       "norm_label": "cc1 of the sonatina parts (section 7): a phrase arch on every statement of the m"
     },
     {
@@ -28240,7 +28240,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L1",
       "id": "leitmotivs_acto2_bocetos",
-      "community": 179,
+      "community": 43,
       "norm_label": "acto2_bocetos.py"
     },
     {
@@ -28249,7 +28249,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L59",
       "id": "leitmotivs_acto2_bocetos_crypt",
-      "community": 179,
+      "community": 43,
       "norm_label": "crypt()"
     },
     {
@@ -28258,7 +28258,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L59",
       "id": "scripts_musica_leitmotivs_acto2_bocetos_py_str",
-      "community": 179,
+      "community": 43,
       "norm_label": "str"
     },
     {
@@ -28267,7 +28267,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L123",
       "id": "leitmotivs_acto2_bocetos_temple",
-      "community": 179,
+      "community": 43,
       "norm_label": "temple()"
     },
     {
@@ -28276,7 +28276,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L191",
       "id": "leitmotivs_acto2_bocetos_boss_crypt",
-      "community": 179,
+      "community": 43,
       "norm_label": "boss_crypt()"
     },
     {
@@ -28285,7 +28285,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L241",
       "id": "leitmotivs_acto2_bocetos_boss_temple",
-      "community": 179,
+      "community": 43,
       "norm_label": "boss_temple()"
     },
     {
@@ -28294,7 +28294,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L301",
       "id": "leitmotivs_acto2_bocetos_main",
-      "community": 179,
+      "community": 43,
       "norm_label": "main()"
     },
     {
@@ -28303,7 +28303,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L1",
       "id": "leitmotivs_acto2_bocetos_rationale_1",
-      "community": 179,
+      "community": 43,
       "norm_label": "act ii sketches on leitmotif 7 \u00absombra\u00bb: la cripta (from the horror sketch, with"
     },
     {
@@ -28312,7 +28312,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L60",
       "id": "leitmotivs_acto2_bocetos_rationale_60",
-      "community": 179,
+      "community": 43,
       "norm_label": "la cripta. exploration: bowed vibraphone, then alto flute with celesta ghosts; w"
     },
     {
@@ -28321,7 +28321,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L124",
       "id": "leitmotivs_acto2_bocetos_rationale_124",
-      "community": 179,
+      "community": 43,
       "norm_label": "el templo oscuro. the tune passes between low male voices and high female voices"
     },
     {
@@ -28330,7 +28330,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L192",
       "id": "leitmotivs_acto2_bocetos_rationale_192",
-      "community": 179,
+      "community": 43,
       "norm_label": "vol'guth, the lich: \u00absombra\u00bb as a necromantic rite at 144. full organ and a larg"
     },
     {
@@ -28339,7 +28339,7 @@
       "source_file": "scripts/musica/leitmotivs/acto2_bocetos.py",
       "source_location": "L242",
       "id": "leitmotivs_acto2_bocetos_rationale_242",
-      "community": 179,
+      "community": 43,
       "norm_label": "malachar, the cult's herald (and abaddon behind him): \u00absombra\u00bb in d phrygian at"
     },
     {
@@ -28465,7 +28465,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L224",
       "id": "leitmotivs_acto3_bocetos_ceniza",
-      "community": 179,
+      "community": 199,
       "norm_label": "ceniza()"
     },
     {
@@ -28546,7 +28546,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L359",
       "id": "leitmotivs_acto3_bocetos_corazon_volcan",
-      "community": 179,
+      "community": 199,
       "norm_label": "corazon_volcan()"
     },
     {
@@ -28681,7 +28681,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L225",
       "id": "leitmotivs_acto3_bocetos_rationale_225",
-      "community": 179,
+      "community": 199,
       "norm_label": "\u00abceniza\u00bb (c harmonic minor, 4/4 at 66): a slow horn melody over trembling low st"
     },
     {
@@ -28762,7 +28762,7 @@
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L360",
       "id": "leitmotivs_acto3_bocetos_rationale_360",
-      "community": 179,
+      "community": 199,
       "norm_label": "\u00abcorazon del volcan\u00bb (c# hungarian minor, 4/4 at 92): the didgeridoo is the drag"
     },
     {
@@ -31874,7 +31874,7 @@
       "label": "Escenario",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7546",
+      "source_location": "L7766",
       "id": "scripts_smoke_test_escenario",
       "community": 18,
       "norm_label": "escenario"
@@ -31883,7 +31883,7 @@
       "label": "montarNumeros()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L7808",
+      "source_location": "L8028",
       "id": "scripts_smoke_test_montarnumeros",
       "community": 18,
       "norm_label": "montarnumeros()"
@@ -31892,7 +31892,7 @@
       "label": "montarP()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L8045",
+      "source_location": "L8265",
       "id": "scripts_smoke_test_montarp",
       "community": 18,
       "norm_label": "montarp()"
@@ -31901,7 +31901,7 @@
       "label": "montarMago()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9202",
+      "source_location": "L9422",
       "id": "scripts_smoke_test_montarmago",
       "community": 18,
       "norm_label": "montarmago()"
@@ -31910,9 +31910,9 @@
       "label": "jugar()",
       "file_type": "code",
       "source_file": "scripts/smoke-test.ts",
-      "source_location": "L9214",
+      "source_location": "L9434",
       "id": "scripts_smoke_test_jugar",
-      "community": 46,
+      "community": 23,
       "norm_label": "jugar()"
     },
     {
@@ -31966,7 +31966,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L1",
       "id": "core_ajustes",
-      "community": 186,
+      "community": 42,
       "norm_label": "ajustes.ts"
     },
     {
@@ -31984,7 +31984,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L19",
       "id": "core_ajustes_ajustes_por_defecto",
-      "community": 186,
+      "community": 42,
       "norm_label": "ajustes_por_defecto"
     },
     {
@@ -31993,7 +31993,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L32",
       "id": "core_ajustes_almacen",
-      "community": 186,
+      "community": 42,
       "norm_label": "almacen"
     },
     {
@@ -32002,7 +32002,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L34",
       "id": "core_ajustes_volumen",
-      "community": 186,
+      "community": 42,
       "norm_label": "volumen()"
     },
     {
@@ -32011,7 +32011,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L35",
       "id": "core_ajustes_booleano",
-      "community": 186,
+      "community": 42,
       "norm_label": "booleano()"
     },
     {
@@ -32020,7 +32020,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L37",
       "id": "core_ajustes_leerajustes",
-      "community": 186,
+      "community": 42,
       "norm_label": "leerajustes()"
     },
     {
@@ -32029,7 +32029,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L59",
       "id": "core_ajustes_guardarajustes",
-      "community": 186,
+      "community": 42,
       "norm_label": "guardarajustes()"
     },
     {
@@ -32047,7 +32047,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L70",
       "id": "core_ajustes_gananciasfx",
-      "community": 4,
+      "community": 42,
       "norm_label": "gananciasfx()"
     },
     {
@@ -32056,7 +32056,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L73",
       "id": "core_ajustes_almacenlocal",
-      "community": 186,
+      "community": 42,
       "norm_label": "almacenlocal()"
     },
     {
@@ -32065,7 +32065,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L76",
       "id": "core_ajustes_actuales",
-      "community": 186,
+      "community": 42,
       "norm_label": "actuales"
     },
     {
@@ -32074,7 +32074,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L77",
       "id": "core_ajustes_oyentes",
-      "community": 186,
+      "community": 42,
       "norm_label": "oyentes"
     },
     {
@@ -32083,7 +32083,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L83",
       "id": "core_ajustes_cambiarajuste",
-      "community": 186,
+      "community": 42,
       "norm_label": "cambiarajuste()"
     },
     {
@@ -32092,7 +32092,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L90",
       "id": "core_ajustes_alcambiarajustes",
-      "community": 186,
+      "community": 39,
       "norm_label": "alcambiarajustes()"
     },
     {
@@ -32236,7 +32236,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L6",
       "id": "core_cartas_instanciar",
-      "community": 75,
+      "community": 23,
       "norm_label": "instanciar()"
     },
     {
@@ -32281,7 +32281,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L47",
       "id": "core_cartas_cartas_retiradas",
-      "community": 46,
+      "community": 85,
       "norm_label": "cartas_retiradas"
     },
     {
@@ -32542,7 +32542,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L4136",
       "id": "core_cartas_nuevamaldicion",
-      "community": 75,
+      "community": 23,
       "norm_label": "nuevamaldicion()"
     },
     {
@@ -32659,7 +32659,7 @@
       "source_file": "src/core/cartas.ts",
       "source_location": "L4796",
       "id": "core_cartas_cartaporid",
-      "community": 46,
+      "community": 23,
       "norm_label": "cartaporid()"
     },
     {
@@ -32677,14 +32677,14 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L1",
       "id": "core_combate",
-      "community": 84,
+      "community": 23,
       "norm_label": "combate.ts"
     },
     {
       "label": "Presentador",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L16",
+      "source_location": "L17",
       "id": "core_combate_presentador",
       "community": 18,
       "norm_label": "presentador"
@@ -32693,16 +32693,16 @@
       "label": "FX_CASTIGO",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L54",
+      "source_location": "L55",
       "id": "core_combate_fx_castigo",
-      "community": 84,
+      "community": 23,
       "norm_label": "fx_castigo"
     },
     {
       "label": "esDungeonMaster()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L60",
+      "source_location": "L61",
       "id": "core_combate_esdungeonmaster",
       "community": 23,
       "norm_label": "esdungeonmaster()"
@@ -32711,16 +32711,16 @@
       "label": "PrevisionAtaque",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L64",
+      "source_location": "L65",
       "id": "core_combate_previsionataque",
-      "community": 84,
+      "community": 23,
       "norm_label": "previsionataque"
     },
     {
       "label": "Combate",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L80",
+      "source_location": "L81",
       "id": "core_combate_combate",
       "community": 23,
       "norm_label": "combate"
@@ -32729,25 +32729,43 @@
       "label": ".intencionOculta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L96",
+      "source_location": "L97",
       "id": "core_combate_combate_intencionoculta",
       "community": 23,
       "norm_label": ".intencionoculta()"
     },
     {
+      "label": ".estadisticas()",
+      "file_type": "code",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L129",
+      "id": "core_combate_combate_estadisticas",
+      "community": 23,
+      "norm_label": ".estadisticas()"
+    },
+    {
+      "label": ".fuerzaEnemiga()",
+      "file_type": "code",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L134",
+      "id": "core_combate_combate_fuerzaenemiga",
+      "community": 23,
+      "norm_label": ".fuerzaenemiga()"
+    },
+    {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L127",
+      "source_location": "L138",
       "id": "core_combate_combate_constructor",
-      "community": 75,
+      "community": 0,
       "norm_label": ".constructor()"
     },
     {
       "label": ".danoDeAtaque()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L160",
+      "source_location": "L171",
       "id": "core_combate_combate_danodeataque",
       "community": 23,
       "norm_label": ".danodeataque()"
@@ -32756,7 +32774,7 @@
       "label": ".danoRecibido()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L168",
+      "source_location": "L179",
       "id": "core_combate_combate_danorecibido",
       "community": 23,
       "norm_label": ".danorecibido()"
@@ -32765,7 +32783,7 @@
       "label": ".bloqueoDeCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L179",
+      "source_location": "L190",
       "id": "core_combate_combate_bloqueodecarta",
       "community": 23,
       "norm_label": ".bloqueodecarta()"
@@ -32774,7 +32792,7 @@
       "label": ".danoGolpe()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L189",
+      "source_location": "L200",
       "id": "core_combate_combate_danogolpe",
       "community": 23,
       "norm_label": ".danogolpe()"
@@ -32783,7 +32801,7 @@
       "label": ".valoresDeCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L202",
+      "source_location": "L213",
       "id": "core_combate_combate_valoresdecarta",
       "community": 84,
       "norm_label": ".valoresdecarta()"
@@ -32792,7 +32810,7 @@
       "label": ".danoDeCastigos()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L215",
+      "source_location": "L226",
       "id": "core_combate_combate_danodecastigos",
       "community": 84,
       "norm_label": ".danodecastigos()"
@@ -32801,7 +32819,7 @@
       "label": ".cargarCastigoEn()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L223",
+      "source_location": "L234",
       "id": "core_combate_combate_cargarcastigoen",
       "community": 23,
       "norm_label": ".cargarcastigoen()"
@@ -32810,7 +32828,7 @@
       "label": ".descargarCastigoEn()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L232",
+      "source_location": "L243",
       "id": "core_combate_combate_descargarcastigoen",
       "community": 23,
       "norm_label": ".descargarcastigoen()"
@@ -32819,7 +32837,7 @@
       "label": ".cerrarCastigo()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L259",
+      "source_location": "L270",
       "id": "core_combate_combate_cerrarcastigo",
       "community": 23,
       "norm_label": ".cerrarcastigo()"
@@ -32828,7 +32846,7 @@
       "label": ".valoresSinCastigo()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L277",
+      "source_location": "L288",
       "id": "core_combate_combate_valoressincastigo",
       "community": 84,
       "norm_label": ".valoressincastigo()"
@@ -32837,7 +32855,7 @@
       "label": ".costeEfectivo()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L288",
+      "source_location": "L299",
       "id": "core_combate_combate_costeefectivo",
       "community": 23,
       "norm_label": ".costeefectivo()"
@@ -32846,7 +32864,7 @@
       "label": ".danoIntencion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L300",
+      "source_location": "L311",
       "id": "core_combate_combate_danointencion",
       "community": 23,
       "norm_label": ".danointencion()"
@@ -32855,7 +32873,7 @@
       "label": ".baseDeGolpe()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L306",
+      "source_location": "L317",
       "id": "core_combate_combate_basedegolpe",
       "community": 23,
       "norm_label": ".basedegolpe()"
@@ -32864,7 +32882,7 @@
       "label": ".vulnerableAlGolpe()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L312",
+      "source_location": "L323",
       "id": "core_combate_combate_vulnerablealgolpe",
       "community": 23,
       "norm_label": ".vulnerablealgolpe()"
@@ -32873,7 +32891,7 @@
       "label": ".previsionAtaques()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L319",
+      "source_location": "L330",
       "id": "core_combate_combate_previsionataques",
       "community": 23,
       "norm_label": ".previsionataques()"
@@ -32882,7 +32900,7 @@
       "label": ".dolorRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L351",
+      "source_location": "L362",
       "id": "core_combate_combate_dolorraices",
       "community": 23,
       "norm_label": ".dolorraices()"
@@ -32891,7 +32909,7 @@
       "label": ".ataqueAnulado()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L364",
+      "source_location": "L375",
       "id": "core_combate_combate_ataqueanulado",
       "community": 23,
       "norm_label": ".ataqueanulado()"
@@ -32900,7 +32918,7 @@
       "label": ".estaTransformadoPublico()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L370",
+      "source_location": "L381",
       "id": "core_combate_combate_estatransformadopublico",
       "community": 23,
       "norm_label": ".estatransformadopublico()"
@@ -32909,7 +32927,7 @@
       "label": ".noPretendeAtacar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L376",
+      "source_location": "L387",
       "id": "core_combate_combate_nopretendeatacar",
       "community": 23,
       "norm_label": ".nopretendeatacar()"
@@ -32918,7 +32936,7 @@
       "label": ".condenaLetal()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L383",
+      "source_location": "L394",
       "id": "core_combate_combate_condenaletal",
       "community": 23,
       "norm_label": ".condenaletal()"
@@ -32927,7 +32945,7 @@
       "label": ".ventajaFurtivaContra()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L389",
+      "source_location": "L400",
       "id": "core_combate_combate_ventajafurtivacontra",
       "community": 23,
       "norm_label": ".ventajafurtivacontra()"
@@ -32936,7 +32954,7 @@
       "label": ".tickVeneno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L396",
+      "source_location": "L407",
       "id": "core_combate_combate_tickveneno",
       "community": 23,
       "norm_label": ".tickveneno()"
@@ -32945,7 +32963,7 @@
       "label": ".ganchos()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L405",
+      "source_location": "L416",
       "id": "core_combate_combate_ganchos",
       "community": 23,
       "norm_label": ".ganchos()"
@@ -32954,7 +32972,7 @@
       "label": ".bonoAtaqueReliquias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L410",
+      "source_location": "L421",
       "id": "core_combate_combate_bonoataquereliquias",
       "community": 23,
       "norm_label": ".bonoataquereliquias()"
@@ -32963,7 +32981,7 @@
       "label": ".dispararBarajados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L417",
+      "source_location": "L428",
       "id": "core_combate_combate_dispararbarajados",
       "community": 23,
       "norm_label": ".dispararbarajados()"
@@ -32972,7 +32990,7 @@
       "label": ".dispararAlRobar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L428",
+      "source_location": "L439",
       "id": "core_combate_combate_dispararalrobar",
       "community": 23,
       "norm_label": ".dispararalrobar()"
@@ -32981,7 +32999,7 @@
       "label": ".efectosMaldicionesEnMano()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L441",
+      "source_location": "L452",
       "id": "core_combate_combate_efectosmaldicionesenmano",
       "community": 23,
       "norm_label": ".efectosmaldicionesenmano()"
@@ -32990,7 +33008,7 @@
       "label": ".consumirMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L456",
+      "source_location": "L467",
       "id": "core_combate_combate_consumirmaldicion",
       "community": 23,
       "norm_label": ".consumirmaldicion()"
@@ -32999,7 +33017,7 @@
       "label": ".saldarMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L473",
+      "source_location": "L484",
       "id": "core_combate_combate_saldarmaldicion",
       "community": 23,
       "norm_label": ".saldarmaldicion()"
@@ -33008,7 +33026,7 @@
       "label": ".meterMaldicion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L487",
+      "source_location": "L498",
       "id": "core_combate_combate_metermaldicion",
       "community": 23,
       "norm_label": ".metermaldicion()"
@@ -33017,7 +33035,7 @@
       "label": ".contexto()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L508",
+      "source_location": "L519",
       "id": "core_combate_combate_contexto",
       "community": 23,
       "norm_label": ".contexto()"
@@ -33026,7 +33044,7 @@
       "label": ".pantallaDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L938",
+      "source_location": "L952",
       "id": "core_combate_combate_pantalladm",
       "community": 23,
       "norm_label": ".pantalladm()"
@@ -33035,7 +33053,7 @@
       "label": ".dialogoDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L946",
+      "source_location": "L960",
       "id": "core_combate_combate_dialogodm",
       "community": 23,
       "norm_label": ".dialogodm()"
@@ -33044,7 +33062,7 @@
       "label": ".seducirDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L953",
+      "source_location": "L967",
       "id": "core_combate_combate_seducirdm",
       "community": 23,
       "norm_label": ".seducirdm()"
@@ -33053,7 +33071,7 @@
       "label": ".rayoDelDM()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L973",
+      "source_location": "L987",
       "id": "core_combate_combate_rayodeldm",
       "community": 23,
       "norm_label": ".rayodeldm()"
@@ -33062,7 +33080,7 @@
       "label": ".infligir()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L992",
+      "source_location": "L1006",
       "id": "core_combate_combate_infligir",
       "community": 23,
       "norm_label": ".infligir()"
@@ -33071,7 +33089,7 @@
       "label": ".refugiarseEnFilacteria()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1080",
+      "source_location": "L1097",
       "id": "core_combate_combate_refugiarseenfilacteria",
       "community": 23,
       "norm_label": ".refugiarseenfilacteria()"
@@ -33080,7 +33098,7 @@
       "label": ".resucitarDeFilacteria()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1096",
+      "source_location": "L1113",
       "id": "core_combate_combate_resucitardefilacteria",
       "community": 23,
       "norm_label": ".resucitardefilacteria()"
@@ -33089,7 +33107,7 @@
       "label": ".disparadoresDeMuerte()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1115",
+      "source_location": "L1132",
       "id": "core_combate_combate_disparadoresdemuerte",
       "community": 23,
       "norm_label": ".disparadoresdemuerte()"
@@ -33098,7 +33116,7 @@
       "label": ".inmortalAhora()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1142",
+      "source_location": "L1159",
       "id": "core_combate_combate_inmortalahora",
       "community": 23,
       "norm_label": ".inmortalahora()"
@@ -33107,7 +33125,7 @@
       "label": ".tieneGuardianes()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1148",
+      "source_location": "L1165",
       "id": "core_combate_combate_tieneguardianes",
       "community": 23,
       "norm_label": ".tieneguardianes()"
@@ -33116,7 +33134,7 @@
       "label": ".extinguirLigados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1154",
+      "source_location": "L1171",
       "id": "core_combate_combate_extinguirligados",
       "community": 23,
       "norm_label": ".extinguirligados()"
@@ -33125,7 +33143,7 @@
       "label": ".despertar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1164",
+      "source_location": "L1181",
       "id": "core_combate_combate_despertar",
       "community": 23,
       "norm_label": ".despertar()"
@@ -33134,7 +33152,7 @@
       "label": ".actuarYa()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1185",
+      "source_location": "L1202",
       "id": "core_combate_combate_actuarya",
       "community": 23,
       "norm_label": ".actuarya()"
@@ -33143,7 +33161,7 @@
       "label": ".rebotarAgathys()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1207",
+      "source_location": "L1224",
       "id": "core_combate_combate_rebotaragathys",
       "community": 23,
       "norm_label": ".rebotaragathys()"
@@ -33152,7 +33170,7 @@
       "label": ".comprobarFin()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1226",
+      "source_location": "L1243",
       "id": "core_combate_combate_comprobarfin",
       "community": 23,
       "norm_label": ".comprobarfin()"
@@ -33161,7 +33179,7 @@
       "label": ".escribirConjuro()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1238",
+      "source_location": "L1255",
       "id": "core_combate_combate_escribirconjuro",
       "community": 23,
       "norm_label": ".escribirconjuro()"
@@ -33170,25 +33188,25 @@
       "label": ".invocar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1259",
+      "source_location": "L1276",
       "id": "core_combate_combate_invocar",
-      "community": 84,
+      "community": 47,
       "norm_label": ".invocar()"
     },
     {
       "label": ".invocarEfimero()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1282",
+      "source_location": "L1299",
       "id": "core_combate_combate_invocarefimero",
-      "community": 84,
+      "community": 47,
       "norm_label": ".invocarefimero()"
     },
     {
       "label": ".resolverInvocacionEfimera()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1298",
+      "source_location": "L1315",
       "id": "core_combate_combate_resolverinvocacionefimera",
       "community": 23,
       "norm_label": ".resolverinvocacionefimera()"
@@ -33197,7 +33215,7 @@
       "label": ".atacarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1313",
+      "source_location": "L1330",
       "id": "core_combate_combate_atacarinvocacion",
       "community": 23,
       "norm_label": ".atacarinvocacion()"
@@ -33206,7 +33224,7 @@
       "label": ".curarInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1345",
+      "source_location": "L1362",
       "id": "core_combate_combate_curarinvocacion",
       "community": 23,
       "norm_label": ".curarinvocacion()"
@@ -33215,7 +33233,7 @@
       "label": ".golpeInvocacion()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1358",
+      "source_location": "L1375",
       "id": "core_combate_combate_golpeinvocacion",
       "community": 23,
       "norm_label": ".golpeinvocacion()"
@@ -33224,16 +33242,16 @@
       "label": ".robarCartas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1369",
+      "source_location": "L1386",
       "id": "core_combate_combate_robarcartas",
-      "community": 23,
+      "community": 75,
       "norm_label": ".robarcartas()"
     },
     {
       "label": ".descartarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1385",
+      "source_location": "L1402",
       "id": "core_combate_combate_descartarcarta",
       "community": 23,
       "norm_label": ".descartarcarta()"
@@ -33242,7 +33260,7 @@
       "label": ".avisarManoVacia()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1409",
+      "source_location": "L1426",
       "id": "core_combate_combate_avisarmanovacia",
       "community": 23,
       "norm_label": ".avisarmanovacia()"
@@ -33251,7 +33269,7 @@
       "label": ".crearDagas()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1415",
+      "source_location": "L1432",
       "id": "core_combate_combate_creardagas",
       "community": 23,
       "norm_label": ".creardagas()"
@@ -33260,7 +33278,7 @@
       "label": ".actualizarIndicadorAcrobacias()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1427",
+      "source_location": "L1444",
       "id": "core_combate_combate_actualizarindicadoracrobacias",
       "community": 23,
       "norm_label": ".actualizarindicadoracrobacias()"
@@ -33269,7 +33287,7 @@
       "label": ".iniciar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1433",
+      "source_location": "L1450",
       "id": "core_combate_combate_iniciar",
       "community": 23,
       "norm_label": ".iniciar()"
@@ -33278,7 +33296,7 @@
       "label": ".cartasPorTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1457",
+      "source_location": "L1475",
       "id": "core_combate_combate_cartasporturno",
       "community": 23,
       "norm_label": ".cartasporturno()"
@@ -33287,7 +33305,7 @@
       "label": ".inicioTurnoJugador()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1465",
+      "source_location": "L1483",
       "id": "core_combate_combate_inicioturnojugador",
       "community": 23,
       "norm_label": ".inicioturnojugador()"
@@ -33296,7 +33314,7 @@
       "label": ".puedeJugar()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1620",
+      "source_location": "L1640",
       "id": "core_combate_combate_puedejugar",
       "community": 23,
       "norm_label": ".puedejugar()"
@@ -33305,7 +33323,7 @@
       "label": ".objetivoReal()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1640",
+      "source_location": "L1660",
       "id": "core_combate_combate_objetivoreal",
       "community": 23,
       "norm_label": ".objetivoreal()"
@@ -33314,7 +33332,7 @@
       "label": ".jugarCarta()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1650",
+      "source_location": "L1670",
       "id": "core_combate_combate_jugarcarta",
       "community": 23,
       "norm_label": ".jugarcarta()"
@@ -33323,7 +33341,7 @@
       "label": ".decrementarEstados()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1742",
+      "source_location": "L1764",
       "id": "core_combate_combate_decrementarestados",
       "community": 23,
       "norm_label": ".decrementarestados()"
@@ -33332,7 +33350,7 @@
       "label": ".envejecerRaices()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1752",
+      "source_location": "L1774",
       "id": "core_combate_combate_envejecerraices",
       "community": 23,
       "norm_label": ".envejecerraices()"
@@ -33341,7 +33359,7 @@
       "label": ".terminarTurno()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1762",
+      "source_location": "L1784",
       "id": "core_combate_combate_terminarturno",
       "community": 23,
       "norm_label": ".terminarturno()"
@@ -33350,7 +33368,7 @@
       "label": ".ejecutarMovimiento()",
       "file_type": "code",
       "source_file": "src/core/combate.ts",
-      "source_location": "L1961",
+      "source_location": "L1986",
       "id": "core_combate_combate_ejecutarmovimiento",
       "community": 23,
       "norm_label": ".ejecutarmovimiento()"
@@ -33361,7 +33379,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L1",
       "id": "core_conjuros",
-      "community": 84,
+      "community": 18,
       "norm_label": "conjuros.ts"
     },
     {
@@ -33370,7 +33388,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L19",
       "id": "core_conjuros_orden_niveles",
-      "community": 84,
+      "community": 18,
       "norm_label": "orden_niveles"
     },
     {
@@ -33379,7 +33397,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L21",
       "id": "core_conjuros_piramideconjuros",
-      "community": 84,
+      "community": 18,
       "norm_label": "piramideconjuros()"
     },
     {
@@ -33388,7 +33406,7 @@
       "source_file": "src/core/conjuros.ts",
       "source_location": "L31",
       "id": "core_conjuros_crearespacios",
-      "community": 84,
+      "community": 18,
       "norm_label": "crearespacios()"
     },
     {
@@ -33433,7 +33451,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L21",
       "id": "core_enemigos_goblin_arquero",
-      "community": 0,
+      "community": 18,
       "norm_label": "goblin_arquero"
     },
     {
@@ -33640,7 +33658,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L345",
       "id": "core_enemigos_ignifax",
-      "community": 0,
+      "community": 18,
       "norm_label": "ignifax"
     },
     {
@@ -33820,7 +33838,7 @@
       "source_file": "src/core/enemigos.ts",
       "source_location": "L568",
       "id": "core_enemigos_heraldo_culto",
-      "community": 0,
+      "community": 18,
       "norm_label": "heraldo_culto"
     },
     {
@@ -33995,19 +34013,19 @@
       "norm_label": "aventurero_esqueletico"
     },
     {
-      "label": "seducir()",
+      "label": "embrujo()",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L852",
-      "id": "core_enemigos_seducir",
+      "source_location": "L855",
+      "id": "core_enemigos_embrujo",
       "community": 0,
-      "norm_label": "seducir()"
+      "norm_label": "embrujo()"
     },
     {
       "label": "INCUBO",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L854",
+      "source_location": "L862",
       "id": "core_enemigos_incubo",
       "community": 0,
       "norm_label": "incubo"
@@ -34016,7 +34034,7 @@
       "label": "SUCUBO",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L864",
+      "source_location": "L881",
       "id": "core_enemigos_sucubo",
       "community": 0,
       "norm_label": "sucubo"
@@ -34025,7 +34043,7 @@
       "label": "ELEMENTAL_FUEGO",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L877",
+      "source_location": "L903",
       "id": "core_enemigos_elemental_fuego",
       "community": 0,
       "norm_label": "elemental_fuego"
@@ -34034,7 +34052,7 @@
       "label": "GUARDIA_DRACONIDO",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L887",
+      "source_location": "L913",
       "id": "core_enemigos_guardia_draconido",
       "community": 0,
       "norm_label": "guardia_draconido"
@@ -34043,7 +34061,7 @@
       "label": "MIMICO_SILLA",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L902",
+      "source_location": "L928",
       "id": "core_enemigos_mimico_silla",
       "community": 0,
       "norm_label": "mimico_silla"
@@ -34052,7 +34070,7 @@
       "label": "MIMICO_PUERTA",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L908",
+      "source_location": "L934",
       "id": "core_enemigos_mimico_puerta",
       "community": 0,
       "norm_label": "mimico_puerta"
@@ -34061,7 +34079,7 @@
       "label": "DORMIDO",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L914",
+      "source_location": "L940",
       "id": "core_enemigos_dormido",
       "community": 0,
       "norm_label": "dormido"
@@ -34070,7 +34088,7 @@
       "label": "MIMICO_COFRE",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L916",
+      "source_location": "L942",
       "id": "core_enemigos_mimico_cofre",
       "community": 0,
       "norm_label": "mimico_cofre"
@@ -34079,7 +34097,7 @@
       "label": "DUNGEON_MASTER",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L934",
+      "source_location": "L960",
       "id": "core_enemigos_dungeon_master",
       "community": 0,
       "norm_label": "dungeon_master"
@@ -34088,25 +34106,25 @@
       "label": "Capitulo",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L949",
+      "source_location": "L975",
       "id": "core_enemigos_capitulo",
-      "community": 0,
+      "community": 41,
       "norm_label": "capitulo"
     },
     {
       "label": "ACTOS",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L963",
+      "source_location": "L989",
       "id": "core_enemigos_actos",
-      "community": 46,
+      "community": 187,
       "norm_label": "actos"
     },
     {
       "label": "crearEnemigo()",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L1087",
+      "source_location": "L1113",
       "id": "core_enemigos_crearenemigo",
       "community": 23,
       "norm_label": "crearenemigo()"
@@ -34115,19 +34133,28 @@
       "label": "resolverVariantes()",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L1102",
+      "source_location": "L1128",
       "id": "core_enemigos_resolvervariantes",
-      "community": 75,
+      "community": 0,
       "norm_label": "resolvervariantes()"
     },
     {
       "label": "enemigosRelacionados()",
       "file_type": "code",
       "source_file": "src/core/enemigos.ts",
-      "source_location": "L1116",
+      "source_location": "L1142",
       "id": "core_enemigos_enemigosrelacionados",
       "community": 0,
       "norm_label": "enemigosrelacionados()"
+    },
+    {
+      "label": "rasgoActual()",
+      "file_type": "code",
+      "source_file": "src/core/enemigos.ts",
+      "source_location": "L1151",
+      "id": "core_enemigos_rasgoactual",
+      "community": 23,
+      "norm_label": "rasgoactual()"
     },
     {
       "label": "epitafio.ts",
@@ -34135,70 +34162,133 @@
       "source_file": "src/core/epitafio.ts",
       "source_location": "L1",
       "id": "core_epitafio",
-      "community": 157,
+      "community": 37,
       "norm_label": "epitafio.ts"
     },
     {
       "label": "DatosCaida",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L5",
+      "source_location": "L10",
       "id": "core_epitafio_datoscaida",
-      "community": 157,
+      "community": 37,
       "norm_label": "datoscaida"
     },
     {
       "label": "lapida",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L70",
+      "source_location": "L243",
       "id": "core_epitafio_lapida",
-      "community": 157,
+      "community": 37,
       "norm_label": "lapida"
+    },
+    {
+      "label": "FuenteEpitafio",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L46",
+      "id": "core_epitafio_fuenteepitafio",
+      "community": 37,
+      "norm_label": "fuenteepitafio"
+    },
+    {
+      "label": "Epitafio",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L48",
+      "id": "core_epitafio_epitafio",
+      "community": 37,
+      "norm_label": "epitafio"
     },
     {
       "label": "NOMBRE_CLASE",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L30",
+      "source_location": "L55",
       "id": "core_epitafio_nombre_clase",
-      "community": 157,
+      "community": 37,
       "norm_label": "nombre_clase"
     },
     {
       "label": "EPITAFIOS",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L35",
+      "source_location": "L60",
       "id": "core_epitafio_epitafios",
-      "community": 157,
+      "community": 37,
       "norm_label": "epitafios"
+    },
+    {
+      "label": "EPITAFIOS_HABITO",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L82",
+      "id": "core_epitafio_epitafios_habito",
+      "community": 37,
+      "norm_label": "epitafios_habito"
+    },
+    {
+      "label": "EPITAFIOS_JEFE",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L136",
+      "id": "core_epitafio_epitafios_jefe",
+      "community": 37,
+      "norm_label": "epitafios_jefe"
     },
     {
       "label": "pick()",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L54",
+      "source_location": "L190",
       "id": "core_epitafio_pick",
-      "community": 157,
+      "community": 37,
       "norm_label": "pick()"
     },
     {
       "label": "plural()",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L60",
+      "source_location": "L196",
       "id": "core_epitafio_plural",
-      "community": 157,
+      "community": 37,
       "norm_label": "plural()"
+    },
+    {
+      "label": "nombreCorto()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L199",
+      "id": "core_epitafio_nombrecorto",
+      "community": 37,
+      "norm_label": "nombrecorto()"
+    },
+    {
+      "label": "rellenables()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L202",
+      "id": "core_epitafio_rellenables",
+      "community": 37,
+      "norm_label": "rellenables()"
+    },
+    {
+      "label": "epitafioDe()",
+      "file_type": "code",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L215",
+      "id": "core_epitafio_epitafiode",
+      "community": 37,
+      "norm_label": "epitafiode()"
     },
     {
       "label": "elegirEpitafio()",
       "file_type": "code",
       "source_file": "src/core/epitafio.ts",
-      "source_location": "L63",
+      "source_location": "L238",
       "id": "core_epitafio_elegirepitafio",
-      "community": 157,
+      "community": 37,
       "norm_label": "elegirepitafio()"
     },
     {
@@ -34207,7 +34297,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L1",
       "id": "core_escena_final",
-      "community": 186,
+      "community": 0,
       "norm_label": "escena-final.ts"
     },
     {
@@ -34216,7 +34306,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L8",
       "id": "core_escena_final_frases_dm",
-      "community": 186,
+      "community": 0,
       "norm_label": "frases_dm"
     },
     {
@@ -34225,7 +34315,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L18",
       "id": "core_escena_final_intencion_dm",
-      "community": 186,
+      "community": 0,
       "norm_label": "intencion_dm"
     },
     {
@@ -34243,7 +34333,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L65",
       "id": "core_escena_final_dias_agenda",
-      "community": 186,
+      "community": 0,
       "norm_label": "dias_agenda"
     },
     {
@@ -34252,7 +34342,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L66",
       "id": "core_escena_final_diaagenda",
-      "community": 186,
+      "community": 0,
       "norm_label": "diaagenda"
     },
     {
@@ -34261,7 +34351,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L70",
       "id": "core_escena_final_lineaagenda",
-      "community": 186,
+      "community": 0,
       "norm_label": "lineaagenda"
     },
     {
@@ -34270,7 +34360,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L78",
       "id": "core_escena_final_guion_agenda",
-      "community": 186,
+      "community": 0,
       "norm_label": "guion_agenda"
     },
     {
@@ -34279,7 +34369,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L98",
       "id": "core_escena_final_almacensimple",
-      "community": 186,
+      "community": 0,
       "norm_label": "almacensimple"
     },
     {
@@ -34288,7 +34378,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L103",
       "id": "core_escena_final_almacenpordefecto",
-      "community": 186,
+      "community": 0,
       "norm_label": "almacenpordefecto()"
     },
     {
@@ -34297,7 +34387,7 @@
       "source_file": "src/core/escena-final.ts",
       "source_location": "L112",
       "id": "core_escena_final_marcarfinalverdadero",
-      "community": 186,
+      "community": 0,
       "norm_label": "marcarfinalverdadero()"
     },
     {
@@ -34310,12 +34400,192 @@
       "norm_label": "finalverdaderodesbloqueado()"
     },
     {
+      "label": "estadisticas.ts",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L1",
+      "id": "core_estadisticas",
+      "community": 37,
+      "norm_label": "estadisticas.ts"
+    },
+    {
+      "label": "OrigenGolpe",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L8",
+      "id": "core_estadisticas_origengolpe",
+      "community": 37,
+      "norm_label": "origengolpe"
+    },
+    {
+      "label": "EstadisticasRun",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L10",
+      "id": "core_estadisticas_estadisticasrun",
+      "community": 34,
+      "norm_label": "estadisticasrun"
+    },
+    {
+      "label": "nuevasEstadisticas()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L43",
+      "id": "core_estadisticas_nuevasestadisticas",
+      "community": 34,
+      "norm_label": "nuevasestadisticas()"
+    },
+    {
+      "label": "normalizarEstadisticas()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L52",
+      "id": "core_estadisticas_normalizarestadisticas",
+      "community": 34,
+      "norm_label": "normalizarestadisticas()"
+    },
+    {
+      "label": "empezarCombate()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L65",
+      "id": "core_estadisticas_empezarcombate",
+      "community": 37,
+      "norm_label": "empezarcombate()"
+    },
+    {
+      "label": "empezarTurno()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L71",
+      "id": "core_estadisticas_empezarturno",
+      "community": 37,
+      "norm_label": "empezarturno()"
+    },
+    {
+      "label": "terminarTurno()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L76",
+      "id": "core_estadisticas_terminarturno",
+      "community": 37,
+      "norm_label": "terminarturno()"
+    },
+    {
+      "label": "cartaJugada()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L80",
+      "id": "core_estadisticas_cartajugada",
+      "community": 37,
+      "norm_label": "cartajugada()"
+    },
+    {
+      "label": "danoInfligido()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L86",
+      "id": "core_estadisticas_danoinfligido",
+      "community": 37,
+      "norm_label": "danoinfligido()"
+    },
+    {
+      "label": "golpeRecibido()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L91",
+      "id": "core_estadisticas_golperecibido",
+      "community": 37,
+      "norm_label": "golperecibido()"
+    },
+    {
+      "label": "bloqueoObtenido()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L99",
+      "id": "core_estadisticas_bloqueoobtenido",
+      "community": 37,
+      "norm_label": "bloqueoobtenido()"
+    },
+    {
+      "label": "perdidaPorEstado()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L104",
+      "id": "core_estadisticas_perdidaporestado",
+      "community": 37,
+      "norm_label": "perdidaporestado()"
+    },
+    {
+      "label": "herirse()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L111",
+      "id": "core_estadisticas_herirse",
+      "community": 37,
+      "norm_label": "herirse()"
+    },
+    {
+      "label": "enemigoSeRefuerza()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L117",
+      "id": "core_estadisticas_enemigoserefuerza",
+      "community": 37,
+      "norm_label": "enemigoserefuerza()"
+    },
+    {
+      "label": "HABITOS",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L125",
+      "id": "core_estadisticas_habitos",
+      "community": 37,
+      "norm_label": "habitos"
+    },
+    {
+      "label": "Habito",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L128",
+      "id": "core_estadisticas_habito",
+      "community": 37,
+      "norm_label": "habito"
+    },
+    {
+      "label": "ContextoHabitos",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L131",
+      "id": "core_estadisticas_contextohabitos",
+      "community": 37,
+      "norm_label": "contextohabitos"
+    },
+    {
+      "label": "evaluarHabitos()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L142",
+      "id": "core_estadisticas_evaluarhabitos",
+      "community": 37,
+      "norm_label": "evaluarhabitos()"
+    },
+    {
+      "label": "peorHabito()",
+      "file_type": "code",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L191",
+      "id": "core_estadisticas_peorhabito",
+      "community": 37,
+      "norm_label": "peorhabito()"
+    },
+    {
       "label": "eventos.ts",
       "file_type": "code",
       "source_file": "src/core/eventos.ts",
       "source_location": "L1",
       "id": "core_eventos",
-      "community": 75,
+      "community": 34,
       "norm_label": "eventos.ts"
     },
     {
@@ -34324,7 +34594,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L7",
       "id": "core_eventos_opcionevento",
-      "community": 75,
+      "community": 34,
       "norm_label": "opcionevento"
     },
     {
@@ -34333,7 +34603,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L13",
       "id": "core_eventos_eventodef",
-      "community": 75,
+      "community": 34,
       "norm_label": "eventodef"
     },
     {
@@ -34342,7 +34612,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L24",
       "id": "core_eventos_curar",
-      "community": 75,
+      "community": 34,
       "norm_label": "curar()"
     },
     {
@@ -34351,7 +34621,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L30",
       "id": "core_eventos_perderpv",
-      "community": 75,
+      "community": 34,
       "norm_label": "perderpv()"
     },
     {
@@ -34360,7 +34630,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L36",
       "id": "core_eventos_mejorables",
-      "community": 75,
+      "community": 34,
       "norm_label": "mejorables()"
     },
     {
@@ -34369,7 +34639,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L40",
       "id": "core_eventos_mejoraraleatorias",
-      "community": 75,
+      "community": 34,
       "norm_label": "mejoraraleatorias()"
     },
     {
@@ -34378,7 +34648,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L52",
       "id": "core_eventos_cartaaleatoria",
-      "community": 75,
+      "community": 18,
       "norm_label": "cartaaleatoria()"
     },
     {
@@ -34387,7 +34657,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L60",
       "id": "core_eventos_quitarcartabasica",
-      "community": 75,
+      "community": 34,
       "norm_label": "quitarcartabasica()"
     },
     {
@@ -34396,7 +34666,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L70",
       "id": "core_eventos_quitarcartaaleatoria",
-      "community": 75,
+      "community": 34,
       "norm_label": "quitarcartaaleatoria()"
     },
     {
@@ -34405,7 +34675,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L82",
       "id": "core_eventos_defnombre",
-      "community": 75,
+      "community": 34,
       "norm_label": "defnombre()"
     },
     {
@@ -34414,7 +34684,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L86",
       "id": "core_eventos_reliquiaaleatoria",
-      "community": 75,
+      "community": 34,
       "norm_label": "reliquiaaleatoria()"
     },
     {
@@ -34423,7 +34693,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L99",
       "id": "core_eventos_eventos_positivos",
-      "community": 75,
+      "community": 34,
       "norm_label": "eventos_positivos"
     },
     {
@@ -34432,7 +34702,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L296",
       "id": "core_eventos_eventos_negativos",
-      "community": 75,
+      "community": 34,
       "norm_label": "eventos_negativos"
     },
     {
@@ -34441,7 +34711,7 @@
       "source_file": "src/core/eventos.ts",
       "source_location": "L368",
       "id": "core_eventos_elegirevento",
-      "community": 46,
+      "community": 41,
       "norm_label": "elegirevento()"
     },
     {
@@ -34450,41 +34720,41 @@
       "source_file": "src/core/guardado.ts",
       "source_location": "L1",
       "id": "core_guardado",
-      "community": 46,
+      "community": 34,
       "norm_label": "guardado.ts"
     },
     {
       "label": "Guardado",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L9",
+      "source_location": "L10",
       "id": "core_guardado_guardado",
-      "community": 46,
+      "community": 34,
       "norm_label": "guardado"
     },
     {
       "label": "serializarRun()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L32",
+      "source_location": "L35",
       "id": "core_guardado_serializarrun",
-      "community": 46,
+      "community": 34,
       "norm_label": "serializarrun()"
     },
     {
       "label": "rehidratarRun()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L54",
+      "source_location": "L58",
       "id": "core_guardado_rehidratarrun",
-      "community": 46,
+      "community": 34,
       "norm_label": "rehidratarrun()"
     },
     {
       "label": "guardarRun()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L94",
+      "source_location": "L99",
       "id": "core_guardado_guardarrun",
       "community": 46,
       "norm_label": "guardarrun()"
@@ -34493,7 +34763,7 @@
       "label": "cargarRun()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L102",
+      "source_location": "L107",
       "id": "core_guardado_cargarrun",
       "community": 46,
       "norm_label": "cargarrun()"
@@ -34502,7 +34772,7 @@
       "label": "hayGuardado()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L112",
+      "source_location": "L117",
       "id": "core_guardado_hayguardado",
       "community": 46,
       "norm_label": "hayguardado()"
@@ -34511,7 +34781,7 @@
       "label": "borrarGuardado()",
       "file_type": "code",
       "source_file": "src/core/guardado.ts",
-      "source_location": "L120",
+      "source_location": "L125",
       "id": "core_guardado_borrarguardado",
       "community": 46,
       "norm_label": "borrarguardado()"
@@ -34522,7 +34792,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L1",
       "id": "core_mapa",
-      "community": 46,
+      "community": 34,
       "norm_label": "mapa.ts"
     },
     {
@@ -34540,7 +34810,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L94",
       "id": "core_mapa_tipos_mision",
-      "community": 46,
+      "community": 34,
       "norm_label": "tipos_mision"
     },
     {
@@ -34549,7 +34819,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L96",
       "id": "core_mapa_distancia_mision",
-      "community": 46,
+      "community": 34,
       "norm_label": "distancia_mision"
     },
     {
@@ -34558,7 +34828,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L99",
       "id": "core_mapa_alcanzablesdesde",
-      "community": 46,
+      "community": 34,
       "norm_label": "alcanzablesdesde()"
     },
     {
@@ -34567,7 +34837,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L115",
       "id": "core_mapa_esalcanzable",
-      "community": 46,
+      "community": 34,
       "norm_label": "esalcanzable()"
     },
     {
@@ -34576,7 +34846,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L121",
       "id": "core_mapa_candidatosmision",
-      "community": 46,
+      "community": 34,
       "norm_label": "candidatosmision()"
     },
     {
@@ -34594,7 +34864,7 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L157",
       "id": "core_mapa_nodosdisponibles",
-      "community": 46,
+      "community": 34,
       "norm_label": "nodosdisponibles()"
     },
     {
@@ -34711,7 +34981,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L1",
       "id": "core_reliquias",
-      "community": 75,
+      "community": 34,
       "norm_label": "reliquias.ts"
     },
     {
@@ -34729,7 +34999,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L14",
       "id": "core_reliquias_mejoraralazar",
-      "community": 75,
+      "community": 34,
       "norm_label": "mejoraralazar()"
     },
     {
@@ -34738,7 +35008,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L23",
       "id": "core_reliquias_primeravez",
-      "community": 75,
+      "community": 34,
       "norm_label": "primeravez()"
     },
     {
@@ -34747,7 +35017,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L31",
       "id": "core_reliquias_totem_roble",
-      "community": 75,
+      "community": 34,
       "norm_label": "totem_roble"
     },
     {
@@ -34756,7 +35026,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L37",
       "id": "core_reliquias_hacha_ancestro",
-      "community": 75,
+      "community": 34,
       "norm_label": "hacha_ancestro"
     },
     {
@@ -34765,7 +35035,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L43",
       "id": "core_reliquias_pendulo_ambar",
-      "community": 75,
+      "community": 34,
       "norm_label": "pendulo_ambar"
     },
     {
@@ -34774,7 +35044,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L49",
       "id": "core_reliquias_guante_ladron",
-      "community": 75,
+      "community": 34,
       "norm_label": "guante_ladron"
     },
     {
@@ -34792,7 +35062,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L66",
       "id": "core_reliquias_simbolo_sagrado",
-      "community": 75,
+      "community": 34,
       "norm_label": "simbolo_sagrado"
     },
     {
@@ -34801,7 +35071,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L72",
       "id": "core_reliquias_iniciales",
-      "community": 75,
+      "community": 34,
       "norm_label": "iniciales"
     },
     {
@@ -34819,7 +35089,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L83",
       "id": "core_reliquias_generales",
-      "community": 75,
+      "community": 34,
       "norm_label": "generales"
     },
     {
@@ -34828,7 +35098,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L342",
       "id": "core_reliquias_de_druida",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_druida"
     },
     {
@@ -34837,7 +35107,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L381",
       "id": "core_reliquias_de_barbaro",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_barbaro"
     },
     {
@@ -34846,7 +35116,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L415",
       "id": "core_reliquias_de_mago",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_mago"
     },
     {
@@ -34855,7 +35125,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L454",
       "id": "core_reliquias_de_picaro",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_picaro"
     },
     {
@@ -34864,7 +35134,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L482",
       "id": "core_reliquias_de_brujo",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_brujo"
     },
     {
@@ -34882,7 +35152,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L563",
       "id": "core_reliquias_de_paladin",
-      "community": 75,
+      "community": 34,
       "norm_label": "de_paladin"
     },
     {
@@ -34891,7 +35161,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L600",
       "id": "core_reliquias_pool_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "pool_reliquias"
     },
     {
@@ -34900,7 +35170,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L605",
       "id": "core_reliquias_reliquiaporid",
-      "community": 46,
+      "community": 34,
       "norm_label": "reliquiaporid()"
     },
     {
@@ -34909,7 +35179,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L611",
       "id": "core_reliquias_reliquiasdisponibles",
-      "community": 75,
+      "community": 34,
       "norm_label": "reliquiasdisponibles()"
     },
     {
@@ -34918,7 +35188,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L619",
       "id": "core_reliquias_peso_rareza",
-      "community": 75,
+      "community": 34,
       "norm_label": "peso_rareza"
     },
     {
@@ -34927,7 +35197,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L629",
       "id": "core_reliquias_elegirponderado",
-      "community": 75,
+      "community": 34,
       "norm_label": "elegirponderado()"
     },
     {
@@ -34936,7 +35206,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L641",
       "id": "core_reliquias_sortearreliquia",
-      "community": 75,
+      "community": 34,
       "norm_label": "sortearreliquia()"
     },
     {
@@ -34954,7 +35224,7 @@
       "source_file": "src/core/reliquias.ts",
       "source_location": "L664",
       "id": "core_reliquias_nombre_rareza_reliquia",
-      "community": 46,
+      "community": 34,
       "norm_label": "nombre_rareza_reliquia"
     },
     {
@@ -35062,7 +35332,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L67",
       "id": "core_run_retirarcarta",
-      "community": 75,
+      "community": 34,
       "norm_label": "retirarcarta()"
     },
     {
@@ -35080,7 +35350,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L91",
       "id": "core_run_anadirmaldicion",
-      "community": 75,
+      "community": 23,
       "norm_label": "anadirmaldicion()"
     },
     {
@@ -35098,7 +35368,7 @@
       "source_file": "src/core/run.ts",
       "source_location": "L106",
       "id": "core_run_anadircarta",
-      "community": 75,
+      "community": 46,
       "norm_label": "anadircarta()"
     },
     {
@@ -35161,7 +35431,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L1",
       "id": "core_taberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "taberna.ts"
     },
     {
@@ -35170,7 +35440,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L10",
       "id": "core_taberna_plantillarumor",
-      "community": 46,
+      "community": 34,
       "norm_label": "plantillarumor"
     },
     {
@@ -35179,7 +35449,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L18",
       "id": "core_taberna_rumortaberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "rumortaberna"
     },
     {
@@ -35188,7 +35458,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L26",
       "id": "core_taberna_rumores",
-      "community": 46,
+      "community": 34,
       "norm_label": "rumores"
     },
     {
@@ -35197,7 +35467,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L61",
       "id": "core_taberna_distancias",
-      "community": 46,
+      "community": 34,
       "norm_label": "distancias"
     },
     {
@@ -35206,7 +35476,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L63",
       "id": "core_taberna_barajar",
-      "community": 46,
+      "community": 34,
       "norm_label": "barajar()"
     },
     {
@@ -35215,7 +35485,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L74",
       "id": "core_taberna_rumorestaberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "rumorestaberna()"
     },
     {
@@ -35224,7 +35494,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L107",
       "id": "core_taberna_aceptarrumor",
-      "community": 46,
+      "community": 34,
       "norm_label": "aceptarrumor()"
     },
     {
@@ -35251,7 +35521,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L173",
       "id": "core_taberna_olvidotaberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "olvidotaberna"
     },
     {
@@ -35260,7 +35530,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L145",
       "id": "core_taberna_olvidos_taberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "olvidos_taberna"
     },
     {
@@ -35269,7 +35539,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L178",
       "id": "core_taberna_cartaseliminables",
-      "community": 46,
+      "community": 34,
       "norm_label": "cartaseliminables()"
     },
     {
@@ -35278,7 +35548,7 @@
       "source_file": "src/core/taberna.ts",
       "source_location": "L184",
       "id": "core_taberna_eliminarcarta",
-      "community": 75,
+      "community": 34,
       "norm_label": "eliminarcarta()"
     },
     {
@@ -35287,23 +35557,23 @@
       "source_file": "src/core/types.ts",
       "source_location": "L1",
       "id": "core_types",
-      "community": 84,
+      "community": 34,
       "norm_label": "types.ts"
     },
     {
       "label": "ClaseId",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L3",
+      "source_location": "L5",
       "id": "core_types_claseid",
-      "community": 46,
+      "community": 6,
       "norm_label": "claseid"
     },
     {
       "label": "TipoCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L5",
+      "source_location": "L7",
       "id": "core_types_tipocarta",
       "community": 187,
       "norm_label": "tipocarta"
@@ -35312,79 +35582,79 @@
       "label": "Rareza",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L6",
+      "source_location": "L8",
       "id": "core_types_rareza",
-      "community": 75,
+      "community": 34,
       "norm_label": "rareza"
     },
     {
       "label": "ModoObjetivo",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L7",
+      "source_location": "L9",
       "id": "core_types_modoobjetivo",
-      "community": 84,
+      "community": 34,
       "norm_label": "modoobjetivo"
     },
     {
       "label": "EstadoId",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L10",
+      "source_location": "L12",
       "id": "core_types_estadoid",
-      "community": 84,
+      "community": 85,
       "norm_label": "estadoid"
     },
     {
       "label": "EfectoConjuro",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L86",
+      "source_location": "L88",
       "id": "core_types_efectoconjuro",
-      "community": 84,
+      "community": 23,
       "norm_label": "efectoconjuro"
     },
     {
       "label": "FormaInvocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L89",
+      "source_location": "L91",
       "id": "core_types_formainvocacion",
-      "community": 84,
+      "community": 47,
       "norm_label": "formainvocacion"
     },
     {
       "label": "EfectoInvocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L93",
+      "source_location": "L95",
       "id": "core_types_efectoinvocacion",
-      "community": 84,
+      "community": 23,
       "norm_label": "efectoinvocacion"
     },
     {
       "label": "Invocacion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L98",
+      "source_location": "L100",
       "id": "core_types_invocacion",
-      "community": 84,
+      "community": 47,
       "norm_label": "invocacion"
     },
     {
       "label": "EfectoTemporal",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L111",
+      "source_location": "L113",
       "id": "core_types_efectotemporal",
-      "community": 84,
+      "community": 23,
       "norm_label": "efectotemporal"
     },
     {
       "label": "Luchador",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L122",
+      "source_location": "L124",
       "id": "core_types_luchador",
       "community": 23,
       "norm_label": "luchador"
@@ -35393,16 +35663,16 @@
       "label": "TipoIntencion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L131",
+      "source_location": "L133",
       "id": "core_types_tipointencion",
-      "community": 84,
+      "community": 34,
       "norm_label": "tipointencion"
     },
     {
       "label": "Movimiento",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L133",
+      "source_location": "L135",
       "id": "core_types_movimiento",
       "community": 23,
       "norm_label": "movimiento"
@@ -35411,7 +35681,7 @@
       "label": "EnemigoDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L169",
+      "source_location": "L171",
       "id": "core_types_enemigodef",
       "community": 0,
       "norm_label": "enemigodef"
@@ -35420,7 +35690,7 @@
       "label": "EnemigoCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L222",
+      "source_location": "L226",
       "id": "core_types_enemigocombate",
       "community": 23,
       "norm_label": "enemigocombate"
@@ -35429,16 +35699,16 @@
       "label": "EspacioConjuro",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L250",
+      "source_location": "L254",
       "id": "core_types_espacioconjuro",
-      "community": 84,
+      "community": 18,
       "norm_label": "espacioconjuro"
     },
     {
       "label": "JugadorCombate",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L255",
+      "source_location": "L259",
       "id": "core_types_jugadorcombate",
       "community": 23,
       "norm_label": "jugadorcombate"
@@ -35447,25 +35717,25 @@
       "label": "ElementoCastigo",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L283",
+      "source_location": "L287",
       "id": "core_types_elementocastigo",
-      "community": 84,
+      "community": 19,
       "norm_label": "elementocastigo"
     },
     {
       "label": "CastigoPreparado",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L286",
+      "source_location": "L290",
       "id": "core_types_castigopreparado",
-      "community": 84,
+      "community": 19,
       "norm_label": "castigopreparado"
     },
     {
       "label": "CartaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L303",
+      "source_location": "L307",
       "id": "core_types_cartadef",
       "community": 84,
       "norm_label": "cartadef"
@@ -35474,16 +35744,16 @@
       "label": "TipoValorCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L359",
+      "source_location": "L363",
       "id": "core_types_tipovalorcarta",
-      "community": 84,
+      "community": 34,
       "norm_label": "tipovalorcarta"
     },
     {
       "label": "ValorCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L372",
+      "source_location": "L376",
       "id": "core_types_valorcarta",
       "community": 84,
       "norm_label": "valorcarta"
@@ -35492,7 +35762,7 @@
       "label": "ValorMostrado",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L393",
+      "source_location": "L397",
       "id": "core_types_valormostrado",
       "community": 84,
       "norm_label": "valormostrado"
@@ -35501,16 +35771,16 @@
       "label": "MejoraCarta",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L397",
+      "source_location": "L401",
       "id": "core_types_mejoracarta",
-      "community": 84,
+      "community": 34,
       "norm_label": "mejoracarta"
     },
     {
       "label": "CartaInstancia",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L408",
+      "source_location": "L412",
       "id": "core_types_cartainstancia",
       "community": 23,
       "norm_label": "cartainstancia"
@@ -35519,52 +35789,52 @@
       "label": "ContextoEfecto",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L415",
+      "source_location": "L419",
       "id": "core_types_contextoefecto",
-      "community": 84,
+      "community": 23,
       "norm_label": "contextoefecto"
     },
     {
       "label": "TipoNodo",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L564",
+      "source_location": "L568",
       "id": "core_types_tiponodo",
-      "community": 46,
+      "community": 34,
       "norm_label": "tiponodo"
     },
     {
       "label": "MisionTaberna",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L567",
+      "source_location": "L571",
       "id": "core_types_misiontaberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "misiontaberna"
     },
     {
       "label": "NodoMapa",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L573",
+      "source_location": "L577",
       "id": "core_types_nodomapa",
-      "community": 46,
+      "community": 34,
       "norm_label": "nodomapa"
     },
     {
       "label": "RarezaReliquia",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L584",
+      "source_location": "L588",
       "id": "core_types_rarezareliquia",
-      "community": 75,
+      "community": 34,
       "norm_label": "rarezareliquia"
     },
     {
       "label": "TipoBendicion",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L588",
+      "source_location": "L592",
       "id": "core_types_tipobendicion",
       "community": 75,
       "norm_label": "tipobendicion"
@@ -35573,54 +35843,54 @@
       "label": "OrigenReliquia",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L591",
+      "source_location": "L595",
       "id": "core_types_origenreliquia",
-      "community": 75,
+      "community": 34,
       "norm_label": "origenreliquia"
     },
     {
       "label": "CartaJugada",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L594",
+      "source_location": "L598",
       "id": "core_types_cartajugada",
-      "community": 84,
+      "community": 34,
       "norm_label": "cartajugada"
     },
     {
       "label": "GolpeRecibido",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L604",
+      "source_location": "L608",
       "id": "core_types_golperecibido",
-      "community": 84,
+      "community": 34,
       "norm_label": "golperecibido"
     },
     {
       "label": "ReliquiaDef",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L613",
+      "source_location": "L617",
       "id": "core_types_reliquiadef",
-      "community": 75,
+      "community": 34,
       "norm_label": "reliquiadef"
     },
     {
       "label": "EstadoRun",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L696",
+      "source_location": "L700",
       "id": "core_types_estadorun",
-      "community": 75,
+      "community": 34,
       "norm_label": "estadorun"
     },
     {
       "label": "DiceTheme",
       "file_type": "code",
       "source_file": "src/core/types.ts",
-      "source_location": "L728",
+      "source_location": "L734",
       "id": "core_types_dicetheme",
-      "community": 84,
+      "community": 27,
       "norm_label": "dicetheme"
     },
     {
@@ -35719,7 +35989,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L1",
       "id": "core_versions",
-      "community": 18,
+      "community": 186,
       "norm_label": "versions.ts"
     },
     {
@@ -35728,7 +35998,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L4",
       "id": "core_versions_changelogentry",
-      "community": 18,
+      "community": 186,
       "norm_label": "changelogentry"
     },
     {
@@ -35737,7 +36007,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L6",
       "id": "core_versions_majorof",
-      "community": 18,
+      "community": 186,
       "norm_label": "majorof()"
     },
     {
@@ -35746,7 +36016,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L10",
       "id": "core_versions_ismajorupgrade",
-      "community": 18,
+      "community": 186,
       "norm_label": "ismajorupgrade()"
     },
     {
@@ -35755,7 +36025,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L15",
       "id": "core_versions_majorchangelog",
-      "community": 18,
+      "community": 186,
       "norm_label": "majorchangelog()"
     },
     {
@@ -35764,7 +36034,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L21",
       "id": "core_versions_shouldnotifymajor",
-      "community": 18,
+      "community": 186,
       "norm_label": "shouldnotifymajor()"
     },
     {
@@ -35773,7 +36043,7 @@
       "source_file": "src/core/versions.ts",
       "source_location": "L29",
       "id": "core_versions_noticeson",
-      "community": 18,
+      "community": 186,
       "norm_label": "noticeson()"
     },
     {
@@ -36169,7 +36439,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1",
       "id": "fx_card_spells",
-      "community": 52,
+      "community": 106,
       "norm_label": "card-spells.ts"
     },
     {
@@ -36178,7 +36448,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L16",
       "id": "fx_card_spells_fire",
-      "community": 52,
+      "community": 106,
       "norm_label": "fire"
     },
     {
@@ -36187,7 +36457,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L17",
       "id": "fx_card_spells_blood",
-      "community": 52,
+      "community": 106,
       "norm_label": "blood"
     },
     {
@@ -36196,7 +36466,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L18",
       "id": "fx_card_spells_leaf",
-      "community": 52,
+      "community": 106,
       "norm_label": "leaf"
     },
     {
@@ -36205,7 +36475,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L19",
       "id": "fx_card_spells_earth",
-      "community": 52,
+      "community": 106,
       "norm_label": "earth"
     },
     {
@@ -36214,7 +36484,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L20",
       "id": "fx_card_spells_moon",
-      "community": 52,
+      "community": 106,
       "norm_label": "moon"
     },
     {
@@ -36223,7 +36493,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L21",
       "id": "fx_card_spells_star",
-      "community": 52,
+      "community": 106,
       "norm_label": "star"
     },
     {
@@ -36232,7 +36502,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L22",
       "id": "fx_card_spells_gold",
-      "community": 52,
+      "community": 106,
       "norm_label": "gold"
     },
     {
@@ -36241,7 +36511,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L23",
       "id": "fx_card_spells_void",
-      "community": 52,
+      "community": 106,
       "norm_label": "void"
     },
     {
@@ -36250,7 +36520,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L24",
       "id": "fx_card_spells_toxic",
-      "community": 52,
+      "community": 106,
       "norm_label": "toxic"
     },
     {
@@ -36259,7 +36529,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L25",
       "id": "fx_card_spells_arcane",
-      "community": 52,
+      "community": 106,
       "norm_label": "arcane"
     },
     {
@@ -36268,7 +36538,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L26",
       "id": "fx_card_spells_sea",
-      "community": 52,
+      "community": 106,
       "norm_label": "sea"
     },
     {
@@ -36277,7 +36547,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L27",
       "id": "fx_card_spells_storm",
-      "community": 52,
+      "community": 106,
       "norm_label": "storm"
     },
     {
@@ -36286,7 +36556,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L28",
       "id": "fx_card_spells_psi",
-      "community": 52,
+      "community": 106,
       "norm_label": "psi"
     },
     {
@@ -36295,7 +36565,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L29",
       "id": "fx_card_spells_fey",
-      "community": 52,
+      "community": 106,
       "norm_label": "fey"
     },
     {
@@ -36304,7 +36574,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L30",
       "id": "fx_card_spells_love",
-      "community": 52,
+      "community": 106,
       "norm_label": "love"
     },
     {
@@ -36313,7 +36583,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L31",
       "id": "fx_card_spells_steel",
-      "community": 52,
+      "community": 106,
       "norm_label": "steel"
     },
     {
@@ -36322,7 +36592,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L32",
       "id": "fx_card_spells_phantom",
-      "community": 52,
+      "community": 106,
       "norm_label": "phantom"
     },
     {
@@ -36331,7 +36601,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L33",
       "id": "fx_card_spells_hell",
-      "community": 52,
+      "community": 106,
       "norm_label": "hell"
     },
     {
@@ -36340,7 +36610,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L35",
       "id": "fx_card_spells_kind",
-      "community": 52,
+      "community": 106,
       "norm_label": "kind"
     },
     {
@@ -36358,7 +36628,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L51",
       "id": "fx_card_spells_burstopts",
-      "community": 52,
+      "community": 106,
       "norm_label": "burstopts"
     },
     {
@@ -36376,7 +36646,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L72",
       "id": "fx_card_spells_riseopts",
-      "community": 52,
+      "community": 106,
       "norm_label": "riseopts"
     },
     {
@@ -36394,7 +36664,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L90",
       "id": "fx_card_spells_gatheropts",
-      "community": 52,
+      "community": 106,
       "norm_label": "gatheropts"
     },
     {
@@ -36529,7 +36799,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L316",
       "id": "fx_card_spells_seaplan",
-      "community": 52,
+      "community": 26,
       "norm_label": "seaplan"
     },
     {
@@ -36538,7 +36808,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L365",
       "id": "fx_card_spells_seax",
-      "community": 52,
+      "community": 178,
       "norm_label": "seax()"
     },
     {
@@ -36547,7 +36817,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L373",
       "id": "fx_card_spells_seaarrival",
-      "community": 52,
+      "community": 178,
       "norm_label": "seaarrival()"
     },
     {
@@ -36556,7 +36826,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L388",
       "id": "fx_card_spells_coleramar",
-      "community": 52,
+      "community": 178,
       "norm_label": "coleramar()"
     },
     {
@@ -36727,7 +36997,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1050",
       "id": "fx_card_spells_almacuchillas",
-      "community": 106,
+      "community": 26,
       "norm_label": "almacuchillas()"
     },
     {
@@ -36862,7 +37132,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1478",
       "id": "fx_card_spells_dart_lanes",
-      "community": 52,
+      "community": 106,
       "norm_label": "dart_lanes"
     },
     {
@@ -36871,7 +37141,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1481",
       "id": "fx_card_spells_dartroute",
-      "community": 52,
+      "community": 106,
       "norm_label": "dartroute"
     },
     {
@@ -36880,7 +37150,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1587",
       "id": "fx_card_spells_darttrail",
-      "community": 52,
+      "community": 106,
       "norm_label": "darttrail()"
     },
     {
@@ -36889,7 +37159,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1593",
       "id": "fx_card_spells_darttimeat",
-      "community": 52,
+      "community": 106,
       "norm_label": "darttimeat()"
     },
     {
@@ -36898,7 +37168,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1596",
       "id": "fx_card_spells_trailpoints",
-      "community": 52,
+      "community": 106,
       "norm_label": "trailpoints()"
     },
     {
@@ -36907,7 +37177,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1603",
       "id": "fx_card_spells_headingat",
-      "community": 52,
+      "community": 106,
       "norm_label": "headingat()"
     },
     {
@@ -36916,7 +37186,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1612",
       "id": "fx_card_spells_proyectilmagico",
-      "community": 52,
+      "community": 106,
       "norm_label": "proyectilmagico()"
     },
     {
@@ -36925,7 +37195,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1676",
       "id": "fx_card_spells_explosionsobrenatural",
-      "community": 52,
+      "community": 106,
       "norm_label": "explosionsobrenatural()"
     },
     {
@@ -36952,7 +37222,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1826",
       "id": "fx_card_spells_devotion",
-      "community": 52,
+      "community": 106,
       "norm_label": "devotion"
     },
     {
@@ -36961,7 +37231,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1827",
       "id": "fx_card_spells_glory",
-      "community": 52,
+      "community": 106,
       "norm_label": "glory"
     },
     {
@@ -36970,7 +37240,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1828",
       "id": "fx_card_spells_ancient",
-      "community": 52,
+      "community": 106,
       "norm_label": "ancient"
     },
     {
@@ -36979,7 +37249,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1829",
       "id": "fx_card_spells_vengeance",
-      "community": 52,
+      "community": 106,
       "norm_label": "vengeance"
     },
     {
@@ -36988,7 +37258,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1830",
       "id": "fx_card_spells_vengeful_flame",
-      "community": 52,
+      "community": 106,
       "norm_label": "vengeful_flame"
     },
     {
@@ -37078,7 +37348,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2145",
       "id": "fx_card_spells_entry",
-      "community": 52,
+      "community": 106,
       "norm_label": "entry"
     },
     {
@@ -37123,7 +37393,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2240",
       "id": "fx_card_spells_volleytiming",
-      "community": 67,
+      "community": 39,
       "norm_label": "volleytiming()"
     },
     {
@@ -37132,7 +37402,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2248",
       "id": "fx_card_spells_sweeparrival",
-      "community": 52,
+      "community": 106,
       "norm_label": "sweeparrival()"
     },
     {
@@ -37141,7 +37411,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2255",
       "id": "fx_card_spells_sweepimpactms",
-      "community": 52,
+      "community": 106,
       "norm_label": "sweepimpactms()"
     },
     {
@@ -37150,7 +37420,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2261",
       "id": "fx_card_spells_cardshake",
-      "community": 67,
+      "community": 39,
       "norm_label": "cardshake()"
     },
     {
@@ -38032,7 +38302,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L215",
       "id": "fx_death_spells_almaheroe",
-      "community": 52,
+      "community": 178,
       "norm_label": "almaheroe()"
     },
     {
@@ -38068,7 +38338,7 @@
       "source_file": "src/fx/doom-chains.ts",
       "source_location": "L36",
       "id": "fx_doom_chains_isdoomconsumption",
-      "community": 26,
+      "community": 19,
       "norm_label": "isdoomconsumption()"
     },
     {
@@ -38311,7 +38581,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L16",
       "id": "fx_enemy_rigs_pt",
-      "community": 45,
+      "community": 104,
       "norm_label": "pt"
     },
     {
@@ -38842,7 +39112,7 @@
       "source_file": "src/fx/enemy-rigs.ts",
       "source_location": "L1939",
       "id": "fx_enemy_rigs_enemy_rigs",
-      "community": 157,
+      "community": 6,
       "norm_label": "enemy_rigs"
     },
     {
@@ -40183,7 +40453,7 @@
       "source_file": "src/fx/holy-flames.ts",
       "source_location": "L13",
       "id": "fx_holy_flames_flamekind",
-      "community": 45,
+      "community": 98,
       "norm_label": "flamekind"
     },
     {
@@ -40255,7 +40525,7 @@
       "source_file": "src/fx/holy-flames.ts",
       "source_location": "L51",
       "id": "fx_holy_flames_flamelayerfor",
-      "community": 45,
+      "community": 98,
       "norm_label": "flamelayerfor()"
     },
     {
@@ -40831,7 +41101,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L1",
       "id": "fx_particle_gl",
-      "community": 67,
+      "community": 45,
       "norm_label": "particle-gl.ts"
     },
     {
@@ -40840,7 +41110,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L166",
       "id": "fx_particle_gl_shape_code",
-      "community": 67,
+      "community": 45,
       "norm_label": "shape_code"
     },
     {
@@ -40885,7 +41155,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L257",
       "id": "fx_particle_gl_particlerenderergl",
-      "community": 67,
+      "community": 39,
       "norm_label": "particlerenderergl"
     },
     {
@@ -40894,7 +41164,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L264",
       "id": "fx_particle_gl_particlerenderergl_create",
-      "community": 67,
+      "community": 39,
       "norm_label": ".create()"
     },
     {
@@ -40903,7 +41173,7 @@
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L270",
       "id": "fx_particle_gl_particlerenderergl_constructor",
-      "community": 67,
+      "community": 39,
       "norm_label": ".constructor()"
     },
     {
@@ -41065,7 +41335,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L18",
       "id": "fx_particulas_movimientoreducido",
-      "community": 67,
+      "community": 39,
       "norm_label": "movimientoreducido()"
     },
     {
@@ -41074,7 +41344,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L20",
       "id": "fx_particulas_menosparticulas",
-      "community": 76,
+      "community": 200,
       "norm_label": "menosparticulas()"
     },
     {
@@ -41083,7 +41353,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L22",
       "id": "fx_particulas_sacudidasactivas",
-      "community": 67,
+      "community": 39,
       "norm_label": "sacudidasactivas()"
     },
     {
@@ -41137,7 +41407,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L87",
       "id": "fx_particulas_motorparticulas",
-      "community": 67,
+      "community": 39,
       "norm_label": "motorparticulas"
     },
     {
@@ -41146,7 +41416,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L104",
       "id": "fx_particulas_motorparticulas_iniciar",
-      "community": 67,
+      "community": 39,
       "norm_label": ".iniciar()"
     },
     {
@@ -41155,7 +41425,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L116",
       "id": "fx_particulas_motorparticulas_ambiente",
-      "community": 67,
+      "community": 39,
       "norm_label": ".ambiente()"
     },
     {
@@ -41164,7 +41434,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L120",
       "id": "fx_particulas_motorparticulas_emitir",
-      "community": 67,
+      "community": 39,
       "norm_label": ".emitir()"
     },
     {
@@ -41173,7 +41443,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L131",
       "id": "fx_particulas_motorparticulas_tienehechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".tienehechizo()"
     },
     {
@@ -41182,7 +41452,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L136",
       "id": "fx_particulas_motorparticulas_anclahechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".anclahechizo()"
     },
     {
@@ -41191,7 +41461,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L141",
       "id": "fx_particulas_motorparticulas_receptorhechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".receptorhechizo()"
     },
     {
@@ -41200,7 +41470,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L146",
       "id": "fx_particulas_motorparticulas_sacudidahechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".sacudidahechizo()"
     },
     {
@@ -41209,7 +41479,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L151",
       "id": "fx_particulas_motorparticulas_rafagahechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".rafagahechizo()"
     },
     {
@@ -41218,7 +41488,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L156",
       "id": "fx_particulas_motorparticulas_barridohechizo",
-      "community": 67,
+      "community": 39,
       "norm_label": ".barridohechizo()"
     },
     {
@@ -41227,7 +41497,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L163",
       "id": "fx_particulas_motorparticulas_hechizo",
-      "community": 52,
+      "community": 26,
       "norm_label": ".hechizo()"
     },
     {
@@ -41236,7 +41506,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L171",
       "id": "fx_particulas_motorparticulas_fuentecarta",
-      "community": 67,
+      "community": 39,
       "norm_label": ".fuentecarta()"
     },
     {
@@ -41254,7 +41524,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L194",
       "id": "fx_particulas_motorparticulas_capa",
-      "community": 67,
+      "community": 39,
       "norm_label": ".capa()"
     },
     {
@@ -41263,7 +41533,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L200",
       "id": "fx_particulas_motorparticulas_estallido",
-      "community": 67,
+      "community": 39,
       "norm_label": ".estallido()"
     },
     {
@@ -41272,7 +41542,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L208",
       "id": "fx_particulas_motorparticulas_contadorfps",
-      "community": 67,
+      "community": 39,
       "norm_label": ".contadorfps()"
     },
     {
@@ -41290,7 +41560,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L259",
       "id": "fx_particulas_fx",
-      "community": 46,
+      "community": 6,
       "norm_label": "fx"
     },
     {
@@ -41461,7 +41731,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L11",
       "id": "fx_puppet_chain_slots",
-      "community": 115,
+      "community": 45,
       "norm_label": "chain_slots"
     },
     {
@@ -41551,7 +41821,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L57",
       "id": "fx_puppet_burst",
-      "community": 45,
+      "community": 10,
       "norm_label": "burst"
     },
     {
@@ -41659,7 +41929,7 @@
       "source_file": "src/fx/puppet.ts",
       "source_location": "L196",
       "id": "fx_puppet_emissive",
-      "community": 7,
+      "community": 45,
       "norm_label": "emissive"
     },
     {
@@ -42064,7 +42334,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L10",
       "id": "fx_spell_fx_box",
-      "community": 52,
+      "community": 26,
       "norm_label": "box"
     },
     {
@@ -42073,7 +42343,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L11",
       "id": "fx_spell_fx_point",
-      "community": 52,
+      "community": 26,
       "norm_label": "point"
     },
     {
@@ -42109,7 +42379,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L33",
       "id": "fx_spell_fx_spelldef",
-      "community": 52,
+      "community": 106,
       "norm_label": "spelldef"
     },
     {
@@ -42118,7 +42388,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L66",
       "id": "fx_spell_fx_clamp01",
-      "community": 52,
+      "community": 178,
       "norm_label": "clamp01()"
     },
     {
@@ -42163,7 +42433,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L71",
       "id": "fx_spell_fx_smooth",
-      "community": 52,
+      "community": 178,
       "norm_label": "smooth()"
     },
     {
@@ -42199,7 +42469,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L77",
       "id": "fx_spell_fx_dropangle",
-      "community": 92,
+      "community": 178,
       "norm_label": "dropangle()"
     },
     {
@@ -42433,7 +42703,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L163",
       "id": "fx_spell_fx_fly",
-      "community": 92,
+      "community": 178,
       "norm_label": "fly()"
     },
     {
@@ -42442,7 +42712,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L168",
       "id": "fx_spell_fx_vinepath",
-      "community": 52,
+      "community": 178,
       "norm_label": "vinepath()"
     },
     {
@@ -42451,7 +42721,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L183",
       "id": "fx_spell_fx_vinefront",
-      "community": 92,
+      "community": 178,
       "norm_label": "vinefront()"
     },
     {
@@ -42469,7 +42739,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L214",
       "id": "fx_spell_fx_zarpa",
-      "community": 92,
+      "community": 106,
       "norm_label": "zarpa()"
     },
     {
@@ -42487,7 +42757,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L260",
       "id": "fx_spell_fx_sangre",
-      "community": 92,
+      "community": 178,
       "norm_label": "sangre()"
     },
     {
@@ -42505,7 +42775,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L331",
       "id": "fx_spell_fx_bellwidth",
-      "community": 52,
+      "community": 178,
       "norm_label": "bellwidth()"
     },
     {
@@ -42577,7 +42847,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L603",
       "id": "fx_spell_fx_raices",
-      "community": 92,
+      "community": 178,
       "norm_label": "raices()"
     },
     {
@@ -42586,7 +42856,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L637",
       "id": "fx_spell_fx_tierra",
-      "community": 92,
+      "community": 178,
       "norm_label": "tierra()"
     },
     {
@@ -43450,7 +43720,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L1",
       "id": "ui_actualizacion",
-      "community": 18,
+      "community": 186,
       "norm_label": "actualizacion.ts"
     },
     {
@@ -43459,7 +43729,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L25",
       "id": "ui_actualizacion_iniciaractualizaciones",
-      "community": 18,
+      "community": 186,
       "norm_label": "iniciaractualizaciones()"
     },
     {
@@ -43468,7 +43738,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L53",
       "id": "ui_actualizacion_mostrarnovedadessinuevo",
-      "community": 18,
+      "community": 186,
       "norm_label": "mostrarnovedadessinuevo()"
     },
     {
@@ -43477,7 +43747,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L67",
       "id": "ui_actualizacion_guardarmeta",
-      "community": 18,
+      "community": 186,
       "norm_label": "guardarmeta()"
     },
     {
@@ -43486,7 +43756,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L70",
       "id": "ui_actualizacion_leermeta",
-      "community": 18,
+      "community": 186,
       "norm_label": "leermeta()"
     },
     {
@@ -43504,7 +43774,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L77",
       "id": "ui_actualizacion_avisosactivados",
-      "community": 18,
+      "community": 186,
       "norm_label": "avisosactivados()"
     },
     {
@@ -43513,7 +43783,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L84",
       "id": "ui_actualizacion_recuperaravisos",
-      "community": 18,
+      "community": 186,
       "norm_label": "recuperaravisos()"
     },
     {
@@ -43522,7 +43792,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L100",
       "id": "ui_actualizacion_cambiaravisos",
-      "community": 18,
+      "community": 186,
       "norm_label": "cambiaravisos()"
     },
     {
@@ -43531,7 +43801,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L122",
       "id": "ui_actualizacion_comprobarversionmayor",
-      "community": 18,
+      "community": 186,
       "norm_label": "comprobarversionmayor()"
     },
     {
@@ -43540,7 +43810,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L140",
       "id": "ui_actualizacion_mostraravisoactualizar",
-      "community": 187,
+      "community": 186,
       "norm_label": "mostraravisoactualizar()"
     },
     {
@@ -43549,7 +43819,7 @@
       "source_file": "src/ui/actualizacion.ts",
       "source_location": "L175",
       "id": "ui_actualizacion_mostrarnovedades",
-      "community": 18,
+      "community": 186,
       "norm_label": "mostrarnovedades()"
     },
     {
@@ -43603,7 +43873,7 @@
       "source_file": "src/ui/capitulo.ts",
       "source_location": "L1",
       "id": "ui_capitulo",
-      "community": 46,
+      "community": 41,
       "norm_label": "capitulo.ts"
     },
     {
@@ -43621,7 +43891,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L1",
       "id": "ui_card_fly",
-      "community": 76,
+      "community": 200,
       "norm_label": "card-fly.ts"
     },
     {
@@ -43630,7 +43900,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L18",
       "id": "ui_card_fly_hand_classes",
-      "community": 76,
+      "community": 200,
       "norm_label": "hand_classes"
     },
     {
@@ -43639,7 +43909,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L20",
       "id": "ui_card_fly_reducedmotion",
-      "community": 76,
+      "community": 200,
       "norm_label": "reducedmotion()"
     },
     {
@@ -43648,7 +43918,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L29",
       "id": "ui_card_fly_run",
-      "community": 76,
+      "community": 200,
       "norm_label": "run()"
     },
     {
@@ -43657,7 +43927,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L46",
       "id": "ui_card_fly_runandhold",
-      "community": 76,
+      "community": 200,
       "norm_label": "runandhold()"
     },
     {
@@ -43675,7 +43945,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L74",
       "id": "ui_card_fly_burn",
-      "community": 76,
+      "community": 200,
       "norm_label": "burn()"
     },
     {
@@ -43684,7 +43954,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L121",
       "id": "ui_card_fly_pose",
-      "community": 76,
+      "community": 200,
       "norm_label": "pose()"
     },
     {
@@ -43693,7 +43963,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L135",
       "id": "ui_card_fly_cardclone",
-      "community": 76,
+      "community": 200,
       "norm_label": "cardclone()"
     },
     {
@@ -43702,7 +43972,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L144",
       "id": "ui_card_fly_pilecenter",
-      "community": 76,
+      "community": 200,
       "norm_label": "pilecenter()"
     },
     {
@@ -43711,7 +43981,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L153",
       "id": "ui_card_fly_flyplay",
-      "community": 76,
+      "community": 200,
       "norm_label": "flyplay()"
     },
     {
@@ -43720,7 +43990,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L175",
       "id": "ui_card_fly_flyshowcase",
-      "community": 76,
+      "community": 200,
       "norm_label": "flyshowcase()"
     },
     {
@@ -43729,7 +43999,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L191",
       "id": "ui_card_fly_burnsolo",
-      "community": 76,
+      "community": 200,
       "norm_label": "burnsolo()"
     },
     {
@@ -43738,7 +44008,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L203",
       "id": "ui_card_fly_flyexhaust",
-      "community": 76,
+      "community": 200,
       "norm_label": "flyexhaust()"
     },
     {
@@ -43747,7 +44017,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L222",
       "id": "ui_card_fly_flydraw",
-      "community": 76,
+      "community": 200,
       "norm_label": "flydraw()"
     },
     {
@@ -43756,7 +44026,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L249",
       "id": "ui_card_fly_flydiscard",
-      "community": 76,
+      "community": 200,
       "norm_label": "flydiscard()"
     },
     {
@@ -43765,7 +44035,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L264",
       "id": "ui_card_fly_flyshuffle",
-      "community": 76,
+      "community": 200,
       "norm_label": "flyshuffle()"
     },
     {
@@ -43774,7 +44044,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L282",
       "id": "ui_card_fly_px",
-      "community": 76,
+      "community": 200,
       "norm_label": "px()"
     },
     {
@@ -43783,7 +44053,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L285",
       "id": "ui_card_fly_slotpose",
-      "community": 76,
+      "community": 200,
       "norm_label": "slotpose()"
     },
     {
@@ -43792,7 +44062,7 @@
       "source_file": "src/ui/card-fly.ts",
       "source_location": "L298",
       "id": "ui_card_fly_glidetoslot",
-      "community": 76,
+      "community": 200,
       "norm_label": "glidetoslot()"
     },
     {
@@ -43918,7 +44188,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L36",
       "id": "ui_card_motion_distance",
-      "community": 76,
+      "community": 200,
       "norm_label": "distance()"
     },
     {
@@ -43972,7 +44242,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L86",
       "id": "ui_card_motion_playduration",
-      "community": 76,
+      "community": 200,
       "norm_label": "playduration()"
     },
     {
@@ -44035,7 +44305,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L154",
       "id": "ui_card_motion_shufflecount",
-      "community": 76,
+      "community": 200,
       "norm_label": "shufflecount()"
     },
     {
@@ -44044,7 +44314,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L159",
       "id": "ui_card_motion_shuffleframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "shuffleframes()"
     },
     {
@@ -44170,7 +44440,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L275",
       "id": "ui_card_motion_dissolvebudget",
-      "community": 76,
+      "community": 200,
       "norm_label": "dissolvebudget()"
     },
     {
@@ -44179,7 +44449,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L281",
       "id": "ui_card_motion_dissolvedelays",
-      "community": 76,
+      "community": 200,
       "norm_label": "dissolvedelays()"
     },
     {
@@ -44188,7 +44458,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L365",
       "id": "ui_card_motion_exhaustpose",
-      "community": 76,
+      "community": 200,
       "norm_label": "exhaustpose()"
     },
     {
@@ -44197,7 +44467,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L375",
       "id": "ui_card_motion_exhaustframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "exhaustframes()"
     },
     {
@@ -44251,7 +44521,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L430",
       "id": "ui_card_motion_reflowframes",
-      "community": 76,
+      "community": 200,
       "norm_label": "reflowframes()"
     },
     {
@@ -44260,7 +44530,7 @@
       "source_file": "src/ui/card-motion.ts",
       "source_location": "L438",
       "id": "ui_card_motion_reflowduration",
-      "community": 76,
+      "community": 200,
       "norm_label": "reflowduration()"
     },
     {
@@ -44521,7 +44791,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L1",
       "id": "ui_castigo_ficha",
-      "community": 84,
+      "community": 19,
       "norm_label": "castigo-ficha.ts"
     },
     {
@@ -44530,7 +44800,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L7",
       "id": "ui_castigo_ficha_icono",
-      "community": 84,
+      "community": 19,
       "norm_label": "icono"
     },
     {
@@ -44539,7 +44809,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L13",
       "id": "ui_castigo_ficha_llamasdecastigo",
-      "community": 84,
+      "community": 19,
       "norm_label": "llamasdecastigo()"
     },
     {
@@ -44548,7 +44818,7 @@
       "source_file": "src/ui/castigo-ficha.ts",
       "source_location": "L20",
       "id": "ui_castigo_ficha_resumencastigo",
-      "community": 84,
+      "community": 19,
       "norm_label": "resumencastigo"
     },
     {
@@ -44561,10 +44831,19 @@
       "norm_label": "combate.ts"
     },
     {
-      "label": "caidaDelHeroe()",
+      "label": "CaidaHeroe",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
       "source_location": "L48",
+      "id": "ui_combate_caidaheroe",
+      "community": 19,
+      "norm_label": "caidaheroe"
+    },
+    {
+      "label": "caidaDelHeroe()",
+      "file_type": "code",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L60",
       "id": "ui_combate_caidadelheroe",
       "community": 46,
       "norm_label": "caidadelheroe()"
@@ -44573,7 +44852,7 @@
       "label": "AccionJugador",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L51",
+      "source_location": "L63",
       "id": "ui_combate_accionjugador",
       "community": 19,
       "norm_label": "accionjugador"
@@ -44582,7 +44861,7 @@
       "label": "AccionCarta",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L55",
+      "source_location": "L67",
       "id": "ui_combate_accioncarta",
       "community": 19,
       "norm_label": "accioncarta"
@@ -44591,7 +44870,7 @@
       "label": "NOMBRE_CLASE",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L57",
+      "source_location": "L69",
       "id": "ui_combate_nombre_clase",
       "community": 19,
       "norm_label": "nombre_clase"
@@ -44600,7 +44879,7 @@
       "label": "SPRITE_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L61",
+      "source_location": "L73",
       "id": "ui_combate_sprite_invocacion",
       "community": 19,
       "norm_label": "sprite_invocacion"
@@ -44609,7 +44888,7 @@
       "label": "PASIVA_INVOCACION",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L65",
+      "source_location": "L77",
       "id": "ui_combate_pasiva_invocacion",
       "community": 19,
       "norm_label": "pasiva_invocacion"
@@ -44618,7 +44897,7 @@
       "label": "pantallaCombate()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L73",
+      "source_location": "L85",
       "id": "ui_combate_pantallacombate",
       "community": 46,
       "norm_label": "pantallacombate()"
@@ -44627,7 +44906,7 @@
       "label": "BACKGROUND_URLS",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1604",
+      "source_location": "L1622",
       "id": "ui_combate_background_urls",
       "community": 19,
       "norm_label": "background_urls"
@@ -44636,7 +44915,7 @@
       "label": "montarFondo()",
       "file_type": "code",
       "source_file": "src/ui/combate.ts",
-      "source_location": "L1612",
+      "source_location": "L1630",
       "id": "ui_combate_montarfondo",
       "community": 19,
       "norm_label": "montarfondo()"
@@ -44710,7 +44989,7 @@
       "source_file": "src/ui/compendio.ts",
       "source_location": "L142",
       "id": "ui_compendio_mostrarexportacion",
-      "community": 187,
+      "community": 186,
       "norm_label": "mostrarexportacion()"
     },
     {
@@ -44809,7 +45088,7 @@
       "source_file": "src/ui/evento.ts",
       "source_location": "L1",
       "id": "ui_evento",
-      "community": 46,
+      "community": 41,
       "norm_label": "evento.ts"
     },
     {
@@ -44827,7 +45106,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L1",
       "id": "ui_fin",
-      "community": 157,
+      "community": 6,
       "norm_label": "fin.ts"
     },
     {
@@ -44836,7 +45115,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L14",
       "id": "ui_fin_eleccionfin",
-      "community": 157,
+      "community": 6,
       "norm_label": "eleccionfin"
     },
     {
@@ -44845,7 +45124,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L17",
       "id": "ui_fin_siluetacaida",
-      "community": 157,
+      "community": 6,
       "norm_label": "siluetacaida()"
     },
     {
@@ -44854,7 +45133,7 @@
       "source_file": "src/ui/fin.ts",
       "source_location": "L31",
       "id": "ui_fin_epilogo",
-      "community": 157,
+      "community": 6,
       "norm_label": "epilogo"
     },
     {
@@ -44872,7 +45151,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L1",
       "id": "ui_final_verdadero",
-      "community": 186,
+      "community": 6,
       "norm_label": "final-verdadero.ts"
     },
     {
@@ -44881,7 +45160,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L19",
       "id": "ui_final_verdadero_nombre_clase",
-      "community": 186,
+      "community": 6,
       "norm_label": "nombre_clase"
     },
     {
@@ -44890,7 +45169,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L23",
       "id": "ui_final_verdadero_izquierda",
-      "community": 186,
+      "community": 6,
       "norm_label": "izquierda"
     },
     {
@@ -44899,7 +45178,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L24",
       "id": "ui_final_verdadero_derecha",
-      "community": 186,
+      "community": 6,
       "norm_label": "derecha"
     },
     {
@@ -44908,7 +45187,7 @@
       "source_file": "src/ui/final-verdadero.ts",
       "source_location": "L26",
       "id": "ui_final_verdadero_pantallafinalverdadero",
-      "community": 186,
+      "community": 46,
       "norm_label": "pantallafinalverdadero()"
     },
     {
@@ -45052,7 +45331,7 @@
       "source_file": "src/ui/gallery.ts",
       "source_location": "L35",
       "id": "ui_gallery_showgallery",
-      "community": 157,
+      "community": 186,
       "norm_label": "showgallery()"
     },
     {
@@ -45169,7 +45448,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L1",
       "id": "ui_instalar",
-      "community": 187,
+      "community": 186,
       "norm_label": "instalar.ts"
     },
     {
@@ -45178,7 +45457,7 @@
       "source_file": "src/ui/instalar.ts",
       "source_location": "L10",
       "id": "ui_instalar_avisoinstalacion",
-      "community": 187,
+      "community": 186,
       "norm_label": "avisoinstalacion()"
     },
     {
@@ -45187,7 +45466,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L1",
       "id": "ui_lapida",
-      "community": 157,
+      "community": 37,
       "norm_label": "lapida.ts"
     },
     {
@@ -45196,7 +45475,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L7",
       "id": "ui_lapida_escape",
-      "community": 157,
+      "community": 37,
       "norm_label": "escape()"
     },
     {
@@ -45205,7 +45484,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L11",
       "id": "ui_lapida_tituloletras",
-      "community": 157,
+      "community": 37,
       "norm_label": "tituloletras()"
     },
     {
@@ -45214,7 +45493,7 @@
       "source_file": "src/ui/lapida.ts",
       "source_location": "L17",
       "id": "ui_lapida_htmlderrota",
-      "community": 157,
+      "community": 37,
       "norm_label": "htmlderrota()"
     },
     {
@@ -45637,7 +45916,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L66",
       "id": "ui_puppet_sprite_arcsector",
-      "community": 45,
+      "community": 104,
       "norm_label": "arcsector()"
     },
     {
@@ -45718,7 +45997,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L275",
       "id": "ui_puppet_sprite_spriteclock",
-      "community": 157,
+      "community": 6,
       "norm_label": "spriteclock()"
     },
     {
@@ -45799,7 +46078,7 @@
       "source_file": "src/ui/puppet-sprite.ts",
       "source_location": "L385",
       "id": "ui_puppet_sprite_puppetsprite_setflames",
-      "community": 45,
+      "community": 98,
       "norm_label": ".setflames()"
     },
     {
@@ -46132,7 +46411,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L1",
       "id": "ui_scene_art",
-      "community": 46,
+      "community": 41,
       "norm_label": "scene-art.ts"
     },
     {
@@ -46141,7 +46420,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L9",
       "id": "ui_scene_art_urltable",
-      "community": 46,
+      "community": 41,
       "norm_label": "urltable"
     },
     {
@@ -46150,7 +46429,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L16",
       "id": "ui_scene_art_portrait_scenes",
-      "community": 46,
+      "community": 41,
       "norm_label": "portrait_scenes"
     },
     {
@@ -46159,7 +46438,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L19",
       "id": "ui_scene_art_chaptersceneid",
-      "community": 46,
+      "community": 41,
       "norm_label": "chaptersceneid()"
     },
     {
@@ -46168,7 +46447,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L28",
       "id": "ui_scene_art_eventsceneid",
-      "community": 46,
+      "community": 41,
       "norm_label": "eventsceneid()"
     },
     {
@@ -46177,7 +46456,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L31",
       "id": "ui_scene_art_picksceneart",
-      "community": 46,
+      "community": 41,
       "norm_label": "picksceneart()"
     },
     {
@@ -46186,7 +46465,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L36",
       "id": "ui_scene_art_scenefigure",
-      "community": 46,
+      "community": 41,
       "norm_label": "scenefigure()"
     },
     {
@@ -46195,7 +46474,7 @@
       "source_file": "src/ui/scene-art.ts",
       "source_location": "L43",
       "id": "ui_scene_art_sceneart",
-      "community": 46,
+      "community": 41,
       "norm_label": "sceneart()"
     },
     {
@@ -46222,7 +46501,7 @@
       "source_file": "src/ui/taberna.ts",
       "source_location": "L1",
       "id": "ui_taberna",
-      "community": 46,
+      "community": 34,
       "norm_label": "taberna.ts"
     },
     {
@@ -46231,7 +46510,7 @@
       "source_file": "src/ui/taberna.ts",
       "source_location": "L11",
       "id": "ui_taberna_lugar_mision",
-      "community": 46,
+      "community": 34,
       "norm_label": "lugar_mision"
     },
     {
@@ -46294,7 +46573,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L1",
       "id": "ui_util",
-      "community": 187,
+      "community": 19,
       "norm_label": "util.ts"
     },
     {
@@ -46303,7 +46582,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L5",
       "id": "ui_util_el",
-      "community": 187,
+      "community": 186,
       "norm_label": "el()"
     },
     {
@@ -46312,7 +46591,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L16",
       "id": "ui_util_espera",
-      "community": 187,
+      "community": 19,
       "norm_label": "espera()"
     },
     {
@@ -46321,7 +46600,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L20",
       "id": "ui_util_centrode",
-      "community": 187,
+      "community": 19,
       "norm_label": "centrode()"
     },
     {
@@ -46330,7 +46609,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L27",
       "id": "ui_util_numeroflotante",
-      "community": 187,
+      "community": 19,
       "norm_label": "numeroflotante()"
     },
     {
@@ -46357,7 +46636,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L61",
       "id": "ui_util_iniciartooltips",
-      "community": 187,
+      "community": 186,
       "norm_label": "iniciartooltips()"
     },
     {
@@ -46366,7 +46645,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L94",
       "id": "ui_util_icono_estado",
-      "community": 187,
+      "community": 19,
       "norm_label": "icono_estado"
     },
     {
@@ -46375,7 +46654,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L117",
       "id": "ui_util_nombre_estado",
-      "community": 187,
+      "community": 19,
       "norm_label": "nombre_estado"
     },
     {
@@ -46393,7 +46672,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L234",
       "id": "ui_util_tipestado",
-      "community": 187,
+      "community": 19,
       "norm_label": "tipestado()"
     },
     {
@@ -46447,7 +46726,7 @@
       "source_file": "src/version.ts",
       "source_location": "L1",
       "id": "src_version",
-      "community": 18,
+      "community": 186,
       "norm_label": "version.ts"
     },
     {
@@ -46456,7 +46735,7 @@
       "source_file": "src/version.ts",
       "source_location": "L6",
       "id": "src_version_entradacambios",
-      "community": 18,
+      "community": 186,
       "norm_label": "entradacambios"
     },
     {
@@ -46465,7 +46744,7 @@
       "source_file": "src/version.ts",
       "source_location": "L12",
       "id": "src_version_changelog",
-      "community": 18,
+      "community": 186,
       "norm_label": "changelog"
     },
     {
@@ -46636,7 +46915,7 @@
       "source_file": "vite.config.ts",
       "source_location": "L1",
       "id": "vite_config",
-      "community": 18,
+      "community": 186,
       "norm_label": "vite.config.ts"
     },
     {
@@ -46645,7 +46924,7 @@
       "source_file": "vite.config.ts",
       "source_location": "L8",
       "id": "vite_config_versionjson",
-      "community": 18,
+      "community": 186,
       "norm_label": "versionjson()"
     },
     {
@@ -46960,7 +47239,7 @@
       "source_file": "README.md",
       "source_location": "L256",
       "id": "readme_reliquias",
-      "community": 75,
+      "community": 85,
       "norm_label": "reliquias"
     },
     {
@@ -46969,7 +47248,7 @@
       "source_file": "README.md",
       "source_location": "L335",
       "id": "readme_bendiciones",
-      "community": 75,
+      "community": 85,
       "norm_label": "bendiciones"
     },
     {
@@ -49925,6 +50204,15 @@
       "norm_label": "visual check and frame captures"
     },
     {
+      "label": "seducir()",
+      "file_type": "code",
+      "source_file": "src/core/enemigos.ts",
+      "source_location": "L852",
+      "community": 0,
+      "norm_label": "seducir()",
+      "id": "core_enemigos_seducir"
+    },
+    {
       "label": "TemaChip",
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
@@ -49938,7 +50226,7 @@
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
       "source_location": "L114",
-      "community": 85,
+      "community": 49,
       "norm_label": "temas",
       "id": "fx_audio_temas"
     },
@@ -49956,7 +50244,7 @@
       "file_type": "code",
       "source_file": "src/fx/audio.ts",
       "source_location": "L449",
-      "community": 4,
+      "community": 49,
       "norm_label": ".chiptune()",
       "id": "fx_audio_motoraudio_chiptune"
     },
@@ -50010,7 +50298,7 @@
       "file_type": "code",
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L666",
-      "community": 106,
+      "community": 92,
       "norm_label": "soulpose()",
       "id": "fx_spell_fx_soulpose"
     },
@@ -50262,7 +50550,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L193",
-      "community": 179,
+      "community": 199,
       "norm_label": "\u00abceniza\u00bb (c harmonic minor, 4/4 at 66): a slow horn melody over trembling low st",
       "id": "leitmotivs_acto3_bocetos_rationale_193"
     },
@@ -50289,7 +50577,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/leitmotivs/acto3_bocetos.py",
       "source_location": "L286",
-      "community": 179,
+      "community": 199,
       "norm_label": "\u00abcorazon del volcan\u00bb (c# hungarian minor, 4/4 at 92): the didgeridoo is the drag",
       "id": "leitmotivs_acto3_bocetos_rationale_286"
     },
@@ -50469,7 +50757,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L434",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo",
       "id": "acto2_volguth_compose_rationale_434"
     },
@@ -50604,7 +50892,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L823",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm",
       "id": "acto2_volguth_compose_rationale_823"
     },
@@ -50622,7 +50910,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1031",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i",
       "id": "acto2_volguth_compose_rationale_1031"
     },
@@ -50631,7 +50919,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than",
       "id": "acto2_volguth_compose_rationale_1064"
     },
@@ -51432,7 +51720,7 @@
       "file_type": "code",
       "source_file": "src/core/taberna.ts",
       "source_location": "L135",
-      "community": 46,
+      "community": 34,
       "norm_label": "curajarra()",
       "id": "core_taberna_curajarra"
     },
@@ -51441,7 +51729,7 @@
       "file_type": "code",
       "source_file": "src/core/taberna.ts",
       "source_location": "L140",
-      "community": 46,
+      "community": 34,
       "norm_label": "beberjarra()",
       "id": "core_taberna_beberjarra"
     },
@@ -51486,7 +51774,7 @@
       "file_type": "code",
       "source_file": "src/fx/particle-gl.ts",
       "source_location": "L227",
-      "community": 45,
+      "community": 39,
       "norm_label": ".colour()",
       "id": "fx_particle_gl_particlerenderergl_colour"
     },
@@ -51495,7 +51783,7 @@
       "file_type": "code",
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1321",
-      "community": 52,
+      "community": 106,
       "norm_label": "dart_sides",
       "id": "fx_card_spells_dart_sides"
     },
@@ -51531,7 +51819,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L201",
-      "community": 6,
+      "community": 104,
       "norm_label": "wolfshapes()",
       "id": "fx_hero_rig_wolfshapes"
     },
@@ -51612,7 +51900,7 @@
       "file_type": "code",
       "source_file": "src/fx/dado.ts",
       "source_location": "L45",
-      "community": 27,
+      "community": 53,
       "norm_label": "qnorm()",
       "id": "fx_dado_qnorm"
     },
@@ -51639,7 +51927,7 @@
       "file_type": "code",
       "source_file": "src/fx/dado.ts",
       "source_location": "L62",
-      "community": 27,
+      "community": 53,
       "norm_label": "qslerp()",
       "id": "fx_dado_qslerp"
     },
@@ -51648,7 +51936,7 @@
       "file_type": "code",
       "source_file": "src/fx/dado.ts",
       "source_location": "L74",
-      "community": 27,
+      "community": 53,
       "norm_label": "qhaciacamara()",
       "id": "fx_dado_qhaciacamara"
     },
@@ -52566,7 +52854,7 @@
       "file_type": "code",
       "source_file": "src/fx/hero-rig.ts",
       "source_location": "L66",
-      "community": 157,
+      "community": 6,
       "norm_label": "action_duration",
       "id": "fx_hero_rig_action_duration"
     },
@@ -53104,7 +53392,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 49,
       "norm_label": "tres actos con dos escenarios cada uno",
       "id": "readme_tres_actos"
     },
@@ -53195,7 +53483,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 47,
       "norm_label": "invocacion del druida",
       "id": "readme_invocacion"
     },
@@ -53234,7 +53522,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 18,
       "norm_label": "espacios de conjuro en piramide (mago)",
       "id": "readme_espacios_conjuro"
     },
@@ -53416,7 +53704,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 46,
+      "community": 41,
       "norm_label": "eventos narrativos",
       "id": "readme_eventos_narrativos"
     },
@@ -53429,7 +53717,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "compendio de cartas",
       "id": "readme_compendio"
     },
@@ -53468,7 +53756,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "quemadura (aliento de dragon de ignifax)",
       "id": "readme_quemadura"
     },
@@ -53481,7 +53769,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "rayos del contemplador (cartas que se agotan, sobrecarga, etereas)",
       "id": "readme_rayos_contemplador"
     },
@@ -53546,7 +53834,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 187,
+      "community": 34,
       "norm_label": "pwa jugable sin conexion",
       "id": "readme_pwa_offline"
     },
@@ -53559,7 +53847,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 49,
       "norm_label": "musica 8-bit con pistas cc0 de opengameart",
       "id": "audio_leeme_musica_8bit"
     },
@@ -53572,7 +53860,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 85,
+      "community": 49,
       "norm_label": "loop chiptune procedural de respaldo",
       "id": "audio_leeme_chiptune_respaldo"
     },
@@ -53598,7 +53886,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 18,
+      "community": 186,
       "norm_label": "despliegue en github pages (push a main)",
       "id": "workflows_deploy_github_pages"
     },
@@ -53611,7 +53899,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 18,
+      "community": 186,
       "norm_label": "los tests del motor son puerta del despliegue",
       "id": "workflows_deploy_tests_en_ci"
     },
@@ -53624,7 +53912,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 18,
+      "community": 186,
       "norm_label": "skill /release (version + changelog + push a main)",
       "id": "release_skill_flujo_release"
     },
@@ -53637,7 +53925,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 18,
+      "community": 186,
       "norm_label": "ventana de novedades alimentada por changelog",
       "id": "release_skill_ventana_novedades"
     },
@@ -53650,7 +53938,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 85,
       "norm_label": "skill /editar-carta (aplica comentarios del compendio)",
       "id": "editar_carta_skill_flujo"
     },
@@ -53728,7 +54016,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 84,
+      "community": 47,
       "norm_label": "invocaciones efimeras (brujo)",
       "id": "readme_invocacion_efimera"
     },
@@ -154545,6 +154833,17 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L6",
       "weight": 1.0,
+      "source": "core_combate",
+      "target": "core_enemigos_rasgoactual",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L6",
+      "weight": 1.0,
       "confidence_score": 1.0,
       "source": "core_combate",
       "target": "core_enemigos_resolvervariantes"
@@ -154570,6 +154869,17 @@
       "confidence_score": 1.0,
       "source": "core_combate",
       "target": "core_escena_final_frases_dm"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "core_combate",
+      "target": "core_estadisticas",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -155285,6 +155595,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/core/combate.ts",
+      "source_location": "L129",
+      "weight": 1.0,
+      "source": "core_combate_combate",
+      "target": "core_combate_combate_estadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/combate.ts",
       "source_location": "L124",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -155300,6 +155620,16 @@
       "confidence_score": 1.0,
       "source": "core_combate_combate",
       "target": "core_combate_combate_extinguirligados"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "core_combate_combate",
+      "target": "core_combate_combate_fuerzaenemiga",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -155367,9 +155697,9 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate",
-      "target": "core_combate_combate_intencionoculta",
-      "confidence_score": 1.0
+      "target": "core_combate_combate_intencionoculta"
     },
     {
       "relation": "method",
@@ -155684,8 +156014,19 @@
       "source_file": "src/core/combate.ts",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_combate_combate_intencionoculta",
-      "target": "core_types_enemigocombate",
+      "target": "core_types_enemigocombate"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/combate.ts",
+      "source_location": "L1894",
+      "weight": 1.0,
+      "source": "core_combate_combate_terminarturno",
+      "target": "core_combate_combate_fuerzaenemiga",
       "confidence_score": 1.0
     },
     {
@@ -157163,6 +157504,17 @@
       "target": "core_types_enemigocombate"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/core/combate.ts",
+      "source_location": "L1145",
+      "weight": 1.0,
+      "source": "core_combate_combate_disparadoresdemuerte",
+      "target": "core_enemigos_rasgoactual"
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -158033,6 +158385,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/core/enemigos.ts",
+      "source_location": "L855",
+      "weight": 1.0,
+      "source": "core_enemigos",
+      "target": "core_enemigos_embrujo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/enemigos.ts",
       "source_location": "L1116",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -158423,6 +158785,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/core/enemigos.ts",
+      "source_location": "L1151",
+      "weight": 1.0,
+      "source": "core_enemigos",
+      "target": "core_enemigos_rasgoactual",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/enemigos.ts",
       "source_location": "L765",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -158683,6 +159055,17 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "core_enemigos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/ui/gallery-catalogue.ts",
       "source_location": "L5",
       "weight": 1.0,
@@ -158930,6 +159313,17 @@
       "target": "core_enemigos_enemigosrelacionados"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "core_enemigos_rasgoactual",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/core/epitafio.ts",
@@ -158953,11 +159347,61 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/core/epitafio.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_epitafio",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L215",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_epitafiode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
       "source_location": "L35",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "core_epitafio",
       "target": "core_epitafio_epitafios"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_epitafios_habito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L136",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_epitafios_jefe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_fuenteepitafio",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -158983,6 +159427,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/core/epitafio.ts",
+      "source_location": "L199",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_nombrecorto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
       "source_location": "L54",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -158998,6 +159452,60 @@
       "confidence_score": 1.0,
       "source": "core_epitafio",
       "target": "core_epitafio_plural"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_epitafio_rellenables",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_estadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_estadisticas_habito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "core_epitafio",
+      "target": "core_estadisticas_peorhabito",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -159020,6 +159528,17 @@
       "confidence_score": 1.0,
       "source": "ui_lapida",
       "target": "core_epitafio"
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "core_epitafio_datoscaida",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -159077,6 +159596,17 @@
       "target": "core_epitafio_lapida"
     },
     {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "core_epitafio_epitafio",
+      "target": "core_estadisticas_habito",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -159086,6 +159616,61 @@
       "confidence_score": 1.0,
       "source": "core_epitafio_elegirepitafio",
       "target": "core_epitafio_pick"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "core_epitafio_epitafiode",
+      "target": "core_epitafio_pick",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "core_epitafio_rellenables",
+      "target": "core_epitafio_nombrecorto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L218",
+      "weight": 1.0,
+      "source": "core_epitafio_epitafiode",
+      "target": "core_epitafio_rellenables",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "source": "core_epitafio_elegirepitafio",
+      "target": "core_epitafio_epitafiode",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/core/epitafio.ts",
+      "source_location": "L217",
+      "weight": 1.0,
+      "source": "core_epitafio_epitafiode",
+      "target": "core_estadisticas_peorhabito"
     },
     {
       "relation": "contains",
@@ -159350,6 +159935,328 @@
       "confidence_score": 1.0,
       "source": "ui_titulo",
       "target": "core_escena_final_finalverdaderodesbloqueado"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_bloqueoobtenido",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_cartajugada",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L131",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_contextohabitos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L86",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_danoinfligido",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_empezarcombate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_empezarturno",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L117",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_enemigoserefuerza",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_evaluarhabitos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L91",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_golperecibido",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L128",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_habito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_habitos",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_herirse",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_normalizarestadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_nuevasestadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_origengolpe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L191",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_peorhabito",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_perdidaporestado",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_estadisticas_terminarturno",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "core_estadisticas",
+      "target": "core_types_tipocarta",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "core_guardado",
+      "target": "core_estadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "core_guardado",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "core_guardado_guardado",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/types.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "core_types",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/types.ts",
+      "source_location": "L730",
+      "weight": 1.0,
+      "source": "core_types_estadorun",
+      "target": "core_estadisticas_estadisticasrun",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "core_estadisticas_normalizarestadisticas",
+      "target": "core_estadisticas_nuevasestadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "core_guardado",
+      "target": "core_estadisticas_normalizarestadisticas",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "core_guardado_rehidratarrun",
+      "target": "core_estadisticas_normalizarestadisticas"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/core/guardado.ts",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "core_guardado_serializarrun",
+      "target": "core_estadisticas_normalizarestadisticas"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/core/estadisticas.ts",
+      "source_location": "L192",
+      "weight": 1.0,
+      "source": "core_estadisticas_peorhabito",
+      "target": "core_estadisticas_evaluarhabitos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -164720,9 +165627,9 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_audio",
-      "target": "fx_music_tracks_retrydelayms",
-      "confidence_score": 1.0
+      "target": "fx_music_tracks_retrydelayms"
     },
     {
       "relation": "imports",
@@ -164742,9 +165649,9 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_audio",
-      "target": "fx_music_tracks_trackstokeep",
-      "confidence_score": 1.0
+      "target": "fx_music_tracks_trackstokeep"
     },
     {
       "relation": "imports_from",
@@ -165086,9 +165993,9 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L379",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_audio_motoraudio",
-      "target": "fx_audio_motoraudio_liberarpistas",
-      "confidence_score": 1.0
+      "target": "fx_audio_motoraudio_liberarpistas"
     },
     {
       "relation": "method",
@@ -165632,9 +166539,9 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L345",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_audio_motoraudio_arrancartema",
-      "target": "fx_audio_motoraudio_liberarpistas",
-      "confidence_score": 1.0
+      "target": "fx_audio_motoraudio_liberarpistas"
     },
     {
       "relation": "calls",
@@ -183871,9 +184778,9 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L66",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_music_tracks",
-      "target": "fx_music_tracks_retrydelayms",
-      "confidence_score": 1.0
+      "target": "fx_music_tracks_retrydelayms"
     },
     {
       "relation": "contains",
@@ -183901,9 +184808,9 @@
       "source_file": "src/fx/music-tracks.ts",
       "source_location": "L72",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "fx_music_tracks",
-      "target": "fx_music_tracks_trackstokeep",
-      "confidence_score": 1.0
+      "target": "fx_music_tracks_trackstokeep"
     },
     {
       "relation": "imports_from",
@@ -200106,6 +201013,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/ui/combate.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "ui_combate",
+      "target": "ui_combate_caidaheroe",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/ui/combate.ts",
       "source_location": "L865",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -210475,5 +211392,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "1527cb604acb033323ac2742d236eced36cbf488"
+  "built_at_commit": "9f0b92e6e7c92eed8bd3f91bb66e610b70fcd031"
 }

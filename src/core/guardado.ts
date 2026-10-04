@@ -1,6 +1,7 @@
 import type { ClaseId, EstadoRun, MisionTaberna, NodoMapa } from './types.ts';
 import { cartaPorId, instanciar, CARTAS_RETIRADAS } from './cartas.ts';
 import { reliquiaPorId } from './reliquias.ts';
+import { normalizarEstadisticas, type EstadisticasRun } from './estadisticas.ts';
 
 const CLAVE = 'mazo-y-mazmorra/guardado';
 
@@ -27,6 +28,8 @@ export interface Guardado {
   mapa: NodoMapa[];
   /** Active tavern quest (older saves lack it). */
   mision?: MisionTaberna | null;
+  /** Run statistics for the tombstone (older saves lack it). */
+  estadisticas?: EstadisticasRun;
 }
 
 export function serializarRun(run: EstadoRun): Guardado {
@@ -48,6 +51,7 @@ export function serializarRun(run: EstadoRun): Guardado {
     reliquias: run.reliquias.map((r) => r.id),
     mapa: structuredClone(run.mapa),
     mision: run.mision ? { ...run.mision } : null,
+    estadisticas: normalizarEstadisticas(run.estadisticas),
   };
 }
 
@@ -88,6 +92,7 @@ export function rehidratarRun(g: Guardado): EstadoRun | null {
     eventosVistos: [...g.eventosVistos],
     elitesVistos: [...(g.elitesVistos ?? [])],
     mision: g.mision ? { ...g.mision } : null,
+    estadisticas: normalizarEstadisticas(g.estadisticas),
   };
 }
 

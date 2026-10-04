@@ -7227,6 +7227,226 @@ try {
   check(false, `la muerte épica se carga (${(err as Error).message})`);
 }
 
+// ── Tailored epitaph: run statistics, the player's worst habit, boss roasts ──
+console.log('\n🪦 Epitafio a medida: estadísticas, peor vicio y jefes');
+try {
+  const es = await import('../src/core/estadisticas.ts');
+  const ep = await import('../src/core/epitafio.ts');
+  const fs = await import('node:fs');
+  const leer = (r: string) => fs.readFileSync(new URL(r, import.meta.url), 'utf8');
+
+  // pure counters
+  const s0 = es.nuevasEstadisticas();
+  check(Object.values(s0).every((v) => v === 0 || v === null), 'unas estadísticas nuevas empiezan a cero');
+  const s1 = es.nuevasEstadisticas();
+  es.empezarCombate(s1);
+  es.empezarTurno(s1);
+  es.cartaJugada(s1, 'ataque');
+  es.cartaJugada(s1, 'habilidad');
+  es.cartaJugada(s1, 'poder');
+  es.danoInfligido(s1, 9);
+  es.golpeRecibido(s1, 4, 6);
+  es.bloqueoObtenido(s1, 6);
+  es.terminarTurno(s1, 2);
+  es.enemigoSeRefuerza(s1, 3);
+  es.empezarTurno(s1);
+  es.perdidaPorEstado(s1, 3);
+  es.herirse(s1, 2);
+  check(s1.combates === 1 && s1.turnos === 2 && s1.turnosUltimo === 2, 'cuenta combates y turnos (en total y en el último combate)');
+  check(s1.ataques === 1 && s1.habilidades === 1 && s1.poderes === 1, 'cuenta las cartas jugadas por tipo');
+  check(s1.danoHecho === 9 && s1.danoRecibido === 4 && s1.danoBloqueado === 6 && s1.bloqueoGanado === 6,
+    'cuenta el daño hecho, el recibido, el bloqueado y el bloqueo ganado');
+  check(s1.energiaSobrante === 2 && s1.escaladoEnemigo === 3 && s1.escaladoUltimo === 3,
+    'cuenta la energía sin gastar y la Fuerza que ganan los enemigos');
+  check(s1.danoVeneno === 3 && s1.autolesion === 2 && s1.ultimoGolpe === 'propio',
+    'separa el veneno y la quemadura del daño que se hace uno mismo, y recuerda el último golpe');
+  es.empezarCombate(s1);
+  check(s1.combates === 2 && s1.turnosUltimo === 0 && s1.escaladoUltimo === 0 && s1.turnos === 2,
+    'un combate nuevo solo reinicia lo del último combate');
+  const parcial = es.normalizarEstadisticas({ combates: 3 } as Partial<ReturnType<typeof es.nuevasEstadisticas>>);
+  check(parcial.combates === 3 && parcial.danoRecibido === 0 && parcial.ultimoGolpe === null, 'unas estadísticas a medias se completan con ceros');
+  check(es.normalizarEstadisticas(undefined).combates === 0, 'sin estadísticas se empieza de cero');
+
+  // the combat engine feeds the run's statistics
+  const munecoS: EnemigoDef = {
+    id: 'muneco-estadisticas', nombre: 'Muñeco', arte: '🎯', pv: [200, 200],
+    ia: () => ({ nombre: 'Esperar', intencion: 'desconocido' }),
+  };
+  const runS = nuevaRun('mago', 4242);
+  runS.reliquias = [];
+  delete runS.estadisticas;
+  const combS = new Combate(runS, [munecoS], crearRng(4242), uiSilenciosa);
+  await combS.iniciar();
+  const est = () => runS.estadisticas!;
+  check(!!runS.estadisticas && est().combates === 1 && est().turnos === 1 && est().turnosUltimo === 1,
+    'cada combate se apunta en las estadísticas de la partida, con su primer turno');
+  combS.jugador.descarte.push(...combS.jugador.mano);
+  combS.jugador.mano = [];
+  combS.jugador.energia = 5;
+  const golpeS = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
+  const defensaS = instanciar(BASICAS.find((c) => c.id === 'defender')!);
+  combS.jugador.mano.push(golpeS, defensaS);
+  const pvMuneco = combS.enemigos[0].pv;
+  await combS.jugarCarta(golpeS, combS.enemigos[0]);
+  check(est().ataques === 1 && est().danoHecho === pvMuneco - combS.enemigos[0].pv && est().danoHecho > 0,
+    `jugar un ataque cuenta la carta y el daño hecho (${est().danoHecho})`);
+  const bloqueoAntesS = combS.jugador.bloqueo;
+  await combS.jugarCarta(defensaS);
+  check(est().habilidades === 1 && est().bloqueoGanado === combS.jugador.bloqueo - bloqueoAntesS && est().bloqueoGanado > 0,
+    `jugar una defensa cuenta la carta y el bloqueo ganado (${est().bloqueoGanado})`);
+  await combS.contexto().perderPV(3);
+  check(est().autolesion === 3 && est().ultimoGolpe === 'propio', 'perder PV por una carta propia cuenta como daño autoinfligido');
+  combS.jugador.bloqueo = 4;
+  combS.jugador.energia = 2;
+  combS.jugador.estados.veneno = 4;
+  combS.enemigos[0].intencion = { nombre: 'Golpe y rugido', intencion: 'ataque', dano: 10, efectos: [['fuerza', 3, false]] };
+  await combS.terminarTurno();
+  check(est().danoBloqueado === 4 && est().danoRecibido === 6, 'el golpe enemigo se reparte entre bloqueado y recibido');
+  check(est().energiaSobrante === 2, 'la energía que sobra al acabar el turno se apunta');
+  check(est().escaladoEnemigo === 3 && est().escaladoUltimo === 3, 'la Fuerza que gana el enemigo durante el combate se apunta');
+  check(est().danoVeneno === 4 && est().ultimoGolpe === 'veneno' && est().turnos === 2 && est().turnosUltimo === 2,
+    'el veneno del héroe se apunta aparte y el turno nuevo se cuenta');
+
+  // the statistics travel in the save; older saves still load
+  const guardadoS = serializarRun(runS);
+  check(JSON.stringify(guardadoS.estadisticas) === JSON.stringify(runS.estadisticas), 'las estadísticas se guardan con la partida');
+  const vueltaS = rehidratarRun(JSON.parse(JSON.stringify(guardadoS)));
+  check(JSON.stringify(vueltaS?.estadisticas) === JSON.stringify(runS.estadisticas), 'y se recuperan al cargarla');
+  const antiguoS = JSON.parse(JSON.stringify(guardadoS));
+  delete antiguoS.estadisticas;
+  const vueltaAntigua = rehidratarRun(antiguoS);
+  check(!!vueltaAntigua && vueltaAntigua.estadisticas?.combates === 0, 'un guardado antiguo sin estadísticas carga y empieza a contar de cero');
+
+  // the worst habit
+  const decente = (p: Partial<ReturnType<typeof es.nuevasEstadisticas>> = {}) => Object.assign(es.nuevasEstadisticas(), {
+    combates: 5, turnos: 25, danoHecho: 400, bloqueoGanado: 150, danoBloqueado: 120, danoRecibido: 60,
+    ataques: 40, habilidades: 40, turnosUltimo: 4, escaladoUltimo: 0, energiaSobrante: 5, ultimoGolpe: 'ataque',
+  }, p);
+  const normal = { mazo: 15, maldiciones: 0 };
+  check(es.peorHabito(decente(), normal) === null, 'una partida decente no tiene vicio que reprochar');
+  check(es.peorHabito(null, normal) === null, 'sin estadísticas no hay vicio');
+  const casos: Array<[string, Partial<ReturnType<typeof es.nuevasEstadisticas>>, { mazo: number; maldiciones: number }, string]> = [
+    ['sinBloqueo', { danoBloqueado: 10, bloqueoGanado: 20, danoRecibido: 150, ataques: 70, habilidades: 8 }, normal, 'apenas bloqueaba y se lo comía todo'],
+    ['eterno', { turnosUltimo: 11, escaladoUltimo: 8 }, normal, 'alargó el último combate y el enemigo se hizo fuerte'],
+    ['tacano', { energiaSobrante: 40 }, normal, 'acababa los turnos con energía sin gastar'],
+    ['envenenado', { ultimoGolpe: 'veneno', danoVeneno: 12 }, normal, 'lo remató el veneno'],
+    ['autolesion', { autolesion: 45 }, normal, 'se hizo más daño a sí mismo de la cuenta'],
+    ['maldito', {}, { mazo: 15, maldiciones: 5 }, 'iba cargado de maldiciones'],
+    ['acaparador', {}, { mazo: 40, maldiciones: 0 }, 'tenía el mazo inflado'],
+    ['pacifista', { danoHecho: 60 }, normal, 'apenas hacía daño'],
+    ['novato', { combates: 1 }, normal, 'cayó en su primer combate'],
+  ];
+  for (const [habito, p, ctx, porque] of casos) {
+    const h = es.peorHabito(decente(p), ctx);
+    check(h === habito, `vicio «${habito}»: ${porque} (sale ${h})`);
+  }
+  check(new Set(casos.map((c) => c[0])).size === es.HABITOS.length && es.HABITOS.every((h) => casos.some((c) => c[0] === h)),
+    `todos los vicios están cubiertos (${es.HABITOS.join(', ')})`);
+  const varios = decente({ danoBloqueado: 10, bloqueoGanado: 20, danoRecibido: 150, turnosUltimo: 16, escaladoUltimo: 10 });
+  const notas = es.evaluarHabitos(varios, normal);
+  check((notas.sinBloqueo ?? 0) >= 1 && (notas.eterno ?? 0) >= 1, 'se detectan varios vicios a la vez');
+  check(es.peorHabito(varios, normal) === 'eterno', 'y la lápida reprocha el peor de todos');
+
+  // phrases
+  const huecos = (t: string) => [...t.matchAll(/\{(\w+)\}/g)].map((m) => m[1]);
+  const validos = new Set(['asesino', 'turnos', 'mazo', 'maldiciones']);
+  const todas = [...ep.EPITAFIOS, ...Object.values(ep.EPITAFIOS_HABITO).flat(), ...Object.values(ep.EPITAFIOS_JEFE).flat()];
+  check(es.HABITOS.every((h) => (ep.EPITAFIOS_HABITO[h]?.length ?? 0) >= 3), 'cada vicio tiene al menos tres epitafios');
+  check(ep.EPITAFIOS_HABITO.sinBloqueo.includes('Pensó que el bloqueo era opcional.'), 'quien no bloquea «pensó que el bloqueo era opcional»');
+  check(ep.EPITAFIOS_HABITO.eterno.includes('Pretendía matar de aburrimiento a {asesino}.'), 'quien alarga el combate «pretendía matar de aburrimiento» a su asesino');
+  check(todas.every((t) => huecos(t).every((h) => validos.has(h))), 'los epitafios solo usan huecos conocidos');
+  const jefesActos = ACTOS.flat().flatMap((e) => e.jefe.map((d) => d.id));
+  const jefesTodos = [...jefesActos, 'filacteria-volguth', 'demonio-mayor'];
+  const sinFrase = jefesTodos.filter((id) => (ep.EPITAFIOS_JEFE[id]?.length ?? 0) < 2);
+  check(sinFrase.length === 0, `cada jefe (y la filacteria y Abaddon) tiene al menos dos epitafios propios (faltan: ${sinFrase.join(', ') || '—'})`);
+  const elitesActos = ACTOS.flat().flatMap((e) => e.elites.filter((g) => g.length === 1).map((g) => g[0].id));
+  check(elitesActos.every((id) => (ep.EPITAFIOS_JEFE[id]?.length ?? 0) >= 1), 'los élites en solitario también tienen su pulla');
+  const nombreLargo = "Vol'guth, Señor de la Cripta";
+  const rellenas = todas.map((t) => t.split('{asesino}').join('Vol\'guth').split('{turnos}').join('14').split('{mazo}').join('38').split('{maldiciones}').join('6'));
+  const largas = rellenas.filter((t) => t.length > 72);
+  check(largas.length === 0, `todos los epitafios caben en la lápida (≤ 72 letras): ${largas.join(' | ') || '—'}`);
+  const sinSarcasmo = todas.filter((t) => !/[.!?»)]$/.test(t));
+  check(sinSarcasmo.length === 0, `todos los epitafios acaban como una frase (${sinSarcasmo.join(' | ') || '—'})`);
+
+  // choosing the epitaph: the roast, the boss, or a general joke
+  const encaja = (texto: string, plantillas: string[]) => plantillas.some((p) => new RegExp(
+    `^${p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\{\w+\\\}/g, '.+')}$`).test(texto));
+  const muerteS = {
+    clase: 'mago', capitulo: 2, subtitulo: 'Capítulo III', escenario: 'La Guarida', asesino: 'Ignifax, el Dragón Rojo',
+    asesinoId: 'ignifax', jefeId: 'ignifax', salas: 14, turnos: 12, semilla: 77,
+    estadisticas: decente({ turnosUltimo: 12, escaladoUltimo: 9 }), mazo: 20, maldiciones: 0,
+  };
+  const tiradas = Array.from({ length: 150 }, (_, i) => ep.epitafioDe({ ...muerteS, semilla: i * 7919 + 11 }));
+  const cuantas = (f: string) => tiradas.filter((t) => t.fuente === f).length;
+  check(cuantas('habito') >= 30 && cuantas('jefe') >= 25 && cuantas('general') >= 15,
+    `se alternan pulla por estadísticas, pulla del jefe y chiste general (${cuantas('habito')}/${cuantas('jefe')}/${cuantas('general')})`);
+  check(tiradas.filter((t) => t.fuente === 'habito').every((t) => t.habito === 'eterno' && encaja(t.texto, ep.EPITAFIOS_HABITO.eterno)),
+    'la pulla por estadísticas reprocha su peor vicio');
+  check(tiradas.some((t) => t.texto === 'Pretendía matar de aburrimiento a Ignifax.'), 'el asesino sale por su nombre corto («…a Ignifax.»)');
+  check(tiradas.filter((t) => t.fuente === 'jefe').every((t) => encaja(t.texto, ep.EPITAFIOS_JEFE.ignifax)), 'la pulla del jefe es la de quien le mató');
+  check(tiradas.filter((t) => t.fuente === 'general').every((t) => encaja(t.texto, ep.EPITAFIOS)), 'el chiste general sale de la lista de siempre');
+  check(tiradas.every((t) => !/[{}]/.test(t.texto)), 'ninguna elección deja huecos sin rellenar');
+  check(new Set(tiradas.map((t) => t.texto)).size >= 10, `el epitafio varía mucho entre muertes (${new Set(tiradas.map((t) => t.texto)).size} distintos)`);
+  check(ep.epitafioDe(muerteS).texto === ep.epitafioDe({ ...muerteS }).texto && ep.elegirEpitafio(muerteS) === ep.epitafioDe(muerteS).texto,
+    'para la misma muerte, el mismo epitafio');
+  check(ep.lapida(muerteS).epitafio === ep.epitafioDe(muerteS).texto, 'la lápida graba el epitafio elegido');
+  // killed by a minion in a boss fight: the boss still gets the credit
+  const esbirro = Array.from({ length: 80 }, (_, i) => ep.epitafioDe({
+    ...muerteS, asesino: 'Esqueleto', asesinoId: 'esqueleto-volguth', jefeId: 'senor-cripta', estadisticas: decente(), semilla: i * 31 + 5,
+  }));
+  check(esbirro.some((t) => t.fuente === 'jefe') && esbirro.filter((t) => t.fuente === 'jefe').every((t) => encaja(t.texto, ep.EPITAFIOS_JEFE['senor-cripta'])),
+    'si le remata un esbirro en un combate de jefe, la pulla es del jefe');
+  const filac = Array.from({ length: 80 }, (_, i) => ep.epitafioDe({ ...muerteS, asesino: "Filacteria de Vol'guth", asesinoId: 'filacteria-volguth', jefeId: 'senor-cripta', semilla: i }));
+  check(filac.filter((t) => t.fuente === 'jefe').every((t) => encaja(t.texto, ep.EPITAFIOS_JEFE['filacteria-volguth'])), 'morir a manos de la filacteria tiene su propia pulla');
+  // nothing known: the general jokes, as before
+  const anonimo = Array.from({ length: 40 }, (_, i) => ep.epitafioDe({
+    clase: 'picaro', capitulo: 0, subtitulo: 'Capítulo I', escenario: 'X', asesino: null, salas: 3, turnos: 2, semilla: i,
+  }));
+  check(anonimo.every((t) => t.fuente === 'general' && !/[{}]/.test(t.texto)), 'sin estadísticas ni jefe, el chiste general de siempre');
+  // a decent run killed by a common enemy: no roast to make, no boss, general joke
+  const comun = Array.from({ length: 40 }, (_, i) => ep.epitafioDe({ ...muerteS, asesino: 'Goblin', asesinoId: 'goblin-cortador', jefeId: null, estadisticas: decente(), semilla: i }));
+  check(comun.every((t) => t.fuente === 'general'), 'una partida sin vicios contra un enemigo común se lleva un chiste general');
+  // first fight: the roast uses the run, not the boss
+  const novatoT = Array.from({ length: 60 }, (_, i) => ep.epitafioDe({ ...muerteS, asesinoId: 'goblin-cortador', jefeId: null, asesino: 'Goblin Cortador', estadisticas: decente({ combates: 1 }), semilla: i }));
+  check(novatoT.some((t) => t.fuente === 'habito' && t.habito === 'novato'), 'caer en el primer combate tiene su pulla');
+
+  // engine and UI wiring
+  const uiComb = leer('../src/ui/combate.ts');
+  check(/ultimaCaida = \{[^}]*asesinoId[^}]*jefeId[^}]*maldiciones/.test(uiComb), 'la caída del héroe recuerda el id del asesino, el jefe del combate y las maldiciones que llevaba');
+  const mainTs = leer('../src/main.ts');
+  check(/estadisticas:\s*run\.estadisticas/.test(mainTs) && /asesinoId/.test(mainTs) && /mazo:\s*run\.mazo\.length/.test(mainTs),
+    'la lápida recibe las estadísticas de la partida, el asesino y el tamaño del mazo');
+
+  // the stone: cracked rock texture and a faint sheen
+  const cssM = leer('../src/estilos/muerte.css');
+  const bloque = (sel: string) => {
+    const re = new RegExp(`(^|\\n)${sel.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*\\{([^}]*)\\}`);
+    return cssM.match(re)?.[2] ?? '';
+  };
+  const piedra = bloque('.lapida');
+  check(/data:image\/svg\+xml/.test(piedra) && /feTurbulence/.test(piedra) && /path/.test(piedra),
+    'la lápida tiene textura de roca (ruido) y grietas dibujadas en un SVG en línea');
+  check((piedra.match(/gradient\(/g) ?? []).length >= 3, 'la piedra se compone de varias capas de degradado');
+  check(!/url\((?!["']?data:)/.test(piedra), 'sin imágenes externas');
+  const svgLen = (piedra.match(/data:image\/svg\+xml[^)]*/g) ?? []).join('').length;
+  check(svgLen > 0 && svgLen < 3500, `la textura es ligera (${svgLen} bytes)`);
+  check(/position:\s*relative/.test(piedra) && /overflow:\s*hidden/.test(piedra), 'el brillo queda recortado dentro de la piedra');
+  const brillo = bloque('.lapida::after');
+  check(/animation:[^;]*lapida-brillo[^;]*infinite/.test(brillo), 'un reflejo recorre la lápida en bucle');
+  const alfas = [...brillo.matchAll(/rgba\([^)]*,\s*([\d.]+)\)/g)].map((m) => Number(m[1]));
+  check(alfas.length > 0 && Math.max(...alfas) <= 0.14, `el reflejo es muy tenue (opacidad máx. ${Math.max(...alfas)})`);
+  check(/pointer-events:\s*none/.test(brillo), 'el reflejo no estorba a los clics');
+  const kf = cssM.match(/@keyframes\s+lapida-brillo\s*\{((?:[^{}]*\{[^}]*\})*)\s*\}/)?.[1] ?? '';
+  check(!!kf && /transform/.test(kf), 'el reflejo se mueve con transform');
+  check(/prefers-reduced-motion[\s\S]*\.lapida::after[^{]*\{[^}]*animation:\s*none/.test(cssM), 'con movimiento reducido el reflejo se queda quieto');
+  check(/@media[^{]*max-width:\s*560px[^{]*portrait[^{]*\{[^@]*\.lapida\s*\{[^}]*width:[^}]*100vw/.test(cssM),
+    'en un móvil en vertical la lápida y el héroe caben en la pantalla');
+  const { htmlDerrota } = await import('../src/ui/lapida.ts');
+  check(/Capítulo&nbsp;III/.test(htmlDerrota(ep.lapida(muerteS))), 'el número del capítulo no se queda solo en otra línea');
+} catch (err) {
+  check(false, `el epitafio a medida se carga (${(err as Error).message})`);
+}
+
 // ── Mandatory discards cannot be cancelled (only «descarta hasta X» can) ─────
 console.log('\n🗑️ Descartes obligatorios');
 {
@@ -9590,7 +9810,7 @@ console.log('\n👥 Élites de grupo');
     check(pareja.map((d) => d.id).sort().join() === 'incubo,sucubo', 'Íncubo y Súcubo');
     let alternan = true;
     for (let t = 0; t < 6; t++) {
-      const [m1, m2] = pareja.map((d) => d.ia(t, () => 0.5, {} as EnemigoCombate, []));
+      const [m1, m2] = pareja.map((d) => d.ia(t, () => 0.5, {} as EnemigoCombate, [{} as EnemigoCombate])); // both alive
       const seduce = (m: Movimiento) => m.intencion === 'perjuicio';
       if (!((seduce(m1) && m2.intencion === 'ataque') || (seduce(m2) && m1.intencion === 'ataque'))) alternan = false;
     }
@@ -9720,6 +9940,48 @@ console.log('\n💪 Vida de los élites de grupo');
     const flojos = [...new Set(defs)].filter((d) => (d.pv[0] + d.pv[1]) / 2 < antes[d.id] * factor);
     check(flojos.length === 0, `Acto ${acto + 1}: los élites de grupo tienen al menos un ${Math.round((factor - 1) * 100)} % más de vida (flojos: ${flojos.map((d) => d.id).join(', ') || '—'})`);
   }
+}
+
+// ── Incubus and succubus: a shared cycle of debuffs, and fury when one falls ──
+console.log('\n💋 Íncubo y súcubo');
+{
+  const [inc, suc] = ['incubo', 'sucubo'].map((id) => ACTOS[1][1].elites[2].find((d) => d.id === id)!);
+  const pareja = (d: EnemigoDef, t: number) => d.ia(t, () => 0.5, {} as EnemigoCombate, [{} as EnemigoCombate]);
+  const solo = (d: EnemigoDef, t: number) => d.ia(t, () => 0.5, {} as EnemigoCombate, []);
+  const perjuicio = (m: Movimiento) => m.maldicion ? `maldición:${m.maldicion.destino}`
+    : (m.efectos ?? []).filter(([, , jug]) => jug).map(([e, n]) => `${e}${n}`).join('+');
+  // turn by turn, the one that is not attacking casts the next debuff of the cycle
+  const ciclo = Array.from({ length: 8 }, (_, t) => {
+    const [a, b] = [pareja(inc, t), pareja(suc, t)];
+    const quien = a.intencion === 'perjuicio' ? 'íncubo' : 'súcubo';
+    return `${quien} ${perjuicio(a.intencion === 'perjuicio' ? a : b)}`;
+  });
+  check(ciclo.slice(0, 4).join(' | ') === 'íncubo vulnerable3 | súcubo fragil3 | íncubo maldición:mano | súcubo maldición:mano'
+    && ciclo.slice(4).join() === ciclo.slice(0, 4).join(), `se turnan: Vulnerable 3, Frágil 3, maldición a la mano, maldición a la mano… (${ciclo.slice(0, 4).join(' | ')})`);
+  check([0, 1, 2, 3].every((t) => [pareja(inc, t), pareja(suc, t)].filter((m) => m.intencion === 'ataque').length === 1), 'y mientras uno embruja, el otro ataca');
+  // alone: every turn an attack plus its own debuff, alternating
+  const sIn = [0, 1, 2, 3].map((t) => solo(inc, t)), sSu = [0, 1, 2, 3].map((t) => solo(suc, t));
+  check(sIn.every((m) => m.intencion === 'ataque' && (m.dano ?? 0) > 0) && sSu.every((m) => m.intencion === 'ataque' && (m.dano ?? 0) > 0),
+    'si cae su pareja, ataca cada turno');
+  check(sIn.map(perjuicio).slice(0, 2).join() === 'vulnerable3,maldición:mano' && sSu.map(perjuicio).slice(0, 2).join() === 'fragil3,maldición:mano',
+    'y cada ataque lleva su perjuicio: él Vulnerable 3 o su maldición; ella Frágil 3 o la suya');
+  check(sIn.find((m) => m.maldicion)?.maldicion?.id !== sSu.find((m) => m.maldicion)?.maldicion?.id, 'cada uno mete su propia maldición');
+}
+
+// ── Traits are vague flavour, never a manual or a hint ───────────────────────
+console.log('\n★ Rasgos con misterio');
+{
+  const E = ENEMIGOS as unknown as Record<string, unknown>;
+  const defs = Object.values(E).filter((v): v is EnemigoDef => typeof v === 'object' && v !== null && 'id' in v && 'ia' in v)
+    .flatMap((d) => [d, ...(d.variantes ?? [])]);
+  const rasgos = defs.flatMap((d) => [d.rasgo, d.rasgoSolo]).filter((r): r is { nombre: string; texto: string } => !!r);
+  const tecnicos = /\d|turno|daño|bloqueo|Fuerza|PV\b|Vulnerable|Frágil|Débil|Veneno|cartas?\b|robas|energía|invoca|al azar/i;
+  const explican = rasgos.filter((r) => tecnicos.test(r.texto) || r.texto.length > 110);
+  check(explican.length === 0, `los rasgos solo insinúan, sin números ni reglas (${explican.map((r) => r.nombre).join(', ') || 'ninguno explica de más'})`);
+  const [inc] = ACTOS[1][1].elites[2];
+  const otro = { vivo: true } as EnemigoCombate, yo = { vivo: true, def: inc } as EnemigoCombate;
+  check(ENEMIGOS.rasgoActual(yo, [yo, otro])?.texto === inc.rasgo?.texto && /pareja/.test(ENEMIGOS.rasgoActual(yo, [yo])?.texto ?? ''),
+    'cuando cae su pareja, el rasgo del íncubo cambia');
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

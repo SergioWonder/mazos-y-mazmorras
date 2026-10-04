@@ -175,6 +175,9 @@ async function juego() {
         clase: run.clase, capitulo: run.capitulo, subtitulo: ACTOS[run.capitulo][run.escenario].subtitulo,
         escenario: ACTOS[run.capitulo][run.escenario].nombre, asesino: caidaDelHeroe()?.asesino ?? null,
         salas: run.piso, turnos: caidaDelHeroe()?.turnos ?? null, semilla: run.semilla + run.piso,
+        // for the roast: who did it, in which boss fight, and how the hero played the run
+        asesinoId: caidaDelHeroe()?.asesinoId ?? null, jefeId: caidaDelHeroe()?.jefeId ?? null,
+        estadisticas: run.estadisticas ?? null, mazo: run.mazo.length, maldiciones: caidaDelHeroe()?.maldiciones ?? 0,
       };
       const eleccionFin = await pantallaFin(desenlace.victoria, run.clase, actoFinal.jefe[0].id, desenlace.epilogoDM, caida);
       if (eleccionFin === 'reintentar' && !desenlace.victoria) reintento = { tipo: 'nueva', clase: run.clase };

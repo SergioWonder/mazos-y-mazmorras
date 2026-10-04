@@ -3,7 +3,7 @@ import type {
   EstadoId, EstadoRun, JugadorCombate, Luchador, Movimiento, ReliquiaDef,
 } from './types.ts';
 import { barajar } from './rng.ts';
-import { crearEnemigo, resolverVariantes } from './enemigos.ts';
+import { crearEnemigo, rasgoActual, resolverVariantes } from './enemigos.ts';
 import { crearEspacios } from './conjuros.ts';
 import { defDe, cartaPorId, instanciar, nuevaMaldicion, CONJURO_PRODIGIOSO, DAGA } from './cartas.ts';
 import { CARTA_SECRETA_DM, FRASES_DM } from './escena-final.ts';
@@ -11,6 +11,7 @@ import type {
   CastigoPreparado, DiceTheme, EfectoConjuro, EfectoInvocacion, ElementoCastigo, FormaInvocacion, ValorMostrado,
 } from './types.ts';
 import { calcularValores } from './valores.ts';
+import * as stats from './estadisticas.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
 export interface Presentador {
@@ -123,6 +124,16 @@ export class Combate {
   run: EstadoRun;
   rng: () => number;
   ui: Presentador;
+
+  /** The run's statistics (for the tombstone), opened on the first fight. */
+  get estadisticas(): stats.EstadisticasRun {
+    return (this.run.estadisticas ??= stats.nuevasEstadisticas());
+  }
+
+  /** Strength the living enemies hold right now (to measure how much they scale). */
+  private fuerzaEnemiga(): number {
+    return this.enemigos.reduce((s, e) => s + (e.vivo ? Math.max(0, e.estados.fuerza ?? 0) : 0), 0);
+  }
 
   constructor(
     run: EstadoRun,
@@ -568,11 +579,13 @@ export class Combate {
       async ganarBloqueo(base) {
         const b = self.bloqueoDeCarta(base);
         self.jugador.bloqueo += b;
+        stats.bloqueoObtenido(self.estadisticas, b);
         await self.ui.fxBloqueo(self.jugador, b);
       },
       async ganarBloqueoAcrobatico(base) {
         const b = self.bloqueoDeCarta(base);
         self.jugador.bloqueo += b;
+        stats.bloqueoObtenido(self.estadisticas, b);
         await self.ui.fxBloqueo(self.jugador, b);
         // Piruetas: reaplica este bloqueo al inicio del próximo turno. Es SOLO el
         // bloqueo de esta carta.
@@ -612,6 +625,7 @@ export class Combate {
         if (real <= 0) return;
         self.jugador.pv -= real;
         self.danoRecibidoEsteTurno += real; // alimenta la Furia del bárbaro
+        stats.herirse(self.estadisticas, real);
         await self.ui.fxGolpe(self.jugador, real, 'golpeEnemigo');
       },
       async robar(n) {
@@ -1028,7 +1042,10 @@ export class Combate {
     }
     // bound to its guardians: it cannot fall while one of them lives
     if (obj !== this.jugador && this.inmortalAhora(obj as EnemigoCombate)) real = Math.min(real, obj.pv - 1);
+    const perdidos = Math.min(real, obj.pv);
     obj.pv = Math.max(0, obj.pv - real);
+    if (obj === this.jugador) stats.golpeRecibido(this.estadisticas, perdidos, absorbido);
+    else stats.danoInfligido(this.estadisticas, perdidos);
     if (obj !== this.jugador) {
       this.danoHechoEsteTurno += real;
       if (real > 0) (obj as EnemigoCombate).heridoEsteTurno = true; // mantiene la Hemorragia
@@ -1067,8 +1084,8 @@ export class Combate {
     if (obj !== this.jugador && real > 0 && obj.vivo) await this.despertar(obj as EnemigoCombate);
     // Armadura de Agathys (brujo): lo que tu bloqueo absorbe vuelve a quien te golpea;
     // Blindaje Infernal, a TODOS
-    const est = this.jugador.estados;
-    if (obj === this.jugador && absorbido > 0 && ((est.agathys ?? 0) > 0 || (est.agathysArea ?? 0) > 0)) {
+    const armadura = this.jugador.estados;
+    if (obj === this.jugador && absorbido > 0 && ((armadura.agathys ?? 0) > 0 || (armadura.agathysArea ?? 0) > 0)) {
       await this.rebotarAgathys(absorbido);
     }
     await this.comprobarFin();
@@ -1125,7 +1142,7 @@ export class Combate {
     }
     for (const aliado of this.enemigos.filter((x) => x.vivo && x !== e && x.def.alMorirAliado)) {
       const r = aliado.def.alMorirAliado!;
-      await this.ui.fxMensaje(`★ ${aliado.nombre}: ${aliado.def.rasgo?.nombre ?? 'se crece'}`);
+      await this.ui.fxMensaje(`★ ${aliado.nombre}: ${rasgoActual(aliado, this.enemigos)?.nombre ?? 'se crece'}`);
       for (const [estado, n] of r.efectos ?? []) {
         aliado.estados[estado] = (aliado.estados[estado] ?? 0) + n;
         await this.ui.fxEstado(aliado, estado, n);
@@ -1431,6 +1448,7 @@ export class Combate {
   }
 
   async iniciar() {
+    stats.empezarCombate(this.estadisticas);
     // Final scene: if Seduce is in the deck, it goes on top so the hero gets a
     // real shot at the secret natural 20 against the Dungeon Master
     if (this.enemigos.some((e) => esDungeonMaster(e))) {
@@ -1464,6 +1482,7 @@ export class Combate {
 
   async inicioTurnoJugador(primero = false) {
     this.turno++;
+    stats.empezarTurno(this.estadisticas);
     this.faseEnemiga = false;
     this.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
     this.danoHechoEsteTurno = 0;
@@ -1490,6 +1509,7 @@ export class Combate {
     // Veneno: pierdes PV al inicio del turno (ignora bloqueo) y baja 1
     const ven = this.jugador.estados.veneno ?? 0;
     if (ven > 0) {
+      stats.perdidaPorEstado(this.estadisticas, Math.min(ven, this.jugador.pv));
       this.jugador.pv = Math.max(0, this.jugador.pv - ven);
       this.danoRecibidoEsteTurno += ven;
       await this.ui.fxGolpe(this.jugador, ven, 'veneno');
@@ -1670,6 +1690,7 @@ export class Combate {
     this.jugador.energia -= this.costeEfectivo(def);
     this.jugadasTurno++;
     this.jugadasCombate++;
+    stats.cartaJugada(this.estadisticas, def.tipo);
     // Smites (paladin): the next attack card unleashes every prepared one
     if (def.tipo === 'ataque' && this.jugador.castigos.length > 0) {
       this.castigoEnCurso = {
@@ -1695,6 +1716,7 @@ export class Combate {
       const real = Math.min(3, this.jugador.pv - 1); // no mata
       if (real > 0) {
         this.jugador.pv -= real;
+        stats.perdidaPorEstado(this.estadisticas, real);
         await this.ui.fxGolpe(this.jugador, real, 'aliento');
         this.ui.render();
       }
@@ -1763,6 +1785,7 @@ export class Combate {
     if (this.enResolucion || this.terminado) return;
     this.enResolucion = true;
     const j = this.jugador;
+    stats.terminarTurno(this.estadisticas, j.energia);
 
     // Efectos temporales del druida: expiran (salvo los permanentes)
     for (const e of [...j.efectosTemporales]) {
@@ -1868,7 +1891,9 @@ export class Combate {
         await this.ui.fxCura(e, regen);
       }
       if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
+      const fuerzaAntes = this.fuerzaEnemiga();
       await this.ejecutarMovimiento(e);
+      stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
       this.decrementarEstados(e);
       this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
       e.turnosVisto++;

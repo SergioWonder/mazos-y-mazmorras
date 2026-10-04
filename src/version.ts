@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.9.2';
+export const VERSION = '8.10.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.10.0',
+    fecha: '2026-10-04',
+    cambios: [
+      '🪦 La lápida es ahora de piedra agrietada, con un leve reflejo de luz, y su epitafio se ríe de cómo moriste: de tus peores costumbres de la partida, del jefe que te mató o, simplemente, de ti.',
+      '💋 El íncubo y la súcubo se turnan para embrujarte (Vulnerable, Frágil y una maldición cada uno en tu mano) mientras el otro ataca; si cae uno, el otro ya no se contiene.',
+      '★ Los rasgos de los enemigos insinúan en vez de explicar: tendrás que descubrir tú qué hacen.',
+    ],
+  },
   {
     version: '8.9.2',
     fecha: '2026-10-03',

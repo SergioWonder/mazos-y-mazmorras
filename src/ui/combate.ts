@@ -30,6 +30,7 @@ import { cardSpellKey, hitSpell, preludeKey, sweepImpactMs } from '../fx/card-sp
 import type { SpellCtx } from '../fx/spell-fx.ts';
 import { ImpactQueue, SweepClock } from './impact-queue.ts';
 import { DeathQueue } from './death-queue.ts';
+import { rasgoActual } from '../core/enemigos.ts';
 import { prodigiousSpell } from './prodigious-fx.ts';
 import { llamasDeCastigo, resumenCastigo } from './castigo-ficha.ts';
 import {
@@ -44,7 +45,18 @@ const MUERTE_SPRITE_MS = 750;
 const MUERTE_CSS_MS = 550;
 
 /** How the hero fell in the last lost combat (for the tombstone). */
-let ultimaCaida: { asesino: string | null; turnos: number } | null = null;
+export interface CaidaHeroe {
+  /** Name and enemy id of whoever dealt the killing blow (null: poison, own card…). */
+  asesino: string | null;
+  asesinoId: string | null;
+  /** Boss of the fatal fight (null if it was not a boss fight). */
+  jefeId: string | null;
+  /** Turns of the fatal fight. */
+  turnos: number;
+  /** Curses the hero carried in that fight (deck, hand and discard). */
+  maldiciones: number;
+}
+let ultimaCaida: CaidaHeroe | null = null;
 export const caidaDelHeroe = () => ultimaCaida;
 
 /** Player actions go through a FIFO queue: one resolves at a time, the rest wait. */
@@ -961,6 +973,7 @@ export function pantallaCombate(
           ataque: 'Pretende atacarte', defensa: 'Va a defenderse',
           mejora: 'Va a potenciarse', perjuicio: 'Va a debilitarte', desconocido: '…',
         };
+        const rasgo = rasgoActual(e, combate.enemigos); // the incubus' changes once the succubus falls
         // its next move is only revealed when the player's turn begins
         const intencion = combate.intencionOculta(e)
           ? '<div class="intencion intencion-oculta" data-tip="Ya ha actuado: verás qué trama cuando empiece tu turno.">…</div>'
@@ -977,8 +990,8 @@ export function pantallaCombate(
             : `<div class="sprite sprite-enemigo" style="font-size:${escala * 4.2}rem">${e.def.arte}</div>`}
           <div class="enemigo-nombre">${e.nombre}</div>
           ${
-            e.def.rasgo
-              ? `<div class="rasgo-jefe" data-tip="<strong>★ ${e.def.rasgo.nombre}</strong><br>${e.def.rasgo.texto}">★ ${e.def.rasgo.nombre}</div>`
+            rasgo
+              ? `<div class="rasgo-jefe" data-tip="<strong>★ ${rasgo.nombre}</strong><br>${rasgo.texto}">★ ${rasgo.nombre}</div>`
               : ''
           }
           ${barraVida(e)}
@@ -1531,7 +1544,12 @@ export function pantallaCombate(
     function muerteHeroe(): () => void {
       const seq = heroDeathSequence(reducedMotion());
       muerteMs = seq.total;
-      ultimaCaida = { asesino: actor?.e.nombre ?? null, turnos: combate.turno };
+      const pilas = [...combate.jugador.mazo, ...combate.jugador.mano, ...combate.jugador.descarte];
+      ultimaCaida = {
+        asesino: actor?.e.nombre ?? null, asesinoId: actor?.e.def.id ?? null,
+        jefeId: esJefe ? defs.find((d) => d.esJefe)?.id ?? defs[0]?.id ?? null : null,
+        turnos: combate.turno, maldiciones: pilas.filter((c) => c.def.tipo === 'maldicion').length,
+      };
       const asesino = actor && actor.e.vivo ? actor.e : null;
       const heroe = spriteActual();
       const caja = cajaDe(elemDe(combate.jugador));

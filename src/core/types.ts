@@ -1,5 +1,7 @@
 // ── Tipos centrales del juego ────────────────────────────────────────────────
 
+import type { EstadisticasRun } from './estadisticas.ts';
+
 export type ClaseId = 'druida' | 'barbaro' | 'mago' | 'picaro' | 'brujo' | 'paladin';
 /** 'maldicion' = curse: unplayable dead weight that clogs the hand and the deck. */
 export type TipoCarta = 'ataque' | 'habilidad' | 'poder' | 'maldicion';
@@ -174,6 +176,8 @@ export interface EnemigoDef {
   escala?: number;       // tamaño relativo del sprite
   /** Rasgo único visible (jefes): nombre + descripción para el tooltip. */
   rasgo?: { nombre: string; texto: string };
+  /** Its trait once it is the last enemy standing (the incubus without the succubus…). */
+  rasgoSolo?: { nombre: string; texto: string };
   /** Ids of its decoys: an attack card aimed at it lands at random on it or on one of them (Vexis). */
   senuelos?: string[];
   /** A slot filled at random from these when the fight starts, never repeating one already
@@ -722,6 +726,8 @@ export interface EstadoRun {
   elitesVistos?: string[];
   /** Active tavern quest (null/absent when there is none). */
   mision?: MisionTaberna | null;
+  /** What the hero did in the fights so far (absent until the first fight). */
+  estadisticas?: EstadisticasRun;
 }
 
 /** Look of the 3D die: the card that rolls it (Seduce, Wish) or a plain one. */
