@@ -7025,7 +7025,19 @@ try {
   const eventIds = eventos.map((e) => SA.eventSceneId(e.id) as string);
   const portraits: string[] = SA.PORTRAIT_SCENES ?? [];
   check(['aldric', 'sibila'].every((id) => portraits.includes(id)), 'Aldric y Síbila son retratos verticales');
-  const expected = [...portraits, 'taberna', 'campamento', ...chapterIds, ...eventIds];
+  // — chapter openings are painted WebP vignettes (16:9), not hand-drawn SVG —
+  const painted: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.webp')) : [];
+  const missingPainted = chapterIds.filter((id) => !painted.includes(`${id}.webp`));
+  check(missingPainted.length === 0 && painted.length === chapterIds.length,
+    `cada vista de capítulo es una ilustración pintada en WebP (${painted.length}/6) ${missingPainted.join(', ')}`);
+  const paintedBad = painted.filter((f) => {
+    const buf: Buffer = fs.readFileSync(new URL(f, dir));
+    const isWebp = buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP';
+    return !isWebp || buf.length > 260 * 1024;
+  });
+  check(paintedBad.length === 0, `las vistas de capítulo son WebP de menos de 260 KB ${paintedBad.join(', ')}`);
+  check(chapterIds.every((id) => !has(id)), 'las vistas de capítulo ya no tienen SVG dibujado');
+  const expected = [...portraits, 'taberna', 'campamento', ...eventIds];
   const missing = expected.filter((id) => !has(id));
   check(missing.length === 0, `cada pantalla o evento con arte tiene su SVG (${expected.length}) ${missing.slice(0, 8).join(', ')}`);
   check(files.every((f) => expected.includes(f.replace(/\.svg$/, ''))), `no sobran SVG de escenas sin pantalla ${files.filter((f) => !expected.includes(f.replace(/\.svg$/, ''))).join(', ')}`);
@@ -7051,6 +7063,9 @@ try {
   // — the loader: the image when drawn, the emoji only as fallback —
   const table = { '../arte/escenas/aldric.svg': '/a/aldric.svg' };
   check(SA.pickSceneArt(table, 'aldric') === '/a/aldric.svg' && SA.pickSceneArt(table, 'sibila') === null, 'la escena se busca por id en la tabla de Vite');
+  const mixed = { '../arte/escenas/capitulo-cripta.webp': '/a/cripta.webp', '../arte/escenas/taberna.svg': '/a/taberna.svg', '../arte/escenas/taberna.webp': '/a/taberna.webp' };
+  check(SA.pickSceneArt(mixed, 'capitulo-cripta') === '/a/cripta.webp' && SA.pickSceneArt(mixed, 'taberna') === '/a/taberna.webp',
+    'la escena pintada en WebP se encuentra y tiene preferencia sobre el SVG');
   const withArt: string = SA.sceneFigure('/a/aldric.svg', '🧓', 'bendicion-arte', 'Aldric', true);
   const withoutArt: string = SA.sceneFigure(null, '🧓', 'bendicion-arte', 'Aldric', true);
   check(/<img[^>]+src="\/a\/aldric\.svg"/.test(withArt) && /alt="Aldric"/.test(withArt) && !withArt.includes('🧓') && /escena-retrato/.test(withArt),
@@ -7074,6 +7089,18 @@ try {
   check(/max-height:[^;]*vh/.test(css.split('.escena-img')[1] ?? '') || /max-height:[^;]*(vh|dvh)/.test(rule(css, '.escena-img')), 'la ilustración limita su alto a la pantalla');
   check(/@media[^{]*max-height[^{]*\{[\s\S]*escena-img/.test(movil) && /escena-img/.test(movil),
     'en móvil apaisado y vertical la ilustración se encoge para no empujar los botones');
+  // — the chapter opening fills all the room the title, text and button leave free —
+  const capBox = rule(css, '.pantalla-capitulo .capitulo-arte');
+  const capImg = rule(css, '.pantalla-capitulo .capitulo-arte .escena-img');
+  check(/container-type:\s*size/.test(capBox) && /flex:\s*1/.test(capBox) && /min-height:\s*0/.test(capBox),
+    'la vista de capítulo ocupa todo el alto libre de la pantalla');
+  check(/width:\s*min\(100cqw,\s*100cqh\s*\*\s*16\s*\/\s*9\)/.test(capImg) && /max-height:\s*none/.test(capImg) && /max-width:\s*none/.test(capImg),
+    'la ilustración del capítulo es la mayor 16:9 que cabe, sin topes fijos');
+  check(!/\.capitulo-arte \.escena-img\s*\{\s*height:\s*min\(/.test(css + movil), 'ni el escritorio ni el móvil limitan la ilustración del capítulo a unos píxeles');
+  const landscape = /@media \(orientation: landscape\) and \(max-height: 540px\) \{[\s\S]*?\n\}/g;
+  const landscapeCss = (movil.match(landscape) ?? []).join('\n');
+  check(/\.pantalla-capitulo \.fin\s*\{[^}]*display:\s*grid/.test(landscapeCss) && /\.pantalla-capitulo \.fin > \.capitulo-arte\s*\{[^}]*grid-row:\s*1 \/ -1/.test(landscapeCss),
+    'en el móvil apaisado la ilustración del capítulo va a la izquierda a toda altura y el texto a su lado');
 } catch (err) {
   check(false, `las escenas ilustradas se cargan (${(err as Error).message})`);
 }

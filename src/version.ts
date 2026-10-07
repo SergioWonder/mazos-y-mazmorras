@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.10.2';
+export const VERSION = '8.11.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.11.0',
+    fecha: '2026-10-07',
+    cambios: [
+      '🖼️ Nuevas ilustraciones pintadas para la presentación de los seis escenarios: el campamento de Gorzug, la guarida bajo la posada, la cripta de Vol\'guth, el templo del Abismo, el tesoro de Ignifax y el laberinto del Contemplador.',
+      '🧭 Tu grupo de héroes aparece a contraluz en cada una, a punto de adentrarse.',
+      '🔎 La ilustración del capítulo ocupa ahora toda la pantalla libre (en el móvil apaisado, a toda altura junto al texto) para verla con detalle.',
+    ],
+  },
   {
     version: '8.10.2',
     fecha: '2026-10-04',

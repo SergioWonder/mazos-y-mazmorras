@@ -138,7 +138,6 @@
   .evento-arte.escena, .hoguera.escena, .bendicion-arte.escena, .capitulo-arte.escena { margin: 0 auto 0.3rem; }
   .escena-vineta .escena-img { height: min(170px, 24vh); }
   .escena-retrato .escena-img { height: min(190px, 25vh); }
-  .capitulo-arte .escena-img { height: min(200px, 30vh); }
   .opcion-bendicion { gap: 0.6rem; }
   .opcion-bendicion .bendicion-icono { width: 42px; height: 42px; }
   .opcion-bendicion .bendicion-icono .reliquia-img { width: 36px; height: 36px; }
@@ -373,6 +372,23 @@
   .panel-evento > .evento-arte.escena ~ h2, .panel-evento > .evento-arte.escena ~ .evento-texto { text-align: left; }
   .panel-evento > .evento-arte.escena ~ .evento-texto { margin-bottom: 0.8rem; }
   .panel-evento .evento-opciones { clear: both; }
+  /* chapter opening: the painting fills the full height on the left, the words stack beside it */
+  .pantalla-capitulo .fin {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    grid-template-rows: 1fr auto auto auto auto 1fr;
+    column-gap: 1.2rem;
+    row-gap: 0.5rem;
+    overflow: hidden;
+  }
+  .pantalla-capitulo .fin > * { grid-column: 2; justify-self: center; }
+  .pantalla-capitulo .fin > .titulo-sub { grid-row: 2; }
+  .pantalla-capitulo .fin > .fin-titulo { grid-row: 3; }
+  .pantalla-capitulo .fin > .fin-texto { grid-row: 4; }
+  .pantalla-capitulo .fin > .btn-tomar { grid-row: 5; }
+  .pantalla-capitulo .fin > .capitulo-arte { grid-column: 1; grid-row: 1 / -1; justify-self: stretch; align-self: stretch; height: 100%; }
+  .pantalla-capitulo .fin-titulo { font-size: clamp(1.6rem, 4vw, 2.4rem); }
+  .pantalla-capitulo .fin-texto { font-size: 0.85rem; }
 }
 
 /* narrow portrait phones: three rows of two classes */

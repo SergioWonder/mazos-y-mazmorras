@@ -1,7 +1,8 @@
-// Hand-drawn illustrations of the narrative screens (src/arte/escenas/*.svg): the
-// NPC portraits (240×300) and the landscape vignettes of chapters, events, the
-// tavern and the camp (320×180). Vite bundles them and hands back their URLs;
-// outside Vite (the node smoke test) the table is empty and the emoji stays.
+// Illustrations of the narrative screens (src/arte/escenas): hand-drawn SVG for the
+// NPC portraits (240×300) and the vignettes of events, the tavern and the camp
+// (320×180), and painted WebP for the chapter openings (1280×720). Vite bundles
+// them and hands back their URLs; outside Vite (the node smoke test) the table is
+// empty and the emoji stays.
 import type { Capitulo } from '../core/enemigos.ts';
 import { ACTOS } from '../core/enemigos.ts';
 import { sceneBackground } from '../fx/background.ts';
@@ -9,7 +10,7 @@ import { sceneBackground } from '../fx/background.ts';
 type UrlTable = Record<string, string>;
 
 const SCENES: UrlTable = import.meta.env
-  ? import.meta.glob('../arte/escenas/*.svg', { eager: true, query: '?url', import: 'default' })
+  ? import.meta.glob('../arte/escenas/*.{svg,webp}', { eager: true, query: '?url', import: 'default' })
   : {};
 
 /** Scenes drawn as upright NPC portraits; every other scene is a landscape vignette. */
@@ -27,9 +28,9 @@ export function chapterSceneId(cap: Capitulo): string {
 /** Scene id of a narrative event's vignette. */
 export const eventSceneId = (eventId: string): string => `evento-${eventId}`;
 
-/** URL of the scene called `id` in `table`, or null if it has not been drawn. */
+/** URL of the scene called `id` in `table` (a painted WebP wins over an SVG), or null if it has not been drawn. */
 export function pickSceneArt(table: UrlTable, id: string): string | null {
-  return table[`../arte/escenas/${id}.svg`] ?? null;
+  return table[`../arte/escenas/${id}.webp`] ?? table[`../arte/escenas/${id}.svg`] ?? null;
 }
 
 /** HTML of a scene box: the framed illustration when there is one, otherwise the emoji. */

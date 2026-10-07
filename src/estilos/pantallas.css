@@ -749,7 +749,24 @@ body[data-capitulo='2'][data-escenario='1'] .capitulo-nombre {
 }
 .escena-vineta .escena-img { aspect-ratio: 16 / 9; height: min(236px, 28vh); }
 .escena-retrato .escena-img { aspect-ratio: 4 / 5; height: min(280px, 32vh); border-radius: 48% 48% 6px 6px / 22% 22% 6px 6px; }
-.capitulo-arte .escena-img { height: min(300px, 36vh); }
+/* chapter opening: the painting takes every pixel the title, text and button leave free */
+.pantalla-capitulo .fin { height: 100dvh; gap: 0.9rem; padding: 1.2rem 1rem; }
+.pantalla-capitulo .fin-titulo { font-size: clamp(2rem, 5.5vw, 4rem); }
+.pantalla-capitulo .capitulo-arte {
+  flex: 1 1 0;
+  min-height: 0;
+  align-self: stretch;
+  width: 100%; /* the shared vignette rules centre with auto margins, which would collapse it */
+  container-type: size;
+  align-items: center;
+  margin: 0;
+}
+.pantalla-capitulo .capitulo-arte .escena-img {
+  width: min(100cqw, 100cqh * 16 / 9);
+  height: auto;
+  max-width: none;
+  max-height: none;
+}
 .panel-descanso .hoguera.escena { --escena-brillo: rgba(255, 140, 59, 0.4); }
 .taberna-arte.escena { --escena-brillo: rgba(255, 170, 70, 0.35); }
 .evento-negativo .escena-img { border-color: rgba(179, 38, 30, 0.6); }
