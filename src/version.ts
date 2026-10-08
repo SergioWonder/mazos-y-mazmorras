@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.11.0';
+export const VERSION = '8.12.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '8.12.0',
+    fecha: '2026-10-08',
+    cambios: [
+      '🚶 Al empezar cada capítulo ves a tu propio héroe de espaldas, a contraluz, a punto de adentrarse en el escenario.',
+      '🖼️ Escenarios nuevos al estilo cómic, más misteriosos y menos oscuros, para los seis capítulos.',
+      '✨ Tu héroe respira, su capa se mece con el aire y su magia suelta chispas: orbe del druida, cristal del mago, llama del brujo y sol del paladín.',
+      '🎒 Capas, correas, escudos y armas se recortan con líneas de luz para reconocer a cada clase desde atrás.',
+    ],
+  },
   {
     version: '8.11.0',
     fecha: '2026-10-07',

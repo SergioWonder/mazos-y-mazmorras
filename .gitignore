@@ -22,4 +22,4 @@ scripts/musica/estudio/.venv/
 scripts/musica/**/build/
 
 # painted chapter openings: originals from gpt-image-2 (the shipped WebP live in src/arte/escenas)
-docs/arte/presentaciones/*.png
+docs/arte/presentaciones/**/*.png

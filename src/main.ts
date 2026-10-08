@@ -71,7 +71,7 @@ async function juego() {
     if (eleccion.tipo === 'nueva') {
       document.body.dataset.escenario = String(run.escenario);
       fx.estiloAmbiente = ACTOS[0][run.escenario].ambiente;
-      await pantallaCapitulo(ACTOS[0][run.escenario]);
+      await pantallaCapitulo(ACTOS[0][run.escenario], run.clase);
       await pantallaBendicion(run, rng, 'inicial'); // the Senescal's task: pick a blessing relic
       guardarRun(run);
     }
@@ -137,7 +137,7 @@ async function juego() {
             const siguiente = sortearEscenario(rng);
             await pantallaBendicion(run, rng, 'entreActos', siguiente);
             avanzarCapitulo(run, rng, siguiente);
-            await pantallaCapitulo(ACTOS[run.capitulo][run.escenario]);
+            await pantallaCapitulo(ACTOS[run.capitulo][run.escenario], run.clase);
           } else {
             // Final joke: the Dungeon Master has the last word. The run is already
             // won, so the save goes now and his ray can only end in victory.

@@ -6,11 +6,14 @@
 //   accent colour; only eyes and magic keep their glow.
 // - 'illustrated' (enemies, invocations): thick outer contour, thin inner ink
 //   lines and a cut shadow on every piece, lit by the act's moon.
+// - 'backlit' (heroes seen from behind, walking into a chapter): the silhouette
+//   with the rim light all round it, and the LIT_EDGES pieces (cape borders,
+//   straps, seams) drawn as lines of light so the back reads. SVG only.
 // The element is persistent so combat re-renders can re-attach it without
 // restarting the animation. All sprites share one requestAnimationFrame loop.
 
 import {
-  EMISSIVE, EYES, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
+  EMISSIVE, EYES, LIT_EDGES, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
   type Action, type ActionType, type BoneId, type Burst, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
 } from '../fx/puppet.ts';
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
@@ -32,7 +35,7 @@ let nextId = 0;
 export const LUZ_LUNA = ['rgba(255,214,160,0.5)', 'rgba(190,210,255,0.5)', 'rgba(255,150,110,0.5)'];
 
 export interface PuppetOptions {
-  style: 'silhouette' | 'illustrated';
+  style: 'silhouette' | 'illustrated' | 'backlit';
   /** Face left (enemies look at the hero). */
   mirrored?: boolean;
   /** Moon rim colour for the illustrated style. */
@@ -125,7 +128,8 @@ class SvgView {
     const grow = k !== 1 ? ` translate(58 129) scale(${k}) translate(-58 -129)` : '';
     const world = svgEl('g', { transform: (opts.mirrored ? 'translate(140 0) scale(-1 1)' : '') + grow });
     svg.append(world);
-    this.shadow = svgEl('ellipse', { cx: 58, cy: 129.5, rx: 22, ry: 4.2, fill: 'rgba(0,0,0,0.5)' });
+    // a backlit figure gets its contact shadow from the scene (the rim filter would outline it)
+    this.shadow = svgEl('ellipse', { cx: 58, cy: 129.5, rx: 22, ry: 4.2, fill: 'rgba(0,0,0,0.5)', visibility: opts.style === 'backlit' ? 'hidden' : 'visible' });
     world.append(this.shadow);
     if (rigSmears(rig)) {
       // smear ghosts: flat copies of the weapon bones, behind the figure
@@ -178,9 +182,15 @@ class SvgView {
       })) { fill.append(r.g); this.groups.push(r); }
       world.append(outline, fill);
     } else {
-      const eyeColour = lighten(rig.accent, 0.55);
+      const eyeColour = lighten(rig.accent, 0.55), edgeColour = lighten(rig.accent, 0.5);
       for (const r of runs(rig.shapes, (s, g) => {
         const e = shapeElement(s);
+        if (LIT_EDGES.has(s.k)) {
+          e.setAttribute('fill', edgeColour);
+          e.setAttribute('opacity', s.k === 'edge' ? '0.9' : '0.45');
+          g.append(e);
+          return;
+        }
         const emissive = EMISSIVE.has(s.k), shines = emissive || s.k === 'eye';
         const colour = emissive ? rig.palette[s.k] : s.k === 'eye' ? eyeColour : BLACK;
         e.setAttribute('fill', colour); e.setAttribute('stroke', shines ? colour : BLACK);
@@ -232,13 +242,20 @@ class SvgView {
     });
     if (this.frames++ % 30 === 0) {
       const w = this.element.getBoundingClientRect().width || 136;
-      this.rimPx = Math.max(this.style === 'silhouette' ? 1.1 : 0.8, w / (this.style === 'silhouette' ? 75 : 130));
+      // the backlit rim is three chained shadows (sides and top), so each one is thinner
+      this.rimPx = this.style === 'backlit' ? Math.max(0.8, w / 260)
+        : Math.max(this.style === 'silhouette' ? 1.1 : 0.8, w / (this.style === 'silhouette' ? 75 : 130));
     }
     const r = this.rimPx.toFixed(2), f: string[] = [];
     if (fx.flash) f.push('brightness(0) invert(1)');
     else if (fx.tint) f.push(`drop-shadow(0 0 4px rgba(255,50,40,${fx.tint.toFixed(2)}))`);
     if (fx.dying) f.push(`grayscale(${fx.dying.toFixed(2)})`);
-    if (this.style === 'silhouette') {
+    if (this.style === 'backlit') {
+      // the light is ahead of the figure: a rim all round it, then the glow
+      const rim = lighten(this.accent, 0.25);
+      f.push(`drop-shadow(${r}px 0 0 ${rim}) drop-shadow(-${r}px 0 0 ${rim}) drop-shadow(0 -${r}px 0 ${rim})`
+        + ` drop-shadow(0 0 ${(this.rimPx * 6).toFixed(1)}px ${this.accent}88)`);
+    } else if (this.style === 'silhouette') {
       f.push(`drop-shadow(${r}px -${r}px 0 ${this.accent}) drop-shadow(0 0 ${(this.rimPx * 4).toFixed(1)}px ${this.accent}aa)`);
     } else {
       f.push(`drop-shadow(-${r}px -${r}px 0 ${this.rim}) drop-shadow(0 4px 3px rgba(0,0,0,0.5))`);
@@ -332,7 +349,7 @@ export class PuppetSprite {
       el.className = 'sprite-marioneta';
       el.setAttribute('aria-hidden', 'true');
       this.gpu = {
-        element: el, rig, style: opts.style, mirrored: !!opts.mirrored, rim: opts.rim ?? LUZ_LUNA[0],
+        element: el, rig, style: opts.style === 'backlit' ? 'silhouette' : opts.style, mirrored: !!opts.mirrored, rim: opts.rim ?? LUZ_LUNA[0],
         aura: null, echoes: false, flames: null, frame: null, visible: true,
       };
       this.stage.add(this.gpu);

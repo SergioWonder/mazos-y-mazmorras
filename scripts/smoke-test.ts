@@ -2175,6 +2175,7 @@ for (const [titulo, archivo, fn] of [
   ['🗡️ Sprite del pícaro', 'picaro', 'testPicaro'],
   ['🔥 Sprite del brujo', 'brujo', 'testBrujo'],
   ['🔨 Sprite del paladín', 'paladin', 'testPaladin'],
+  ['🚶 Héroes de espaldas (presentación de capítulo)', 'espalda', 'testEspalda'],
 ] as const) {
   console.log(`\n${titulo}`);
   try {
@@ -7025,17 +7026,9 @@ try {
   const eventIds = eventos.map((e) => SA.eventSceneId(e.id) as string);
   const portraits: string[] = SA.PORTRAIT_SCENES ?? [];
   check(['aldric', 'sibila'].every((id) => portraits.includes(id)), 'Aldric y Síbila son retratos verticales');
-  // — chapter openings are painted WebP vignettes (16:9), not hand-drawn SVG —
-  const painted: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.webp')) : [];
-  const missingPainted = chapterIds.filter((id) => !painted.includes(`${id}.webp`));
-  check(missingPainted.length === 0 && painted.length === chapterIds.length,
-    `cada vista de capítulo es una ilustración pintada en WebP (${painted.length}/6) ${missingPainted.join(', ')}`);
-  const paintedBad = painted.filter((f) => {
-    const buf: Buffer = fs.readFileSync(new URL(f, dir));
-    const isWebp = buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP';
-    return !isWebp || buf.length > 260 * 1024;
-  });
-  check(paintedBad.length === 0, `las vistas de capítulo son WebP de menos de 260 KB ${paintedBad.join(', ')}`);
+  // — chapter openings are layered (empty scenario + the hero's puppet), no flat picture left —
+  const flat: string[] = fs.existsSync(dir) ? fs.readdirSync(dir).filter((f: string) => f.endsWith('.webp')) : [];
+  check(flat.length === 0, `no quedan vistas de capítulo planas en escenas/ ${flat.join(', ')}`);
   check(chapterIds.every((id) => !has(id)), 'las vistas de capítulo ya no tienen SVG dibujado');
   const expected = [...portraits, 'taberna', 'campamento', ...eventIds];
   const missing = expected.filter((id) => !has(id));
@@ -7077,6 +7070,34 @@ try {
   check(/sceneArt\('aldric'/.test(bendicion) && /sceneArt\('sibila'/.test(bendicion) && !/class="bendicion-arte">/.test(bendicion),
     'la bendición muestra a Aldric y a Síbila ilustrados, con el emoji solo de respaldo');
   check(/sceneArt\(chapterSceneId\(cap\)/.test(capitulo), 'el inicio de capítulo muestra la vista de su escenario');
+  // — layered openings: the empty scenario with the hero's puppet walking in, from behind —
+  const CL: any = await import('../src/ui/chapter-layers.ts');
+  const layerIds = Object.keys(CL.CHAPTER_LAYERS);
+  check(layerIds.length === chapterIds.length && chapterIds.every((id) => layerIds.includes(id)),
+    `cada escenario abre con su escena por capas (${layerIds.length}/${chapterIds.length})`);
+  const layerDir = new URL('../src/arte/escenas/capas/', import.meta.url);
+  const layerBad = layerIds.filter((id) => {
+    const f = new URL(`${id}.webp`, layerDir);
+    if (!fs.existsSync(f)) return true;
+    const buf: Buffer = fs.readFileSync(f);
+    return buf.toString('ascii', 8, 12) !== 'WEBP' || buf.length > 420 * 1024;
+  });
+  check(layerBad.length === 0, `cada escenario por capas tiene su fondo vacío en WebP de menos de 420 KB ${layerBad.join(', ')}`);
+  for (const id of layerIds) {
+    const layer = CL.CHAPTER_LAYERS[id];
+    const box = CL.heroBox(layer);
+    const footX = box.left + box.width * 58 / 140, footY = box.top + box.height * 128 / 135;
+    const figure = box.height * CL.BACK_FIGURE_HEIGHT / 135;
+    check(Math.abs(footX - layer.foot[0] * 100) < 0.01 && Math.abs(footY - layer.foot[1] * 100) < 0.01 && Math.abs(figure - layer.height * 100) < 0.01,
+      `${id}: el héroe apoya los pies en su sitio (${(layer.foot[0] * 100).toFixed(0)} %, ${(layer.foot[1] * 100).toFixed(0)} %) y mide el ${(layer.height * 100).toFixed(0)} % del alto`);
+    check(layer.height > 0.2 && layer.height < 0.7 && layer.foot[1] > 0.5 && layer.foot[1] <= 1, `${id}: el héroe está en primer plano, a una escala creíble`);
+  }
+  check(/chapterLayers?\(/.test(capitulo) && /HeroBackSprite/.test(capitulo) && /\.destroy\(\)/.test(capitulo),
+    'el capítulo por capas pone la marioneta de espaldas de tu clase y la retira al salir');
+  const mainTs = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  check((mainTs.match(/pantallaCapitulo\([^)]*run\.clase\)/g) ?? []).length === 2, 'las dos entradas a un capítulo le pasan la clase del héroe');
+  const capas = /\.escena-capas\s*\{[^}]*/.exec(fs.readFileSync(new URL('../src/estilos/pantallas.css', import.meta.url), 'utf8'))?.[0] ?? '';
+  check(/position:\s*relative/.test(capas) && /overflow:\s*hidden/.test(capas), 'la escena por capas recorta al héroe dentro del marco');
   check(/sceneArt\('taberna'/.test(taberna) && !/taberna-arte">🍺/.test(taberna), 'la taberna muestra su ilustración');
   check(/sceneArt\(eventSceneId\(evento\.id\),\s*evento\.arte/.test(evento) && !/evento-arte">\$\{evento\.arte\}/.test(evento),
     'cada evento muestra su viñeta y usa su emoji solo de respaldo');

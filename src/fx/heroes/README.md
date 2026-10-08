@@ -147,3 +147,27 @@ Run: `node --experimental-strip-types scripts/smoke-test.ts` (it must end with
    It writes `<dir>/<action>-NN.png` and `<dir>/<action>-sheet.png`. Frames are
    stepped at a fixed 60 fps, so it also works while the browser pane is hidden.
 4. Repeat with `?render=svg` to check the SVG fallback.
+
+## Heroes seen from behind (`espalda/`)
+
+The chapter openings show the empty scenario (`src/arte/escenas/capas/<id>.webp`)
+with the player's hero walking into it, its back to us. Each class has a second
+rig in `espalda/<clase>.ts`, gathered in `fx/hero-back.ts` (`HERO_BACK_RIGS`) and
+shown by `ui/hero-back-sprite.ts` in the SVG `backlit` style; where the feet land
+and how tall the hero stands in each scenario lives in `ui/chapter-layers.ts`.
+
+- Same engine and viewBox, but the figure faces away: centred on the feet at
+  `BACK_FEET` (58, 128), about `BACK_FIGURE_HEIGHT` (80) units tall, both arms
+  and legs visible (`armB` is the viewer's left, `armF` the right).
+- `backlit`: black, a rim light all round in `accent`, and the `LIT_EDGES` keys
+  (`edge` bright, `edgeSoft` faint) painted as lines of light: cape borders and
+  hems, straps, belts, shield rims. They are what makes the back readable; keep
+  them to outlines (many parallel vertical lines read as hair).
+- Wide capes are hand-drawn panels on the chain bones with a small `sway` and
+  `limit`, so their lit borders do not break into steps; `strandEdges` traces the
+  border of a `strandShapes` strand.
+- Idle only: the generic breathing, the chains and, for magic, `emitters` with a
+  continuous particle preset (`arcana`, `vacio`, `alma`, `destelloCarta`…).
+- Tests: `scripts/hero-tests/espalda.ts` (fast loop:
+  `node --experimental-strip-types scripts/hero-tests/run-espalda.ts <clase>`).
+  Visual check over a scenario: `scripts/escenas/preview_espalda.ts <out.png> <clase>`.

@@ -261,3 +261,25 @@ export function strandShapes(spec: ChainSpec, key: string, widths: number[], opt
   }
   return out;
 }
+
+/**
+ * Lines of light along the border of a strand drawn with strandShapes (same spec,
+ * widths and tip): both sides of every segment and, on the last one, its end
+ * (the teeth of a ragged hem). They hang on the chain bones, so they sway with the
+ * cloth. Used by the backlit heroes seen from behind to read their capes.
+ */
+export function strandEdges(spec: ChainSpec, widths: number[], opts: StrandOptions & { key?: string; width?: number } = {}): Shape[] {
+  const key = opts.key ?? 'edge', w = opts.width ?? 0.8;
+  const out: Shape[] = [];
+  for (const s of strandShapes(spec, key, widths, opts)) {
+    if (s.t !== 'p') continue;
+    const pts = s.pts, last = pts.length - 1;
+    const flat = pts.length === 4 && s.b !== CHAIN_BONES[spec.slot][spec.joints.length - 2];
+    // sides only on the inner segments; the whole end on the last one
+    const pairs: [number, number][] = flat ? [[0, 1], [2, 3]] : Array.from({ length: last }, (_, i) => [i, i + 1]);
+    for (const [a, b] of pairs) {
+      out.push({ t: 'l', b: s.b, k: key, x1: pts[a][0], y1: pts[a][1], x2: pts[b][0], y2: pts[b][1], w });
+    }
+  }
+  return out;
+}

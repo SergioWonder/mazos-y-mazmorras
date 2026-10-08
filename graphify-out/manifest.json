@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1791384242.2369454,
-    "ast_hash": "fd21b6facdf7517ca29203f9edcfc4f9",
+    "mtime": 1791451263.7588997,
+    "ast_hash": "045ea3db659bacc38687e8c2f703dff9",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1791384364.678124,
-    "ast_hash": "fc66ff0c812c963a46632950a44963e1",
+    "mtime": 1791451135.2583187,
+    "ast_hash": "ebdf4b2eef19b789d8e7f5b1e564719c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1791100778.0004845,
-    "ast_hash": "78ed7c4098a5f4d68542785e17041e84",
+    "mtime": 1791447907.6938891,
+    "ast_hash": "7a1358b4a066810fbd0f31c9357d5bb4",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
@@ -105,8 +105,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/capitulo.ts": {
-    "mtime": 1790544237.9469814,
-    "ast_hash": "0f2ea02748273b5121c7eab9ff30651a",
+    "mtime": 1791447907.6944058,
+    "ast_hash": "29f3a30de214c53252db9a6af40d1234",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/carta.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1791384401.4285796,
-    "ast_hash": "d40cb605f784fb4a09ecc507c61a6cc2",
+    "mtime": 1791451263.7583885,
+    "ast_hash": "60999b2aa964b402a19c9a1afbbe1266",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -225,8 +225,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/puppet.ts": {
-    "mtime": 1791006196.0474768,
-    "ast_hash": "28cc1bdd69d72a9b3e82c9b7aa4b63da",
+    "mtime": 1791447801.186667,
+    "ast_hash": "ff8ac54d3af81f8e97a3c93d73190a2d",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/gallery-catalogue.ts": {
@@ -240,8 +240,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/puppet-sprite.ts": {
-    "mtime": 1790977919.9803197,
-    "ast_hash": "fe9f56e7a71f3dff3dac8eba3d871a3a",
+    "mtime": 1791448042.2941914,
+    "ast_hash": "81f4fbca7f68580392e73b17a66ee97b",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/particle-gl.ts": {
@@ -2215,8 +2215,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/chains.ts": {
-    "mtime": 1790523907.5015037,
-    "ast_hash": "482b8b9bbf40133a0543b8fe615cbd7a",
+    "mtime": 1791448002.7443283,
+    "ast_hash": "c98810a004db540c54e0cf2aad52560f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/barbaro.ts": {
@@ -2250,8 +2250,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/README.md": {
-    "mtime": 1790719936.63275,
-    "ast_hash": "4a31ba61e6b74fc3e06489a0805409a7",
+    "mtime": 1791448341.7735622,
+    "ast_hash": "5ae7fccf02c8ee6fca543fc9676b7e53",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/fx/card-spells.ts": {
@@ -3640,38 +3640,138 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/escenas/capitulos_webp.py": {
-    "mtime": 1791384186.8718467,
-    "ast_hash": "4cb8038aaf07d89d7a130d61c956cfe8",
+    "mtime": 1791451184.360136,
+    "ast_hash": "64fe506ffdec6367f038c9794734dae2",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-asentamiento-ogro.webp": {
-    "mtime": 1791384187.2652178,
-    "ast_hash": "fc5059cc0ee9cb1dfc481dfa7d04eea1",
+  "/Users/sergio/WonderBits/personal/videogame/scripts/escenas/preview_espalda.ts": {
+    "mtime": 1791448796.737263,
+    "ast_hash": "105c8af9eb4852253c2e44d987bac3a7",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-cripta.webp": {
-    "mtime": 1791384187.406477,
-    "ast_hash": "07cee0375a929fc23ed3d908e606518c",
+  "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/espalda.ts": {
+    "mtime": 1791448016.6590552,
+    "ast_hash": "4689a20844a899fddd07234da669f6ff",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-guarida-contrabandistas.webp": {
-    "mtime": 1791384187.5747313,
-    "ast_hash": "8f2dffa9a5af864d7279f5068ff0e81a",
+  "/Users/sergio/WonderBits/personal/videogame/scripts/hero-tests/run-espalda.ts": {
+    "mtime": 1791448198.8135297,
+    "ast_hash": "7d904dbad28e0bd97b930b57f48c2d17",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-guarida-dragon.webp": {
-    "mtime": 1791384187.7410655,
-    "ast_hash": "3948fac42130e7f3b352b0c84e9d289a",
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/hero-back.ts": {
+    "mtime": 1791447862.8863776,
+    "ast_hash": "4e30f0b1081aeef331c2e3372d20dc10",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-laberinto-contemplador.webp": {
-    "mtime": 1791384187.9072835,
-    "ast_hash": "e821b81dee30b30b050164add23e8440",
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/barbaro.ts": {
+    "mtime": 1791448725.7763135,
+    "ast_hash": "6f2a901e30e85f14c7ae5c1644264b94",
     "semantic_hash": ""
   },
-  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capitulo-templo-oscuro.webp": {
-    "mtime": 1791384188.0599825,
-    "ast_hash": "057e24f46c41766a40b35aac364ca6f6",
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/brujo.ts": {
+    "mtime": 1791448633.7314718,
+    "ast_hash": "86d01c1bbc785b6bd04818098c7021ec",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/druida.ts": {
+    "mtime": 1791448680.7030578,
+    "ast_hash": "06db5f9037640fbe977115bb64333397",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/mago.ts": {
+    "mtime": 1791448752.8360043,
+    "ast_hash": "46fbc9604177729faa9b59f364d85ed8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/paladin.ts": {
+    "mtime": 1791448672.6906471,
+    "ast_hash": "0e006eca831c05f94aafd7e0130c5857",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/fx/heroes/espalda/picaro.ts": {
+    "mtime": 1791448198.8096046,
+    "ast_hash": "a14c7bf10ebb419d2201d23668f2ae09",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/chapter-layers.ts": {
+    "mtime": 1791451156.696427,
+    "ast_hash": "ddc0b9d2663e055798e417b5dc082902",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/ui/hero-back-sprite.ts": {
+    "mtime": 1791447891.4032278,
+    "ast_hash": "3bf06e5d44ba5610b2d7fe77b2384912",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/v2/prompt-guarida-contrabandistas.txt": {
+    "mtime": 1791445749.7586246,
+    "ast_hash": "c5c7a835a62d3b7874f49bbce1b704dd",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-asentamiento-ogro.png": {
+    "mtime": 1791383579.858823,
+    "ast_hash": "63b51907cd4e63192b50f4567fe55696",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-cripta.png": {
+    "mtime": 1791383582.0491781,
+    "ast_hash": "97454e0ea9a215e030256e5c60c28e41",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-guarida-contrabandistas.png": {
+    "mtime": 1791383584.5606692,
+    "ast_hash": "9768f5246a0567a190dd2504103e2d49",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-guarida-dragon.png": {
+    "mtime": 1791383586.5704641,
+    "ast_hash": "6d66e26853e08ba96eba3a1a3ff6b0ff",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-laberinto-contemplador.png": {
+    "mtime": 1791383580.1938334,
+    "ast_hash": "164d4a85377760b6c39d4a5eae0e9fec",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/capitulo-templo-oscuro.png": {
+    "mtime": 1791383574.4598777,
+    "ast_hash": "a1bf273c845c81f0b20d434d0a0b1f06",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-guarida-contrabandistas.webp": {
+    "mtime": 1791451185.1320648,
+    "ast_hash": "86a39f617ce2ba99bf9b1ad6076c847b",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/docs/arte/presentaciones/v2/estilo-comun.txt": {
+    "mtime": 1791451020.285636,
+    "ast_hash": "7e94d20826e88b9c2927306a489d18b8",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-asentamiento-ogro.webp": {
+    "mtime": 1791451184.69392,
+    "ast_hash": "2c5d4287f3d28e8401e843f8b9713f0a",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-cripta.webp": {
+    "mtime": 1791451184.9234316,
+    "ast_hash": "a0c4bfa4bc523232f85eef2ab587ab93",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-guarida-dragon.webp": {
+    "mtime": 1791451185.3738172,
+    "ast_hash": "71ef98f4ff595c206687250d50ba016d",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-laberinto-contemplador.webp": {
+    "mtime": 1791451185.6063771,
+    "ast_hash": "74ed3bce927e8ac926c75347a4e4261e",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-templo-oscuro.webp": {
+    "mtime": 1791451185.8218293,
+    "ast_hash": "ae0af5769462743fd76c3d65259b7f57",
     "semantic_hash": ""
   }
 }

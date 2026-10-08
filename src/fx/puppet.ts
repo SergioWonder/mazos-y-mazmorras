@@ -201,6 +201,10 @@ export const EMISSIVE = new Set([
   'iris', 'vein', 'glint',
 ]);
 export const EYES = new Set(['eye', 'eyeGlow']);
+/** Keys painted as lines of light inside a backlit figure seen from behind (the
+ *  heroes walking into a chapter): cape borders, straps, seams. 'edge' is the
+ *  bright rim, 'edgeSoft' a fainter fold or seam. */
+export const LIT_EDGES = new Set(['edge', 'edgeSoft']);
 
 export const C = (b: BoneId, k: string, x: number, y: number, r: number): Shape => ({ t: 'c', b, k, x, y, r });
 export const E = (b: BoneId, k: string, x: number, y: number, rx: number, ry: number): Shape => ({ t: 'e', b, k, x, y, rx, ry });
