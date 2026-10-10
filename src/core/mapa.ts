@@ -4,7 +4,8 @@ import { elegir } from './rng.ts';
 /**
  * Genera el mapa de un capítulo: un grafo de 13 filas que sube hasta el jefe,
  * al estilo Slay the Spire, con hueco para eventos, hogueras y tabernas.
- * Filas de 3–4 caminos, poco enlazados entre sí, para que elegir ruta pese.
+ * Casi siempre 3 caminos por fila (a veces 2 o 4), poco enlazados entre sí,
+ * para que elegir ruta pese.
  */
 export function generarMapa(rng: () => number): NodoMapa[] {
   const nodos: NodoMapa[] = [];
@@ -25,7 +26,11 @@ export function generarMapa(rng: () => number): NodoMapa[] {
     () => 'descanso',
     () => 'jefe',
   ];
-  const anchoPorFila = [3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 3, 1];
+  // mostly three choices per level, sometimes two or four; the chest row and the
+  // last campfire stay at three, and the boss alone at the top
+  const ancho = () => { const r = rng(); return r < 0.22 ? 2 : r < 0.78 ? 3 : 4; };
+  const anchoPorFila = tiposPorFila.map((_, f) =>
+    f === tiposPorFila.length - 1 ? 1 : f === 6 || f === tiposPorFila.length - 2 ? 3 : ancho());
   const numFilas = anchoPorFila.length;
   /** Rows the guarantees below may touch: between the opening fights and the last campfire. */
   const MEDIO = { desde: 2, hasta: numFilas - 3 };
@@ -33,9 +38,8 @@ export function generarMapa(rng: () => number): NodoMapa[] {
 
   const filas: NodoMapa[][] = [];
   for (let f = 0; f < numFilas; f++) {
-    const ancho = anchoPorFila[f];
     const fila: NodoMapa[] = [];
-    for (let c = 0; c < ancho; c++) {
+    for (let c = 0; c < anchoPorFila[f]; c++) {
       const nodo: NodoMapa = {
         id: id++, fila: f, col: c, tipo: tiposPorFila[f](),
         siguientes: [], visitado: false,
@@ -96,6 +100,35 @@ export function generarMapa(rng: () => number): NodoMapa[] {
   }
   colocarTabernas(nodos, rng);
   return nodos;
+}
+
+/** Deterministic 0..1 noise for a node (its id and the map's size as the seed). */
+function ruido(id: number, sal: number, k: number): number {
+  let h = Math.imul(id + 1, 0x9e3779b1) ^ Math.imul(sal + 7, 0x85ebca6b) ^ Math.imul(k + 3, 0xc2b2ae35);
+  h ^= h >>> 15; h = Math.imul(h, 0x2c1b3c6d); h ^= h >>> 12;
+  return (h >>> 0) / 4294967296;
+}
+
+/**
+ * Where a node is drawn on the map, in % of the map (row 0 at the bottom). The
+ * grid is nudged so it looks drawn by hand: each row leans a little to one side
+ * and each node moves a little, never so much that two nodes touch or a level
+ * slips below the previous one. Stable: the same map always looks the same.
+ */
+export function posicionNodo(mapa: NodoMapa[], n: NodoMapa): { x: number; y: number } {
+  const filas = Math.max(...mapa.map((m) => m.fila)) + 1;
+  const enFila = mapa.filter((m) => m.fila === n.fila).length;
+  const sal = mapa.length;
+  const paso = 80 / enFila;                       // room between paths in this row
+  const salto = 82 / Math.max(1, filas - 1);      // room between levels
+  const jefe = enFila === 1 && n.fila === filas - 1;
+  const inclinacion = jefe ? 0 : (ruido(n.fila, sal, 1) - 0.5) * Math.min(8, paso * 0.4);
+  const dx = jefe ? 0 : (ruido(n.id, sal, 2) - 0.5) * paso * 0.42;
+  // levels are close together: a small vertical nudge, so neighbours never touch
+  const dy = jefe ? 0 : (ruido(n.id, sal, 3) - 0.5) * salto * 0.17;
+  const x = ((n.col + 0.5) / enFila) * 80 + 10 + inclinacion + dx;
+  const y = 90 - n.fila * salto + dy;
+  return { x: Math.min(92, Math.max(8, x)), y };
 }
 
 /** Node types a tavern rumour can point at. */

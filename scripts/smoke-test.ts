@@ -9,7 +9,7 @@ import {
   HERALDO_CULTO, CONTEMPLADOR,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
-import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
+import { generarMapa, nodosDisponibles, posicionNodo } from '../src/core/mapa.ts';
 import { ajusteEncuentro, PRIMEROS_FACILES, type ContextoEncuentro } from '../src/core/dificultad.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
@@ -227,18 +227,20 @@ console.log('— Mapa —');
   }
   console.log('  ✓ 50 mapas generados: 13 filas, 1 jefe, ≥2 eventos, descansos y todo alcanzable');
   check(nodosDisponibles(generarMapa(crearRng(42)), -1).length >= 1, 'hay nodos iniciales disponibles');
-  // longer and wider paths, less tangled: fewer forks than before (1 + 55 %)
-  let nodos = 0, enlaces = 0, filasAnchas = 0, filas = 0;
+  // longer paths, mostly three choices per level (sometimes two or four), less tangled
+  let nodos = 0, enlaces = 0, filasDe4 = 0, filas = 0, variados = 0;
   for (let i = 0; i < 50; i++) {
     const mapa = generarMapa(crearRng(i * 11 + 2));
     const n = mapa.filter((x) => x.tipo !== 'jefe');
     nodos += n.length; enlaces += n.reduce((a, x) => a + x.siguientes.length, 0);
     const porFila = new Map<number, number>();
-    for (const x of mapa) porFila.set(x.fila, (porFila.get(x.fila) ?? 0) + 1);
-    filas += porFila.size; filasAnchas += [...porFila.values()].filter((v) => v >= 4).length;
+    for (const x of n) porFila.set(x.fila, (porFila.get(x.fila) ?? 0) + 1);
+    filas += porFila.size; filasDe4 += [...porFila.values()].filter((v) => v >= 4).length;
+    if (new Set([...porFila.values()]).size >= 3) variados++;
   }
-  check(nodos / filas >= 3.2, `más columnas: ${(nodos / filas).toFixed(1)} nodos por fila de media`);
-  check(filasAnchas / filas >= 0.4, `muchas filas tienen 4 caminos (${Math.round((filasAnchas / filas) * 100)} %)`);
+  check(nodos / filas >= 2.6 && nodos / filas <= 3.3, `unas tres opciones por nivel: ${(nodos / filas).toFixed(1)} nodos por fila de media`);
+  check(filasDe4 / filas <= 0.3, `pocas filas tienen 4 caminos (${Math.round((filasDe4 / filas) * 100)} %)`);
+  check(variados >= 40, `el número de caminos varía de un nivel a otro (${variados}/50 mapas con filas de 2, 3 y 4)`);
   check(enlaces / nodos <= 1.42, `menos conectados: ${(enlaces / nodos).toFixed(2)} salidas por nodo de media`);
 }
 
@@ -4437,6 +4439,41 @@ console.log('\n🙏 Bendiciones');
     check(!!rest && rest.pvMax === max && rest.reliquias.length === run.reliquias.length,
       'rehidratar no vuelve a aplicar el pacto de la Codicia');
   }
+}
+
+console.log('— Mapa a mano alzada —');
+{
+  // the nodes are nudged off the grid, without overlapping or breaking the row order
+  let filasTorcidas = 0, filasMulti = 0, fuera = 0, pegados = 0, desorden = 0, enRejilla = 0, total = 0;
+  for (let i = 0; i < 40; i++) {
+    const mapa = generarMapa(crearRng(i * 19 + 4));
+    const p = new Map(mapa.map((n) => [n.id, posicionNodo(mapa, n)]));
+    const numFilas = Math.max(...mapa.map((n) => n.fila)) + 1;
+    for (let f = 0; f < numFilas; f++) {
+      const fila = mapa.filter((n) => n.fila === f);
+      const ys = fila.map((n) => p.get(n.id)!.y);
+      if (fila.length > 1) { filasMulti++; if (Math.max(...ys) - Math.min(...ys) > 0.35) filasTorcidas++; }
+      const siguiente = mapa.filter((n) => n.fila === f + 1).map((n) => p.get(n.id)!.y);
+      if (siguiente.length && Math.max(...siguiente) >= Math.min(...ys)) desorden++;
+    }
+    for (const n of mapa) {
+      const { x, y } = p.get(n.id)!;
+      total++;
+      if (x < 6 || x > 94 || y < 4 || y > 94) fuera++;
+      const enFila = mapa.filter((m) => m.fila === n.fila).length;
+      if (Math.abs(x - (((n.col + 0.5) / enFila) * 80 + 10)) < 0.3) enRejilla++;
+      for (const m of mapa) {
+        if (m.id <= n.id) continue;
+        const q = p.get(m.id)!;
+        if (Math.hypot((x - q.x) * 0.7, y - q.y) < 5.5) pegados++;
+      }
+    }
+    if (JSON.stringify(posicionNodo(mapa, mapa[3])) !== JSON.stringify(p.get(mapa[3].id))) desorden++;
+  }
+  check(filasTorcidas / filasMulti >= 0.7, `las filas no son rectas (${filasTorcidas}/${filasMulti})`);
+  check(enRejilla / total <= 0.15, `los nodos se apartan de la cuadrícula (${enRejilla}/${total} en su sitio exacto)`);
+  check(fuera === 0 && pegados === 0, `y no se salen del mapa ni se pisan (${fuera} fuera, ${pegados} pegados)`);
+  check(desorden === 0, `cada nivel sigue estando por encima del anterior y la posición es estable (${desorden})`);
 }
 
 console.log('— Fila de cofres —');

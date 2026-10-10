@@ -1,5 +1,5 @@
 import type { EstadoRun, NodoMapa, TipoNodo } from '../core/types.ts';
-import { nodosDisponibles } from '../core/mapa.ts';
+import { nodosDisponibles, posicionNodo } from '../core/mapa.ts';
 import { ACTOS } from '../core/enemigos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
@@ -104,16 +104,11 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
     const lienzo = raiz.querySelector('.mapa-nodos') as HTMLElement;
     const scroll = raiz.querySelector('.mapa-scroll') as HTMLElement;
     const svg = raiz.querySelector('.mapa-svg') as SVGSVGElement;
-    const filas = Math.max(...run.mapa.map((n) => n.fila)) + 1;
     const byId = new Map(run.mapa.map((n) => [n.id, n]));
 
-    // percentage position of each node (row 0 at the bottom)
-    const pos = (n: NodoMapa) => {
-      const enFila = run.mapa.filter((x) => x.fila === n.fila).length;
-      const x = ((n.col + 0.5) / enFila) * 80 + 10;
-      const y = 90 - (n.fila / (filas - 1)) * 82;
-      return { x, y };
-    };
+    // percentage position of each node (row 0 at the bottom), nudged off the grid
+    const posiciones = new Map(run.mapa.map((n) => [n.id, posicionNodo(run.mapa, n)]));
+    const pos = (n: NodoMapa) => posiciones.get(n.id)!;
 
     // ink trails, drawn in pixels so dashes and pen width stay true on any size
     const drawTrails = () => {
