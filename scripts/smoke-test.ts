@@ -9,7 +9,7 @@ import {
   HERALDO_CULTO, CONTEMPLADOR,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
-import { generarMapa, nodosDisponibles, posicionNodo } from '../src/core/mapa.ts';
+import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA } from '../src/core/mapa.ts';
 import { ajusteEncuentro, PRIMEROS_FACILES, type ContextoEncuentro } from '../src/core/dificultad.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
@@ -4459,9 +4459,9 @@ console.log('— Mapa a mano alzada —');
     for (const n of mapa) {
       const { x, y } = p.get(n.id)!;
       total++;
-      if (x < 6 || x > 94 || y < 4 || y > 94) fuera++;
+      if (x < 17 || x > 83 || y < 4 || y > 94) fuera++; // clear of the drawings on the parchment's sides
       const enFila = mapa.filter((m) => m.fila === n.fila).length;
-      if (Math.abs(x - (((n.col + 0.5) / enFila) * 80 + 10)) < 0.3) enRejilla++;
+      if (Math.abs(x - (((n.col + 0.5) / enFila) * ANCHO_MAPA + (100 - ANCHO_MAPA) / 2)) < 0.3) enRejilla++;
       for (const m of mapa) {
         if (m.id <= n.id) continue;
         const q = p.get(m.id)!;
@@ -4472,7 +4472,7 @@ console.log('— Mapa a mano alzada —');
   }
   check(filasTorcidas / filasMulti >= 0.7, `las filas no son rectas (${filasTorcidas}/${filasMulti})`);
   check(enRejilla / total <= 0.15, `los nodos se apartan de la cuadrícula (${enRejilla}/${total} en su sitio exacto)`);
-  check(fuera === 0 && pegados === 0, `y no se salen del mapa ni se pisan (${fuera} fuera, ${pegados} pegados)`);
+  check(fuera === 0 && pegados === 0, `y no se salen de la franja central del mapa ni se pisan (${fuera} fuera, ${pegados} pegados)`);
   check(desorden === 0, `cada nivel sigue estando por encima del anterior y la posición es estable (${desorden})`);
 }
 

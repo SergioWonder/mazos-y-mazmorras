@@ -188,7 +188,8 @@ descuelga de las demás en su mismo nivel.
 - **Mapa** de 13 filas por capítulo (`core/mapa.ts`), casi siempre de 3 caminos por fila
   (a veces 2 o 4) y poco enlazados entre sí (cada nodo sigue al más cercano y solo a veces
   se bifurca), dibujado a mano alzada (`posicionNodo`: cada fila se inclina y cada nodo se
-  desplaza un poco, de forma estable y sin que se pisen), con ≥3
+  desplaza un poco, de forma estable y sin que se pisen) y en la franja central del
+  pergamino (`ANCHO_MAPA`, 62 %), lejos de los dibujos de los bordes, con ≥3
   eventos, élites, descansos y tabernas. Se ve como un **mapa de aventura de papel** (ver [Mapa a tinta](#mapa-a-tinta)):
   combate, élite, evento, campamento, cofre, taberna y jefe, dibujados a plumilla. Los **cofres** van todos en una sola fila, la
   central (fila 6), que es entera de cofres: no hay cofres en ninguna otra fila.

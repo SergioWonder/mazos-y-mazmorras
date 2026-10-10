@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '9.0.1';
+export const VERSION = '9.0.2';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '9.0.2',
+    fecha: '2026-10-10',
+    cambios: [
+      '🗺️ Los caminos del mapa se juntan hacia el centro del pergamino: los lugares de los extremos ya no se montan sobre el camino, el río y los dibujos de los bordes.',
+    ],
+  },
   {
     version: '9.0.1',
     fecha: '2026-10-10',

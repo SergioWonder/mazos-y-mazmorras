@@ -1,7 +1,7 @@
 # Graph Report - videogame  (2026-10-10)
 
 ## Corpus Check
-- 232 files · ~1,801,606 words
+- 232 files · ~1,801,734 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `1f262682`
+- Built from commit: `064cf2a1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -322,8 +322,8 @@ Cohesion: 0.07
 Nodes (13): defDe(), Combate, esDungeonMaster(), crearEnemigo(), barajar(), CartaInstancia, EnemigoCombate, JugadorCombate (+5 more)
 
 ### Community 26 - "Configuración de Vite y PWA"
-Cohesion: 0.14
-Nodes (23): SeaPlan, almaCondenada(), CHAIN, chainAngle(), chainAt(), chainFront(), chainLink(), doomChainPath() (+15 more)
+Cohesion: 0.17
+Nodes (20): almaCondenada(), CHAIN, chainAngle(), chainAt(), chainFront(), chainLink(), doomChainPath(), doomChainSprites() (+12 more)
 
 ### Community 27 - "Community 27"
 Cohesion: 0.05
@@ -370,8 +370,8 @@ Cohesion: 0.17
 Nodes (15): decode(), fractura_asalto(), fractura_choir(), fractura_espiral(), main(), Act III combat sketches: frantic versions of the two chosen songs, on the same t, «Espiral»: progressive — a 7/16 cell (root, root, rest, ♭2, root, rest, tritone), The motif on the solo cello, doubled by the horns or the choir. (+7 more)
 
 ### Community 39 - "Community 39"
-Cohesion: 0.11
-Nodes (9): Ajustes, alCambiarAjustes(), cardShake(), volleyTiming(), menosParticulas(), MotorParticulas, movimientoReducido(), sacudidasActivas() (+1 more)
+Cohesion: 0.40
+Nodes (9): DEATH_SPELLS, mix(), muerteBarbaro(), muerteBrujo(), muerteDruida(), muerteMago(), muertePaladin(), muertePicaro() (+1 more)
 
 ### Community 40 - "Community 40"
 Cohesion: 0.70
@@ -426,8 +426,8 @@ Cohesion: 0.06
 Nodes (77): arch(), bar_of(), bass_segments(), build(), cbsn_pitch(), cc_value(), chant(), chant_pitch() (+69 more)
 
 ### Community 55 - "Community 55"
-Cohesion: 0.15
-Nodes (27): coleraMar(), seaArrival(), seaX(), almaHeroe(), DEATH_SPELLS, mix(), muerteBarbaro(), muerteBrujo() (+19 more)
+Cohesion: 0.05
+Nodes (55): ANCIENT, ARCANE, BLOOD, BurstOpts, coleraMar(), d20(), DART_LANES, DART_SIDES (+47 more)
 
 ### Community 56 - "Community 56"
 Cohesion: 0.05
@@ -462,8 +462,8 @@ Cohesion: 0.25
 Nodes (10): actuales, AJUSTES_POR_DEFECTO, Almacen, almacenLocal(), booleano(), cambiarAjuste(), guardarAjustes(), leerAjustes() (+2 more)
 
 ### Community 67 - "Community 67"
-Cohesion: 0.07
-Nodes (28): DoomSprite, ParticleRendererGL, SHAPE_CODE, SpriteBatchGL, AmbientPreset, AMBIENTS, AmbientStyle, between() (+20 more)
+Cohesion: 0.05
+Nodes (37): Ajustes, alCambiarAjustes(), cardShake(), volleyTiming(), DoomSprite, ParticleRendererGL, SHAPE_CODE, SpriteBatchGL (+29 more)
 
 ### Community 68 - "Community 68"
 Cohesion: 0.40
@@ -534,8 +534,8 @@ Cohesion: 0.23
 Nodes (5): hexc(), neatline(), Double map border with alternating graduated blocks., scale_bar(), Sketch
 
 ### Community 92 - "Community 92"
-Cohesion: 0.10
-Nodes (65): abisal(), aliento(), almaCondenada(), Anchor, aullido(), BANISH, bendicion(), BLIND (+57 more)
+Cohesion: 0.09
+Nodes (70): abisal(), aliento(), almaCondenada(), Anchor, aullido(), BANISH, bendicion(), BLIND (+62 more)
 
 ### Community 93 - "Community 93"
 Cohesion: 0.24
@@ -582,8 +582,8 @@ Cohesion: 0.07
 Nodes (82): bar_of(), bass_items(), bass_note_at(), basses_spic(), build(), cello_eighths_b(), cello_ostinato(), choir_voices() (+74 more)
 
 ### Community 106 - "Community 106"
-Cohesion: 0.08
-Nodes (107): almaCuchillas(), ANCIENT, angelPrelude(), angelVengador(), ARCANE, bendicionCelestial(), BLOOD, bolt() (+99 more)
+Cohesion: 0.15
+Nodes (68): almaCuchillas(), angelPrelude(), angelVengador(), bendicionCelestial(), bolt(), burst(), chain(), clarividencia() (+60 more)
 
 ### Community 107 - "Community 107"
 Cohesion: 0.10
@@ -678,8 +678,8 @@ Cohesion: 0.11
 Nodes (18): 1. Función, emoción y repetición, 2. Tempo, métrica, tonalidad, duración, 3. Forma compás a compás e intensidad, 4. Armonía, 5. Leitmotiv, 6. Orquestación por sección, 7. Dinámica, 8. Criterios de aceptación (+10 more)
 
 ### Community 134 - "Community 134"
-Cohesion: 0.13
-Nodes (22): augment(), build(), main(), _motions(), moving_parallels(), new_parts(), P(), _parallel() (+14 more)
+Cohesion: 0.11
+Nodes (34): augment(), bar_of(), build(), main(), _motions(), moving_parallels(), name_of(), new_parts() (+26 more)
 
 ### Community 136 - "Community 136"
 Cohesion: 0.20
@@ -758,24 +758,24 @@ Cohesion: 0.13
 Nodes (17): ENEMY_RIGS, INVOCATION_RIGS, captureAction(), CaptureOptions, post(), rasterSvg(), siluetaCaida(), GalleryCard (+9 more)
 
 ### Community 158 - "Community 158"
-Cohesion: 0.33
-Nodes (7): pc_in(), place(), Root on beat 1 and the fifth of the chord on «3 and» (the root again where the f, Root on beat 1 and the fifth of the chord on «3 and» (the root again where the f, Lowest pitch of pitch class pc inside [lo, hi] (None if there is none)., timp_root(), timpani()
+Cohesion: 0.15
+Nodes (16): celli(), celli_cost(), pc_in(), pedal(), place(), [(first eighth, last eighth + 1, chord, bass pc)] of a bar., The 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo, The 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo (+8 more)
 
 ### Community 159 - "Community 159"
-Cohesion: 0.17
-Nodes (24): bar_of(), chord_at(), hit_pair(), melody_pcs(), name_of(), _pair(), parallels(), (inner, outer): parallel 5ths/8ves on the written score. inner = anything that i (+16 more)
+Cohesion: 0.26
+Nodes (13): chord_at(), hit_pair(), melody_pcs(), P(), _pair(), Root and partner inside the trombones' 43-56: root below if it fits, else the pa, Trombones on a 3+3+2 hit: root + third in 43-56. Where the third would double th, F#4' / 'Bb2' / 66 -> MIDI number (C4 = 60). (+5 more)
 
 ### Community 160 - "Community 160"
-Cohesion: 0.11
-Nodes (18): best_path(), celli(), celli_cost(), lead_voices(), events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present, Written sounding spans for the voice-leading analysis: a short note (a hit) last, Written sounding spans for the voice-leading analysis: a short note (a hit) last, Viterbi over the candidate voicings of each segment. (+10 more)
+Cohesion: 0.17
+Nodes (12): best_path(), lead_voices(), Written sounding spans for the voice-leading analysis: a short note (a hit) last, Written sounding spans for the voice-leading analysis: a short note (a hit) last, Viterbi over the candidate voicings of each segment., Viterbi over the candidate voicings of each segment., segs: dicts with t0. ext: [(spans, octave_ok)] of the parts the voices must not, segs: dicts with t0. ext: [(spans, octave_ok)] of the parts the voices must not (+4 more)
 
 ### Community 161 - "Community 161"
 Cohesion: 0.15
 Nodes (6): library(), Where the (large, not versioned) sample libraries live.  They can be spread over, Absolute path inside the sample libraries folder., Absolute path of a library file: the first root that holds the library folder., roots(), str
 
 ### Community 162 - "Community 162"
-Cohesion: 0.18
-Nodes (8): Note, pedal(), [(first eighth, last eighth + 1, chord, bass pc)] of a bar., Value of a controller at tick t (linear between points, as the sampler reads it), Dynamic level: CC1 at the note start for CC1 patches, else the velocity., The 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo, The 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo, segments()
+Cohesion: 0.25
+Nodes (4): Note, events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present, Value of a controller at tick t (linear between points, as the sampler reads it), Dynamic level: CC1 at the note start for CC1 patches, else the velocity.
 
 ### Community 163 - "Community 163"
 Cohesion: 0.09

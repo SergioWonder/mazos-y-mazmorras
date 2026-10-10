@@ -18034,7 +18034,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L80",
       "id": "acto2_volguth_compose_p",
-      "community": 134,
+      "community": 159,
       "norm_label": "p()"
     },
     {
@@ -18043,7 +18043,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "acto2_volguth_compose_name_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "name_of()"
     },
     {
@@ -18052,7 +18052,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L92",
       "id": "scripts_musica_acto2_volguth_compose_py_str",
-      "community": 159,
+      "community": 134,
       "norm_label": "str"
     },
     {
@@ -18088,7 +18088,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L156",
       "id": "acto2_volguth_compose_segments",
-      "community": 162,
+      "community": 158,
       "norm_label": "segments()"
     },
     {
@@ -18151,7 +18151,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L206",
       "id": "acto2_volguth_compose_part_tied",
-      "community": 160,
+      "community": 162,
       "norm_label": ".tied()"
     },
     {
@@ -18286,7 +18286,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L440",
       "id": "acto2_volguth_compose_pedal",
-      "community": 162,
+      "community": 158,
       "norm_label": "pedal()"
     },
     {
@@ -18295,7 +18295,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L455",
       "id": "acto2_volguth_compose_timp_root",
-      "community": 158,
+      "community": 159,
       "norm_label": "timp_root()"
     },
     {
@@ -18439,7 +18439,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L756",
       "id": "acto2_volguth_compose_son",
-      "community": 159,
+      "community": 134,
       "norm_label": "son()"
     },
     {
@@ -18493,7 +18493,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L833",
       "id": "acto2_volguth_compose_celli_cost",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli_cost()"
     },
     {
@@ -18502,7 +18502,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L846",
       "id": "acto2_volguth_compose_celli",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli()"
     },
     {
@@ -18556,7 +18556,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1054",
       "id": "acto2_volguth_compose_bar_of",
-      "community": 159,
+      "community": 134,
       "norm_label": "bar_of()"
     },
     {
@@ -18565,7 +18565,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1058",
       "id": "acto2_volguth_compose_role",
-      "community": 159,
+      "community": 134,
       "norm_label": "role()"
     },
     {
@@ -18574,7 +18574,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
       "id": "acto2_volguth_compose_parallels",
-      "community": 159,
+      "community": 134,
       "norm_label": "parallels()"
     },
     {
@@ -18583,7 +18583,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1097",
       "id": "acto2_volguth_compose_repetitions",
-      "community": 159,
+      "community": 134,
       "norm_label": "repetitions()"
     },
     {
@@ -18592,7 +18592,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1107",
       "id": "acto2_volguth_compose_sfz_keys",
-      "community": 159,
+      "community": 134,
       "norm_label": "sfz_keys()"
     },
     {
@@ -18610,7 +18610,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "acto2_volguth_compose_verify",
-      "community": 159,
+      "community": 134,
       "norm_label": "verify()"
     },
     {
@@ -18619,7 +18619,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1126",
       "id": "scripts_musica_acto2_volguth_compose_py_bool",
-      "community": 159,
+      "community": 134,
       "norm_label": "bool"
     },
     {
@@ -18646,7 +18646,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L81",
       "id": "acto2_volguth_compose_rationale_81",
-      "community": 134,
+      "community": 159,
       "norm_label": "f#4' / 'bb2' / 66 -> midi number (c4 = 60)."
     },
     {
@@ -18664,7 +18664,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L157",
       "id": "acto2_volguth_compose_rationale_157",
-      "community": 162,
+      "community": 158,
       "norm_label": "[(first eighth, last eighth + 1, chord, bass pc)] of a bar."
     },
     {
@@ -18682,7 +18682,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L207",
       "id": "acto2_volguth_compose_rationale_207",
-      "community": 160,
+      "community": 162,
       "norm_label": "events = [(start tick, end tick, pitches)]: consecutive chords; a pitch present"
     },
     {
@@ -18781,7 +18781,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L441",
       "id": "acto2_volguth_compose_rationale_441",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo"
     },
     {
@@ -18925,7 +18925,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L834",
       "id": "acto2_volguth_compose_rationale_834",
-      "community": 160,
+      "community": 158,
       "norm_label": "root + fifth is the brief's figure; the root alone costs a little, root + third"
     },
     {
@@ -18934,7 +18934,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L847",
       "id": "acto2_volguth_compose_rationale_847",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm"
     },
     {
@@ -18952,7 +18952,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1065",
       "id": "acto2_volguth_compose_rationale_1065",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i"
     },
     {
@@ -18961,7 +18961,7 @@
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1098",
       "id": "acto2_volguth_compose_rationale_1098",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than"
     },
     {
@@ -32137,7 +32137,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L6",
       "id": "core_ajustes_ajustes",
-      "community": 39,
+      "community": 67,
       "norm_label": "ajustes"
     },
     {
@@ -32254,7 +32254,7 @@
       "source_file": "src/core/ajustes.ts",
       "source_location": "L90",
       "id": "core_ajustes_alcambiarajustes",
-      "community": 39,
+      "community": 67,
       "norm_label": "alcambiarajustes()"
     },
     {
@@ -35078,7 +35078,7 @@
       "label": "posicionNodo()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L118",
+      "source_location": "L122",
       "id": "core_mapa_posicionnodo",
       "community": 46,
       "norm_label": "posicionnodo()"
@@ -35087,7 +35087,7 @@
       "label": "TIPOS_MISION",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L135",
+      "source_location": "L140",
       "id": "core_mapa_tipos_mision",
       "community": 46,
       "norm_label": "tipos_mision"
@@ -35096,7 +35096,7 @@
       "label": "DISTANCIA_MISION",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L137",
+      "source_location": "L142",
       "id": "core_mapa_distancia_mision",
       "community": 46,
       "norm_label": "distancia_mision"
@@ -35105,7 +35105,7 @@
       "label": "alcanzablesDesde()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L140",
+      "source_location": "L145",
       "id": "core_mapa_alcanzablesdesde",
       "community": 46,
       "norm_label": "alcanzablesdesde()"
@@ -35114,7 +35114,7 @@
       "label": "esAlcanzable()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L156",
+      "source_location": "L161",
       "id": "core_mapa_esalcanzable",
       "community": 46,
       "norm_label": "esalcanzable()"
@@ -35123,7 +35123,7 @@
       "label": "candidatosMision()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L162",
+      "source_location": "L167",
       "id": "core_mapa_candidatosmision",
       "community": 46,
       "norm_label": "candidatosmision()"
@@ -35132,7 +35132,7 @@
       "label": "colocarTabernas()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L176",
+      "source_location": "L181",
       "id": "core_mapa_colocartabernas",
       "community": 46,
       "norm_label": "colocartabernas()"
@@ -35141,7 +35141,7 @@
       "label": "nodosDisponibles()",
       "file_type": "code",
       "source_file": "src/core/mapa.ts",
-      "source_location": "L198",
+      "source_location": "L203",
       "id": "core_mapa_nodosdisponibles",
       "community": 46,
       "norm_label": "nodosdisponibles()"
@@ -36466,7 +36466,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L109",
       "id": "fx_audio_motoraudio_musicaapagada",
-      "community": 39,
+      "community": 67,
       "norm_label": ".musicaapagada()"
     },
     {
@@ -36592,7 +36592,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L379",
       "id": "fx_audio_motoraudio_liberarpistas",
-      "community": 4,
+      "community": 65,
       "norm_label": ".liberarpistas()"
     },
     {
@@ -36673,7 +36673,7 @@
       "source_file": "src/fx/audio.ts",
       "source_location": "L528",
       "id": "fx_audio_motoraudio_escucharajustes",
-      "community": 39,
+      "community": 67,
       "norm_label": ".escucharajustes()"
     },
     {
@@ -36718,7 +36718,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1",
       "id": "fx_card_spells",
-      "community": 106,
+      "community": 55,
       "norm_label": "card-spells.ts"
     },
     {
@@ -36727,7 +36727,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L16",
       "id": "fx_card_spells_fire",
-      "community": 106,
+      "community": 55,
       "norm_label": "fire"
     },
     {
@@ -36736,7 +36736,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L17",
       "id": "fx_card_spells_blood",
-      "community": 106,
+      "community": 55,
       "norm_label": "blood"
     },
     {
@@ -36745,7 +36745,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L18",
       "id": "fx_card_spells_leaf",
-      "community": 106,
+      "community": 55,
       "norm_label": "leaf"
     },
     {
@@ -36754,7 +36754,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L19",
       "id": "fx_card_spells_earth",
-      "community": 106,
+      "community": 55,
       "norm_label": "earth"
     },
     {
@@ -36763,7 +36763,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L20",
       "id": "fx_card_spells_moon",
-      "community": 106,
+      "community": 55,
       "norm_label": "moon"
     },
     {
@@ -36772,7 +36772,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L21",
       "id": "fx_card_spells_star",
-      "community": 106,
+      "community": 55,
       "norm_label": "star"
     },
     {
@@ -36781,7 +36781,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L22",
       "id": "fx_card_spells_gold",
-      "community": 106,
+      "community": 55,
       "norm_label": "gold"
     },
     {
@@ -36790,7 +36790,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L23",
       "id": "fx_card_spells_void",
-      "community": 106,
+      "community": 55,
       "norm_label": "void"
     },
     {
@@ -36799,7 +36799,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L24",
       "id": "fx_card_spells_toxic",
-      "community": 106,
+      "community": 55,
       "norm_label": "toxic"
     },
     {
@@ -36808,7 +36808,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L25",
       "id": "fx_card_spells_arcane",
-      "community": 106,
+      "community": 55,
       "norm_label": "arcane"
     },
     {
@@ -36817,7 +36817,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L26",
       "id": "fx_card_spells_sea",
-      "community": 106,
+      "community": 55,
       "norm_label": "sea"
     },
     {
@@ -36826,7 +36826,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L27",
       "id": "fx_card_spells_storm",
-      "community": 106,
+      "community": 55,
       "norm_label": "storm"
     },
     {
@@ -36835,7 +36835,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L28",
       "id": "fx_card_spells_psi",
-      "community": 106,
+      "community": 55,
       "norm_label": "psi"
     },
     {
@@ -36844,7 +36844,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L29",
       "id": "fx_card_spells_fey",
-      "community": 106,
+      "community": 55,
       "norm_label": "fey"
     },
     {
@@ -36853,7 +36853,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L30",
       "id": "fx_card_spells_love",
-      "community": 106,
+      "community": 55,
       "norm_label": "love"
     },
     {
@@ -36862,7 +36862,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L31",
       "id": "fx_card_spells_steel",
-      "community": 106,
+      "community": 55,
       "norm_label": "steel"
     },
     {
@@ -36871,7 +36871,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L32",
       "id": "fx_card_spells_phantom",
-      "community": 106,
+      "community": 55,
       "norm_label": "phantom"
     },
     {
@@ -36880,7 +36880,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L33",
       "id": "fx_card_spells_hell",
-      "community": 106,
+      "community": 55,
       "norm_label": "hell"
     },
     {
@@ -36889,7 +36889,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L35",
       "id": "fx_card_spells_kind",
-      "community": 106,
+      "community": 55,
       "norm_label": "kind"
     },
     {
@@ -36907,7 +36907,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L51",
       "id": "fx_card_spells_burstopts",
-      "community": 106,
+      "community": 55,
       "norm_label": "burstopts"
     },
     {
@@ -36925,7 +36925,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L72",
       "id": "fx_card_spells_riseopts",
-      "community": 106,
+      "community": 55,
       "norm_label": "riseopts"
     },
     {
@@ -36943,7 +36943,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L90",
       "id": "fx_card_spells_gatheropts",
-      "community": 106,
+      "community": 55,
       "norm_label": "gatheropts"
     },
     {
@@ -37006,7 +37006,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L171",
       "id": "fx_card_spells_d20",
-      "community": 106,
+      "community": 55,
       "norm_label": "d20()"
     },
     {
@@ -37078,7 +37078,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L316",
       "id": "fx_card_spells_seaplan",
-      "community": 26,
+      "community": 55,
       "norm_label": "seaplan"
     },
     {
@@ -37411,7 +37411,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1478",
       "id": "fx_card_spells_dart_lanes",
-      "community": 106,
+      "community": 55,
       "norm_label": "dart_lanes"
     },
     {
@@ -37420,7 +37420,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1481",
       "id": "fx_card_spells_dartroute",
-      "community": 106,
+      "community": 55,
       "norm_label": "dartroute"
     },
     {
@@ -37429,7 +37429,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1587",
       "id": "fx_card_spells_darttrail",
-      "community": 106,
+      "community": 55,
       "norm_label": "darttrail()"
     },
     {
@@ -37438,7 +37438,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1593",
       "id": "fx_card_spells_darttimeat",
-      "community": 106,
+      "community": 55,
       "norm_label": "darttimeat()"
     },
     {
@@ -37447,7 +37447,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1596",
       "id": "fx_card_spells_trailpoints",
-      "community": 106,
+      "community": 55,
       "norm_label": "trailpoints()"
     },
     {
@@ -37456,7 +37456,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1603",
       "id": "fx_card_spells_headingat",
-      "community": 106,
+      "community": 55,
       "norm_label": "headingat()"
     },
     {
@@ -37465,7 +37465,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1612",
       "id": "fx_card_spells_proyectilmagico",
-      "community": 106,
+      "community": 55,
       "norm_label": "proyectilmagico()"
     },
     {
@@ -37474,7 +37474,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1676",
       "id": "fx_card_spells_explosionsobrenatural",
-      "community": 106,
+      "community": 55,
       "norm_label": "explosionsobrenatural()"
     },
     {
@@ -37501,7 +37501,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1826",
       "id": "fx_card_spells_devotion",
-      "community": 106,
+      "community": 55,
       "norm_label": "devotion"
     },
     {
@@ -37510,7 +37510,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1827",
       "id": "fx_card_spells_glory",
-      "community": 106,
+      "community": 55,
       "norm_label": "glory"
     },
     {
@@ -37519,7 +37519,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1828",
       "id": "fx_card_spells_ancient",
-      "community": 106,
+      "community": 55,
       "norm_label": "ancient"
     },
     {
@@ -37528,7 +37528,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1829",
       "id": "fx_card_spells_vengeance",
-      "community": 106,
+      "community": 55,
       "norm_label": "vengeance"
     },
     {
@@ -37537,7 +37537,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1830",
       "id": "fx_card_spells_vengeful_flame",
-      "community": 106,
+      "community": 55,
       "norm_label": "vengeful_flame"
     },
     {
@@ -37609,7 +37609,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2102",
       "id": "fx_card_spells_gatherprelude",
-      "community": 106,
+      "community": 55,
       "norm_label": "gatherprelude()"
     },
     {
@@ -37627,7 +37627,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2145",
       "id": "fx_card_spells_entry",
-      "community": 106,
+      "community": 55,
       "norm_label": "entry"
     },
     {
@@ -37672,7 +37672,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2240",
       "id": "fx_card_spells_volleytiming",
-      "community": 39,
+      "community": 67,
       "norm_label": "volleytiming()"
     },
     {
@@ -37681,7 +37681,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2248",
       "id": "fx_card_spells_sweeparrival",
-      "community": 106,
+      "community": 55,
       "norm_label": "sweeparrival()"
     },
     {
@@ -37690,7 +37690,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2255",
       "id": "fx_card_spells_sweepimpactms",
-      "community": 106,
+      "community": 55,
       "norm_label": "sweepimpactms()"
     },
     {
@@ -37699,7 +37699,7 @@
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L2261",
       "id": "fx_card_spells_cardshake",
-      "community": 39,
+      "community": 67,
       "norm_label": "cardshake()"
     },
     {
@@ -38518,7 +38518,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L1",
       "id": "fx_death_spells",
-      "community": 55,
+      "community": 39,
       "norm_label": "death-spells.ts"
     },
     {
@@ -38527,7 +38527,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L10",
       "id": "fx_death_spells_mix",
-      "community": 55,
+      "community": 39,
       "norm_label": "mix()"
     },
     {
@@ -38536,7 +38536,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L17",
       "id": "fx_death_spells_muertebarbaro",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertebarbaro()"
     },
     {
@@ -38545,7 +38545,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L49",
       "id": "fx_death_spells_muertedruida",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertedruida()"
     },
     {
@@ -38554,7 +38554,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L81",
       "id": "fx_death_spells_muertemago",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertemago()"
     },
     {
@@ -38563,7 +38563,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L109",
       "id": "fx_death_spells_muertepicaro",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertepicaro()"
     },
     {
@@ -38572,7 +38572,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L141",
       "id": "fx_death_spells_muertebrujo",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertebrujo()"
     },
     {
@@ -38581,7 +38581,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L172",
       "id": "fx_death_spells_muertepaladin",
-      "community": 55,
+      "community": 39,
       "norm_label": "muertepaladin()"
     },
     {
@@ -38599,7 +38599,7 @@
       "source_file": "src/fx/death-spells.ts",
       "source_location": "L239",
       "id": "fx_death_spells_death_spells",
-      "community": 55,
+      "community": 39,
       "norm_label": "death_spells"
     },
     {
@@ -42316,7 +42316,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L18",
       "id": "fx_particulas_movimientoreducido",
-      "community": 39,
+      "community": 67,
       "norm_label": "movimientoreducido()"
     },
     {
@@ -42325,7 +42325,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L20",
       "id": "fx_particulas_menosparticulas",
-      "community": 39,
+      "community": 67,
       "norm_label": "menosparticulas()"
     },
     {
@@ -42334,7 +42334,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L22",
       "id": "fx_particulas_sacudidasactivas",
-      "community": 39,
+      "community": 67,
       "norm_label": "sacudidasactivas()"
     },
     {
@@ -42388,7 +42388,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L87",
       "id": "fx_particulas_motorparticulas",
-      "community": 39,
+      "community": 67,
       "norm_label": "motorparticulas"
     },
     {
@@ -42397,7 +42397,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L104",
       "id": "fx_particulas_motorparticulas_iniciar",
-      "community": 39,
+      "community": 67,
       "norm_label": ".iniciar()"
     },
     {
@@ -42406,7 +42406,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L116",
       "id": "fx_particulas_motorparticulas_ambiente",
-      "community": 39,
+      "community": 67,
       "norm_label": ".ambiente()"
     },
     {
@@ -42415,7 +42415,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L120",
       "id": "fx_particulas_motorparticulas_emitir",
-      "community": 39,
+      "community": 67,
       "norm_label": ".emitir()"
     },
     {
@@ -42424,7 +42424,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L131",
       "id": "fx_particulas_motorparticulas_tienehechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".tienehechizo()"
     },
     {
@@ -42433,7 +42433,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L136",
       "id": "fx_particulas_motorparticulas_anclahechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".anclahechizo()"
     },
     {
@@ -42442,7 +42442,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L141",
       "id": "fx_particulas_motorparticulas_receptorhechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".receptorhechizo()"
     },
     {
@@ -42451,7 +42451,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L146",
       "id": "fx_particulas_motorparticulas_sacudidahechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".sacudidahechizo()"
     },
     {
@@ -42460,7 +42460,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L151",
       "id": "fx_particulas_motorparticulas_rafagahechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".rafagahechizo()"
     },
     {
@@ -42469,7 +42469,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L156",
       "id": "fx_particulas_motorparticulas_barridohechizo",
-      "community": 39,
+      "community": 67,
       "norm_label": ".barridohechizo()"
     },
     {
@@ -42478,7 +42478,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L163",
       "id": "fx_particulas_motorparticulas_hechizo",
-      "community": 26,
+      "community": 55,
       "norm_label": ".hechizo()"
     },
     {
@@ -42487,7 +42487,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L171",
       "id": "fx_particulas_motorparticulas_fuentecarta",
-      "community": 39,
+      "community": 67,
       "norm_label": ".fuentecarta()"
     },
     {
@@ -42505,7 +42505,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L194",
       "id": "fx_particulas_motorparticulas_capa",
-      "community": 39,
+      "community": 67,
       "norm_label": ".capa()"
     },
     {
@@ -42514,7 +42514,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L200",
       "id": "fx_particulas_motorparticulas_estallido",
-      "community": 39,
+      "community": 67,
       "norm_label": ".estallido()"
     },
     {
@@ -42523,7 +42523,7 @@
       "source_file": "src/fx/particulas.ts",
       "source_location": "L208",
       "id": "fx_particulas_motorparticulas_contadorfps",
-      "community": 39,
+      "community": 67,
       "norm_label": ".contadorfps()"
     },
     {
@@ -43324,7 +43324,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L10",
       "id": "fx_spell_fx_box",
-      "community": 26,
+      "community": 55,
       "norm_label": "box"
     },
     {
@@ -43333,7 +43333,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L11",
       "id": "fx_spell_fx_point",
-      "community": 26,
+      "community": 55,
       "norm_label": "point"
     },
     {
@@ -43369,7 +43369,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L33",
       "id": "fx_spell_fx_spelldef",
-      "community": 106,
+      "community": 55,
       "norm_label": "spelldef"
     },
     {
@@ -43414,7 +43414,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L70",
       "id": "fx_spell_fx_easein",
-      "community": 55,
+      "community": 39,
       "norm_label": "easein()"
     },
     {
@@ -43432,7 +43432,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L72",
       "id": "fx_spell_fx_easeinout",
-      "community": 92,
+      "community": 106,
       "norm_label": "easeinout()"
     },
     {
@@ -43459,7 +43459,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L77",
       "id": "fx_spell_fx_dropangle",
-      "community": 55,
+      "community": 92,
       "norm_label": "dropangle()"
     },
     {
@@ -43612,7 +43612,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L133",
       "id": "fx_spell_fx_painter_drop",
-      "community": 55,
+      "community": 92,
       "norm_label": ".drop()"
     },
     {
@@ -43693,7 +43693,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L163",
       "id": "fx_spell_fx_fly",
-      "community": 55,
+      "community": 92,
       "norm_label": "fly()"
     },
     {
@@ -43729,7 +43729,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L214",
       "id": "fx_spell_fx_zarpa",
-      "community": 55,
+      "community": 92,
       "norm_label": "zarpa()"
     },
     {
@@ -43747,7 +43747,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L260",
       "id": "fx_spell_fx_sangre",
-      "community": 55,
+      "community": 92,
       "norm_label": "sangre()"
     },
     {
@@ -43783,7 +43783,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L410",
       "id": "fx_spell_fx_luna",
-      "community": 92,
+      "community": 106,
       "norm_label": "luna()"
     },
     {
@@ -43927,7 +43927,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L896",
       "id": "fx_spell_fx_engulf",
-      "community": 55,
+      "community": 92,
       "norm_label": "engulf()"
     },
     {
@@ -44053,7 +44053,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L1077",
       "id": "fx_spell_fx_tongue",
-      "community": 55,
+      "community": 92,
       "norm_label": "tongue()"
     },
     {
@@ -44179,7 +44179,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L1504",
       "id": "fx_spell_fx_castigogenerico",
-      "community": 55,
+      "community": 92,
       "norm_label": "castigogenerico()"
     },
     {
@@ -44215,7 +44215,7 @@
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L1677",
       "id": "fx_spell_fx_castigofuego",
-      "community": 55,
+      "community": 92,
       "norm_label": "castigofuego()"
     },
     {
@@ -47689,7 +47689,7 @@
       "source_file": "src/ui/util.ts",
       "source_location": "L41",
       "id": "ui_util_sacudir",
-      "community": 39,
+      "community": 67,
       "norm_label": "sacudir()"
     },
     {
@@ -48308,7 +48308,7 @@
       "label": "Reliquias",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L265",
+      "source_location": "L266",
       "id": "readme_reliquias",
       "community": 75,
       "norm_label": "reliquias"
@@ -48317,7 +48317,7 @@
       "label": "Bendiciones",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L344",
+      "source_location": "L345",
       "id": "readme_bendiciones",
       "community": 75,
       "norm_label": "bendiciones"
@@ -48326,7 +48326,7 @@
       "label": "Estructura",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L406",
+      "source_location": "L407",
       "id": "readme_estructura",
       "community": 85,
       "norm_label": "estructura"
@@ -48335,7 +48335,7 @@
       "label": "Arte de las cartas",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L453",
+      "source_location": "L454",
       "id": "readme_arte_de_las_cartas",
       "community": 85,
       "norm_label": "arte de las cartas"
@@ -48344,7 +48344,7 @@
       "label": "Mapa a tinta",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L464",
+      "source_location": "L465",
       "id": "readme_mapa_a_tinta",
       "community": 85,
       "norm_label": "mapa a tinta"
@@ -48353,7 +48353,7 @@
       "label": "Actualizaciones y avisos",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L489",
+      "source_location": "L490",
       "id": "readme_actualizaciones_y_avisos",
       "community": 85,
       "norm_label": "actualizaciones y avisos"
@@ -48362,7 +48362,7 @@
       "label": "Motor gr\u00e1fico (WebGL2)",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L499",
+      "source_location": "L500",
       "id": "readme_motor_gr\u00e1fico_webgl2",
       "community": 85,
       "norm_label": "motor grafico (webgl2)"
@@ -51378,7 +51378,7 @@
       "file_type": "code",
       "source_file": "src/fx/spell-fx.ts",
       "source_location": "L666",
-      "community": 92,
+      "community": 55,
       "norm_label": "soulpose()",
       "id": "fx_spell_fx_soulpose"
     },
@@ -51837,7 +51837,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L434",
-      "community": 162,
+      "community": 158,
       "norm_label": "the 16' pedal on the bass of section 4 (36-47; it sounds an octave lower); commo",
       "id": "acto2_volguth_compose_rationale_434"
     },
@@ -51972,7 +51972,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L823",
-      "community": 160,
+      "community": 158,
       "norm_label": "celli tremolo: root + fifth of each chord in 36-50, voice-led per half bar (comm",
       "id": "acto2_volguth_compose_rationale_823"
     },
@@ -51990,7 +51990,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1031",
-      "community": 159,
+      "community": 134,
       "norm_label": "(inner, outer): parallel 5ths/8ves on the written score. inner = anything that i",
       "id": "acto2_volguth_compose_rationale_1031"
     },
@@ -51999,7 +51999,7 @@
       "file_type": "rationale",
       "source_file": "scripts/musica/acto2-volguth/compose.py",
       "source_location": "L1064",
-      "community": 159,
+      "community": 134,
       "norm_label": "two-bar windows of the whole texture (every track) repeated identical more than",
       "id": "acto2_volguth_compose_rationale_1064"
     },
@@ -52863,7 +52863,7 @@
       "file_type": "code",
       "source_file": "src/fx/card-spells.ts",
       "source_location": "L1321",
-      "community": 106,
+      "community": 55,
       "norm_label": "dart_sides",
       "id": "fx_card_spells_dart_sides"
     },
@@ -152222,9 +152222,9 @@
       "source_file": "scripts/smoke-test.ts",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "scripts_smoke_test",
-      "target": "core_mapa_posicionnodo",
-      "confidence_score": 1.0
+      "target": "core_mapa_posicionnodo"
     },
     {
       "relation": "imports_from",
@@ -163270,9 +163270,9 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L118",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_mapa",
-      "target": "core_mapa_posicionnodo",
-      "confidence_score": 1.0
+      "target": "core_mapa_posicionnodo"
     },
     {
       "relation": "contains",
@@ -163280,9 +163280,9 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L106",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_mapa",
-      "target": "core_mapa_ruido",
-      "confidence_score": 1.0
+      "target": "core_mapa_ruido"
     },
     {
       "relation": "contains",
@@ -163454,9 +163454,9 @@
       "source_file": "src/core/mapa.ts",
       "source_location": "L125",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "core_mapa_posicionnodo",
-      "target": "core_mapa_ruido",
-      "confidence_score": 1.0
+      "target": "core_mapa_ruido"
     },
     {
       "relation": "imports",
@@ -163465,9 +163465,9 @@
       "source_file": "src/ui/mapa.ts",
       "source_location": "L2",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "ui_mapa",
-      "target": "core_mapa_posicionnodo",
-      "confidence_score": 1.0
+      "target": "core_mapa_posicionnodo"
     },
     {
       "relation": "calls",
@@ -215611,5 +215611,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "1f2626828178659da23eabbd9ba76376e33df3b1"
+  "built_at_commit": "064cf2a1e288f2ccc5a96cd11cf97ddcdaf6184e"
 }

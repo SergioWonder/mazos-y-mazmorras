@@ -109,6 +109,10 @@ function ruido(id: number, sal: number, k: number): number {
   return (h >>> 0) / 4294967296;
 }
 
+/** Width (% of the map) of the central band the paths use: the parchment's sides
+ *  are drawn (a road, a river, buildings), and the icons must keep clear of them. */
+export const ANCHO_MAPA = 62;
+
 /**
  * Where a node is drawn on the map, in % of the map (row 0 at the bottom). The
  * grid is nudged so it looks drawn by hand: each row leans a little to one side
@@ -119,16 +123,17 @@ export function posicionNodo(mapa: NodoMapa[], n: NodoMapa): { x: number; y: num
   const filas = Math.max(...mapa.map((m) => m.fila)) + 1;
   const enFila = mapa.filter((m) => m.fila === n.fila).length;
   const sal = mapa.length;
-  const paso = 80 / enFila;                       // room between paths in this row
+  const margen = (100 - ANCHO_MAPA) / 2;
+  const paso = ANCHO_MAPA / enFila;               // room between paths in this row
   const salto = 82 / Math.max(1, filas - 1);      // room between levels
   const jefe = enFila === 1 && n.fila === filas - 1;
   const inclinacion = jefe ? 0 : (ruido(n.fila, sal, 1) - 0.5) * Math.min(8, paso * 0.4);
   const dx = jefe ? 0 : (ruido(n.id, sal, 2) - 0.5) * paso * 0.42;
   // levels are close together: a small vertical nudge, so neighbours never touch
   const dy = jefe ? 0 : (ruido(n.id, sal, 3) - 0.5) * salto * 0.17;
-  const x = ((n.col + 0.5) / enFila) * 80 + 10 + inclinacion + dx;
+  const x = ((n.col + 0.5) / enFila) * ANCHO_MAPA + margen + inclinacion + dx;
   const y = 90 - n.fila * salto + dy;
-  return { x: Math.min(92, Math.max(8, x)), y };
+  return { x: Math.min(100 - margen + 2, Math.max(margen - 2, x)), y };
 }
 
 /** Node types a tavern rumour can point at. */

@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1791645488.3416607,
-    "ast_hash": "9adacfdbb1f5f0bae2431d860b570c4f",
+    "mtime": 1791658386.308966,
+    "ast_hash": "7681e443d3be95cf3ab1828ce9f11f1e",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1791645438.5947444,
-    "ast_hash": "8b6acde737d0b2e3ceca0ad4ab523b1f",
+    "mtime": 1791658348.1681135,
+    "ast_hash": "36b6f77ad192475f79d7fce16d11e2b3",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/mapa.ts": {
-    "mtime": 1791645422.276516,
-    "ast_hash": "76ce1771427125714bd011ca1acbe050",
+    "mtime": 1791658348.1687393,
+    "ast_hash": "9a7849b83f1c4bfc4905660db448a5ff",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1791645488.3412728,
-    "ast_hash": "2e72ecde8e489645fa3caddc116edd18",
+    "mtime": 1791658386.308222,
+    "ast_hash": "558865c32440eefcf75b11208219e336",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1791645488.3407152,
-    "ast_hash": "4bcad72736bc7fa1e06084047f369cc1",
+    "mtime": 1791658386.309378,
+    "ast_hash": "3c3b3b2ef7c192d702c6a19e02fd7967",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
