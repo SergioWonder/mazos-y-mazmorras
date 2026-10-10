@@ -5,13 +5,13 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/package.json": {
-    "mtime": 1791451263.7588997,
-    "ast_hash": "045ea3db659bacc38687e8c2f703dff9",
+    "mtime": 1791644688.5498393,
+    "ast_hash": "43b89102b1bb9b7384378808602ef039",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/scripts/smoke-test.ts": {
-    "mtime": 1791451135.2583187,
-    "ast_hash": "ebdf4b2eef19b789d8e7f5b1e564719c",
+    "mtime": 1791644472.4863088,
+    "ast_hash": "82ebf46038e8d73c5ee03cc0f1459f15",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/cartas.ts": {
@@ -20,8 +20,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/combate.ts": {
-    "mtime": 1791100676.389396,
-    "ast_hash": "bcb4dd32c227a2417885060e7bbec8ab",
+    "mtime": 1791644602.7614083,
+    "ast_hash": "a063efc101fa5cc635efefca11950542",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/conjuros.ts": {
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/mapa.ts": {
-    "mtime": 1790458321.8425221,
-    "ast_hash": "4a22829b865888f569aee333b2f4bcaa",
+    "mtime": 1791644551.2940779,
+    "ast_hash": "119a95d7828a8d36ce3f0f0c10d65fbf",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/core/reliquias.ts": {
@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/main.ts": {
-    "mtime": 1791447907.6938891,
-    "ast_hash": "7a1358b4a066810fbd0f31c9357d5bb4",
+    "mtime": 1791644521.9584048,
+    "ast_hash": "36b28ab41174a9394051ca304e0c210a",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/actualizacion.ts": {
@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/combate.ts": {
-    "mtime": 1791100778.0001483,
-    "ast_hash": "0aa23ea61756f63100b158322c1e73b6",
+    "mtime": 1791644521.9545202,
+    "ast_hash": "ebebb867f616ea5af1f541a085516f5f",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/ui/compendio.ts": {
@@ -165,8 +165,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/version.ts": {
-    "mtime": 1791451263.7583885,
-    "ast_hash": "60999b2aa964b402a19c9a1afbbe1266",
+    "mtime": 1791644688.5496094,
+    "ast_hash": "84d5c6658cef121e34d39a51d6671d45",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/src/vite-env.d.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/README.md": {
-    "mtime": 1790719447.0796084,
-    "ast_hash": "248d3e7842dbaa3d39220f4f5f4fb29d",
+    "mtime": 1791644662.6982706,
+    "ast_hash": "24a66ca994678f711fb2a91cfb15843c",
     "semantic_hash": ""
   },
   "/Users/sergio/WonderBits/personal/videogame/index.html": {
@@ -3772,6 +3772,11 @@
   "/Users/sergio/WonderBits/personal/videogame/src/arte/escenas/capas/capitulo-templo-oscuro.webp": {
     "mtime": 1791451185.8218293,
     "ast_hash": "ae0af5769462743fd76c3d65259b7f57",
+    "semantic_hash": ""
+  },
+  "/Users/sergio/WonderBits/personal/videogame/src/core/dificultad.ts": {
+    "mtime": 1791644602.7616389,
+    "ast_hash": "e50748199258208f67595cdf67cb5b67",
     "semantic_hash": ""
   }
 }

@@ -10,6 +10,7 @@ import {
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles } from '../src/core/mapa.ts';
+import { ajusteEncuentro, PRIMEROS_FACILES, type ContextoEncuentro } from '../src/core/dificultad.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
   poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA, MALDICIONES, GOLPE_SAGRADO, DEFENSA_SAGRADA,
@@ -141,7 +142,7 @@ function mejorObjetivo(comb: Combate): EnemigoCombate | undefined {
 /** Progresión simulada: un jefe no se pelea con el mazo inicial, así que para
  *  los encuentros tardíos se añaden recompensas y mejoras al mazo. */
 /** `pv`: the hero's max HP (a huge one measures what a fight costs to win). */
-interface OpcionesSim { extra?: number; mejoras?: number; pv?: number }
+interface OpcionesSim { extra?: number; mejoras?: number; pv?: number; contexto?: ContextoEncuentro }
 
 async function simular(
   clase: ClaseId, semilla: number, defs: EnemigoDef[], op: OpcionesSim = {},
@@ -158,7 +159,7 @@ async function simular(
     if (mejorables.length === 0) break;
     mejorables[Math.floor(rng() * mejorables.length)].mejorada = true;
   }
-  const combate = new Combate(run, defs, rng, uiSilenciosa);
+  const combate = new Combate(run, defs, rng, uiSilenciosa, false, op.contexto);
   await combate.iniciar();
 
   let turnos = 0;
@@ -206,8 +207,8 @@ console.log('— Mapa —');
     const mapa = generarMapa(crearRng(i * 7 + 1));
     const jefe = mapa.filter((n) => n.tipo === 'jefe');
     if (jefe.length !== 1) check(false, `mapa ${i}: debe haber exactamente 1 jefe`);
-    if (Math.max(...mapa.map((n) => n.fila)) !== 9)
-      check(false, `mapa ${i}: debe tener 10 filas`);
+    if (Math.max(...mapa.map((n) => n.fila)) !== 12)
+      check(false, `mapa ${i}: debe tener 13 filas`);
     if (mapa.filter((n) => n.tipo === 'evento').length < 2)
       check(false, `mapa ${i}: debe haber al menos 2 eventos`);
     if (mapa.filter((n) => n.tipo === 'descanso').length < 3)
@@ -224,8 +225,21 @@ console.log('— Mapa —');
       check(false, `mapa ${i}: hay nodos inalcanzables (${alcanzables.size}/${mapa.length})`);
     }
   }
-  console.log('  ✓ 50 mapas generados: 10 filas, 1 jefe, ≥2 eventos, descansos y todo alcanzable');
+  console.log('  ✓ 50 mapas generados: 13 filas, 1 jefe, ≥2 eventos, descansos y todo alcanzable');
   check(nodosDisponibles(generarMapa(crearRng(42)), -1).length >= 1, 'hay nodos iniciales disponibles');
+  // longer and wider paths, less tangled: fewer forks than before (1 + 55 %)
+  let nodos = 0, enlaces = 0, filasAnchas = 0, filas = 0;
+  for (let i = 0; i < 50; i++) {
+    const mapa = generarMapa(crearRng(i * 11 + 2));
+    const n = mapa.filter((x) => x.tipo !== 'jefe');
+    nodos += n.length; enlaces += n.reduce((a, x) => a + x.siguientes.length, 0);
+    const porFila = new Map<number, number>();
+    for (const x of mapa) porFila.set(x.fila, (porFila.get(x.fila) ?? 0) + 1);
+    filas += porFila.size; filasAnchas += [...porFila.values()].filter((v) => v >= 4).length;
+  }
+  check(nodos / filas >= 3.2, `más columnas: ${(nodos / filas).toFixed(1)} nodos por fila de media`);
+  check(filasAnchas / filas >= 0.4, `muchas filas tienen 4 caminos (${Math.round((filasAnchas / filas) * 100)} %)`);
+  check(enlaces / nodos <= 1.42, `menos conectados: ${(enlaces / nodos).toFixed(2)} salidas por nodo de media`);
 }
 
 console.log('— Recompensas y pools —');
@@ -282,6 +296,82 @@ console.log('— Arte de las cartas —');
   }
 }
 
+/** A normal fight later in the act (past the easy first ones). */
+const TARDIO: ContextoEncuentro = { tipo: 'normal', orden: PRIMEROS_FACILES + 2 };
+
+console.log('— Dificultad de los combates normales —');
+{
+  const temprano: ContextoEncuentro = { tipo: 'normal', orden: 0 };
+  // — the rule —
+  const solo = ajusteEncuentro(TARDIO, 1), pareja = ajusteEncuentro(TARDIO, 2), trio = ajusteEncuentro(TARDIO, 3);
+  check(solo.pv > 1.2 && solo.dano > 1.1 && !solo.alternan, `un enemigo solo pega y aguanta más (PV ×${solo.pv}, daño ×${solo.dano})`);
+  check(pareja.pv === 1 && pareja.dano === 1 && !pareja.alternan, 'una pareja queda como estaba');
+  check(trio.alternan && trio.dano <= 1, 'en grupos de tres se turnan para atacar');
+  const t0 = ajusteEncuentro(temprano, 2);
+  check(t0.pv < 1 && t0.dano < 1, `los ${PRIMEROS_FACILES} primeros combates normales del acto son más suaves (PV ×${t0.pv}, daño ×${t0.dano})`);
+  check(ajusteEncuentro({ tipo: 'normal', orden: PRIMEROS_FACILES }, 2).pv === 1, `desde el combate ${PRIMEROS_FACILES + 1} la dificultad es la normal`);
+  const elite = ajusteEncuentro({ tipo: 'elite' }, 1), jefe = ajusteEncuentro({ tipo: 'jefe' }, 3);
+  check(elite.pv === 1 && elite.dano === 1 && !elite.alternan && jefe.pv === 1 && !jefe.alternan, 'élites y jefes no cambian');
+
+  // — applied to a real fight: HP and the damage of the announced attacks —
+  const worgSolo = ACTOS[0][0].normales.find((g) => g.length === 1)!;
+  const sin = new Combate(nuevaRun('barbaro', 7), worgSolo, crearRng(77), uiSilenciosa);
+  const con = new Combate(nuevaRun('barbaro', 7), worgSolo, crearRng(77), uiSilenciosa, false, TARDIO);
+  const rPv = con.enemigos[0].pvMax / sin.enemigos[0].pvMax;
+  check(Math.abs(rPv - solo.pv) < 0.06, `${worgSolo[0].nombre} solo: ${sin.enemigos[0].pvMax} → ${con.enemigos[0].pvMax} PV`);
+  const dSin = sin.enemigos[0].intencion.dano ?? 0, dCon = con.enemigos[0].intencion.dano ?? 0;
+  check(dSin === 0 || dCon === Math.max(1, Math.round(dSin * solo.dano)), `y su ataque anunciado pasa de ${dSin} a ${dCon}`);
+
+  // — groups of three take turns: never all three attack in the same round —
+  const trios = ACTOS.flat().flatMap((c) => c.normales.filter((g) => g.length >= 3));
+  let todosALaVez = 0, sinAtacar = 0, rondas = 0;
+  for (const [k, g] of trios.entries()) {
+    const run = nuevaRun('paladin', 50 + k);
+    run.pvMax = run.pv = 5000;
+    const c = new Combate(run, g, crearRng(500 + k), uiSilenciosa, false, TARDIO);
+    await c.iniciar();
+    const ataco = new Map<EnemigoCombate, number>();
+    for (let r = 0; r < 6 && !c.terminado; r++) {
+      const vivos = c.enemigos.filter((e) => e.vivo);
+      if (vivos.length < 3) break;
+      const atacan = vivos.filter((e) => e.intencion.intencion === 'ataque' || e.intencion.dano !== undefined);
+      rondas++;
+      if (atacan.length === vivos.length && vivos.length >= 3) todosALaVez++;
+      for (const e of atacan) ataco.set(e, r);
+      await c.terminarTurno();
+    }
+    // every enemy that knows how to attack still does so now and then
+    for (const e of c.enemigos) if (e.vivo && !ataco.has(e) && (e.danoBaseMax ?? 0) > 0) sinAtacar++;
+  }
+  check(trios.length > 0 && rondas > 10 && todosALaVez === 0, `en ${trios.length} grupos de tres, ninguna ronda atacan todos a la vez (${todosALaVez}/${rondas})`);
+  check(sinAtacar === 0, `pero ninguno se queda sin atacar (${sinAtacar})`);
+
+  // — what the fights cost: HP lost by the simulated hero —
+  const coste = async (grupos: EnemigoDef[][], contexto?: ContextoEncuentro) => {
+    let perdido = 0, n = 0;
+    for (const [capIdx] of ACTOS.flat().entries()) {
+      for (const clase of CLASES) {
+        for (const [k, g] of grupos.entries()) {
+          if (k % 6 !== capIdx) continue;
+          const { combate, run } = await simular(clase, 900 + k * 7 + capIdx, g, { pv: 2000, extra: Math.floor(capIdx / 2) * 5, contexto });
+          perdido += run.pvMax - combate.jugador.pv;
+          n++;
+        }
+      }
+    }
+    return perdido / Math.max(1, n);
+  };
+  const solos = ACTOS.flat().flatMap((c) => c.normales.filter((g) => g.length === 1));
+  const parejas = ACTOS.flat().flatMap((c) => c.normales.filter((g) => g.length === 2));
+  const soloAntes = await coste(solos), soloAhora = await coste(solos, TARDIO);
+  const trioAntes = await coste(trios), trioAhora = await coste(trios, TARDIO);
+  const parejaAhora = await coste(parejas, TARDIO), parejaTemprana = await coste(parejas, temprano);
+  console.log(`  PV perdidos por combate · solo ${soloAntes.toFixed(1)} → ${soloAhora.toFixed(1)} · trío ${trioAntes.toFixed(1)} → ${trioAhora.toFixed(1)} · pareja ${parejaAhora.toFixed(1)} (temprana ${parejaTemprana.toFixed(1)})`);
+  check(soloAhora > soloAntes * 1.3, `un enemigo solo cuesta bastante más vida (${soloAntes.toFixed(1)} → ${soloAhora.toFixed(1)} PV)`);
+  check(trioAhora < trioAntes * 0.85, `un grupo de tres cuesta menos vida (${trioAntes.toFixed(1)} → ${trioAhora.toFixed(1)} PV)`);
+  check(parejaTemprana < parejaAhora * 0.85, `los primeros combates del acto cuestan menos que los de más adelante (${parejaTemprana.toFixed(1)} < ${parejaAhora.toFixed(1)} PV)`);
+}
+
 console.log('— Combates simulados: los 6 escenarios × 5 clases × 4 tipos de encuentro —');
 {
   /** Los tres tipos de encuentro se comportan muy distinto: un enemigo solo
@@ -294,11 +384,11 @@ console.log('— Combates simulados: los 6 escenarios × 5 clases × 4 tipos de 
    *  con el mazo inicial no dice nada de la clase, solo de la escala del acto. */
   const progresion = (capIdx: number, base: OpcionesSim): OpcionesSim => {
     const acto = Math.floor(capIdx / 2); // 0, 1 o 2
-    return { extra: acto * 5 + (base.extra ?? 0), mejoras: acto * 2 + (base.mejoras ?? 0) };
+    return { extra: acto * 5 + (base.extra ?? 0), mejoras: acto * 2 + (base.mejoras ?? 0), contexto: base.contexto };
   };
   const tipos = [
-    { nombre: 'singular', base: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length === 1) },
-    { nombre: 'grupo', base: {}, grupos: (c: Cap) => c.normales.filter((g) => g.length > 1) },
+    { nombre: 'singular', base: { contexto: TARDIO }, grupos: (c: Cap) => c.normales.filter((g) => g.length === 1) },
+    { nombre: 'grupo', base: { contexto: TARDIO }, grupos: (c: Cap) => c.normales.filter((g) => g.length > 1) },
     { nombre: 'élite', base: { extra: 3, mejoras: 1 }, grupos: (c: Cap) => c.elites },
     { nombre: 'jefe', base: { extra: 6, mejoras: 2 }, grupos: (c: Cap) => [c.jefe] },
   ];
@@ -4380,11 +4470,11 @@ console.log('— Taberna y misiones —');
       const tabernas = mapa.filter((n) => n.tipo === 'taberna');
       if (tabernas.length >= 2) conDos++;
       if (tabernas.length < 1 || tabernas.length > 2) malas++;
-      if (tabernas.some((t) => t.fila === 0 || t.fila >= 8)) malas++;
+      if (tabernas.some((t) => t.fila === 0 || t.fila > 8)) malas++;
       // existing guarantees still hold
       if (!mapa.some((n) => n.tipo === 'elite') || !mapa.some((n) => n.tipo === 'cofre')) malas++;
       if (mapa.filter((n) => n.tipo === 'evento').length < 2) malas++;
-      if (mapa.filter((n) => n.tipo === 'descanso' && n.fila < 8).length < 2) malas++;
+      if (mapa.filter((n) => n.tipo === 'descanso' && n.fila < 11).length < 2) malas++;
       for (const t of tabernas) {
         const cands = TB.candidatosMision(mapa, t.id);
         if (cands.length === 0) sinMision++;

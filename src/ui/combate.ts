@@ -1,3 +1,4 @@
+import type { ContextoEncuentro } from '../core/dificultad.ts';
 import { Combate, esDungeonMaster, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
 import { FRASES_DM } from '../core/escena-final.ts';
 import type {
@@ -89,6 +90,7 @@ export function pantallaCombate(
   esJefe: boolean,
   nombreCapitulo: string,
   esElite = false,
+  orden?: number,
 ): Promise<'victoria' | 'derrota'> {
   return new Promise((resolver) => {
     ultimaCaida = null;
@@ -655,7 +657,8 @@ export function pantallaCombate(
       },
     };
 
-    const combate = new Combate(run, defs, rng, ui, esJefe || esElite);
+    const contexto: ContextoEncuentro = { tipo: esJefe ? 'jefe' : esElite ? 'elite' : 'normal', orden };
+    const combate = new Combate(run, defs, rng, ui, esJefe || esElite, contexto);
 
     // ── Action queue ─────────────────────────────────────────────────────────
     // Cards and "end turn" chosen while something resolves wait here instead of

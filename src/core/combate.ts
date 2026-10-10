@@ -11,6 +11,7 @@ import type {
   CastigoPreparado, DiceTheme, EfectoConjuro, EfectoInvocacion, ElementoCastigo, FormaInvocacion, ValorMostrado,
 } from './types.ts';
 import { calcularValores } from './valores.ts';
+import { ajusteEncuentro, type AjusteEncuentro, type ContextoEncuentro } from './dificultad.ts';
 import * as stats from './estadisticas.ts';
 
 /** Eventos que el motor comunica a la interfaz para renderizar y animar. */
@@ -121,6 +122,8 @@ export class Combate {
   private enGanchoEstado = false;
   private victoriaNotificada = false;
   eliteOJefe: boolean;
+  /** Difficulty of this encounter (normal fights: alone, in threes, early in the act). */
+  readonly ajuste: AjusteEncuentro;
   run: EstadoRun;
   rng: () => number;
   ui: Presentador;
@@ -141,6 +144,7 @@ export class Combate {
     rng: () => number,
     ui: Presentador,
     eliteOJefe = false,
+    contexto?: ContextoEncuentro,
   ) {
     this.run = run;
     this.rng = rng;
@@ -164,6 +168,54 @@ export class Combate {
       castigos: [],
     };
     this.enemigos = resolverVariantes(defs, rng).map((d) => crearEnemigo(d, rng));
+    this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
+    for (const e of this.enemigos) {
+      if (this.ajuste.pv !== 1) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * this.ajuste.pv));
+      e.intencion = this.ajustarIntencion(e, e.intencion);
+      e.danoBaseMax = e.intencion.dano ?? 0;
+    }
+    this.coordinarGrupo();
+  }
+
+  /** A move an enemy has just decided, adapted to the encounter: the damage of a
+   *  lone enemy, of a group or of an early fight. */
+  private ajustarIntencion(_e: EnemigoCombate, m: Movimiento): Movimiento {
+    if (this.ajuste.dano !== 1 && m.dano !== undefined) m = { ...m, dano: Math.max(1, Math.round(m.dano * this.ajuste.dano)) };
+    return m;
+  }
+
+  /** Enemies of a group of three or more that attacked in the round just announced. */
+  private atacaronUltima = new Set<EnemigoCombate>();
+
+  /** Groups of three or more take turns: once every enemy has announced its next
+   *  move, at most half of them (rounded up) attack; the others guard or prepare
+   *  instead, and those that attacked last round are the first to hold back, so
+   *  each one alternates and nobody is left without attacking. */
+  private coordinarGrupo() {
+    if (!this.ajuste.alternan) return;
+    const vivos = this.enemigos.filter((x) => x.vivo);
+    if (vivos.length < 3) { this.atacaronUltima.clear(); return; }
+    const ataca = (x: Movimiento) => x.intencion === 'ataque' || x.dano !== undefined;
+    const atacantes = vivos.filter((x) => ataca(x.intencion) && !x.saltaAccion);
+    const tope = Math.ceil(vivos.length / 2);
+    const sobran = atacantes
+      .sort((x, y) => Number(this.atacaronUltima.has(y)) - Number(this.atacaronUltima.has(x)) || this.enemigos.indexOf(x) - this.enemigos.indexOf(y))
+      .slice(0, Math.max(0, atacantes.length - tope));
+    for (const e of sobran) e.intencion = this.movimientoDeEspera(e, e.intencion);
+    this.atacaronUltima = new Set(vivos.filter((x) => ataca(x.intencion)));
+  }
+
+  /** What an enemy does on a round it holds back: its own next move that is not an
+   *  attack (as Cambiazo finds it), or it stands guard. */
+  private movimientoDeEspera(e: EnemigoCombate, ataque: Movimiento): Movimiento {
+    const ataca = (x: Movimiento) => x.intencion === 'ataque' || x.dano !== undefined;
+    const aliados = this.enemigos.filter((x) => x.vivo && x !== e);
+    for (let i = 1; i <= 8; i++) {
+      const otro = e.def.ia(e.turnosVisto + i, this.rng, e, aliados);
+      if (!ataca(otro)) return otro;
+    }
+    const golpe = (ataque.dano ?? 0) * (ataque.veces ?? 1);
+    return { nombre: 'En guardia', intencion: 'defensa', bloqueo: Math.max(3, Math.round(golpe * 0.5)) };
   }
 
   // ── Cálculo de daño/bloqueo (reglas StS) ──────────────────────────────────
@@ -1182,7 +1234,7 @@ export class Combate {
     const sueno = e.def.durmiente;
     if (!sueno || e.despierto || !e.vivo || this.terminado) return;
     e.despierto = true;
-    e.intencion = e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e));
+    e.intencion = this.ajustarIntencion(e, e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e)));
     e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
     await this.ui.fxMensaje(`😱 ¡${e.nombre} despierta!`);
     this.ui.render();
@@ -1208,7 +1260,7 @@ export class Combate {
         e.intencion = e.intencionForzada;
         delete e.intencionForzada;
       } else {
-        e.intencion = e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e));
+        e.intencion = this.ajustarIntencion(e, e.def.ia(e.turnosVisto, this.rng, e, this.enemigos.filter((x) => x.vivo && x !== e)));
       }
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
       this.ui.render();
@@ -1903,10 +1955,10 @@ export class Combate {
         e.intencion = e.intencionForzada;
         delete e.intencionForzada;
       } else {
-        e.intencion = e.def.ia(
+        e.intencion = this.ajustarIntencion(e, e.def.ia(
           e.turnosVisto, this.rng, e,
           this.enemigos.filter((x) => x.vivo && x !== e),
-        );
+        ));
       }
       e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
       this.intencionesOcultas.add(e); // hidden until the player's turn begins
@@ -1915,6 +1967,7 @@ export class Combate {
       this.ui.render();
       await this.ui.espera(250);
     }
+    this.coordinarGrupo(); // groups of three or more take turns for the coming round
 
     if (vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
 

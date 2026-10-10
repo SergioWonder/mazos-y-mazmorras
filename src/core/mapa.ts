@@ -2,8 +2,9 @@ import type { NodoMapa, TipoNodo } from './types.ts';
 import { elegir } from './rng.ts';
 
 /**
- * Genera el mapa de un capítulo: un grafo de 10 filas que sube hasta el jefe,
+ * Genera el mapa de un capítulo: un grafo de 13 filas que sube hasta el jefe,
  * al estilo Slay the Spire, con hueco para eventos, hogueras y tabernas.
+ * Filas de 3–4 caminos, poco enlazados entre sí, para que elegir ruta pese.
  */
 export function generarMapa(rng: () => number): NodoMapa[] {
   const nodos: NodoMapa[] = [];
@@ -13,16 +14,22 @@ export function generarMapa(rng: () => number): NodoMapa[] {
     () => 'combate',
     () => 'combate',
     () => (rng() < 0.35 ? 'evento' : rng() < 0.2 ? 'descanso' : 'combate'),
+    () => (rng() < 0.35 ? 'evento' : rng() < 0.2 ? 'descanso' : 'combate'),
     () => (rng() < 0.4 ? 'evento' : rng() < 0.2 ? 'descanso' : 'combate'),
+    () => (rng() < 0.15 ? 'elite' : rng() < 0.35 ? 'evento' : 'combate'),
     () => 'cofre', // central row: the chapter's only row of chests
     () => (rng() < 0.25 ? 'elite' : rng() < 0.4 ? 'evento' : rng() < 0.25 ? 'descanso' : 'combate'),
+    () => (rng() < 0.3 ? 'elite' : rng() < 0.3 ? 'evento' : rng() < 0.3 ? 'descanso' : 'combate'),
     () => (rng() < 0.35 ? 'elite' : rng() < 0.45 ? 'descanso' : 'combate'),
     () => (rng() < 0.4 ? 'evento' : rng() < 0.25 ? 'descanso' : 'combate'),
     () => 'descanso',
     () => 'jefe',
   ];
-  const anchoPorFila = [2, 3, 3, 3, 2, 3, 3, 2, 2, 1];
+  const anchoPorFila = [3, 4, 4, 4, 4, 4, 3, 4, 4, 4, 4, 3, 1];
   const numFilas = anchoPorFila.length;
+  /** Rows the guarantees below may touch: between the opening fights and the last campfire. */
+  const MEDIO = { desde: 2, hasta: numFilas - 3 };
+  const DESCANSO_JEFE = numFilas - 2;
 
   const filas: NodoMapa[][] = [];
   for (let f = 0; f < numFilas; f++) {
@@ -38,29 +45,30 @@ export function generarMapa(rng: () => number): NodoMapa[] {
     }
     filas.push(fila);
   }
-  // Garantías: élite y al menos 2 eventos en el tramo medio (los cofres ya
-  // ocupan entera la fila central, la 4)
-  if (!nodos.some((n) => n.tipo === 'elite')) elegir(rng, filas[6]).tipo = 'elite';
+  // Garantías: élite y al menos 3 eventos en el tramo medio (los cofres ya
+  // ocupan entera la fila central)
+  if (!nodos.some((n) => n.tipo === 'elite')) elegir(rng, filas[9]).tipo = 'elite';
   let intentos = 0;
-  while (nodos.filter((n) => n.tipo === 'evento').length < 2 && intentos++ < 50) {
-    const fila = filas[2 + Math.floor(rng() * 6)];
+  while (nodos.filter((n) => n.tipo === 'evento').length < 3 && intentos++ < 60) {
+    const fila = filas[MEDIO.desde + Math.floor(rng() * (MEDIO.hasta - MEDIO.desde + 1))];
     const candidatos = fila.filter((n) => n.tipo === 'combate');
     if (candidatos.length === 0) continue;
     elegir(rng, candidatos).tipo = 'evento';
   }
-  // … y al menos 2 hogueras en el tramo medio (además de la fija ante el jefe)
+  // … y al menos 2 hogueras en el tramo medio (además de la fila fija ante el jefe)
   intentos = 0;
   while (
-    nodos.filter((n) => n.tipo === 'descanso' && n.fila < 8).length < 2 &&
-    intentos++ < 50
+    nodos.filter((n) => n.tipo === 'descanso' && n.fila < DESCANSO_JEFE).length < 2 &&
+    intentos++ < 60
   ) {
-    const fila = filas[3 + Math.floor(rng() * 5)];
+    const fila = filas[3 + Math.floor(rng() * (MEDIO.hasta - 2))];
     const candidatos = fila.filter((n) => n.tipo === 'combate');
     if (candidatos.length === 0) continue;
     elegir(rng, candidatos).tipo = 'descanso';
   }
 
-  // Conexiones: cada nodo enlaza con los 1-2 nodos más cercanos de la fila superior
+  // Conexiones: cada nodo enlaza con el nodo más cercano de la fila superior y, a
+  // veces, con el siguiente más cercano (pocas bifurcaciones: rutas más separadas)
   for (let f = 0; f < numFilas - 1; f++) {
     const actual = filas[f];
     const arriba = filas[f + 1];
@@ -72,7 +80,7 @@ export function generarMapa(rng: () => number): NodoMapa[] {
           Math.abs((b.col + 0.5) / arriba.length - pos),
       );
       n.siguientes.push(orden[0].id);
-      if (orden.length > 1 && rng() < 0.55) n.siguientes.push(orden[1].id);
+      if (orden.length > 1 && rng() < 0.3) n.siguientes.push(orden[1].id);
     }
     // Asegura que todos los nodos de arriba son alcanzables
     for (const arr of arriba) {
@@ -129,7 +137,7 @@ export function candidatosMision(mapa: NodoMapa[], desde: number): NodoMapa[] {
   });
 }
 
-/** Turns 1–2 fights into taverns (rows 1–5: never the first row nor next to the
+/** Turns 1–2 fights into taverns (rows 1–8: never the first row nor near the
  *  boss), only where a quest target 2–4 rows ahead exists. Only fights are
  *  converted, so the event/campfire/elite/chest guarantees stay intact. */
 function colocarTabernas(nodos: NodoMapa[], rng: () => number) {
@@ -137,7 +145,7 @@ function colocarTabernas(nodos: NodoMapa[], rng: () => number) {
   const tabernas: NodoMapa[] = [];
   for (let i = 0; i < cuantas; i++) {
     const posibles = nodos.filter((n) => {
-      if (n.tipo !== 'combate' || n.fila < 1 || n.fila > 5) return false;
+      if (n.tipo !== 'combate' || n.fila < 1 || n.fila > 8) return false;
       if (tabernas.some((t) => t.fila === n.fila)) return false;
       if (candidatosMision(nodos, n.id).length === 0) return false;
       // converting it must not leave an earlier tavern without a target

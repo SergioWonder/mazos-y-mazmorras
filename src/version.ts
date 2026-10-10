@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '8.12.0';
+export const VERSION = '9.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '9.0.0',
+    fecha: '2026-10-10',
+    cambios: [
+      '⚔️ Dracs & Rogues 9.0: combates rediseñados. Un enemigo solo aguanta y pega más, y en grupos de tres se turnan para atacar.',
+      '🌱 Los tres primeros combates normales de cada acto son más suaves; a partir de ahí, la cosa se pone seria.',
+      '🗺️ Mapas más largos y anchos: 13 pasos hasta el jefe, hasta cuatro caminos por fila y menos cruces, para que elegir ruta pese de verdad.',
+      '🚶 Cada capítulo empieza con tu héroe de espaldas, a contraluz y animado, adentrándose en escenarios nuevos de estilo cómic.',
+      '👥 Élites nuevos de grupo en cada escenario (la Horda Goblin, un enjambre de ratas, el íncubo y la súcubo, guardas dracónidos y un cofre mímico) y un Vexis que engaña de verdad con sus ilusiones.',
+      '🎻 Banda sonora del Acto III y temas propios para el Contemplador e Ignifax; y la Condena arrastra a sus víctimas al inframundo entre cadenas y una campana fúnebre.',
+    ],
+  },
   {
     version: '8.12.0',
     fecha: '2026-10-08',

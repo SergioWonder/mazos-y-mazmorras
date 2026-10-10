@@ -98,7 +98,9 @@ async function juego() {
       switch (nodo.tipo) {
         case 'combate': {
           const grupo = elegir(rng, cap.normales.filter((g) => g.length <= (run.piso < 3 ? 2 : 3)));
-          const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre);
+          // its place among this act's normal fights (the node is already marked visited)
+          const orden = run.mapa.filter((n) => n.tipo === 'combate' && n.visitado).length - 1;
+          const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre, false, orden);
           if (resultado === 'derrota') vivo = false;
           else await elegirCarta(run, rng);
           break;

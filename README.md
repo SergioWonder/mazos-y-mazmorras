@@ -185,12 +185,19 @@ descuelga de las demás en su mismo nivel.
   ~70 % positivos / ~30 % negativos, sin repetirse dentro de una run.
 - **Compendio de cartas** (desde el menú): todas las cartas por clase (y las maldiciones), con opción de
   verlas mejoradas, comentarios por carta y exportación a JSON `[{id, comentario}]`.
-- **Mapa** de 10 filas por capítulo (`core/mapa.ts`) con ≥2 eventos, élites, descansos
-  y tabernas. Se ve como un **mapa de aventura de papel** (ver [Mapa a tinta](#mapa-a-tinta)):
+- **Mapa** de 13 filas por capítulo (`core/mapa.ts`), de 3–4 caminos por fila y poco
+  enlazados entre sí (cada nodo sigue al más cercano y solo a veces se bifurca), con ≥3
+  eventos, élites, descansos y tabernas. Se ve como un **mapa de aventura de papel** (ver [Mapa a tinta](#mapa-a-tinta)):
   combate, élite, evento, campamento, cofre, taberna y jefe, dibujados a plumilla. Los **cofres** van todos en una sola fila, la
-  central (fila 4), que es entera de cofres: no hay cofres en ninguna otra fila.
+  central (fila 6), que es entera de cofres: no hay cofres en ninguna otra fila.
+- **Dificultad de los combates normales** (`core/dificultad.ts`): un enemigo solo tiene
+  un 40 % más de PV y pega un 25 % más; en grupos de tres o más se turnan (cada ronda
+  ataca como mucho la mitad, empezando a descansar los que atacaron la anterior, que
+  hacen otra acción suya o se ponen en guardia) y pegan un 10 % menos; los tres primeros
+  combates normales de cada acto son más suaves (PV ×0,85, daño ×0,8). Élites y jefes no
+  cambian.
 - **Tabernas** (nodos 🍺, `core/taberna.ts` y `ui/taberna.ts`): 1–2 por capítulo,
-  en las filas 1–5 (nunca en la primera ni junto al jefe). Dentro, dos parroquianos
+  en las filas 1–8 (nunca en la primera ni cerca del jefe). Dentro, dos parroquianos
   (tabernero, bardo, tabernera…) te cuentan un rumor cada uno (8 textos, según el
   tipo de lugar) y eliges uno, o pides una jarra que cura un 12 % de los PV. El
   rumor marca una **misión** en un nodo alcanzable a 2–4 filas (combate, élite,
