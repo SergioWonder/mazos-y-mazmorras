@@ -166,17 +166,42 @@ function terminar(p: PartidaMulti, victoria: boolean, finalVerdadero: boolean, e
 const puedeTomar = (run: EstadoRun, r: ReliquiaDef) => reliquiasDisponibles(run).some((x) => x.id === r.id);
 
 export function reliquiasValidas(p: PartidaMulti, sala: Sala, h: Hueco): ReliquiaDef[] {
-  return sala.reliquias!.ofertas.filter((r) => puedeTomar(p.runs[h], r));
+  return sala.reliquias!.ofertas[h].filter((r) => puedeTomar(p.runs[h], r));
+}
+
+/** What each hero sees of the relics drawn for the room: the same, except that a slot holding
+ *  a relic that does not fit him (one of the other hero's class) shows a relic of his own class
+ *  instead, drawn with the shared rng among the ones he does not have yet. Only when he has no
+ *  class relic left does it show any other relic he can take; a slot nothing fills is dropped. */
+export function ofertasPorHeroe(
+  p: PartidaMulti, base: ReliquiaDef[], origen: OrigenReliquia,
+): Record<Hueco, ReliquiaDef[]> {
+  const out: Record<Hueco, ReliquiaDef[]> = { cara: [], cruz: [] };
+  for (const h of HUECOS) {
+    const run = p.runs[h];
+    const vistas = new Set(base.map((r) => r.id)); // never show him the same relic twice
+    for (const r of base) {
+      if (puedeTomar(run, r)) { out[h].push(r); continue; }
+      const libres = reliquiasDisponibles(run).filter((x) => !vistas.has(x.id));
+      const propias = libres.filter((x) => x.soloClase === run.clase);
+      const pool = propias.length > 0 ? propias : libres;
+      if (pool.length === 0) continue;
+      const sustituta = sortearDePool(pool, p.rng, origen) ?? pool[Math.floor(p.rng() * pool.length)];
+      vistas.add(sustituta.id);
+      out[h].push(sustituta);
+    }
+  }
+  return out;
 }
 
 async function abrirReliquias(p: PartidaMulti, sala: Sala, origen: OrigenReliquia) {
-  // the pool is what either hero could still receive; each relic is checked per hero when picked
+  // the draw is what either hero could still receive; each hero then sees his own version of it
   const vistas = new Set<string>();
   const pool = HUECOS.flatMap((h) => reliquiasDisponibles(p.runs[h])).filter((r) => !vistas.has(r.id) && vistas.add(r.id));
   const primera = sortearDePool(pool, p.rng, origen);
   const segunda = primera ? sortearDePool(pool.filter((r) => r.id !== primera.id), p.rng, origen) : undefined;
-  const ofertas = [primera, segunda].filter((r): r is ReliquiaDef => !!r);
-  if (ofertas.length === 0) {
+  const sorteadas = [primera, segunda].filter((r): r is ReliquiaDef => !!r);
+  if (sorteadas.length === 0) {
     // like a solo chest with nothing left: bandages
     for (const h of HUECOS) {
       curarPorVendas(p.runs[h]);
@@ -187,7 +212,7 @@ async function abrirReliquias(p: PartidaMulti, sala: Sala, origen: OrigenReliqui
     return;
   }
   sala.etapa = 'reliquia';
-  sala.reliquias = { origen, ofertas, elecciones: {}, sinOpciones: {} };
+  sala.reliquias = { origen, ofertas: ofertasPorHeroe(p, sorteadas, origen), elecciones: {}, sinOpciones: {} };
   for (const h of HUECOS) if (reliquiasValidas(p, sala, h).length === 0) sala.reliquias.sinOpciones[h] = true;
   await comprobarReliquias(p, sala);
 }
@@ -196,16 +221,16 @@ async function comprobarReliquias(p: PartidaMulti, sala: Sala) {
   const of = sala.reliquias!;
   if (!HUECOS.every((h) => of.sinOpciones[h] || of.elecciones[h] !== undefined)) return;
   const eleccion = (h: Hueco) => of.elecciones[h];
-  const def = (id: string) => of.ofertas.find((r) => r.id === id)!;
+  const def = (h: Hueco, id: string) => of.ofertas[h].find((r) => r.id === id)!;
   const reparto: Record<Hueco, ReliquiaDef | null> = { cara: null, cruz: null };
   if (eleccion('cara') !== undefined && eleccion('cara') === eleccion('cruz')) {
-    // the same relic: the coin decides who keeps it, the other takes what is left (if it fits)
+    // the same relic: the coin decides who keeps it, the other takes the other slot as he sees it (if it fits)
     const ganador = await tirarMoneda(p, 'reliquia');
     const perdedor = otroHueco(ganador);
-    reparto[ganador] = def(eleccion(ganador)!);
-    reparto[perdedor] = of.ofertas.find((r) => r.id !== eleccion(ganador) && puedeTomar(p.runs[perdedor], r)) ?? null;
+    reparto[ganador] = def(ganador, eleccion(ganador)!);
+    reparto[perdedor] = of.ofertas[perdedor].find((r) => r.id !== eleccion(ganador) && puedeTomar(p.runs[perdedor], r)) ?? null;
   } else {
-    for (const h of HUECOS) reparto[h] = eleccion(h) !== undefined ? def(eleccion(h)!) : null;
+    for (const h of HUECOS) reparto[h] = eleccion(h) !== undefined ? def(h, eleccion(h)!) : null;
   }
   for (const h of HUECOS) {
     const r = reparto[h];

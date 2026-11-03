@@ -1086,7 +1086,9 @@ export function pantallaCombate(
         const veces = m.veces && m.veces > 1 ? `×${m.veces}` : '';
         // the raw hit (block and summons are not taken off); 🌿 if the roots will crush it
         const raices = p?.aplastado ? ' <small class="int-raices">🌿</small>' : '';
-        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${raices}</span>`;
+        // two players: the blow falls on both heroes at once
+        const ambos = duo ? ' <small class="int-ambos">👥</small>' : '';
+        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${raices}${ambos}</span>`;
       }
       if (m.invocar) return `<span class="int-mejora">👥</span>`;
       if (m.devorar) return `<span class="int-mejora">🍖</span>`;
@@ -1132,8 +1134,8 @@ export function pantallaCombate(
         if (cartaPendiente || modoObjetivo) div.classList.add('targeteable');
         if (objetivoSel) div.classList.add('objetivo-activo');
         const tipInt: Record<string, string> = {
-          ataque: 'Pretende atacarte', defensa: 'Va a defenderse',
-          mejora: 'Va a potenciarse', perjuicio: 'Va a debilitarte', desconocido: '…',
+          ataque: duo ? 'Pretende atacaros a los dos' : 'Pretende atacarte', defensa: 'Va a defenderse',
+          mejora: 'Va a potenciarse', perjuicio: duo ? 'Va a debilitaros a los dos' : 'Va a debilitarte', desconocido: '…',
         };
         const rasgo = rasgoActual(e, combate.enemigos); // the incubus' changes once the succubus falls
         // its next move is only revealed when the player's turn begins

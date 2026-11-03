@@ -67,9 +67,13 @@ En multijugador el azar solo ocurre dentro de `aplicar`. Lo que se encontró:
 
 ## Reglas de diseño aplicadas
 
-D1 PV ×1,6 (solo los enemigos del inicio del combate; los invocados no; el DM no) · D2 cada
-movimiento que alcanza a un héroe tira al azar entre los vivos, un ataque de varios golpes cae
-entero en el mismo; los movimientos que no alcanzan a nadie no tiran · D3 caído = sin turno, se
+D1 PV ×1,6 (los enemigos del inicio y también los que se unen durante el combate; el DM no) · D2 cada
+movimiento enemigo alcanza a cada héroe vivo con su propio bloqueo y reliquias, un ataque de varios golpes da todos
+los golpes a los dos, y no hay tirada de objetivo (`Combate.ejecutarMovimiento` reparte a `heroesVivos()`; primero
+las raíces que aplastan, luego los golpes) · D3 caído = sin turno, se
 levanta con el 25 % (redondeado) al ganar el compañero; caen los dos = derrota · D4 vale que lo
 consiga cualquiera · D5 ningún evento actual cambia nada compartido, así que no hay moneda de
 eventos (cada uno aplica su opción). Si se añade uno, hará falta una marca en `OpcionEvento`.
+
+Reliquias: `ofertasPorHeroe` (en `salas.ts`) da a cada héroe su versión de las dos sorteadas; la casilla con una
+reliquia de la otra clase se sustituye por una de la suya (rng compartido, que no tenga ya).

@@ -43,10 +43,11 @@ export interface HeroeEnSala {
   listo: boolean;
 }
 
-/** Relics offered to both heroes at once (elite, boss, chest): each picks one. */
+/** Relics offered to both heroes at once (elite, boss, chest): each picks one of the two he sees
+ *  (a slot with a relic of the other hero's class shows one of his own class instead). */
 export interface OfertaReliquias {
   origen: OrigenReliquia;
-  ofertas: ReliquiaDef[];
+  ofertas: Record<Hueco, ReliquiaDef[]>;
   elecciones: Partial<Record<Hueco, string>>;
   /** Heroes with nothing to pick (no offered relic fits them): they get bandages instead. */
   sinOpciones: Partial<Record<Hueco, true>>;

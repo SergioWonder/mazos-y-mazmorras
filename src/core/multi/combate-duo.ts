@@ -1,25 +1,21 @@
 import { Combate, esDungeonMaster, type Presentador, type VinculoDuo } from '../combate.ts';
 import type { ContextoEncuentro } from '../dificultad.ts';
-import type { CartaInstancia, EnemigoCombate, EnemigoDef, EstadoRun, Movimiento } from '../types.ts';
+import type { CartaInstancia, EnemigoCombate, EnemigoDef, EstadoRun } from '../types.ts';
 import { HUECOS, type Hueco } from './tipos.ts';
 
-/** D1: with two heroes every enemy has this much more HP (the damage does not change). */
+/** D1: with two heroes every enemy has this much more HP, the ones that join later included
+ *  (the damage does not change). The Dungeon Master is never scaled. */
 export const FACTOR_PV_DUO = 1.6;
 /** D3: a downed hero gets back up with this share of his max HP when the partner wins. */
 export const PV_AL_LEVANTARSE = 0.25;
-
-/** Does this move reach a hero (so the shared rng picks who)? Pure buffs and guards do not. */
-function alcanzaAUnHeroe(m: Movimiento): boolean {
-  return m.dano !== undefined || m.mataAlInstante === true || m.maldicion !== undefined
-    || (m.efectos ?? []).some(([, , sobreJugador]) => sobreJugador);
-}
 
 /**
  * Two heroes against the same enemies. Each hero has his own `Combate` (deck, hand, energy,
  * statuses, relics); both point at the same enemy objects. The heroes' turn is simultaneous:
  * every `jugar` resolves at once. When all the heroes still standing have ended the turn there
- * is one single enemy turn, whose every attack picks a living hero with the shared rng (D2);
- * then both heroes start their next turn. Nothing here touches the rng but the game itself.
+ * is one single enemy turn, whose every attack reaches every living hero (D2), each with his
+ * own block and statuses; then both heroes start their next turn. Nothing here touches the rng
+ * but the game itself.
  */
 export class CombateDuo implements VinculoDuo {
   readonly combates: Record<Hueco, Combate>;
@@ -44,6 +40,7 @@ export class CombateDuo implements VinculoDuo {
       if (!esDungeonMaster(e)) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * FACTOR_PV_DUO));
     }
     const cruz = new Combate(runs.cruz, defs, rng, ui.cruz, eliteOJefe, contexto, cara.lado);
+    cara.lado.factorPv = FACTOR_PV_DUO; // the ones that join the fight later get it too
     this.combates = { cara, cruz };
     for (const c of [cara, cruz]) {
       c.vinculo = this;
@@ -137,14 +134,6 @@ export class CombateDuo implements VinculoDuo {
     await this.rondaEnemiga();
   }
 
-  /** The hero each enemy move falls on: a living hero, picked with the shared rng (D2). All
-   *  the hits of one move go to him. Moves that reach nobody pick nobody (no roll). */
-  private objetivoDe(e: EnemigoCombate): Combate {
-    const vivos = this.vivos();
-    if (vivos.length === 1 || e.saltaAccion || !alcanzaAUnHeroe(e.intencion)) return vivos[0].c;
-    return vivos[Math.floor(this.rng() * vivos.length)].c;
-  }
-
   private async rondaEnemiga() {
     // 1. each living hero's end of turn, in a fixed order
     for (const { c } of this.vivos()) {
@@ -154,12 +143,12 @@ export class CombateDuo implements VinculoDuo {
       if (this.terminado) return;
     }
     // 2. one enemy turn (on a copy: summons do not act the turn they arrive). The first living
-    //    hero pays each enemy's upkeep (poison, bleeding…); the move itself falls on `objetivoDe`.
+    //    hero pays each enemy's upkeep (poison, bleeding…); the move itself reaches every hero.
     for (const e of [...this.enemigos]) {
       if (!e.vivo || this.luchaAcabada()) continue;
       const lider = this.vivos()[0]?.c;
       if (!lider) break;
-      await lider.turnoDeEnemigo(e, () => this.objetivoDe(e));
+      await lider.turnoDeEnemigo(e);
       await this.evaluar();
     }
     if (this.terminado) return;

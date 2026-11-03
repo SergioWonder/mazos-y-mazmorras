@@ -55,8 +55,8 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
   objetos enemigo**. Lo que uno aplica a un enemigo (Vulnerable, veneno, daño) se ve en el momento en el otro.
 - Turno de los héroes simultáneo: cada uno juega cartas cuando quiere; cada `jugar` se resuelve entero al llegar.
   Cuando **los dos** han enviado `finTurno`: final de turno de cada héroe y **un único turno enemigo**. Cada
-  movimiento de ataque elige objetivo entre los héroes vivos con el rng compartido (D2) y se ejecuta contra el
-  `Combate` de ese héroe. Después, inicio de turno de ambos.
+  movimiento enemigo alcanza a **cada héroe vivo** (D2), cada uno con su propio bloqueo, Vulnerable y reliquias
+  defensivas, y se ejecuta contra el `Combate` de cada uno. Después, inicio de turno de ambos.
 - Hay que separar en `Combate` el «fin de turno del héroe» de la «fase enemiga», y hacer que el estado ligado a los
   enemigos (intenciones ocultas, alternancia de grupos) exista una sola vez.
 - **Auditar el rng**: ningún código de presentación puede consumir el rng del motor ni cambiar el orden de las
@@ -67,8 +67,12 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
 
 - **Mapa**: cada uno vota un nodo. Si coinciden, se va; si no, **moneda** (cara gana el voto de cara, cruz el de cruz).
 - **Recompensas de cartas**: cada uno ve y elige las suyas, sin esperar al otro.
-- **Reliquias** (élite, jefe, cofre, misión): se ofrecen **dos** a la vez, cada uno elige una. Si eligen la misma,
-  moneda: el ganador se la queda y el otro se lleva la restante.
+- **Reliquias** (élite, jefe, cofre, misión): se ofrecen **dos** a la vez, cada uno elige una. Si entre las ofrecidas
+  hay una que solo encaja con la clase de uno de los dos, el otro ve en esa casilla **una reliquia de su propia clase**
+  (sorteada con el rng compartido entre las de su clase que aún no tiene), así que los dos siempre tienen dos
+  reliquias válidas y nadie se queda con las vendas. Si eligen la misma (una compartida), moneda: el ganador se la
+  queda y el otro se lleva la otra casilla **tal y como la ve él**. Solo si a un héroe no le queda ninguna reliquia
+  válida, vendas (+10 PV).
 - **Eventos**: cada uno elige su opción y le afecta solo a él. Si un evento cambia algo compartido (el mapa, la sala
   siguiente), moneda para decidir qué elección vale (D5).
 - **Descanso, tienda, taberna, bendiciones**: cada uno decide lo suyo.
@@ -76,9 +80,13 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
 
 ### Decisiones aplicadas (revertibles)
 
-- **D1.** Enemigos a dos: PV ×1,6 (el daño no cambia).
-- **D2.** Cada movimiento de ataque elige un héroe vivo al azar (rng compartido); un ataque de varios golpes va
-  entero al mismo.
+- **D1.** Enemigos a dos: PV ×1,6 (el daño no cambia). Vale también para los que se unen durante el combate
+  (invocados, escindidos, refuerzos, el que sale de la filacteria…); el Dungeon Master no se escala.
+- **D2.** (Sustituida.) El daño enemigo alcanza **a los dos héroes a la vez**: cada ataque, y cada efecto enemigo
+  dirigido a «el héroe» (debilitadores, estados, cartas que se añaden al mazo), se aplica a **cada héroe vivo**, cada
+  uno con su bloqueo, Vulnerable y reliquias defensivas. Un ataque de varios golpes da todos los golpes a los dos.
+  Ya no hay tirada de objetivo (no gasta rng). El Rayo del Dungeon Master también alcanza a los dos. Con el daño
+  efectivamente doblado, ×1,6 PV se mantiene salvo que bot contra bot muestre la partida imposible.
 - **D3.** Un héroe a 0 PV queda caído el resto del combate (sin turno). Si su compañero gana, se levanta con el 25 %
   de sus PV máximos. Si caen los dos, la run termina para ambos.
 - **D4.** El final secreto del DM vale si cualquiera de los dos lo consigue.
@@ -109,4 +117,4 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
   (`src/ui/partida-multi.ts`) reconstruye desde el guardado + log, aplica en orden lo que difunde la sala (sin predicción), pide
   `{t:'resync'}` si el hash no coincide y reconecta con espera creciente. Combate: la pantalla de solitario con los dos héroes
   (`pantallaCombate(…, multi)`); mapa con los dos votos; moneda (`src/ui/moneda.ts`); el resto de salas, un panel de elección genérico.
-  Las intenciones enemigas no muestran el héroe objetivo: el motor lo sortea al ejecutar el ataque (D2), no antes.
+  Las intenciones enemigas de ataque llevan la marca 👥 («os ataca a los dos») y el daño se anima sobre los dos héroes.

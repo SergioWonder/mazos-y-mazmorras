@@ -93,6 +93,8 @@ export interface LadoEnemigo {
   golpesPantallaDM: number;
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero: boolean;
+  /** HP scale of the enemies that join the fight (1.6 with two heroes, see multi/combate-duo.ts). */
+  factorPv: number;
 }
 
 /** What a combat needs to know when it is one of two heroes fighting the same enemies. */
@@ -209,7 +211,7 @@ export class Combate {
     this.enemigos = resolverVariantes(defs, rng).map((d) => crearEnemigo(d, rng));
     this.lado = {
       enemigos: this.enemigos, intencionesOcultas: new Set(), atacaronUltima: new Set(),
-      golpesPantallaDM: 0, finalVerdadero: false,
+      golpesPantallaDM: 0, finalVerdadero: false, factorPv: 1,
     };
     this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
     for (const e of this.enemigos) {
@@ -1075,7 +1077,7 @@ export class Combate {
   /** The Dungeon Master's ray: the hero dies outright. It skips infligir on
    *  purpose, so block, Mirror Image, invulnerability, summons and relic hooks
    *  never get a say. */
-  private async rayoDelDM(e: EnemigoCombate) {
+  private async rayoDelDM(e: EnemigoCombate, dialogar = true) {
     const j = this.jugador;
     const pv = j.pv;
     j.bloqueo = 0;
@@ -1086,7 +1088,7 @@ export class Combate {
     j.vivo = false;
     await this.ui.fxGolpe(j, pv, e.intencion.fx ?? 'divino'); // the UI draws it as the rayoDM spell
     await this.ui.fxMuerteHeroe?.();
-    await this.dialogoDM(e, FRASES_DM.rayo);
+    if (dialogar) await this.dialogoDM(e, FRASES_DM.rayo);
     await this.comprobarFin();
     this.ui.render();
   }
@@ -1161,7 +1163,7 @@ export class Combate {
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
         if (obj !== this.jugador && e.def.invocaAlMorir && this.tieneGuardianes(e.def.invocaAlMorir)) {
           await this.ui.fxEsperarMuerte?.(e); // the newcomer takes the slot once the body has fallen
-          const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
+          const liberado = this.escalarRecienLlegado(crearEnemigo(e.def.invocaAlMorir, this.rng));
           this.enemigos.push(liberado);
           await this.ui.fxMensaje(`¡De las entrañas de ${e.nombre} se alza ${liberado.nombre}!`);
           this.ui.render();
@@ -1190,7 +1192,7 @@ export class Combate {
     e.vivo = false;
     await this.ui.fxMuerte(e, causa);
     await this.ui.fxEsperarMuerte?.(e); // the phylactery takes his slot once the body has fallen
-    const fil = crearEnemigo(vasija, this.rng);
+    const fil = this.escalarRecienLlegado(crearEnemigo(vasija, this.rng));
     fil.pv = Math.min(fil.pvMax, e.filacteriaPv ?? fil.pvMax);
     fil.alma = { def: e.def, resurrecciones: e.alma?.resurrecciones ?? 0 };
     const i = this.enemigos.indexOf(e);
@@ -1204,7 +1206,7 @@ export class Combate {
   private async resucitarDeFilacteria(fil: EnemigoCombate) {
     const alma = fil.alma;
     if (!alma) return;
-    const liche = crearEnemigo(alma.def, this.rng);
+    const liche = this.escalarRecienLlegado(crearEnemigo(alma.def, this.rng));
     liche.filacteriaUsada = true; // back from the dead: his attacks feed on life
     liche.filacteriaPv = fil.pv;
     liche.alma = { def: alma.def, resurrecciones: alma.resurrecciones + 1 };
@@ -1280,7 +1282,7 @@ export class Combate {
     const llegan: EnemigoCombate[] = [];
     for (const def of sueno.despertar) {
       if (this.enemigos.filter((x) => x.vivo).length >= 5) break; // campo lleno
-      const nuevo = crearEnemigo(def, this.rng);
+      const nuevo = this.escalarRecienLlegado(crearEnemigo(def, this.rng));
       this.enemigos.push(nuevo);
       llegan.push(nuevo);
       await this.ui.fxMensaje(`¡${nuevo.nombre} también era un mímico!`);
@@ -1918,7 +1920,7 @@ export class Combate {
     // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
     for (const e of [...this.enemigos]) {
       if (!e.vivo || this.luchaAcabada()) continue;
-      await this.turnoDeEnemigo(e, () => this);
+      await this.turnoDeEnemigo(e);
     }
     this.coordinarGrupo(); // groups of three or more take turns for the coming round
     await this.cierreDeRondaA();
@@ -2014,9 +2016,8 @@ export class Combate {
   }
 
   /** One enemy's turn. Its upkeep (bleeding, poison, regeneration) runs here, on this hero's
-   *  account; its move is carried out by the hero `objetivo()` picks, asked only once the
-   *  enemy is sure to act (a roll of the shared rng in two-hero fights). */
-  async turnoDeEnemigo(e: EnemigoCombate, objetivo: () => Combate) {
+   *  account; its move reaches every living hero (see ejecutarMovimiento). */
+  async turnoDeEnemigo(e: EnemigoCombate) {
     // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
     // se cierra si durante tu turno no recibió daño no bloqueado.
     const hem = e.estados.hemorragia ?? 0;
@@ -2047,7 +2048,7 @@ export class Combate {
     }
     if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
     const fuerzaAntes = this.fuerzaEnemiga();
-    await objetivo().ejecutarMovimiento(e);
+    await this.ejecutarMovimiento(e);
     stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
     this.decrementarEstados(e);
     this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
@@ -2146,12 +2147,80 @@ export class Combate {
     delete j.estados.frenesi; // el Frenesí solo dura este turno
   }
 
+  /** One enemy attack against this hero: every hit, with his own block, Mirror Image, relics
+   *  and thorns. `atraveso` tells whether some hit got past the block and the summon;
+   *  `abortar` that the fight ended or the attacker died on the way (nothing else happens). */
+  private async golpesAlHeroe(e: EnemigoCombate, m: Movimiento): Promise<{ atraveso: boolean; abortar: boolean }> {
+    let atraveso = false;
+    const veces = m.veces ?? 1;
+    for (let i = 0; i < veces; i++) {
+      // a dead attacker (Thorns, a relic) stops its flurry and does nothing else
+      if (this.luchaAcabada() || !e.vivo) return { atraveso, abortar: true };
+      // a hero who fell in this very attack takes no more hits (his partner still does)
+      if (this.vinculo && !this.jugador.vivo) return { atraveso, abortar: false };
+      // Mirror Image: each charge prevents the next attack hit for sure (no roll)
+      const cargas = this.jugador.estados.espejismo ?? 0;
+      if (cargas > 0) {
+        this.jugador.estados.espejismo = cargas - 1;
+        if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
+        await this.ui.fxMensaje('🪞 ¡Ataque prevenido!');
+        this.ui.render();
+        if (veces > 1) await this.ui.espera(220);
+        continue;
+      }
+      const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(m)));
+      const bloqueoAntes = this.jugador.bloqueo;
+      // piercing hits go through the block without breaking it
+      this.atacanteActual = e;
+      let real = 0;
+      try {
+        real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+      } finally {
+        this.atacanteActual = null;
+      }
+      if (real > 0) atraveso = true;
+      // Vampiric: it heals part of the damage that got through
+      const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
+      if (sorbo > 0 && e.vivo) {
+        const cura = Math.min(sorbo, e.pvMax - e.pv);
+        if (cura > 0) {
+          e.pv += cura;
+          await this.ui.fxCura(e, cura);
+        }
+      }
+      if (!this.terminado) {
+        const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
+        await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
+      }
+      // Espinas: devuelve daño al atacante
+      const espinas = this.jugador.estados.espinas ?? 0;
+      if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');
+      if (veces > 1) await this.ui.espera(220);
+    }
+    return { atraveso, abortar: false };
+  }
+
+  /** An enemy that joins the fight takes the party's HP scale (two heroes) like the starting
+   *  ones do; the Dungeon Master never scales. */
+  private escalarRecienLlegado(e: EnemigoCombate): EnemigoCombate {
+    const f = this.lado.factorPv;
+    if (f !== 1 && !esDungeonMaster(e)) {
+      e.pvMax = Math.max(1, Math.round(e.pvMax * f));
+      e.pv = Math.max(1, Math.round(e.pv * f));
+    }
+    return e;
+  }
+
+  /** The enemy's move. It reaches every living hero (one in single player, both in a two-hero
+   *  fight), each with his own block, statuses and relics; what is not aimed at the heroes
+   *  (block, healing, summons…) happens once. The caller is whichever hero's combat leads. */
   async ejecutarMovimiento(e: EnemigoCombate) {
+    const heroes = this.heroesVivos();
     // The Dungeon Master's ray: nothing makes him skip it, nothing stops it
     if (e.intencion.mataAlInstante) {
       e.saltaAccion = false;
       await this.ui.fxEnemigoActua(e);
-      await this.rayoDelDM(e);
+      for (const [i, h] of heroes.entries()) await h.rayoDelDM(e, i === 0);
       return;
     }
     // Seducción/Deseo: el enemigo se salta esta acción
@@ -2169,60 +2238,30 @@ export class Combate {
     }
 
     // a poisoned blade only poisons if some hit got past your block and your summon
-    let atraveso = false;
+    const atraveso = new Map<Combate, boolean>();
+    // heroes the attack still reaches (roots crush it for the ones who cast them, see below)
+    let objetivos = heroes;
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
       // atacar el enemigo pierde PV igual a la DIFERENCIA (cuánto superan las
-      // raíces a su ataque), ignorando el bloqueo. Sin daño base extra.
-      const dolor = this.dolorRaices(e);
-      if (dolor !== null) {
+      // raíces a su ataque), ignorando el bloqueo. Sin daño base extra. First the enemy
+      // hurts itself for every hero whose attack is crushed, then it hits the others.
+      const aplastados: Combate[] = [];
+      for (const h of heroes) {
+        const dolor = h.dolorRaices(e);
+        if (dolor === null) continue;
+        aplastados.push(h);
         await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
         if (dolor > 0) await this.infligir(e, dolor, 'raices');
-        if (!this.terminado) await this.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));
-        return;
+        if (!this.terminado) await h.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));
       }
-      const veces = m.veces ?? 1;
-      for (let i = 0; i < veces; i++) {
-        // a dead attacker (Thorns, a relic) stops its flurry and does nothing else
-        if (this.terminado || !e.vivo) return;
-        // Mirror Image: each charge prevents the next attack hit for sure (no roll)
-        const cargas = this.jugador.estados.espejismo ?? 0;
-        if (cargas > 0) {
-          this.jugador.estados.espejismo = cargas - 1;
-          if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
-          await this.ui.fxMensaje('🪞 ¡Ataque prevenido!');
-          this.ui.render();
-          if (veces > 1) await this.ui.espera(220);
-          continue;
-        }
-        const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(m)));
-        const bloqueoAntes = this.jugador.bloqueo;
-        // piercing hits go through the block without breaking it
-        this.atacanteActual = e;
-        let real = 0;
-        try {
-          real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
-        } finally {
-          this.atacanteActual = null;
-        }
-        if (real > 0) atraveso = true;
-        // Vampiric: it heals part of the damage that got through
-        const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
-        if (sorbo > 0 && e.vivo) {
-          const cura = Math.min(sorbo, e.pvMax - e.pv);
-          if (cura > 0) {
-            e.pv += cura;
-            await this.ui.fxCura(e, cura);
-          }
-        }
-        if (!this.terminado) {
-          const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
-          await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
-        }
-        // Espinas: devuelve daño al atacante
-        const espinas = this.jugador.estados.espinas ?? 0;
-        if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');
-        if (veces > 1) await this.ui.espera(220);
+      if (aplastados.length === heroes.length) return;
+      if (aplastados.length > 0 && (!e.vivo || this.luchaAcabada())) return;
+      objetivos = heroes.filter((h) => !aplastados.includes(h));
+      for (const h of objetivos) {
+        const r = await h.golpesAlHeroe(e, m);
+        atraveso.set(h, r.atraveso);
+        if (r.abortar) return;
       }
     }
     if (m.bloqueo) {
@@ -2258,10 +2297,18 @@ export class Combate {
     }
     if (m.efectos) {
       for (const [estado, n, sobreJugador] of m.efectos) {
-        if (estado === 'veneno' && sobreJugador && m.dano !== undefined && !atraveso) continue;
-        const obj = sobreJugador ? this.jugador : e;
-        obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
-        await this.ui.fxEstado(obj, estado, n);
+        if (!sobreJugador) {
+          e.estados[estado] = (e.estados[estado] ?? 0) + n;
+          await this.ui.fxEstado(e, estado, n);
+          continue;
+        }
+        // aimed at «the hero»: every hero the attack reached takes it
+        for (const h of objetivos) {
+          if (h.vinculo && !h.jugador.vivo) continue;
+          if (estado === 'veneno' && m.dano !== undefined && !atraveso.get(h)) continue;
+          h.jugador.estados[estado] = (h.jugador.estados[estado] ?? 0) + n;
+          await h.ui.fxEstado(h.jugador, estado, n);
+        }
       }
     }
     if (m.invocar) {
@@ -2269,12 +2316,17 @@ export class Combate {
         if (this.enemigos.filter((x) => x.vivo).length >= 5) break; // campo lleno
         const nuevo = crearEnemigo(inv.def, this.rng);
         nuevo.pv = nuevo.pvMax = inv.pv;
+        this.escalarRecienLlegado(nuevo);
         this.enemigos.push(nuevo);
         await this.ui.fxMensaje(`¡${e.nombre} invoca a ${nuevo.nombre}!`);
         this.ui.render();
       }
     }
-    if (m.maldicion && !this.terminado) await this.meterMaldicion(m.maldicion.id, m.maldicion.destino, e);
+    if (m.maldicion) {
+      for (const h of objetivos) {
+        if (!h.terminado) await h.meterMaldicion(m.maldicion.id, m.maldicion.destino, e);
+      }
+    }
     if (m.devorar) {
       const presa = this.enemigos
         .filter((x) => x.vivo && x !== e)

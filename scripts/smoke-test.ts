@@ -33,6 +33,7 @@ import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
 import { CombateDuo } from '../src/core/multi/combate-duo.ts';
+import { ofertasPorHeroe } from '../src/core/multi/salas.ts';
 import {
   crearPartidaMulti, serializarPartidaMulti, rehidratarPartidaMulti, esPuntoDeGuardado, pendiente, esValida, aplicar,
   hashPartida, decisionBot, HUECOS, type PartidaMulti, type EntradaSellada, type Hueco,
@@ -10375,9 +10376,52 @@ try {
     check(!duo.puedeJugar('cara', carta), 'quien ya terminó el turno no puede jugar más cartas');
     check(duo.puedeJugar('cruz', duo.combates.cruz.jugador.mano.find((c) => c.def.coste <= 1 && c.def.tipo !== 'maldicion')!), 'el compañero sigue jugando');
     await duo.terminarTurno('cruz');
-    const perdidas = [pvCara - duo.combates.cara.jugador.pv, pvCruz - duo.combates.cruz.jugador.pv].sort();
-    check(e.turnosVisto === 1 && perdidas[0] === 0 && perdidas[1] === 7, 'con los dos finTurno hay un único turno enemigo y su golpe cae en un solo héroe');
+    const perdidas = [pvCara - duo.combates.cara.jugador.pv, pvCruz - duo.combates.cruz.jugador.pv];
+    check(e.turnosVisto === 1 && perdidas[0] === 7 && perdidas[1] === 7, 'con los dos finTurno hay un único turno enemigo y su golpe cae en los dos héroes');
     check(duo.combates.cara.turno === 2 && duo.combates.cruz.turno === 2 && !duo.finTurno.cara && !duo.finTurno.cruz, 'después empieza el turno siguiente de ambos');
+  }
+
+  // Enemy damage hits both heroes at once, each with his own block; a multi-hit lands every hit on both
+  {
+    const multigolpe: EnemigoDef = {
+      id: 'multigolpe-test', nombre: 'Multigolpe', arte: '👾', pv: [40, 40],
+      ia: () => ({ nombre: 'Ráfaga', intencion: 'ataque', dano: 3, veces: 2 }),
+    };
+    const duo = await nuevoDuo([multigolpe]);
+    const [cara, cruz] = [duo.combates.cara, duo.combates.cruz];
+    cara.jugador.bloqueo = 4; // only cara has block
+    const [pvCara, pvCruz] = [cara.jugador.pv, cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvCara - cara.jugador.pv === 2 && pvCruz - cruz.jugador.pv === 6,
+      `un ataque de varios golpes cae entero en los dos, cada uno con su bloqueo (cara −${pvCara - cara.jugador.pv}, cruz −${pvCruz - cruz.jugador.pv})`);
+  }
+
+  // D1 also for the enemies that join the fight (summons); the Dungeon Master is never scaled
+  {
+    const invocador: EnemigoDef = {
+      id: 'invocador-test', nombre: 'Invocador', arte: '👾', pv: [100, 100],
+      ia: () => ({ nombre: 'Llamada', intencion: 'mejora', invocar: [{ def: pegador(1, 10), pv: 10 }] }),
+    };
+    const duo = await nuevoDuo([invocador]);
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    const nuevo = duo.enemigos.find((x) => x.def.id === 'pegador-test');
+    check(!!nuevo && nuevo.pvMax === 16 && nuevo.pv === 16, `el enemigo invocado en combate también lleva los PV ×1,6 (10 → ${nuevo?.pvMax})`);
+  }
+
+  // Relics: a class relic that does not fit a hero becomes one of his own class
+  {
+    const RQr = await import('../src/core/reliquias.ts');
+    const p = crearPartidaMulti({ semilla: 3, clases: { cara: 'druida', cruz: 'barbaro' } });
+    const deClase = RQr.reliquiaPorId('semilla-roble')!;
+    const comun = RQr.reliquiasDisponibles(p.runs.cara).find((r) => !r.soloClase && r.rareza === 'comun')!;
+    const oferta = ofertasPorHeroe(p, [deClase, comun], 'cofre');
+    const ids = (h: Hueco) => oferta[h].map((r) => r.id);
+    check(deClase.soloClase === 'druida' && ids('cara').join() === [deClase.id, comun.id].join(), 'quien encaja con la reliquia de clase la ve tal cual');
+    check(oferta.cruz.length === 2 && oferta.cruz[0].soloClase === 'barbaro' && oferta.cruz[1].id === comun.id
+      && oferta.cruz.every((r) => RQr.reliquiasDisponibles(p.runs.cruz).some((x) => x.id === r.id)),
+      'el otro ve en esa casilla una reliquia de su propia clase y conserva la compartida');
   }
 
   // Downed hero: out for the rest of the fight, back up (25 %) when the partner wins
