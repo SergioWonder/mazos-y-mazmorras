@@ -18,15 +18,33 @@ export function bearerToken(header: string | undefined): string | null {
   return m ? m[1] : null;
 }
 
-/** Requires a valid session; puts the player in `c.var.user`. */
-export const requireUser = createMiddleware<AppEnv>(async (c, next) => {
-  const token = bearerToken(c.req.header('authorization'));
-  if (!token) return c.json({ error: 'unauthorized' }, 401);
-  const row = await c.env.DB.prepare(
+/** The player a session token belongs to, or null when it is unknown or expired. */
+export async function userForToken(db: D1Database, token: string): Promise<User | null> {
+  return db.prepare(
     `SELECT u.id, u.email, u.display_name AS displayName
        FROM sessions s JOIN users u ON u.id = s.user_id
       WHERE s.token_hash = ? AND s.expires_at > ?`,
   ).bind(await sha256(token), Date.now()).first<User>();
+}
+
+/** Requires a valid session; puts the player in `c.var.user`. */
+export const requireUser = createMiddleware<AppEnv>(async (c, next) => {
+  const token = bearerToken(c.req.header('authorization'));
+  if (!token) return c.json({ error: 'unauthorized' }, 401);
+  const row = await userForToken(c.env.DB, token);
+  if (!row) return c.json({ error: 'unauthorized' }, 401);
+  c.set('user', row);
+  await next();
+});
+
+/**
+ * Like `requireUser` for WebSocket upgrades: browsers cannot set `Authorization` on a WebSocket, so the session
+ * token travels in the `Sec-WebSocket-Protocol` header (echoed back by the Durable Object) or in `?token=`.
+ */
+export const requireUserWs = createMiddleware<AppEnv>(async (c, next) => {
+  if (c.req.header('upgrade')?.toLowerCase() !== 'websocket') return c.json({ error: 'upgrade_required' }, 426);
+  const token = c.req.header('sec-websocket-protocol')?.split(',')[0]?.trim() || c.req.query('token');
+  const row = token ? await userForToken(c.env.DB, token) : null;
   if (!row) return c.json({ error: 'unauthorized' }, 401);
   c.set('user', row);
   await next();

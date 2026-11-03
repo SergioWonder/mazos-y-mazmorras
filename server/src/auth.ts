@@ -66,7 +66,13 @@ export function authRoutes(deps: Deps) {
     const body = await readJson<{ displayName: unknown }>(c.req);
     const name = typeof body.displayName === 'string' ? body.displayName.trim().replace(/\s+/g, ' ') : '';
     if ([...name].length < 2 || [...name].length > 24) return c.json({ error: 'invalid_display_name' }, 400);
-    await c.env.DB.prepare('UPDATE users SET display_name = ? WHERE id = ?').bind(name, c.var.user.id).run();
+    try {
+      await c.env.DB.prepare('UPDATE users SET display_name = ? WHERE id = ?').bind(name, c.var.user.id).run();
+    } catch (err) {
+      // The unique index on lower(display_name) also covers the race between two concurrent renames.
+      if (String(err).includes('UNIQUE')) return c.json({ error: 'name_taken' }, 409);
+      throw err;
+    }
     return c.json({ ...c.var.user, displayName: name });
   });
 

@@ -3,6 +3,9 @@ import { cors } from 'hono/cors';
 import { authRoutes } from './auth.ts';
 import { runsRoutes } from './runs.ts';
 import { savesRoutes } from './saves.ts';
+import { multiRoutes } from './multi.ts';
+import { pushRoutes } from './subscriptions.ts';
+import { usersRoutes } from './users.ts';
 import type { AppEnv, Deps } from './types.ts';
 
 export type { Deps, Mailer, MagicLinkEmail } from './types.ts';
@@ -22,5 +25,8 @@ export function createApp(deps: Deps) {
   app.route('/', authRoutes(deps));
   app.route('/', savesRoutes());
   app.route('/', runsRoutes());
+  app.route('/', usersRoutes());
+  app.route('/', multiRoutes());
+  app.route('/', pushRoutes());
   return app;
 }

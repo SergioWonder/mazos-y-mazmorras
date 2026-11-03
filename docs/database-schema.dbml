@@ -4,7 +4,7 @@
 Table users {
   id text [pk, note: 'UUID']
   email text [not null, unique, note: 'lowercased; login is by magic link, no password']
-  display_name text [note: 'shown on the leaderboard, 2-24 chars']
+  display_name text [note: 'shown on the leaderboard, 2-24 chars; unique ignoring case (index on lower(display_name))']
   created_at integer [not null]
 }
 
@@ -60,5 +60,35 @@ Table runs {
   indexes {
     (user_id, created_at) [name: 'idx_runs_user']
     (hero_class, result, chapter, floor, turns) [name: 'idx_runs_leaderboard']
+  }
+}
+
+
+Table multi_games {
+  id text [pk, note: 'UUID; also the name of the game\'s Sala Durable Object']
+  host_user_id text [not null, ref: > users.id, note: 'plays `cara`']
+  guest_user_id text [ref: > users.id, note: 'plays `cruz`; NULL = the debugging bot']
+  host_class text [not null]
+  guest_class text [note: 'NULL while the invitation is pending']
+  status text [not null, note: "'invited' | 'declined' | 'active' | 'finished'"]
+  created_at integer [not null]
+  updated_at integer [not null]
+
+  indexes {
+    (host_user_id, status) [name: 'idx_multi_games_host']
+    (guest_user_id, status) [name: 'idx_multi_games_guest']
+    (host_user_id, guest_user_id) [unique, name: 'idx_multi_games_pending', note: "partial: WHERE status = 'invited' (one pending invitation per pair)"]
+  }
+}
+
+Table push_subscriptions {
+  endpoint text [pk, note: 'Web Push endpoint of one browser/device']
+  user_id text [not null, ref: > users.id]
+  p256dh text [not null, note: 'browser public key, base64url']
+  auth text [not null, note: 'browser auth secret, base64url']
+  created_at integer [not null]
+
+  indexes {
+    user_id [name: 'idx_push_subscriptions_user']
   }
 }
