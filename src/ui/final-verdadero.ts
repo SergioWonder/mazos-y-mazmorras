@@ -49,9 +49,7 @@ export function pantallaFinalVerdadero(clase: ClaseId): Promise<void> {
         <div class="fv-asientos fv-derecha"></div>
       </div>
       <div class="fv-final">
-        <p class="fv-texto">Sedujiste al Dungeon Master con un 20 natural, y la mesa entera
-        logró lo imposible: <strong>cuadrar agendas</strong>. La próxima sesión es el sábado
-        a las 17:00. Trae dados.</p>
+        <p class="fv-texto">Conseguisteis agendar la próxima sesión con éxito.</p>
         <p class="fin-sub">Campaña completada con el ${NOMBRE_CLASE[clase]} · ¡Final verdadero!</p>
         <button class="btn-tomar fv-volver">Volver al título <span class="atajo">[Enter]</span></button>
       </div>

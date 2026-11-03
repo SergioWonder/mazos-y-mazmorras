@@ -11,7 +11,8 @@ import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { finalVerdaderoDesbloqueado } from '../core/escena-final.ts';
 
-export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' } | { tipo: 'recargar' };
+export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' } | { tipo: 'recargar' }
+  | { tipo: 'final-verdadero'; clase: ClaseId }; // replay from the leaderboard
 
 let recargarTitulo: (() => void) | null = null;
 
@@ -129,7 +130,9 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     };
     window.addEventListener('keydown', teclado);
 
+    let terminado = false;
     function terminar(eleccion: EleccionTitulo) {
+      terminado = true;
       window.removeEventListener('keydown', teclado);
       recargarTitulo = null;
       registrarAccesosMenuPrincipal(null);
@@ -140,7 +143,9 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     recargarTitulo = () => terminar({ tipo: 'recargar' });
 
     botones.forEach((b) => b.addEventListener('click', () => void activar(b)));
-    raiz.querySelector('.titulo-clasificacion')!.addEventListener('click', () => void superponer(pantallaClasificacion));
+    // the leaderboard can replay the true ending (triple click on the player's own DM medal)
+    const clasificacion = () => pantallaClasificacion({ repetirFinal: (clase) => terminar({ tipo: 'final-verdadero', clase }) });
+    raiz.querySelector('.titulo-clasificacion')!.addEventListener('click', () => void superponer(clasificacion));
 
     // Overlays (compendium, gallery, confirmation) pause the title's keyboard navigation
     // while open; only one at a time, whether opened here or from the settings panel
@@ -152,7 +157,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       try {
         return await abrir();
       } finally {
-        window.addEventListener('keydown', teclado);
+        if (!terminado) window.addEventListener('keydown', teclado); // an overlay may have ended the title
         superpuesta = false;
       }
     }
@@ -160,7 +165,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     registrarAccesosMenuPrincipal({
       compendio: () => void superponer(pantallaCompendio),
       galeria: () => void superponer(showGallery),
-      clasificacion: () => void superponer(pantallaClasificacion),
+      clasificacion: () => void superponer(clasificacion),
     });
   });
 }
