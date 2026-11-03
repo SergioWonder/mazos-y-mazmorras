@@ -5,6 +5,8 @@
   "name": "dracs-and-rogues",
   "compatibility_date": "2026-11-01",
   "workers_dev": true,
+  // Linked to the morghur.es zone (Workers custom domain, certificate managed by Cloudflare).
+  "routes": [{ "pattern": "dracs-and-rogues.morghur.es", "custom_domain": true }],
   "assets": {
     "directory": "./dist"
   }

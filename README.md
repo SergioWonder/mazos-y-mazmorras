@@ -6,7 +6,10 @@ elegidos al azar en cada partida: el Acto I es **El Asentamiento Ogro** o **La
 Guarida de los Contrabandistas**; el Acto II, **La Cripta** o **El Templo Oscuro**;
 el Acto III, **La Guarida del Dragón** o **El Laberinto del Contemplador**.
 
-🎮 **Jugar**: https://sergiowonder.github.io/mazos-y-mazmorras/
+🎮 **Jugar**: https://dracs-and-rogues.morghur.es/
+
+La copia de GitHub Pages (`sergiowonder.github.io/mazos-y-mazmorras/`) sigue publicándose solo para mudar
+el progreso local de quien entra por la dirección antigua (`src/core/migracion.ts`, variable del repo `GAME_URL`).
 
 ## Ejecutar
 
