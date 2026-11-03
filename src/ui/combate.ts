@@ -233,6 +233,8 @@ export function pantallaCombate(
     };
     const spriteInvocacion = (): PuppetSprite | null => spriteInvocacionDe(combate);
     const spriteActual = (): HeroSprite => {
+      const muerto = cadaveres.get(combate.jugador);
+      if (muerto) return muerto; // he fell in that shape: the corpse stays as it was
       const f = formaActual();
       if (!f) return heroSprite;
       let s = formSprites.get(f);
@@ -275,6 +277,23 @@ export function pantallaCombate(
     let lanzadorMulti: Luchador | null = null;
     const lanzador = (): Luchador => lanzadorMulti ?? combate.jugador;
     const spriteDe = (obj: Luchador): HeroSprite | null => (obj === combate.jugador ? spriteActual() : spriteCompaneroActual());
+    /** Heroes already lying on the field (two players), with the puppet they fell as. */
+    const caidos = new Set<Luchador>();
+    const cadaveres = new Map<Luchador, HeroSprite>();
+    /** Two players: a hero who drops plays his death right then and stays there as a corpse, while the fight goes on. */
+    async function caer(obj: Luchador) {
+      if (!duo || caidos.has(obj)) return;
+      caidos.add(obj);
+      const { x, y } = centroDe(elemDe(obj));
+      audio.sfx('muerte');
+      fx.emitir('muerte', x, y);
+      sacudir(3);
+      const sprite = spriteDe(obj);
+      if (sprite) cadaveres.set(obj, sprite);
+      const ms = sprite?.fall() ?? 0;
+      render();
+      await espera(ms + 250);
+    }
 
     // ── Spell VFX: each card fx key has its own composition (fx/spell-fx.ts) ─
     /** Effect of the card being played and who has already shown it. */
@@ -499,6 +518,7 @@ export function pantallaCombate(
         }
         alImpactar();
         await espera(260);
+        if (duo && esHeroe(obj) && obj.pv <= 0) await caer(obj);
       },
       async fxBloqueo(obj, n) {
         await impactos.settle();
@@ -575,8 +595,9 @@ export function pantallaCombate(
         await espera(900);
       },
       async fxMuerteHeroe() {
-        // wait for the bolt to land, then the hero collapses and fades for good
+        // wait for the bolt to land, then the hero collapses and fades for good (two players: stays as a corpse)
         await espera(380);
+        if (duo) return void (await caer(combate.jugador));
         audio.sfx('muerte');
         sacudir(3);
         spriteActual().play('death');
@@ -668,6 +689,8 @@ export function pantallaCombate(
     let formaMostradaCompanero: FormId | null = null;
     const formaCompanero = (): FormId | null => (companero ? currentForm(companero.jugador.efectosTemporales) : null);
     const spriteCompaneroActual = (): HeroSprite | null => {
+      const muerto = companero ? cadaveres.get(companero.jugador) : undefined;
+      if (muerto) return muerto;
       const f = formaCompanero();
       if (!f || !spriteCompanero) return spriteCompanero;
       let s = formSpritesCompanero.get(f);
@@ -686,7 +709,14 @@ export function pantallaCombate(
       while (!cond() && rechazos === r0 && !resuelto && performance.now() - t0 < maxMs) await new Promise<void>((r) => setTimeout(r, 40));
     };
     /** The partner's presenter: the same effects, and his summon animates on its own puppet. */
-    const uiCompanero: Presentador = { ...ui, ...fxInvocacionDe(() => companero!) };
+    const uiCompanero: Presentador = {
+      ...ui,
+      ...fxInvocacionDe(() => companero!),
+      async fxMuerteHeroe() {
+        await espera(380);
+        await caer(companero!.jugador);
+      },
+    };
     /** Tears the screen down without ending the fight (the game is being rebuilt). */
     let destruirVista: () => void = () => {};
     if (multi) {
@@ -1051,6 +1081,7 @@ export function pantallaCombate(
         if (forma) actual.play('spell');
         formaMostrada = forma;
       }
+      if (duo && !j.vivo) void caer(j);
       if (companero) renderCompanero();
     }
 
@@ -1086,6 +1117,7 @@ export function pantallaCombate(
         if (forma) sprite.play('spell'); // a new form arrives with a roar
         formaMostradaCompanero = forma;
       }
+      if (!cj.vivo) void caer(cj);
       // his summon, on its own puppet, a little further right so the two parties do not pile up
       const invHtml = renderInvocacionHTML(companero!, 'invocacion-companero');
       if (invHtml) {
@@ -1790,7 +1822,7 @@ export function pantallaCombate(
           audio.sfx('impacto', 0.7);
           audio.fundirMusica(seq.music.level, seq.music.seconds);
         },
-        caida: () => heroe.play('death'),
+        caida: () => { if (!caidos.has(combate.jugador)) heroe.play('death'); },
         estallido: () => { fx.hechizo(tema.spell, caja, { mirando: 1 }); },
         vineta: () => {}, // CSS: the vignette starts on its own delay
         gong: () => audio.gongFunebre(),

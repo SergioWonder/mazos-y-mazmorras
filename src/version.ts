@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.1.0';
+export const VERSION = '10.1.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.1.1',
+    fecha: '2026-11-04',
+    cambios: [
+      '💀 En combate a dos, quien cae se desploma en ese mismo momento y su cuerpo se queda en el suelo mientras el otro sigue luchando.',
+    ],
+  },
   {
     version: '10.1.0',
     fecha: '2026-11-04',

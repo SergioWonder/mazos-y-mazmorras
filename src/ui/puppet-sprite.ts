@@ -13,7 +13,7 @@
 // restarting the animation. All sprites share one requestAnimationFrame loop.
 
 import {
-  EMISSIVE, EYES, LIT_EDGES, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION,
+  EMISSIVE, EYES, LIT_EDGES, activeAction, puppetImpact, emitterWorld, applyMatrix, ACTION_DURATION, CORPSE_ACTION, CORPSE_OPACITY,
   type Action, type ActionType, type BoneId, type Burst, type EffectGeometry, type Effects, type Matrix, type Pose, type PuppetRig, type Shape,
 } from '../fx/puppet.ts';
 import { PuppetAnimator, SMEAR_GHOSTS, rigSmears, smearBonesOf, type Ghost } from '../fx/animator.ts';
@@ -315,6 +315,8 @@ export class PuppetSprite {
   private readonly stage: PuppetStage | null;
   private action: Action | null = null;
   private gone = false;
+  /** Fell and stays on the field as a corpse (two players), instead of fading out. */
+  private corpse = false;
   private readonly mirrored: boolean;
   // particle emission (bosses)
   private lastT = -1;
@@ -366,6 +368,7 @@ export class PuppetSprite {
 
   /** Starts an action; returns the ms until the blow lands (0 when not an attack). */
   play(type: ActionType): number {
+    if (this.corpse) return 0; // a corpse does not flinch, swing or cast
     this.gone = false;
     this.action = { type, t0: clock };
     const impact = type === 'attack' ? ACTION_DURATION.attack * puppetImpact(this.rig) : 0;
@@ -379,8 +382,21 @@ export class PuppetSprite {
     this.intensity = k;
   }
 
+  /** Plays the death but leaves the body down on the field, still and dimmed (a fallen hero in a two-player fight).
+   *  Returns the ms the fall takes. */
+  fall(): number {
+    if (this.corpse) return 0;
+    this.play('death');
+    this.corpse = true;
+    return ACTION_DURATION.death * 1000;
+  }
+
+  /** Whether it already lies there as a corpse. */
+  get fallen(): boolean { return this.corpse; }
+
   /** Back to idle and visible (e.g. after a death in the gallery). */
   reset() {
+    this.corpse = false;
     this.gone = false;
     this.action = null;
   }
@@ -457,13 +473,15 @@ export class PuppetSprite {
   }
 
   tick(t: number) {
-    const act = activeAction(this.action, t);
-    if (!act) {
+    let act = activeAction(this.action, t);
+    if (!act && this.corpse) act = CORPSE_ACTION; // the fall is over: the body stays down
+    else if (!act) {
       // a finished death leaves the puppet gone until the next action
       if (this.action?.type === 'death') this.gone = true;
       this.action = null;
     }
     const { p, fx, bones, geo, ghosts, smearBones } = this.animator.frame(t, act);
+    if (this.corpse) fx.opacity = Math.max(fx.opacity, CORPSE_OPACITY);
     if (this.gpu) {
       this.gpu.visible = this.visible;
       this.gpu.frame = { pose: p, fx, bones, geo, gone: this.gone, ghosts, smearBones };
