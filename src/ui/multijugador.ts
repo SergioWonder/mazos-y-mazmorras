@@ -1,7 +1,7 @@
 // Multiplayer lobby: invite a player (or the debugging bot), answer invitations, resume games and switch on Web Push.
 // Opens from the title screen's «Multijugador» button, or on a given game from a notification (`?sala=<id>`).
 
-import { nube, type PartidaMulti, type ResultadoInvitar } from '../core/nube.ts';
+import { nube, type Companero, type PartidaMulti, type ResultadoInvitar } from '../core/nube.ts';
 import type { ClaseId } from '../core/types.ts';
 import { PV_POR_CLASE } from '../core/run.ts';
 import { alEventoBuzon } from './avisos-multi.ts';
@@ -145,6 +145,7 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
     document.body.appendChild(capa);
 
     let partidas: PartidaMulti[] | null = null;
+    let companeros: Companero[] = []; // players I have played with, friends first
     let cargando = true;
     let nota = '';
     let notaError = false;
@@ -163,9 +164,10 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
       const mia = ++peticion;
       cargando = true;
       pintar();
-      const lista = await nube.partidasMulti();
+      const [lista, comp] = await Promise.all([nube.partidasMulti(), nube.companeros()]);
       if (mia !== peticion || cerrado) return;
       partidas = lista;
+      companeros = comp ?? companeros;
       cargando = false;
       if (lista === null && nube.haySesion()) avisar('Sin conexión: no se pudo cargar tu lista de partidas.', true);
       pintar();
@@ -237,6 +239,15 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
       if (juego) void entrar(juego, false); // the host was already told by the server
     }
 
+    /** Saves or forgets a past partner as a friend (the list redraws at once, the server follows). */
+    async function cambiarAmigo(c: Companero) {
+      const amigo = !c.amigo;
+      companeros = companeros.map((x) => (x.id === c.id ? { ...x, amigo } : x));
+      pintar();
+      const res = await nube.marcarAmigo(c.id, amigo);
+      if (res !== 'ok') { avisar('No se pudo guardar el cambio. Inténtalo de nuevo.', true); void cargar(); }
+    }
+
     async function rechazar(p: PartidaMulti) {
       ocupado = true; pintar();
       await nube.rechazarInvitacion(p.id);
@@ -285,7 +296,10 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
       if (nota) cuerpo.appendChild(el('p', `multi-nota${notaError ? ' multi-nota-error' : ''}`, '')).textContent = nota;
 
       // 1. Invite
-      const invitar_ = seccion('✉️ Invitar a un jugador', 'Escribe el nombre exacto de un aventurero (no importan las mayúsculas).');
+      const amigos = companeros.filter((c) => c.amigo);
+      const invitar_ = seccion('✉️ Invitar a un jugador', amigos.length
+        ? 'Escribe el nombre de un aventurero o elige a uno de tus amigos.'
+        : 'Escribe el nombre exacto de un aventurero (no importan las mayúsculas).');
       const form = el('form', 'cuenta-form');
       const input = el('input', 'cuenta-input') as HTMLInputElement;
       input.type = 'text';
@@ -295,6 +309,19 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
       input.value = nombreInvitado;
       input.disabled = ocupado;
       input.addEventListener('input', () => { nombreInvitado = input.value; });
+      // autocomplete with my friends (the browser's own suggestion list, also on phones)
+      if (amigos.length) {
+        const lista = el('datalist') as HTMLDataListElement;
+        lista.id = 'multi-amigos';
+        for (const a of amigos) {
+          const o = el('option') as HTMLOptionElement;
+          o.value = a.nombre;
+          lista.appendChild(o);
+        }
+        input.setAttribute('list', lista.id);
+        input.autocomplete = 'off';
+        form.appendChild(lista);
+      }
       const enviar = el('button', 'btn-tomar', 'Invitar') as HTMLButtonElement;
       enviar.type = 'submit';
       enviar.disabled = ocupado;
@@ -307,8 +334,21 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
         void invitar(nombre);
       });
       invitar_.appendChild(form);
+      // one tap on a friend fills the name in
+      if (amigos.length) {
+        const chips = el('div', 'multi-amigos');
+        for (const a of amigos) {
+          const b = el('button', 'multi-amigo') as HTMLButtonElement;
+          b.type = 'button';
+          b.textContent = `⭐ ${a.nombre}`;
+          b.disabled = ocupado;
+          b.addEventListener('click', () => { nombreInvitado = a.nombre; input.value = a.nombre; input.focus(); });
+          chips.appendChild(b);
+        }
+        invitar_.appendChild(chips);
+      }
       invitar_.appendChild(boton('🤖 Jugar con un bot', () => void invitar('bot'), 'multi-bot'));
-      invitar_.appendChild(el('small', 'cuenta-ayuda', 'El bot es para depurar: de momento no juega nada.'));
+      invitar_.appendChild(el('small', 'cuenta-ayuda', 'El bot juega la primera carta que puede: sirve para probar.'));
       cuerpo.appendChild(invitar_);
 
       if (cargando && !partidas) { cuerpo.appendChild(el('p', 'multi-ayuda', 'Cargando tus partidas…')); }
@@ -356,7 +396,24 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
         cuerpo.appendChild(el('p', 'multi-ayuda multi-vacio', 'Todavía no tienes partidas ni invitaciones.'));
       }
 
-      // 5. Web Push
+      // 5. Past partners: save them as friends to invite them in a tap
+      if (companeros.length) {
+        const s = seccion('⭐ Compañeros de aventura', 'Guarda como amigos a quienes ya han jugado contigo: te saldrán al escribir su nombre.');
+        const ul = el('ul', 'multi-lista');
+        for (const c of companeros) {
+          const f = el('li', 'multi-fila');
+          const t = el('span', 'multi-fila-texto');
+          t.textContent = `${c.amigo ? '⭐ ' : ''}${c.nombre}`;
+          const a = el('span', 'multi-fila-acciones');
+          a.append(boton(c.amigo ? 'Quitar de amigos' : '⭐ Guardar como amigo', () => void cambiarAmigo(c), c.amigo ? 'multi-aviso-no' : ''));
+          f.append(t, a);
+          ul.appendChild(f);
+        }
+        s.appendChild(ul);
+        cuerpo.appendChild(s);
+      }
+
+      // 6. Web Push
       if (push !== 'no-soportado') {
         const s = seccion('🔔 Avisos');
         const filaPush = el('label', 'menu-ajustes-fila ajuste-interruptor');

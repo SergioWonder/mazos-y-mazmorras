@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.0.1';
+export const VERSION = '10.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.1.0',
+    fecha: '2026-11-04',
+    cambios: [
+      '⭐ Guarda como amigos a quienes ya han jugado contigo (en «Multijugador» → Compañeros de aventura): te aparecen al escribir el nombre para invitar y con un toque se rellena.',
+      '🐺 En combate a dos ves las transformaciones de tu compañero y su invocación, con su propia figura, a su lado.',
+      '🤖 El bot se toma su tiempo entre jugada y jugada, como una persona.',
+    ],
+  },
   {
     version: '10.0.1',
     fecha: '2026-11-04',

@@ -219,15 +219,19 @@ export function pantallaCombate(
       ultimaCampana = t;
       setTimeout(() => audio.sfx('campanaCondena'), DOOM_TOLL_AT * 1000);
     };
-    const spritesInvocacion = new Map<string, PuppetSprite>();
-    const spriteInvocacion = (): PuppetSprite | null => {
-      const inv = combate.jugador.invocacion;
+    /** Invocation puppets of each hero on screen (mine and, with two players, the partner's), by form. */
+    const spritesInvocacion = new Map<Combate, Map<string, PuppetSprite>>();
+    const spriteInvocacionDe = (c: Combate): PuppetSprite | null => {
+      const inv = c.jugador.invocacion;
       const rig = inv && INVOCATION_RIGS[inv.forma];
       if (!inv || !rig) return null;
-      let s = spritesInvocacion.get(inv.forma);
-      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', rim: luzLuna, stage }); spritesInvocacion.set(inv.forma, s); }
+      let propios = spritesInvocacion.get(c);
+      if (!propios) { propios = new Map(); spritesInvocacion.set(c, propios); }
+      let s = propios.get(inv.forma);
+      if (!s) { s = new PuppetSprite(rig, { style: 'illustrated', rim: luzLuna, stage }); propios.set(inv.forma, s); }
       return s;
     };
+    const spriteInvocacion = (): PuppetSprite | null => spriteInvocacionDe(combate);
     const spriteActual = (): HeroSprite => {
       const f = formaActual();
       if (!f) return heroSprite;
@@ -262,13 +266,15 @@ export function pantallaCombate(
       const idx = combate.enemigos.indexOf(obj as EnemigoCombate);
       return raiz.querySelector(`.enemigo[data-idx="${idx}"]`);
     };
-    const elemInvocacion = (): HTMLElement | null => raiz.querySelector('.invocacion');
+    /** The invocation box of a hero: mine, or the partner's (two players). */
+    const elemInvocacionDe = (c: Combate): HTMLElement | null =>
+      raiz.querySelector(c === combate ? '.invocacion:not(.invocacion-companero)' : '.invocacion-companero');
     /** Either hero of the screen (the partner too, in two-player mode). */
     const esHeroe = (obj: Luchador): boolean => obj === combate.jugador || (!!companero && obj === companero.jugador);
     /** The hero whose card is being played (the caster of the effects drawn meanwhile). */
     let lanzadorMulti: Luchador | null = null;
     const lanzador = (): Luchador => lanzadorMulti ?? combate.jugador;
-    const spriteDe = (obj: Luchador): HeroSprite | null => (obj === combate.jugador ? spriteActual() : spriteCompanero);
+    const spriteDe = (obj: Luchador): HeroSprite | null => (obj === combate.jugador ? spriteActual() : spriteCompaneroActual());
 
     // ── Spell VFX: each card fx key has its own composition (fx/spell-fx.ts) ─
     /** Effect of the card being played and who has already shown it. */
@@ -603,58 +609,7 @@ export function pantallaCombate(
         render();
         await espera(220);
       },
-      async fxInvocacionGolpe(dano) {
-        const elem = elemInvocacion();
-        const { x, y } = centroDe(elem);
-        fx.emitir('golpeEnemigo', x, y);
-        audio.sfx(dano > 0 ? 'golpeEnemigo' : 'bloqueo');
-        if (dano > 0) {
-          spriteInvocacion()?.play('hit');
-          numeroFlotante(elem, `${dano}`, 'dano');
-          elem?.classList.add('golpeado');
-          setTimeout(() => elem?.classList.remove('golpeado'), 350);
-        }
-        render();
-        await espera(240);
-      },
-      async fxInvocacionMuerte() {
-        const elem = elemInvocacion();
-        const { x, y } = centroDe(elem);
-        fx.emitir('muerte', x, y);
-        audio.sfx('muerte');
-        const s = spriteInvocacion();
-        if (s) {
-          s.play('death');
-          await espera(750);
-        } else {
-          elem?.classList.add('muriendo');
-          await espera(450);
-        }
-        render();
-      },
-      async fxInvocacionAtaca() {
-        const elem = elemInvocacion();
-        const { x, y } = centroDe(elem);
-        const s = spriteInvocacion();
-        if (s) {
-          await espera(s.play('attack'));
-          fx.emitir('zarpa', x, y);
-          return;
-        }
-        fx.emitir('zarpa', x, y);
-        elem?.classList.add('inv-ataca');
-        setTimeout(() => elem?.classList.remove('inv-ataca'), 300);
-        await espera(120);
-      },
-      async fxInvocacionCura(n) {
-        const elem = elemInvocacion();
-        const { x, y } = centroDe(elem);
-        fx.emitir('cura', x, y);
-        audio.sfx('cura');
-        numeroFlotante(elem, `+${n}`, 'cura');
-        render();
-        await espera(220);
-      },
+      ...fxInvocacionDe(() => combate),
       async fxDado(n, caras, theme) {
         audio.sfx('carta');
         await rodarDado(n, caras, theme); // icosaedro 3D (WebGL) rodando por la pantalla
@@ -708,6 +663,17 @@ export function pantallaCombate(
     const combate: Combate = multi ? multi.duo.combates[multi.yo] : new Combate(run, defs, rng, ui, esJefe || esElite, contexto);
     const companero: Combate | null = multi ? multi.duo.combates[otroHueco(multi.yo)] : null;
     const spriteCompanero: HeroSprite | null = multi ? new HeroSprite(multi.clases[otroHueco(multi.yo)], stage) : null;
+    /** The partner's druid forms, each on its own puppet like mine. */
+    const formSpritesCompanero = new Map<FormId, HeroSprite>();
+    let formaMostradaCompanero: FormId | null = null;
+    const formaCompanero = (): FormId | null => (companero ? currentForm(companero.jugador.efectosTemporales) : null);
+    const spriteCompaneroActual = (): HeroSprite | null => {
+      const f = formaCompanero();
+      if (!f || !spriteCompanero) return spriteCompanero;
+      let s = formSpritesCompanero.get(f);
+      if (!s) { s = new HeroSprite(f, stage); formSpritesCompanero.set(f, s); }
+      return s;
+    };
     const nombreCompanero = multi ? multi.nombres[otroHueco(multi.yo)] : '';
     /** The fight is over: this combat's own end when alone, the party's with two heroes. */
     const finDe = () => (duo ? duo.terminado : combate.terminado);
@@ -719,27 +685,8 @@ export function pantallaCombate(
       const t0 = performance.now();
       while (!cond() && rechazos === r0 && !resuelto && performance.now() - t0 < maxMs) await new Promise<void>((r) => setTimeout(r, 40));
     };
-    /** The partner's summon has no panel of its own: its effects show over the hero. */
-    const uiCompanero: Presentador = {
-      ...ui,
-      async fxInvocacionGolpe(dano) {
-        numeroFlotante(elemDe(companero!.jugador), `🐾 ${dano}`, 'dano');
-        await espera(240);
-      },
-      async fxInvocacionMuerte() {
-        numeroFlotante(elemDe(companero!.jugador), '🐾 ✝', 'dano');
-        await espera(300);
-      },
-      async fxInvocacionAtaca() {
-        const { x, y } = centroDe(elemDe(companero!.jugador));
-        fx.emitir('zarpa', x, y);
-        await espera(200);
-      },
-      async fxInvocacionCura(n) {
-        numeroFlotante(elemDe(companero!.jugador), `🐾 +${n}`, 'cura');
-        await espera(220);
-      },
-    };
+    /** The partner's presenter: the same effects, and his summon animates on its own puppet. */
+    const uiCompanero: Presentador = { ...ui, ...fxInvocacionDe(() => companero!) };
     /** Tears the screen down without ending the fight (the game is being rebuilt). */
     let destruirVista: () => void = () => {};
     if (multi) {
@@ -754,7 +701,7 @@ export function pantallaCombate(
           const elem = mia ? raiz.querySelector(`.carta[data-mano="${c.jugador.mano.indexOf(inst)}"]`) as HTMLElement | null : null;
           // the hero swings (or casts) while the card flies; damage waits for the blow
           const inicio = performance.now();
-          const impacto = (mia ? spriteActual() : spriteCompanero!).play(defDe(inst).tipo === 'ataque' ? 'attack' : 'spell');
+          const impacto = (mia ? spriteActual() : spriteCompaneroActual()!).play(defDe(inst).tipo === 'ataque' ? 'attack' : 'spell');
           if (mia) lanzadas.add(inst);
           await animarLanzamiento(inst, elem, objetivo, impacto);
           const restante = impacto - (performance.now() - inicio);
@@ -950,9 +897,69 @@ export function pantallaCombate(
       return `<div class="estados">${fichas}</div>`;
     }
 
-    /** Panel de la invocación del druida (vida, forma y pasivas). */
-    function renderInvocacionHTML(): string {
-      const inv = combate.jugador.invocacion;
+    /** The invocation effects of a hero's summon (mine or the partner's), drawn on its own box and puppet. */
+    function fxInvocacionDe(dueno: () => Combate): Pick<Presentador, 'fxInvocacionGolpe' | 'fxInvocacionMuerte' | 'fxInvocacionAtaca' | 'fxInvocacionCura'> {
+      const elemInv = () => elemInvocacionDe(dueno());
+      const spriteInv = () => spriteInvocacionDe(dueno());
+      return {
+        async fxInvocacionGolpe(dano) {
+          const elem = elemInv();
+          const { x, y } = centroDe(elem);
+          fx.emitir('golpeEnemigo', x, y);
+          audio.sfx(dano > 0 ? 'golpeEnemigo' : 'bloqueo');
+          if (dano > 0) {
+            spriteInv()?.play('hit');
+            numeroFlotante(elem, `${dano}`, 'dano');
+            elem?.classList.add('golpeado');
+            setTimeout(() => elem?.classList.remove('golpeado'), 350);
+          }
+          render();
+          await espera(240);
+        },
+        async fxInvocacionMuerte() {
+          const elem = elemInv();
+          const { x, y } = centroDe(elem);
+          fx.emitir('muerte', x, y);
+          audio.sfx('muerte');
+          const s = spriteInv();
+          if (s) {
+            s.play('death');
+            await espera(750);
+          } else {
+            elem?.classList.add('muriendo');
+            await espera(450);
+          }
+          render();
+        },
+        async fxInvocacionAtaca() {
+          const elem = elemInv();
+          const { x, y } = centroDe(elem);
+          const s = spriteInv();
+          if (s) {
+            await espera(s.play('attack'));
+            fx.emitir('zarpa', x, y);
+            return;
+          }
+          fx.emitir('zarpa', x, y);
+          elem?.classList.add('inv-ataca');
+          setTimeout(() => elem?.classList.remove('inv-ataca'), 300);
+          await espera(120);
+        },
+        async fxInvocacionCura(n) {
+          const elem = elemInv();
+          const { x, y } = centroDe(elem);
+          fx.emitir('cura', x, y);
+          audio.sfx('cura');
+          numeroFlotante(elem, `+${n}`, 'cura');
+          render();
+          await espera(220);
+        },
+      };
+    }
+
+    /** Panel de la invocación del druida (vida, forma y pasivas); `c` is whose it is (mine by default). */
+    function renderInvocacionHTML(c: Combate = combate, clase = ''): string {
+      const inv = c.jugador.invocacion;
       if (!inv || inv.vida <= 0) return '';
       const emoji = SPRITE_INVOCACION[inv.forma] ?? '🐾';
       const dmg = inv.efimera ? (inv.dano ?? 0) : Math.max(1, Math.round(inv.vida * 0.3));
@@ -965,8 +972,8 @@ export function pantallaCombate(
       }`.replace(/"/g, '&quot;');
       const pct = Math.max(0, (inv.vida / inv.vidaMax) * 100);
       return `
-        <div class="invocacion ${inv.efimera ? 'inv-efimera' : ''}" data-tip="${tip}">
-          ${spriteInvocacion() ? '<div class="sprite sprite-invocacion sprite-ilustrado"></div>' : `<div class="sprite sprite-invocacion">${emoji}</div>`}
+        <div class="invocacion ${clase} ${inv.efimera ? 'inv-efimera' : ''}" data-tip="${tip}">
+          ${spriteInvocacionDe(c) ? '<div class="sprite sprite-invocacion sprite-ilustrado"></div>' : `<div class="sprite sprite-invocacion">${emoji}</div>`}
           <div class="vida vida-inv">
             <div class="vida-relleno vida-relleno-inv" style="width:${pct}%"></div>
             <span class="vida-texto">${inv.vida}/${inv.vidaMax}</span>
@@ -1036,7 +1043,7 @@ export function pantallaCombate(
       actual.setFlames(j.castigos[0] ? llamasDeCastigo(j.castigos[0]) : null);
       const inv = spriteInvocacion();
       if (inv) {
-        $('.sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
+        $('.invocacion:not(.invocacion-companero) .sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
         inv.setAura(combate.jugador.invocacion?.efimera ? '#a15ce0' : null);
       }
       // a new form arrives with a roar and a burst of its colour
@@ -1052,9 +1059,12 @@ export function pantallaCombate(
       const cj = companero!.jugador;
       const listo = duo!.finTurno[otroHueco(yo)] && cj.vivo;
       const rival = multi!.clases[otroHueco(yo)];
-      const div = el('div', `heroe heroe-companero${listo ? ' companero-listo' : ''}${cj.vivo ? '' : ' caido'}`);
+      const forma = formaCompanero();
+      const furia = cj.furiaFuerza + cj.furiaDestreza > 0;
+      const sprite = spriteCompaneroActual()!;
+      const div = el('div', `heroe heroe-companero${listo ? ' companero-listo' : ''}${cj.vivo ? '' : ' caido'}${forma ? ' transformado' : ''}`);
       div.dataset.luchador = 'companero';
-      div.style.setProperty('--acento-heroe', spriteCompanero!.accent);
+      div.style.setProperty('--acento-heroe', sprite.accent);
       div.innerHTML = `
         <div class="companero-nombre"></div>
         ${cj.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${cj.bloqueo}</div>` : ''}
@@ -1063,13 +1073,29 @@ export function pantallaCombate(
         ${fichasEstados(cj)}
         <div class="companero-estado">
           <span class="chip-energia" data-tip="Energía de tu compañero">⚡ ${cj.energia}/${cj.energiaMax}</span>
-          ${cj.invocacion && cj.invocacion.vida > 0 ? `<span class="chip-energia" data-tip="Su invocación">🐾 ${cj.invocacion.vida}/${cj.invocacion.vidaMax}</span>` : ''}
           ${!cj.vivo ? '<span class="badge-caido">Caído</span>' : listo ? '<span class="badge-listo">Listo</span>' : ''}
         </div>`;
       (div.querySelector('.companero-nombre') as HTMLElement).textContent = `${nombreCompanero} · ${NOMBRE_CLASE[rival] ?? rival}`;
       $('.lado-jugador').appendChild(div);
-      div.querySelector('.sprite-silueta')!.appendChild(spriteCompanero!.element);
-      spriteCompanero!.setAura(null);
+      div.querySelector('.sprite-silueta')!.appendChild(sprite.element);
+      // the same glows as my hero: Fury, druid form, Mirror Image, a prepared Smite
+      sprite.setAura(furia ? '#ff6b35' : forma ? '#7dba4e' : null);
+      sprite.setEchoes((cj.estados.espejismo ?? 0) > 0);
+      sprite.setFlames(cj.castigos[0] ? llamasDeCastigo(cj.castigos[0]) : null);
+      if (forma !== formaMostradaCompanero) {
+        if (forma) sprite.play('spell'); // a new form arrives with a roar
+        formaMostradaCompanero = forma;
+      }
+      // his summon, on its own puppet, a little further right so the two parties do not pile up
+      const invHtml = renderInvocacionHTML(companero!, 'invocacion-companero');
+      if (invHtml) {
+        $('.lado-jugador').insertAdjacentHTML('beforeend', invHtml);
+        const inv = spriteInvocacionDe(companero!);
+        if (inv) {
+          $('.invocacion-companero .sprite-invocacion.sprite-ilustrado')?.appendChild(inv.element);
+          inv.setAura(cj.invocacion?.efimera ? '#a15ce0' : null);
+        }
+      }
     }
 
     function textoIntencion(e: EnemigoCombate, p?: PrevisionAtaque): string {
@@ -1703,8 +1729,9 @@ export function pantallaCombate(
       heroSprite.destroy();
       spriteCompanero?.destroy();
       for (const s of formSprites.values()) s.destroy();
+      for (const s of formSpritesCompanero.values()) s.destroy();
       for (const s of spritesEnemigo.values()) s.destroy();
-      for (const s of spritesInvocacion.values()) s.destroy();
+      for (const propios of spritesInvocacion.values()) for (const s of propios.values()) s.destroy();
       stage?.destroy();
       medirEscenario.disconnect();
     }
