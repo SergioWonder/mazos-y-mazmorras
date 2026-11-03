@@ -10225,5 +10225,74 @@ console.log('\n★ Rasgos con misterio');
     'cuando cae su pareja, el rasgo del íncubo cambia');
 }
 
+// ── Cloud client: optional, never throws, never overwrites silently ─────────
+console.log('\n☁️ Cliente de la nube');
+try {
+  const { crearNube } = await import('../src/core/nube.ts');
+  const memoria = () => {
+    const m = new Map<string, string>();
+    return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) };
+  };
+  type Llamada = { metodo: string; ruta: string; cuerpo: unknown };
+  const respuesta = (estado: number, cuerpo?: unknown) =>
+    new Response(cuerpo === undefined ? null : JSON.stringify(cuerpo), { status: estado, headers: { 'content-type': 'application/json' } });
+  const montar = (responder: (l: Llamada) => Response | 'red') => {
+    const llamadas: Llamada[] = [];
+    const fetchFalso = (async (url: string, init?: RequestInit) => {
+      const l = { metodo: init?.method ?? 'GET', ruta: new URL(url).pathname, cuerpo: init?.body ? JSON.parse(String(init.body)) : undefined };
+      llamadas.push(l);
+      const r = responder(l);
+      if (r === 'red') throw new TypeError('fetch failed');
+      return r;
+    }) as unknown as typeof fetch;
+    const nube = crearNube({ fetch: fetchFalso, almacen: memoria(), apiUrl: 'https://api.test' });
+    return { nube, llamadas };
+  };
+  const sesionOk = (l: Llamada) => (l.ruta === '/auth/verify' ? respuesta(200, { session: 'sess', user: { id: 'u1', email: 'a@b.es', displayName: null } }) : null);
+
+  // 401 from any call clears the session
+  {
+    const { nube } = montar((l) => sesionOk(l) ?? respuesta(401, { error: 'unauthorized' }));
+    await nube.canjearEnlace('tok');
+    check(nube.haySesion(), 'canjear el enlace deja la sesión iniciada');
+    await nube.yo();
+    check(!nube.haySesion(), 'un 401 de cualquier llamada cierra la sesión');
+  }
+  // 409: the server copy is kept as a pending conflict, never overwritten
+  {
+    const { nube, llamadas } = montar((l) => sesionOk(l) ?? (l.metodo === 'PUT' ? respuesta(409, { error: 'conflict', data: { clase: 'mago' }, revision: 5 }) : respuesta(404, { revision: 0 })));
+    await nube.canjearEnlace('tok');
+    const res = await nube.subirPartida({ clase: 'paladin' });
+    check(res === 'conflicto' && nube.conflictoPendiente()?.revision === 5, 'un 409 guarda la copia del servidor como conflicto pendiente');
+    const puts = llamadas.filter((l) => l.metodo === 'PUT').length;
+    await nube.subirPartida({ clase: 'paladin' });
+    check(puts === 1 && llamadas.filter((l) => l.metodo === 'PUT').length === 1, 'con un conflicto pendiente no se vuelve a pisar la nube');
+  }
+  // Outbox: kept on network error, dropped on success
+  {
+    let caida = true;
+    const { nube } = montar((l) => sesionOk(l) ?? (caida ? 'red' : respuesta(201, { ok: true })));
+    await nube.canjearEnlace('tok').catch(() => null);
+    caida = true;
+    nube.registrarPartidaTerminada({ heroClass: 'mago', result: 'defeat', chapter: 1, floor: 4, turns: 30, seed: 7, gameVersion: '9.1.0' });
+    await nube.vaciarCola();
+    check(nube.longitudCola() === 1, 'una partida terminada se queda en la cola si falla la red');
+    caida = false;
+    await nube.vaciarCola();
+    check(nube.longitudCola() === 0, 'y se quita de la cola cuando el servidor la acepta');
+  }
+  // Network failures never throw
+  {
+    const { nube } = montar(() => 'red');
+    let lanzo = false;
+    try {
+      await nube.canjearEnlace('tok'); await nube.yo(); await nube.subirPartida({}); await nube.partidaRemota(); await nube.clasificacion('mago'); await nube.vaciarCola();
+    } catch { lanzo = true; }
+    check(!lanzo, 'si fetch falla, ninguna llamada de la nube lanza');
+  }
+} catch (e) {
+  check(false, `el cliente de la nube: ${(e as Error).message}`);
+}
+
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
 process.exit(fallos === 0 ? 0 : 1);
