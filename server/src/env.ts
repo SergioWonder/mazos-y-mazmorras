@@ -12,6 +12,8 @@ export interface Env {
   VAPID_PUBLIC_KEY?: string;
   VAPID_PRIVATE_KEY?: string;
   VAPID_SUBJECT?: string;
+  /** Pause (ms) between the bot's entries so the human sees it play (default 700; tests set 0). */
+  BOT_RETARDO_MS?: string;
 }
 
 declare global {
@@ -28,6 +30,7 @@ declare global {
       VAPID_PUBLIC_KEY?: string;
       VAPID_PRIVATE_KEY?: string;
       VAPID_SUBJECT?: string;
+      BOT_RETARDO_MS?: string;
       TEST_MIGRATIONS?: import('cloudflare:test').D1Migration[];
     }
   }

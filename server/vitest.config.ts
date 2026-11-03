@@ -16,6 +16,8 @@ export default defineConfig({
             TEST_MIGRATIONS: await readD1Migrations(path.join(import.meta.dirname, 'migrations')),
             VAPID_PUBLIC_KEY: vapid.publicKey,
             VAPID_PRIVATE_KEY: vapid.privateKey,
+            // The bot answers at once in tests.
+            BOT_RETARDO_MS: '0',
           },
         },
       };

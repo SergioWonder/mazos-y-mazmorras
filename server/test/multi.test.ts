@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { crearPartidaMulti, pendiente } from '../../src/core/multi/index.ts';
 import { fakeMailer, json, loginNamed, openSocket, testApp } from './helpers.ts';
 
 type Call = ReturnType<typeof testApp>;
@@ -145,7 +146,7 @@ describe('Sala', () => {
     expect(Number.isInteger(startA.semilla)).toBe(true);
   });
 
-  it('numera las entradas en orden, las difunde con su hash y reenvía el log a quien se reconecta', async () => {
+  it('numera las entradas en orden, las difunde con su hash y, al cerrarse la sala de bendiciones, guarda y trunca el log', async () => {
     const { call, sent } = await setup();
     const ana = await loginNamed(call, sent, 'Ana');
     const bea = await loginNamed(call, sent, 'Bea');
@@ -157,49 +158,32 @@ describe('Sala', () => {
     const first = await a.until((m) => m.t === 'empieza');
     await b.until((m) => m.t === 'empieza');
 
-    a.send({ t: 'entrada', entrada: { tipo: 'mapa', nodo: 3 } });
-    b.send({ t: 'entrada', entrada: { tipo: 'finTurno' } });
+    // each hero picks the first of his opening blessings (what the engine offers them)
+    const p = crearPartidaMulti({ semilla: first.semilla, clases: first.clases });
+    const eleccion = (h: 'cara' | 'cruz') => {
+      const q = pendiente(p, h);
+      if (!q || q.tipo !== 'eleccion') throw new Error('no blessing offered');
+      return { tipo: 'eleccion', clave: q.clave, valor: q.opciones[0] };
+    };
+    a.send({ t: 'entrada', entrada: eleccion('cara') });
+    await a.until((m) => m.t === 'entrada' && m.entrada.seq === 1);
+    b.send({ t: 'entrada', entrada: eleccion('cruz') });
     await b.until((m) => m.t === 'entrada' && m.entrada.seq === 2);
     await a.until((m) => m.t === 'entrada' && m.entrada.seq === 2);
 
     const seen = a.messages.filter((m) => m.t === 'entrada');
-    expect(seen.map((m) => [m.entrada.seq, m.entrada.de, m.entrada.tipo])).toEqual([[1, 'cara', 'mapa'], [2, 'cruz', 'finTurno']]);
+    expect(seen.map((m) => [m.entrada.seq, m.entrada.de, m.entrada.tipo])).toEqual([[1, 'cara', 'eleccion'], [2, 'cruz', 'eleccion']]);
     expect(seen[0].hash).not.toBe(seen[1].hash);
     expect(b.messages.filter((m) => m.t === 'entrada').map((m) => m.hash)).toEqual(seen.map((m) => m.hash));
 
-    // Ana drops and comes back: she gets the whole log again
+    // both blessings done = the game is back at the map, a save point: Ana reconnects to the save and an empty log
     a.ws!.close(1000, 'bye');
     const again = await entrar(call, ana, id);
     again.send({ t: 'listo' });
     const resumed = await again.until((m) => m.t === 'empieza');
     expect(resumed.semilla).toBe(first.semilla);
-    expect(resumed.log.map((e: any) => [e.entrada.seq, e.entrada.tipo])).toEqual([[1, 'mapa'], [2, 'finTurno']]);
-  });
-
-  it('el guardado de sala lo manda cara y al retomar llega con las entradas posteriores', async () => {
-    const { call, sent } = await setup();
-    const ana = await loginNamed(call, sent, 'Ana');
-    const bea = await loginNamed(call, sent, 'Bea');
-    const id = await activeGame(call, ana, bea);
-    const a = await entrar(call, ana, id);
-    const b = await entrar(call, bea, id);
-    a.send({ t: 'listo' });
-    b.send({ t: 'listo' });
-    await a.until((m) => m.t === 'empieza');
-
-    a.send({ t: 'entrada', entrada: { tipo: 'finTurno' } });
-    await a.until((m) => m.t === 'entrada' && m.entrada.seq === 1);
-    a.send({ t: 'guardado', guardado: { sala: 4 } });
-    b.send({ t: 'guardado', guardado: { sala: 'trampa' } }); // only `cara` may save for now
-    a.send({ t: 'entrada', entrada: { tipo: 'finTurno' } });
-    await a.until((m) => m.t === 'entrada' && m.entrada.seq === 2);
-    await b.until((m) => m.t === 'error');
-
-    const c = await entrar(call, bea, id);
-    c.send({ t: 'listo' });
-    const resumed = await c.until((m) => m.t === 'empieza');
-    expect(resumed.guardado).toEqual({ sala: 4 });
-    expect(resumed.log.map((e: any) => e.entrada.seq)).toEqual([2]);
+    expect(resumed.guardado).toMatchObject({ v: 1, fase: { tipo: 'mapa' } });
+    expect(resumed.log).toEqual([]);
   });
 
   it('contra el bot el hueco cruz siempre está conectado y listo: empieza con un solo jugador', async () => {

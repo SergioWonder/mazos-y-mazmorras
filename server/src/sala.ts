@@ -1,10 +1,12 @@
-// Sala: one Durable Object per multiplayer game. A generic relay: it numbers the players' entries, keeps the log and
-// the latest room save in SQLite, and broadcasts every accepted entry with the hash of the resulting state. The engine
-// is plugged in through `MotorSala` (see motor.ts).
+// Sala: one Durable Object per multiplayer game. It runs the real two-player engine (see motor.ts): it validates and
+// numbers the players' entries, applies them one at a time, keeps the log since the last room save (and the save, which
+// the server computes) in SQLite, and broadcasts every accepted entry with the hash of the resulting state. Against the
+// bot, it also plays the `cruz` seat.
 
 import { DurableObject } from 'cloudflare:workers';
+import { crearRng } from '../../src/core/rng.ts';
 import type { Env } from './env.ts';
-import { crearMotorGenerico, esEntrada, HASH_INICIAL, type EntradaSellada, type Hueco, type MotorSala } from './motor.ts';
+import { crearMotor, esEntrada, rehidratarMotor, type EntradaSellada, type Hueco, type MotorSala } from './motor.ts';
 import { avisarBuzon, urlSala } from './notify.ts';
 
 /** What the Worker tells the room about the game (read from D1 after checking the player belongs to it). */
@@ -24,8 +26,12 @@ const MAX_ENTRADA = 2 * 1024;
 const HUECOS: Hueco[] = ['cara', 'cruz'];
 const otro = (h: Hueco): Hueco => (h === 'cara' ? 'cruz' : 'cara');
 
+const RETARDO_BOT_MS = 700;
+
 export class Sala extends DurableObject<Env> {
   private motor: MotorSala | null = null;
+  /** Entries (and bot moves) are applied one at a time: `aplicar` is async. */
+  private cola: Promise<void> = Promise.resolve();
 
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
@@ -45,8 +51,19 @@ export class Sala extends DurableObject<Env> {
     this.ctx.storage.sql.exec('INSERT INTO meta (k, v) VALUES (?, ?) ON CONFLICT (k) DO UPDATE SET v = excluded.v', k, v);
   }
   private info(): InfoSala { return JSON.parse(this.leer('sala')!) as InfoSala; }
-  private motorActual(): MotorSala {
-    return (this.motor ??= crearMotorGenerico(this.leer('hash') ?? HASH_INICIAL));
+  /** The engine, rebuilt from the last save (or the seed) plus the log when this instance has just woken up. */
+  private async motorActual(): Promise<MotorSala> {
+    if (this.motor) return this.motor;
+    const guardado = this.leer('guardado');
+    const motor = guardado !== null
+      ? rehidratarMotor(JSON.parse(guardado))
+      : crearMotor({ semilla: Number(this.leer('semilla')), clases: this.info().clases });
+    for (const { entrada } of this.registro()) await motor.aplicar(entrada);
+    return (this.motor = motor);
+  }
+  private encolar(trabajo: () => Promise<void>): Promise<void> {
+    this.cola = this.cola.then(trabajo).catch((err) => { console.error('room job failed', err); this.motor = null; });
+    return this.cola;
   }
   /** Entries after the last room save (all of them while there is no save yet). */
   private registro(): { entrada: EntradaSellada; hash: string }[] {
@@ -103,13 +120,13 @@ export class Sala extends DurableObject<Env> {
   async webSocketMessage(ws: WebSocket, raw: string | ArrayBuffer): Promise<void> {
     const adjunto = this.adjunto(ws);
     if (!adjunto || typeof raw !== 'string' || raw.length > MAX_MENSAJE) return this.enviar(ws, { t: 'error', motivo: 'mensaje_invalido' });
-    let msg: { t?: unknown; entrada?: unknown; guardado?: unknown };
+    let msg: { t?: unknown; entrada?: unknown };
     try { msg = JSON.parse(raw); } catch { return this.enviar(ws, { t: 'error', motivo: 'mensaje_invalido' }); }
 
     switch (msg.t) {
       case 'listo': return this.alEstarListo(ws, adjunto);
-      case 'entrada': return this.alRecibirEntrada(ws, adjunto, msg.entrada);
-      case 'guardado': return this.alRecibirGuardado(ws, adjunto, msg.guardado);
+      case 'entrada': return this.encolar(() => this.alRecibirEntrada(ws, adjunto, msg.entrada));
+      case 'resync': return this.encolar(async () => { if (adjunto.enPartida) this.enviar(ws, this.empieza()); });
       default: return this.enviar(ws, { t: 'error', motivo: 'mensaje_desconocido' });
     }
   }
@@ -130,16 +147,11 @@ export class Sala extends DurableObject<Env> {
     this.intentarEmpezar();
   }
 
-  /** Sends `empieza` to every ready socket that has not got it yet, once both seats are connected and ready. */
-  private intentarEmpezar(): void {
-    if (!HUECOS.every((h) => this.conectado(h) && this.listo(h))) return;
+  /** What a client needs to (re)build the game: the last room save (or the seed) and the entries since. */
+  private empieza() {
     const info = this.info();
-    if (this.leer('empezada') !== '1') {
-      this.escribir('semilla', String(crypto.getRandomValues(new Uint32Array(1))[0]));
-      this.escribir('empezada', '1');
-    }
     const guardado = this.leer('guardado');
-    const empieza = {
+    return {
       t: 'empieza',
       semilla: Number(this.leer('semilla')),
       clases: info.clases,
@@ -148,6 +160,16 @@ export class Sala extends DurableObject<Env> {
       guardado: guardado === null ? null : JSON.parse(guardado),
       log: this.registro(),
     };
+  }
+
+  /** Sends `empieza` to every ready socket that has not got it yet, once both seats are connected and ready. */
+  private intentarEmpezar(): void {
+    if (!HUECOS.every((h) => this.conectado(h) && this.listo(h))) return;
+    if (this.leer('empezada') !== '1') {
+      this.escribir('semilla', String(crypto.getRandomValues(new Uint32Array(1))[0]));
+      this.escribir('empezada', '1');
+    }
+    const empieza = this.empieza();
     for (const s of this.abiertos()) {
       const a = this.adjunto(s);
       if (!a || !a.listo || a.enPartida) continue;
@@ -155,30 +177,65 @@ export class Sala extends DurableObject<Env> {
       this.enviar(s, empieza);
     }
     this.difundir(this.estado());
+    void this.encolar(async () => this.vigilarBot(await this.motorActual()));
   }
 
-  private alRecibirEntrada(ws: WebSocket, adjunto: Adjunto, crudo: unknown): void {
+  /** Validates, numbers, applies, persists and broadcasts an entry from a player. */
+  private async alRecibirEntrada(ws: WebSocket, adjunto: Adjunto, crudo: unknown): Promise<void> {
     if (!adjunto.enPartida) return this.enviar(ws, { t: 'error', motivo: 'no_empezada' });
     if (!esEntrada(crudo) || JSON.stringify(crudo).length > MAX_ENTRADA) return this.enviar(ws, { t: 'error', motivo: 'entrada_invalida' });
+    const motor = await this.motorActual();
     // The seat comes from the socket, never from what the client says.
-    const seq = Number(this.leer('seq') ?? 0) + 1;
-    const sellada = { ...crudo, seq, de: adjunto.hueco } as EntradaSellada;
-    const motor = this.motorActual();
-    motor.aplicar(sellada);
-    const hash = motor.hash();
-    this.ctx.storage.sql.exec('INSERT INTO log (seq, entrada, hash) VALUES (?, ?, ?)', seq, JSON.stringify(sellada), hash);
-    this.escribir('seq', String(seq));
-    this.escribir('hash', hash);
-    this.difundir({ t: 'entrada', entrada: sellada, hash }, true);
+    const sellada = { ...crudo, seq: Number(this.leer('seq') ?? 0) + 1, de: adjunto.hueco } as EntradaSellada;
+    if (!motor.esValida(sellada)) return this.enviar(ws, { t: 'error', motivo: 'invalida' });
+    await this.procesar(motor, sellada);
   }
 
-  /** Room save sent by the client of `cara` (unit C will make the server compute it): it replaces the log up to now. */
-  private alRecibirGuardado(ws: WebSocket, adjunto: Adjunto, guardado: unknown): void {
-    if (adjunto.hueco !== 'cara') return this.enviar(ws, { t: 'error', motivo: 'solo_cara' });
-    if (!adjunto.enPartida || guardado === undefined) return this.enviar(ws, { t: 'error', motivo: 'guardado_invalido' });
-    const sql = this.ctx.storage.sql;
-    this.escribir('guardado', JSON.stringify(guardado));
-    sql.exec('DELETE FROM log WHERE seq <= ?', Number(this.leer('seq') ?? 0));
+  /** Applies an already valid sealed entry, then persists and broadcasts it in one synchronous step. */
+  private async procesar(motor: MotorSala, sellada: EntradaSellada): Promise<void> {
+    await motor.aplicar(sellada);
+    const hash = motor.hash();
+    this.ctx.storage.transactionSync(() => {
+      this.ctx.storage.sql.exec('INSERT INTO log (seq, entrada, hash) VALUES (?, ?, ?)', sellada.seq, JSON.stringify(sellada), hash);
+      this.escribir('seq', String(sellada.seq));
+      this.escribir('hash', hash);
+      // A room save: the server computes it and the log restarts from it.
+      if (motor.esPuntoDeGuardado()) {
+        this.escribir('guardado', JSON.stringify(motor.serializar()));
+        this.ctx.storage.sql.exec('DELETE FROM log');
+      }
+    });
+    this.difundir({ t: 'entrada', entrada: sellada, hash }, true);
+    if (motor.terminada()) this.ctx.waitUntil(this.marcarTerminada());
+    this.vigilarBot(motor);
+  }
+
+  private async marcarTerminada(): Promise<void> {
+    try {
+      await this.env.DB.prepare(`UPDATE multi_games SET status = 'finished', updated_at = ? WHERE id = ?`).bind(Date.now(), this.info().id).run();
+    } catch (err) { console.error('could not mark the game as finished', err); }
+  }
+
+  // ── bot ────────────────────────────────────────────────────────────────────
+  /** Wakes the alarm when the bot seat has something to decide (a short pause so the human sees it play). */
+  private vigilarBot(motor: MotorSala): void {
+    if (!this.info().bot || motor.terminada() || motor.pendiente('cruz') === null) return;
+    const espera = Number(this.env.BOT_RETARDO_MS ?? RETARDO_BOT_MS);
+    void this.ctx.storage.setAlarm(Date.now() + (Number.isFinite(espera) ? espera : RETARDO_BOT_MS));
+  }
+
+  async alarm(): Promise<void> {
+    await this.encolar(async () => {
+      if (this.leer('empezada') !== '1' || !this.info().bot) return;
+      const motor = await this.motorActual();
+      const seq = Number(this.leer('seq') ?? 0) + 1;
+      // seeded from the game seed and the entry number: reproducible, whatever instance wakes up
+      const rng = crearRng((Number(this.leer('semilla')) ^ Math.imul(seq, 0x9e3779b1)) >>> 0);
+      const entrada = motor.decisionBot('cruz', rng);
+      if (!entrada) return;
+      const sellada = { ...entrada, seq, de: 'cruz' } as EntradaSellada;
+      if (motor.esValida(sellada)) await this.procesar(motor, sellada);
+    });
   }
 
   webSocketClose(ws: WebSocket, code: number): void {

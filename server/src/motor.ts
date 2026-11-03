@@ -1,36 +1,54 @@
-// What the Sala (room relay) needs from the game engine. Unit C plugs the real engine (`src/core/multi`) in here;
-// until then the generic stub below only chains a hash over the entries so clients can already check their sync.
+// What the Sala (room) needs from the game engine: an adapter over the real two-player engine (`src/core/multi`, pure
+// TypeScript shared with the clients). The room runs it without presenters, so every entry applies silently.
 
-export type Hueco = 'cara' | 'cruz';
+import {
+  aplicar, crearPartidaMulti, decisionBot, esPuntoDeGuardado, esValida, hashPartida, pendiente, rehidratarPartidaMulti,
+  serializarPartidaMulti,
+  type Entrada, type EntradaSellada, type GuardadoMulti, type Hueco, type PartidaMulti, type Pregunta,
+} from '../../src/core/multi/index.ts';
 
-export type Entrada =
-  | { tipo: 'mapa'; nodo: number }
-  | { tipo: 'jugar'; carta: string; objetivo?: number }
-  | { tipo: 'finTurno' }
-  | { tipo: 'eleccion'; clave: string; valor: number | string | null };
-
-export type EntradaSellada = Entrada & { seq: number; de: Hueco };
+export type { Entrada, EntradaSellada, GuardadoMulti, Hueco, Pregunta };
 
 export interface MotorSala {
-  /** Applies an accepted, numbered entry to the room state. */
-  aplicar(entrada: EntradaSellada): void;
+  /** Would the engine accept this (sealed) entry right now? */
+  esValida(entrada: EntradaSellada): boolean;
+  /** Applies an accepted, numbered entry to the room state. Entries must be applied one at a time. */
+  aplicar(entrada: EntradaSellada): Promise<void>;
   /** Cheap, stable digest of the state after the entries applied so far. */
   hash(): string;
+  /** True at the start of a room (and when the game ends): the only moments the game can be saved. */
+  esPuntoDeGuardado(): boolean;
+  /** The game state as a save (only valid when `esPuntoDeGuardado`). */
+  serializar(): GuardadoMulti;
+  /** What this seat has to decide now (null: nothing). */
+  pendiente(hueco: Hueco): Pregunta | null;
+  /** The entry the bot would play for this seat. */
+  decisionBot(hueco: Hueco, rng: () => number): Entrada | null;
+  /** The run is over (victory or defeat). */
+  terminada(): boolean;
 }
 
-export const HASH_INICIAL = '00000000';
-
-/** Engine-agnostic stand-in: the «state» is just a running FNV-1a digest of the entries. */
-export function crearMotorGenerico(hashInicial: string = HASH_INICIAL): MotorSala {
-  let actual = hashInicial;
+function envolver(p: PartidaMulti): MotorSala {
   return {
-    aplicar(entrada) {
-      let h = 0x811c9dc5;
-      for (const c of `${actual}|${JSON.stringify(entrada)}`) h = Math.imul(h ^ c.charCodeAt(0), 0x01000193) >>> 0;
-      actual = h.toString(16).padStart(8, '0');
-    },
-    hash: () => actual,
+    esValida: (e) => esValida(p, e),
+    aplicar: (e) => aplicar(p, e),
+    hash: () => hashPartida(p),
+    esPuntoDeGuardado: () => esPuntoDeGuardado(p),
+    serializar: () => serializarPartidaMulti(p),
+    pendiente: (h) => pendiente(p, h),
+    decisionBot: (h, rng) => decisionBot(p, h, rng),
+    terminada: () => p.fase.tipo === 'fin',
   };
+}
+
+/** A new game from the seed and the two classes. */
+export function crearMotor(opts: { semilla: number; clases: Record<Hueco, string> }): MotorSala {
+  return envolver(crearPartidaMulti({ semilla: opts.semilla, clases: opts.clases as never }));
+}
+
+/** The game as it was at a room save. */
+export function rehidratarMotor(guardado: GuardadoMulti): MotorSala {
+  return envolver(rehidratarPartidaMulti(guardado));
 }
 
 const esEntero = (v: unknown): v is number => Number.isInteger(v);
