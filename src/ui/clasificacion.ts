@@ -16,9 +16,30 @@ export interface OpcionesClasificacion {
   repetirFinal?: (clase: ClaseId) => void;
 }
 
+/** Bubble with the DM secret. It lives in the dialog layer, not in the scrolling list,
+ *  so the list never clips it; it opens above the medal, or below when there is no room. */
+function globoDM(capa: HTMLElement) {
+  const globo = el('span', 'clasif-dm-globo', SECRETO_DM);
+  globo.setAttribute('role', 'status');
+  capa.appendChild(globo);
+  let ocultar: number | undefined;
+  return (ancla: HTMLElement) => {
+    const r = ancla.getBoundingClientRect();
+    globo.classList.add('clasif-dm-abierto');
+    const g = globo.getBoundingClientRect();
+    const margen = 6;
+    const arriba = r.top - g.height - margen >= margen;
+    const x = Math.min(Math.max(r.left + r.width / 2 - g.width / 2, margen), window.innerWidth - g.width - margen);
+    globo.style.left = `${x}px`;
+    globo.style.top = `${arriba ? r.top - g.height - margen : r.bottom + margen}px`;
+    window.clearTimeout(ocultar);
+    ocultar = window.setTimeout(() => globo.classList.remove('clasif-dm-abierto'), 2600);
+  };
+}
+
 /** The Dungeon Master's face with sparks around it. A click tells what it means (never how);
  *  a triple click on the player's own row replays the true ending. */
-function medallonDM(propia: boolean, repetir: (() => void) | null): HTMLElement {
+function medallonDM(propia: boolean, repetir: (() => void) | null, mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
   const medallon = el('button', 'clasif-dm') as HTMLButtonElement;
   medallon.type = 'button';
   medallon.setAttribute('aria-label', SECRETO_DM);
@@ -35,21 +56,16 @@ function medallonDM(propia: boolean, repetir: (() => void) | null): HTMLElement 
       medallon.appendChild(chispa);
     }
   }
-  const globo = el('span', 'clasif-dm-globo', SECRETO_DM);
-  globo.setAttribute('role', 'status');
-  medallon.appendChild(globo);
-  let ocultar: number | undefined;
   medallon.addEventListener('click', (ev) => {
     ev.stopPropagation();
     if (ev.detail >= 3 && propia && repetir) { repetir(); return; }
-    medallon.classList.add('clasif-dm-abierto');
-    window.clearTimeout(ocultar);
-    ocultar = window.setTimeout(() => medallon.classList.remove('clasif-dm-abierto'), 2600);
+    mostrarGlobo(medallon);
   });
   return medallon;
 }
 
-function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repetir: (() => void) | null): HTMLElement {
+function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repetir: (() => void) | null,
+  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
   const f = el('li', `clasif-fila${propia ? ' clasif-propia' : ''}`);
   f.appendChild(el('span', 'clasif-pos', String(posicion)));
   const nombre = el('span', 'clasif-nombre');
@@ -58,7 +74,7 @@ function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repeti
   f.appendChild(nombre);
   // the true ending outranks any other victory: the Dungeon Master himself fell
   if (e.dmDefeated) {
-    f.appendChild(medallonDM(propia, repetir));
+    f.appendChild(medallonDM(propia, repetir, mostrarGlobo));
   } else {
     const res = el('span', 'clasif-resultado', e.result === 'victory' ? '🏆' : '💀');
     res.title = e.result === 'victory' ? 'Victoria' : 'Derrota';
@@ -91,6 +107,7 @@ export function pantallaClasificacion(opciones: OpcionesClasificacion = {}): Pro
     panel.append(cab, selector, lista);
     capa.appendChild(panel);
     document.body.appendChild(capa);
+    const mostrarGlobo = globoDM(capa);
 
     const aviso = (texto: string) => { lista.replaceChildren(el('p', 'clasif-vacio', texto)); };
 
@@ -106,7 +123,7 @@ export function pantallaClasificacion(opciones: OpcionesClasificacion = {}): Pro
       const repetirCon = (e: EntradaClasificacion) => opciones.repetirFinal
         ? () => { cerrar(); opciones.repetirFinal!(e.heroClass as ClaseId); }
         : null;
-      entradas.forEach((e, i) => ol.appendChild(fila(e, i + 1, e.userId === yo, repetirCon(e))));
+      entradas.forEach((e, i) => ol.appendChild(fila(e, i + 1, e.userId === yo, repetirCon(e), mostrarGlobo)));
       lista.replaceChildren(ol);
       if (!nube.haySesion()) {
         lista.appendChild(el('p', 'clasif-pista', 'Crea una cuenta en ⚙️ Ajustes para aparecer aquí.'));

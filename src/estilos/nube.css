@@ -128,13 +128,13 @@
   --ang: calc(var(--i) * 60deg);
 }
 .clasif-dm-globo {
-  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) scale(0.9);
+  position: fixed; left: 0; top: 0; transform: scale(0.9);
   white-space: nowrap; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.75rem;
   background: #24122f; color: #ffd8f4; border: 1px solid rgba(255, 140, 220, 0.6);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none;
-  transition: opacity 0.15s, transform 0.15s; z-index: 2;
+  transition: opacity 0.15s, transform 0.15s; z-index: 110;
 }
-.clasif-dm-abierto .clasif-dm-globo { opacity: 1; transform: translateX(-50%) scale(1); }
+.clasif-dm-globo.clasif-dm-abierto { opacity: 1; transform: scale(1); }
 @keyframes clasif-dm-latido {
   0%, 100% { box-shadow: 0 0 6px rgba(190, 90, 255, 0.6), 0 0 2px rgba(255, 209, 102, 0.9) inset; }
   50% { box-shadow: 0 0 14px rgba(230, 110, 255, 0.95), 0 0 3px rgba(255, 209, 102, 1) inset; }
