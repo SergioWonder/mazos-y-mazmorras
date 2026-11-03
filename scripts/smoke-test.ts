@@ -6,7 +6,7 @@ import { nuevaRun, avanzarCapitulo } from '../src/core/run.ts';
 import { crearRng } from '../src/core/rng.ts';
 import {
   ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, GOBLIN_FAMELICO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
-  HERALDO_CULTO, CONTEMPLADOR,
+  HERALDO_CULTO, CONTEMPLADOR, EMBAUCADOR_ARCANO,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA } from '../src/core/mapa.ts';
@@ -32,6 +32,7 @@ import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent } from
 import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
+import { CombateDuo } from '../src/core/multi/combate-duo.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as ClaseId[];
 
@@ -10292,6 +10293,113 @@ try {
   }
 } catch (e) {
   check(false, `el cliente de la nube: ${(e as Error).message}`);
+}
+
+// ── 👥 Multijugador: motor de dos héroes ─────────────────────────────────────
+console.log('— 👥 Multijugador —');
+try {
+  const uiMulti = { cara: uiSilenciosa, cruz: uiSilenciosa };
+  const pegador = (dano: number, pv = 40): EnemigoDef => ({
+    id: 'pegador-test', nombre: 'Pegador', arte: '👾', pv: [pv, pv],
+    ia: () => ({ nombre: 'Golpe', intencion: 'ataque', dano }),
+  });
+  const cartaDe = (lista: CartaDef[], id: string) => instanciar(lista.find((c) => c.id === id)!);
+  const nuevoDuo = async (defs: EnemigoDef[], semilla = 7, clases: [ClaseId, ClaseId] = ['druida', 'barbaro']) => {
+    const runs = { cara: nuevaRun(clases[0], semilla), cruz: nuevaRun(clases[1], semilla) };
+    const duo = new CombateDuo(runs, defs, crearRng(semilla), uiMulti);
+    await duo.iniciar();
+    return duo;
+  };
+
+  // Shared enemies: what `cara` applies is there for `cruz`
+  {
+    const duo = await nuevoDuo([pegador(7, 40)]);
+    const e = duo.enemigos[0];
+    check(e.pvMax === 64, 'los enemigos a dos héroes tienen un 60 % más de PV (40 → 64)');
+    check(duo.combates.cara.enemigos === duo.combates.cruz.enemigos, 'los dos héroes comparten los mismos objetos enemigo');
+    const zarpazo = cartaDe(DRUIDA, 'zarpazo');
+    const golpe1 = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
+    const golpe2 = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
+    duo.combates.cara.jugador.mano = [zarpazo];
+    duo.combates.cruz.jugador.mano = [golpe1, golpe2];
+    const antes = e.pv;
+    await duo.jugar('cruz', golpe1, e);
+    const danoNormal = antes - e.pv;
+    await duo.jugar('cara', zarpazo, e);
+    check((duo.combates.cruz.enemigos[0].estados.vulnerable ?? 0) > 0, 'la Vulnerable que pone cara se ve en el combate de cruz');
+    const medio = e.pv;
+    await duo.jugar('cruz', golpe2, e);
+    check(danoNormal > 0 && medio - e.pv === Math.floor(danoNormal * 1.5), `con Vulnerable de cara, el siguiente ataque de cruz pega más (${danoNormal} → ${medio - e.pv})`);
+  }
+
+  // The enemy turn waits for both `finTurno`, and happens once
+  {
+    const duo = await nuevoDuo([pegador(7)]);
+    const e = duo.enemigos[0];
+    const [pvCara, pvCruz] = [duo.combates.cara.jugador.pv, duo.combates.cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    check(e.turnosVisto === 0 && duo.combates.cara.jugador.pv === pvCara && duo.combates.cruz.jugador.pv === pvCruz,
+      'con un solo finTurno los enemigos no actúan');
+    const carta = duo.combates.cara.jugador.mano[0];
+    check(!duo.puedeJugar('cara', carta), 'quien ya terminó el turno no puede jugar más cartas');
+    check(duo.puedeJugar('cruz', duo.combates.cruz.jugador.mano.find((c) => c.def.coste <= 1 && c.def.tipo !== 'maldicion')!), 'el compañero sigue jugando');
+    await duo.terminarTurno('cruz');
+    const perdidas = [pvCara - duo.combates.cara.jugador.pv, pvCruz - duo.combates.cruz.jugador.pv].sort();
+    check(e.turnosVisto === 1 && perdidas[0] === 0 && perdidas[1] === 7, 'con los dos finTurno hay un único turno enemigo y su golpe cae en un solo héroe');
+    check(duo.combates.cara.turno === 2 && duo.combates.cruz.turno === 2 && !duo.finTurno.cara && !duo.finTurno.cruz, 'después empieza el turno siguiente de ambos');
+  }
+
+  // Downed hero: out for the rest of the fight, back up (25 %) when the partner wins
+  {
+    const duo = await nuevoDuo([pegador(7, 10)]);
+    const e = duo.enemigos[0];
+    const cruz = duo.combates.cruz;
+    await cruz.infligir(cruz.jugador, 999);
+    check(!cruz.jugador.vivo && !duo.terminado, 'un héroe a 0 PV cae pero la run sigue mientras su compañero esté en pie');
+    check(!duo.puedeJugar('cruz', cruz.jugador.mano[0]), 'el héroe caído no juega');
+    await duo.terminarTurno('cara'); // only the living one has to end the turn
+    check(e.turnosVisto === 1 && !cruz.jugador.vivo && duo.combates.cara.jugador.pv < duo.combates.cara.jugador.pvMax,
+      'el caído no frena el turno enemigo y los ataques solo caen en el vivo');
+    const golpes = [0, 1, 2, 3].map(() => instanciar(BASICAS.find((c) => c.id === 'golpe')!));
+    duo.combates.cara.jugador.mano = [...golpes];
+    duo.combates.cara.jugador.energia = 9;
+    for (const g of golpes) { if (!duo.terminado) await duo.jugar('cara', g, e); }
+    check(duo.terminado === 'victoria' && cruz.jugador.vivo && cruz.jugador.pv === Math.round(cruz.jugador.pvMax * 0.25),
+      'si el compañero gana, el caído se levanta con el 25 % de sus PV máximos');
+  }
+  {
+    const duo = await nuevoDuo([pegador(7, 100)]);
+    for (const h of ['cara', 'cruz'] as const) await duo.combates[h].infligir(duo.combates[h].jugador, 999);
+    await duo.evaluar();
+    check(duo.terminado === 'derrota', 'si caen los dos, el combate se pierde');
+  }
+
+  // Randomness only happens when the game is applied: what the screen asks costs no rng
+  {
+    let llamadas = 0;
+    const base = crearRng(3);
+    const rngContado = () => { llamadas++; return base(); };
+    const runs = { cara: nuevaRun('barbaro', 3), cruz: nuevaRun('paladin', 3) };
+    const duo = new CombateDuo(runs, [EMBAUCADOR_ARCANO], rngContado, uiMulti, true);
+    await duo.iniciar();
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz'); // Vexis summons his illusions
+    const vexis = duo.enemigos.find((x) => x.def.id === 'embaucador-arcano')!;
+    check(duo.enemigos.some((x) => x.def.id === 'imagen-ilusoria' && x.vivo), 'Vexis ya tiene ilusiones en el campo');
+    const antes = llamadas;
+    for (const h of ['cara', 'cruz'] as const) {
+      const c = duo.combates[h];
+      for (const carta of c.jugador.mano) {
+        c.objetivoReal(carta, vexis);
+        c.valoresDeCarta(defDe(carta), vexis);
+      }
+      c.previsionAtaques();
+      for (const e of duo.enemigos) c.danoIntencion(e);
+    }
+    check(llamadas === antes, 'objetivoReal, los valores de las cartas y las previsiones no gastan rng en multijugador');
+  }
+} catch (e) {
+  check(false, `el motor de dos héroes: ${(e as Error).message}`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);
