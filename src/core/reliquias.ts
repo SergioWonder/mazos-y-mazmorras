@@ -637,11 +637,10 @@ function elegirPonderado<T>(rng: () => number, items: Array<[T, number]>): T | u
   return items[items.length - 1][0];
 }
 
-/** Rolls a relic for this run from the given source (undefined if none is left). */
-export function sortearReliquia(
-  run: EstadoRun, rng: () => number, origen: OrigenReliquia = 'cofre',
+/** Rolls a relic among `disponibles` from the given source (undefined if none is left). */
+export function sortearDePool(
+  disponibles: ReliquiaDef[], rng: () => number, origen: OrigenReliquia = 'cofre',
 ): ReliquiaDef | undefined {
-  const disponibles = reliquiasDisponibles(run);
   const tramos = (pesos: Partial<Record<RarezaReliquia, number>>) =>
     (Object.entries(pesos) as Array<[RarezaReliquia, number]>)
       .filter(([rareza]) => disponibles.some((r) => r.rareza === rareza));
@@ -652,6 +651,20 @@ export function sortearReliquia(
   if (!rareza) return undefined;
   const candidatas = disponibles.filter((r) => r.rareza === rareza);
   return elegirPonderado(rng, candidatas.map((r): [ReliquiaDef, number] => [r, r.soloClase ? PESO_CLASE : 1]));
+}
+
+/** Rolls a relic for this run from the given source (undefined if none is left). */
+export function sortearReliquia(
+  run: EstadoRun, rng: () => number, origen: OrigenReliquia = 'cofre',
+): ReliquiaDef | undefined {
+  return sortearDePool(reliquiasDisponibles(run), rng, origen);
+}
+
+/** The consolation when a chest has no relic left: bandages that heal 10 HP. Returns the HP healed. */
+export function curarPorVendas(run: EstadoRun, n = 10): number {
+  const real = Math.min(n, run.pvMax - run.pv);
+  run.pv += real;
+  return real;
 }
 
 /** Gives a relic to the run and applies its on-pickup effect. */

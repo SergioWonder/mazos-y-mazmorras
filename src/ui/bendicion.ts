@@ -1,6 +1,6 @@
 import type { EstadoRun, TipoBendicion } from '../core/types.ts';
 import {
-  ofrecerBendicionInicial, ofrecerBendicionEntreActos, aplicarBendicion, discursoSenescal, discursoSibila, type OfertaBendicion,
+  ofrecerBendicionInicial, ofrecerBendicionEntreActos, aplicarBendicion, aplicarBendicionEntreActos, discursoSenescal, discursoSibila, type OfertaBendicion,
 } from '../core/bendiciones.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
@@ -85,8 +85,8 @@ export function pantallaBendicion(
     function elegir(o: OfertaBendicion) {
       if (elegido) return;
       elegido = true;
-      aplicarBendicion(run, o, rng);
-      if (!inicial) run.pv = run.pvMax; // full heal between acts
+      if (inicial) aplicarBendicion(run, o, rng);
+      else aplicarBendicionEntreActos(run, o, rng); // plus a full heal
       fx.estallido('divino');
       anuncio(`✨ ${o.reliquia.nombre}`, 'anuncio-rara');
       window.removeEventListener('keydown', teclado);

@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '9.2.4';
+export const VERSION = '10.0.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,18 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.0.0',
+    fecha: '2026-11-04',
+    cambios: [
+      '👥 Multijugador cooperativo: desde el título, «Multijugador» e invita a otro perfil por su nombre (o a un bot para practicar). Le llega un aviso y, si tiene el juego abierto, una alerta para empezar.',
+      '⚔️ En combate jugáis a la vez y cada carta tiene efecto al momento: la vulnerabilidad que pone uno cuenta para el daño del otro. Cuando los dos termináis el turno, atacan los enemigos… a los dos.',
+      '🪙 En el mapa cada uno vota su camino; si no coincidís, se lanza una moneda (cara, quien invita; cruz, quien acepta). Las reliquias igual: dos a elegir y moneda si queréis la misma.',
+      '💾 La partida a dos se guarda en el servidor y se retoma desde «Multijugador» con el mismo compañero. Tu partida en solitario se guarda aparte.',
+      '🏅 La clasificación estrena la pestaña «Dúo», con los dos jugadores y sus clases en la misma fila.',
+      '✏️ Los nombres de perfil ahora son únicos.',
+    ],
+  },
   {
     version: '9.2.4',
     fecha: '2026-11-04',

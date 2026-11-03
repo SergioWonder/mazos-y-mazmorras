@@ -5,8 +5,9 @@ import './estilos/combate.css';
 import './estilos/pantallas.css';
 import './estilos/movil.css';
 
-import { crearRng, elegir } from './core/rng.ts';
+import { crearRng } from './core/rng.ts';
 import { nuevaRun, avanzarCapitulo, sortearEscenario, entrarEnSala, cartaExtraEnSala, elegirElite } from './core/run.ts';
+import { grupoNormal } from './core/sala.ts';
 import { ACTOS, DUNGEON_MASTER } from './core/enemigos.ts';
 import { desenlaceCampana } from './core/escena-final.ts';
 import { cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
@@ -30,6 +31,7 @@ import { iniciarTooltips, anuncio } from './ui/util.ts';
 import { crearMenuAjustes } from './ui/menu-ajustes.ts';
 import { activarSonidoInterfaz } from './ui/sonido-interfaz.ts';
 import { nube } from './core/nube.ts';
+import { iniciarAvisosMulti } from './ui/avisos-multi.ts';
 import {
   aterrizajeLogin, sincronizarAlTitulo, guardarYSubir, borrarGuardadoFinal, registrarFinDePartida, sincronizarFinalVerdadero,
 } from './ui/nube-juego.ts';
@@ -40,6 +42,8 @@ avisoInstalacion();
 iniciarActualizaciones();
 // `?login=<token>` from the magic-link email (the address bar is cleaned right away)
 void aterrizajeLogin();
+// Live multiplayer alerts (Buzón WebSocket) while there is a session
+iniciarAvisosMulti();
 
 // Settings menu (sound, volume, performance) at the top right of every screen
 crearMenuAjustes();
@@ -111,9 +115,8 @@ async function juego() {
 
       switch (nodo.tipo) {
         case 'combate': {
-          const grupo = elegir(rng, cap.normales.filter((g) => g.length <= (run.piso < 3 ? 2 : 3)));
           // its place among this act's normal fights (the node is already marked visited)
-          const orden = run.mapa.filter((n) => n.tipo === 'combate' && n.visitado).length - 1;
+          const { grupo, orden } = grupoNormal(run, rng);
           const resultado = await pantallaCombate(run, grupo, rng, false, cap.nombre, false, orden);
           if (resultado === 'derrota') vivo = false;
           else await elegirCarta(run, rng);

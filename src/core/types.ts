@@ -241,8 +241,11 @@ export interface EnemigoCombate extends Luchador {
   despierto?: boolean;
   /** Si está activo, este enemigo se salta su próxima acción (Seducir/Deseo). */
   saltaAccion?: boolean;
-  /** Instancias de Raíces activas: cada carta aporta su cantidad y su duración. */
-  raicesInstancias?: Array<{ cantidad: number; turnos: number }>;
+  /** Instancias de Raíces activas: cada carta aporta su cantidad y su duración. `hueco` = who cast
+   *  it (two-hero fights: it only protects that hero; absent when playing alone). */
+  raicesInstancias?: Array<{ cantidad: number; turnos: number; hueco?: string }>;
+  /** (two-hero fights) Darkness applied by each hero; `estados.oscuridad` is the sum of both. */
+  oscuridadPorHueco?: Record<string, number>;
   /** Recibió daño no bloqueado durante el turno del jugador (para la Hemorragia). */
   heridoEsteTurno?: boolean;
   /** Intención que ejecutará en su PRÓXIMO turno en vez de generar una nueva

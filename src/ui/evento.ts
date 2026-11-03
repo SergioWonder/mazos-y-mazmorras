@@ -1,5 +1,5 @@
 import type { EstadoRun } from '../core/types.ts';
-import { elegirEvento } from '../core/eventos.ts';
+import { abrirEvento } from '../core/eventos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { sceneArt, eventSceneId } from './scene-art.ts';
@@ -7,8 +7,7 @@ import { sceneArt, eventSceneId } from './scene-art.ts';
 /** Pantalla de evento narrativo con elecciones. */
 export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void> {
   return new Promise((resolver) => {
-    const evento = elegirEvento(rng, new Set(run.eventosVistos));
-    run.eventosVistos.push(evento.id);
+    const evento = abrirEvento([run], rng);
 
     const overlay = document.getElementById('overlay')!;
     overlay.innerHTML = '';

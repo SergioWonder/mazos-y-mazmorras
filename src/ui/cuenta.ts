@@ -21,6 +21,7 @@ export function seccionCuenta(): { seccion: HTMLElement; destruir: () => void } 
   let error = '';
   let email = '';
   let nota = ''; // feedback of the name form
+  let borrador: string | null = null; // name the player typed and the server rejected
   let cerrado = false;
 
   const pintar = () => {
@@ -89,7 +90,8 @@ export function seccionCuenta(): { seccion: HTMLElement; destruir: () => void } 
     input.maxLength = 24;
     input.placeholder = 'Nombre en la clasificación';
     input.setAttribute('aria-label', 'Nombre en la clasificación');
-    input.value = usuario.displayName ?? '';
+    // after a rejected name the player keeps what they typed, with the form still open
+    input.value = borrador ?? usuario.displayName ?? '';
     const boton = el('button', 'btn-tomar', 'Guardar nombre') as HTMLButtonElement;
     boton.type = 'submit';
     form.append(input, boton);
@@ -98,19 +100,23 @@ export function seccionCuenta(): { seccion: HTMLElement; destruir: () => void } 
       const nombre = input.value.trim();
       if (nombre.length < 2 || nombre.length > 24) {
         nota = 'El nombre debe tener entre 2 y 24 caracteres.';
+        borrador = nombre;
         return pintar();
       }
       boton.disabled = true;
       const res = await nube.cambiarNombre(nombre);
       nota = res === 'ok' ? 'Nombre guardado.'
         : res === 'invalido' ? 'El nombre debe tener entre 2 y 24 caracteres.'
+        : res === 'ocupado' ? 'Ese nombre ya lo usa otro aventurero. Elige otro.'
         : res === 'sin-sesion' ? 'Tu sesión ha caducado: vuelve a entrar.'
         : 'Sin conexión: no se pudo guardar el nombre.';
+      borrador = res === 'ok' ? null : nombre;
       pintar();
+      if (res === 'ocupado') seccion.querySelector<HTMLInputElement>('.cuenta-input')?.focus();
     });
     seccion.appendChild(form);
-    seccion.appendChild(el('small', 'cuenta-ayuda', 'Sin nombre apareces como «Aventurero anónimo» en la clasificación.'));
-    if (nota) seccion.appendChild(el('p', 'cuenta-aviso', nota));
+    seccion.appendChild(el('small', 'cuenta-ayuda', 'Sin nombre apareces como «Aventurero anónimo» en la clasificación. Para jugar en multijugador necesitas uno.'));
+    if (nota) seccion.appendChild(el('p', nota === 'Nombre guardado.' ? 'cuenta-aviso' : 'cuenta-aviso cuenta-error', nota));
     nota = '';
 
     const salir = el('button', 'btn-tomar cuenta-secundario', 'Cerrar sesión') as HTMLButtonElement;

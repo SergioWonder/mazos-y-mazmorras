@@ -56,9 +56,14 @@ export interface EntradaClasificacion {
   dmDefeated?: boolean; killer?: string | null; finalBoss?: string | null;
   chapter: number; floor: number; turns: number; createdAt: number;
 }
+/** Best run of a pair of profiles (the host first). */
+export interface EntradaClasificacionDuo {
+  players: Array<{ userId: string; displayName: string | null; heroClass: string }>;
+  result: 'victory' | 'defeat'; dmDefeated?: boolean; chapter: number; floor: number; turns: number; createdAt: number;
+}
 
 export type ResultadoEnlace = 'enviado' | 'email-invalido' | 'demasiados' | 'correo-no-disponible' | 'sin-conexion' | 'error';
-export type ResultadoNombre = 'ok' | 'invalido' | 'sin-sesion' | 'sin-conexion';
+export type ResultadoNombre = 'ok' | 'invalido' | 'ocupado' | 'sin-sesion' | 'sin-conexion';
 export type ResultadoSubida = 'subida' | 'conflicto' | 'sin-sesion' | 'error';
 export type EstadoRemoto =
   | { estado: 'hay'; partida: PartidaRemota }
@@ -67,6 +72,25 @@ export type EstadoRemoto =
   | { estado: 'error' };
 
 interface Respuesta { estado: number; cuerpo: any }
+
+export type Hueco = 'cara' | 'cruz';
+/** One of the player's multiplayer games as the lobby shows it (an invitation or a game to resume). */
+export interface PartidaMulti {
+  id: string;
+  estado: 'invitada' | 'activa';
+  /** The seat of this player: `cara` invited, `cruz` accepted. */
+  hueco: Hueco;
+  /** Only for invitations: sent by this player or received from the other. */
+  direccion: 'enviada' | 'recibida' | null;
+  otro: { id: string | null; nombre: string; bot: boolean };
+  claseCara: string;
+  claseCruz: string | null;
+  actualizada: number;
+}
+export type ResultadoInvitar =
+  | { estado: 'ok'; id: string; bot: boolean }
+  | { estado: 'no-existe' | 'ya-invitado' | 'a-ti-mismo' | 'sin-nombre' | 'sin-sesion' | 'sin-conexion' | 'error' };
+export type ResultadoMulti = 'ok' | 'no-existe' | 'no-pendiente' | 'no-activa' | 'clase-ocupada' | 'prohibido' | 'sin-sesion' | 'sin-conexion' | 'error';
 
 function almacenGlobal(): AlmacenNube | null {
   try { return typeof localStorage === 'undefined' ? null : localStorage; } catch { return null; }
@@ -182,6 +206,7 @@ export function crearNube(deps: DepsNube = {}) {
     if (!r) return 'sin-conexion';
     if (r.estado === 401) return 'sin-sesion';
     if (r.estado === 400) return 'invalido';
+    if (r.estado === 409) return 'ocupado'; // another adventurer already uses that name
     if (!ok(r)) return 'sin-conexion';
     const s = sesion();
     if (s) escribir(CLAVE_SESION, JSON.stringify({ token: s.token, usuario: r.cuerpo as Usuario } satisfies Sesion));
@@ -342,8 +367,79 @@ export function crearNube(deps: DepsNube = {}) {
     return r!.cuerpo.entries as EntradaClasificacion[];
   }
 
+  /** Multiplayer leaderboard: the best run of each pair of profiles. */
+  async function clasificacionDuo(limite = 20): Promise<EntradaClasificacionDuo[] | null> {
+    const r = await pedir('GET', `/leaderboard?mode=duo&limit=${limite}`, undefined, false);
+    if (!ok(r) || !Array.isArray(r!.cuerpo?.entries)) return null;
+    return r!.cuerpo.entries as EntradaClasificacionDuo[];
+  }
+
   const recordarClase = (clase: string) => escribir(CLAVE_ULTIMA_CLASE, clase);
   const ultimaClase = () => leer(CLAVE_ULTIMA_CLASE);
+
+  // ── Multiplayer: invitations, games, Web Push ──────────────────────────────
+  function resultadoMulti(r: Respuesta | null): ResultadoMulti {
+    if (!r) return 'sin-conexion';
+    if (ok(r)) return 'ok';
+    if (r.estado === 401) return 'sin-sesion';
+    if (r.estado === 403) return 'prohibido';
+    if (r.estado === 404) return 'no-existe';
+    if (r.estado === 409) {
+      if (r.cuerpo?.error === 'class_taken') return 'clase-ocupada';
+      return r.cuerpo?.error === 'not_active' ? 'no-activa' : 'no-pendiente';
+    }
+    return 'error';
+  }
+
+  /** Invites a player by display name (or `'bot'` for a debugging game against the bot). */
+  async function invitar(invitado: string, claseHeroe: string): Promise<ResultadoInvitar> {
+    const r = await pedir('POST', '/multi/games', { guest: invitado, heroClass: claseHeroe });
+    if (!r) return { estado: 'sin-conexion' };
+    if (ok(r)) return { estado: 'ok', id: String(r.cuerpo?.id), bot: r.cuerpo?.bot === true };
+    if (r.estado === 401) return { estado: 'sin-sesion' };
+    if (r.estado === 404) return { estado: 'no-existe' };
+    if (r.estado === 409) return { estado: 'ya-invitado' };
+    if (r.estado === 400) {
+      return { estado: r.cuerpo?.error === 'name_required' ? 'sin-nombre' : r.cuerpo?.error === 'cannot_invite_self' ? 'a-ti-mismo' : 'error' };
+    }
+    return { estado: 'error' };
+  }
+
+  /** Pending invitations (received and sent) and active games; null offline or logged out. */
+  async function partidasMulti(): Promise<PartidaMulti[] | null> {
+    const r = await pedir('GET', '/multi/games');
+    if (!ok(r) || !Array.isArray(r!.cuerpo?.games)) return null;
+    return (r!.cuerpo.games as any[]).map((g) => ({
+      id: g.id,
+      estado: g.status === 'invited' ? 'invitada' : 'activa',
+      hueco: g.hueco,
+      direccion: g.direction === 'sent' ? 'enviada' : g.direction === 'received' ? 'recibida' : null,
+      otro: { id: g.other?.id ?? null, nombre: g.other?.displayName ?? 'Aventurero anónimo', bot: g.other?.bot === true },
+      claseCara: g.hostClass,
+      claseCruz: g.guestClass ?? null,
+      actualizada: g.updatedAt,
+    }));
+  }
+
+  const aceptarInvitacion = async (id: string, claseHeroe: string) =>
+    resultadoMulti(await pedir('POST', `/multi/games/${encodeURIComponent(id)}/accept`, { heroClass: claseHeroe }));
+  const rechazarInvitacion = async (id: string) => resultadoMulti(await pedir('POST', `/multi/games/${encodeURIComponent(id)}/decline`, {}));
+  /** Asks the other player to resume (they get an alert); the room opens when both connect. */
+  const pedirRetomar = async (id: string) => resultadoMulti(await pedir('POST', `/multi/games/${encodeURIComponent(id)}/resume`, {}));
+
+  /** Public VAPID key to subscribe to Web Push with; null when the server has none (push unavailable). */
+  async function claveVapid(): Promise<string | null> {
+    const r = await pedir('GET', '/push/key', undefined, false);
+    return ok(r) && typeof r!.cuerpo?.key === 'string' && r!.cuerpo.key ? (r!.cuerpo.key as string) : null;
+  }
+  const suscribirPush = async (suscripcion: unknown) => resultadoMulti(await pedir('POST', '/push/subscribe', suscripcion));
+  const anularPush = async (endpoint: string) => resultadoMulti(await pedir('DELETE', '/push/subscribe', { endpoint }));
+
+  /** WebSocket address of a server route. The session rides as the subprotocol (browsers cannot set headers on a WebSocket). */
+  function direccionSocket(ruta: string): { url: string; protocolo: string } | null {
+    const s = sesion();
+    return s ? { url: `${apiUrl.replace(/^http/, 'ws')}${ruta}`, protocolo: s.token } : null;
+  }
 
   return {
     haySesion: () => sesion() !== null,
@@ -353,7 +449,9 @@ export function crearNube(deps: DepsNube = {}) {
     partidaRemota, subirPartida, borrarPartida, conflictoPendiente, revisionRun, aceptarRemota, imponerLocal,
     sincronizarPerfil,
     registrarPartidaTerminada, longitudCola, vaciarCola,
-    clasificacion, recordarClase, ultimaClase,
+    clasificacion, clasificacionDuo, recordarClase, ultimaClase,
+    invitar, partidasMulti, aceptarInvitacion, rechazarInvitacion, pedirRetomar,
+    claveVapid, suscribirPush, anularPush, direccionSocket,
   };
 }
 

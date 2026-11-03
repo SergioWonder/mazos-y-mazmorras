@@ -1,5 +1,5 @@
 import type { ContextoEncuentro } from '../core/dificultad.ts';
-import { Combate, esDungeonMaster, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
+import { Combate, esDungeonMaster, oscuridadDe, raicesDe, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
 import { FRASES_DM } from '../core/escena-final.ts';
 import type {
   CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
@@ -40,6 +40,42 @@ import {
 import { setSpriteTimeScale } from './puppet-sprite.ts';
 import { verCartas } from './visor-mazo.ts';
 import '../estilos/muerte.css';
+import type { CombateDuo, Entrada, Hueco } from '../core/multi/index.ts';
+import { otroHueco } from '../core/multi/index.ts';
+import type { ClaseId } from '../core/types.ts';
+
+/** Two-player mode of the combat screen: the engine (`CombateDuo`) owns the fight, this screen only shows it and
+ *  sends the local hero's entries. The solo flow never passes it. */
+export interface OpcionesCombateMulti {
+  duo: CombateDuo;
+  /** The seat of the local player. */
+  yo: Hueco;
+  clases: Record<Hueco, ClaseId>;
+  nombres: Record<Hueco, string>;
+  /** Sends the local hero's entry to the room (nothing is applied until the room echoes it back). */
+  enviar(entrada: Entrada): void;
+  /** Hands the caller the view as soon as it is built (the engine's presenters are the view's). */
+  alMontar(vista: VistaCombateMulti): void;
+}
+
+/** What the multiplayer loop drives on the combat screen. */
+export interface VistaCombateMulti {
+  duo: CombateDuo;
+  /** Tears the screen down without ending the fight (the game is being rebuilt). */
+  destruir(): void;
+  /** The presenter of each hero's combat, to hand to the engine. */
+  presentadores: Record<Hueco, Presentador>;
+  /** Plays a card's flight and the hero's gesture before the engine resolves it. */
+  jugada(h: Hueco, carta: CartaInstancia, objetivo?: EnemigoCombate): Promise<void>;
+  /** The card has been resolved: settle the pending effects. */
+  cerrarJugada(): Promise<void>;
+  /** The room refused the entry that was being awaited. */
+  rechazada(): void;
+  /** Shows the card picker of a card that asks something mid-play (discard, recover…). */
+  elegirCarta(cartas: CartaInstancia[], titulo: string, cancelable: boolean): Promise<CartaInstancia | null>;
+  /** Repaints (the partner's state may have changed). */
+  actualizar(): void;
+}
 
 /** How long an enemy takes to fall: its puppet's death, or the CSS one of the emoji enemies. */
 const MUERTE_SPRITE_MS = 750;
@@ -91,6 +127,7 @@ export function pantallaCombate(
   nombreCapitulo: string,
   esElite = false,
   orden?: number,
+  multi?: OpcionesCombateMulti,
 ): Promise<'victoria' | 'derrota'> {
   return new Promise((resolver) => {
     ultimaCaida = null;
@@ -101,7 +138,7 @@ export function pantallaCombate(
     audio.reproducirTema(combatTheme(run.capitulo, esJefe, defs, run.escenario)); // scenario combat version, boss or the DM
 
     // ── Estructura ──────────────────────────────────────────────────────────
-    const raiz = el('div', 'combate');
+    const raiz = el('div', multi ? 'combate combate-duo' : 'combate');
     raiz.innerHTML = `
       <div class="escenario">
         <div class="cielo"><div class="luna"></div></div>
@@ -171,7 +208,7 @@ export function pantallaCombate(
     };
     /** The figure's body when it has a puppet (Doom's bell and chains hug it), else its box. */
     const cuerpoDe = (obj: Luchador) => {
-      const s = obj === combate.jugador ? undefined : spritesEnemigo.get(obj as EnemigoCombate);
+      const s = esHeroe(obj) ? undefined : spritesEnemigo.get(obj as EnemigoCombate);
       return s ? s.bodyBox() : cajaDe(elemDe(obj));
     };
     /** The funeral bell of Doom, heard once for every enemy it tolls over at the same time. */
@@ -220,11 +257,18 @@ export function pantallaCombate(
 
     // ── Presentador: efectos visuales que pide el motor ──────────────────────
     const elemDe = (obj: Luchador): HTMLElement | null => {
-      if (obj === combate.jugador) return raiz.querySelector('.heroe');
+      if (obj === combate.jugador) return raiz.querySelector('.heroe[data-luchador="jugador"]');
+      if (companero && obj === companero.jugador) return raiz.querySelector('.heroe[data-luchador="companero"]');
       const idx = combate.enemigos.indexOf(obj as EnemigoCombate);
       return raiz.querySelector(`.enemigo[data-idx="${idx}"]`);
     };
     const elemInvocacion = (): HTMLElement | null => raiz.querySelector('.invocacion');
+    /** Either hero of the screen (the partner too, in two-player mode). */
+    const esHeroe = (obj: Luchador): boolean => obj === combate.jugador || (!!companero && obj === companero.jugador);
+    /** The hero whose card is being played (the caster of the effects drawn meanwhile). */
+    let lanzadorMulti: Luchador | null = null;
+    const lanzador = (): Luchador => lanzadorMulti ?? combate.jugador;
+    const spriteDe = (obj: Luchador): HeroSprite | null => (obj === combate.jugador ? spriteActual() : spriteCompanero);
 
     // ── Spell VFX: each card fx key has its own composition (fx/spell-fx.ts) ─
     /** Effect of the card being played and who has already shown it. */
@@ -256,10 +300,10 @@ export function pantallaCombate(
     };
     /** Casts spell `clave` on a fighter (from the hero when the receiver is an enemy). */
     const lanzarHechizo = (clave: string, obj: Luchador, desde?: { x: number; y: number }, tinte?: string) => {
-      const heroe = obj === combate.jugador;
+      const heroe = esHeroe(obj);
       const campana = clave === 'condena';
       const ok = fx.hechizo(clave, campana ? cuerpoDe(obj) : cajaDe(elemDe(obj)), {
-        desde: desde ?? (heroe ? undefined : centroDe(elemDe(combate.jugador))), mirando: heroe ? 1 : -1, tinte,
+        desde: desde ?? (heroe ? undefined : centroDe(elemDe(lanzador()))), mirando: heroe ? 1 : -1, tinte,
       });
       // Doom: the bell tolls, and the enemy's chains wait for the toll to climb
       if (ok && campana) {
@@ -278,9 +322,9 @@ export function pantallaCombate(
     const hechizoPara = (obj: Luchador): boolean => {
       const h = hechizoCarta;
       if (!h || h.hecho.has(obj) || !fx.tieneHechizo(h.clave)) return false;
-      if (obj === combate.jugador && fx.receptorHechizo(h.clave) === 'enemies') return false;
-      if (h.hecho.size > 0 && (obj === combate.jugador || h.hecho.has(combate.jugador))) return false;
-      if (h.modo === 'enemigo' && obj !== combate.jugador && h.objetivo && obj !== h.objetivo) return false;
+      if (obj === lanzador() && fx.receptorHechizo(h.clave) === 'enemies') return false;
+      if (h.hecho.size > 0 && (obj === lanzador() || h.hecho.has(lanzador()))) return false;
+      if (h.modo === 'enemigo' && !esHeroe(obj) && h.objetivo && obj !== h.objetivo) return false;
       h.hecho.add(obj);
       lanzarHechizo(h.clave, obj);
       return true;
@@ -292,7 +336,7 @@ export function pantallaCombate(
       hechizoCarta = def.fx
         ? { clave: cardSpellKey(def.id, def.fx), id: def.id, fx: def.fx, tipo: def.tipo, modo: def.objetivo, objetivo, hecho: new Set() }
         : null;
-      if (hechizoCarta && fx.anclaHechizo(hechizoCarta.clave) === 'self') hechizoPara(combate.jugador);
+      if (hechizoCarta && fx.anclaHechizo(hechizoCarta.clave) === 'self') hechizoPara(lanzador());
       // the Prodigious Spell looks like a random spell, grander the more it deals
       hechizoProdigio = def.id === 'conjuro-prodigioso' ? prodigiousSpell(10 + combate.jugador.conjuroEscrito) : null;
     };
@@ -303,7 +347,7 @@ export function pantallaCombate(
       hechizoProdigio = null;
       barrido.reset();
       if (!h || h.hecho.size > 0 || !fx.tieneHechizo(h.clave)) return;
-      if (hechizoAlHeroe(h)) lanzarHechizo(h.clave, combate.jugador);
+      if (hechizoAlHeroe(h)) lanzarHechizo(h.clave, lanzador());
       else if (h.modo === 'enemigo' && h.objetivo) lanzarHechizo(h.clave, h.objetivo);
       else for (const e of combate.enemigos.filter((x) => x.vivo)) lanzarHechizo(h.clave, e);
     };
@@ -344,7 +388,7 @@ export function pantallaCombate(
       if (h.cast || !ctxBarrido) {
         const cajas = combate.enemigos.filter((e) => e.vivo || e === obj).map((e) => cajaDe(elemDe(e)));
         ctxBarrido = {
-          box: unirCajas(cajas), targets: cajas, from: centroDe(elemDe(combate.jugador)), view: { w: window.innerWidth, h: window.innerHeight },
+          box: unirCajas(cajas), targets: cajas, from: centroDe(elemDe(lanzador())), view: { w: window.innerWidth, h: window.innerHeight },
         };
         fx.hechizo(clave, ctxBarrido.box, { desde: ctxBarrido.from, mirando: -1, objetivos: cajas });
         const sacudida = fx.sacudidaHechizo(clave);
@@ -360,13 +404,13 @@ export function pantallaCombate(
     const pvPintado = new WeakMap<Luchador, number>();
     /** Hit effect: its own spell when there is one. Returns false to fall back to particles. */
     const hechizoGolpe = (obj: Luchador, efecto: string): boolean => {
-      if (actor && obj === combate.jugador && actor.e.intencion.mataAlInstante) {
+      if (actor && esHeroe(obj) && actor.e.intencion.mataAlInstante) {
         // the Dungeon Master's ray leaves his flung hands, with a full-screen flash
         const r = cajaDe(elemDe(actor.e));
         destelloPantalla();
         return lanzarHechizo('rayoDM', obj, { x: r.x + r.w * 0.45, y: r.y + r.h * 0.4 });
       }
-      if (efecto === 'aliento' && actor && obj === combate.jugador) {
+      if (efecto === 'aliento' && actor && esHeroe(obj)) {
         // Ignifax's breath pours from the mouth; the Beholder's rays leave its eye
         const r = elemDe(actor.e)?.getBoundingClientRect();
         const rayo = /^(rayo|mirada)/i.test(actor.movimiento);
@@ -374,7 +418,7 @@ export function pantallaCombate(
         const tinte = rayo ? TINTE_RAYO.find(([re]) => re.test(actor!.movimiento))?.[1] ?? '#ff5ad8' : undefined;
         return lanzarHechizo(rayo ? 'rayoOcular' : 'aliento', obj, desde, tinte);
       }
-      if (hechizoProdigio && !actor && obj !== combate.jugador) {
+      if (hechizoProdigio && !actor && !esHeroe(obj)) {
         hechizoCarta?.hecho.add(obj);
         if (hechizoProdigio === 'rayoDM') destelloPantalla();
         return lanzarHechizo(hechizoProdigio, obj);
@@ -387,7 +431,7 @@ export function pantallaCombate(
       const clave = hitSpell(actor || repetida ? null : hechizoCarta, efecto);
       if (!fx.tieneHechizo(clave)) return false;
       if (hechizoCarta && efecto === hechizoCarta.fx) hechizoCarta.hecho.add(obj);
-      return lanzarHechizo(clave, obj, obj === combate.jugador && actor ? centroDe(elemDe(actor.e)) : undefined);
+      return lanzarHechizo(clave, obj, esHeroe(obj) && actor ? centroDe(elemDe(actor.e)) : undefined);
     };
 
     const ui: Presentador = {
@@ -401,8 +445,8 @@ export function pantallaCombate(
         const clave = actor ? '' : hitSpell(hechizoCarta, efecto);
         let rafaga = actor ? null : fx.rafagaHechizo(clave);
         // Doom consuming an enemy: nothing lands on it, its death by Doom plays instead
-        const remate = obj !== combate.jugador && isDoomConsumption(efecto, !!hechizoCarta);
-        const barre = obj !== combate.jugador && !actor && !remate ? fx.barridoHechizo(clave) : null;
+        const remate = !esHeroe(obj) && isDoomConsumption(efecto, !!hechizoCarta);
+        const barre = !esHeroe(obj) && !actor && !remate ? fx.barridoHechizo(clave) : null;
         if (!rafaga && barre === null) await impactos.settle();
         if (remate) rafaga = null;
         else if (barre !== null) {
@@ -424,7 +468,7 @@ export function pantallaCombate(
           if (remate && dano > 0) {
             numeroFlotante(elem, `${dano}`, 'dano');
           } else if (dano > 0) {
-            if (obj === combate.jugador) spriteActual().play('hit');
+            if (esHeroe(obj)) spriteDe(obj)?.play('hit');
             else spriteEnemigo(obj as EnemigoCombate)?.play('hit');
             numeroFlotante(elem, `${dano}`, 'dano');
             elem?.classList.add('golpeado');
@@ -454,7 +498,7 @@ export function pantallaCombate(
         await impactos.settle();
         const elem = elemDe(obj);
         // the card's own effect (a shield, bark, moonlight…) stands for the block it grants
-        const yaMostrado = obj === combate.jugador && !!hechizoCarta?.hecho.has(obj);
+        const yaMostrado = obj === lanzador() && !!hechizoCarta?.hecho.has(obj);
         if (!yaMostrado && !hechizoPara(obj)) lanzarHechizo('bloqueo', obj);
         audio.sfx('bloqueo');
         numeroFlotante(elem, `+${n} 🛡`, 'bloqueo');
@@ -658,7 +702,77 @@ export function pantallaCombate(
     };
 
     const contexto: ContextoEncuentro = { tipo: esJefe ? 'jefe' : esElite ? 'elite' : 'normal', orden };
-    const combate = new Combate(run, defs, rng, ui, esJefe || esElite, contexto);
+    // Two players: the engine already built both combats; the screen shows mine and the partner's compactly
+    const duo = multi?.duo ?? null;
+    const yo: Hueco = multi?.yo ?? 'cara';
+    const combate: Combate = multi ? multi.duo.combates[multi.yo] : new Combate(run, defs, rng, ui, esJefe || esElite, contexto);
+    const companero: Combate | null = multi ? multi.duo.combates[otroHueco(multi.yo)] : null;
+    const spriteCompanero: HeroSprite | null = multi ? new HeroSprite(multi.clases[otroHueco(multi.yo)], stage) : null;
+    const nombreCompanero = multi ? multi.nombres[otroHueco(multi.yo)] : '';
+    /** The fight is over: this combat's own end when alone, the party's with two heroes. */
+    const finDe = () => (duo ? duo.terminado : combate.terminado);
+    /** Entries the room refused: whoever waits for an echo stops waiting. */
+    let rechazos = 0;
+    /** Waits until `cond` holds (the room echoed what was sent), or the entry is refused, or too long passes. */
+    const esperarEco = async (cond: () => boolean, maxMs = 20_000) => {
+      const r0 = rechazos;
+      const t0 = performance.now();
+      while (!cond() && rechazos === r0 && !resuelto && performance.now() - t0 < maxMs) await new Promise<void>((r) => setTimeout(r, 40));
+    };
+    /** The partner's summon has no panel of its own: its effects show over the hero. */
+    const uiCompanero: Presentador = {
+      ...ui,
+      async fxInvocacionGolpe(dano) {
+        numeroFlotante(elemDe(companero!.jugador), `🐾 ${dano}`, 'dano');
+        await espera(240);
+      },
+      async fxInvocacionMuerte() {
+        numeroFlotante(elemDe(companero!.jugador), '🐾 ✝', 'dano');
+        await espera(300);
+      },
+      async fxInvocacionAtaca() {
+        const { x, y } = centroDe(elemDe(companero!.jugador));
+        fx.emitir('zarpa', x, y);
+        await espera(200);
+      },
+      async fxInvocacionCura(n) {
+        numeroFlotante(elemDe(companero!.jugador), `🐾 +${n}`, 'cura');
+        await espera(220);
+      },
+    };
+    /** Tears the screen down without ending the fight (the game is being rebuilt). */
+    let destruirVista: () => void = () => {};
+    if (multi) {
+      multi.alMontar({
+        duo: multi.duo,
+        destruir: () => destruirVista(),
+        presentadores: { [multi.yo]: ui, [otroHueco(multi.yo)]: uiCompanero } as Record<Hueco, Presentador>,
+        async jugada(h, inst, objetivo) {
+          const c = multi.duo.combates[h];
+          lanzadorMulti = c.jugador;
+          const mia = h === multi.yo;
+          const elem = mia ? raiz.querySelector(`.carta[data-mano="${c.jugador.mano.indexOf(inst)}"]`) as HTMLElement | null : null;
+          // the hero swings (or casts) while the card flies; damage waits for the blow
+          const inicio = performance.now();
+          const impacto = (mia ? spriteActual() : spriteCompanero!).play(defDe(inst).tipo === 'ataque' ? 'attack' : 'spell');
+          if (mia) lanzadas.add(inst);
+          await animarLanzamiento(inst, elem, objetivo, impacto);
+          const restante = impacto - (performance.now() - inicio);
+          if (restante > 0) await espera(restante);
+          abrirHechizoCarta(defDe(inst), objetivo);
+        },
+        async cerrarJugada() {
+          await impactos.settle();
+          vidaEnVuelo.clear();
+          cerrarHechizoCarta();
+          lanzadorMulti = null;
+          render();
+        },
+        rechazada() { rechazos++; },
+        elegirCarta: (cartas, titulo, cancelable) => ui.elegirCarta(cartas, titulo, { cancelable }),
+        actualizar: () => render(),
+      });
+    }
 
     // ── Action queue ─────────────────────────────────────────────────────────
     // Cards and "end turn" chosen while something resolves wait here instead of
@@ -668,7 +782,7 @@ export function pantallaCombate(
         if (a.kind !== 'card') return { ok: true };
         const v = checkCardAction(a, {
           inHand: (c) => combate.jugador.mano.includes(c),
-          canPlay: (c) => combate.puedeJugar(c),
+          canPlay: (c) => (duo ? duo.puedeJugar(yo, c) : combate.puedeJugar(c)),
           reason: (c) => motivoNoJugable(c),
           needsTarget: (c) => defDe(c).objetivo === 'enemigo',
           isAlive: (e) => e.vivo,
@@ -683,6 +797,21 @@ export function pantallaCombate(
         return { ok: true };
       },
       execute: async (a) => {
+        if (multi) {
+          // two players: nothing is applied here. The entry goes to the room and the card stays «being played»
+          // (still in hand) until the room's echo is applied, the same way on both screens.
+          if (a.kind === 'card') {
+            const objetivo = a.target ? combate.enemigos.indexOf(a.target) : -1;
+            multi.enviar({ tipo: 'jugar', carta: String(a.card.uid), ...(objetivo >= 0 ? { objetivo } : {}) });
+            await esperarEco(() => !combate.jugador.mano.includes(a.card));
+          } else if (a.kind === 'endTurn') {
+            const turno = combate.turno;
+            multi.enviar({ tipo: 'finTurno' });
+            // until the next round starts for me (the enemy turn plays out meanwhile)
+            await esperarEco(() => duo!.terminado !== null || combate.turno > turno, 60_000);
+          }
+          return;
+        }
         if (a.kind === 'start') {
           await combate.iniciar();
           // final scene: the Dungeon Master opens with his classic line
@@ -710,7 +839,9 @@ export function pantallaCombate(
     }
     /** Why `inst` cannot be queued now (energy and spell slots left after the queue), or null. */
     function motivoNoEncolable(inst: CartaInstancia): string | null {
-      if (combate.terminado || cola.isClosed) return 'El combate ha terminado';
+      if (finDe() || cola.isClosed) return 'El combate ha terminado';
+      if (duo && !combate.jugador.vivo) return '💀 Estás caído';
+      if (duo && duo.finTurno[yo]) return `Ya has terminado tu turno: esperando a ${nombreCompanero}…`;
       if (cola.indexOf(finTurnoEnCola) >= 0) return 'Fin de turno pendiente (tócalo para cancelarlo)';
       const def = defDe(inst);
       if (def.tipo === 'maldicion' && def.purgar === undefined) return '☠️ Las maldiciones no se pueden jugar';
@@ -748,7 +879,8 @@ export function pantallaCombate(
     }
     /** "End turn" toggles: queues it, or cancels it if already waiting. */
     function pulsarFinTurno() {
-      if (combate.terminado || cola.isClosed) return;
+      if (finDe() || cola.isClosed) return;
+      if (duo && (!combate.jugador.vivo || duo.finTurno[yo])) return;
       if (cola.remove(finTurnoEnCola)) return;
       // the enemy turn (and the draw of the next hand) is already an end turn running:
       // a second one would skip the player's next turn
@@ -763,7 +895,7 @@ export function pantallaCombate(
     // ── Render ───────────────────────────────────────────────────────────────
     function render() {
       // a boss phase change (Abaddon rising) crossfades to the other version of the boss song
-      if (esJefe && !combate.terminado && combate.enemigos.some((e) => e.vivo)) {
+      if (esJefe && !finDe() && combate.enemigos.some((e) => e.vivo)) {
         audio.reproducirTema(combatTheme(run.capitulo, true, combate.enemigos.filter((e) => e.vivo).map((e) => e.def), run.escenario));
       }
       renderBarra();
@@ -888,6 +1020,7 @@ export function pantallaCombate(
           ${j.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${j.bloqueo}</div>` : ''}
           ${conjuro}
           ${indicadorCastigo()}
+          ${!j.vivo ? '<div class="badge-caido badge-caido-yo">Caído</div>' : ''}
           ${sprite}
           ${barraVida(j)}
           ${fichasEstados(j)}
@@ -896,7 +1029,7 @@ export function pantallaCombate(
         </div>
         ${renderInvocacionHTML()}`;
       const actual = spriteActual();
-      $('.sprite-silueta')?.appendChild(actual.element);
+      $('.heroe[data-luchador="jugador"] .sprite-silueta')?.appendChild(actual.element);
       // glows that used to be CSS filters on the emoji: Fury, druid form, Mirror Image
       actual.setAura(furiaActiva ? '#ff6b35' : forma ? '#7dba4e' : null);
       actual.setEchoes((j.estados.espejismo ?? 0) > 0);
@@ -911,6 +1044,32 @@ export function pantallaCombate(
         if (forma) actual.play('spell');
         formaMostrada = forma;
       }
+      if (companero) renderCompanero();
+    }
+
+    /** The partner (two players): his figure on the stage, with a compact state next to it. */
+    function renderCompanero() {
+      const cj = companero!.jugador;
+      const listo = duo!.finTurno[otroHueco(yo)] && cj.vivo;
+      const rival = multi!.clases[otroHueco(yo)];
+      const div = el('div', `heroe heroe-companero${listo ? ' companero-listo' : ''}${cj.vivo ? '' : ' caido'}`);
+      div.dataset.luchador = 'companero';
+      div.style.setProperty('--acento-heroe', spriteCompanero!.accent);
+      div.innerHTML = `
+        <div class="companero-nombre"></div>
+        ${cj.bloqueo > 0 ? `<div class="bloqueo-ficha">🛡️${cj.bloqueo}</div>` : ''}
+        <div class="sprite sprite-jugador sprite-silueta"></div>
+        ${barraVida(cj)}
+        ${fichasEstados(cj)}
+        <div class="companero-estado">
+          <span class="chip-energia" data-tip="Energía de tu compañero">⚡ ${cj.energia}/${cj.energiaMax}</span>
+          ${cj.invocacion && cj.invocacion.vida > 0 ? `<span class="chip-energia" data-tip="Su invocación">🐾 ${cj.invocacion.vida}/${cj.invocacion.vidaMax}</span>` : ''}
+          ${!cj.vivo ? '<span class="badge-caido">Caído</span>' : listo ? '<span class="badge-listo">Listo</span>' : ''}
+        </div>`;
+      (div.querySelector('.companero-nombre') as HTMLElement).textContent = `${nombreCompanero} · ${NOMBRE_CLASE[rival] ?? rival}`;
+      $('.lado-jugador').appendChild(div);
+      div.querySelector('.sprite-silueta')!.appendChild(spriteCompanero!.element);
+      spriteCompanero!.setAura(null);
     }
 
     function textoIntencion(e: EnemigoCombate, p?: PrevisionAtaque): string {
@@ -927,7 +1086,9 @@ export function pantallaCombate(
         const veces = m.veces && m.veces > 1 ? `×${m.veces}` : '';
         // the raw hit (block and summons are not taken off); 🌿 if the roots will crush it
         const raices = p?.aplastado ? ' <small class="int-raices">🌿</small>' : '';
-        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${raices}</span>`;
+        // two players: the blow falls on both heroes at once
+        const ambos = duo ? ' <small class="int-ambos">👥</small>' : '';
+        return `<span class="int-ataque">⚔️ <span class="${mod}">${d}</span>${veces}${raices}${ambos}</span>`;
       }
       if (m.invocar) return `<span class="int-mejora">👥</span>`;
       if (m.devorar) return `<span class="int-mejora">🍖</span>`;
@@ -944,8 +1105,11 @@ export function pantallaCombate(
       const st = e.estados;
       const partes = [`${m.dano} base`];
       if (st.fuerza) partes.push(`${st.fuerza > 0 ? '+' : '−'}${Math.abs(st.fuerza)} Fuerza`);
-      if (st.raices) partes.push(`−${st.raices} Raíces`);
-      if (st.oscuridad) partes.push(`−${st.oscuridad} Oscuridad`);
+      // only the roots and darkness this hero cast count against him (two players)
+      const raicesMias = raicesDe(e, combate.hueco);
+      const oscuridadMia = oscuridadDe(e, combate.hueco);
+      if (raicesMias) partes.push(`−${raicesMias} Raíces`);
+      if (oscuridadMia) partes.push(`−${oscuridadMia} Oscuridad`);
       if ((st.debil ?? 0) > 0) partes.push('Débil −25 %');
       if (combate.vulnerableAlGolpe() > 0) partes.push('tu Vulnerable +50 %');
       const lineas: string[] = [];
@@ -973,8 +1137,8 @@ export function pantallaCombate(
         if (cartaPendiente || modoObjetivo) div.classList.add('targeteable');
         if (objetivoSel) div.classList.add('objetivo-activo');
         const tipInt: Record<string, string> = {
-          ataque: 'Pretende atacarte', defensa: 'Va a defenderse',
-          mejora: 'Va a potenciarse', perjuicio: 'Va a debilitarte', desconocido: '…',
+          ataque: duo ? 'Pretende atacaros a los dos' : 'Pretende atacarte', defensa: 'Va a defenderse',
+          mejora: 'Va a potenciarse', perjuicio: duo ? 'Va a debilitaros a los dos' : 'Va a debilitarte', desconocido: '…',
         };
         const rasgo = rasgoActual(e, combate.enemigos); // the incubus' changes once the succubus falls
         // its next move is only revealed when the player's turn begins
@@ -1093,9 +1257,12 @@ export function pantallaCombate(
       const btn = $('.btn-fin-turno');
       const pendiente = cola.indexOf(finTurnoEnCola) >= 0;
       const enCurso = cola.current?.kind === 'endTurn';
+      const esperando = !!duo && duo.finTurno[yo] && !duo.finTurno[otroHueco(yo)] && companero!.jugador.vivo && !finDe();
       btn.classList.toggle('fin-pendiente', pendiente);
       btn.classList.toggle('turno-enemigo', enCurso && !pendiente);
-      const html = pendiente
+      const html = esperando
+        ? `Esperando a ${nombreCompanero.replace(/[<>&]/g, '')}…<span class="atajo">⏳</span>`
+        : pendiente
         ? 'Fin de turno<span class="atajo">⏳</span>'
         : enCurso
           ? 'Turno enemigo<span class="atajo">…</span>'
@@ -1201,7 +1368,7 @@ export function pantallaCombate(
         kind: def.tipo === 'maldicion' ? 'habilidad' : def.tipo, // a paid-off curse flies like a skill
         selfFx: !!clave && fx.anclaHechizo(clave) === 'self',
         target: objetivo ? caja(elemDe(objetivo)) : null,
-        hero: caja(elemDe(combate.jugador)),
+        hero: caja(elemDe(lanzador())),
         enemies: combate.enemigos.filter((e) => e.vivo).map((e) => caja(elemDe(e))).filter((b) => b !== null),
         from: desde,
         viewport: { w: window.innerWidth, h: window.innerHeight },
@@ -1212,7 +1379,7 @@ export function pantallaCombate(
     function cajaReceptores(def: CartaDef, objetivo: EnemigoCombate | undefined, clave: string) {
       const alHeroe = fx.receptorHechizo(clave) !== 'enemies'
         && (fx.anclaHechizo(clave) === 'self' || def.objetivo === 'ninguno' || def.objetivo === 'propio');
-      const quienes: Luchador[] = alHeroe ? [combate.jugador]
+      const quienes: Luchador[] = alHeroe ? [lanzador()]
         : def.objetivo === 'enemigo' && objetivo ? [objetivo] : combate.enemigos.filter((e) => e.vivo);
       return unirCajas(quienes.map((q) => cajaDe(elemDe(q))));
     }
@@ -1225,7 +1392,7 @@ export function pantallaCombate(
       const suelta = soltada?.inst === inst && performance.now() - soltada.at < 1500 ? soltada : null;
       soltada = null;
       // a card that will end up exhausted burns away on the way instead of fading on arrival
-      const exhaust = exhaustsWhenPlayed(def, combate.jugador.estados);
+      const exhaust = exhaustsWhenPlayed(def, (lanzador() as typeof combate.jugador).estados);
       // Animación especial de cartas raras: carta gigante + estallido de partículas
       if (def.animRara) {
         const grande = renderCarta(def);
@@ -1236,7 +1403,7 @@ export function pantallaCombate(
         const preludio = preludeKey(def.id);
         if (preludio) {
           fx.hechizo(preludio, cajaReceptores(def, objetivo, cardSpellKey(def.id, def.fx)), {
-            desde: centroDe(elemDe(combate.jugador)), mirando: fx.anclaHechizo(preludio) === 'self' ? 1 : -1,
+            desde: centroDe(elemDe(lanzador())), mirando: fx.anclaHechizo(preludio) === 'self' ? 1 : -1,
           });
         } else fx.estallido(def.fx ?? 'impacto');
         audio.sfxRara(def.fx ?? 'divino');
@@ -1456,7 +1623,7 @@ export function pantallaCombate(
 
     // ── Teclado (simulando mando) ────────────────────────────────────────────
     function alTeclar(ev: KeyboardEvent) {
-      if (combate.terminado) return;
+      if (finDe()) return;
       // a card selector (discard N, pick a card…) owns the keyboard until the player chooses
       if (document.getElementById('overlay')?.classList.contains('overlay-activo')) return;
       const mano = combate.jugador.mano;
@@ -1511,33 +1678,43 @@ export function pantallaCombate(
     /** Length of the running death sequence (ms), null when there is none. */
     let muerteMs: number | null = null;
     function comprobarFinal() {
-      if (!combate.terminado || resuelto) return;
+      if (!finDe() || resuelto) return;
       resuelto = true;
       cola.close(); // whatever was still queued is dropped
       window.removeEventListener('keydown', alTeclar);
       // the last enemy just fell: the calm version comes back, from the same point of the song
-      const calma = themeAfterCombat(combate.terminado, run.capitulo, run.escenario, defs);
+      const calma = themeAfterCombat(finDe()!, run.capitulo, run.escenario, defs);
       if (calma) audio.reproducirTema(calma);
       // a real defeat plays the hero's death (the Dungeon Master's ray has its own scene)
-      const muerte = playsDefeatSequence(combate.terminado, defs) ? muerteHeroe() : null;
+      const muerte = playsDefeatSequence(finDe()!, defs) ? muerteHeroe() : null;
       // time to read the DM's last line; a soul dragged under by Doom is seen to the end
       const pausa = Math.max(muerteMs ?? (defs.some((d) => d.dungeonMaster) ? 1800 : 700), almaHasta - performance.now());
       // the last enemies finish falling before the screen goes
       void Promise.all([espera(pausa), muertes.settle()]).then(() => {
         muerte?.();
-        run.pv = Math.max(0, combate.jugador.pv);
-        if (combate.terminado === 'victoria') {
-          for (const r of run.reliquias) r.finCombate?.(run);
-        }
-        heroSprite.destroy();
-        for (const s of formSprites.values()) s.destroy();
-        for (const s of spritesEnemigo.values()) s.destroy();
-        for (const s of spritesInvocacion.values()) s.destroy();
-        stage?.destroy();
-        medirEscenario.disconnect();
-        resolver(combate.terminado!);
+        if (!multi) combate.cerrarCombate(); // the HP carry over and the relics that heal after a win act (the engine does it for two)
+        limpiar();
+        resolver(finDe()!);
       });
     }
+
+    /** Releases the screen's sprites and the WebGL stage. */
+    function limpiar() {
+      heroSprite.destroy();
+      spriteCompanero?.destroy();
+      for (const s of formSprites.values()) s.destroy();
+      for (const s of spritesEnemigo.values()) s.destroy();
+      for (const s of spritesInvocacion.values()) s.destroy();
+      stage?.destroy();
+      medirEscenario.disconnect();
+    }
+    destruirVista = () => {
+      if (resuelto) return;
+      resuelto = true;
+      cola.close();
+      window.removeEventListener('keydown', alTeclar);
+      limpiar();
+    };
 
     /**
      * The hero's last moments (fx/hero-death.ts): red heartbeat and shake, slow motion
@@ -1617,7 +1794,8 @@ export function pantallaCombate(
       esJefe ? 'anuncio-jefe' : '',
     );
     // the intro runs through the queue too, so cards chosen meanwhile wait for it
-    cola.enqueue({ kind: 'start' });
+    if (multi) render(); // the engine started the fight (and plays the intro) before the screen existed
+    else cola.enqueue({ kind: 'start' });
   });
 }
 

@@ -79,9 +79,58 @@ export interface PrevisionAtaque {
   aplastado: boolean;
 }
 
+/** Everything that belongs to the enemy side of a fight. In a solo fight the combat owns
+ *  one; in a two-hero fight both combats point at the same one, so what a hero does to an
+ *  enemy (and what the enemies decide) exists exactly once. */
+export interface LadoEnemigo {
+  enemigos: EnemigoCombate[];
+  /** Enemies that already picked their next move during the enemy turn: it stays hidden
+   *  until the heroes' turn begins. */
+  intencionesOcultas: Set<EnemigoCombate>;
+  /** Enemies of a group of three or more that attacked in the round just announced. */
+  atacaronUltima: Set<EnemigoCombate>;
+  /** Hits the Dungeon Master's screen has soaked up (every other one gets his retort). */
+  golpesPantallaDM: number;
+  /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
+  finalVerdadero: boolean;
+  /** HP scale of the enemies that join the fight (1.6 with two heroes, see multi/combate-duo.ts). */
+  factorPv: number;
+}
+
+/** What a combat needs to know when it is one of two heroes fighting the same enemies. */
+export interface VinculoDuo {
+  /** Both heroes' combats, in a fixed order. */
+  heroes(): Combate[];
+  /** The fight is over for the whole party (victory, or every hero down). */
+  luchaAcabada(): boolean;
+}
+
+/** Roots an enemy holds against `hueco`'s hero: the ones he cast (two-hero fights). Playing alone
+ *  (`hueco` undefined) it is the whole total, exactly as always. */
+export function raicesDe(e: EnemigoCombate, hueco?: string): number {
+  if (hueco === undefined) return e.estados.raices ?? 0;
+  return (e.raicesInstancias ?? []).reduce((s, r) => s + (r.hueco === hueco ? r.cantidad : 0), 0);
+}
+
+/** Darkness an enemy holds against `hueco`'s hero: the one he applied (two-hero fights). Alone, the total. */
+export function oscuridadDe(e: EnemigoCombate, hueco?: string): number {
+  if (hueco === undefined) return e.estados.oscuridad ?? 0;
+  return e.oscuridadPorHueco?.[hueco] ?? 0;
+}
+
 export class Combate {
   jugador: JugadorCombate;
+  /** Which hero this combat is in a two-hero fight (undefined when playing alone). */
+  hueco: string | undefined = undefined;
+  /** Same array as `lado.enemigos` (it is only ever mutated in place). */
   enemigos: EnemigoCombate[];
+  /** The enemy side: shared with the partner's combat in a two-hero fight. */
+  readonly lado: LadoEnemigo;
+  /** Set in a two-hero fight: the partner and the party's end condition. */
+  vinculo: VinculoDuo | null = null;
+  /** Two-hero fights roll nothing from presentation code: the decoy roll of a card
+   *  happens only while it is played (see objetivoReal). */
+  sinTiradasDePresentacion = false;
   turno = 0;
   danoHechoEsteTurno = 0;
   danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
@@ -90,13 +139,11 @@ export class Combate {
   descartadasEsteCombate = 0; // cards discarded by effects over the whole fight (Steel Tempest)
   terminado: 'victoria' | 'derrota' | null = null;
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
-  finalVerdadero = false;
+  get finalVerdadero(): boolean { return this.lado.finalVerdadero; }
+  set finalVerdadero(v: boolean) { this.lado.finalVerdadero = v; }
   enResolucion = false;
-  /** Enemies that already picked their next move during the enemy turn: it stays hidden
-   *  until the player's turn begins. */
-  private intencionesOcultas = new Set<EnemigoCombate>();
   intencionOculta(e: EnemigoCombate): boolean {
-    return this.intencionesOcultas.has(e);
+    return this.lado.intencionesOcultas.has(e);
   }
 
   /** Decoy roll the UI already made for a card (so it flies where the blow will land). */
@@ -145,6 +192,8 @@ export class Combate {
     ui: Presentador,
     eliteOJefe = false,
     contexto?: ContextoEncuentro,
+    /** Two-hero fights: the enemy side the first hero's combat already built. */
+    compartido?: LadoEnemigo,
   ) {
     this.run = run;
     this.rng = rng;
@@ -167,7 +216,18 @@ export class Combate {
       bloqueoAplazado: [],
       castigos: [],
     };
+    if (compartido) {
+      // the partner's combat already built (and tuned) the enemies
+      this.lado = compartido;
+      this.enemigos = compartido.enemigos;
+      this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
+      return;
+    }
     this.enemigos = resolverVariantes(defs, rng).map((d) => crearEnemigo(d, rng));
+    this.lado = {
+      enemigos: this.enemigos, intencionesOcultas: new Set(), atacaronUltima: new Set(),
+      golpesPantallaDM: 0, finalVerdadero: false, factorPv: 1,
+    };
     this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
     for (const e of this.enemigos) {
       if (this.ajuste.pv !== 1) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * this.ajuste.pv));
@@ -184,25 +244,24 @@ export class Combate {
     return m;
   }
 
-  /** Enemies of a group of three or more that attacked in the round just announced. */
-  private atacaronUltima = new Set<EnemigoCombate>();
-
   /** Groups of three or more take turns: once every enemy has announced its next
    *  move, at most half of them (rounded up) attack; the others guard or prepare
    *  instead, and those that attacked last round are the first to hold back, so
    *  each one alternates and nobody is left without attacking. */
-  private coordinarGrupo() {
+  coordinarGrupo() {
     if (!this.ajuste.alternan) return;
+    const previos = this.lado.atacaronUltima;
     const vivos = this.enemigos.filter((x) => x.vivo);
-    if (vivos.length < 3) { this.atacaronUltima.clear(); return; }
+    if (vivos.length < 3) { previos.clear(); return; }
     const ataca = (x: Movimiento) => x.intencion === 'ataque' || x.dano !== undefined;
     const atacantes = vivos.filter((x) => ataca(x.intencion) && !x.saltaAccion);
     const tope = Math.ceil(vivos.length / 2);
     const sobran = atacantes
-      .sort((x, y) => Number(this.atacaronUltima.has(y)) - Number(this.atacaronUltima.has(x)) || this.enemigos.indexOf(x) - this.enemigos.indexOf(y))
+      .sort((x, y) => Number(previos.has(y)) - Number(previos.has(x)) || this.enemigos.indexOf(x) - this.enemigos.indexOf(y))
       .slice(0, Math.max(0, atacantes.length - tope));
     for (const e of sobran) e.intencion = this.movimientoDeEspera(e, e.intencion);
-    this.atacaronUltima = new Set(vivos.filter((x) => ataca(x.intencion)));
+    previos.clear();
+    for (const x of vivos) if (ataca(x.intencion)) previos.add(x);
   }
 
   /** What an enemy does on a round it holds back: its own next move that is not an
@@ -221,9 +280,11 @@ export class Combate {
   // ── Cálculo de daño/bloqueo (reglas StS) ──────────────────────────────────
 
   danoDeAtaque(atacante: Luchador, base: number): number {
-    let dano = base + (atacante.estados.fuerza ?? 0)
-      - (atacante.estados.raices ?? 0)
-      - (atacante.estados.oscuridad ?? 0);
+    // an enemy's attack on this hero loses only the roots and darkness this hero cast
+    const enemigo = (atacante as Partial<EnemigoCombate>).def !== undefined;
+    const raices = enemigo ? raicesDe(atacante as EnemigoCombate, this.hueco) : atacante.estados.raices ?? 0;
+    const oscuridad = enemigo ? oscuridadDe(atacante as EnemigoCombate, this.hueco) : atacante.estados.oscuridad ?? 0;
+    let dano = base + (atacante.estados.fuerza ?? 0) - raices - oscuridad;
     if ((atacante.estados.debil ?? 0) > 0) dano = Math.floor(dano * 0.75);
     return Math.max(0, dano);
   }
@@ -413,10 +474,10 @@ export class Combate {
    *  when it does attack. */
   private dolorRaices(e: EnemigoCombate): number | null {
     const m = e.intencion;
-    const raices = e.estados.raices ?? 0;
+    const raices = raicesDe(e, this.hueco);
     if (m.dano === undefined || raices <= 0) return null;
     // Darkness lowers the attack too, so it counts towards the crush
-    let efectivo = this.baseDeGolpe(m) + (e.estados.fuerza ?? 0) - raices - (e.estados.oscuridad ?? 0);
+    let efectivo = this.baseDeGolpe(m) + (e.estados.fuerza ?? 0) - raices - oscuridadDe(e, this.hueco);
     if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
     return efectivo > 0 ? null : Math.min(raices, -efectivo);
   }
@@ -647,6 +708,7 @@ export class Combate {
       },
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
+        if (estado === 'oscuridad' && obj !== self.jugador) self.anotarOscuridad(obj as EnemigoCombate, n);
         await self.ui.fxEstado(obj, estado, n);
         // Relics react to the statuses you apply (not to the ones they apply).
         if (!self.enGanchoEstado && n > 0) {
@@ -663,7 +725,7 @@ export class Combate {
         // Profundas (raizProlongada) suma turnos a cada nueva instancia.
         const extra = self.jugador.estados.raizProlongada ?? 0;
         e.raicesInstancias = e.raicesInstancias ?? [];
-        e.raicesInstancias.push({ cantidad, turnos: turnos + extra });
+        e.raicesInstancias.push({ cantidad, turnos: turnos + extra, ...(self.hueco !== undefined ? { hueco: self.hueco } : {}) });
         e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
         await self.ui.fxEstado(e, 'raices', cantidad);
       },
@@ -997,14 +1059,11 @@ export class Combate {
 
   // ── Final scene: the Dungeon Master ────────────────────────────────────────
 
-  /** Hits the screen has soaked up (every other one gets the DM's retort). */
-  private golpesPantallaDM = 0;
-
   /** A blow (or an instant kill) against the DM: the screen blocks it all. */
   private async pantallaDM(e: EnemigoCombate, fx?: string) {
-    this.golpesPantallaDM++;
+    this.lado.golpesPantallaDM++;
     await this.ui.fxGolpe(e, 0, fx);
-    if (this.golpesPantallaDM % 2 === 1) await this.ui.fxMensaje('🛡️ ¡La pantalla del DM lo bloquea todo!');
+    if (this.lado.golpesPantallaDM % 2 === 1) await this.ui.fxMensaje('🛡️ ¡La pantalla del DM lo bloquea todo!');
     else await this.dialogoDM(e, FRASES_DM.bloqueo);
   }
 
@@ -1019,7 +1078,7 @@ export class Combate {
   async seducirDM(e: EnemigoCombate, tirada: number) {
     if (!e.vivo || this.terminado) return;
     if (tirada < 20) {
-      this.golpesPantallaDM++;
+      this.lado.golpesPantallaDM++;
       await this.ui.fxGolpe(e, 0, 'corazones');
       await this.dialogoDM(e, tirada === 19 ? FRASES_DM.casi : FRASES_DM.bloqueo);
       return;
@@ -1036,7 +1095,7 @@ export class Combate {
   /** The Dungeon Master's ray: the hero dies outright. It skips infligir on
    *  purpose, so block, Mirror Image, invulnerability, summons and relic hooks
    *  never get a say. */
-  private async rayoDelDM(e: EnemigoCombate) {
+  private async rayoDelDM(e: EnemigoCombate, dialogar = true) {
     const j = this.jugador;
     const pv = j.pv;
     j.bloqueo = 0;
@@ -1047,7 +1106,7 @@ export class Combate {
     j.vivo = false;
     await this.ui.fxGolpe(j, pv, e.intencion.fx ?? 'divino'); // the UI draws it as the rayoDM spell
     await this.ui.fxMuerteHeroe?.();
-    await this.dialogoDM(e, FRASES_DM.rayo);
+    if (dialogar) await this.dialogoDM(e, FRASES_DM.rayo);
     await this.comprobarFin();
     this.ui.render();
   }
@@ -1122,7 +1181,7 @@ export class Combate {
         // Disparador de muerte: el Heraldo del Culto libera a su Demonio Mayor
         if (obj !== this.jugador && e.def.invocaAlMorir && this.tieneGuardianes(e.def.invocaAlMorir)) {
           await this.ui.fxEsperarMuerte?.(e); // the newcomer takes the slot once the body has fallen
-          const liberado = crearEnemigo(e.def.invocaAlMorir, this.rng);
+          const liberado = this.escalarRecienLlegado(crearEnemigo(e.def.invocaAlMorir, this.rng));
           this.enemigos.push(liberado);
           await this.ui.fxMensaje(`¡De las entrañas de ${e.nombre} se alza ${liberado.nombre}!`);
           this.ui.render();
@@ -1151,7 +1210,7 @@ export class Combate {
     e.vivo = false;
     await this.ui.fxMuerte(e, causa);
     await this.ui.fxEsperarMuerte?.(e); // the phylactery takes his slot once the body has fallen
-    const fil = crearEnemigo(vasija, this.rng);
+    const fil = this.escalarRecienLlegado(crearEnemigo(vasija, this.rng));
     fil.pv = Math.min(fil.pvMax, e.filacteriaPv ?? fil.pvMax);
     fil.alma = { def: e.def, resurrecciones: e.alma?.resurrecciones ?? 0 };
     const i = this.enemigos.indexOf(e);
@@ -1165,7 +1224,7 @@ export class Combate {
   private async resucitarDeFilacteria(fil: EnemigoCombate) {
     const alma = fil.alma;
     if (!alma) return;
-    const liche = crearEnemigo(alma.def, this.rng);
+    const liche = this.escalarRecienLlegado(crearEnemigo(alma.def, this.rng));
     liche.filacteriaUsada = true; // back from the dead: his attacks feed on life
     liche.filacteriaPv = fil.pv;
     liche.alma = { def: alma.def, resurrecciones: alma.resurrecciones + 1 };
@@ -1241,7 +1300,7 @@ export class Combate {
     const llegan: EnemigoCombate[] = [];
     for (const def of sueno.despertar) {
       if (this.enemigos.filter((x) => x.vivo).length >= 5) break; // campo lleno
-      const nuevo = crearEnemigo(def, this.rng);
+      const nuevo = this.escalarRecienLlegado(crearEnemigo(def, this.rng));
       this.enemigos.push(nuevo);
       llegan.push(nuevo);
       await this.ui.fxMensaje(`¡${nuevo.nombre} también era un mímico!`);
@@ -1296,10 +1355,36 @@ export class Combate {
     if (this.terminado) return;
     if (!this.jugador.vivo || this.jugador.pv <= 0) this.terminado = 'derrota';
     else if (this.enemigos.every((e) => !e.vivo)) this.terminado = 'victoria';
-    if (this.terminado === 'victoria' && !this.victoriaNotificada) {
-      this.victoriaNotificada = true;
-      for (const r of this.run.reliquias) r.alVencerCombate?.(this.run, { eliteOJefe: this.eliteOJefe });
+    if (this.terminado === 'victoria') this.notificarVictoria();
+  }
+
+  /** Tells the relics the fight was won (once). A hero who was down when his partner won
+   *  gets it too: he gets back up with the party. */
+  notificarVictoria() {
+    if (this.victoriaNotificada) return;
+    this.victoriaNotificada = true;
+    for (const r of this.run.reliquias) r.alVencerCombate?.(this.run, { eliteOJefe: this.eliteOJefe });
+  }
+
+  /** The rules that close a fight, once the screen is done with it: the HP carry over to
+   *  the run, and on a win the relics that heal after the fight act. */
+  cerrarCombate() {
+    this.run.pv = Math.max(0, this.jugador.pv);
+    if (this.terminado === 'victoria') {
+      for (const r of this.run.reliquias) r.finCombate?.(this.run);
     }
+  }
+
+  /** The fight is over for everyone: this combat's own end when alone, the party's when two
+   *  heroes fight together (one may be down while the other still stands). */
+  luchaAcabada(): boolean {
+    return this.vinculo ? this.vinculo.luchaAcabada() : this.terminado !== null;
+  }
+
+  /** The heroes still on their feet, this one included: who the enemy side can still reach. */
+  heroesVivos(): Combate[] {
+    const todos = this.vinculo ? this.vinculo.heroes() : [this];
+    return todos.filter((h) => h.jugador.vivo);
   }
 
   /** Escribe en el Conjuro Prodigioso: suma daño, añade efecto (sin apilar) y
@@ -1403,7 +1488,7 @@ export class Combate {
       }
       if (arbol && e.vivo) {
         e.raicesInstancias = e.raicesInstancias ?? [];
-        e.raicesInstancias.push({ cantidad: 2, turnos: 1 });
+        e.raicesInstancias.push({ cantidad: 2, turnos: 1, ...(this.hueco !== undefined ? { hueco: this.hueco } : {}) });
         e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
         await this.ui.fxEstado(e, 'raices', 2);
       }
@@ -1536,7 +1621,7 @@ export class Combate {
     this.turno++;
     stats.empezarTurno(this.estadisticas);
     this.faseEnemiga = false;
-    this.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
+    this.lado.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
@@ -1626,6 +1711,7 @@ export class Combate {
     if (oxt > 0) {
       for (const e of this.enemigos.filter((x) => x.vivo)) {
         e.estados.oscuridad = (e.estados.oscuridad ?? 0) + oxt;
+        this.anotarOscuridad(e, oxt);
         await this.ui.fxEstado(e, 'oscuridad', oxt);
       }
     }
@@ -1708,15 +1794,27 @@ export class Combate {
 
   /** Where an attack card aimed at `objetivo` really lands: an enemy with decoys (Vexis and
    *  his illusions) shares the blow out at random among itself and its living decoys. The UI
-   *  asks before the card flies; jugarCarta then keeps that same roll. */
+   *  asks before the card flies; jugarCarta then keeps that same roll. In two-hero fights
+   *  this is a no-op: nothing the screen asks may touch the rng, so the roll is made only
+   *  while the card is played. */
   objetivoReal(carta: CartaInstancia, objetivo?: EnemigoCombate): EnemigoCombate | undefined {
-    const def = defDe(carta);
-    const senuelos = objetivo?.def.senuelos;
-    if (!objetivo?.vivo || def.tipo !== 'ataque' || def.objetivo !== 'enemigo' || !senuelos?.length) return objetivo;
-    const candidatos = [objetivo, ...this.enemigos.filter((e) => e.vivo && e !== objetivo && senuelos.includes(e.def.id))];
-    const hacia = candidatos[Math.floor(this.rng() * candidatos.length)];
-    this.desvioPrevisto = { carta, desde: objetivo, hacia };
+    if (this.sinTiradasDePresentacion) return objetivo;
+    const hacia = this.sortearObjetivo(carta, objetivo);
+    if (this.tieneSenuelos(carta, objetivo)) this.desvioPrevisto = { carta, desde: objetivo!, hacia: hacia! };
     return hacia;
+  }
+
+  private tieneSenuelos(carta: CartaInstancia, objetivo?: EnemigoCombate): boolean {
+    const def = defDe(carta);
+    return !!objetivo?.vivo && def.tipo === 'ataque' && def.objetivo === 'enemigo' && !!objetivo.def.senuelos?.length;
+  }
+
+  /** The decoy roll itself (consumes the rng only when the target has decoys). */
+  private sortearObjetivo(carta: CartaInstancia, objetivo?: EnemigoCombate): EnemigoCombate | undefined {
+    if (!this.tieneSenuelos(carta, objetivo)) return objetivo;
+    const senuelos = objetivo!.def.senuelos!;
+    const candidatos = [objetivo!, ...this.enemigos.filter((e) => e.vivo && e !== objetivo && senuelos.includes(e.def.id))];
+    return candidatos[Math.floor(this.rng() * candidatos.length)];
   }
 
   async jugarCarta(carta: CartaInstancia, objetivo?: EnemigoCombate) {
@@ -1731,8 +1829,7 @@ export class Combate {
     const yaTirado = !!previsto && previsto.carta === carta && previsto.hacia.vivo
       && (objetivo === previsto.desde || objetivo === previsto.hacia);
     const apuntado = yaTirado ? previsto!.desde : objetivo;
-    const real = yaTirado ? previsto!.hacia : this.objetivoReal(carta, objetivo);
-    this.desvioPrevisto = null;
+    const real = yaTirado ? previsto!.hacia : this.sortearObjetivo(carta, objetivo);
     if (real && apuntado && real !== apuntado && real.def.id !== apuntado.def.id) await this.ui.fxMensaje('🃏 ¡Era una ilusión!');
     objetivo = real;
     this.enResolucion = true;
@@ -1814,27 +1911,69 @@ export class Combate {
   /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador.
    *  The hero's Vulnerable is left out here: it ticks at the end of the enemy turn. */
   private decrementarEstados(l: Luchador) {
+    // two-hero fights: each hero's Darkness on the enemy fades on its own (see anotarOscuridad)
+    const porHueco = (l as Partial<EnemigoCombate>).oscuridadPorHueco;
     for (const k of [
       ...(l === this.jugador ? [] : ['vulnerable']), 'debil', 'fragil', 'invulnerable', 'quemadura', 'oscuridad',
       'cartasAgotan', 'cartasSobrecoste', 'cartasEtereas',
     ] as EstadoId[]) {
+      if (k === 'oscuridad' && porHueco) continue;
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
     }
+    if (porHueco) {
+      for (const h of Object.keys(porHueco)) if (--porHueco[h] <= 0) delete porHueco[h];
+      const total = Object.values(porHueco).reduce((s, n) => s + n, 0);
+      if (total > 0) l.estados.oscuridad = total;
+      else delete l.estados.oscuridad;
+    }
+  }
+
+  /** Two-hero fights: remembers which hero applied this Darkness (`estados.oscuridad` already holds
+   *  the total). Playing alone nothing is tracked and the total is all there is. */
+  private anotarOscuridad(e: EnemigoCombate, n: number) {
+    if (this.hueco === undefined || n <= 0) return;
+    e.oscuridadPorHueco ??= {};
+    e.oscuridadPorHueco[this.hueco] = (e.oscuridadPorHueco[this.hueco] ?? 0) + n;
   }
 
   /** Tras el turno del enemigo, cada instancia de Raíces pierde 1 turno. */
   private envejecerRaices(e: EnemigoCombate) {
     if (!e.raicesInstancias?.length) { delete e.estados.raices; return; }
     e.raicesInstancias = e.raicesInstancias
-      .map((r) => ({ cantidad: r.cantidad, turnos: r.turnos - 1 }))
+      .map((r) => ({ ...r, turnos: r.turnos - 1 }))
       .filter((r) => r.turnos > 0);
     const total = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
     if (total > 0) e.estados.raices = total;
     else delete e.estados.raices;
   }
 
+  /** Single-player end of turn: the hero's end of turn, the enemies' turn and the start of the
+   *  next round, in that order. Two-hero fights run the same parts themselves, so the enemy
+   *  turn happens once for both heroes (see multi/combate-duo.ts). */
   async terminarTurno() {
     if (this.enResolucion || this.terminado) return;
+    await this.finDeTurnoHeroe();
+    // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
+    for (const e of [...this.enemigos]) {
+      if (!e.vivo || this.luchaAcabada()) continue;
+      await this.turnoDeEnemigo(e);
+    }
+    this.coordinarGrupo(); // groups of three or more take turns for the coming round
+    await this.cierreDeRondaA();
+    await this.condenaFinal();
+    await this.cierreDeRondaB();
+    this.enResolucion = false;
+    if (!this.terminado) await this.inicioTurnoJugador();
+    else this.ui.render(); // cierra el combate (p. ej. si la Hemorragia mató al último enemigo)
+  }
+
+  /** Vulnerable the hero already had when his turn ended: it counts down once the enemies
+   *  are done; any applied during the enemy turn survives to its next hit. */
+  private vulnerableAntes = 0;
+
+  /** The hero's part of the end of turn: effects expire, relics and curses act, the hand is
+   *  discarded. The hero stays busy (`enResolucion`) until the next round starts. */
+  async finDeTurnoHeroe() {
     this.enResolucion = true;
     const j = this.jugador;
     stats.terminarTurno(this.estadisticas, j.energia);
@@ -1886,9 +2025,7 @@ export class Combate {
 
     this.decrementarEstados(j);
     this.faseEnemiga = true;
-    // Vulnerable the hero already had counts down once the enemies are done;
-    // any applied during the enemy turn survives to its next hit.
-    const vulnerableAntes = j.estados.vulnerable ?? 0;
+    this.vulnerableAntes = j.estados.vulnerable ?? 0;
 
     // Curses held in the hand hurt now, before the discard (after the status
     // countdown, so a Weak or Frail they give lasts into the next round).
@@ -1912,77 +2049,91 @@ export class Combate {
     j.mano = retenidas;
     this.ui.render();
     await this.ui.espera(300);
+  }
 
-    // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
-    for (const e of [...this.enemigos]) {
-      if (!e.vivo || this.terminado) continue;
-      // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
-      // se cierra si durante tu turno no recibió daño no bloqueado.
-      const hem = e.estados.hemorragia ?? 0;
-      if (hem > 0) {
-        const mantenida = e.heridoEsteTurno === true;
-        await this.infligir(e, hem, 'sangre', true);
-        const sed = j.estados.sedSangre ?? 0;
-        if (sed > 0 && j.vivo) {
-          j.bloqueo += sed;
-          await this.ui.fxBloqueo(j, sed);
-        }
-        if (!mantenida && e.vivo) {
-          delete e.estados.hemorragia;
-          await this.ui.fxMensaje(`🩸 La herida de ${e.nombre} se cierra`);
+  /** One enemy's turn. Its upkeep (bleeding, poison, regeneration) runs here, on this hero's
+   *  account; its move reaches every living hero (see ejecutarMovimiento). */
+  async turnoDeEnemigo(e: EnemigoCombate) {
+    // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
+    // se cierra si durante tu turno no recibió daño no bloqueado.
+    const hem = e.estados.hemorragia ?? 0;
+    if (hem > 0) {
+      const mantenida = e.heridoEsteTurno === true;
+      await this.infligir(e, hem, 'sangre', true);
+      for (const h of this.heroesVivos()) {
+        const sed = h.jugador.estados.sedSangre ?? 0;
+        if (sed > 0) {
+          h.jugador.bloqueo += sed;
+          await h.ui.fxBloqueo(h.jugador, sed);
         }
       }
-      if (!e.vivo || this.terminado) continue; // la Hemorragia pudo matarlo
-      // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
-      await this.tickVeneno(e);
-      if (!e.vivo || this.terminado) continue; // el Veneno pudo matarlo
-      // Regeneration: it heals at the start of its turn
-      const regen = Math.min(e.estados.regeneracion ?? 0, e.pvMax - e.pv);
-      if (regen > 0) {
-        e.pv += regen;
-        await this.ui.fxCura(e, regen);
+      if (!mantenida && e.vivo) {
+        delete e.estados.hemorragia;
+        await this.ui.fxMensaje(`🩸 La herida de ${e.nombre} se cierra`);
       }
-      if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
-      const fuerzaAntes = this.fuerzaEnemiga();
-      await this.ejecutarMovimiento(e);
-      stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
-      this.decrementarEstados(e);
-      this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
-      e.turnosVisto++;
-      // Cambiazo: si tiene una intención forzada, la ejecuta ahora en vez de
-      // generar una nueva; si no, la IA decide su siguiente movimiento.
-      if (e.intencionForzada) {
-        e.intencion = e.intencionForzada;
-        delete e.intencionForzada;
-      } else {
-        e.intencion = this.ajustarIntencion(e, e.def.ia(
-          e.turnosVisto, this.rng, e,
-          this.enemigos.filter((x) => x.vivo && x !== e),
-        ));
-      }
-      e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
-      this.intencionesOcultas.add(e); // hidden until the player's turn begins
-      // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
-      if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
-      this.ui.render();
-      await this.ui.espera(250);
     }
-    this.coordinarGrupo(); // groups of three or more take turns for the coming round
+    if (!e.vivo || this.luchaAcabada()) return; // la Hemorragia pudo matarlo
+    // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
+    await this.tickVeneno(e);
+    if (!e.vivo || this.luchaAcabada()) return; // el Veneno pudo matarlo
+    // Regeneration: it heals at the start of its turn
+    const regen = Math.min(e.estados.regeneracion ?? 0, e.pvMax - e.pv);
+    if (regen > 0) {
+      e.pv += regen;
+      await this.ui.fxCura(e, regen);
+    }
+    if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
+    const fuerzaAntes = this.fuerzaEnemiga();
+    await this.ejecutarMovimiento(e);
+    stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
+    this.decrementarEstados(e);
+    this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
+    e.turnosVisto++;
+    // Cambiazo: si tiene una intención forzada, la ejecuta ahora en vez de
+    // generar una nueva; si no, la IA decide su siguiente movimiento.
+    if (e.intencionForzada) {
+      e.intencion = e.intencionForzada;
+      delete e.intencionForzada;
+    } else {
+      e.intencion = this.ajustarIntencion(e, e.def.ia(
+        e.turnosVisto, this.rng, e,
+        this.enemigos.filter((x) => x.vivo && x !== e),
+      ));
+    }
+    e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+    this.lado.intencionesOcultas.add(e); // hidden until the player's turn begins
+    // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
+    if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
+    this.ui.render();
+    await this.ui.espera(250);
+  }
 
-    if (vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
+  /** After the enemy turn, the hero's side: Vulnerable counts down and the warlock's
+   *  ephemeral summon strikes and fades. */
+  async cierreDeRondaA() {
+    const j = this.jugador;
+    if (this.vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
 
     // Invocación efímera del brujo: si aguantó la ronda, golpea y se desvanece
     await this.resolverInvocacionEfimera();
+  }
 
-    // Condena (brujo): al final del turno enemigo, quien tenga Condena ≥ sus PV
-    // actuales sucumbe. Va por la vía normal de daño, así que respeta la
-    // filacteria del liche y dispara los efectos de muerte (Heraldo, Infernal).
+  /** Condena (brujo): al final del turno enemigo, quien tenga Condena ≥ sus PV
+   *  actuales sucumbe. Va por la vía normal de daño, así que respeta la
+   *  filacteria del liche y dispara los efectos de muerte (Heraldo, Infernal).
+   *  It belongs to the enemy side: in a two-hero fight it runs once. */
+  async condenaFinal() {
     for (const e of [...this.enemigos]) {
-      if (this.terminado) break;
+      if (this.luchaAcabada()) break;
       if (!this.condenaLetal(e)) continue;
       await this.ui.fxMensaje(`🕳️ La Condena consume a ${e.nombre}`);
       await this.infligir(e, e.pv, 'condena', true, true);
     }
+  }
+
+  /** The last of the round for the hero: one-turn buffs fade and the Rage may break. */
+  async cierreDeRondaB() {
+    const j = this.jugador;
 
     // Armadura de Agathys y las mejoras de un solo turno de la Explosión
     delete j.estados.agathys;
@@ -2030,18 +2181,82 @@ export class Combate {
       await this.ganchos((r, c) => r.alPerderFuria?.(c));
     }
     delete j.estados.frenesi; // el Frenesí solo dura este turno
-
-    this.enResolucion = false;
-    if (!this.terminado) await this.inicioTurnoJugador();
-    else this.ui.render(); // cierra el combate (p. ej. si la Hemorragia mató al último enemigo)
   }
 
+  /** One enemy attack against this hero: every hit, with his own block, Mirror Image, relics
+   *  and thorns. `atraveso` tells whether some hit got past the block and the summon;
+   *  `abortar` that the fight ended or the attacker died on the way (nothing else happens). */
+  private async golpesAlHeroe(e: EnemigoCombate, m: Movimiento): Promise<{ atraveso: boolean; abortar: boolean }> {
+    let atraveso = false;
+    const veces = m.veces ?? 1;
+    for (let i = 0; i < veces; i++) {
+      // a dead attacker (Thorns, a relic) stops its flurry and does nothing else
+      if (this.luchaAcabada() || !e.vivo) return { atraveso, abortar: true };
+      // a hero who fell in this very attack takes no more hits (his partner still does)
+      if (this.vinculo && !this.jugador.vivo) return { atraveso, abortar: false };
+      // Mirror Image: each charge prevents the next attack hit for sure (no roll)
+      const cargas = this.jugador.estados.espejismo ?? 0;
+      if (cargas > 0) {
+        this.jugador.estados.espejismo = cargas - 1;
+        if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
+        await this.ui.fxMensaje('🪞 ¡Ataque prevenido!');
+        this.ui.render();
+        if (veces > 1) await this.ui.espera(220);
+        continue;
+      }
+      const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(m)));
+      const bloqueoAntes = this.jugador.bloqueo;
+      // piercing hits go through the block without breaking it
+      this.atacanteActual = e;
+      let real = 0;
+      try {
+        real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
+      } finally {
+        this.atacanteActual = null;
+      }
+      if (real > 0) atraveso = true;
+      // Vampiric: it heals part of the damage that got through
+      const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
+      if (sorbo > 0 && e.vivo) {
+        const cura = Math.min(sorbo, e.pvMax - e.pv);
+        if (cura > 0) {
+          e.pv += cura;
+          await this.ui.fxCura(e, cura);
+        }
+      }
+      if (!this.terminado) {
+        const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
+        await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
+      }
+      // Espinas: devuelve daño al atacante
+      const espinas = this.jugador.estados.espinas ?? 0;
+      if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');
+      if (veces > 1) await this.ui.espera(220);
+    }
+    return { atraveso, abortar: false };
+  }
+
+  /** An enemy that joins the fight takes the party's HP scale (two heroes) like the starting
+   *  ones do; the Dungeon Master never scales. */
+  private escalarRecienLlegado(e: EnemigoCombate): EnemigoCombate {
+    const f = this.lado.factorPv;
+    if (f !== 1 && !esDungeonMaster(e)) {
+      e.pvMax = Math.max(1, Math.round(e.pvMax * f));
+      e.pv = Math.max(1, Math.round(e.pv * f));
+    }
+    return e;
+  }
+
+  /** The enemy's move. It reaches every living hero (one in single player, both in a two-hero
+   *  fight), each with his own block, statuses and relics; what is not aimed at the heroes
+   *  (block, healing, summons…) happens once. The caller is whichever hero's combat leads. */
   async ejecutarMovimiento(e: EnemigoCombate) {
+    const heroes = this.heroesVivos();
     // The Dungeon Master's ray: nothing makes him skip it, nothing stops it
     if (e.intencion.mataAlInstante) {
       e.saltaAccion = false;
       await this.ui.fxEnemigoActua(e);
-      await this.rayoDelDM(e);
+      for (const [i, h] of heroes.entries()) await h.rayoDelDM(e, i === 0);
       return;
     }
     // Seducción/Deseo: el enemigo se salta esta acción
@@ -2059,60 +2274,30 @@ export class Combate {
     }
 
     // a poisoned blade only poisons if some hit got past your block and your summon
-    let atraveso = false;
+    const atraveso = new Map<Combate, boolean>();
+    // heroes the attack still reaches (roots crush it for the ones who cast them, see below)
+    let objetivos = heroes;
     if (m.dano !== undefined) {
       // Raíces: el ataque baja en esa cantidad. Si queda en 0 o menos, en vez de
       // atacar el enemigo pierde PV igual a la DIFERENCIA (cuánto superan las
-      // raíces a su ataque), ignorando el bloqueo. Sin daño base extra.
-      const dolor = this.dolorRaices(e);
-      if (dolor !== null) {
+      // raíces a su ataque), ignorando el bloqueo. Sin daño base extra. First the enemy
+      // hurts itself for every hero whose attack is crushed, then it hits the others.
+      const aplastados: Combate[] = [];
+      for (const h of heroes) {
+        const dolor = h.dolorRaices(e);
+        if (dolor === null) continue;
+        aplastados.push(h);
         await this.ui.fxMensaje('🌿 ¡Las raíces lo aplastan!');
         if (dolor > 0) await this.infligir(e, dolor, 'raices');
-        if (!this.terminado) await this.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));
-        return;
+        if (!this.terminado) await h.ganchos((r, c) => r.alAplastarRaices?.(c, e, dolor));
       }
-      const veces = m.veces ?? 1;
-      for (let i = 0; i < veces; i++) {
-        // a dead attacker (Thorns, a relic) stops its flurry and does nothing else
-        if (this.terminado || !e.vivo) return;
-        // Mirror Image: each charge prevents the next attack hit for sure (no roll)
-        const cargas = this.jugador.estados.espejismo ?? 0;
-        if (cargas > 0) {
-          this.jugador.estados.espejismo = cargas - 1;
-          if (this.jugador.estados.espejismo <= 0) delete this.jugador.estados.espejismo;
-          await this.ui.fxMensaje('🪞 ¡Ataque prevenido!');
-          this.ui.render();
-          if (veces > 1) await this.ui.espera(220);
-          continue;
-        }
-        const dano = this.danoRecibido(this.jugador, this.danoDeAtaque(e, this.baseDeGolpe(m)));
-        const bloqueoAntes = this.jugador.bloqueo;
-        // piercing hits go through the block without breaking it
-        this.atacanteActual = e;
-        let real = 0;
-        try {
-          real = await this.infligir(this.jugador, dano, m.fx ?? 'golpeEnemigo', m.perforante === true, true);
-        } finally {
-          this.atacanteActual = null;
-        }
-        if (real > 0) atraveso = true;
-        // Vampiric: it heals part of the damage that got through
-        const sorbo = Math.floor(real * (e.def.vampirico ?? 0));
-        if (sorbo > 0 && e.vivo) {
-          const cura = Math.min(sorbo, e.pvMax - e.pv);
-          if (cura > 0) {
-            e.pv += cura;
-            await this.ui.fxCura(e, cura);
-          }
-        }
-        if (!this.terminado) {
-          const golpe = { dano, bloqueado: Math.max(0, bloqueoAntes - this.jugador.bloqueo), real };
-          await this.ganchos((r, c) => r.alSerGolpeado?.(c, e, golpe));
-        }
-        // Espinas: devuelve daño al atacante
-        const espinas = this.jugador.estados.espinas ?? 0;
-        if (espinas > 0 && e.vivo) await this.infligir(e, espinas, 'raices');
-        if (veces > 1) await this.ui.espera(220);
+      if (aplastados.length === heroes.length) return;
+      if (aplastados.length > 0 && (!e.vivo || this.luchaAcabada())) return;
+      objetivos = heroes.filter((h) => !aplastados.includes(h));
+      for (const h of objetivos) {
+        const r = await h.golpesAlHeroe(e, m);
+        atraveso.set(h, r.atraveso);
+        if (r.abortar) return;
       }
     }
     if (m.bloqueo) {
@@ -2148,10 +2333,18 @@ export class Combate {
     }
     if (m.efectos) {
       for (const [estado, n, sobreJugador] of m.efectos) {
-        if (estado === 'veneno' && sobreJugador && m.dano !== undefined && !atraveso) continue;
-        const obj = sobreJugador ? this.jugador : e;
-        obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
-        await this.ui.fxEstado(obj, estado, n);
+        if (!sobreJugador) {
+          e.estados[estado] = (e.estados[estado] ?? 0) + n;
+          await this.ui.fxEstado(e, estado, n);
+          continue;
+        }
+        // aimed at «the hero»: every hero the attack reached takes it
+        for (const h of objetivos) {
+          if (h.vinculo && !h.jugador.vivo) continue;
+          if (estado === 'veneno' && m.dano !== undefined && !atraveso.get(h)) continue;
+          h.jugador.estados[estado] = (h.jugador.estados[estado] ?? 0) + n;
+          await h.ui.fxEstado(h.jugador, estado, n);
+        }
       }
     }
     if (m.invocar) {
@@ -2159,12 +2352,17 @@ export class Combate {
         if (this.enemigos.filter((x) => x.vivo).length >= 5) break; // campo lleno
         const nuevo = crearEnemigo(inv.def, this.rng);
         nuevo.pv = nuevo.pvMax = inv.pv;
+        this.escalarRecienLlegado(nuevo);
         this.enemigos.push(nuevo);
         await this.ui.fxMensaje(`¡${e.nombre} invoca a ${nuevo.nombre}!`);
         this.ui.render();
       }
     }
-    if (m.maldicion && !this.terminado) await this.meterMaldicion(m.maldicion.id, m.maldicion.destino, e);
+    if (m.maldicion) {
+      for (const h of objetivos) {
+        if (!h.terminado) await h.meterMaldicion(m.maldicion.id, m.maldicion.destino, e);
+      }
+    }
     if (m.devorar) {
       const presa = this.enemigos
         .filter((x) => x.vivo && x !== e)

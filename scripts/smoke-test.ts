@@ -6,7 +6,7 @@ import { nuevaRun, avanzarCapitulo } from '../src/core/run.ts';
 import { crearRng } from '../src/core/rng.ts';
 import {
   ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, GOBLIN_FAMELICO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
-  HERALDO_CULTO, CONTEMPLADOR,
+  HERALDO_CULTO, CONTEMPLADOR, EMBAUCADOR_ARCANO,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA } from '../src/core/mapa.ts';
@@ -32,6 +32,12 @@ import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent } from
 import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
+import { CombateDuo } from '../src/core/multi/combate-duo.ts';
+import { ofertasPorHeroe } from '../src/core/multi/salas.ts';
+import {
+  crearPartidaMulti, serializarPartidaMulti, rehidratarPartidaMulti, esPuntoDeGuardado, pendiente, esValida, aplicar,
+  hashPartida, decisionBot, HUECOS, type PartidaMulti, type EntradaSellada, type Hueco,
+} from '../src/core/multi/index.ts';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as ClaseId[];
 
@@ -9435,7 +9441,7 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
   }
   const combateFin = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   const finalCombate = combateFin.slice(combateFin.indexOf('function comprobarFinal'), combateFin.indexOf('setTimeout', combateFin.indexOf('function comprobarFinal')));
-  check(/themeAfterCombat\(combate\.terminado, run\.capitulo, run\.escenario, defs\)/.test(finalCombate),
+  check(/themeAfterCombat\((combate\.terminado|finDe\(\)!), run\.capitulo, run\.escenario, defs\)/.test(finalCombate),
     'la música cambia en cuanto cae el último enemigo, antes de las recompensas');
   const motor = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
   check(/sameSong\(/.test(motor) && /loopPosition\(/.test(motor), 'al pasar entre versiones de la misma canción, el audio sigue desde el mismo punto');
@@ -10290,8 +10296,385 @@ try {
     } catch { lanzo = true; }
     check(!lanzo, 'si fetch falla, ninguna llamada de la nube lanza');
   }
+  // Multiplayer lobby: a taken name surfaces as a typed result and the game list is mapped for the lobby
+  {
+    const { nube, llamadas } = montar((l) => sesionOk(l)
+      ?? (l.metodo === 'PATCH' && l.ruta === '/me' ? respuesta(409, { error: 'name_taken' }) : null)
+      ?? (l.metodo === 'POST' && l.ruta === '/multi/games' ? respuesta(404, { error: 'user_not_found' }) : null)
+      ?? (l.metodo === 'GET' && l.ruta === '/multi/games' ? respuesta(200, { games: [
+        { id: 'g1', status: 'invited', hueco: 'cruz', direction: 'received', other: { id: 'u2', displayName: 'Ana', bot: false }, hostClass: 'mago', guestClass: null, createdAt: 1, updatedAt: 2 },
+        { id: 'g2', status: 'active', hueco: 'cara', direction: null, other: { id: null, displayName: 'Bot', bot: true }, hostClass: 'picaro', guestClass: 'druida', createdAt: 1, updatedAt: 3 },
+      ] }) : null)
+      ?? respuesta(404));
+    await nube.canjearEnlace('tok');
+    check(await nube.cambiarNombre('Morghur') === 'ocupado', 'un nombre ya usado (409 name_taken) sale como «ocupado» y no cierra la sesión');
+    check(nube.haySesion(), 'el 409 del nombre no cierra la sesión');
+    const partidas = await nube.partidasMulti();
+    check(partidas?.length === 2 && partidas[0].direccion === 'recibida' && partidas[0].otro.nombre === 'Ana' && partidas[0].claseCruz === null,
+      'la lista de partidas multijugador traduce invitaciones recibidas con el nombre del otro');
+    check(partidas?.[1].otro.bot === true && partidas[1].claseCruz === 'druida' && partidas[1].hueco === 'cara', 'y las activas contra el bot con su hueco y clases');
+    const invitar = await nube.invitar('Nadie', 'mago');
+    check(invitar.estado === 'no-existe' && llamadas.some((l) => l.ruta === '/multi/games' && JSON.stringify(l.cuerpo) === '{"guest":"Nadie","heroClass":"mago"}'),
+      'invitar a un nombre que no existe sale como «no-existe»');
+  }
+  // Without a session the lobby calls answer «sin-sesion» without touching the network
+  {
+    const { nube, llamadas } = montar(() => respuesta(200, {}));
+    check(await nube.partidasMulti() === null && (await nube.invitar('bot', 'mago')).estado === 'sin-sesion' && llamadas.length === 0,
+      'sin sesión, el lobby no llama al servidor');
+  }
 } catch (e) {
   check(false, `el cliente de la nube: ${(e as Error).message}`);
+}
+
+// ── 👥 Multijugador: motor de dos héroes ─────────────────────────────────────
+console.log('— 👥 Multijugador —');
+try {
+  const uiMulti = { cara: uiSilenciosa, cruz: uiSilenciosa };
+  const pegador = (dano: number, pv = 40): EnemigoDef => ({
+    id: 'pegador-test', nombre: 'Pegador', arte: '👾', pv: [pv, pv],
+    ia: () => ({ nombre: 'Golpe', intencion: 'ataque', dano }),
+  });
+  const cartaDe = (lista: CartaDef[], id: string) => instanciar(lista.find((c) => c.id === id)!);
+  const nuevoDuo = async (defs: EnemigoDef[], semilla = 7, clases: [ClaseId, ClaseId] = ['druida', 'barbaro']) => {
+    const runs = { cara: nuevaRun(clases[0], semilla), cruz: nuevaRun(clases[1], semilla) };
+    const duo = new CombateDuo(runs, defs, crearRng(semilla), uiMulti);
+    await duo.iniciar();
+    return duo;
+  };
+
+  // Shared enemies: what `cara` applies is there for `cruz`
+  {
+    const duo = await nuevoDuo([pegador(7, 40)]);
+    const e = duo.enemigos[0];
+    check(e.pvMax === 64, 'los enemigos a dos héroes tienen un 60 % más de PV (40 → 64)');
+    check(duo.combates.cara.enemigos === duo.combates.cruz.enemigos, 'los dos héroes comparten los mismos objetos enemigo');
+    const zarpazo = cartaDe(DRUIDA, 'zarpazo');
+    const golpe1 = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
+    const golpe2 = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
+    duo.combates.cara.jugador.mano = [zarpazo];
+    duo.combates.cruz.jugador.mano = [golpe1, golpe2];
+    const antes = e.pv;
+    await duo.jugar('cruz', golpe1, e);
+    const danoNormal = antes - e.pv;
+    await duo.jugar('cara', zarpazo, e);
+    check((duo.combates.cruz.enemigos[0].estados.vulnerable ?? 0) > 0, 'la Vulnerable que pone cara se ve en el combate de cruz');
+    const medio = e.pv;
+    await duo.jugar('cruz', golpe2, e);
+    check(danoNormal > 0 && medio - e.pv === Math.floor(danoNormal * 1.5), `con Vulnerable de cara, el siguiente ataque de cruz pega más (${danoNormal} → ${medio - e.pv})`);
+  }
+
+  // The enemy turn waits for both `finTurno`, and happens once
+  {
+    const duo = await nuevoDuo([pegador(7)]);
+    const e = duo.enemigos[0];
+    const [pvCara, pvCruz] = [duo.combates.cara.jugador.pv, duo.combates.cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    check(e.turnosVisto === 0 && duo.combates.cara.jugador.pv === pvCara && duo.combates.cruz.jugador.pv === pvCruz,
+      'con un solo finTurno los enemigos no actúan');
+    const carta = duo.combates.cara.jugador.mano[0];
+    check(!duo.puedeJugar('cara', carta), 'quien ya terminó el turno no puede jugar más cartas');
+    check(duo.puedeJugar('cruz', duo.combates.cruz.jugador.mano.find((c) => c.def.coste <= 1 && c.def.tipo !== 'maldicion')!), 'el compañero sigue jugando');
+    await duo.terminarTurno('cruz');
+    const perdidas = [pvCara - duo.combates.cara.jugador.pv, pvCruz - duo.combates.cruz.jugador.pv];
+    check(e.turnosVisto === 1 && perdidas[0] === 7 && perdidas[1] === 7, 'con los dos finTurno hay un único turno enemigo y su golpe cae en los dos héroes');
+    check(duo.combates.cara.turno === 2 && duo.combates.cruz.turno === 2 && !duo.finTurno.cara && !duo.finTurno.cruz, 'después empieza el turno siguiente de ambos');
+  }
+
+  // Enemy damage hits both heroes at once, each with his own block; a multi-hit lands every hit on both
+  {
+    const multigolpe: EnemigoDef = {
+      id: 'multigolpe-test', nombre: 'Multigolpe', arte: '👾', pv: [40, 40],
+      ia: () => ({ nombre: 'Ráfaga', intencion: 'ataque', dano: 3, veces: 2 }),
+    };
+    const duo = await nuevoDuo([multigolpe]);
+    const [cara, cruz] = [duo.combates.cara, duo.combates.cruz];
+    cara.jugador.bloqueo = 4; // only cara has block
+    const [pvCara, pvCruz] = [cara.jugador.pv, cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvCara - cara.jugador.pv === 2 && pvCruz - cruz.jugador.pv === 6,
+      `un ataque de varios golpes cae entero en los dos, cada uno con su bloqueo (cara −${pvCara - cara.jugador.pv}, cruz −${pvCruz - cruz.jugador.pv})`);
+  }
+
+  // D1 also for the enemies that join the fight (summons); the Dungeon Master is never scaled
+  {
+    const invocador: EnemigoDef = {
+      id: 'invocador-test', nombre: 'Invocador', arte: '👾', pv: [100, 100],
+      ia: () => ({ nombre: 'Llamada', intencion: 'mejora', invocar: [{ def: pegador(1, 10), pv: 10 }] }),
+    };
+    const duo = await nuevoDuo([invocador]);
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    const nuevo = duo.enemigos.find((x) => x.def.id === 'pegador-test');
+    check(!!nuevo && nuevo.pvMax === 16 && nuevo.pv === 16, `el enemigo invocado en combate también lleva los PV ×1,6 (10 → ${nuevo?.pvMax})`);
+  }
+
+  // Roots and Darkness only protect the hero who cast them
+  {
+    const duo = await nuevoDuo([pegador(7, 40)]);
+    const [cara, cruz] = [duo.combates.cara, duo.combates.cruz];
+    const e = duo.enemigos[0];
+    await cara.contexto().aplicarRaices(e, 3, 2);
+    check(cara.danoIntencion(e) === 4 && cruz.danoIntencion(e) === 7,
+      `cada uno ve el daño con sus propias raíces (cara ${cara.danoIntencion(e)}, cruz ${cruz.danoIntencion(e)})`);
+    const [pvCara, pvCruz] = [cara.jugador.pv, cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvCara - cara.jugador.pv === 4 && pvCruz - cruz.jugador.pv === 7,
+      `las raíces que lanzó cara le bajan el golpe a cara y no a cruz (cara −${pvCara - cara.jugador.pv}, cruz −${pvCruz - cruz.jugador.pv})`);
+  }
+  {
+    // roots above the attack: first the enemy hurts itself (backlash on the caster), then it hits the other hero in full
+    const registro: string[] = [];
+    let enemigo: unknown = null;
+    const uiLog = (h: Hueco): Presentador => ({
+      ...uiSilenciosa,
+      fxGolpe: async (obj, real) => { registro.push(obj === enemigo ? `enemigo−${real}` : `${h}−${real}`); },
+    });
+    const runs = { cara: nuevaRun('druida', 7), cruz: nuevaRun('barbaro', 7) };
+    const duo = new CombateDuo(runs, [pegador(7, 40)], crearRng(7), { cara: uiLog('cara'), cruz: uiLog('cruz') });
+    await duo.iniciar();
+    const e = duo.enemigos[0];
+    enemigo = e;
+    await duo.combates.cara.contexto().aplicarRaices(e, 10, 2);
+    registro.length = 0;
+    const [pvEnemigo, pvCara, pvCruz] = [e.pv, duo.combates.cara.jugador.pv, duo.combates.cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvEnemigo - e.pv === 3 && duo.combates.cara.jugador.pv === pvCara && pvCruz - duo.combates.cruz.jugador.pv === 7,
+      `con raíces por encima del ataque el enemigo se hiere (−${pvEnemigo - e.pv}), cara no recibe nada y cruz recibe el golpe entero`);
+    check(registro.join() === 'enemigo−3,cruz−7', `primero se hiere el enemigo y luego golpea al otro héroe (${registro.join()})`);
+  }
+
+  // Relics: a class relic that does not fit a hero becomes one of his own class
+  {
+    const RQr = await import('../src/core/reliquias.ts');
+    const p = crearPartidaMulti({ semilla: 3, clases: { cara: 'druida', cruz: 'barbaro' } });
+    const deClase = RQr.reliquiaPorId('semilla-roble')!;
+    const comun = RQr.reliquiasDisponibles(p.runs.cara).find((r) => !r.soloClase && r.rareza === 'comun')!;
+    const oferta = ofertasPorHeroe(p, [deClase, comun], 'cofre');
+    const ids = (h: Hueco) => oferta[h].map((r) => r.id);
+    check(deClase.soloClase === 'druida' && ids('cara').join() === [deClase.id, comun.id].join(), 'quien encaja con la reliquia de clase la ve tal cual');
+    check(oferta.cruz.length === 2 && oferta.cruz[0].soloClase === 'barbaro' && oferta.cruz[1].id === comun.id
+      && oferta.cruz.every((r) => RQr.reliquiasDisponibles(p.runs.cruz).some((x) => x.id === r.id)),
+      'el otro ve en esa casilla una reliquia de su propia clase y conserva la compartida');
+  }
+
+  // Downed hero: out for the rest of the fight, back up (25 %) when the partner wins
+  {
+    const duo = await nuevoDuo([pegador(7, 10)]);
+    const e = duo.enemigos[0];
+    const cruz = duo.combates.cruz;
+    await cruz.infligir(cruz.jugador, 999);
+    check(!cruz.jugador.vivo && !duo.terminado, 'un héroe a 0 PV cae pero la run sigue mientras su compañero esté en pie');
+    check(!duo.puedeJugar('cruz', cruz.jugador.mano[0]), 'el héroe caído no juega');
+    await duo.terminarTurno('cara'); // only the living one has to end the turn
+    check(e.turnosVisto === 1 && !cruz.jugador.vivo && duo.combates.cara.jugador.pv < duo.combates.cara.jugador.pvMax,
+      'el caído no frena el turno enemigo y los ataques solo caen en el vivo');
+    const golpes = [0, 1, 2, 3].map(() => instanciar(BASICAS.find((c) => c.id === 'golpe')!));
+    duo.combates.cara.jugador.mano = [...golpes];
+    duo.combates.cara.jugador.energia = 9;
+    for (const g of golpes) { if (!duo.terminado) await duo.jugar('cara', g, e); }
+    check(duo.terminado === 'victoria' && cruz.jugador.vivo && cruz.jugador.pv === Math.round(cruz.jugador.pvMax * 0.25),
+      'si el compañero gana, el caído se levanta con el 25 % de sus PV máximos');
+  }
+  {
+    const duo = await nuevoDuo([pegador(7, 100)]);
+    for (const h of ['cara', 'cruz'] as const) await duo.combates[h].infligir(duo.combates[h].jugador, 999);
+    await duo.evaluar();
+    check(duo.terminado === 'derrota', 'si caen los dos, el combate se pierde');
+  }
+
+  // Randomness only happens when the game is applied: what the screen asks costs no rng
+  {
+    let llamadas = 0;
+    const base = crearRng(3);
+    const rngContado = () => { llamadas++; return base(); };
+    const runs = { cara: nuevaRun('barbaro', 3), cruz: nuevaRun('paladin', 3) };
+    const duo = new CombateDuo(runs, [EMBAUCADOR_ARCANO], rngContado, uiMulti, true);
+    await duo.iniciar();
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz'); // Vexis summons his illusions
+    const vexis = duo.enemigos.find((x) => x.def.id === 'embaucador-arcano')!;
+    check(duo.enemigos.some((x) => x.def.id === 'imagen-ilusoria' && x.vivo), 'Vexis ya tiene ilusiones en el campo');
+    const antes = llamadas;
+    for (const h of ['cara', 'cruz'] as const) {
+      const c = duo.combates[h];
+      for (const carta of c.jugador.mano) {
+        c.objetivoReal(carta, vexis);
+        c.valoresDeCarta(defDe(carta), vexis);
+      }
+      c.previsionAtaques();
+      for (const e of duo.enemigos) c.danoIntencion(e);
+    }
+    check(llamadas === antes, 'objetivoReal, los valores de las cartas y las previsiones no gastan rng en multijugador');
+  }
+
+  // ── The game state machine: bots, determinism, replay, coin ────────────────
+  /** Plays a whole game with both bots, sealing every entry. Heroes are made very tough so the
+   *  run goes through every kind of room; the checkpoints (start of each room) are kept. */
+  interface Grabacion {
+    p: PartidaMulti; log: EntradaSellada[]; hashes: string[];
+    puntos: Array<{ guardado: ReturnType<typeof serializarPartidaMulti>; desde: number; hash: string }>;
+  }
+  const partidaNueva = (semilla: number, clases: Record<Hueco, ClaseId>, pv = 9999) => {
+    const p = crearPartidaMulti({ semilla, clases });
+    for (const h of HUECOS) { p.runs[h].pvMax = pv; p.runs[h].pv = pv; }
+    return p;
+  };
+  const jugarBots = async (semilla: number, clases: Record<Hueco, ClaseId>, pv = 9999, limite = 40000): Promise<Grabacion> => {
+    const p = partidaNueva(semilla, clases, pv);
+    const rngBot = crearRng(semilla ^ 0xb07);
+    const g: Grabacion = { p, log: [], hashes: [], puntos: [] };
+    const punto = () => { if (esPuntoDeGuardado(p)) g.puntos.push({ guardado: serializarPartidaMulti(p), desde: g.log.length, hash: hashPartida(p) }); };
+    punto();
+    while (p.fase.tipo !== 'fin' && g.log.length < limite) {
+      let movido = false;
+      for (const h of HUECOS) {
+        const e = decisionBot(p, h, rngBot);
+        if (!e) continue;
+        const sellada = { ...e, seq: g.log.length, de: h } as EntradaSellada;
+        if (!esValida(p, sellada)) throw new Error(`el bot de ${h} propone una entrada inválida: ${JSON.stringify(e)}`);
+        await aplicar(p, sellada);
+        g.log.push(sellada);
+        g.hashes.push(hashPartida(p));
+        punto();
+        movido = true;
+        if (p.fase.tipo === 'fin') break;
+      }
+      if (!movido) throw new Error(`la partida se atasca en la fase ${p.fase.tipo}`);
+    }
+    return g;
+  };
+  const CLASES_BOT = { cara: 'barbaro', cruz: 'paladin' } as Record<Hueco, ClaseId>;
+
+  // bot vs bot: a full game with fixed seed and classes reaches the end without exceptions
+  let grabada: Grabacion | null = null;
+  try {
+    grabada = await jugarBots(21, CLASES_BOT);
+    const fin = grabada.p.fase as { tipo: string; victoria?: boolean };
+    check(fin.tipo === 'fin', `bot contra bot: la partida llega al final (${grabada.log.length} entradas, ${grabada.puntos.length} salas)`);
+    check(fin.victoria === true, 'con héroes duros la campaña se completa (hasta la escena del Dungeon Master)');
+  } catch (e) {
+    check(false, `bot contra bot: ${(e as Error).message}`);
+  }
+  // and with fragile heroes it ends in a defeat, not in an exception
+  try {
+    const frágil = await jugarBots(5, { cara: 'mago', cruz: 'druida' }, 30);
+    check(frágil.p.fase.tipo === 'fin', 'bot contra bot con héroes frágiles: termina (derrota) sin excepciones');
+  } catch (e) {
+    check(false, `bot contra bot frágil: ${(e as Error).message}`);
+  }
+
+  if (grabada) {
+    const g = grabada;
+    // determinism: an independent instance fed the same sealed entries has the same hash after every one
+    {
+      const q = partidaNueva(21, CLASES_BOT);
+      let primera = -1;
+      check(hashPartida(q) === g.puntos[0].hash, 'dos instancias recién creadas con la misma semilla tienen el mismo hash');
+      for (let i = 0; i < g.log.length && primera < 0; i++) {
+        await aplicar(q, g.log[i]);
+        if (hashPartida(q) !== g.hashes[i]) primera = i;
+      }
+      check(primera < 0, `una segunda instancia con las mismas entradas selladas coincide en el hash tras cada una (${g.log.length})${primera >= 0 ? ` · primera diferencia en la entrada ${primera}` : ''}`);
+    }
+    // replay: the save of a room start plus that room's entries gives the same hash again
+    {
+      let bien = 0; let mal = 0;
+      for (let k = 0; k < g.puntos.length; k++) {
+        const pt = g.puntos[k];
+        const hasta = k + 1 < g.puntos.length ? g.puntos[k + 1].desde : g.log.length;
+        const q = rehidratarPartidaMulti(JSON.parse(JSON.stringify(pt.guardado)));
+        let ok = hashPartida(q) === pt.hash;
+        for (let i = pt.desde; i < hasta && ok; i++) {
+          await aplicar(q, g.log[i]);
+          ok = hashPartida(q) === g.hashes[i];
+        }
+        if (ok) bien++; else mal++;
+      }
+      check(mal === 0 && bien > 3, `rehidratar el guardado de inicio de sala y repetir sus entradas reproduce el hash (${bien} salas)`);
+    }
+  }
+
+  // coin: a map disagreement resolves to one of the two votes, and both instances agree
+  {
+    let alguna = new Set<Hueco>(); let todasBien = true;
+    for (let semilla = 1; semilla <= 10; semilla++) {
+      const a = partidaNueva(semilla, CLASES_BOT);
+      const b = partidaNueva(semilla, CLASES_BOT);
+      const rngBot = crearRng(semilla);
+      // get to the first map vote: both bots take the opening blessing
+      let n = 0;
+      while (a.fase.tipo === 'bendicion') {
+        for (const h of HUECOS) {
+          const e = decisionBot(a, h, rngBot);
+          if (!e) continue;
+          const s = { ...e, seq: n++, de: h } as EntradaSellada;
+          await aplicar(a, s); await aplicar(b, s);
+        }
+      }
+      const pregunta = pendiente(a, 'cara');
+      if (!pregunta || pregunta.tipo !== 'mapa' || pregunta.nodos.length < 2) { todasBien = false; continue; }
+      const [vc, vz] = [pregunta.nodos[0], pregunta.nodos[1]];
+      const sc = { tipo: 'mapa', nodo: vc, seq: n++, de: 'cara' } as EntradaSellada;
+      const sz = { tipo: 'mapa', nodo: vz, seq: n++, de: 'cruz' } as EntradaSellada;
+      for (const s of [sc, sz]) { await aplicar(a, s); await aplicar(b, s); }
+      const elegido = a.runs.cara.nodoActual;
+      const ganador: Hueco = elegido === vc ? 'cara' : 'cruz';
+      alguna.add(ganador);
+      if (!(elegido === vc || elegido === vz) || b.runs.cara.nodoActual !== elegido || a.runs.cruz.nodoActual !== elegido
+        || hashPartida(a) !== hashPartida(b)) todasBien = false;
+      // agreeing votes need no coin
+      if (semilla === 1) {
+        const c = partidaNueva(semilla, CLASES_BOT);
+        let m = 0;
+        const rb = crearRng(semilla);
+        while (c.fase.tipo === 'bendicion') for (const h of HUECOS) { const e = decisionBot(c, h, rb); if (e) await aplicar(c, { ...e, seq: m++, de: h } as EntradaSellada); }
+        await aplicar(c, { tipo: 'mapa', nodo: vc, seq: m++, de: 'cara' } as EntradaSellada);
+        const antes = c.fase.tipo;
+        await aplicar(c, { tipo: 'mapa', nodo: vc, seq: m++, de: 'cruz' } as EntradaSellada);
+        check(antes === 'mapa' && c.runs.cara.nodoActual === vc, 'si los dos votan el mismo nodo se va a él sin moneda');
+      }
+    }
+    check(todasBien, 'con votos distintos el resultado es uno de los dos votos y las dos instancias coinciden');
+    check(alguna.size === 2, 'la moneda no favorece siempre al mismo hueco (en 10 semillas salen cara y cruz)');
+  }
+
+  // a question inside a card (a discard) pauses the entry until its answer arrives
+  {
+    const p = partidaNueva(31, { cara: 'picaro', cruz: 'barbaro' });
+    const rb = crearRng(31);
+    let n = 0;
+    const paso = async (h: Hueco, e: Parameters<typeof aplicar>[1] extends infer T ? Omit<T & object, 'seq' | 'de'> : never) => aplicar(p, { ...(e as object), seq: n++, de: h } as EntradaSellada);
+    // advance by bots until the first fight has begun
+    while (!(p.fase.tipo === 'sala' && pendiente(p, 'cara')?.tipo === 'combate')) {
+      let hecho = false;
+      for (const h of HUECOS) { const e = decisionBot(p, h, rb); if (e) { await paso(h, e as never); hecho = true; } }
+      if (!hecho) break;
+    }
+    const sala = (p.fase as unknown as { sala: { combate: CombateDuo } }).sala;
+    const cara = sala.combate.combates.cara;
+    const filo = cartaDe(PICARO, 'filo-rapido');
+    cara.jugador.mano = [filo, ...cara.jugador.mano.slice(0, 3)];
+    cara.jugador.energia = 3;
+    const objetivo = sala.combate.enemigos.findIndex((e) => e.vivo);
+    await paso('cara', { tipo: 'jugar', carta: String(filo.uid), objetivo } as never);
+    const q = pendiente(p, 'cara');
+    check(q?.tipo === 'eleccion' && q.contexto === 'enCarta' && q.opciones.length >= 1, 'una carta que pide elegir deja una pregunta «enCarta» pendiente');
+    check(pendiente(p, 'cruz') === null, 'mientras tanto el compañero espera');
+    const intento = { tipo: 'finTurno', seq: n, de: 'cara' } as EntradaSellada;
+    check(!esValida(p, intento), 'con una pregunta abierta no se admite otra cosa que su respuesta');
+    const antes = hashPartida(p);
+    if (q?.tipo === 'eleccion') await paso('cara', { tipo: 'eleccion', clave: q.clave, valor: q.opciones[0] } as never);
+    check(pendiente(p, 'cara')?.tipo === 'combate' && hashPartida(p) !== antes, 'al contestar, la carta termina de resolverse y se sigue jugando');
+    let lanzo = false;
+    try { serializarPartidaMulti(p); } catch { lanzo = true; }
+    check(lanzo && !esPuntoDeGuardado(p), 'dentro de una sala no se puede guardar: el punto de guardado es el inicio de sala');
+  }
+} catch (e) {
+  check(false, `el motor de dos héroes: ${(e as Error).message}`);
 }
 
 console.log(fallos === 0 ?'\n✅ Todo correcto' : `\n❌ ${fallos} fallos`);

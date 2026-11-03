@@ -374,3 +374,11 @@ export function elegirEvento(
   const lista = frescos.length ? frescos : pool;
   return lista[Math.floor(rng() * lista.length)];
 }
+
+/** The event of an event room for one or more heroes: drawn once, avoiding the ones any of
+ *  them has lived, and written down in each run's log. */
+export function abrirEvento(runs: EstadoRun[], rng: () => number): EventoDef {
+  const evento = elegirEvento(rng, new Set(runs.flatMap((r) => r.eventosVistos)));
+  for (const run of runs) run.eventosVistos.push(evento.id);
+  return evento;
+}

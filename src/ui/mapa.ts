@@ -3,6 +3,7 @@ import { nodosDisponibles, posicionNodo } from '../core/mapa.ts';
 import { ACTOS } from '../core/enemigos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
+import type { Hueco } from '../core/multi/index.ts';
 import { relicIcon } from './relic-art.ts';
 import { cardArtBitmap } from './card-svgs.ts';
 import { mapIconFor, mapIconUrl, hasMapIcon, mapBackground, mapScenarioKey } from './map-icons.ts';
@@ -55,7 +56,15 @@ function inkTrail(ax: number, ay: number, bx: number, by: number, ida: number, i
   return `M${pts[0]} L${pts.slice(1).join(' ')}`;
 }
 
-export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<NodoMapa> {
+/** Two-player mode of the map: both heroes vote, and each one's choice is marked on the node. */
+export interface OpcionesMapaMulti {
+  yo: Hueco;
+  nombres: Record<Hueco, string>;
+  /** Hands the caller what it needs to refresh the screen while the votes come in. */
+  alMontar(api: { votos(v: Partial<Record<Hueco, number>>): void; ayuda(texto: string): void }): void;
+}
+
+export function pantallaMapa(run: EstadoRun, nombreCapitulo: string, multi?: OpcionesMapaMulti): Promise<NodoMapa> {
   return new Promise((resolver) => {
     const app = document.getElementById('app')!;
     app.innerHTML = '';
@@ -195,6 +204,26 @@ export function pantallaMapa(run: EstadoRun, nombreCapitulo: string): Promise<No
 
     const onResize = () => drawTrails();
     window.addEventListener('resize', onResize);
+
+    // two players: show who voted for which node
+    if (multi) {
+      const nodoPorId = new Map<number, HTMLElement>();
+      run.mapa.forEach((n, i) => nodoPorId.set(n.id, lienzo.children[i] as HTMLElement));
+      multi.alMontar({
+        votos(v) {
+          lienzo.querySelectorAll('.voto-marca').forEach((m) => m.remove());
+          for (const h of ['cara', 'cruz'] as Hueco[]) {
+            const id = v[h];
+            const nodo = id === undefined ? undefined : nodoPorId.get(id);
+            if (!nodo) continue;
+            const marca = el('span', `voto-marca ${h === multi.yo ? 'voto-yo' : 'voto-companero'}`, h === multi.yo ? 'Tú' : multi.nombres[h]);
+            marca.title = `Voto de ${multi.nombres[h]}`;
+            nodo.appendChild(marca);
+          }
+        },
+        ayuda(texto) { (raiz.querySelector('.titulo-ayuda') as HTMLElement).textContent = texto; },
+      });
+    }
 
     const teclado = (ev: KeyboardEvent) => {
       if (ev.code === 'ArrowLeft' || ev.code === 'ArrowRight') {

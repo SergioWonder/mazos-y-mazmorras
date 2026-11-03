@@ -10,6 +10,8 @@ import { registrarAccesosMenuPrincipal } from './menu-ajustes.ts';
 import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { finalVerdaderoDesbloqueado } from '../core/escena-final.ts';
+import { pantallaMultijugador } from './multijugador.ts';
+import { registrarUnirse, tomarSalaDeLaUrl } from './avisos-multi.ts';
 
 export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' } | { tipo: 'recargar' }
   | { tipo: 'final-verdadero'; clase: ClaseId }; // replay from the leaderboard
@@ -33,11 +35,16 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       <div class="titulo-marco">
         <h1 class="titulo-juego"><span>Dracs</span> <em>&</em> <span>Rogues</span></h1>
         <p class="titulo-sub">Seis clases, tres actos y dos caminos posibles en cada uno</p>
-        ${
-          puedeContinuar
-            ? `<button class="btn-tomar btn-continuar">📜 Continuar partida guardada</button>`
-            : ''
-        }
+        <div class="titulo-menu">
+          ${
+            puedeContinuar
+              ? `<button class="btn-tomar btn-continuar">📜 Continuar partida guardada</button>`
+              : ''
+          }
+          <button class="btn-tomar btn-modo btn-solitario">⚔️ Un jugador</button>
+          <button class="btn-tomar btn-modo btn-multijugador">👥 Multijugador</button>
+        </div>
+        <div class="titulo-clases" hidden>
         <p class="titulo-intro">
           Los tambores de guerra resuenan en el valle. Una banda de goblins, al servicio
           del temible <strong>Gorzug</strong>, asola las aldeas del condado.
@@ -87,7 +94,9 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
             siguiente golpe y Fervor que brota de cada Golpe y Defensa.</span>
           </button>
         </div>
-        <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
+        <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir · Esc para volver</p>
+        <button class="btn-tomar btn-volver-menu">← Volver</button>
+        </div>
         <button class="btn-tomar titulo-clasificacion">🏆 Clasificación</button>
         <p class="titulo-version">v${VERSION}${
           finalVerdaderoDesbloqueado()
@@ -98,34 +107,70 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     `;
     app.appendChild(raiz);
 
-    // Each class card shows its hero as the backlit puppet, idle. One fixed WebGL stage
-    // draws them all over the cards (SVG fallback without WebGL2).
-    const stage = PuppetStage.create(raiz, { fixed: true, style: 'z-index:6;' });
-    const heroes = [...raiz.querySelectorAll<HTMLButtonElement>('.clase-carta')].map((carta) => {
-      const heroe = new HeroSprite(carta.dataset.clase as ClaseId, stage);
-      carta.querySelector('.clase-icono')!.appendChild(heroe.element);
-      return heroe;
-    });
+    // Two steps: the main menu («Continuar», «Un jugador», «Multijugador») and, behind «Un jugador», the class choice.
+    const menu = raiz.querySelector<HTMLElement>('.titulo-menu')!;
+    const clases = raiz.querySelector<HTMLElement>('.titulo-clases')!;
+    let modo: 'menu' | 'clases' = 'menu';
 
-    const botones = [...raiz.querySelectorAll<HTMLButtonElement>('.clase-carta, .btn-continuar')];
+    // Each class card shows its hero as the backlit puppet, idle. One fixed WebGL stage
+    // draws them all over the cards (SVG fallback without WebGL2). It only exists while
+    // the cards are on screen, so the sprites never sit over a hidden layout.
+    let stage: ReturnType<typeof PuppetStage.create> | null = null;
+    let heroes: HeroSprite[] = [];
+    const montarHeroes = () => {
+      stage = PuppetStage.create(raiz, { fixed: true, style: 'z-index:6;' });
+      heroes = [...raiz.querySelectorAll<HTMLButtonElement>('.clase-carta')].map((carta) => {
+        const heroe = new HeroSprite(carta.dataset.clase as ClaseId, stage!);
+        carta.querySelector('.clase-icono')!.appendChild(heroe.element);
+        return heroe;
+      });
+    };
+    const quitarHeroes = () => {
+      for (const h of heroes) h.destroy();
+      heroes = [];
+      stage?.destroy();
+      stage = null;
+    };
+
+    const botonesDe = () => modo === 'menu'
+      ? [...raiz.querySelectorAll<HTMLButtonElement>('.titulo-menu button')]
+      : [...raiz.querySelectorAll<HTMLButtonElement>('.clase-carta')];
     let idx = 0;
-    const marcar = () => botones.forEach((b, i) => b.classList.toggle('clase-activa', i === idx));
+    const marcar = () => {
+      raiz.querySelectorAll('.clase-activa').forEach((b) => b.classList.remove('clase-activa'));
+      botonesDe()[idx]?.classList.add('clase-activa');
+    };
+    const irA = (nuevo: 'menu' | 'clases') => {
+      if (nuevo === modo) return;
+      modo = nuevo;
+      menu.hidden = modo !== 'menu';
+      clases.hidden = modo !== 'clases';
+      if (modo === 'clases') montarHeroes(); else quitarHeroes();
+      idx = 0;
+      marcar();
+    };
     marcar();
 
     const activar = async (b: HTMLButtonElement) => {
       if (b.classList.contains('btn-continuar')) return terminar({ tipo: 'continuar' });
+      if (b.classList.contains('btn-solitario')) return irA('clases');
+      if (b.classList.contains('btn-multijugador')) { void superponer(() => pantallaMultijugador()); return; }
       // a new run overwrites the saved one: ask first
       if (puedeContinuar && !(await superponer(confirmarNuevaPartida))) return;
       terminar({ tipo: 'nueva', clase: b.dataset.clase as ClaseId });
     };
 
     const teclado = (ev: KeyboardEvent) => {
-      if (ev.code === 'ArrowLeft' || ev.code === 'ArrowRight') {
-        idx = (idx + (ev.code === 'ArrowRight' ? 1 : -1) + botones.length) % botones.length;
+      const botones = botonesDe();
+      if (ev.code === 'ArrowLeft' || ev.code === 'ArrowRight' || (modo === 'menu' && (ev.code === 'ArrowUp' || ev.code === 'ArrowDown'))) {
+        const paso = ev.code === 'ArrowRight' || ev.code === 'ArrowDown' ? 1 : -1;
+        idx = (idx + paso + botones.length) % botones.length;
         marcar();
       } else if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
         void activar(botones[idx]);
+      } else if (ev.code === 'Escape' && modo === 'clases') {
+        irA('menu');
       }
     };
     window.addEventListener('keydown', teclado);
@@ -136,13 +181,14 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       window.removeEventListener('keydown', teclado);
       recargarTitulo = null;
       registrarAccesosMenuPrincipal(null);
-      for (const h of heroes) h.destroy();
-      stage?.destroy();
+      registrarUnirse(null);
+      quitarHeroes();
       resolver(eleccion);
     }
     recargarTitulo = () => terminar({ tipo: 'recargar' });
 
-    botones.forEach((b) => b.addEventListener('click', () => void activar(b)));
+    raiz.querySelectorAll<HTMLButtonElement>('.titulo-menu button, .clase-carta').forEach((b) => b.addEventListener('click', () => void activar(b)));
+    raiz.querySelector('.btn-volver-menu')!.addEventListener('click', () => irA('menu'));
     // the leaderboard can replay the true ending (triple click on the player's own DM medal)
     const clasificacion = () => pantallaClasificacion({ repetirFinal: (clase) => terminar({ tipo: 'final-verdadero', clase }) });
     raiz.querySelector('.titulo-clasificacion')!.addEventListener('click', () => void superponer(clasificacion));
@@ -167,6 +213,11 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
       galeria: () => void superponer(showGallery),
       clasificacion: () => void superponer(clasificacion),
     });
+    // «Unirme» on an alert opens the lobby right here; a notification link (`?sala=`) lands on its game
+    const abrirLobby = (sala: string | null) => void superponer(() => pantallaMultijugador({ sala }));
+    registrarUnirse(abrirLobby);
+    const pendiente = tomarSalaDeLaUrl();
+    if (pendiente) abrirLobby(pendiente);
   });
 }
 

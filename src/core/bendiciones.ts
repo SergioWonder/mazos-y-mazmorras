@@ -70,6 +70,12 @@ export function aplicarBendicion(run: EstadoRun, oferta: OfertaBendicion, rng: (
   otorgarReliquia(run, oferta.reliquia, rng);
 }
 
+/** Síbila's blessing between two acts: the chosen relic, and a full heal on top. */
+export function aplicarBendicionEntreActos(run: EstadoRun, oferta: OfertaBendicion, rng: () => number) {
+  aplicarBendicion(run, oferta, rng);
+  run.pv = run.pvMax;
+}
+
 // ── What the Senescal and Síbila say: each speaks of the map that was drawn ──
 
 const OFRENDA = 'El torreón guarda viejos tesoros bendecidos: llévate el que mejor te sirva.';

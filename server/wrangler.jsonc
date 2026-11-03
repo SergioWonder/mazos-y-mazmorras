@@ -12,13 +12,25 @@
       "migrations_dir": "migrations"
     }
   ],
+  "durable_objects": {
+    "bindings": [
+      // Per-user inbox: live alerts over WebSocket, Web Push when nobody is connected.
+      { "name": "BUZON", "class_name": "Buzon" },
+      // Per-game room: relays and logs the players' entries.
+      { "name": "SALA", "class_name": "Sala" }
+    ]
+  },
+  "migrations": [{ "tag": "v1-multiplayer", "new_sqlite_classes": ["Buzon", "Sala"] }],
   "vars": {
+    // Web Push: public VAPID key (see server/README.md). Empty = push disabled.
+    "VAPID_PUBLIC_KEY": "BNhssjlWczrFokveV8yJKoLFh7zvNDDa77a0w7cWTv3PXVt-DpqrszCM9pn4SjjIjgNWaMmleFRpYfkLo1SCCTw",
+    "VAPID_SUBJECT": "mailto:no-reply@morghur.es",
     // Where the game lives: magic links point here.
     "APP_URL": "https://dracs-and-rogues.morghur.es/",
     // Comma-separated origins allowed by CORS.
     "ALLOWED_ORIGINS": "https://dracs-and-rogues.morghur.es,https://dracs-and-rogues.sergiowonder.workers.dev,https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
     "EMAIL_FROM": "Dracs & Rogues <no-reply@morghur.es>"
   }
-  // Secrets (wrangler secret put): RESEND_API_KEY (Infisical SergioAlvarez/RESEND_API_TOKEN, send-only key).
+  // Secrets (wrangler secret put): VAPID_PRIVATE_KEY (Web Push), RESEND_API_KEY (Infisical SergioAlvarez/RESEND_API_TOKEN, send-only key).
   // Without it, magic links are only logged (local dev).
 }
