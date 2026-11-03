@@ -1525,10 +1525,7 @@ export function pantallaCombate(
       // the last enemies finish falling before the screen goes
       void Promise.all([espera(pausa), muertes.settle()]).then(() => {
         muerte?.();
-        run.pv = Math.max(0, combate.jugador.pv);
-        if (combate.terminado === 'victoria') {
-          for (const r of run.reliquias) r.finCombate?.(run);
-        }
+        combate.cerrarCombate(); // the HP carry over and the relics that heal after a win act
         heroSprite.destroy();
         for (const s of formSprites.values()) s.destroy();
         for (const s of spritesEnemigo.values()) s.destroy();

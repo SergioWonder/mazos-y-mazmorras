@@ -1,7 +1,7 @@
 import type { CartaDef, EstadoRun, OrigenReliquia } from '../core/types.ts';
 import { recompensaCartas } from '../core/cartas.ts';
-import { sortearReliquia, otorgarReliquia, NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
-import { afilarCarta, anadirCarta, curaDeDescanso, descansar, maldicionesDe, pesoRaroEfectivo, purificar } from '../core/run.ts';
+import { sortearReliquia, otorgarReliquia, curarPorVendas, NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
+import { afilarCarta, anadirCarta, cartasMejorables, curaDeDescanso, descansar, maldicionesDe, pesoRaroEfectivo, purificar } from '../core/run.ts';
 import { fx } from '../fx/particulas.ts';
 import { el, anuncio } from './util.ts';
 import { relicIcon } from './relic-art.ts';
@@ -77,7 +77,7 @@ export function obtenerReliquia(
   return new Promise((resolver) => {
     const reliquia = sortearReliquia(run, rng, origen);
     if (!reliquia) {
-      run.pv = Math.min(run.pvMax, run.pv + 10);
+      curarPorVendas(run);
       anuncio('El cofre contiene vendas: +10 PV', 'anuncio-botin');
       return resolver();
     }
@@ -132,7 +132,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
     function vistaPrincipal() {
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
-      const mejorables = run.mazo.filter((c) => !c.mejorada && c.def.mejora);
+      const mejorables = cartasMejorables(run);
       const malditas = maldicionesDe(run);
       const panel = el('div', 'panel-recompensa panel-descanso');
       panel.innerHTML = `
@@ -246,7 +246,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
     function vistaMejora() {
       overlay.innerHTML = '';
       overlay.className = 'overlay-activo';
-      const mejorables = run.mazo.filter((c) => !c.mejorada && c.def.mejora);
+      const mejorables = cartasMejorables(run);
       const panel = el('div', 'panel-recompensa panel-mejora');
       panel.innerHTML = `
         <h2>⚒️ Afilar</h2>

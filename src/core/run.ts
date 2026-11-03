@@ -138,13 +138,26 @@ export function sortearEscenario(rng: () => number): number {
 /** Prepara la run para el siguiente capítulo: nuevo mapa y respiro. `escenario` is the
  *  map already drawn (and foretold by Síbila); without it, one is drawn now. */
 export function avanzarCapitulo(run: EstadoRun, rng: () => number, escenario = sortearEscenario(rng)) {
-  run.capitulo++;
-  run.escenario = escenario; // uno de los dos escenarios del nuevo acto
-  run.mapa = generarMapa(rng);
-  run.mision = null; // the old map's tavern quest cannot be followed any more
-  run.nodoActual = -1;
-  run.piso = 0;
-  run.pv = Math.min(run.pvMax, run.pv + Math.floor(run.pvMax * 0.35));
+  avanzarCapituloGrupo([run], rng, escenario);
+}
+
+/** The next chapter for a whole party: one new map, drawn once, that every run shares. */
+export function avanzarCapituloGrupo(runs: EstadoRun[], rng: () => number, escenario: number) {
+  const mapa = generarMapa(rng);
+  for (const run of runs) {
+    run.capitulo++;
+    run.escenario = escenario; // uno de los dos escenarios del nuevo acto
+    run.mapa = mapa;
+    run.mision = null; // the old map's tavern quest cannot be followed any more
+    run.nodoActual = -1;
+    run.piso = 0;
+    run.pv = Math.min(run.pvMax, run.pv + Math.floor(run.pvMax * 0.35));
+  }
+}
+
+/** Cards of the deck the campfire (or an event) can still upgrade. */
+export function cartasMejorables(run: EstadoRun): CartaInstancia[] {
+  return run.mazo.filter((c) => !c.mejorada && c.def.mejora);
 }
 
 /** The elite group of the next elite room: drawn at random among the scenario's elites not

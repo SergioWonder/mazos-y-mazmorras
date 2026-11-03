@@ -7,6 +7,15 @@ export function instanciar(def: CartaDef): CartaInstancia {
   return { uid: uidSiguiente++, def, mejorada: false };
 }
 
+/** The uid the next card will get. A multiplayer game keeps its own counter (card ids travel in
+ *  the log, so every machine must hand out the same ones) and lends it here while it runs. */
+export function contadorUid(): number {
+  return uidSiguiente;
+}
+export function fijarContadorUid(n: number) {
+  uidSiguiente = n;
+}
+
 /** Definición efectiva de una instancia: aplica la mejora si la tiene. */
 export function defDe(inst: CartaInstancia): CartaDef {
   if (!inst.mejorada || !inst.def.mejora) return inst.def;

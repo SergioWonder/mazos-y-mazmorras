@@ -79,9 +79,41 @@ export interface PrevisionAtaque {
   aplastado: boolean;
 }
 
+/** Everything that belongs to the enemy side of a fight. In a solo fight the combat owns
+ *  one; in a two-hero fight both combats point at the same one, so what a hero does to an
+ *  enemy (and what the enemies decide) exists exactly once. */
+export interface LadoEnemigo {
+  enemigos: EnemigoCombate[];
+  /** Enemies that already picked their next move during the enemy turn: it stays hidden
+   *  until the heroes' turn begins. */
+  intencionesOcultas: Set<EnemigoCombate>;
+  /** Enemies of a group of three or more that attacked in the round just announced. */
+  atacaronUltima: Set<EnemigoCombate>;
+  /** Hits the Dungeon Master's screen has soaked up (every other one gets his retort). */
+  golpesPantallaDM: number;
+  /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
+  finalVerdadero: boolean;
+}
+
+/** What a combat needs to know when it is one of two heroes fighting the same enemies. */
+export interface VinculoDuo {
+  /** Both heroes' combats, in a fixed order. */
+  heroes(): Combate[];
+  /** The fight is over for the whole party (victory, or every hero down). */
+  luchaAcabada(): boolean;
+}
+
 export class Combate {
   jugador: JugadorCombate;
+  /** Same array as `lado.enemigos` (it is only ever mutated in place). */
   enemigos: EnemigoCombate[];
+  /** The enemy side: shared with the partner's combat in a two-hero fight. */
+  readonly lado: LadoEnemigo;
+  /** Set in a two-hero fight: the partner and the party's end condition. */
+  vinculo: VinculoDuo | null = null;
+  /** Two-hero fights roll nothing from presentation code: the decoy roll of a card
+   *  happens only while it is played (see objetivoReal). */
+  sinTiradasDePresentacion = false;
   turno = 0;
   danoHechoEsteTurno = 0;
   danoRecibidoEsteTurno = 0; // daño real (no bloqueado) sufrido en la ronda
@@ -90,13 +122,11 @@ export class Combate {
   descartadasEsteCombate = 0; // cards discarded by effects over the whole fight (Steel Tempest)
   terminado: 'victoria' | 'derrota' | null = null;
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
-  finalVerdadero = false;
+  get finalVerdadero(): boolean { return this.lado.finalVerdadero; }
+  set finalVerdadero(v: boolean) { this.lado.finalVerdadero = v; }
   enResolucion = false;
-  /** Enemies that already picked their next move during the enemy turn: it stays hidden
-   *  until the player's turn begins. */
-  private intencionesOcultas = new Set<EnemigoCombate>();
   intencionOculta(e: EnemigoCombate): boolean {
-    return this.intencionesOcultas.has(e);
+    return this.lado.intencionesOcultas.has(e);
   }
 
   /** Decoy roll the UI already made for a card (so it flies where the blow will land). */
@@ -145,6 +175,8 @@ export class Combate {
     ui: Presentador,
     eliteOJefe = false,
     contexto?: ContextoEncuentro,
+    /** Two-hero fights: the enemy side the first hero's combat already built. */
+    compartido?: LadoEnemigo,
   ) {
     this.run = run;
     this.rng = rng;
@@ -167,7 +199,18 @@ export class Combate {
       bloqueoAplazado: [],
       castigos: [],
     };
+    if (compartido) {
+      // the partner's combat already built (and tuned) the enemies
+      this.lado = compartido;
+      this.enemigos = compartido.enemigos;
+      this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
+      return;
+    }
     this.enemigos = resolverVariantes(defs, rng).map((d) => crearEnemigo(d, rng));
+    this.lado = {
+      enemigos: this.enemigos, intencionesOcultas: new Set(), atacaronUltima: new Set(),
+      golpesPantallaDM: 0, finalVerdadero: false,
+    };
     this.ajuste = ajusteEncuentro(contexto, this.enemigos.length);
     for (const e of this.enemigos) {
       if (this.ajuste.pv !== 1) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * this.ajuste.pv));
@@ -184,25 +227,24 @@ export class Combate {
     return m;
   }
 
-  /** Enemies of a group of three or more that attacked in the round just announced. */
-  private atacaronUltima = new Set<EnemigoCombate>();
-
   /** Groups of three or more take turns: once every enemy has announced its next
    *  move, at most half of them (rounded up) attack; the others guard or prepare
    *  instead, and those that attacked last round are the first to hold back, so
    *  each one alternates and nobody is left without attacking. */
-  private coordinarGrupo() {
+  coordinarGrupo() {
     if (!this.ajuste.alternan) return;
+    const previos = this.lado.atacaronUltima;
     const vivos = this.enemigos.filter((x) => x.vivo);
-    if (vivos.length < 3) { this.atacaronUltima.clear(); return; }
+    if (vivos.length < 3) { previos.clear(); return; }
     const ataca = (x: Movimiento) => x.intencion === 'ataque' || x.dano !== undefined;
     const atacantes = vivos.filter((x) => ataca(x.intencion) && !x.saltaAccion);
     const tope = Math.ceil(vivos.length / 2);
     const sobran = atacantes
-      .sort((x, y) => Number(this.atacaronUltima.has(y)) - Number(this.atacaronUltima.has(x)) || this.enemigos.indexOf(x) - this.enemigos.indexOf(y))
+      .sort((x, y) => Number(previos.has(y)) - Number(previos.has(x)) || this.enemigos.indexOf(x) - this.enemigos.indexOf(y))
       .slice(0, Math.max(0, atacantes.length - tope));
     for (const e of sobran) e.intencion = this.movimientoDeEspera(e, e.intencion);
-    this.atacaronUltima = new Set(vivos.filter((x) => ataca(x.intencion)));
+    previos.clear();
+    for (const x of vivos) if (ataca(x.intencion)) previos.add(x);
   }
 
   /** What an enemy does on a round it holds back: its own next move that is not an
@@ -997,14 +1039,11 @@ export class Combate {
 
   // ── Final scene: the Dungeon Master ────────────────────────────────────────
 
-  /** Hits the screen has soaked up (every other one gets the DM's retort). */
-  private golpesPantallaDM = 0;
-
   /** A blow (or an instant kill) against the DM: the screen blocks it all. */
   private async pantallaDM(e: EnemigoCombate, fx?: string) {
-    this.golpesPantallaDM++;
+    this.lado.golpesPantallaDM++;
     await this.ui.fxGolpe(e, 0, fx);
-    if (this.golpesPantallaDM % 2 === 1) await this.ui.fxMensaje('🛡️ ¡La pantalla del DM lo bloquea todo!');
+    if (this.lado.golpesPantallaDM % 2 === 1) await this.ui.fxMensaje('🛡️ ¡La pantalla del DM lo bloquea todo!');
     else await this.dialogoDM(e, FRASES_DM.bloqueo);
   }
 
@@ -1019,7 +1058,7 @@ export class Combate {
   async seducirDM(e: EnemigoCombate, tirada: number) {
     if (!e.vivo || this.terminado) return;
     if (tirada < 20) {
-      this.golpesPantallaDM++;
+      this.lado.golpesPantallaDM++;
       await this.ui.fxGolpe(e, 0, 'corazones');
       await this.dialogoDM(e, tirada === 19 ? FRASES_DM.casi : FRASES_DM.bloqueo);
       return;
@@ -1296,10 +1335,36 @@ export class Combate {
     if (this.terminado) return;
     if (!this.jugador.vivo || this.jugador.pv <= 0) this.terminado = 'derrota';
     else if (this.enemigos.every((e) => !e.vivo)) this.terminado = 'victoria';
-    if (this.terminado === 'victoria' && !this.victoriaNotificada) {
-      this.victoriaNotificada = true;
-      for (const r of this.run.reliquias) r.alVencerCombate?.(this.run, { eliteOJefe: this.eliteOJefe });
+    if (this.terminado === 'victoria') this.notificarVictoria();
+  }
+
+  /** Tells the relics the fight was won (once). A hero who was down when his partner won
+   *  gets it too: he gets back up with the party. */
+  notificarVictoria() {
+    if (this.victoriaNotificada) return;
+    this.victoriaNotificada = true;
+    for (const r of this.run.reliquias) r.alVencerCombate?.(this.run, { eliteOJefe: this.eliteOJefe });
+  }
+
+  /** The rules that close a fight, once the screen is done with it: the HP carry over to
+   *  the run, and on a win the relics that heal after the fight act. */
+  cerrarCombate() {
+    this.run.pv = Math.max(0, this.jugador.pv);
+    if (this.terminado === 'victoria') {
+      for (const r of this.run.reliquias) r.finCombate?.(this.run);
     }
+  }
+
+  /** The fight is over for everyone: this combat's own end when alone, the party's when two
+   *  heroes fight together (one may be down while the other still stands). */
+  luchaAcabada(): boolean {
+    return this.vinculo ? this.vinculo.luchaAcabada() : this.terminado !== null;
+  }
+
+  /** The heroes still on their feet, this one included: who the enemy side can still reach. */
+  heroesVivos(): Combate[] {
+    const todos = this.vinculo ? this.vinculo.heroes() : [this];
+    return todos.filter((h) => h.jugador.vivo);
   }
 
   /** Escribe en el Conjuro Prodigioso: suma daño, añade efecto (sin apilar) y
@@ -1536,7 +1601,7 @@ export class Combate {
     this.turno++;
     stats.empezarTurno(this.estadisticas);
     this.faseEnemiga = false;
-    this.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
+    this.lado.intencionesOcultas.clear(); // their next moves show now, as the player's turn begins
     this.danoHechoEsteTurno = 0;
     this.danoRecibidoEsteTurno = 0;
     this.danoBloqueadoEsteTurno = 0;
@@ -1708,15 +1773,27 @@ export class Combate {
 
   /** Where an attack card aimed at `objetivo` really lands: an enemy with decoys (Vexis and
    *  his illusions) shares the blow out at random among itself and its living decoys. The UI
-   *  asks before the card flies; jugarCarta then keeps that same roll. */
+   *  asks before the card flies; jugarCarta then keeps that same roll. In two-hero fights
+   *  this is a no-op: nothing the screen asks may touch the rng, so the roll is made only
+   *  while the card is played. */
   objetivoReal(carta: CartaInstancia, objetivo?: EnemigoCombate): EnemigoCombate | undefined {
-    const def = defDe(carta);
-    const senuelos = objetivo?.def.senuelos;
-    if (!objetivo?.vivo || def.tipo !== 'ataque' || def.objetivo !== 'enemigo' || !senuelos?.length) return objetivo;
-    const candidatos = [objetivo, ...this.enemigos.filter((e) => e.vivo && e !== objetivo && senuelos.includes(e.def.id))];
-    const hacia = candidatos[Math.floor(this.rng() * candidatos.length)];
-    this.desvioPrevisto = { carta, desde: objetivo, hacia };
+    if (this.sinTiradasDePresentacion) return objetivo;
+    const hacia = this.sortearObjetivo(carta, objetivo);
+    if (this.tieneSenuelos(carta, objetivo)) this.desvioPrevisto = { carta, desde: objetivo!, hacia: hacia! };
     return hacia;
+  }
+
+  private tieneSenuelos(carta: CartaInstancia, objetivo?: EnemigoCombate): boolean {
+    const def = defDe(carta);
+    return !!objetivo?.vivo && def.tipo === 'ataque' && def.objetivo === 'enemigo' && !!objetivo.def.senuelos?.length;
+  }
+
+  /** The decoy roll itself (consumes the rng only when the target has decoys). */
+  private sortearObjetivo(carta: CartaInstancia, objetivo?: EnemigoCombate): EnemigoCombate | undefined {
+    if (!this.tieneSenuelos(carta, objetivo)) return objetivo;
+    const senuelos = objetivo!.def.senuelos!;
+    const candidatos = [objetivo!, ...this.enemigos.filter((e) => e.vivo && e !== objetivo && senuelos.includes(e.def.id))];
+    return candidatos[Math.floor(this.rng() * candidatos.length)];
   }
 
   async jugarCarta(carta: CartaInstancia, objetivo?: EnemigoCombate) {
@@ -1731,8 +1808,7 @@ export class Combate {
     const yaTirado = !!previsto && previsto.carta === carta && previsto.hacia.vivo
       && (objetivo === previsto.desde || objetivo === previsto.hacia);
     const apuntado = yaTirado ? previsto!.desde : objetivo;
-    const real = yaTirado ? previsto!.hacia : this.objetivoReal(carta, objetivo);
-    this.desvioPrevisto = null;
+    const real = yaTirado ? previsto!.hacia : this.sortearObjetivo(carta, objetivo);
     if (real && apuntado && real !== apuntado && real.def.id !== apuntado.def.id) await this.ui.fxMensaje('🃏 ¡Era una ilusión!');
     objetivo = real;
     this.enResolucion = true;
@@ -1833,8 +1909,33 @@ export class Combate {
     else delete e.estados.raices;
   }
 
+  /** Single-player end of turn: the hero's end of turn, the enemies' turn and the start of the
+   *  next round, in that order. Two-hero fights run the same parts themselves, so the enemy
+   *  turn happens once for both heroes (see multi/combate-duo.ts). */
   async terminarTurno() {
     if (this.enResolucion || this.terminado) return;
+    await this.finDeTurnoHeroe();
+    // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
+    for (const e of [...this.enemigos]) {
+      if (!e.vivo || this.luchaAcabada()) continue;
+      await this.turnoDeEnemigo(e, () => this);
+    }
+    this.coordinarGrupo(); // groups of three or more take turns for the coming round
+    await this.cierreDeRondaA();
+    await this.condenaFinal();
+    await this.cierreDeRondaB();
+    this.enResolucion = false;
+    if (!this.terminado) await this.inicioTurnoJugador();
+    else this.ui.render(); // cierra el combate (p. ej. si la Hemorragia mató al último enemigo)
+  }
+
+  /** Vulnerable the hero already had when his turn ended: it counts down once the enemies
+   *  are done; any applied during the enemy turn survives to its next hit. */
+  private vulnerableAntes = 0;
+
+  /** The hero's part of the end of turn: effects expire, relics and curses act, the hand is
+   *  discarded. The hero stays busy (`enResolucion`) until the next round starts. */
+  async finDeTurnoHeroe() {
     this.enResolucion = true;
     const j = this.jugador;
     stats.terminarTurno(this.estadisticas, j.energia);
@@ -1886,9 +1987,7 @@ export class Combate {
 
     this.decrementarEstados(j);
     this.faseEnemiga = true;
-    // Vulnerable the hero already had counts down once the enemies are done;
-    // any applied during the enemy turn survives to its next hit.
-    const vulnerableAntes = j.estados.vulnerable ?? 0;
+    this.vulnerableAntes = j.estados.vulnerable ?? 0;
 
     // Curses held in the hand hurt now, before the discard (after the status
     // countdown, so a Weak or Frail they give lasts into the next round).
@@ -1912,77 +2011,92 @@ export class Combate {
     j.mano = retenidas;
     this.ui.render();
     await this.ui.espera(300);
+  }
 
-    // Turno enemigo (sobre una copia: las invocaciones no actúan el turno en que llegan)
-    for (const e of [...this.enemigos]) {
-      if (!e.vivo || this.terminado) continue;
-      // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
-      // se cierra si durante tu turno no recibió daño no bloqueado.
-      const hem = e.estados.hemorragia ?? 0;
-      if (hem > 0) {
-        const mantenida = e.heridoEsteTurno === true;
-        await this.infligir(e, hem, 'sangre', true);
-        const sed = j.estados.sedSangre ?? 0;
-        if (sed > 0 && j.vivo) {
-          j.bloqueo += sed;
-          await this.ui.fxBloqueo(j, sed);
-        }
-        if (!mantenida && e.vivo) {
-          delete e.estados.hemorragia;
-          await this.ui.fxMensaje(`🩸 La herida de ${e.nombre} se cierra`);
+  /** One enemy's turn. Its upkeep (bleeding, poison, regeneration) runs here, on this hero's
+   *  account; its move is carried out by the hero `objetivo()` picks, asked only once the
+   *  enemy is sure to act (a roll of the shared rng in two-hero fights). */
+  async turnoDeEnemigo(e: EnemigoCombate, objetivo: () => Combate) {
+    // Hemorragia: al inicio de su turno pierde PV (ignora bloqueo). Tras el tic
+    // se cierra si durante tu turno no recibió daño no bloqueado.
+    const hem = e.estados.hemorragia ?? 0;
+    if (hem > 0) {
+      const mantenida = e.heridoEsteTurno === true;
+      await this.infligir(e, hem, 'sangre', true);
+      for (const h of this.heroesVivos()) {
+        const sed = h.jugador.estados.sedSangre ?? 0;
+        if (sed > 0) {
+          h.jugador.bloqueo += sed;
+          await h.ui.fxBloqueo(h.jugador, sed);
         }
       }
-      if (!e.vivo || this.terminado) continue; // la Hemorragia pudo matarlo
-      // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
-      await this.tickVeneno(e);
-      if (!e.vivo || this.terminado) continue; // el Veneno pudo matarlo
-      // Regeneration: it heals at the start of its turn
-      const regen = Math.min(e.estados.regeneracion ?? 0, e.pvMax - e.pv);
-      if (regen > 0) {
-        e.pv += regen;
-        await this.ui.fxCura(e, regen);
+      if (!mantenida && e.vivo) {
+        delete e.estados.hemorragia;
+        await this.ui.fxMensaje(`🩸 La herida de ${e.nombre} se cierra`);
       }
-      if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
-      const fuerzaAntes = this.fuerzaEnemiga();
-      await this.ejecutarMovimiento(e);
-      stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
-      this.decrementarEstados(e);
-      this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
-      e.turnosVisto++;
-      // Cambiazo: si tiene una intención forzada, la ejecuta ahora en vez de
-      // generar una nueva; si no, la IA decide su siguiente movimiento.
-      if (e.intencionForzada) {
-        e.intencion = e.intencionForzada;
-        delete e.intencionForzada;
-      } else {
-        e.intencion = this.ajustarIntencion(e, e.def.ia(
-          e.turnosVisto, this.rng, e,
-          this.enemigos.filter((x) => x.vivo && x !== e),
-        ));
-      }
-      e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
-      this.intencionesOcultas.add(e); // hidden until the player's turn begins
-      // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
-      if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
-      this.ui.render();
-      await this.ui.espera(250);
     }
-    this.coordinarGrupo(); // groups of three or more take turns for the coming round
+    if (!e.vivo || this.luchaAcabada()) return; // la Hemorragia pudo matarlo
+    // Veneno: al inicio de su turno pierde PV (ignora bloqueo) y baja 1 (pícaro)
+    await this.tickVeneno(e);
+    if (!e.vivo || this.luchaAcabada()) return; // el Veneno pudo matarlo
+    // Regeneration: it heals at the start of its turn
+    const regen = Math.min(e.estados.regeneracion ?? 0, e.pvMax - e.pv);
+    if (regen > 0) {
+      e.pv += regen;
+      await this.ui.fxCura(e, regen);
+    }
+    if (!e.def.conservaBloqueo) e.bloqueo = 0; // Unbreakable Oath: its block piles up
+    const fuerzaAntes = this.fuerzaEnemiga();
+    await objetivo().ejecutarMovimiento(e);
+    stats.enemigoSeRefuerza(this.estadisticas, this.fuerzaEnemiga() - fuerzaAntes);
+    this.decrementarEstados(e);
+    this.envejecerRaices(e); // cada instancia de raíces pierde 1 turno
+    e.turnosVisto++;
+    // Cambiazo: si tiene una intención forzada, la ejecuta ahora en vez de
+    // generar una nueva; si no, la IA decide su siguiente movimiento.
+    if (e.intencionForzada) {
+      e.intencion = e.intencionForzada;
+      delete e.intencionForzada;
+    } else {
+      e.intencion = this.ajustarIntencion(e, e.def.ia(
+        e.turnosVisto, this.rng, e,
+        this.enemigos.filter((x) => x.vivo && x !== e),
+      ));
+    }
+    e.danoBaseMax = Math.max(e.danoBaseMax, e.intencion.dano ?? 0);
+    this.lado.intencionesOcultas.add(e); // hidden until the player's turn begins
+    // a sleeper whose time is up wakes at the end of its last sleeping turn (its companions strike at once)
+    if (e.def.durmiente && !e.despierto && e.turnosVisto >= e.def.durmiente.turnos && e.vivo) await this.despertar(e);
+    this.ui.render();
+    await this.ui.espera(250);
+  }
 
-    if (vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
+  /** After the enemy turn, the hero's side: Vulnerable counts down and the warlock's
+   *  ephemeral summon strikes and fades. */
+  async cierreDeRondaA() {
+    const j = this.jugador;
+    if (this.vulnerableAntes > 0 && (j.estados.vulnerable ?? 0) > 0) j.estados.vulnerable!--;
 
     // Invocación efímera del brujo: si aguantó la ronda, golpea y se desvanece
     await this.resolverInvocacionEfimera();
+  }
 
-    // Condena (brujo): al final del turno enemigo, quien tenga Condena ≥ sus PV
-    // actuales sucumbe. Va por la vía normal de daño, así que respeta la
-    // filacteria del liche y dispara los efectos de muerte (Heraldo, Infernal).
+  /** Condena (brujo): al final del turno enemigo, quien tenga Condena ≥ sus PV
+   *  actuales sucumbe. Va por la vía normal de daño, así que respeta la
+   *  filacteria del liche y dispara los efectos de muerte (Heraldo, Infernal).
+   *  It belongs to the enemy side: in a two-hero fight it runs once. */
+  async condenaFinal() {
     for (const e of [...this.enemigos]) {
-      if (this.terminado) break;
+      if (this.luchaAcabada()) break;
       if (!this.condenaLetal(e)) continue;
       await this.ui.fxMensaje(`🕳️ La Condena consume a ${e.nombre}`);
       await this.infligir(e, e.pv, 'condena', true, true);
     }
+  }
+
+  /** The last of the round for the hero: one-turn buffs fade and the Rage may break. */
+  async cierreDeRondaB() {
+    const j = this.jugador;
 
     // Armadura de Agathys y las mejoras de un solo turno de la Explosión
     delete j.estados.agathys;
@@ -2030,10 +2144,6 @@ export class Combate {
       await this.ganchos((r, c) => r.alPerderFuria?.(c));
     }
     delete j.estados.frenesi; // el Frenesí solo dura este turno
-
-    this.enResolucion = false;
-    if (!this.terminado) await this.inicioTurnoJugador();
-    else this.ui.render(); // cierra el combate (p. ej. si la Hemorragia mató al último enemigo)
   }
 
   async ejecutarMovimiento(e: EnemigoCombate) {
