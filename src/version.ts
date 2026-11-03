@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '9.1.0';
+export const VERSION = '9.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,15 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '9.2.0',
+    fecha: '2026-11-03',
+    cambios: [
+      '☁️ Cuenta en la nube: en Ajustes, escribe tu correo y entra con el enlace que te llega, sin contraseña. Tu partida se guarda sola y puedes seguirla en otro dispositivo.',
+      '🏆 Clasificación por clase: tus partidas terminadas suben a la tabla. Ponte un nombre en Ajustes para salir con él.',
+      '🔀 Si tienes partidas distintas en dos dispositivos, el juego te pregunta con cuál seguir.',
+    ],
+  },
   {
     version: '9.1.0',
     fecha: '2026-11-03',
