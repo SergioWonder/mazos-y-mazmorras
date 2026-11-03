@@ -14,7 +14,7 @@
   ],
   "vars": {
     // Where the game lives: magic links point here.
-    "APP_URL": "https://sergiowonder.github.io/mazos-y-mazmorras/",
+    "APP_URL": "https://dracs-and-rogues.morghur.es/",
     // Comma-separated origins allowed by CORS.
     "ALLOWED_ORIGINS": "https://dracs-and-rogues.morghur.es,https://dracs-and-rogues.sergiowonder.workers.dev,https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
     "EMAIL_FROM": "Dracs & Rogues <no-reply@morghur.es>"

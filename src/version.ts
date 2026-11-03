@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '9.0.2';
+export const VERSION = '9.1.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '9.1.0',
+    fecha: '2026-11-03',
+    cambios: [
+      '🏰 Nueva casa: el juego se muda a dracs-and-rogues.morghur.es. Si entras por la dirección de siempre te lleva allí con tu partida, tus ajustes y tus finales.',
+      '📲 Si lo tienes instalado como app, ábrelo una vez para mudar tu progreso e instálalo de nuevo desde la dirección nueva.',
+    ],
+  },
   {
     version: '9.0.2',
     fecha: '2026-10-10',

@@ -12,7 +12,7 @@ describe('acceso con enlace mágico', () => {
     expect(sent).toHaveLength(1);
     expect(sent[0].to).toBe('ana@ejemplo.com');
     const link = new URL(sent[0].link);
-    expect(`${link.origin}${link.pathname}`).toBe('https://sergiowonder.github.io/mazos-y-mazmorras/');
+    expect(`${link.origin}${link.pathname}`).toBe('https://dracs-and-rogues.morghur.es/');
     expect(link.searchParams.get('login')).toMatch(/^[A-Za-z0-9_-]{43}$/);
   });
 
