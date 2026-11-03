@@ -1,0 +1,30 @@
+{
+  "name": "dracs-rogues-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 migrations apply dracs-rogues --local",
+    "db:migrate:remote": "wrangler d1 migrations apply dracs-rogues --remote",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.5.0",
+    "@cloudflare/workers-types": "^5.20261103.1",
+    "typescript": "~5.6.2",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.156.2"
+  },
+  "allowScripts": {
+    "workerd@1.20260815.1": true,
+    "workerd@1.20261102.1": true,
+    "esbuild@0.28.1": true,
+    "esbuild@0.28.2": true
+  },
+  "dependencies": {
+    "hono": "^4.13.16"
+  }
+}

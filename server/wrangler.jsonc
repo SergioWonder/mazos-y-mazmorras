@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "dracs-rogues-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "dracs-rogues",
+      // Replace with the id printed by `wrangler d1 create dracs-rogues` before the first deploy.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "vars": {
+    // Where the game lives: magic links point here.
+    "APP_URL": "https://sergiowonder.github.io/mazos-y-mazmorras/",
+    // Comma-separated origins allowed by CORS.
+    "ALLOWED_ORIGINS": "https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
+    "EMAIL_FROM": "Dracs & Rogues <no-reply@example.com>"
+  }
+  // Secrets (wrangler secret put): RESEND_API_KEY. Without it, magic links are only logged (local dev).
+}
