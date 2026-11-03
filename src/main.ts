@@ -9,11 +9,11 @@ import { crearRng, elegir } from './core/rng.ts';
 import { nuevaRun, avanzarCapitulo, sortearEscenario, entrarEnSala, cartaExtraEnSala, elegirElite } from './core/run.ts';
 import { ACTOS, DUNGEON_MASTER } from './core/enemigos.ts';
 import { desenlaceCampana } from './core/escena-final.ts';
-import { guardarRun, cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
+import { cargarRun, hayGuardado, borrarGuardado } from './core/guardado.ts';
 import { fx } from './fx/particulas.ts';
 import { audio } from './fx/audio.ts';
 import { exploreTheme } from './fx/music-tracks.ts';
-import { pantallaTitulo, type EleccionTitulo } from './ui/titulo.ts';
+import { pantallaTitulo, refrescarTitulo, type EleccionTitulo } from './ui/titulo.ts';
 import { pantallaMapa } from './ui/mapa.ts';
 import { pantallaCombate, caidaDelHeroe } from './ui/combate.ts';
 import { pantallaCapitulo } from './ui/capitulo.ts';
@@ -29,11 +29,17 @@ import { pantallaFinalVerdadero } from './ui/final-verdadero.ts';
 import { iniciarTooltips, anuncio } from './ui/util.ts';
 import { crearMenuAjustes } from './ui/menu-ajustes.ts';
 import { activarSonidoInterfaz } from './ui/sonido-interfaz.ts';
+import { nube } from './core/nube.ts';
+import {
+  aterrizajeLogin, sincronizarAlTitulo, guardarYSubir, borrarGuardadoFinal, registrarFinDePartida, sincronizarFinalVerdadero,
+} from './ui/nube-juego.ts';
 
 fx.iniciar(document.getElementById('fx-canvas') as HTMLCanvasElement);
 iniciarTooltips();
 avisoInstalacion();
 iniciarActualizaciones();
+// `?login=<token>` from the magic-link email (the address bar is cleaned right away)
+void aterrizajeLogin();
 
 // Settings menu (sound, volume, performance) at the top right of every screen
 crearMenuAjustes();
@@ -54,8 +60,13 @@ async function juego() {
     document.body.dataset.capitulo = '0';
     fx.estiloAmbiente = 'brasas';
     audio.menu(); // música del menú principal
+    // With an account, the title reconciles the local run with the cloud in the background
+    let enTitulo = !reintento;
+    if (enTitulo) void sincronizarAlTitulo(() => enTitulo).then((cambio) => { if (cambio) refrescarTitulo(); });
     const eleccion = reintento ?? await pantallaTitulo(hayGuardado());
     reintento = null;
+    enTitulo = false;
+    if (eleccion.tipo === 'recargar') continue; // the cloud changed the local save: draw the title again
 
     let run;
     if (eleccion.tipo === 'continuar') {
@@ -67,6 +78,7 @@ async function juego() {
     }
 
     // la semilla deriva del guardado: el rng continúa distinto pero determinista
+    nube.recordarClase(run.clase); // the leaderboard opens on the last class played
     const rng = crearRng((run.semilla ^ 0x9e3779b9) + run.piso * 7919);
 
     if (eleccion.tipo === 'nueva') {
@@ -74,7 +86,7 @@ async function juego() {
       fx.estiloAmbiente = ACTOS[0][run.escenario].ambiente;
       await pantallaCapitulo(ACTOS[0][run.escenario], run.clase);
       await pantallaBendicion(run, rng, 'inicial'); // the Senescal's task: pick a blessing relic
-      guardarRun(run);
+      guardarYSubir(run);
     }
     let vivo = true;
     let campanaCompleta = false;
@@ -145,7 +157,7 @@ async function juego() {
             // Final joke: the Dungeon Master has the last word. The run is already
             // won, so the save goes now and his ray can only end in victory.
             campanaCompleta = true;
-            borrarGuardado();
+            borrarGuardadoFinal();
             escenaDM = await pantallaCombate(run, [DUNGEON_MASTER], rng, true, 'Detrás de la pantalla');
             audio.menu(); // the DM's metal gives way to the main theme for the closing screens
           }
@@ -163,16 +175,19 @@ async function juego() {
       if (vivo && !campanaCompleta && cartaExtraEnSala(run, nodo.tipo)) await elegirCarta(run, rng);
 
       // guardado automático tras resolver cada sala
-      if (vivo && !campanaCompleta) guardarRun(run);
+      if (vivo && !campanaCompleta) guardarYSubir(run);
     }
 
     const desenlace = desenlaceCampana(campanaCompleta, escenaDM);
-    if (desenlace.borrarGuardado) borrarGuardado(); // la run terminó: muerte o victoria
+    if (desenlace.borrarGuardado && !campanaCompleta) borrarGuardadoFinal(); // la run terminó: muerte (la victoria ya lo borró arriba)
+    registrarFinDePartida(run, desenlace.victoria); // leaderboard outbox: goes up now or after the next login
     // el epílogo depende del jefe del escenario final que te haya tocado
     const actoFinal = ACTOS[ACTOS.length - 1][run.escenario];
     // the secret: the DM fell to a natural 20 on Seduce, and the table finds a date
-    if (desenlace.finalVerdadero) await pantallaFinalVerdadero(run.clase);
-    else {
+    if (desenlace.finalVerdadero) {
+      await pantallaFinalVerdadero(run.clase);
+      sincronizarFinalVerdadero(); // the profile slot keeps the true ending for good
+    } else {
       // the tombstone: where, against whom and how far the hero got
       const caida = desenlace.victoria ? null : {
         clase: run.clase, capitulo: run.capitulo, subtitulo: ACTOS[run.capitulo][run.escenario].subtitulo,

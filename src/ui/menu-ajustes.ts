@@ -8,6 +8,7 @@ import { ajustes, alCambiarAjustes, cambiarAjuste, type Ajustes } from '../core/
 import { el } from './util.ts';
 import { audio } from '../fx/audio.ts';
 import { EVENTO_AVISOS, avisosDisponibles, avisosActivados, cambiarAvisos } from './actualizacion.ts';
+import { seccionCuenta } from './cuenta.ts';
 
 type Interruptor = { tipo: 'interruptor'; clave: keyof Ajustes; etiqueta: string; ayuda?: string };
 type Deslizador = { tipo: 'volumen'; clave: 'volumenMusica' | 'volumenSonidos'; etiqueta: string; depende: 'musica' | 'sonidos' };
@@ -37,7 +38,7 @@ const SECCIONES: { titulo: string; opciones: Opcion[] }[] = [
 let boton: HTMLButtonElement | null = null;
 
 /** Shortcuts only the main menu offers (it pauses its own keyboard while they are open). */
-export type AccesosMenuPrincipal = { compendio: () => void; galeria: () => void };
+export type AccesosMenuPrincipal = { compendio: () => void; galeria: () => void; clasificacion: () => void };
 let accesos: AccesosMenuPrincipal | null = null;
 
 /** The title screen registers its shortcuts on mount and clears them (null) on leaving. */
@@ -142,6 +143,11 @@ export function abrirMenuAjustes() {
     panel.appendChild(bloque);
   }
 
+  // Cloud account (login, display name, logout)
+  const cuenta = seccionCuenta();
+  alCerrar.push(cuenta.destruir);
+  panel.appendChild(cuenta.seccion);
+
   // Main-menu shortcuts: close the panel and hand over to the title screen
   if (accesos) {
     const disponibles = accesos;
@@ -153,6 +159,7 @@ export function abrirMenuAjustes() {
       b.addEventListener('click', () => { cerrar(); abrir(); });
       enlaces.appendChild(b);
     };
+    enlace('🏆 Clasificación', disponibles.clasificacion);
     enlace('📖 Compendio de cartas', disponibles.compendio);
     enlace('🎭 Galería de sprites', disponibles.galeria);
     bloque.appendChild(enlaces);

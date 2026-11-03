@@ -114,6 +114,34 @@ export function cargarRun(): EstadoRun | null {
   }
 }
 
+/** The raw save as stored (null if none, unreadable or not a valid run), for the cloud sync. */
+export function leerGuardado(): Guardado | null {
+  try {
+    const crudo = localStorage.getItem(CLAVE);
+    if (!crudo) return null;
+    const g = JSON.parse(crudo) as Guardado;
+    return rehidratarRun(g) ? g : null;
+  } catch {
+    return null;
+  }
+}
+
+/** True if this game version can load the save (it may come from another version through the cloud). */
+export function esCargable(g: Guardado): boolean {
+  try { return rehidratarRun(g) !== null; } catch { return false; }
+}
+
+/** Writes a save that came from the cloud; false if it is not a run this version can load. */
+export function escribirGuardado(g: Guardado): boolean {
+  try {
+    if (!esCargable(g)) return false;
+    localStorage.setItem(CLAVE, JSON.stringify(g));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export function hayGuardado(): boolean {
   try {
     return localStorage.getItem(CLAVE) !== null;

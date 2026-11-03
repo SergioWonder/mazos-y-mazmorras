@@ -17,6 +17,11 @@ export const CLAVES_MIGRABLES = [
   'mazmorra-avisos-mayores',
   'mazmorra-version-vista',
   'mazo-y-mazmorra/aviso-instalar',
+  'mym-nube-sesion',
+  'mym-nube-revision-run',
+  'mym-nube-revision-perfil',
+  'mym-nube-cola',
+  'mym-ultima-clase',
 ];
 
 /** Set on the new domain after the first import: later visits through the old link change nothing. */

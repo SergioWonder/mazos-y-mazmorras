@@ -5,12 +5,20 @@ import { el } from './util.ts';
 import { VERSION } from '../version.ts';
 import { pantallaCompendio } from './compendio.ts';
 import { showGallery } from './gallery.ts';
+import { pantallaClasificacion } from './clasificacion.ts';
 import { registrarAccesosMenuPrincipal } from './menu-ajustes.ts';
 import { PuppetStage } from './puppet-stage.ts';
 import { HeroSprite } from './hero-sprite.ts';
 import { finalVerdaderoDesbloqueado } from '../core/escena-final.ts';
 
-export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' };
+export type EleccionTitulo = { tipo: 'nueva'; clase: ClaseId } | { tipo: 'continuar' } | { tipo: 'recargar' };
+
+let recargarTitulo: (() => void) | null = null;
+
+/** Rebuilds the title on screen (the cloud changed the local save or the true ending). No-op if it is not showing. */
+export function refrescarTitulo() {
+  recargarTitulo?.();
+}
 
 export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo> {
   return new Promise((resolver) => {
@@ -79,6 +87,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
           </button>
         </div>
         <p class="titulo-ayuda">←→ y Enter, o haz clic para elegir</p>
+        <button class="btn-tomar titulo-clasificacion">🏆 Clasificación</button>
         <p class="titulo-version">v${VERSION}${
           finalVerdaderoDesbloqueado()
             ? ' · <span class="titulo-final-verdadero" title="Has visto el final verdadero">🎲 Final verdadero desbloqueado</span>'
@@ -122,13 +131,16 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
 
     function terminar(eleccion: EleccionTitulo) {
       window.removeEventListener('keydown', teclado);
+      recargarTitulo = null;
       registrarAccesosMenuPrincipal(null);
       for (const h of heroes) h.destroy();
       stage?.destroy();
       resolver(eleccion);
     }
+    recargarTitulo = () => terminar({ tipo: 'recargar' });
 
     botones.forEach((b) => b.addEventListener('click', () => void activar(b)));
+    raiz.querySelector('.titulo-clasificacion')!.addEventListener('click', () => void superponer(pantallaClasificacion));
 
     // Overlays (compendium, gallery, confirmation) pause the title's keyboard navigation
     // while open; only one at a time, whether opened here or from the settings panel
@@ -148,6 +160,7 @@ export function pantallaTitulo(puedeContinuar: boolean): Promise<EleccionTitulo>
     registrarAccesosMenuPrincipal({
       compendio: () => void superponer(pantallaCompendio),
       galeria: () => void superponer(showGallery),
+      clasificacion: () => void superponer(pantallaClasificacion),
     });
   });
 }
