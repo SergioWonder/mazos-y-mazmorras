@@ -1,5 +1,5 @@
 import type { ContextoEncuentro } from '../core/dificultad.ts';
-import { Combate, esDungeonMaster, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
+import { Combate, esDungeonMaster, oscuridadDe, raicesDe, type Presentador, type PrevisionAtaque } from '../core/combate.ts';
 import { FRASES_DM } from '../core/escena-final.ts';
 import type {
   CartaDef, CartaInstancia, EnemigoCombate, EnemigoDef, EstadoId, EstadoRun, Luchador,
@@ -1105,8 +1105,11 @@ export function pantallaCombate(
       const st = e.estados;
       const partes = [`${m.dano} base`];
       if (st.fuerza) partes.push(`${st.fuerza > 0 ? '+' : '−'}${Math.abs(st.fuerza)} Fuerza`);
-      if (st.raices) partes.push(`−${st.raices} Raíces`);
-      if (st.oscuridad) partes.push(`−${st.oscuridad} Oscuridad`);
+      // only the roots and darkness this hero cast count against him (two players)
+      const raicesMias = raicesDe(e, combate.hueco);
+      const oscuridadMia = oscuridadDe(e, combate.hueco);
+      if (raicesMias) partes.push(`−${raicesMias} Raíces`);
+      if (oscuridadMia) partes.push(`−${oscuridadMia} Oscuridad`);
       if ((st.debil ?? 0) > 0) partes.push('Débil −25 %');
       if (combate.vulnerableAlGolpe() > 0) partes.push('tu Vulnerable +50 %');
       const lineas: string[] = [];

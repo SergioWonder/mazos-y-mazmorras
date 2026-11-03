@@ -91,6 +91,13 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
   efectivamente doblado, ×1,6 PV se mantiene salvo que bot contra bot muestre la partida imposible.
 - **D3.** Un héroe a 0 PV queda caído el resto del combate (sin turno). Si su compañero gana, se levanta con el 25 %
   de sus PV máximos. Si caen los dos, la run termina para ambos.
+- **D8.** Raíces y Oscuridad solo protegen a quien las lanzó (nerf a dos). Cada instancia de Raíces y cada aplicación de
+  Oscuridad recuerda el hueco que la lanzó (`raicesDe(e, hueco)`, `oscuridadDe(e, hueco)`); cuando un ataque enemigo
+  resuelve contra un héroe, solo le resta **sus** raíces y **su** oscuridad, y el compañero recibe el daño normal. Si
+  las raíces de quien las lanzó dejan el golpe dirigido a él en cero o menos, el enemigo se hiere con la diferencia
+  (como en solitario). Orden de resolución y de animación: primero el enemigo se hiere (rebote de las raíces) y luego
+  golpea al otro héroe, si sigue vivo. Cada pantalla muestra en la intención el daño que **le** hará a quien la mira,
+  así que las cifras pueden diferir entre las dos. En solitario no cambia nada (un solo hueco: los totales de siempre).
 - **D4.** El final secreto del DM vale si cualquiera de los dos lo consigue.
 - **D5.** Eventos que afectan a lo compartido: moneda.
 - **D6.** (Sustituida.) Las partidas multijugador **sí** cuentan en la clasificación: cuando una termina (victoria, derrota o final

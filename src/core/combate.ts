@@ -105,8 +105,23 @@ export interface VinculoDuo {
   luchaAcabada(): boolean;
 }
 
+/** Roots an enemy holds against `hueco`'s hero: the ones he cast (two-hero fights). Playing alone
+ *  (`hueco` undefined) it is the whole total, exactly as always. */
+export function raicesDe(e: EnemigoCombate, hueco?: string): number {
+  if (hueco === undefined) return e.estados.raices ?? 0;
+  return (e.raicesInstancias ?? []).reduce((s, r) => s + (r.hueco === hueco ? r.cantidad : 0), 0);
+}
+
+/** Darkness an enemy holds against `hueco`'s hero: the one he applied (two-hero fights). Alone, the total. */
+export function oscuridadDe(e: EnemigoCombate, hueco?: string): number {
+  if (hueco === undefined) return e.estados.oscuridad ?? 0;
+  return e.oscuridadPorHueco?.[hueco] ?? 0;
+}
+
 export class Combate {
   jugador: JugadorCombate;
+  /** Which hero this combat is in a two-hero fight (undefined when playing alone). */
+  hueco: string | undefined = undefined;
   /** Same array as `lado.enemigos` (it is only ever mutated in place). */
   enemigos: EnemigoCombate[];
   /** The enemy side: shared with the partner's combat in a two-hero fight. */
@@ -265,9 +280,11 @@ export class Combate {
   // ── Cálculo de daño/bloqueo (reglas StS) ──────────────────────────────────
 
   danoDeAtaque(atacante: Luchador, base: number): number {
-    let dano = base + (atacante.estados.fuerza ?? 0)
-      - (atacante.estados.raices ?? 0)
-      - (atacante.estados.oscuridad ?? 0);
+    // an enemy's attack on this hero loses only the roots and darkness this hero cast
+    const enemigo = (atacante as Partial<EnemigoCombate>).def !== undefined;
+    const raices = enemigo ? raicesDe(atacante as EnemigoCombate, this.hueco) : atacante.estados.raices ?? 0;
+    const oscuridad = enemigo ? oscuridadDe(atacante as EnemigoCombate, this.hueco) : atacante.estados.oscuridad ?? 0;
+    let dano = base + (atacante.estados.fuerza ?? 0) - raices - oscuridad;
     if ((atacante.estados.debil ?? 0) > 0) dano = Math.floor(dano * 0.75);
     return Math.max(0, dano);
   }
@@ -457,10 +474,10 @@ export class Combate {
    *  when it does attack. */
   private dolorRaices(e: EnemigoCombate): number | null {
     const m = e.intencion;
-    const raices = e.estados.raices ?? 0;
+    const raices = raicesDe(e, this.hueco);
     if (m.dano === undefined || raices <= 0) return null;
     // Darkness lowers the attack too, so it counts towards the crush
-    let efectivo = this.baseDeGolpe(m) + (e.estados.fuerza ?? 0) - raices - (e.estados.oscuridad ?? 0);
+    let efectivo = this.baseDeGolpe(m) + (e.estados.fuerza ?? 0) - raices - oscuridadDe(e, this.hueco);
     if ((e.estados.debil ?? 0) > 0) efectivo = Math.floor(efectivo * 0.75);
     return efectivo > 0 ? null : Math.min(raices, -efectivo);
   }
@@ -691,6 +708,7 @@ export class Combate {
       },
       async aplicarEstado(obj, estado, n) {
         obj.estados[estado] = (obj.estados[estado] ?? 0) + n;
+        if (estado === 'oscuridad' && obj !== self.jugador) self.anotarOscuridad(obj as EnemigoCombate, n);
         await self.ui.fxEstado(obj, estado, n);
         // Relics react to the statuses you apply (not to the ones they apply).
         if (!self.enGanchoEstado && n > 0) {
@@ -707,7 +725,7 @@ export class Combate {
         // Profundas (raizProlongada) suma turnos a cada nueva instancia.
         const extra = self.jugador.estados.raizProlongada ?? 0;
         e.raicesInstancias = e.raicesInstancias ?? [];
-        e.raicesInstancias.push({ cantidad, turnos: turnos + extra });
+        e.raicesInstancias.push({ cantidad, turnos: turnos + extra, ...(self.hueco !== undefined ? { hueco: self.hueco } : {}) });
         e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
         await self.ui.fxEstado(e, 'raices', cantidad);
       },
@@ -1470,7 +1488,7 @@ export class Combate {
       }
       if (arbol && e.vivo) {
         e.raicesInstancias = e.raicesInstancias ?? [];
-        e.raicesInstancias.push({ cantidad: 2, turnos: 1 });
+        e.raicesInstancias.push({ cantidad: 2, turnos: 1, ...(this.hueco !== undefined ? { hueco: this.hueco } : {}) });
         e.estados.raices = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
         await this.ui.fxEstado(e, 'raices', 2);
       }
@@ -1693,6 +1711,7 @@ export class Combate {
     if (oxt > 0) {
       for (const e of this.enemigos.filter((x) => x.vivo)) {
         e.estados.oscuridad = (e.estados.oscuridad ?? 0) + oxt;
+        this.anotarOscuridad(e, oxt);
         await this.ui.fxEstado(e, 'oscuridad', oxt);
       }
     }
@@ -1892,19 +1911,36 @@ export class Combate {
   /** Reduce contadores temporales (débil, vulnerable, frágil…) de un luchador.
    *  The hero's Vulnerable is left out here: it ticks at the end of the enemy turn. */
   private decrementarEstados(l: Luchador) {
+    // two-hero fights: each hero's Darkness on the enemy fades on its own (see anotarOscuridad)
+    const porHueco = (l as Partial<EnemigoCombate>).oscuridadPorHueco;
     for (const k of [
       ...(l === this.jugador ? [] : ['vulnerable']), 'debil', 'fragil', 'invulnerable', 'quemadura', 'oscuridad',
       'cartasAgotan', 'cartasSobrecoste', 'cartasEtereas',
     ] as EstadoId[]) {
+      if (k === 'oscuridad' && porHueco) continue;
       if ((l.estados[k] ?? 0) > 0) l.estados[k]!--;
     }
+    if (porHueco) {
+      for (const h of Object.keys(porHueco)) if (--porHueco[h] <= 0) delete porHueco[h];
+      const total = Object.values(porHueco).reduce((s, n) => s + n, 0);
+      if (total > 0) l.estados.oscuridad = total;
+      else delete l.estados.oscuridad;
+    }
+  }
+
+  /** Two-hero fights: remembers which hero applied this Darkness (`estados.oscuridad` already holds
+   *  the total). Playing alone nothing is tracked and the total is all there is. */
+  private anotarOscuridad(e: EnemigoCombate, n: number) {
+    if (this.hueco === undefined || n <= 0) return;
+    e.oscuridadPorHueco ??= {};
+    e.oscuridadPorHueco[this.hueco] = (e.oscuridadPorHueco[this.hueco] ?? 0) + n;
   }
 
   /** Tras el turno del enemigo, cada instancia de Raíces pierde 1 turno. */
   private envejecerRaices(e: EnemigoCombate) {
     if (!e.raicesInstancias?.length) { delete e.estados.raices; return; }
     e.raicesInstancias = e.raicesInstancias
-      .map((r) => ({ cantidad: r.cantidad, turnos: r.turnos - 1 }))
+      .map((r) => ({ ...r, turnos: r.turnos - 1 }))
       .filter((r) => r.turnos > 0);
     const total = e.raicesInstancias.reduce((s, r) => s + r.cantidad, 0);
     if (total > 0) e.estados.raices = total;

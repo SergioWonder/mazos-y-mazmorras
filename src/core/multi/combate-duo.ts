@@ -42,7 +42,9 @@ export class CombateDuo implements VinculoDuo {
     const cruz = new Combate(runs.cruz, defs, rng, ui.cruz, eliteOJefe, contexto, cara.lado);
     cara.lado.factorPv = FACTOR_PV_DUO; // the ones that join the fight later get it too
     this.combates = { cara, cruz };
-    for (const c of [cara, cruz]) {
+    for (const h of HUECOS) {
+      const c = this.combates[h];
+      c.hueco = h; // roots and darkness only protect the hero who cast them
       c.vinculo = this;
       c.sinTiradasDePresentacion = true;
     }

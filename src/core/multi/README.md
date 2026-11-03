@@ -77,3 +77,8 @@ eventos (cada uno aplica su opción). Si se añade uno, hará falta una marca en
 
 Reliquias: `ofertasPorHeroe` (en `salas.ts`) da a cada héroe su versión de las dos sorteadas; la casilla con una
 reliquia de la otra clase se sustituye por una de la suya (rng compartido, que no tenga ya).
+
+Raíces y Oscuridad por hueco (D8): `Combate.hueco` lo fija `CombateDuo` (`'cara'`/`'cruz'`; `undefined` en solitario);
+`aplicarRaices` y `anotarOscuridad` guardan quién las lanzó en `raicesInstancias[].hueco` y `oscuridadPorHueco`, y
+`raicesDe(e, hueco)` / `oscuridadDe(e, hueco)` (exportadas por `combate.ts`) dan el total de cada héroe. `danoDeAtaque`,
+`dolorRaices`, `danoIntencion` y la previsión usan los de su propio héroe; sin hueco devuelven el total de siempre.

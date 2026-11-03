@@ -10410,6 +10410,43 @@ try {
     check(!!nuevo && nuevo.pvMax === 16 && nuevo.pv === 16, `el enemigo invocado en combate también lleva los PV ×1,6 (10 → ${nuevo?.pvMax})`);
   }
 
+  // Roots and Darkness only protect the hero who cast them
+  {
+    const duo = await nuevoDuo([pegador(7, 40)]);
+    const [cara, cruz] = [duo.combates.cara, duo.combates.cruz];
+    const e = duo.enemigos[0];
+    await cara.contexto().aplicarRaices(e, 3, 2);
+    check(cara.danoIntencion(e) === 4 && cruz.danoIntencion(e) === 7,
+      `cada uno ve el daño con sus propias raíces (cara ${cara.danoIntencion(e)}, cruz ${cruz.danoIntencion(e)})`);
+    const [pvCara, pvCruz] = [cara.jugador.pv, cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvCara - cara.jugador.pv === 4 && pvCruz - cruz.jugador.pv === 7,
+      `las raíces que lanzó cara le bajan el golpe a cara y no a cruz (cara −${pvCara - cara.jugador.pv}, cruz −${pvCruz - cruz.jugador.pv})`);
+  }
+  {
+    // roots above the attack: first the enemy hurts itself (backlash on the caster), then it hits the other hero in full
+    const registro: string[] = [];
+    let enemigo: unknown = null;
+    const uiLog = (h: Hueco): Presentador => ({
+      ...uiSilenciosa,
+      fxGolpe: async (obj, real) => { registro.push(obj === enemigo ? `enemigo−${real}` : `${h}−${real}`); },
+    });
+    const runs = { cara: nuevaRun('druida', 7), cruz: nuevaRun('barbaro', 7) };
+    const duo = new CombateDuo(runs, [pegador(7, 40)], crearRng(7), { cara: uiLog('cara'), cruz: uiLog('cruz') });
+    await duo.iniciar();
+    const e = duo.enemigos[0];
+    enemigo = e;
+    await duo.combates.cara.contexto().aplicarRaices(e, 10, 2);
+    registro.length = 0;
+    const [pvEnemigo, pvCara, pvCruz] = [e.pv, duo.combates.cara.jugador.pv, duo.combates.cruz.jugador.pv];
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    check(pvEnemigo - e.pv === 3 && duo.combates.cara.jugador.pv === pvCara && pvCruz - duo.combates.cruz.jugador.pv === 7,
+      `con raíces por encima del ataque el enemigo se hiere (−${pvEnemigo - e.pv}), cara no recibe nada y cruz recibe el golpe entero`);
+    check(registro.join() === 'enemigo−3,cruz−7', `primero se hiere el enemigo y luego golpea al otro héroe (${registro.join()})`);
+  }
+
   // Relics: a class relic that does not fit a hero becomes one of his own class
   {
     const RQr = await import('../src/core/reliquias.ts');
