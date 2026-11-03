@@ -98,7 +98,7 @@
 .moneda-nombre { font-size: 0.95rem; font-weight: bold; max-width: 8rem; overflow-wrap: anywhere; }
 .moneda-canto { position: absolute; inset: 0; transform-style: preserve-3d; }
 .moneda-disco { background: #a8741a; }
-.moneda-quieta { filter: drop-shadow(0 0 1.2rem rgba(255, 215, 90, 0.55)); }
+.moneda-escena.moneda-quieta { filter: drop-shadow(0 0 1.2rem rgba(255, 215, 90, 0.55)); }
 .moneda-resultado { margin: 0; font-size: 1.5rem; font-weight: bold; color: var(--brasa-viva); text-shadow: 0 2px 8px #000; opacity: 0; transition: opacity 0.3s; }
 .moneda-resultado.visible { opacity: 1; }
 

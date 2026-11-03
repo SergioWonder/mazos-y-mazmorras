@@ -105,6 +105,8 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
 - **B. Motor** (en paralelo con A): `src/core/multi/` según el contrato, combate a dos, moneda, votos, bot, y smoke
   tests de determinismo (dos instancias independientes con el mismo log terminan con el mismo hash, y repetir desde
   un guardado de sala reproduce el mismo estado).
-- **C. Integración**: la Sala ejecuta el motor (valida entradas, calcula el hash, juega el bot). El cliente tiene un
-  bucle multijugador con dos héroes en pantalla (uno arriba a la izquierda y otro abajo a la derecha, algo
-  solapados), la animación de la moneda, avisos de «esperando al compañero» y el estado del compañero.
+- **C. Integración** (hecha): la Sala ejecuta el motor (valida entradas, calcula el hash y el guardado, juega el bot). El cliente
+  (`src/ui/partida-multi.ts`) reconstruye desde el guardado + log, aplica en orden lo que difunde la sala (sin predicción), pide
+  `{t:'resync'}` si el hash no coincide y reconecta con espera creciente. Combate: la pantalla de solitario con los dos héroes
+  (`pantallaCombate(…, multi)`); mapa con los dos votos; moneda (`src/ui/moneda.ts`); el resto de salas, un panel de elección genérico.
+  Las intenciones enemigas no muestran el héroe objetivo: el motor lo sortea al ejecutar el ataque (D2), no antes.

@@ -71,13 +71,18 @@ se borran solas.
 
 ### Sala (`/multi/games/:id/ws`)
 
-Un Durable Object por partida: relé genérico de entradas, el motor se enchufará detrás de `src/motor.ts`
-(`aplicar`/`hash`; hoy un stub que encadena un hash). Mensajes del servidor: `{ t: 'hueco', hueco, nombres, clases, bot }` al conectar,
+Un Durable Object por partida que ejecuta el **motor real** (`src/core/multi`, a través del adaptador `src/motor.ts`): valida cada
+entrada (`esValida`; si no, `{ t: 'error', motivo: 'invalida' }` solo al emisor y no se guarda), la numera (`seq`, `de` = hueco del socket),
+la aplica de una en una (cola de promesas) y la difunde con el hash resultante. Guarda en SQLite el último guardado de sala (lo calcula el
+servidor al llegar a un punto de guardado: inicio de cada sala o fin de partida) y el log desde entonces. Contra el bot (`cruz`) la sala
+decide por él con `decisionBot` (alarma del DO, `BOT_RETARDO_MS`, por defecto 700 ms entre jugadas; rng sembrado con la semilla de la
+partida y el nº de entrada) y marca la partida `finished` en D1 al terminar. Mensajes del servidor: `{ t: 'hueco', hueco, nombres, clases, bot }` al conectar,
 `{ t: 'estado', huecos: { cara: { conectado, listo }, cruz: {…} }, empezada }`, `{ t: 'empieza', semilla, clases, nombres, bot, guardado, log: [{ entrada, hash }] }`
-cuando los dos están conectados y listos (primera vez: semilla nueva; al retomar: último guardado + entradas posteriores),
-`{ t: 'entrada', entrada: EntradaSellada, hash }` por cada entrada aceptada (numerada con `seq`, con `de` = el hueco del socket) y
-`{ t: 'error', motivo }` (`no_empezada`, `entrada_invalida`, `solo_cara`, …). Del cliente: `{ t: 'listo' }`, `{ t: 'entrada', entrada }` y
-`{ t: 'guardado', guardado }` (solo `cara`; sustituye al log anterior). Contra el bot, el hueco `cruz` siempre está conectado y listo.
+cuando los dos están conectados y listos (primera vez: semilla nueva; al retomar: último guardado + entradas posteriores; el cliente
+reconstruye desde el guardado, o desde la semilla si es `null`, y reproduce el log en silencio),
+`{ t: 'entrada', entrada: EntradaSellada, hash }` por cada entrada aceptada y
+`{ t: 'error', motivo }` (`no_empezada`, `entrada_invalida`, `invalida`, …). Del cliente: `{ t: 'listo' }`, `{ t: 'entrada', entrada }` y
+`{ t: 'resync' }` (la sala vuelve a mandar `empieza` a ese socket). Contra el bot, el hueco `cruz` siempre está conectado y listo.
 
 ### Sincronización (cliente)
 

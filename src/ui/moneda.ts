@@ -55,6 +55,7 @@ export async function lanzarMoneda(r: ResultadoMoneda, nombres: Record<Hueco, st
   );
   await giro.finished.catch(() => undefined);
   moneda.classList.add('moneda-quieta');
+  escena.classList.add('moneda-quieta'); // the glow goes on the scene: a filter on the coin itself would flatten its 3D
   resultado.classList.add('visible');
   fx.estallido('estrellas');
   await espera(1400);
