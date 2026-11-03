@@ -8,8 +8,7 @@
     {
       "binding": "DB",
       "database_name": "dracs-rogues",
-      // Replace with the id printed by `wrangler d1 create dracs-rogues` before the first deploy.
-      "database_id": "00000000-0000-0000-0000-000000000000",
+      "database_id": "32055969-e7fb-43ae-907f-b9e7fd1feadd",
       "migrations_dir": "migrations"
     }
   ],
