@@ -14,8 +14,11 @@ function fila(e: EntradaClasificacion, posicion: number, propia: boolean): HTMLE
   nombre.textContent = e.displayName || 'Aventurero anónimo';
   if (!e.displayName) nombre.classList.add('clasif-anonimo');
   f.appendChild(nombre);
-  const res = el('span', 'clasif-resultado', e.result === 'victory' ? '🏆' : '💀');
-  res.title = e.result === 'victory' ? 'Victoria' : 'Derrota';
+  // the true ending outranks any other victory: the Dungeon Master himself fell
+  const [icono, texto] = e.dmDefeated ? ['🎲', 'Derrotó al Dungeon Master']
+    : e.result === 'victory' ? ['🏆', 'Victoria'] : ['💀', 'Derrota'];
+  const res = el('span', 'clasif-resultado', icono);
+  res.title = texto;
   f.appendChild(res);
   f.appendChild(el('span', 'clasif-avance', `Cap. ${e.chapter + 1} · piso ${e.floor}`));
   f.appendChild(el('span', 'clasif-turnos', `${e.turns} turnos`));

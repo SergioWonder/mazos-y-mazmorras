@@ -27,10 +27,11 @@ export function borrarGuardadoFinal() {
 }
 
 /** Queues the finished run for the leaderboard and tries to send it (it stays queued if that fails). */
-export function registrarFinDePartida(run: EstadoRun, victoria: boolean) {
+export function registrarFinDePartida(run: EstadoRun, victoria: boolean, dmDerrotado = false) {
   nube.registrarPartidaTerminada({
     heroClass: run.clase,
     result: victoria ? 'victory' : 'defeat',
+    dmDefeated: victoria && dmDerrotado, // true ending: the DM fell to a natural 20 on Seduce
     chapter: run.capitulo,
     floor: run.piso,
     turns: run.estadisticas?.turnos ?? 0,

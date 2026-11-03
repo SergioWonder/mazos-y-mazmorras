@@ -48,6 +48,7 @@ Table runs {
   user_id text [not null, ref: > users.id]
   hero_class text [not null, note: 'druida | barbaro | mago | picaro | brujo | paladin']
   result text [not null, note: "'victory' | 'defeat'"]
+  dm_defeated integer [not null, default: 0, note: 'true ending: the Dungeon Master fell; ranks above any victory']
   chapter integer [not null]
   floor integer [not null]
   turns integer [not null]

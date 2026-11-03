@@ -62,6 +62,20 @@ describe('partidas terminadas y clasificación', () => {
     expect(entries[0]).not.toHaveProperty('email');
   });
 
+  it('quien derrotó al DM va por delante de cualquier otra victoria y la clasificación lo indica', async () => {
+    const { mailer, sent } = fakeMailer();
+    const call = testApp(mailer);
+    const heroClass = 'brujo';
+    const ganador = await login(call, sent);
+    const seductor = await login(call, sent);
+
+    await call('/runs', ganador.auth(json(run({ heroClass, result: 'victory', chapter: 2, floor: 15, turns: 200 }))));
+    await call('/runs', seductor.auth(json(run({ heroClass, result: 'victory', dmDefeated: true, chapter: 2, floor: 15, turns: 900 }))));
+
+    const { entries } = await (await call(`/leaderboard?class=${heroClass}`)).json<{ entries: Array<{ userId: string; dmDefeated: boolean }> }>();
+    expect(entries.map((e) => [e.userId, e.dmDefeated])).toEqual([[seductor.userId, true], [ganador.userId, false]]);
+  });
+
   it('rechaza partidas con clase o datos imposibles', async () => {
     const { mailer, sent } = fakeMailer();
     const call = testApp(mailer);

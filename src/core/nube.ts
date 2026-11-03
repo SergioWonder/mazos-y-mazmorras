@@ -37,6 +37,8 @@ export interface PartidaTerminada {
   runId: string;
   heroClass: string;
   result: 'victory' | 'defeat';
+  /** True ending: the Dungeon Master fell. */
+  dmDefeated?: boolean;
   chapter: number;
   floor: number;
   turns: number;
@@ -48,7 +50,7 @@ export interface PartidaTerminada {
 export interface PartidaRemota { data: unknown; revision: number; updatedAt: number }
 export interface EntradaClasificacion {
   userId: string; displayName: string | null; heroClass: string; result: 'victory' | 'defeat';
-  chapter: number; floor: number; turns: number; createdAt: number;
+  dmDefeated?: boolean; chapter: number; floor: number; turns: number; createdAt: number;
 }
 
 export type ResultadoEnlace = 'enviado' | 'email-invalido' | 'demasiados' | 'correo-no-disponible' | 'sin-conexion' | 'error';
