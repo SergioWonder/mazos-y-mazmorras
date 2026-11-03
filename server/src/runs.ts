@@ -5,10 +5,16 @@ import { isCount, isHeroClass, readJson, UUID_RE } from './validate.ts';
 
 interface RunBody {
   runId: unknown; heroClass: unknown; result: unknown; chapter: unknown; floor: unknown;
-  turns: unknown; seed: unknown; gameVersion: unknown; stats: unknown; dmDefeated: unknown;
+  turns: unknown; seed: unknown; gameVersion: unknown; stats: unknown; dmDefeated: unknown; killer: unknown; finalBoss: unknown;
 }
 
 const MAX_STATS_BYTES = 8 * 1024;
+const MAX_NAME = 60;
+
+/** Optional enemy name as shown in game (killer of the hero, or the final boss that fell). */
+const nombreOpcional = (v: unknown): v is string | undefined | null =>
+  v === undefined || v === null || (typeof v === 'string' && v.trim().length > 0 && v.length <= MAX_NAME);
+const limpio = (v: unknown) => (typeof v === 'string' ? v.trim() : null);
 
 /** Best run first: the Dungeon Master defeated (true ending), then victories, then the furthest chapter and floor, then the fewest turns (earliest wins ties). */
 const ranking = (t: string) =>
@@ -29,13 +35,15 @@ export function runsRoutes() {
       typeof b.gameVersion === 'string' && b.gameVersion.length <= 20 &&
       (stats === null || stats.length <= MAX_STATS_BYTES) &&
       (b.dmDefeated === undefined || typeof b.dmDefeated === 'boolean') &&
-      !(b.dmDefeated === true && b.result !== 'victory');
+      !(b.dmDefeated === true && b.result !== 'victory') &&
+      nombreOpcional(b.killer) && nombreOpcional(b.finalBoss);
     if (!valid) return c.json({ error: 'invalid_run' }, 400);
 
     const inserted = await c.env.DB.prepare(
-      `INSERT INTO runs (id, user_id, hero_class, result, dm_defeated, chapter, floor, turns, seed, game_version, stats, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO NOTHING`,
-    ).bind(b.runId, c.var.user.id, b.heroClass, b.result, b.dmDefeated === true ? 1 : 0, b.chapter, b.floor, b.turns, b.seed, b.gameVersion, stats, Date.now()).run();
+      `INSERT INTO runs (id, user_id, hero_class, result, dm_defeated, killer, final_boss, chapter, floor, turns, seed, game_version, stats, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON CONFLICT (id) DO NOTHING`,
+    ).bind(b.runId, c.var.user.id, b.heroClass, b.result, b.dmDefeated === true ? 1 : 0,
+      b.result === 'defeat' ? limpio(b.killer) : null, b.result === 'victory' ? limpio(b.finalBoss) : null, b.chapter, b.floor, b.turns, b.seed, b.gameVersion, stats, Date.now()).run();
     // A replayed upload (same runId) is accepted without counting twice.
     return c.json({ runId: b.runId }, inserted.meta.changes > 0 ? 201 : 200);
   });
@@ -53,7 +61,7 @@ export function runsRoutes() {
     if (heroClass !== undefined && !isHeroClass(heroClass)) return c.json({ error: 'unknown_class' }, 400);
     const limit = Math.min(Math.max(Number.parseInt(c.req.query('limit') ?? '20', 10) || 20, 1), 100);
     const { results } = await c.env.DB.prepare(
-      `SELECT r.user_id AS userId, u.display_name AS displayName, r.hero_class AS heroClass, r.result, r.dm_defeated AS dmDefeated,
+      `SELECT r.user_id AS userId, u.display_name AS displayName, r.hero_class AS heroClass, r.result, r.dm_defeated AS dmDefeated, r.killer, r.final_boss AS finalBoss,
               r.chapter, r.floor, r.turns, r.created_at AS createdAt
          FROM (SELECT runs.*, ROW_NUMBER() OVER (PARTITION BY runs.user_id ORDER BY ${ranking('runs')}) AS rank_in_user
                  FROM runs WHERE ?1 IS NULL OR runs.hero_class = ?1) r

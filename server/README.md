@@ -41,7 +41,7 @@ Autenticación con `Authorization: Bearer <session>`. Cuerpos JSON.
 | GET | `/saves/:slot` | ✔ | `slot` = `run` \| `profile` → `{ data, revision, updatedAt }`; 404 `{ revision }` si está vacía |
 | PUT | `/saves/:slot` | ✔ | `{ data, baseRevision }` → `{ revision }`. 409 con la copia del servidor si otro dispositivo guardó antes. Máx. 256 KB |
 | DELETE | `/saves/:slot` | ✔ | 204; deja una marca para que un dispositivo atrasado no resucite la partida |
-| POST | `/runs` | ✔ | Partida terminada `{ runId (UUID), heroClass, result: victory\|defeat, dmDefeated?, chapter, floor, turns, seed, gameVersion, stats? }` → 201 (200 si ya estaba). `dmDefeated` (final verdadero) solo con `victory` |
+| POST | `/runs` | ✔ | Partida terminada `{ runId (UUID), heroClass, result: victory\|defeat, dmDefeated?, chapter, floor, turns, seed, gameVersion, stats? }` → 201 (200 si ya estaba). `dmDefeated` (final verdadero) solo con `victory`; `killer` (derrota) y `finalBoss` (victoria), nombres de hasta 60 caracteres, opcionales |
 | GET | `/runs/mine` | ✔ | Últimas 50 partidas del jugador |
 | GET | `/leaderboard?class=&limit=` | — | Mejor partida de cada jugador: primero quien derrotó al DM, luego victorias, luego capítulo y piso más altos, luego menos turnos |
 
