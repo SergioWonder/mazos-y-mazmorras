@@ -9440,7 +9440,7 @@ console.log('\n🎼 Versiones de exploración y combate sincronizadas');
   }
   const combateFin = fs.readFileSync(new URL('../src/ui/combate.ts', import.meta.url), 'utf8');
   const finalCombate = combateFin.slice(combateFin.indexOf('function comprobarFinal'), combateFin.indexOf('setTimeout', combateFin.indexOf('function comprobarFinal')));
-  check(/themeAfterCombat\(combate\.terminado, run\.capitulo, run\.escenario, defs\)/.test(finalCombate),
+  check(/themeAfterCombat\((combate\.terminado|finDe\(\)!), run\.capitulo, run\.escenario, defs\)/.test(finalCombate),
     'la música cambia en cuanto cae el último enemigo, antes de las recompensas');
   const motor = fs.readFileSync(new URL('../src/fx/audio.ts', import.meta.url), 'utf8');
   check(/sameSong\(/.test(motor) && /loopPosition\(/.test(motor), 'al pasar entre versiones de la misma canción, el audio sigue desde el mismo punto');

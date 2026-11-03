@@ -7,7 +7,7 @@ import { PV_POR_CLASE } from '../core/run.ts';
 import { alEventoBuzon } from './avisos-multi.ts';
 import { abrirMenuAjustes } from './menu-ajustes.ts';
 import { NOMBRE_CLASE } from './nube-juego.ts';
-import { pantallaSalaMulti } from './sala-multi.ts';
+import { jugarPartidaMulti } from './partida-multi.ts';
 import { el } from './util.ts';
 import '../estilos/multi.css';
 
@@ -150,6 +150,7 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
     let push: EstadoPush | 'cargando' = 'cargando';
     let ocupado = false; // an action is in flight: buttons stay disabled
     let cerrado = false;
+    let jugando = false; // a game is on screen: the lobby is hidden underneath
     const pidenRetomar = new Set<string>(); // games whose other player already asked to resume
     let peticion = 0;
 
@@ -188,8 +189,12 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
       }
       ocupado = false;
       pintar();
-      await pantallaSalaMulti(p);
-      if (!cerrado) void cargar();
+      // the game takes the whole screen: the lobby waits hidden (and its key capture stands down) and closes on exit
+      jugando = true;
+      capa.style.display = 'none';
+      await jugarPartidaMulti(p);
+      jugando = false;
+      cerrar(); // back to the title; the game is listed under «Retomar» next time
     }
 
     async function invitar(nombre: string) {
@@ -393,7 +398,7 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
     };
     // capture phase: no key reaches the title underneath; Escape closes (unless a dialog above has it)
     const teclado = (ev: KeyboardEvent) => {
-      if (document.querySelector('.multi-clase, .multi-sala-fondo, .menu-ajustes')) return;
+      if (jugando || document.querySelector('.multi-clase, .multi-sala-fondo, .menu-ajustes')) return;
       if (ev.code === 'Escape') { ev.preventDefault(); ev.stopImmediatePropagation(); cerrar(); }
       else if (!(ev.target instanceof HTMLElement && ['BUTTON', 'INPUT'].includes(ev.target.tagName))) ev.stopImmediatePropagation();
     };
