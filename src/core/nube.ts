@@ -86,7 +86,7 @@ export interface PartidaMulti {
 export type ResultadoInvitar =
   | { estado: 'ok'; id: string; bot: boolean }
   | { estado: 'no-existe' | 'ya-invitado' | 'a-ti-mismo' | 'sin-nombre' | 'sin-sesion' | 'sin-conexion' | 'error' };
-export type ResultadoMulti = 'ok' | 'no-existe' | 'no-pendiente' | 'no-activa' | 'prohibido' | 'sin-sesion' | 'sin-conexion' | 'error';
+export type ResultadoMulti = 'ok' | 'no-existe' | 'no-pendiente' | 'no-activa' | 'clase-ocupada' | 'prohibido' | 'sin-sesion' | 'sin-conexion' | 'error';
 
 function almacenGlobal(): AlmacenNube | null {
   try { return typeof localStorage === 'undefined' ? null : localStorage; } catch { return null; }
@@ -380,7 +380,10 @@ export function crearNube(deps: DepsNube = {}) {
     if (r.estado === 401) return 'sin-sesion';
     if (r.estado === 403) return 'prohibido';
     if (r.estado === 404) return 'no-existe';
-    if (r.estado === 409) return r.cuerpo?.error === 'not_active' ? 'no-activa' : 'no-pendiente';
+    if (r.estado === 409) {
+      if (r.cuerpo?.error === 'class_taken') return 'clase-ocupada';
+      return r.cuerpo?.error === 'not_active' ? 'no-activa' : 'no-pendiente';
+    }
     return 'error';
   }
 

@@ -22,6 +22,8 @@ las decisiones marcadas (D#) son revertibles.
 
 - `cara`: quien invita (siempre cara en las monedas). `cruz`: quien acepta (siempre cruz).
 - La partida es de esa pareja de perfiles: solo ellos dos pueden retomarla.
+- **Dos clases distintas por partida.** El anfitrión elige clase al invitar; en el diálogo de aceptar esa clase sale desactivada
+  («La ha elegido <nombre>») y el servidor rechaza aceptar con la misma (`409 class_taken`). El bot juega una clase al azar distinta de la del anfitrión.
 
 ### Contrato del motor (`src/core/multi/`)
 

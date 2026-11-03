@@ -61,6 +61,24 @@ describe('invitaciones', () => {
     expect(['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin']).toContain(game.guestClass);
   });
 
+  it('el invitado no puede aceptar con la misma clase que el anfitrión (409 class_taken) y el bot elige otra distinta', async () => {
+    const { call, sent } = await setup();
+    const ana = await loginNamed(call, sent, 'Ana');
+    const bea = await loginNamed(call, sent, 'Bea');
+    const { id } = await (await call('/multi/games', ana.auth(json({ guest: bea.name, heroClass: 'mago' })))).json<{ id: string }>();
+
+    const igual = await call(`/multi/games/${id}/accept`, bea.auth(json({ heroClass: 'mago' })));
+    expect(igual.status).toBe(409);
+    expect(await igual.json()).toEqual({ error: 'class_taken' });
+    expect((await listGames(call, bea)).find((g) => g.id === id)).toMatchObject({ status: 'invited' }); // still pending
+    expect((await call(`/multi/games/${id}/accept`, bea.auth(json({ heroClass: 'druida' })))).status).toBe(200);
+
+    for (let i = 0; i < 12; i++) {
+      const bot = await (await call('/multi/games', ana.auth(json({ guest: 'bot', heroClass: 'mago' })))).json<{ id: string }>();
+      expect((await listGames(call, ana)).find((g) => g.id === bot.id).guestClass).not.toBe('mago');
+    }
+  });
+
   it('sin nombre de jugador no se puede invitar', async () => {
     const { call, sent } = await setup();
     const { login } = await import('./helpers.ts');

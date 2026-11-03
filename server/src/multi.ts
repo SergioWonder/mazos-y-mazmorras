@@ -48,7 +48,9 @@ export function multiRoutes() {
     const id = crypto.randomUUID();
 
     if (body.guest === 'bot') {
-      const botClass = HERO_CLASSES[Math.floor(Math.random() * HERO_CLASSES.length)];
+      // a random class, never the host's
+      const libres = HERO_CLASSES.filter((k) => k !== body.heroClass);
+      const botClass = libres[Math.floor(Math.random() * libres.length)];
       await c.env.DB.prepare(
         `INSERT INTO multi_games (id, host_user_id, guest_user_id, host_class, guest_class, status, created_at, updated_at)
          VALUES (?, ?, NULL, ?, ?, 'active', ?, ?)`,
@@ -106,6 +108,8 @@ export function multiRoutes() {
     const body = await readJson<{ heroClass: unknown }>(c.req);
     if (!isHeroClass(body.heroClass)) return c.json({ error: 'invalid_class' }, 400);
     if (!me.displayName) return c.json({ error: 'name_required' }, 400);
+    // the two heroes of a game never share a class
+    if (body.heroClass === game.host_class) return c.json({ error: 'class_taken' }, 409);
     const res = await c.env.DB.prepare(
       `UPDATE multi_games SET status = 'active', guest_class = ?, updated_at = ? WHERE id = ? AND status = 'invited'`,
     ).bind(body.heroClass, Date.now(), game.id).run();

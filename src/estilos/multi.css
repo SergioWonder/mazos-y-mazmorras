@@ -32,6 +32,9 @@
 .multi-clase-boton { margin: 0; display: flex; flex-direction: column; gap: 0.1rem; align-items: center; padding: 0.5rem 0.3rem; cursor: pointer; }
 .multi-clase-boton small { opacity: 0.75; }
 .multi-clase-ultima { border-color: var(--brasa-viva); }
+/* the class the partner already took: greyed out, not pickable */
+.multi-clase-tomada { opacity: 0.45; filter: grayscale(1); cursor: not-allowed; }
+.multi-clase-tomada small { opacity: 1; font-style: italic; }
 
 /* in-game: banner, waiting panel, choice panels */
 .multi-banner {

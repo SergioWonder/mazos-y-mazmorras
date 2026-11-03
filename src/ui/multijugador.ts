@@ -24,8 +24,9 @@ const ERRORES_INVITAR: Record<Exclude<ResultadoInvitar['estado'], 'ok'>, string>
   error: 'Algo ha fallado. Inténtalo de nuevo en un rato.',
 };
 
-/** Small modal to pick the hero class for an invitation. Resolves null when cancelled. */
-function elegirClase(titulo: string): Promise<ClaseId | null> {
+/** Small modal to pick the hero class for an invitation. Resolves null when cancelled. `ocupada` is the class the
+ *  partner already took: it shows greyed out and cannot be picked. */
+function elegirClase(titulo: string, ocupada?: { clase: string | null; por: string }): Promise<ClaseId | null> {
   return new Promise((resolver) => {
     const capa = el('div', 'confirmar-fondo multi-clase');
     capa.setAttribute('role', 'dialog');
@@ -35,11 +36,13 @@ function elegirClase(titulo: string): Promise<ClaseId | null> {
     const rejilla = el('div', 'multi-clases');
     const ultima = nube.ultimaClase();
     for (const clase of CLASES) {
-      const b = el('button', `btn-tomar multi-clase-boton${clase === ultima ? ' multi-clase-ultima' : ''}`) as HTMLButtonElement;
+      const tomada = !!ocupada && clase === ocupada.clase;
+      const b = el('button', `btn-tomar multi-clase-boton${clase === ultima && !tomada ? ' multi-clase-ultima' : ''}${tomada ? ' multi-clase-tomada' : ''}`) as HTMLButtonElement;
       b.type = 'button';
       b.appendChild(el('strong', '', NOMBRE_CLASE[clase]));
-      b.appendChild(el('small', '', `❤️ ${PV_POR_CLASE[clase]} PV`));
-      b.addEventListener('click', () => cerrar(clase));
+      b.appendChild(el('small', '', tomada ? `La ha elegido ${ocupada!.por}` : `❤️ ${PV_POR_CLASE[clase]} PV`));
+      if (tomada) b.disabled = true;
+      else b.addEventListener('click', () => cerrar(clase));
       rejilla.appendChild(b);
     }
     caja.appendChild(rejilla);
@@ -59,7 +62,7 @@ function elegirClase(titulo: string): Promise<ClaseId | null> {
     };
     window.addEventListener('keydown', teclado, true);
     capa.addEventListener('click', (ev) => { if (ev.target === capa) cerrar(null); });
-    capa.querySelector<HTMLButtonElement>('.multi-clase-ultima, .multi-clase-boton')!.focus();
+    capa.querySelector<HTMLButtonElement>('.multi-clase-ultima, .multi-clase-boton:not(:disabled)')!.focus();
   });
 }
 
@@ -217,13 +220,15 @@ export function pantallaMultijugador(opciones: OpcionesLobby = {}): Promise<void
     }
 
     async function aceptar(p: PartidaMulti) {
-      const clase = await elegirClase(`Tu clase para jugar con ${p.otro.nombre}`);
+      const clase = await elegirClase(`Tu clase para jugar con ${p.otro.nombre}`, { clase: p.claseCara, por: p.otro.nombre });
       if (!clase || cerrado) return;
       ocupado = true; pintar();
       const res = await nube.aceptarInvitacion(p.id, clase);
       ocupado = false;
       if (res !== 'ok') {
-        avisar(res === 'no-pendiente' ? 'Esa invitación ya no está disponible.' : 'No se pudo aceptar. Inténtalo de nuevo.', true);
+        avisar(res === 'no-pendiente' ? 'Esa invitación ya no está disponible.'
+          : res === 'clase-ocupada' ? `${p.otro.nombre} ya ha elegido esa clase: elige otra.`
+          : 'No se pudo aceptar. Inténtalo de nuevo.', true);
         return void cargar();
       }
       nube.recordarClase(clase);
