@@ -12,6 +12,7 @@ const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as co
 const TAB_DUO = 'duo';
 const SECRETO_DM = 'Ha derrotado al Dungeon Master';
 const CHISPAS_DM = 6;
+type MostrarGlobo = (ancla: HTMLElement, texto?: string) => void;
 
 export interface OpcionesClasificacion {
   /** Replays the true ending (only offered on the title screen). */
@@ -25,7 +26,8 @@ function globoDM(capa: HTMLElement) {
   globo.setAttribute('role', 'status');
   capa.appendChild(globo);
   let ocultar: number | undefined;
-  return (ancla: HTMLElement) => {
+  return (ancla: HTMLElement, texto = SECRETO_DM) => {
+    globo.textContent = texto;
     const r = ancla.getBoundingClientRect();
     globo.classList.add('clasif-dm-abierto');
     const g = globo.getBoundingClientRect();
@@ -41,7 +43,7 @@ function globoDM(capa: HTMLElement) {
 
 /** The Dungeon Master's face with sparks around it. A click tells what it means (never how);
  *  a triple click on the player's own row replays the true ending. */
-function medallonDM(propia: boolean, repetir: (() => void) | null, mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+function medallonDM(propia: boolean, repetir: (() => void) | null, mostrarGlobo: MostrarGlobo): HTMLElement {
   const medallon = el('button', 'clasif-dm') as HTMLButtonElement;
   medallon.type = 'button';
   medallon.setAttribute('aria-label', SECRETO_DM);
@@ -66,17 +68,27 @@ function medallonDM(propia: boolean, repetir: (() => void) | null, mostrarGlobo:
   return medallon;
 }
 
-function iconoResultado(e: { dmDefeated?: boolean; result: 'victory' | 'defeat' }, propia: boolean, repetir: (() => void) | null,
-  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+function iconoResultado(
+  e: { dmDefeated?: boolean; result: 'victory' | 'defeat'; killer?: string | null; finalBoss?: string | null },
+  propia: boolean, repetir: (() => void) | null, mostrarGlobo: MostrarGlobo,
+): HTMLElement {
   // the true ending outranks any other victory: the Dungeon Master himself fell
   if (e.dmDefeated) return medallonDM(propia, repetir, mostrarGlobo);
-  const res = el('span', 'clasif-resultado', e.result === 'victory' ? '🏆' : '💀');
-  res.title = e.result === 'victory' ? 'Victoria' : 'Derrota';
+  // the icon tells, on click/tap, which final boss fell or who killed the hero
+  const victoria = e.result === 'victory';
+  const texto = victoria
+    ? (e.finalBoss ? `Derrotó a ${e.finalBoss}` : 'Victoria')
+    : (e.killer ? `Cayó ante ${e.killer}` : 'Derrota');
+  const res = el('button', 'clasif-resultado', victoria ? '🏆' : '💀') as HTMLButtonElement;
+  res.type = 'button';
+  res.setAttribute('aria-label', texto);
+  res.title = texto;
+  res.addEventListener('click', (ev) => { ev.stopPropagation(); mostrarGlobo(res, texto); });
   return res;
 }
 
 function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repetir: (() => void) | null,
-  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+  mostrarGlobo: MostrarGlobo): HTMLElement {
   const f = el('li', `clasif-fila${propia ? ' clasif-propia' : ''}`);
   f.appendChild(el('span', 'clasif-pos', String(posicion)));
   const nombre = el('span', 'clasif-nombre');
@@ -91,7 +103,7 @@ function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repeti
 
 /** Multiplayer row: both players with their class on the same line («Ana · Druida + Bea · Mago»). */
 function filaDuo(e: EntradaClasificacionDuo, posicion: number, propia: boolean,
-  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+  mostrarGlobo: MostrarGlobo): HTMLElement {
   const f = el('li', `clasif-fila clasif-fila-duo${propia ? ' clasif-propia' : ''}`);
   f.appendChild(el('span', 'clasif-pos', String(posicion)));
   const nombre = el('span', 'clasif-nombre');

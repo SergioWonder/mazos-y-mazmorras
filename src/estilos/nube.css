@@ -150,3 +150,10 @@
   .clasif-dm, .clasif-dm-chispa { animation: none; }
   .clasif-dm-chispa { display: none; }
 }
+
+/* Leaderboard result icon: a plain icon that opens the bubble (who killed the hero / which boss fell) */
+.clasif-resultado {
+  justify-self: center; padding: 0; border: 0; background: none; color: inherit;
+  font: inherit; line-height: 1; cursor: pointer;
+}
+.clasif-resultado:focus-visible { outline: 2px solid var(--brasa-viva); outline-offset: 2px; border-radius: 4px; }

@@ -49,6 +49,8 @@ Table runs {
   hero_class text [not null, note: 'druida | barbaro | mago | picaro | brujo | paladin']
   result text [not null, note: "'victory' | 'defeat'"]
   dm_defeated integer [not null, default: 0, note: 'true ending: the Dungeon Master fell; ranks above any victory']
+  killer text [note: 'defeat: enemy that killed the hero (name as shown in game)']
+  final_boss text [note: 'victory: final boss that fell (name as shown in game)']
   chapter integer [not null]
   floor integer [not null]
   turns integer [not null]

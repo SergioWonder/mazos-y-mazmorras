@@ -39,6 +39,9 @@ export interface PartidaTerminada {
   result: 'victory' | 'defeat';
   /** True ending: the Dungeon Master fell. */
   dmDefeated?: boolean;
+  /** Defeat: the enemy that killed the hero. Victory: the final boss that fell. Names as shown in game. */
+  killer?: string | null;
+  finalBoss?: string | null;
   chapter: number;
   floor: number;
   turns: number;
@@ -50,7 +53,8 @@ export interface PartidaTerminada {
 export interface PartidaRemota { data: unknown; revision: number; updatedAt: number }
 export interface EntradaClasificacion {
   userId: string; displayName: string | null; heroClass: string; result: 'victory' | 'defeat';
-  dmDefeated?: boolean; chapter: number; floor: number; turns: number; createdAt: number;
+  dmDefeated?: boolean; killer?: string | null; finalBoss?: string | null;
+  chapter: number; floor: number; turns: number; createdAt: number;
 }
 /** Best run of a pair of profiles (the host first). */
 export interface EntradaClasificacionDuo {

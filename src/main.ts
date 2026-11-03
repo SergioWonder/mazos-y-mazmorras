@@ -184,9 +184,12 @@ async function juego() {
 
     const desenlace = desenlaceCampana(campanaCompleta, escenaDM);
     if (desenlace.borrarGuardado && !campanaCompleta) borrarGuardadoFinal(); // la run terminó: muerte (la victoria ya lo borró arriba)
-    registrarFinDePartida(run, desenlace.victoria, desenlace.finalVerdadero); // leaderboard outbox: goes up now or after the next login
     // el epílogo depende del jefe del escenario final que te haya tocado
     const actoFinal = ACTOS[ACTOS.length - 1][run.escenario];
+    // leaderboard outbox (goes up now or after the next login), with who killed the hero or which final boss fell
+    registrarFinDePartida(run, desenlace.victoria, desenlace.finalVerdadero, {
+      asesino: caidaDelHeroe()?.asesino ?? null, jefeFinal: actoFinal.jefe[0]?.nombre ?? null,
+    });
     // the secret: the DM fell to a natural 20 on Seduce, and the table finds a date
     if (desenlace.finalVerdadero) {
       await pantallaFinalVerdadero(run.clase);
