@@ -4,6 +4,7 @@ API gratuita en **Cloudflare Workers + D1** para cuentas, progreso en la nube y
 clasificación. El juego sigue funcionando sin cuenta: el guardado es primero local y la
 nube es una copia que permite continuar en otro dispositivo.
 
+- **Producción:** <https://dracs-rogues-api.sergiowonder.workers.dev> (D1 `dracs-rogues`, región WEUR).
 - Runtime: Cloudflare Workers (plan Free: 100.000 peticiones/día, sin tarjeta, no se duerme).
 - Base de datos: D1 (SQLite, 5 GB gratis). Esquema: [`docs/database-schema.dbml`](../docs/database-schema.dbml),
   migraciones en `migrations/`.
@@ -52,7 +53,17 @@ Autenticación con `Authorization: Bearer <session>`. Cuerpos JSON.
 3. Al terminar una run: `POST /runs` (reintenta sin miedo, el `runId` evita duplicados) y
    `DELETE /saves/run`.
 
-## Despliegue (una vez)
+## Desplegar a mano
+
+El token vive en Infisical (proyecto *SergioAlvarez*, `CLOUDFLARE_API_TOKEN`, entorno `prod`):
+
+```bash
+export CLOUDFLARE_API_TOKEN=$(infisical secrets get CLOUDFLARE_API_TOKEN --projectId=5fc9a102-3eaf-46f4-b1cc-383b9e1baffa --env=prod --path=/ --plain --silent)
+export CLOUDFLARE_ACCOUNT_ID=bf5525adf381fc90c6455878aa38a77a
+npm run db:migrate:remote && npm run deploy
+```
+
+## Despliegue inicial (ya hecho, como referencia)
 
 1. Crear cuenta gratuita en <https://dash.cloudflare.com/sign-up> (no pide tarjeta).
 2. Iniciar sesión con Wrangler. Sin navegador en WSL: crear un API token (plantilla
