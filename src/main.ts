@@ -67,6 +67,7 @@ async function juego() {
     reintento = null;
     enTitulo = false;
     if (eleccion.tipo === 'recargar') continue; // the cloud changed the local save: draw the title again
+    if (eleccion.tipo === 'final-verdadero') { await pantallaFinalVerdadero(eleccion.clase); continue; } // replay from the leaderboard
 
     let run;
     if (eleccion.tipo === 'continuar') {

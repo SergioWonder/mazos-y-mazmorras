@@ -109,3 +109,42 @@
   .clasif-fila { grid-template-columns: 1.4rem minmax(0, 1fr) 1.4rem auto; }
   .clasif-turnos { display: none; }
 }
+
+/* Leaderboard: the Dungeon Master's face for whoever defeated him (the secret is never told) */
+.clasif-dm {
+  position: relative; justify-self: center; width: 1.9rem; height: 1.9rem; padding: 0;
+  border: 1px solid rgba(255, 140, 220, 0.7); border-radius: 50%; background: #1a0f24; cursor: pointer;
+  box-shadow: 0 0 8px rgba(190, 90, 255, 0.75), 0 0 2px rgba(255, 209, 102, 0.9) inset;
+  animation: clasif-dm-latido 2.4s ease-in-out infinite;
+}
+.clasif-dm-marco { position: absolute; inset: 0; border-radius: 50%; overflow: hidden; }
+/* zoom on the hood and the red eyes of the app icon */
+.clasif-dm-cara { width: 100%; height: 100%; display: block; object-fit: cover; transform: scale(2.2); transform-origin: 47% 36%; }
+.clasif-dm-chispa {
+  position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; border-radius: 50%;
+  background: radial-gradient(circle, #fff6c8 0%, #ffb3f0 45%, rgba(170, 80, 255, 0) 75%);
+  pointer-events: none; opacity: 0;
+  animation: clasif-dm-chispa 1.9s ease-out infinite; animation-delay: calc(var(--i) * -0.32s);
+  --ang: calc(var(--i) * 60deg);
+}
+.clasif-dm-globo {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) scale(0.9);
+  white-space: nowrap; padding: 0.25rem 0.55rem; border-radius: 6px; font-size: 0.75rem;
+  background: #24122f; color: #ffd8f4; border: 1px solid rgba(255, 140, 220, 0.6);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none;
+  transition: opacity 0.15s, transform 0.15s; z-index: 2;
+}
+.clasif-dm-abierto .clasif-dm-globo { opacity: 1; transform: translateX(-50%) scale(1); }
+@keyframes clasif-dm-latido {
+  0%, 100% { box-shadow: 0 0 6px rgba(190, 90, 255, 0.6), 0 0 2px rgba(255, 209, 102, 0.9) inset; }
+  50% { box-shadow: 0 0 14px rgba(230, 110, 255, 0.95), 0 0 3px rgba(255, 209, 102, 1) inset; }
+}
+@keyframes clasif-dm-chispa {
+  0% { opacity: 0; transform: rotate(var(--ang)) translateY(-0.5rem) scale(0.6); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(calc(var(--ang) + 40deg)) translateY(-1.45rem) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .clasif-dm, .clasif-dm-chispa { animation: none; }
+  .clasif-dm-chispa { display: none; }
+}
