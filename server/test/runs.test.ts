@@ -76,6 +76,22 @@ describe('partidas terminadas y clasificación', () => {
     expect(entries.map((e) => [e.userId, e.dmDefeated])).toEqual([[seductor.userId, true], [ganador.userId, false]]);
   });
 
+  it('la clasificación dice quién mató al héroe o qué jefe derrotó', async () => {
+    const { mailer, sent } = fakeMailer();
+    const call = testApp(mailer);
+    const heroClass = 'barbaro';
+    const caido = await login(call, sent);
+    const vencedor = await login(call, sent);
+
+    await call('/runs', caido.auth(json(run({ heroClass, result: 'defeat', killer: 'Gorzug el Ogro' }))));
+    await call('/runs', vencedor.auth(json(run({ heroClass, result: 'victory', chapter: 2, floor: 15, finalBoss: 'Ignifax' }))));
+
+    const { entries } = await (await call(`/leaderboard?class=${heroClass}`)).json<{ entries: Array<{ userId: string; killer: string | null; finalBoss: string | null }> }>();
+    const de = (id: string) => entries.find((e) => e.userId === id)!;
+    expect(de(caido.userId)).toMatchObject({ killer: 'Gorzug el Ogro', finalBoss: null });
+    expect(de(vencedor.userId)).toMatchObject({ killer: null, finalBoss: 'Ignifax' });
+  });
+
   it('rechaza partidas con clase o datos imposibles', async () => {
     const { mailer, sent } = fakeMailer();
     const call = testApp(mailer);
