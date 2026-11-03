@@ -8961,9 +8961,64 @@ console.log('\n📱 Iconos de la app instalada');
     `los iconos del manifiesto existen en public/ (${iconos.join(', ')})`);
   check(iconos.every((f) => !/^icono-(192|512|maskable-512)\.png$/.test(f)),
     'los iconos no reutilizan los nombres del icono antiguo (Android no vería el cambio)');
-  check(/id: '\/mazos-y-mazmorras\/'/.test(conf), 'el manifiesto fija su id igual al de la app ya instalada');
   const aviso = fs.readFileSync(new URL('../public/sw-avisos.js', import.meta.url), 'utf8');
   check([...aviso.matchAll(/'([\w-]+\.png)'/g)].every((m) => iconos.includes(m[1])), 'las notificaciones usan el icono actual');
+}
+
+// ── Moving to the new domain: github.io hands the local data over in the URL fragment ─
+console.log('\n🏰 Mudanza al dominio nuevo');
+try {
+  const mig = await import('../src/core/migracion.ts');
+  const { urlTraspaso, importarTraspaso, CLAVES_MIGRABLES } = mig;
+  const almacen = (inicial: Record<string, string> = {}) => {
+    const m = new Map(Object.entries(inicial));
+    return { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), datos: m };
+  };
+  const partida = JSON.stringify({ v: 1, clase: 'paladin', nombre: 'Señor de las Brasas ñ€' });
+  const viejo = almacen({ 'mazo-y-mazmorra/guardado': partida, 'mazmorra-ajustes': '{"musica":false}', 'otra-web': 'no' });
+
+  const url = urlTraspaso('https://dracs-and-rogues.morghur.es/', viejo);
+  check(url.startsWith('https://dracs-and-rogues.morghur.es/#migrar='), 'la mudanza lleva los datos en el fragmento, que no llega a ningún servidor');
+  check(CLAVES_MIGRABLES.includes('mazo-y-mazmorra/guardado') && CLAVES_MIGRABLES.includes('mym-final-verdadero'), 'se mudan la partida y el final verdadero');
+
+  const nuevo = almacen();
+  check(importarTraspaso(new URL(url).hash, nuevo) === 'importado', 'el dominio nuevo importa lo que trae el enlace');
+  check(nuevo.datos.get('mazo-y-mazmorra/guardado') === partida, 'la partida llega intacta, con tildes y símbolos');
+  check(nuevo.datos.get('mazmorra-ajustes') === '{"musica":false}', 'los ajustes también se mudan');
+  check(!nuevo.datos.has('otra-web'), 'solo se mudan las claves del juego');
+
+  check(importarTraspaso(new URL(url).hash, nuevo) === 'ya-importado', 'la mudanza se importa una sola vez: volver por el enlace viejo no resucita una partida ya terminada');
+
+  const yaJugaba = almacen({ 'mazo-y-mazmorra/guardado': '{"v":1,"clase":"mago"}' });
+  importarTraspaso(new URL(url).hash, yaJugaba);
+  check(yaJugaba.datos.get('mazo-y-mazmorra/guardado') === '{"v":1,"clase":"mago"}', 'si ya jugabas en el dominio nuevo, tu partida de allí no se pisa');
+  check(yaJugaba.datos.get('mazmorra-ajustes') === '{"musica":false}', '…pero lo que allí faltaba sí llega');
+
+  check(importarTraspaso('', almacen()) === 'nada' && importarTraspaso('#otra=1', almacen()) === 'nada', 'sin enlace de mudanza no hace nada');
+  check(importarTraspaso('#migrar=%%basura', almacen()) === 'invalido', 'un enlace corrupto no rompe el arranque');
+
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const fuentes = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true })
+    .flatMap((e) => (e.isDirectory() ? fuentes(path.join(dir, e.name)) : e.name.endsWith('.ts') ? [path.join(dir, e.name)] : []));
+  const claves = new Set(fuentes(new URL('../src', import.meta.url).pathname)
+    .filter((f) => !f.endsWith('migracion.ts'))
+    .flatMap((f) => [...fs.readFileSync(f, 'utf8').matchAll(/const CLAVE\w* = '([^']+)'/g)].map((m) => m[1])));
+  const olvidadas = [...claves].filter((c) => !CLAVES_MIGRABLES.includes(c));
+  check(claves.size >= 8 && olvidadas.length === 0, `toda clave del almacenamiento se muda (${olvidadas.join(', ') || `${claves.size} claves`})`);
+} catch (e) {
+  check(false, `la mudanza de dominio: ${(e as Error).message}`);
+}
+
+// ── Both builds: GitHub Pages keeps its path (and installed app id), Cloudflare serves from / ─
+console.log('\n🌐 Dos despliegues del mismo juego');
+{
+  const fs = await import('node:fs');
+  const conf = fs.readFileSync(new URL('../vite.config.ts', import.meta.url), 'utf8');
+  check(/const BASE = process\.env\.BASE_PATH \?\? '\/mazos-y-mazmorras\/'/.test(conf), 'la ruta base sale de BASE_PATH y por defecto sigue siendo la de GitHub Pages');
+  check(/id: BASE\b/.test(conf), 'el id del manifiesto sigue a la ruta base (la app instalada de github.io conserva el suyo)');
+  const main = fs.readFileSync(new URL('../src/main.ts', import.meta.url), 'utf8');
+  check(/^import '\.\/ui\/mudanza\.ts';/.test(main), 'la mudanza es lo primero que se ejecuta, antes de que nada lea o escriba el almacenamiento');
 }
 
 // ── Paladin: holy flames around the hero while a Smite is prepared ──────────

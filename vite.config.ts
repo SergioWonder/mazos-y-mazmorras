@@ -18,18 +18,20 @@ function versionJson(): Plugin {
   };
 }
 
+/** GitHub Pages serves the game under the repo path; Cloudflare (dracs-and-rogues.morghur.es) builds with BASE_PATH=/. */
+const BASE = process.env.BASE_PATH ?? '/mazos-y-mazmorras/';
+
 export default defineConfig({
-  // Ruta base del repositorio en GitHub Pages
-  base: '/mazos-y-mazmorras/',
+  base: BASE,
   plugins: [
     versionJson(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['icono.svg', 'apple-touch-icon.png', 'favicon.png'],
       manifest: {
-        // Same id Chrome derived from start_url for existing installs: never change it,
-        // or Android treats the game as a different app.
-        id: '/mazos-y-mazmorras/',
+        // Same id Chrome derived from start_url for existing installs: never change it on a
+        // given origin, or Android treats the game as a different app. It follows the base.
+        id: BASE,
         name: 'Dracs & Rogues',
         short_name: 'Dracs & Rogues',
         description:

@@ -1,3 +1,4 @@
+import './ui/mudanza.ts';
 import './estilos/base.css';
 import './estilos/cartas.css';
 import './estilos/combate.css';
