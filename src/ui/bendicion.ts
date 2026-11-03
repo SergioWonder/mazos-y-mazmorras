@@ -33,13 +33,28 @@ function contenidoOpcion(o: OfertaBendicion): string {
  * - `inicial`: before setting off, 4 blessing relics (class, general, pact, wildcard).
  * - `entreActos`: full heal plus the unique-card relics and other blessing relics up to 3 options.
  */
-export function pantallaBendicion(
+export async function pantallaBendicion(
   run: EstadoRun, rng: () => number, momento: MomentoBendicion = 'entreActos', escenarioSiguiente = 0,
 ): Promise<void> {
+  const inicial = momento === 'inicial';
+  const ofrecidos = inicial ? ofrecerBendicionInicial(run, rng) : ofrecerBendicionEntreActos(run, rng);
+  if (ofrecidos.length === 0) return;
+  const o = await panelBendicion(run, ofrecidos, momento, escenarioSiguiente);
+  if (inicial) aplicarBendicion(run, o, rng);
+  else aplicarBendicionEntreActos(run, o, rng); // plus a full heal
+  await new Promise((r) => setTimeout(r, 900));
+}
+
+/**
+ * The blessing screen (the Senescal or the Seer, and the relics on offer): resolves with the chosen offer the
+ * moment it is picked (with its flash and announcement) and changes nothing, the caller applies it (solo here,
+ * the room engine in multiplayer).
+ */
+export function panelBendicion(
+  run: EstadoRun, ofrecidos: OfertaBendicion[], momento: MomentoBendicion = 'entreActos', escenarioSiguiente = 0,
+): Promise<OfertaBendicion> {
   return new Promise((resolver) => {
     const inicial = momento === 'inicial';
-    const ofrecidos = inicial ? ofrecerBendicionInicial(run, rng) : ofrecerBendicionEntreActos(run, rng);
-    if (ofrecidos.length === 0) return resolver();
 
     const app = document.getElementById('app')!;
     app.innerHTML = '';
@@ -85,12 +100,10 @@ export function pantallaBendicion(
     function elegir(o: OfertaBendicion) {
       if (elegido) return;
       elegido = true;
-      if (inicial) aplicarBendicion(run, o, rng);
-      else aplicarBendicionEntreActos(run, o, rng); // plus a full heal
       fx.estallido('divino');
       anuncio(`✨ ${o.reliquia.nombre}`, 'anuncio-rara');
       window.removeEventListener('keydown', teclado);
-      setTimeout(resolver, 900);
+      resolver(o);
     }
 
     const teclado = (ev: KeyboardEvent) => {

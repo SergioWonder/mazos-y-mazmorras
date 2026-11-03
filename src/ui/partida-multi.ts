@@ -11,16 +11,20 @@ import {
 } from '../core/multi/index.ts';
 import { cartaPorId } from '../core/cartas.ts';
 import { nube, type PartidaMulti as PartidaLobby } from '../core/nube.ts';
-import { reliquiaPorId } from '../core/reliquias.ts';
-import type { ClaseId, EstadoRun } from '../core/types.ts';
+import { NOMBRE_RAREZA_RELIQUIA, reliquiaPorId } from '../core/reliquias.ts';
+import type { OfertaBendicion } from '../core/bendiciones.ts';
+import type { CartaDef, ClaseId, EstadoRun } from '../core/types.ts';
 import { audio } from '../fx/audio.ts';
 import { exploreTheme } from '../fx/music-tracks.ts';
 import { fx } from '../fx/particulas.ts';
-import { renderCarta } from './carta.ts';
+import { panelBendicion } from './bendicion.ts';
 import { pantallaCombate, type VistaCombateMulti } from './combate.ts';
+import { panelEvento } from './evento.ts';
 import { pantallaFin } from './fin.ts';
 import { pantallaFinalVerdadero } from './final-verdadero.ts';
 import { pantallaMapa } from './mapa.ts';
+import { panelBotin, panelCampamento } from './recompensa.ts';
+import { panelTaberna } from './taberna.ts';
 import { lanzarMoneda } from './moneda.ts';
 import { relicIcon } from './relic-art.ts';
 import { refrescarTitulo } from './titulo.ts';
@@ -322,101 +326,79 @@ export function jugarPartidaMulti(partida: PartidaLobby): Promise<void> {
       if (esperandoEco) return mostrarEspera();
       if (eleccionAbierta === clave && overlayPropio) return;
       eleccionAbierta = clave;
+      overlayPropio = true; // whatever the screen leaves on the overlay is ours to clear
       const sala = p!.fase.tipo === 'sala' ? p!.fase.sala : null;
       const run = p!.runs[yo];
       const datos = sala?.heroes[yo].abierta?.datos;
-      const o = overlay();
-      o.innerHTML = '';
-      o.className = 'overlay-activo';
-      overlayPropio = true;
-      const panel = el('div', 'panel-recompensa multi-eleccion');
-      const titulo = el('h2');
-      const sub = el('p');
-      const fila = el('div', 'multi-opciones');
-      panel.append(titulo, sub, fila);
-      o.appendChild(panel);
+      const vigente = () => eleccionAbierta === clave; // a resync may have replaced this question meanwhile
       const elegir = (valor: number | string | null) => {
+        if (!vigente()) return;
         eleccionAbierta = null;
         esperandoEco = true;
         enviarEntrada({ tipo: 'eleccion', clave: q.clave, valor });
         mostrarEspera();
       };
-      const boton = (html: string, valor: number | string | null, clase = '') => {
-        const b = el('button', `btn-tomar multi-opcion ${clase}`) as HTMLButtonElement;
-        b.type = 'button';
-        b.innerHTML = html;
-        b.addEventListener('click', () => elegir(valor));
-        fila.appendChild(b);
-        return b;
-      };
-      const carta = (uid: string) => run.mazo.find((c) => String(c.uid) === uid);
-      const saltar = q.opciones.includes(null);
 
+      // The very same screens as in solo: they only resolve with the decision, the room applies it.
       switch (q.contexto) {
-        case 'bendicion':
-        case 'reliquia':
-          titulo.textContent = q.contexto === 'bendicion' ? '✨ Elige tu bendición' : '🧰 Elige una reliquia';
-          sub.textContent = q.contexto === 'reliquia' ? 'Si los dos elegís la misma, la moneda decide quién se la queda.' : 'Una reliquia para empezar la aventura.';
-          for (const id of q.opciones) {
-            const r = reliquiaPorId(String(id));
-            if (r) boton(`<span class="multi-opcion-icono">${relicIcon(r, 40)}</span><strong>${r.nombre}</strong><small>${r.texto}</small>`, r.id, 'multi-opcion-reliquia');
-          }
-          break;
-        case 'carta':
-          titulo.textContent = '🏆 Botín de guerra';
-          sub.textContent = 'Añade una carta a tu mazo';
-          fila.className = 'recompensa-cartas';
-          q.opciones.forEach((id, i) => {
-            const def = id === null ? undefined : cartaPorId(String(id));
-            if (!def) return;
-            const c = renderCarta(def);
-            c.classList.add('carta-recompensa');
-            c.style.setProperty('--retraso', `${i * 0.12}s`);
-            c.addEventListener('click', () => elegir(def.id));
-            fila.appendChild(c);
-          });
-          break;
-        case 'descanso':
-          titulo.textContent = '🔥 Campamento';
-          sub.textContent = 'Descansa, afila una carta o purifica una maldición.';
-          for (const op of q.opciones) {
-            const [accion, uid] = String(op).split(':');
-            const c = uid ? carta(uid) : undefined;
-            if (accion === 'descansar') boton('🛌 <strong>Descansar</strong><small>Recupera PV</small>', op);
-            else if (accion === 'afilar' && c) boton(`⚒️ <strong>Afilar «${c.def.nombre}»</strong><small>Mejora esta carta</small>`, op);
-            else if (accion === 'purificar' && c) boton(`🕯️ <strong>Quemar «${c.def.nombre}»</strong><small>Purifica la maldición</small>`, op);
-          }
-          break;
-        case 'evento': {
-          const ev = sala?.evento;
-          titulo.textContent = ev ? `${ev.arte} ${ev.titulo}` : 'Un suceso';
-          sub.textContent = ev?.texto ?? '';
-          for (const op of q.opciones) {
-            const opcion = ev?.opciones[Number(op)];
-            if (opcion) boton(`<strong>${opcion.etiqueta}</strong><small>${opcion.detalle}</small>`, op);
-          }
-          break;
+        case 'bendicion': {
+          const inicial = p!.fase.tipo === 'bendicion';
+          const ofertas: OfertaBendicion[] = datos?.k === 'bendicion'
+            ? datos.ofertas
+            : q.opciones.map((id) => reliquiaPorId(String(id))).filter((r) => !!r).map((r) => ({ tipo: 'reliquia' as const, reliquia: r! }));
+          void panelBendicion(run, ofertas, inicial ? 'inicial' : 'entreActos', sala?.siguiente ?? 0)
+            .then((o) => elegir(o.reliquia.id));
+          return;
         }
+        case 'reliquia':
+          return mostrarReliquias(q, elegir);
+        case 'carta': {
+          const defs = q.opciones.map((id) => (id === null ? undefined : cartaPorId(String(id)))).filter((d) => !!d);
+          void panelBotin(defs as CartaDef[]).then((def) => elegir(def ? def.id : null));
+          return;
+        }
+        case 'descanso':
+          void panelCampamento(run).then((d) => elegir(d.accion === 'descansar' ? 'descansar' : `${d.accion}:${d.carta.uid}`));
+          return;
+        case 'evento':
+          if (sala?.evento) void panelEvento(sala.evento).then((i) => elegir(i));
+          return;
         case 'taberna':
-          titulo.textContent = '🍺 La taberna';
-          sub.textContent = 'Escucha un rumor o deja que olviden una carta tuya.';
-          for (const op of q.opciones) {
-            const [accion, id] = String(op).split(':');
-            if (datos?.k !== 'taberna') break;
-            if (accion === 'rumor') {
-              const r = datos.rumores.find((x) => String(x.nodo) === id);
-              if (r) boton(`${r.icono} <strong>${r.narrador}</strong><small>${r.texto}</small>`, op);
-            } else {
-              const c = carta(id);
-              if (c) boton(`🍷 <strong>${datos.olvido.etiqueta}: «${c.def.nombre}»</strong><small>${datos.olvido.detalle}</small>`, op);
-            }
-          }
-          break;
-        default:
-          titulo.textContent = 'Elige';
-          for (const op of q.opciones) if (op !== null) boton(String(op), op);
+          if (datos?.k !== 'taberna') return;
+          void panelTaberna(run, datos.rumores, datos.olvido)
+            .then((d) => elegir(d.accion === 'rumor' ? `rumor:${d.rumor.nodo}` : `olvido:${d.carta.uid}`));
+          return;
       }
-      if (saltar) boton('Seguir sin elegir', null, 'multi-opcion-saltar');
+    }
+
+    /** The two relics on offer (multiplayer only: solo has a single relic to take), in the blessing's style. */
+    function mostrarReliquias(q: PreguntaEleccion, elegir: (valor: string) => void) {
+      const o = overlay();
+      o.innerHTML = '';
+      o.className = 'overlay-activo';
+      const panel = el('div', 'panel-recompensa panel-reliquia multi-reliquias');
+      panel.innerHTML = `
+        <h2>🧰 ¡Habéis encontrado reliquias!</h2>
+        <p>Elige la tuya. Si los dos elegís la misma, la moneda decide quién se la queda.</p>
+        <div class="evento-opciones bendicion-opciones"></div>`;
+      const cont = panel.querySelector('.bendicion-opciones') as HTMLElement;
+      q.opciones.forEach((id, i) => {
+        const r = reliquiaPorId(String(id));
+        if (!r) return;
+        const b = el('button', 'evento-opcion opcion-bendicion') as HTMLButtonElement;
+        b.type = 'button';
+        b.innerHTML = `<span class="bendicion-icono">${relicIcon(r, 48)}</span>
+          <span class="bendicion-texto">
+            <span class="bendicion-tipo">${NOMBRE_RAREZA_RELIQUIA[r.rareza]}${r.soloClase ? ' · de tu clase' : ''}</span>
+            <span class="op-etiqueta">${r.nombre}</span>
+            <span class="op-detalle">${r.texto}</span>
+          </span>`;
+        b.style.setProperty('--retraso', `${0.15 + i * 0.1}s`);
+        b.addEventListener('click', () => { fx.estallido('divino'); elegir(r.id); });
+        cont.appendChild(b);
+      });
+      o.appendChild(panel);
+      fx.estallido('divino');
     }
 
     async function mostrarFin() {

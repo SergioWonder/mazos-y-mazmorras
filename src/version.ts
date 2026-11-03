@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.0.0';
+export const VERSION = '10.0.1';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,13 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.0.1',
+    fecha: '2026-11-04',
+    cambios: [
+      '🎨 En multijugador, el botín, el campamento, los eventos, la taberna y las bendiciones vuelven a verse como en solitario: con sus ilustraciones y eligiendo la carta en un segundo paso.',
+    ],
+  },
   {
     version: '10.0.0',
     fecha: '2026-11-04',
