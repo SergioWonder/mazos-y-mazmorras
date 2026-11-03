@@ -71,7 +71,8 @@ describe('Sala con el motor real', () => {
     // only what was applied up to turn 2: by then the bot may already be playing its next turn
     const delBot = a.messages.slice(0, cursor).filter((m) => m.t === 'entrada' && m.entrada.de === 'cruz');
     expect(delBot.length).toBeGreaterThan(0);
-    expect(delBot.at(-1).entrada.tipo).toBe('finTurno');
+    // the bot ended its turn by itself (its next turn may already have started, depending on timing)
+    expect(delBot.some((m) => m.entrada.tipo === 'finTurno')).toBe(true);
   });
 
   it('rechaza una entrada que el motor no admite y no la guarda en el log', async () => {
