@@ -1,4 +1,4 @@
-import type { CartaDef, EstadoRun, OrigenReliquia } from '../core/types.ts';
+import type { CartaDef, CartaInstancia, EstadoRun, OrigenReliquia } from '../core/types.ts';
 import { recompensaCartas } from '../core/cartas.ts';
 import { sortearReliquia, otorgarReliquia, curarPorVendas, NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
 import { afilarCarta, anadirCarta, cartasMejorables, curaDeDescanso, descansar, maldicionesDe, pesoRaroEfectivo, purificar } from '../core/run.ts';
@@ -9,11 +9,19 @@ import { sceneArt } from './scene-art.ts';
 import { renderCarta } from './carta.ts';
 
 /** Overlay de elección de carta tras un combate. */
-export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Promise<void> {
-  return new Promise((resolver) => {
-    const opciones = recompensaCartas(run.clase, rng, pesoRaroEfectivo(run, pesoRaro));
-    if (opciones.length === 0) return resolver();
+export async function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Promise<void> {
+  const opciones = recompensaCartas(run.clase, rng, pesoRaroEfectivo(run, pesoRaro));
+  if (opciones.length === 0) return;
+  const def = await panelBotin(opciones);
+  if (!def) return;
+  const inst = anadirCarta(run, def);
+  anuncio(`+ ${def.nombre}${inst.mejorada ? '+' : ''}`, 'anuncio-botin');
+}
 
+/** The card reward screen: shows the offered cards and resolves with the one taken (null = skipped).
+ *  It changes nothing: the caller applies the choice (solo here, the room engine in multiplayer). */
+export function panelBotin(opciones: CartaDef[]): Promise<CartaDef | null> {
+  return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
     overlay.innerHTML = '';
     overlay.className = 'overlay-activo';
@@ -32,7 +40,7 @@ export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Pr
       const c = renderCarta(def);
       c.classList.add('carta-recompensa');
       c.style.setProperty('--retraso', `${i * 0.12}s`);
-      c.addEventListener('click', () => tomar(def));
+      c.addEventListener('click', () => cerrar(def));
       cont.appendChild(c);
       return c;
     });
@@ -48,24 +56,19 @@ export function elegirCarta(run: EstadoRun, rng: () => number, pesoRaro = 4): Pr
         marcar();
       } else if (ev.code === 'Enter' || ev.code === 'Space') {
         ev.preventDefault();
-        tomar(opciones[idx]);
+        cerrar(opciones[idx]);
       } else if (ev.code === 'KeyS' || ev.code === 'Escape') {
-        cerrar();
+        cerrar(null);
       }
     };
     window.addEventListener('keydown', teclado);
-    panel.querySelector('.btn-saltar')!.addEventListener('click', cerrar);
+    panel.querySelector('.btn-saltar')!.addEventListener('click', () => cerrar(null));
 
-    function tomar(def: CartaDef) {
-      const inst = anadirCarta(run, def);
-      anuncio(`+ ${def.nombre}${inst.mejorada ? '+' : ''}`, 'anuncio-botin');
-      cerrar();
-    }
-    function cerrar() {
+    function cerrar(def: CartaDef | null) {
       window.removeEventListener('keydown', teclado);
       overlay.className = '';
       overlay.innerHTML = '';
-      resolver();
+      resolver(def);
     }
   });
 }
@@ -117,16 +120,38 @@ export function obtenerReliquia(
 
 /** Pantalla de campamento: descansar (curar), afilar (mejorar 1 carta) o, si
  *  llevas maldiciones, purificar una en vez de curarte. */
-export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random): Promise<void> {
+export async function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random): Promise<void> {
+  const d = await panelCampamento(run);
+  if (d.accion === 'descansar') {
+    const maxAntes = run.pvMax;
+    const curado = descansar(run);
+    const extraMax = run.pvMax - maxAntes;
+    anuncio(extraMax > 0 ? `+${extraMax} PV máximos` : `+${curado} PV`, 'anuncio-botin');
+  } else if (d.accion === 'afilar') {
+    const extra = afilarCarta(run, d.carta, rng);
+    anuncio(`⚒️ ${[`${d.carta.def.nombre}+`, ...extra].join(' · ')}`, 'anuncio-botin');
+  } else if (purificar(run, d.carta)) {
+    anuncio(`🕯️ «${d.carta.def.nombre}» arde en la hoguera`, 'anuncio-botin');
+  }
+}
+
+/** What the player decided at the campfire. */
+export type DecisionCampamento =
+  | { accion: 'descansar' }
+  | { accion: 'afilar' | 'purificar'; carta: CartaInstancia };
+
+/** The campfire screens (main choice, then the card to sharpen or to burn): resolves with the decision and
+ *  changes nothing, the caller applies it (solo here, the room engine in multiplayer). */
+export function panelCampamento(run: EstadoRun): Promise<DecisionCampamento> {
   return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
     const cura = curaDeDescanso(run);
 
-    function cerrar(fnTeclado: (ev: KeyboardEvent) => void) {
+    function cerrar(fnTeclado: (ev: KeyboardEvent) => void, decision: DecisionCampamento) {
       window.removeEventListener('keydown', fnTeclado);
       overlay.className = '';
       overlay.innerHTML = '';
-      resolver();
+      resolver(decision);
     }
 
     function vistaPrincipal() {
@@ -169,13 +194,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       };
       window.addEventListener('keydown', teclado);
 
-      panel.querySelector('.btn-descansar')!.addEventListener('click', () => {
-        const maxAntes = run.pvMax;
-        const curado = descansar(run);
-        const extraMax = run.pvMax - maxAntes;
-        anuncio(extraMax > 0 ? `+${extraMax} PV máximos` : `+${curado} PV`, 'anuncio-botin');
-        cerrar(teclado);
-      });
+      panel.querySelector('.btn-descansar')!.addEventListener('click', () => cerrar(teclado, { accion: 'descansar' }));
       panel.querySelector('.btn-afilar')!.addEventListener('click', () => {
         if (mejorables.length === 0) return;
         window.removeEventListener('keydown', teclado);
@@ -216,10 +235,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       marcar();
 
       function quemar(i: number) {
-        const inst = malditas[i];
-        if (!purificar(run, inst)) return;
-        anuncio(`🕯️ «${inst.def.nombre}» arde en la hoguera`, 'anuncio-botin');
-        cerrar(teclado);
+        cerrar(teclado, { accion: 'purificar', carta: malditas[i] });
       }
 
       const teclado = (ev: KeyboardEvent) => {
@@ -278,10 +294,7 @@ export function pantallaDescanso(run: EstadoRun, rng: () => number = Math.random
       marcar();
 
       function mejorar(i: number) {
-        const inst = mejorables[i];
-        const extra = afilarCarta(run, inst, rng);
-        anuncio(`⚒️ ${[`${inst.def.nombre}+`, ...extra].join(' · ')}`, 'anuncio-botin');
-        cerrar(teclado);
+        cerrar(teclado, { accion: 'afilar', carta: mejorables[i] });
       }
 
       const teclado = (ev: KeyboardEvent) => {

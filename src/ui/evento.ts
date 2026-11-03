@@ -1,14 +1,22 @@
 import type { EstadoRun } from '../core/types.ts';
-import { abrirEvento } from '../core/eventos.ts';
+import { abrirEvento, type EventoDef } from '../core/eventos.ts';
 import { fx } from '../fx/particulas.ts';
 import { el } from './util.ts';
 import { sceneArt, eventSceneId } from './scene-art.ts';
 
 /** Pantalla de evento narrativo con elecciones. */
-export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void> {
-  return new Promise((resolver) => {
-    const evento = abrirEvento([run], rng);
+export async function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void> {
+  const evento = abrirEvento([run], rng);
+  await panelEvento(evento, (i) => evento.opciones[i].aplicar(run, rng));
+}
 
+/**
+ * The event screen (scene art, text, options). With `aplicar`, the chosen option is applied right away and its
+ * outcome is shown with «Continuar» (solo). Without it, the screen resolves with the chosen index as soon as it is
+ * picked and leaves the panel on screen: the caller sends the choice (multiplayer, the room applies it).
+ */
+export function panelEvento(evento: EventoDef, aplicar?: (i: number) => string): Promise<number> {
+  return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
     overlay.innerHTML = '';
     overlay.className = 'overlay-activo';
@@ -39,8 +47,16 @@ export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void>
     const marcar = () => botones.forEach((b, i) => b.classList.toggle('op-foco', i === idx));
     marcar();
 
+    let elegido = -1;
     function elegir(i: number) {
-      const resultado = evento.opciones[i].aplicar(run, rng);
+      if (elegido >= 0) return;
+      elegido = i;
+      if (!aplicar) {
+        window.removeEventListener('keydown', teclado);
+        botones.forEach((b) => { b.disabled = true; });
+        return resolver(i);
+      }
+      const resultado = aplicar(i);
       // muestra el desenlace
       cont.innerHTML = '';
       const res = el('p', 'evento-resultado', resultado);
@@ -76,7 +92,7 @@ export function pantallaEvento(run: EstadoRun, rng: () => number): Promise<void>
       window.removeEventListener('keydown', teclado);
       overlay.className = '';
       overlay.innerHTML = '';
-      resolver();
+      resolver(elegido);
     }
   });
 }

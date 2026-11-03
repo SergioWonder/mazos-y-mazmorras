@@ -1,4 +1,4 @@
-import type { EstadoRun, NodoMapa, ReliquiaDef } from '../core/types.ts';
+import type { CartaInstancia, EstadoRun, NodoMapa, ReliquiaDef } from '../core/types.ts';
 import { rumoresTaberna, aceptarRumor, olvidoTaberna, cartasEliminables, eliminarCarta } from '../core/taberna.ts';
 import { defDe } from '../core/cartas.ts';
 import { NOMBRE_RAREZA_RELIQUIA } from '../core/reliquias.ts';
@@ -12,18 +12,37 @@ const LUGAR_MISION: Record<string, string> = {
   combate: '⚔️ Combate', elite: '💀 Élite', evento: '❓ Evento', cofre: '🧰 Tesoro',
 };
 
+type Rumor = ReturnType<typeof rumoresTaberna>[number];
+type Olvido = ReturnType<typeof olvidoTaberna>;
+
+/** What the player decided in the tavern. */
+export type DecisionTaberna = { accion: 'rumor'; rumor: Rumor } | { accion: 'olvido'; carta: CartaInstancia };
+
 /** Tavern screen: pick one of two rumours (it marks a quest on the map) or
  *  let someone in the tavern take a card off your deck. */
-export function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: () => number): Promise<void> {
+export async function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: () => number): Promise<void> {
+  const rumores = rumoresTaberna(run, taberna, rng);
+  const olvido = olvidoTaberna(rng);
+  const d = await panelTaberna(run, rumores, olvido);
+  if (d.accion === 'rumor') {
+    aceptarRumor(run, d.rumor);
+    anuncio('📜 Misión marcada en el mapa', 'anuncio-botin');
+  } else {
+    const nombre = defDe(d.carta).nombre;
+    if (eliminarCarta(run, d.carta)) anuncio(olvido.anuncio.replace('{carta}', nombre), 'anuncio-botin');
+  }
+}
+
+/** The tavern screens (rumours or the forgetting, then the card): resolves with the decision and changes
+ *  nothing, the caller applies it (solo here, the room engine in multiplayer). */
+export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): Promise<DecisionTaberna> {
   return new Promise((resolver) => {
-    const rumores = rumoresTaberna(run, taberna, rng);
-    const olvido = olvidoTaberna(rng);
     const overlay = document.getElementById('overlay')!;
 
-    function cerrar() {
+    function cerrar(decision: DecisionTaberna) {
       overlay.className = '';
       overlay.innerHTML = '';
-      resolver();
+      resolver(decision);
     }
 
     /** Arrow keys move the focus, Enter picks, Esc (if given) goes back. */
@@ -72,11 +91,7 @@ export function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: () => nu
       const opciones: Array<{ etiqueta: string; detalle: string; accion: () => void; activa?: boolean }> = rumores.map((r) => ({
         etiqueta: `${r.icono} ${r.narrador}`,
         detalle: `«${r.texto}» <span class="rumor-destino">📜 Marca: ${LUGAR_MISION[r.tipo] ?? r.tipo}</span>`,
-        accion: () => {
-          aceptarRumor(run, r);
-          anuncio('📜 Misión marcada en el mapa', 'anuncio-botin');
-          cerrar();
-        },
+        accion: () => cerrar({ accion: 'rumor', rumor: r }),
       }));
       const eliminables = cartasEliminables(run);
       opciones.push({
@@ -134,12 +149,8 @@ export function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: () => nu
       panel.querySelector('.btn-saltar')!.addEventListener('click', salir);
 
       function quitar(i: number) {
-        const inst = eliminables[i];
-        const nombre = defDe(inst).nombre;
-        if (!eliminarCarta(run, inst)) return;
         soltar();
-        anuncio(olvido.anuncio.replace('{carta}', nombre), 'anuncio-botin');
-        cerrar();
+        cerrar({ accion: 'olvido', carta: eliminables[i] });
       }
     }
 
