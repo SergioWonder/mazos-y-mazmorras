@@ -3,6 +3,7 @@ import { cors } from 'hono/cors';
 import { authRoutes } from './auth.ts';
 import { runsRoutes } from './runs.ts';
 import { savesRoutes } from './saves.ts';
+import { friendRoutes } from './friends.ts';
 import { multiRoutes } from './multi.ts';
 import { pushRoutes } from './subscriptions.ts';
 import { usersRoutes } from './users.ts';
@@ -27,6 +28,7 @@ export function createApp(deps: Deps) {
   app.route('/', runsRoutes());
   app.route('/', usersRoutes());
   app.route('/', multiRoutes());
+  app.route('/', friendRoutes());
   app.route('/', pushRoutes());
   return app;
 }

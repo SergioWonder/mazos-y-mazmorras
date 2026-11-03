@@ -83,6 +83,17 @@ Table multi_games {
   }
 }
 
+Table friends {
+  user_id text [ref: > users.id, note: 'who keeps the list (one-way)']
+  friend_id text [ref: > users.id, note: 'a player they have already played a multiplayer game with']
+  created_at integer [not null]
+
+  indexes {
+    (user_id, friend_id) [pk]
+  }
+  Note: 'Saved friends, offered as autocomplete when inviting. Only players with an accepted game together can be saved.'
+}
+
 Table duo_runs {
   id text [pk, note: 'the multiplayer game id: recording twice is harmless; written by the Sala when the game ends, never by the client; bot games are not recorded']
   host_user_id text [not null, ref: > users.id, note: 'plays `cara`']

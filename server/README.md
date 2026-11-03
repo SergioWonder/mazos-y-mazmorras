@@ -52,6 +52,9 @@ Autenticación con `Authorization: Bearer <session>`. Cuerpos JSON.
 | POST | `/multi/games/:id/accept` | ✔ | `{ heroClass }`, solo el invitado → la partida pasa a `active` y avisa al anfitrión. 409 `not_pending`; 409 `class_taken` si elige la misma clase que el anfitrión (los dos héroes de una partida nunca comparten clase) |
 | POST | `/multi/games/:id/decline` | ✔ | Solo el invitado → `declined`. 409 `not_pending` |
 | POST | `/multi/games/:id/resume` | ✔ | Avisa al otro jugador (`retomar-pedido`). 409 `not_active`. `{ id, bot }` |
+| GET | `/friends` | ✔ | Jugadores con los que ya has jugado (partida aceptada, sin el bot), amigos primero: `{ companions: [{ userId, displayName, friend }] }` |
+| PUT | `/friends/:userId` | ✔ | Guarda como amigo (lista propia, unidireccional). 403 `not_played_together` si no habéis jugado juntos |
+| DELETE | `/friends/:userId` | ✔ | Lo quita de tus amigos |
 | GET | `/multi/games/:id/ws` | ✔ ¹ | WebSocket de la **Sala** (ver abajo). Solo los dos perfiles de una partida `active` (403 al resto, 409 si no está activa) |
 | GET | `/inbox/ws` | ✔ ¹ | WebSocket del **Buzón** del jugador (ver abajo) |
 | GET | `/push/key` | — | `{ key }`: clave pública VAPID, `null` si el servidor no tiene Web Push configurado |

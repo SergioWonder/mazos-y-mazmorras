@@ -27,7 +27,17 @@ const MAX_ENTRADA = 2 * 1024;
 const HUECOS: Hueco[] = ['cara', 'cruz'];
 const otro = (h: Hueco): Hueco => (h === 'cara' ? 'cruz' : 'cara');
 
-const RETARDO_BOT_MS = 700;
+/** The bot thinks for a random while between its actions, so it plays like a person. */
+const RETARDO_BOT_MIN_MS = 900;
+const RETARDO_BOT_MAX_MS = 2600;
+
+/** How long the bot waits before its next action: `fijo` (BOT_RETARDO_MS, the tests use 0) or a random pause.
+ *  Only timing: the bot's decisions come from the seeded rng, so the game stays reproducible. */
+export function retardoBot(fijo: string | undefined, azar: () => number = Math.random): number {
+  const n = fijo === undefined || fijo === '' ? NaN : Number(fijo);
+  if (Number.isFinite(n)) return n;
+  return Math.round(RETARDO_BOT_MIN_MS + azar() * (RETARDO_BOT_MAX_MS - RETARDO_BOT_MIN_MS));
+}
 
 export class Sala extends DurableObject<Env> {
   private motor: MotorSala | null = null;
@@ -224,8 +234,7 @@ export class Sala extends DurableObject<Env> {
   /** Wakes the alarm when the bot seat has something to decide (a short pause so the human sees it play). */
   private vigilarBot(motor: MotorSala): void {
     if (!this.info().bot || motor.terminada() || motor.pendiente('cruz') === null) return;
-    const espera = Number(this.env.BOT_RETARDO_MS ?? RETARDO_BOT_MS);
-    void this.ctx.storage.setAlarm(Date.now() + (Number.isFinite(espera) ? espera : RETARDO_BOT_MS));
+    void this.ctx.storage.setAlarm(Date.now() + retardoBot(this.env.BOT_RETARDO_MS));
   }
 
   async alarm(): Promise<void> {

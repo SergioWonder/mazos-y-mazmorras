@@ -75,6 +75,9 @@ interface Respuesta { estado: number; cuerpo: any }
 
 export type Hueco = 'cara' | 'cruz';
 /** One of the player's multiplayer games as the lobby shows it (an invitation or a game to resume). */
+/** Someone you have already played with; `amigo` if you saved them. */
+export interface Companero { id: string; nombre: string; amigo: boolean }
+
 export interface PartidaMulti {
   id: string;
   estado: 'invitada' | 'activa';
@@ -427,6 +430,16 @@ export function crearNube(deps: DepsNube = {}) {
   /** Asks the other player to resume (they get an alert); the room opens when both connect. */
   const pedirRetomar = async (id: string) => resultadoMulti(await pedir('POST', `/multi/games/${encodeURIComponent(id)}/resume`, {}));
 
+  /** The players you have already played with, your friends first; null offline or logged out. */
+  async function companeros(): Promise<Companero[] | null> {
+    const r = await pedir('GET', '/friends');
+    if (!ok(r) || !Array.isArray(r!.cuerpo?.companions)) return null;
+    return (r!.cuerpo.companions as any[]).map((c) => ({ id: String(c.userId), nombre: String(c.displayName), amigo: c.friend === true }));
+  }
+  /** Saves (or forgets) a player you have played with as a friend. */
+  const marcarAmigo = async (id: string, amigo: boolean) =>
+    resultadoMulti(await pedir(amigo ? 'PUT' : 'DELETE', `/friends/${encodeURIComponent(id)}`));
+
   /** Public VAPID key to subscribe to Web Push with; null when the server has none (push unavailable). */
   async function claveVapid(): Promise<string | null> {
     const r = await pedir('GET', '/push/key', undefined, false);
@@ -450,7 +463,7 @@ export function crearNube(deps: DepsNube = {}) {
     sincronizarPerfil,
     registrarPartidaTerminada, longitudCola, vaciarCola,
     clasificacion, clasificacionDuo, recordarClase, ultimaClase,
-    invitar, partidasMulti, aceptarInvitacion, rechazarInvitacion, pedirRetomar,
+    invitar, partidasMulti, aceptarInvitacion, rechazarInvitacion, pedirRetomar, companeros, marcarAmigo,
     claveVapid, suscribirPush, anularPush, direccionSocket,
   };
 }
