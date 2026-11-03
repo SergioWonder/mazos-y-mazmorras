@@ -68,7 +68,8 @@ describe('Sala con el motor real', () => {
 
     a.send({ t: 'entrada', entrada: { tipo: 'finTurno' } });
     cursor = await conducir(a, p, cursor, () => duo.combates.cara.turno === 2 || duo.terminado !== null, () => null);
-    const delBot = a.messages.filter((m) => m.t === 'entrada' && m.entrada.de === 'cruz');
+    // only what was applied up to turn 2: by then the bot may already be playing its next turn
+    const delBot = a.messages.slice(0, cursor).filter((m) => m.t === 'entrada' && m.entrada.de === 'cruz');
     expect(delBot.length).toBeGreaterThan(0);
     expect(delBot.at(-1).entrada.tipo).toBe('finTurno');
   });
