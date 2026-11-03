@@ -4,13 +4,8 @@ dev-dist/
 .DS_Store
 *.local
 
-# graphify: internos (rutas absolutas, caché y contadores locales)
-graphify-out/.graphify_*
-graphify-out/cache/
-graphify-out/cost.json
-
-# graphify: copias de seguridad del grafo curado
-graphify-out/[0-9]*/
+# graphify: local knowledge graph, regenerated per machine (never committed)
+graphify-out/
 
 # rendered soundtrack output (the copies in public/audio are the ones shipped)
 scripts/musica/**/*.mp3
