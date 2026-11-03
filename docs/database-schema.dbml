@@ -81,6 +81,25 @@ Table multi_games {
   }
 }
 
+Table duo_runs {
+  id text [pk, note: 'the multiplayer game id: recording twice is harmless; written by the Sala when the game ends, never by the client; bot games are not recorded']
+  host_user_id text [not null, ref: > users.id, note: 'plays `cara`']
+  guest_user_id text [not null, ref: > users.id, note: 'plays `cruz`']
+  host_class text [not null]
+  guest_class text [not null]
+  result text [not null, note: "'victory' | 'defeat'"]
+  dm_defeated integer [not null, default: 0, note: 'true ending (either hero seduced the DM); ranks above any victory']
+  chapter integer [not null]
+  floor integer [not null]
+  turns integer [not null]
+  created_at integer [not null]
+
+  indexes {
+    (host_user_id, guest_user_id) [name: 'idx_duo_runs_users']
+    (result, chapter, floor, turns) [name: 'idx_duo_runs_leaderboard']
+  }
+}
+
 Table push_subscriptions {
   endpoint text [pk, note: 'Web Push endpoint of one browser/device']
   user_id text [not null, ref: > users.id]

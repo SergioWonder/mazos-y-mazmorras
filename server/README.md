@@ -46,6 +46,7 @@ Autenticación con `Authorization: Bearer <session>`. Cuerpos JSON.
 | POST | `/runs` | ✔ | Partida terminada `{ runId (UUID), heroClass, result: victory\|defeat, dmDefeated?, chapter, floor, turns, seed, gameVersion, stats? }` → 201 (200 si ya estaba). `dmDefeated` (final verdadero) solo con `victory` |
 | GET | `/runs/mine` | ✔ | Últimas 50 partidas del jugador |
 | GET | `/leaderboard?class=&limit=` | — | Mejor partida de cada jugador: primero quien derrotó al DM, luego victorias, luego capítulo y piso más altos, luego menos turnos |
+| GET | `/leaderboard?mode=duo&limit=` | — | Clasificación multijugador: la mejor partida de cada **pareja de perfiles** (da igual quién invitó), con el mismo orden. `{ entries: [{ players: [{ userId, displayName, heroClass }, …] (primero el anfitrión), result, dmDefeated, chapter, floor, turns, createdAt }] }`. `mode` desconocido → 400 `unknown_mode` |
 | POST | `/multi/games` | ✔ | `{ guest: <displayName> \| 'bot', heroClass }` → 201 `{ id, status, bot }`. Exige nombre de jugador (400 `name_required`). 404 `user_not_found`, 409 `already_invited` (ya hay una invitación pendiente al mismo jugador). Con `'bot'` la partida nace `active` y el bot recibe una clase al azar |
 | GET | `/multi/games` | ✔ | `{ games: [{ id, status: invited\|active, hueco: cara\|cruz, direction: sent\|received\|null, other: { id, displayName, bot }, hostClass, guestClass, createdAt, updatedAt }] }`: invitaciones recibidas y enviadas y partidas activas |
 | POST | `/multi/games/:id/accept` | ✔ | `{ heroClass }`, solo el invitado → la partida pasa a `active` y avisa al anfitrión. 409 `not_pending` |
@@ -76,7 +77,9 @@ entrada (`esValida`; si no, `{ t: 'error', motivo: 'invalida' }` solo al emisor 
 la aplica de una en una (cola de promesas) y la difunde con el hash resultante. Guarda en SQLite el último guardado de sala (lo calcula el
 servidor al llegar a un punto de guardado: inicio de cada sala o fin de partida) y el log desde entonces. Contra el bot (`cruz`) la sala
 decide por él con `decisionBot` (alarma del DO, `BOT_RETARDO_MS`, por defecto 700 ms entre jugadas; rng sembrado con la semilla de la
-partida y el nº de entrada) y marca la partida `finished` en D1 al terminar. Mensajes del servidor: `{ t: 'hueco', hueco, nombres, clases, bot }` al conectar,
+partida y el nº de entrada) y marca la partida `finished` en D1 al terminar. Al terminar (victoria, derrota o final verdadero del DM) la propia sala
+**registra la partida en `duo_runs`** (`src/duo-runs.ts`; sin POST del cliente; las partidas contra el bot no se registran) con el resultado, `dmDefeated`,
+capítulo, piso y turnos que calcula el motor; alimenta `GET /leaderboard?mode=duo`. Mensajes del servidor: `{ t: 'hueco', hueco, nombres, clases, bot }` al conectar,
 `{ t: 'estado', huecos: { cara: { conectado, listo }, cruz: {…} }, empezada }`, `{ t: 'empieza', semilla, clases, nombres, bot, guardado, log: [{ entrada, hash }] }`
 cuando los dos están conectados y listos (primera vez: semilla nueva; al retomar: último guardado + entradas posteriores; el cliente
 reconstruye desde el guardado, o desde la semilla si es `null`, y reproduce el log en silencio),

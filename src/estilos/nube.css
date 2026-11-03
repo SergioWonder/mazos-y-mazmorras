@@ -74,6 +74,8 @@
 .clasif-pos { text-align: right; opacity: 0.7; }
 .clasif-nombre { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .clasif-anonimo { opacity: 0.6; font-style: italic; }
+/* two players and their classes share one row: let the names wrap instead of cutting them */
+.clasif-fila-duo .clasif-nombre { white-space: normal; overflow-wrap: anywhere; line-height: 1.25; }
 .clasif-avance, .clasif-turnos { font-size: 0.8rem; opacity: 0.8; white-space: nowrap; }
 .clasif-propia { background: rgba(255, 209, 102, 0.14); border-left: 3px solid var(--brasa-viva); }
 .clasif-vacio, .clasif-pista { margin: 1rem 0; text-align: center; opacity: 0.75; line-height: 1.4; }

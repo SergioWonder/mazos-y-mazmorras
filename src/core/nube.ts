@@ -52,6 +52,11 @@ export interface EntradaClasificacion {
   userId: string; displayName: string | null; heroClass: string; result: 'victory' | 'defeat';
   dmDefeated?: boolean; chapter: number; floor: number; turns: number; createdAt: number;
 }
+/** Best run of a pair of profiles (the host first). */
+export interface EntradaClasificacionDuo {
+  players: Array<{ userId: string; displayName: string | null; heroClass: string }>;
+  result: 'victory' | 'defeat'; dmDefeated?: boolean; chapter: number; floor: number; turns: number; createdAt: number;
+}
 
 export type ResultadoEnlace = 'enviado' | 'email-invalido' | 'demasiados' | 'correo-no-disponible' | 'sin-conexion' | 'error';
 export type ResultadoNombre = 'ok' | 'invalido' | 'ocupado' | 'sin-sesion' | 'sin-conexion';
@@ -358,6 +363,13 @@ export function crearNube(deps: DepsNube = {}) {
     return r!.cuerpo.entries as EntradaClasificacion[];
   }
 
+  /** Multiplayer leaderboard: the best run of each pair of profiles. */
+  async function clasificacionDuo(limite = 20): Promise<EntradaClasificacionDuo[] | null> {
+    const r = await pedir('GET', `/leaderboard?mode=duo&limit=${limite}`, undefined, false);
+    if (!ok(r) || !Array.isArray(r!.cuerpo?.entries)) return null;
+    return r!.cuerpo.entries as EntradaClasificacionDuo[];
+  }
+
   const recordarClase = (clase: string) => escribir(CLAVE_ULTIMA_CLASE, clase);
   const ultimaClase = () => leer(CLAVE_ULTIMA_CLASE);
 
@@ -430,7 +442,7 @@ export function crearNube(deps: DepsNube = {}) {
     partidaRemota, subirPartida, borrarPartida, conflictoPendiente, revisionRun, aceptarRemota, imponerLocal,
     sincronizarPerfil,
     registrarPartidaTerminada, longitudCola, vaciarCola,
-    clasificacion, recordarClase, ultimaClase,
+    clasificacion, clasificacionDuo, recordarClase, ultimaClase,
     invitar, partidasMulti, aceptarInvitacion, rechazarInvitacion, pedirRetomar,
     claveVapid, suscribirPush, anularPush, direccionSocket,
   };

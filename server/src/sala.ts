@@ -6,6 +6,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import { crearRng } from '../../src/core/rng.ts';
 import type { Env } from './env.ts';
+import { registrarPartidaDuo, type ResumenDuo } from './duo-runs.ts';
 import { crearMotor, esEntrada, rehidratarMotor, type EntradaSellada, type Hueco, type MotorSala } from './motor.ts';
 import { avisarBuzon, urlSala } from './notify.ts';
 
@@ -206,14 +207,17 @@ export class Sala extends DurableObject<Env> {
       }
     });
     this.difundir({ t: 'entrada', entrada: sellada, hash }, true);
-    if (motor.terminada()) this.ctx.waitUntil(this.marcarTerminada());
+    if (motor.terminada()) this.ctx.waitUntil(this.marcarTerminada(motor.resumenFinal()));
     this.vigilarBot(motor);
   }
 
-  private async marcarTerminada(): Promise<void> {
+  /** The game is over: mark it finished and record it for the duo leaderboard (the server's word, no client POST). */
+  private async marcarTerminada(resumen: ResumenDuo | null): Promise<void> {
     try {
       await this.env.DB.prepare(`UPDATE multi_games SET status = 'finished', updated_at = ? WHERE id = ?`).bind(Date.now(), this.info().id).run();
     } catch (err) { console.error('could not mark the game as finished', err); }
+    if (!resumen) return;
+    try { await registrarPartidaDuo(this.env.DB, this.info(), resumen); } catch (err) { console.error('could not record the duo run', err); }
   }
 
   // ── bot ────────────────────────────────────────────────────────────────────

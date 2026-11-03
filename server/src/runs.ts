@@ -49,9 +49,37 @@ export function runsRoutes() {
   });
 
   app.get('/leaderboard', async (c) => {
+    const mode = c.req.query('mode');
+    if (mode !== undefined && mode !== 'solo' && mode !== 'duo') return c.json({ error: 'unknown_mode' }, 400);
+    const limit = Math.min(Math.max(Number.parseInt(c.req.query('limit') ?? '20', 10) || 20, 1), 100);
+    if (mode === 'duo') {
+      // best run of each pair of profiles (whoever hosted), ranked like the solo board
+      const { results } = await c.env.DB.prepare(
+        `SELECT r.host_user_id AS hostId, h.display_name AS hostName, r.host_class AS hostClass,
+                r.guest_user_id AS guestId, g.display_name AS guestName, r.guest_class AS guestClass,
+                r.result, r.dm_defeated AS dmDefeated, r.chapter, r.floor, r.turns, r.created_at AS createdAt
+           FROM (SELECT duo_runs.*, ROW_NUMBER() OVER (
+                         PARTITION BY min(duo_runs.host_user_id, duo_runs.guest_user_id), max(duo_runs.host_user_id, duo_runs.guest_user_id)
+                         ORDER BY ${ranking('duo_runs')}) AS rank_in_pair
+                   FROM duo_runs) r
+           JOIN users h ON h.id = r.host_user_id
+           JOIN users g ON g.id = r.guest_user_id
+          WHERE r.rank_in_pair = 1
+          ORDER BY ${ranking('r')}
+          LIMIT ?1`,
+      ).bind(limit).all();
+      return c.json({
+        entries: results.map((e) => ({
+          players: [
+            { userId: e.hostId, displayName: e.hostName, heroClass: e.hostClass },
+            { userId: e.guestId, displayName: e.guestName, heroClass: e.guestClass },
+          ],
+          result: e.result, dmDefeated: e.dmDefeated === 1, chapter: e.chapter, floor: e.floor, turns: e.turns, createdAt: e.createdAt,
+        })),
+      });
+    }
     const heroClass = c.req.query('class');
     if (heroClass !== undefined && !isHeroClass(heroClass)) return c.json({ error: 'unknown_class' }, 400);
-    const limit = Math.min(Math.max(Number.parseInt(c.req.query('limit') ?? '20', 10) || 20, 1), 100);
     const { results } = await c.env.DB.prepare(
       `SELECT r.user_id AS userId, u.display_name AS displayName, r.hero_class AS heroClass, r.result, r.dm_defeated AS dmDefeated,
               r.chapter, r.floor, r.turns, r.created_at AS createdAt

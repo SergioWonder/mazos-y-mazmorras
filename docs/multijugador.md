@@ -91,7 +91,10 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
   de sus PV máximos. Si caen los dos, la run termina para ambos.
 - **D4.** El final secreto del DM vale si cualquiera de los dos lo consigue.
 - **D5.** Eventos que afectan a lo compartido: moneda.
-- **D6.** Las partidas multijugador no cuentan todavía para la clasificación.
+- **D6.** (Sustituida.) Las partidas multijugador **sí** cuentan en la clasificación: cuando una termina (victoria, derrota o final
+  verdadero del DM), **el servidor** la registra desde la Sala (autoritativo, sin POST del cliente) en `duo_runs`; las partidas contra el bot
+  no se registran. `GET /leaderboard?mode=duo` da la mejor partida de cada **pareja de perfiles** con el mismo orden que en solitario, y el
+  panel tiene una pestaña «👥 Dúo» con los dos jugadores y su clase en la misma fila.
 - **D7.** Notificación con la partida cerrada: Web Push (pide permiso; en iPhone solo con la app instalada). Con el
   juego abierto: aviso dentro del juego por WebSocket.
 

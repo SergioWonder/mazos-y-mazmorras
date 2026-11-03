@@ -6,6 +6,7 @@ import {
   serializarPartidaMulti,
   type Entrada, type EntradaSellada, type GuardadoMulti, type Hueco, type PartidaMulti, type Pregunta,
 } from '../../src/core/multi/index.ts';
+import type { ResumenDuo } from './duo-runs.ts';
 
 export type { Entrada, EntradaSellada, GuardadoMulti, Hueco, Pregunta };
 
@@ -26,6 +27,8 @@ export interface MotorSala {
   decisionBot(hueco: Hueco, rng: () => number): Entrada | null;
   /** The run is over (victory or defeat). */
   terminada(): boolean;
+  /** What the leaderboard needs once the run is over (null while it goes on). */
+  resumenFinal(): ResumenDuo | null;
 }
 
 function envolver(p: PartidaMulti): MotorSala {
@@ -38,6 +41,14 @@ function envolver(p: PartidaMulti): MotorSala {
     pendiente: (h) => pendiente(p, h),
     decisionBot: (h, rng) => decisionBot(p, h, rng),
     terminada: () => p.fase.tipo === 'fin',
+    resumenFinal: () => p.fase.tipo !== 'fin' ? null : {
+      victory: p.fase.victoria,
+      // true ending: the Dungeon Master fell to a natural 20 on Seduce (either hero)
+      dmDefeated: p.fase.victoria && p.fase.finalVerdadero,
+      chapter: p.runs.cara.capitulo,
+      floor: p.runs.cara.piso,
+      turns: p.runs.cara.estadisticas?.turnos ?? 0,
+    },
   };
 }
 

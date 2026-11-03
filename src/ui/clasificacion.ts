@@ -1,6 +1,6 @@
 // Leaderboard panel: best run of each player, by class. Opens from the title screen.
 
-import { nube, type EntradaClasificacion } from '../core/nube.ts';
+import { nube, type EntradaClasificacion, type EntradaClasificacionDuo } from '../core/nube.ts';
 import type { ClaseId } from '../core/types.ts';
 import { menosParticulas } from '../fx/particulas.ts';
 import { el } from './util.ts';
@@ -8,6 +8,8 @@ import { NOMBRE_CLASE } from './nube-juego.ts';
 import '../estilos/nube.css';
 
 const CLASES = ['druida', 'barbaro', 'mago', 'picaro', 'brujo', 'paladin'] as const;
+/** The multiplayer tab, next to the six classes. */
+const TAB_DUO = 'duo';
 const SECRETO_DM = 'Ha derrotado al Dungeon Master';
 const CHISPAS_DM = 6;
 
@@ -64,6 +66,15 @@ function medallonDM(propia: boolean, repetir: (() => void) | null, mostrarGlobo:
   return medallon;
 }
 
+function iconoResultado(e: { dmDefeated?: boolean; result: 'victory' | 'defeat' }, propia: boolean, repetir: (() => void) | null,
+  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+  // the true ending outranks any other victory: the Dungeon Master himself fell
+  if (e.dmDefeated) return medallonDM(propia, repetir, mostrarGlobo);
+  const res = el('span', 'clasif-resultado', e.result === 'victory' ? '🏆' : '💀');
+  res.title = e.result === 'victory' ? 'Victoria' : 'Derrota';
+  return res;
+}
+
 function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repetir: (() => void) | null,
   mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
   const f = el('li', `clasif-fila${propia ? ' clasif-propia' : ''}`);
@@ -72,14 +83,24 @@ function fila(e: EntradaClasificacion, posicion: number, propia: boolean, repeti
   nombre.textContent = e.displayName || 'Aventurero anónimo';
   if (!e.displayName) nombre.classList.add('clasif-anonimo');
   f.appendChild(nombre);
-  // the true ending outranks any other victory: the Dungeon Master himself fell
-  if (e.dmDefeated) {
-    f.appendChild(medallonDM(propia, repetir, mostrarGlobo));
-  } else {
-    const res = el('span', 'clasif-resultado', e.result === 'victory' ? '🏆' : '💀');
-    res.title = e.result === 'victory' ? 'Victoria' : 'Derrota';
-    f.appendChild(res);
-  }
+  f.appendChild(iconoResultado(e, propia, repetir, mostrarGlobo));
+  f.appendChild(el('span', 'clasif-avance', `Cap. ${e.chapter + 1} · piso ${e.floor}`));
+  f.appendChild(el('span', 'clasif-turnos', `${e.turns} turnos`));
+  return f;
+}
+
+/** Multiplayer row: both players with their class on the same line («Ana · Druida + Bea · Mago»). */
+function filaDuo(e: EntradaClasificacionDuo, posicion: number, propia: boolean,
+  mostrarGlobo: (ancla: HTMLElement) => void): HTMLElement {
+  const f = el('li', `clasif-fila clasif-fila-duo${propia ? ' clasif-propia' : ''}`);
+  f.appendChild(el('span', 'clasif-pos', String(posicion)));
+  const nombre = el('span', 'clasif-nombre');
+  nombre.textContent = e.players
+    .map((p) => `${p.displayName || 'Aventurero anónimo'} · ${NOMBRE_CLASE[p.heroClass] ?? p.heroClass}`)
+    .join(' + ');
+  nombre.title = nombre.textContent;
+  f.appendChild(nombre);
+  f.appendChild(iconoResultado(e, false, null, mostrarGlobo));
   f.appendChild(el('span', 'clasif-avance', `Cap. ${e.chapter + 1} · piso ${e.floor}`));
   f.appendChild(el('span', 'clasif-turnos', `${e.turns} turnos`));
   return f;
@@ -114,11 +135,21 @@ export function pantallaClasificacion(opciones: OpcionesClasificacion = {}): Pro
     async function cargar() {
       const mia = ++peticion;
       aviso('Cargando…');
+      const yo = nube.usuario()?.id;
+      if (clase === TAB_DUO) {
+        const entradas = await nube.clasificacionDuo(20);
+        if (mia !== peticion) return;
+        if (entradas === null) return aviso('Sin conexión: no se pudo cargar la clasificación.');
+        if (entradas.length === 0) return aviso('Nadie ha terminado una partida en dúo todavía. ¡Sed los primeros!');
+        const ol = el('ol', 'clasif-tabla');
+        entradas.forEach((e, i) => ol.appendChild(filaDuo(e, i + 1, e.players.some((p) => p.userId === yo), mostrarGlobo)));
+        lista.replaceChildren(ol);
+        return;
+      }
       const entradas = await nube.clasificacion(clase, 20);
       if (mia !== peticion) return; // the player already picked another class
       if (entradas === null) return aviso('Sin conexión: no se pudo cargar la clasificación.');
       if (entradas.length === 0) return aviso('Nadie ha terminado una partida con esta clase todavía. ¡Sé el primero!');
-      const yo = nube.usuario()?.id;
       const ol = el('ol', 'clasif-tabla');
       const repetirCon = (e: EntradaClasificacion) => opciones.repetirFinal
         ? () => { cerrar(); opciones.repetirFinal!(e.heroClass as ClaseId); }
@@ -130,15 +161,16 @@ export function pantallaClasificacion(opciones: OpcionesClasificacion = {}): Pro
       }
     }
 
-    const botones = CLASES.map((c) => {
-      const b = el('button', 'clasif-clase', NOMBRE_CLASE[c]) as HTMLButtonElement;
+    const pestanas = [...CLASES, TAB_DUO] as const;
+    const botones = pestanas.map((c) => {
+      const b = el('button', 'clasif-clase', c === TAB_DUO ? '👥 Dúo' : NOMBRE_CLASE[c]) as HTMLButtonElement;
       b.setAttribute('role', 'tab');
       b.addEventListener('click', () => { clase = c; marcar(); void cargar(); });
       selector.appendChild(b);
       return b;
     });
     const marcar = () => botones.forEach((b, i) => {
-      const activa = CLASES[i] === clase;
+      const activa = pestanas[i] === clase;
       b.classList.toggle('clasif-clase-activa', activa);
       b.setAttribute('aria-selected', String(activa));
     });
