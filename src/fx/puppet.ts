@@ -191,6 +191,10 @@ export const EYES_OUT = 0.7;
 
 /** Seconds each action lasts. */
 export const ACTION_DURATION: Record<ActionType, number> = { attack: 0.8, spell: 0.8, hit: 0.6, death: 0.9 };
+/** A fallen hero that stays on the field (two players): the death held on its last frame, still. */
+export const CORPSE_ACTION: ActionProgress = { type: 'death', p: 1 };
+/** How visible a corpse stays (the death itself fades the puppet out to 0). */
+export const CORPSE_OPACITY = 0.6;
 
 /** Keys that glow (magic foci, eyes, fire, poison…). */
 export const EMISSIVE = new Set([
@@ -438,17 +442,19 @@ export function puppetPose(rig: PuppetRig, t: number, action: ActionProgress | n
   // and out at the edges so actions start and end without a pop (which the
   // physics chains would amplify)
   const hold = actionHold(action);
-  const b = Math.sin((t * 2 * Math.PI) / 2.5 + rig.phase), calm = 1 - 0.7 * hold;
+  // a corpse (the death held past its end) does not breathe at all
+  const still = action?.type === 'death' && action.p >= 1;
+  const b = Math.sin((t * 2 * Math.PI) / 2.5 + rig.phase), calm = still ? 0 : 1 - 0.7 * hold;
   p.torsoY += b * 0.9 * calm; p.torso += b * 1.2 * calm; p.head -= b * 1.5 * calm;
   p.armF += b * 2.5 * calm; p.armB -= b * 2.5 * calm; p.weapon -= b * 2 * calm;
-  if (rig.hover) p.torsoY += Math.sin(t * 2 * Math.PI * 0.55 + rig.phase) * rig.hover;
+  if (rig.hover && !still) p.torsoY += Math.sin(t * 2 * Math.PI * 0.55 + rig.phase) * rig.hover;
   if (rig.wings) articulateWings(rig, p, t, action);
   else if (rig.flap) {
     const w = Math.sin(t * 2 * Math.PI * (rig.flapBones === 'wings' ? WING_HZ : 1.6) + rig.phase) * rig.flap * (1 - 0.5 * hold);
     if (rig.flapBones === 'wings') { p.wingF += w; p.wingB += w * 0.9; } else { p.armF += w; p.armB += w * 0.9; p.torsoY -= w * 0.08; }
   }
   // cape/scarf/tail hangs from its pivot and trails behind forward motion
-  p.cape += b * 4 + Math.sin(t * 1.7 + rig.phase) * 2 - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
+  p.cape += (still ? 0 : b * 4 + Math.sin(t * 1.7 + rig.phase) * 2) - (p.torso - base.torso) * 0.8 + p.rootX * 0.9;
   // blink now and then; the eyes go out for good near the end of the death
   fx.blink = (action?.type === 'death' && action.p >= EYES_OUT)
     || (rig.eyesShut ? rig.eyesShut(t, action) : ((t + rig.phase) % 3.7) < 0.13);

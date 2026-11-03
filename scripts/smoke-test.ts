@@ -28,7 +28,7 @@ import { hasFullArt } from '../src/ui/card-looks.ts';
 import { spawnEffect, stepParticles, EFFECTS, type Particle } from '../src/fx/particle-sim.ts';
 import { sceneBackground } from '../src/fx/background.ts';
 import { MUSIC_TRACKS, loopWindow, MP3_DELAY_SAMPLES } from '../src/fx/music-tracks.ts';
-import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent } from '../src/fx/puppet.ts';
+import { puppetPose, puppetBones, puppetEffects, emitterWorld, boneParent, CORPSE_ACTION, CORPSE_OPACITY } from '../src/fx/puppet.ts';
 import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
@@ -2358,6 +2358,15 @@ console.log('\n👹 Bestiario ilustrado');
   const rig = ENEMY_RIGS['goblin-cortador'];
   check(!!puppetPose(rig, 0, { type: 'death', p: 0.03 }).fx.flash, 'muerte: destello al recibir el golpe final');
   check(puppetPose(rig, 0, { type: 'death', p: 0.95 }).fx.opacity === 0, 'muerte: acaba desvanecido');
+  // a fallen hero in a two-player fight stays as a corpse: down, still (no breathing) and visible
+  {
+    const heroe = HERO_RIGS.mago;
+    const cuerpo = (t: number) => puppetPose(heroe, t, CORPSE_ACTION);
+    check(JSON.stringify(cuerpo(0.3).p) === JSON.stringify(cuerpo(1.7).p), 'cadáver: no respira, se queda quieto en el suelo');
+    check(cuerpo(0).p.torsoY === puppetPose(heroe, 0, { type: 'death', p: 0.99 }).p.torsoY || cuerpo(0).p.torso < heroe.rest!.torso!,
+      'cadáver: con la postura final de la caída');
+    check(CORPSE_OPACITY > 0.3 && CORPSE_OPACITY < 1, 'cadáver: se ve, apagado');
+  }
   // los arqueros disparan flechas; los hechiceros, bolas de energía
   const arquero = ENEMY_RIGS['goblin-arquero'];
   const a = puppetPose(arquero, 0, { type: 'attack', p: 0.6 });
