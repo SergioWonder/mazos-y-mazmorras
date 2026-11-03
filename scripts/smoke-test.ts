@@ -10290,6 +10290,33 @@ try {
     } catch { lanzo = true; }
     check(!lanzo, 'si fetch falla, ninguna llamada de la nube lanza');
   }
+  // Multiplayer lobby: a taken name surfaces as a typed result and the game list is mapped for the lobby
+  {
+    const { nube, llamadas } = montar((l) => sesionOk(l)
+      ?? (l.metodo === 'PATCH' && l.ruta === '/me' ? respuesta(409, { error: 'name_taken' }) : null)
+      ?? (l.metodo === 'POST' && l.ruta === '/multi/games' ? respuesta(404, { error: 'user_not_found' }) : null)
+      ?? (l.metodo === 'GET' && l.ruta === '/multi/games' ? respuesta(200, { games: [
+        { id: 'g1', status: 'invited', hueco: 'cruz', direction: 'received', other: { id: 'u2', displayName: 'Ana', bot: false }, hostClass: 'mago', guestClass: null, createdAt: 1, updatedAt: 2 },
+        { id: 'g2', status: 'active', hueco: 'cara', direction: null, other: { id: null, displayName: 'Bot', bot: true }, hostClass: 'picaro', guestClass: 'druida', createdAt: 1, updatedAt: 3 },
+      ] }) : null)
+      ?? respuesta(404));
+    await nube.canjearEnlace('tok');
+    check(await nube.cambiarNombre('Morghur') === 'ocupado', 'un nombre ya usado (409 name_taken) sale como «ocupado» y no cierra la sesión');
+    check(nube.haySesion(), 'el 409 del nombre no cierra la sesión');
+    const partidas = await nube.partidasMulti();
+    check(partidas?.length === 2 && partidas[0].direccion === 'recibida' && partidas[0].otro.nombre === 'Ana' && partidas[0].claseCruz === null,
+      'la lista de partidas multijugador traduce invitaciones recibidas con el nombre del otro');
+    check(partidas?.[1].otro.bot === true && partidas[1].claseCruz === 'druida' && partidas[1].hueco === 'cara', 'y las activas contra el bot con su hueco y clases');
+    const invitar = await nube.invitar('Nadie', 'mago');
+    check(invitar.estado === 'no-existe' && llamadas.some((l) => l.ruta === '/multi/games' && JSON.stringify(l.cuerpo) === '{"guest":"Nadie","heroClass":"mago"}'),
+      'invitar a un nombre que no existe sale como «no-existe»');
+  }
+  // Without a session the lobby calls answer «sin-sesion» without touching the network
+  {
+    const { nube, llamadas } = montar(() => respuesta(200, {}));
+    check(await nube.partidasMulti() === null && (await nube.invitar('bot', 'mago')).estado === 'sin-sesion' && llamadas.length === 0,
+      'sin sesión, el lobby no llama al servidor');
+  }
 } catch (e) {
   check(false, `el cliente de la nube: ${(e as Error).message}`);
 }

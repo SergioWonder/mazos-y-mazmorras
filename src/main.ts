@@ -30,6 +30,7 @@ import { iniciarTooltips, anuncio } from './ui/util.ts';
 import { crearMenuAjustes } from './ui/menu-ajustes.ts';
 import { activarSonidoInterfaz } from './ui/sonido-interfaz.ts';
 import { nube } from './core/nube.ts';
+import { iniciarAvisosMulti } from './ui/avisos-multi.ts';
 import {
   aterrizajeLogin, sincronizarAlTitulo, guardarYSubir, borrarGuardadoFinal, registrarFinDePartida, sincronizarFinalVerdadero,
 } from './ui/nube-juego.ts';
@@ -40,6 +41,8 @@ avisoInstalacion();
 iniciarActualizaciones();
 // `?login=<token>` from the magic-link email (the address bar is cleaned right away)
 void aterrizajeLogin();
+// Live multiplayer alerts (Buzón WebSocket) while there is a session
+iniciarAvisosMulti();
 
 // Settings menu (sound, volume, performance) at the top right of every screen
 crearMenuAjustes();
