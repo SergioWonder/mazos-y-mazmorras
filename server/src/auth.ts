@@ -22,12 +22,20 @@ export function authRoutes(deps: Deps) {
       .bind(email, now - LOGIN_TOKEN_TTL_MS).first<{ n: number }>();
     if ((recent?.n ?? 0) >= MAX_LINKS_PER_WINDOW) return c.json({ error: 'too_many_requests' }, 429);
     const token = randomToken();
+    const tokenHash = await sha256(token);
     await c.env.DB.prepare('INSERT INTO login_tokens (token_hash, email, expires_at, created_at) VALUES (?, ?, ?, ?)')
-      .bind(await sha256(token), email, now + LOGIN_TOKEN_TTL_MS, now)
+      .bind(tokenHash, email, now + LOGIN_TOKEN_TTL_MS, now)
       .run();
     const link = new URL(c.env.APP_URL);
     link.searchParams.set('login', token);
-    await deps.mailer.sendMagicLink({ to: email, link: link.toString() });
+    try {
+      await deps.mailer.sendMagicLink({ to: email, link: link.toString() });
+    } catch (err) {
+      // The link never left: drop it so the failed attempt does not count against the rate limit.
+      console.error('magic link email failed', err);
+      await c.env.DB.prepare('DELETE FROM login_tokens WHERE token_hash = ?').bind(tokenHash).run();
+      return c.json({ error: 'email_unavailable' }, 503);
+    }
     return c.body(null, 202);
   });
 

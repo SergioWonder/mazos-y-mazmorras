@@ -17,7 +17,8 @@
     "APP_URL": "https://sergiowonder.github.io/mazos-y-mazmorras/",
     // Comma-separated origins allowed by CORS.
     "ALLOWED_ORIGINS": "https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
-    "EMAIL_FROM": "Dracs & Rogues <no-reply@example.com>"
+    "EMAIL_FROM": "Dracs & Rogues <no-reply@morghur.es>"
   }
-  // Secrets (wrangler secret put): RESEND_API_KEY. Without it, magic links are only logged (local dev).
+  // Secrets (wrangler secret put): RESEND_API_KEY (Infisical SergioAlvarez/RESEND_API_TOKEN, send-only key).
+  // Without it, magic links are only logged (local dev).
 }
