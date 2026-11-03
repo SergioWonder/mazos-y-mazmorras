@@ -78,4 +78,18 @@ describe('acceso con enlace mágico', () => {
     expect((await call('/auth/logout', json({}, session))).status).toBe(204);
     expect((await call('/me', { headers: { authorization: `Bearer ${session}` } })).status).toBe(401);
   });
+
+  it('si el correo no se puede enviar responde 503 y el intento no gasta el cupo', async () => {
+    const email = uniqueEmail();
+    const failing = { async sendMagicLink() { throw new Error('Resend rejected the email: 403'); } };
+    const call = testApp(failing);
+
+    const res = await call('/auth/magic-link', json({ email }));
+    expect(res.status).toBe(503);
+    expect(await res.json()).toEqual({ error: 'email_unavailable' });
+
+    const { mailer, sent } = fakeMailer();
+    for (let i = 0; i < 3; i++) await testApp(mailer)('/auth/magic-link', json({ email }));
+    expect(sent).toHaveLength(3);
+  });
 });
