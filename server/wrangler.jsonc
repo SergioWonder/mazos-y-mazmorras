@@ -23,7 +23,7 @@
   "migrations": [{ "tag": "v1-multiplayer", "new_sqlite_classes": ["Buzon", "Sala"] }],
   "vars": {
     // Web Push: public VAPID key (see server/README.md). Empty = push disabled.
-    "VAPID_PUBLIC_KEY": "",
+    "VAPID_PUBLIC_KEY": "BNhssjlWczrFokveV8yJKoLFh7zvNDDa77a0w7cWTv3PXVt-DpqrszCM9pn4SjjIjgNWaMmleFRpYfkLo1SCCTw",
     "VAPID_SUBJECT": "mailto:no-reply@morghur.es",
     // Where the game lives: magic links point here.
     "APP_URL": "https://dracs-and-rogues.morghur.es/",
