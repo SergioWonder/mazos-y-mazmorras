@@ -1,0 +1,4 @@
+# Cloudflare static assets (GitHub Pages ignores this file).
+# Hashed bundles never change; everything else (index.html, sw.js, version.json) revalidates.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

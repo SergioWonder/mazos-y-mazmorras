@@ -16,7 +16,7 @@
     // Where the game lives: magic links point here.
     "APP_URL": "https://sergiowonder.github.io/mazos-y-mazmorras/",
     // Comma-separated origins allowed by CORS.
-    "ALLOWED_ORIGINS": "https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
+    "ALLOWED_ORIGINS": "https://dracs-and-rogues.morghur.es,https://dracs-and-rogues.sergiowonder.workers.dev,https://sergiowonder.github.io,http://localhost:5173,http://localhost:4173",
     "EMAIL_FROM": "Dracs & Rogues <no-reply@morghur.es>"
   }
   // Secrets (wrangler secret put): RESEND_API_KEY (Infisical SergioAlvarez/RESEND_API_TOKEN, send-only key).

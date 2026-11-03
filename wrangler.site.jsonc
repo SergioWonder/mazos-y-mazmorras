@@ -1,0 +1,11 @@
+// The game as static assets on Cloudflare Workers (free): dracs-and-rogues.morghur.es.
+// Build with BASE_PATH=/ first; GitHub Pages keeps serving the /mazos-y-mazmorras/ build.
+{
+  "$schema": "server/node_modules/wrangler/config-schema.json",
+  "name": "dracs-and-rogues",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./dist"
+  }
+}

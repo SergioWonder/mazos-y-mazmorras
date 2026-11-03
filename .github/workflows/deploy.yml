@@ -1,4 +1,4 @@
-name: Desplegar en GitHub Pages
+name: Desplegar el juego
 
 on:
   push:
@@ -25,6 +25,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          # Once set (repo variable), the github.io copy hands the player's data to this URL and redirects.
+          VITE_MIGRAR_A: ${{ vars.GAME_URL }}
       - name: Tests del motor
         run: node --experimental-strip-types scripts/smoke-test.ts
       - uses: actions/configure-pages@v5
@@ -43,3 +46,27 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # The same game served from / on Cloudflare (dracs-and-rogues.morghur.es).
+  cloudflare:
+    needs: build
+    if: vars.CLOUDFLARE_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            server/package-lock.json
+      - run: npm ci
+      - run: npm run build
+        env:
+          BASE_PATH: /
+      - run: npm ci --prefix server
+      - run: server/node_modules/.bin/wrangler deploy -c wrangler.site.jsonc

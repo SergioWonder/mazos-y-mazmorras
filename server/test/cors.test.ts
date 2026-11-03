@@ -15,6 +15,13 @@ describe('CORS', () => {
     expect(res.headers.get('access-control-allow-headers')?.toLowerCase()).toContain('authorization');
   });
 
+  it('permite también el juego en su dominio nuevo y en workers.dev', async () => {
+    for (const origin of ['https://dracs-and-rogues.morghur.es', 'https://dracs-and-rogues.sergiowonder.workers.dev']) {
+      const res = await testApp()('/me', preflight(origin));
+      expect(res.headers.get('access-control-allow-origin')).toBe(origin);
+    }
+  });
+
   it('no abre la API a otras webs', async () => {
     const res = await testApp()('/saves/run', preflight('https://web-maliciosa.example'));
 
