@@ -29,19 +29,23 @@ export interface TossTrack {
 
 export const COIN_RADIUS = 1;
 export const COIN_HALF_THICKNESS = 0.075;
-export const TOSS_MIN_S = 1.5;
-export const TOSS_MAX_S = 2.6;
+export const TOSS_MIN_S = 2.1;
+export const TOSS_MAX_S = 3.4;
 export const DEFAULT_TOSS_BOX: RollBox = { minX: -3.6, maxX: 3.6, minZ: -2.2, maxZ: 2.2 };
 
-const GRAVITY = 32;
+// lighter than the d20's 32: the coin needs a long, legible flight for its turns
+const GRAVITY = 14;
 const STEP = 1 / 300;
 const FRAME_EVERY = 5; // one stored frame every 5 steps → 60 fps
-const MAX_SIM_S = 3.4;
+const MAX_SIM_S = 4.2;
 /** Whole turns the coin makes in the air before it first touches the table. */
-export const AIR_TURNS_MIN = 3.2;
-export const AIR_TURNS_MAX = 4.2;
+export const AIR_TURNS_MIN = 7.4;
+export const AIR_TURNS_MAX = 8.4;
+/** Seconds in the air before the first bounce. */
+const AIR_TIME_MIN = 1.15;
+const AIR_TIME_MAX = 1.35;
 /** Highest the centre of the coin ever gets (the camera keeps it on screen). */
-export const TOSS_PEAK = 3.4;
+export const TOSS_PEAK = 5;
 const RIM_POINTS = 36;
 // principal moments of a uniform disc of mass 1: about its axis and about a diameter
 const I_AXIS = 0.5 * COIN_RADIUS * COIN_RADIUS;
@@ -120,10 +124,13 @@ function simulate(seed: number, box: RollBox): SimResult {
   // Throw: flicked in from one side like a thumb flip, nearly flat, spinning about a
   // horizontal diameter fast enough for 3–4 whole turns before it first lands
   const dir = rng() < 0.5 ? 1 : -1;
-  const x: Vec3 = [dir > 0 ? box.minX + 1.2 : box.maxX - 1.2, 1.8 + rng() * 0.5, midZ + (rng() - 0.5) * depth * 0.35];
-  const v: Vec3 = [dir * (0.75 + rng() * 0.3) * width, 5 + rng() * 1.2, (rng() - 0.5) * 2.5];
-  // time until the centre comes down to about half a radius over the table
-  const flight = (v[1] + Math.sqrt(v[1] * v[1] + 2 * GRAVITY * (x[1] - 0.55))) / GRAVITY;
+  const x: Vec3 = [dir > 0 ? box.minX + 1.3 : box.maxX - 1.3, 1.6 + rng() * 0.4, midZ + (rng() - 0.5) * depth * 0.3];
+  // launch speed chosen for the flight time: the centre comes down to about half a radius over the table
+  const flight = AIR_TIME_MIN + rng() * (AIR_TIME_MAX - AIR_TIME_MIN);
+  const drop = x[1] - 0.55;
+  const vy = (0.5 * GRAVITY * flight * flight - drop) / flight;
+  // it crosses about half the table in the air, so it never hits a wall before landing
+  const v: Vec3 = [dir * ((0.4 + rng() * 0.12) * (width - 2.6)) / flight, vy, (rng() - 0.5) * 1.2];
   const turns = AIR_TURNS_MIN + rng() * (AIR_TURNS_MAX - AIR_TURNS_MIN);
   const flip = (turns * Math.PI * 2) / flight;
   const heading = rng() * Math.PI * 2;
@@ -162,6 +169,7 @@ function simulate(seed: number, box: RollBox): SimResult {
   const effMass = (r: Vec3, d: Vec3) => 1 / (1 + dot(cross(invInertia(q, cross(r, d)), r), d));
 
   let calm = 0;
+  let firstTouch = -1;
   const maxSteps = Math.round(MAX_SIM_S / STEP);
   for (let step = 1; step <= maxSteps; step++) {
     const t = step * STEP;
@@ -223,7 +231,9 @@ function simulate(seed: number, box: RollBox): SimResult {
 
     // damping: tiny air drag; sliding and rolling on the table bleed energy, more so
     // as the toss gets old, so it always settles inside the time budget
-    const assist = t > 1.4 ? (t - 1.4) * 8 : 0;
+    if (onFloor && firstTouch < 0) firstTouch = t;
+    const settling = firstTouch < 0 ? 0 : t - firstTouch;
+    const assist = settling > 0.85 ? (settling - 0.85) * 8 : 0;
     const kw = onFloor ? 0.9 + assist : 0.03;
     const kv = onFloor ? 0.6 + assist * 0.6 : 0.02;
     const fw = Math.exp(-kw * STEP), fv = Math.exp(-kv * STEP);

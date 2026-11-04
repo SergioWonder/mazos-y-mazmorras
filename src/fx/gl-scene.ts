@@ -67,8 +67,12 @@ export function fitTableCamera(box: RollBox, aspect: number, fov: number, pitch:
   const target: Vec3 = [0, 0, 0.3];
   const pts: Vec3[] = [];
   for (const x of [box.minX - margin, box.maxX + margin]) for (const z of [box.minZ - margin, box.maxZ + margin]) pts.push([x, 0, z]);
-  // something flying up to `height` (plus its own size) must stay on screen too
-  if (height > 0) for (const x of [box.minX, box.maxX]) for (const z of [box.minZ, box.maxZ]) pts.push([x, height + 1, z]);
+  // something flying up to `height` (plus its own size) must stay on screen too; it peaks
+  // over the middle of the table, never over its corners
+  if (height > 0) {
+    const mx = (box.maxX - box.minX) * 0.3, mz = (box.maxZ - box.minZ) * 0.2, cx = (box.minX + box.maxX) / 2, cz = (box.minZ + box.maxZ) / 2;
+    for (const x of [cx - mx, cx + mx]) for (const z of [cz - mz, cz + mz]) pts.push([x, height + 1, z]);
+  }
   let eye: Vec3 = [0, 10, 6], view = lookAt(eye, target);
   for (let d = 5; d < 60; d += 0.25) {
     eye = [0, target[1] + d * Math.sin(pitch), target[2] + d * Math.cos(pitch)];
