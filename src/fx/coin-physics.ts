@@ -37,6 +37,11 @@ const GRAVITY = 32;
 const STEP = 1 / 300;
 const FRAME_EVERY = 5; // one stored frame every 5 steps → 60 fps
 const MAX_SIM_S = 3.4;
+/** Whole turns the coin makes in the air before it first touches the table. */
+export const AIR_TURNS_MIN = 3.2;
+export const AIR_TURNS_MAX = 4.2;
+/** Highest the centre of the coin ever gets (the camera keeps it on screen). */
+export const TOSS_PEAK = 3.4;
 const RIM_POINTS = 36;
 // principal moments of a uniform disc of mass 1: about its axis and about a diameter
 const I_AXIS = 0.5 * COIN_RADIUS * COIN_RADIUS;
@@ -112,16 +117,22 @@ function simulate(seed: number, box: RollBox): SimResult {
   const width = box.maxX - box.minX;
   const midZ = (box.minZ + box.maxZ) / 2, depth = box.maxZ - box.minZ;
 
-  // Throw: flicked in from one side, rising and flipping hard about a diameter
+  // Throw: flicked in from one side like a thumb flip, nearly flat, spinning about a
+  // horizontal diameter fast enough for 3–4 whole turns before it first lands
   const dir = rng() < 0.5 ? 1 : -1;
-  const x: Vec3 = [dir > 0 ? box.minX + 1.2 : box.maxX - 1.2, 2.2 + rng() * 1.2, midZ + (rng() - 0.5) * depth * 0.35];
-  const v: Vec3 = [dir * (0.75 + rng() * 0.4) * width, 3 + rng() * 3, (rng() - 0.5) * 2.5];
-  let q = qNormalize([rng() - 0.5, rng() - 0.5, rng() - 0.5, rng() - 0.5]);
-  // spin mostly about a diameter (the flip), with a little about the axis (it makes it wobble)
-  const a = rng() * Math.PI * 2;
-  const flip = 22 + rng() * 10, twirl = (rng() - 0.5) * 8;
-  const wBody: Vec3 = [Math.cos(a) * flip, twirl, Math.sin(a) * flip];
-  const w0 = rotateVec(q, wBody);
+  const x: Vec3 = [dir > 0 ? box.minX + 1.2 : box.maxX - 1.2, 1.8 + rng() * 0.5, midZ + (rng() - 0.5) * depth * 0.35];
+  const v: Vec3 = [dir * (0.75 + rng() * 0.3) * width, 5 + rng() * 1.2, (rng() - 0.5) * 2.5];
+  // time until the centre comes down to about half a radius over the table
+  const flight = (v[1] + Math.sqrt(v[1] * v[1] + 2 * GRAVITY * (x[1] - 0.55))) / GRAVITY;
+  const turns = AIR_TURNS_MIN + rng() * (AIR_TURNS_MAX - AIR_TURNS_MIN);
+  const flip = (turns * Math.PI * 2) / flight;
+  const heading = rng() * Math.PI * 2;
+  const tilt = (rng() - 0.5) * 0.3;
+  // nearly flat: a small tilt about the spin axis, then any turn about the vertical
+  let q = qNormalize(qMul([0, Math.sin(heading / 2), 0, Math.cos(heading / 2)], [Math.sin(tilt / 2), 0, 0, Math.cos(tilt / 2)]));
+  // spin about the body x axis (a diameter, horizontal at the start) plus a little twirl about the coin axis
+  const twirl = (rng() - 0.5) * 4;
+  const w0 = rotateVec(q, [flip, twirl, 0]);
   // angular momentum is what the impulses change; w follows from it and the orientation
   const L: Vec3 = inertia(q, w0);
   let w: Vec3 = w0;

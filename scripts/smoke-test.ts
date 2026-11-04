@@ -6007,9 +6007,22 @@ try {
   check(JSON.stringify(M.simulateToss({ heads: true, seed: 42 })) === JSON.stringify(c), 'el lanzamiento es determinista con la misma semilla');
   check(JSON.stringify(M.simulateToss({ heads: true, seed: 43 }).frames) !== JSON.stringify(c.frames), 'otra semilla, otro lanzamiento');
   check(M.isCoinSymmetry(c.compensation) && M.isCoinSymmetry(x.compensation), 'la compensación es una simetría del disco (la forma física no cambia)');
-  // a real toss: it flips over several times in the air
-  const vueltas = c.frames.reduce((n, f, i) => (i > 0 && Math.sign(M.rotateVec(f.q, [0, 1, 0])[1]) !== Math.sign(M.rotateVec(c.frames[i - 1].q, [0, 1, 0])[1]) ? n + 1 : n), 0);
-  check(vueltas >= 4, `la moneda da vueltas en el aire (${vueltas} medias vueltas)`);
+  // a real toss: 3 or 4 whole turns in the air before it first touches the table
+  const vueltasEnElAire: number[] = [];
+  for (let s = 0; s < 24; s++) {
+    const p = M.simulateToss({ heads: s % 2 === 0, seed: 900 + s * 31 });
+    const primerGolpe = p.impacts[0]?.t ?? p.duration;
+    let medias = 0;
+    const aire = p.frames.filter((f) => f.t <= primerGolpe);
+    for (let i = 1; i < aire.length; i++) {
+      if (Math.sign(M.rotateVec(aire[i].q, [0, 1, 0])[1]) !== Math.sign(M.rotateVec(aire[i - 1].q, [0, 1, 0])[1])) medias++;
+    }
+    vueltasEnElAire.push(medias / 2);
+  }
+  const cumbre = Math.max(...Array.from({ length: 24 }, (_, s) => Math.max(...M.simulateToss({ heads: true, seed: 900 + s * 31 }).frames.map((f) => f.x[1]))));
+  check(cumbre <= M.TOSS_PEAK, `la moneda no sube más de lo que la cámara encuadra (${cumbre.toFixed(2)} ≤ ${M.TOSS_PEAK})`);
+  check(vueltasEnElAire.every((v) => v >= 3 && v <= 4.5),
+    `la moneda da 3 o 4 vueltas en el aire antes de caer (${vueltasEnElAire.join(', ')})`);
 } catch (e) {
   check(false, `las pruebas de la moneda revientan: ${(e as Error).stack ?? e}`);
 }
