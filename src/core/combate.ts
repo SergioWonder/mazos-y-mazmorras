@@ -2256,7 +2256,9 @@ export class Combate {
     if (e.intencion.mataAlInstante) {
       e.saltaAccion = false;
       await this.ui.fxEnemigoActua(e);
-      for (const [i, h] of heroes.entries()) await h.rayoDelDM(e, i === 0);
+      // one hero per ray: with two heroes the shared dice pick whom it strikes (alone, no roll is spent)
+      const victima = heroes.length > 1 ? heroes[Math.floor(this.rng() * heroes.length)] : heroes[0];
+      if (victima) await victima.rayoDelDM(e);
       return;
     }
     // Seducción/Deseo: el enemigo se salta esta acción

@@ -3,9 +3,9 @@ name: Backend (Cloudflare Worker)
 on:
   push:
     branches: [main]
-    paths: ['server/**', '.github/workflows/server.yml']
+    paths: ['server/**', 'src/core/**', '.github/workflows/server.yml'] # the rooms run the game engine (src/core)
   pull_request:
-    paths: ['server/**', '.github/workflows/server.yml']
+    paths: ['server/**', 'src/core/**', '.github/workflows/server.yml'] # the rooms run the game engine (src/core)
   workflow_dispatch:
 
 jobs:
