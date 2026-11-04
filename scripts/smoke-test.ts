@@ -6007,7 +6007,7 @@ try {
   check(JSON.stringify(M.simulateToss({ heads: true, seed: 42 })) === JSON.stringify(c), 'el lanzamiento es determinista con la misma semilla');
   check(JSON.stringify(M.simulateToss({ heads: true, seed: 43 }).frames) !== JSON.stringify(c.frames), 'otra semilla, otro lanzamiento');
   check(M.isCoinSymmetry(c.compensation) && M.isCoinSymmetry(x.compensation), 'la compensación es una simetría del disco (la forma física no cambia)');
-  // a real toss: 3 or 4 whole turns in the air before it first touches the table
+  // a real toss: 7 or 8 whole turns in the air, slow enough to follow, before it first touches the table
   const vueltasEnElAire: number[] = [];
   for (let s = 0; s < 24; s++) {
     const p = M.simulateToss({ heads: s % 2 === 0, seed: 900 + s * 31 });
@@ -6021,8 +6021,15 @@ try {
   }
   const cumbre = Math.max(...Array.from({ length: 24 }, (_, s) => Math.max(...M.simulateToss({ heads: true, seed: 900 + s * 31 }).frames.map((f) => f.x[1]))));
   check(cumbre <= M.TOSS_PEAK, `la moneda no sube más de lo que la cámara encuadra (${cumbre.toFixed(2)} ≤ ${M.TOSS_PEAK})`);
-  check(vueltasEnElAire.every((v) => v >= 3 && v <= 4.5),
-    `la moneda da 3 o 4 vueltas en el aire antes de caer (${vueltasEnElAire.join(', ')})`);
+  // the camera frames the peak over the middle of the table: high up, the coin is never near the sides
+  const caja = M.DEFAULT_TOSS_BOX;
+  const alLado = Array.from({ length: 24 }, (_, s) => M.simulateToss({ heads: true, seed: 900 + s * 31 })).every((p) =>
+    p.frames.every((f) => f.x[1] < 2.5 || Math.abs(f.x[0]) <= (caja.maxX - caja.minX) * 0.3 + 0.6));
+  check(alLado, 'en lo más alto la moneda va por el centro de la mesa, donde la cámara la encuadra');
+  check(vueltasEnElAire.every((v) => v >= 7 && v <= 8.5),
+    `la moneda da 7 u 8 vueltas en el aire antes de caer (${vueltasEnElAire.join(', ')})`);
+  const vuelos = Array.from({ length: 24 }, (_, s) => M.simulateToss({ heads: true, seed: 900 + s * 31 }).impacts[0]?.t ?? 0);
+  check(vuelos.every((t) => t >= 1.05), `vuela al menos 1 s para que las vueltas se vean (mínimo ${Math.min(...vuelos).toFixed(2)} s)`);
 } catch (e) {
   check(false, `las pruebas de la moneda revientan: ${(e as Error).stack ?? e}`);
 }
