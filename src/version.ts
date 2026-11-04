@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.3.0';
+export const VERSION = '10.4.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.4.0',
+    fecha: '2026-11-04',
+    cambios: [
+      '🍺 En multijugador la taberna se decide entre los dos: los mismos rumores para ambos, la moneda si no coincidís y la misma misión para los dos. Si elegís olvidar, cada uno escoge su carta.',
+      '🔧 Arreglado: la partida a dos podía quedarse esperando al compañero para siempre (por ejemplo al llegar al Acto II) hasta salir y volver a entrar.',
+    ],
+  },
   {
     version: '10.3.0',
     fecha: '2026-11-04',

@@ -18,7 +18,7 @@ export type Paso =
   | { k: 'carta'; peso: number }          // card reward (weight of a rare one)
   | { k: 'descanso' }
   | { k: 'evento' }
-  | { k: 'taberna' }
+  | { k: 'olvido'; olvido: OlvidoTaberna } // the tavern chose to forget: this hero picks a card of his own deck
   | { k: 'bendicionEntreActos' }
   | { k: 'mision' }                       // the tavern quest of the room is paid (no question)
   | { k: 'cartaExtra' };                  // a relic adds a card reward to this kind of room (no question)
@@ -53,7 +53,15 @@ export interface OfertaReliquias {
   sinOpciones: Partial<Record<Hueco, true>>;
 }
 
-export type EtapaSala = 'combate' | 'reliquia' | 'heroes' | 'dm';
+export type EtapaSala = 'combate' | 'reliquia' | 'taberna' | 'heroes' | 'dm';
+
+/** The tavern is decided together: the same rumours (and forgetting) for both, a vote each, the coin if they differ.
+ *  A rumour marks the same quest for both heroes; forgetting lets each one take a card off his own deck. */
+export interface TabernaComun {
+  rumores: RumorTaberna[];
+  olvido: OlvidoTaberna;
+  votos: Partial<Record<Hueco, string>>;
+}
 
 export interface Sala {
   nodo: NodoMapa;
@@ -63,6 +71,7 @@ export interface Sala {
   /** The boss of the last act: after it comes the Dungeon Master. */
   ultimoJefe: boolean;
   reliquias: OfertaReliquias | null;
+  taberna: TabernaComun | null;
   /** What each hero does once the shared steps (fight, relics) are over. */
   pasosTras: Paso[];
   heroes: Record<Hueco, HeroeEnSala>;

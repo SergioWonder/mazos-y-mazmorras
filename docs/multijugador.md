@@ -83,7 +83,14 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
   válida, vendas (+10 PV).
 - **Eventos**: cada uno elige su opción y le afecta solo a él. Si un evento cambia algo compartido (el mapa, la sala
   siguiente), moneda para decidir qué elección vale (D5).
-- **Descanso, tienda, taberna, bendiciones**: cada uno decide lo suyo.
+- **Descanso, tienda, bendiciones**: cada uno decide lo suyo.
+- **Taberna (en común)**: los dos ven los mismos rumores (y la opción de olvidar una carta); cada uno vota y, si no
+  coinciden, decide la moneda (cara = quien invita). Un rumor marca **la misma misión para los dos**; olvidar hace
+  que cada uno escoja después una carta de su propio mazo (quien no tiene ninguna, no hace nada).
+- **Sin estado global compartido con el resto del juego**: los ids de carta salen de un contador del módulo que la
+  partida a dos toma prestado mientras aplica cada entrada (y la animación puede durar segundos). Nada fuera de la
+  partida debe crear cartas mientras tanto: la sincronización con la nube del título comprueba el guardado en
+  solitario sin reconstruirlo (`esCargable`). El cliente nunca deja de pedir `resync` si el hash no cuadra.
 - La sala termina cuando los dos han cerrado lo suyo; entonces se guarda y se pasa al mapa.
 
 ### Decisiones aplicadas (revertibles)

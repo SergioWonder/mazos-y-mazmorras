@@ -15,8 +15,13 @@ const LUGAR_MISION: Record<string, string> = {
 type Rumor = ReturnType<typeof rumoresTaberna>[number];
 type Olvido = ReturnType<typeof olvidoTaberna>;
 
-/** What the player decided in the tavern. */
-export type DecisionTaberna = { accion: 'rumor'; rumor: Rumor } | { accion: 'olvido'; carta: CartaInstancia };
+/** What the player decided in the tavern (`olvidar`: a vote for forgetting, two-player tavern). */
+export type DecisionTaberna =
+  | { accion: 'rumor'; rumor: Rumor } | { accion: 'olvido'; carta: CartaInstancia } | { accion: 'olvidar' };
+
+/** Two-player tavern: `voto` resolves the main choice as a vote (forgetting without picking a card, which comes
+ *  later); `soloOlvido` opens straight on the card to forget, with no way back. */
+export interface ModoTaberna { voto?: { olvidoActivo: boolean; nota: string }; soloOlvido?: boolean }
 
 /** Tavern screen: pick one of two rumours (it marks a quest on the map) or
  *  let someone in the tavern take a card off your deck. */
@@ -27,7 +32,7 @@ export async function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: ()
   if (d.accion === 'rumor') {
     aceptarRumor(run, d.rumor);
     anuncio('📜 Misión marcada en el mapa', 'anuncio-botin');
-  } else {
+  } else if (d.accion === 'olvido') {
     const nombre = defDe(d.carta).nombre;
     if (eliminarCarta(run, d.carta)) anuncio(olvido.anuncio.replace('{carta}', nombre), 'anuncio-botin');
   }
@@ -35,7 +40,7 @@ export async function pantallaTaberna(run: EstadoRun, taberna: NodoMapa, rng: ()
 
 /** The tavern screens (rumours or the forgetting, then the card): resolves with the decision and changes
  *  nothing, the caller applies it (solo here, the room engine in multiplayer). */
-export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): Promise<DecisionTaberna> {
+export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido, modo: ModoTaberna = {}): Promise<DecisionTaberna> {
   return new Promise((resolver) => {
     const overlay = document.getElementById('overlay')!;
 
@@ -86,6 +91,7 @@ export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): 
         <div class="evento-opciones"></div>
       `;
       overlay.appendChild(panel);
+      if (modo.voto) panel.querySelector('.evento-texto')!.insertAdjacentHTML('afterend', `<p class="taberna-voto">${modo.voto.nota}</p>`);
 
       const cont = panel.querySelector('.evento-opciones') as HTMLElement;
       const opciones: Array<{ etiqueta: string; detalle: string; accion: () => void; activa?: boolean }> = rumores.map((r) => ({
@@ -97,8 +103,9 @@ export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): 
       opciones.push({
         etiqueta: olvido.etiqueta,
         detalle: olvido.detalle,
-        activa: eliminables.length > 0,
-        accion: () => vistaOlvido(),
+        activa: modo.voto ? modo.voto.olvidoActivo : eliminables.length > 0,
+        // voting: forgetting is the choice; the card comes after, once the tavern is decided
+        accion: () => (modo.voto ? cerrar({ accion: 'olvidar' }) : vistaOlvido()),
       });
 
       const botones = opciones.map((op, i) => {
@@ -128,7 +135,7 @@ export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): 
         <h2>${olvido.etiqueta}</h2>
         <p>${olvido.titulo}</p>
         <div class="mejora-rejilla"></div>
-        <button class="btn-saltar">Volver <span class="atajo">[Esc]</span></button>
+        ${modo.soloOlvido ? '' : '<button class="btn-saltar">Volver <span class="atajo">[Esc]</span></button>'}
       `;
       overlay.appendChild(panel);
 
@@ -145,8 +152,8 @@ export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): 
         soltar();
         vistaPrincipal();
       };
-      const soltar = navegar(cartas, (i) => quitar(i), 'seleccionada', salir);
-      panel.querySelector('.btn-saltar')!.addEventListener('click', salir);
+      const soltar = navegar(cartas, (i) => quitar(i), 'seleccionada', modo.soloOlvido ? undefined : salir);
+      panel.querySelector('.btn-saltar')?.addEventListener('click', salir);
 
       function quitar(i: number) {
         soltar();
@@ -154,7 +161,8 @@ export function panelTaberna(run: EstadoRun, rumores: Rumor[], olvido: Olvido): 
       }
     }
 
-    vistaPrincipal();
+    if (modo.soloOlvido) vistaOlvido();
+    else vistaPrincipal();
   });
 }
 

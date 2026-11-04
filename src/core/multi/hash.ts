@@ -51,6 +51,9 @@ export function resumenPartida(p: PartidaMulti): string {
   } else {
     const s = f.sala;
     out.push(`sala n${s.nodo.id} ${s.nodo.tipo} etapa:${s.etapa} sig${s.siguiente ?? '-'} ev${s.evento?.id ?? '-'}`);
+    if (s.taberna) {
+      out.push(`tab [${s.taberna.rumores.map((r) => r.nodo).join(',')}] ${s.taberna.olvido.etiqueta} ${HUECOS.map((h) => s.taberna!.votos[h] ?? '-').join(',')}`);
+    }
     if (s.reliquias) {
       out.push(`rel ${s.reliquias.origen} ${HUECOS.map((h) => `${h}[${s.reliquias!.ofertas[h].map((r) => r.id).join(',')}]`).join(' ')} ${HUECOS.map((h) => s.reliquias!.elecciones[h] ?? (s.reliquias!.sinOpciones[h] ? '/' : '-')).join(',')}`);
     }

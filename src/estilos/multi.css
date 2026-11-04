@@ -144,3 +144,6 @@
   color: var(--pergamino); background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(217, 169, 63, 0.55);
 }
 .multi-amigo:hover:not(:disabled), .multi-amigo:focus-visible { background: rgba(217, 169, 63, 0.2); }
+
+/* two-player tavern: how the choice is made together */
+.taberna-voto { margin: 0.2rem 0 0.6rem; font-size: 0.85rem; font-style: italic; color: var(--brasa-viva, #f0b84a); text-align: center; }

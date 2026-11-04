@@ -1,7 +1,7 @@
 import type { Presentador } from '../combate.ts';
 import { crearRngConEstado } from '../rng.ts';
 import type { CartaInstancia } from '../types.ts';
-import { HUECOS, type Hueco } from './tipos.ts';
+import { HUECOS, type Hueco, type ResultadoMoneda } from './tipos.ts';
 import type { PartidaMulti } from './estado.ts';
 
 // Plumbing shared by the state machine: checkpoints, the coin, narration hooks and the
@@ -46,7 +46,7 @@ export function fijarRng(p: PartidaMulti) {
   p.estadoRng = r.estado;
 }
 
-export async function tirarMoneda(p: PartidaMulti, motivo: 'mapa' | 'reliquia'): Promise<Hueco> {
+export async function tirarMoneda(p: PartidaMulti, motivo: ResultadoMoneda['motivo']): Promise<Hueco> {
   const ganador = moneda(p.rng);
   await p.pres?.moneda?.({ motivo, ganador });
   return ganador;

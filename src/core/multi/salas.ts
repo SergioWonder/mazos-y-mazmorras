@@ -24,7 +24,8 @@ import { nodosDisponibles } from '../mapa.ts';
 
 // The rooms of the map for two heroes. Per-player rules of the design:
 // card rewards each on their own; relics: two offered, each picks one, a coin if it is the same;
-// events, campfires and taverns per player; the room ends when both have closed theirs.
+// events and campfires per player; the tavern together (a vote, the coin if they differ, the same quest for both);
+// the room ends when both have closed theirs.
 
 const heroeVacio = (): HeroeEnSala => ({ cola: [], abierta: null, listo: false });
 
@@ -50,7 +51,7 @@ export async function entrarEnSala(p: PartidaMulti, nodoId: number) {
     for (const nota of entrarEnSalaReliquias(run, nodo.tipo, p.rng)) await aviso(p, h, nota);
   }
   const sala: Sala = {
-    nodo, etapa: 'heroes', combate: null, ultimoJefe: false, reliquias: null, pasosTras: [],
+    nodo, etapa: 'heroes', combate: null, ultimoJefe: false, reliquias: null, taberna: null, pasosTras: [],
     heroes: { cara: heroeVacio(), cruz: heroeVacio() }, evento: null, siguiente: null,
   };
   p.fase = { tipo: 'sala', sala };
@@ -90,8 +91,7 @@ export async function entrarEnSala(p: PartidaMulti, nodoId: number) {
       await avanzarTodos(p, sala);
       break;
     case 'taberna':
-      armarColas(sala, [{ k: 'taberna' }, ...COLA_FINAL]);
-      await avanzarTodos(p, sala);
+      await abrirTaberna(p, sala);
       break;
   }
 }
@@ -247,6 +247,50 @@ async function comprobarReliquias(p: PartidaMulti, sala: Sala) {
   await avanzarTodos(p, sala);
 }
 
+// ── The tavern: decided together ───────────────────────────────────────────
+
+/** What both heroes vote on in the tavern: its rumours (`rumor:<node>`) and, if anyone has a card to lose, forgetting. */
+export function opcionesTaberna(p: PartidaMulti, sala: Sala): string[] {
+  const t = sala.taberna!;
+  const olvidar = HUECOS.some((h) => cartasEliminables(p.runs[h]).length > 0);
+  return [...t.rumores.map((r) => `rumor:${r.nodo}`), ...(olvidar ? ['olvido'] : [])];
+}
+
+async function abrirTaberna(p: PartidaMulti, sala: Sala) {
+  // the map is shared, so the rumours are drawn once for both
+  sala.taberna = { rumores: rumoresTaberna(p.runs.cara, sala.nodo, p.rng), olvido: olvidoTaberna(p.rng), votos: {} };
+  if (opcionesTaberna(p, sala).length === 0) {
+    sala.taberna = null;
+    armarColas(sala, [...COLA_FINAL]);
+    await avanzarTodos(p, sala);
+    return;
+  }
+  sala.etapa = 'taberna';
+}
+
+async function votarTaberna(p: PartidaMulti, sala: Sala, h: Hueco, valor: string) {
+  const t = sala.taberna!;
+  t.votos[h] = valor;
+  const { cara, cruz } = t.votos;
+  if (cara === undefined || cruz === undefined) {
+    p.pres?.esperandoAlCompanero?.(h);
+    return;
+  }
+  const elegido = cara === cruz ? cara : (await tirarMoneda(p, 'taberna')) === 'cara' ? cara : cruz;
+  sala.taberna = null;
+  if (elegido.startsWith('rumor:')) {
+    const rumor = t.rumores.find((r) => `rumor:${r.nodo}` === elegido)!;
+    for (const x of HUECOS) {
+      aceptarRumor(p.runs[x], rumor); // the same quest for both
+      await aviso(p, x, '📜 Misión marcada en el mapa');
+    }
+    armarColas(sala, [...COLA_FINAL]);
+  } else {
+    armarColas(sala, [{ k: 'olvido', olvido: t.olvido }, ...COLA_FINAL]);
+  }
+  await avanzarTodos(p, sala);
+}
+
 // ── What each hero does on his own ──────────────────────────────────────────
 
 /** Runs the hero's steps until one needs his answer (or he has none left). */
@@ -284,14 +328,11 @@ async function avanzar(p: PartidaMulti, sala: Sala, h: Hueco) {
       case 'evento':
         he.abierta = abierta('evento', 'evento', sala.evento!.opciones.map((_, i) => i), { k: 'evento' });
         break;
-      case 'taberna': {
-        const rumores = rumoresTaberna(run, sala.nodo, p.rng);
-        const olvido = olvidoTaberna(p.rng);
-        const opciones = [
-          ...rumores.map((r) => `rumor:${r.nodo}`),
-          ...cartasEliminables(run).map((c) => `olvido:${c.uid}`),
-        ];
-        he.abierta = abierta('taberna', 'taberna', opciones, { k: 'taberna', rumores, olvido });
+      case 'olvido': {
+        // the tavern chose to forget: each hero picks a card of his own deck (nothing to pick, nothing to do)
+        const cartas = cartasEliminables(run);
+        if (cartas.length === 0) break;
+        he.abierta = abierta('taberna', 'taberna', cartas.map((c) => `olvido:${c.uid}`), { k: 'taberna', rumores: [], olvido: paso.olvido });
         break;
       }
       case 'bendicionEntreActos': {
@@ -403,6 +444,7 @@ export async function aplicarEnSala(p: PartidaMulti, sala: Sala, h: Hueco, e: En
     return;
   }
   if (e.tipo !== 'eleccion') return;
+  if (sala.etapa === 'taberna') return votarTaberna(p, sala, h, String(e.valor));
   if (sala.etapa === 'reliquia') {
     sala.reliquias!.elecciones[h] = String(e.valor);
     if (!sala.reliquias!.sinOpciones[otroHueco(h)] && sala.reliquias!.elecciones[otroHueco(h)] === undefined) {
