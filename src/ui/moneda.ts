@@ -13,6 +13,7 @@ import { el, espera } from './util.ts';
 const MOTIVO: Record<ResultadoMoneda['motivo'], string> = {
   mapa: 'Distinto camino: lo decide la moneda',
   reliquia: 'La misma reliquia: lo decide la moneda',
+  taberna: 'Distinta elección en la taberna: lo decide la moneda',
 };
 const LANZAMIENTO_MS = 2200;
 

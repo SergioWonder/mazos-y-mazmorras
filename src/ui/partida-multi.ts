@@ -225,9 +225,12 @@ export function jugarPartidaMulti(partida: PartidaLobby): Promise<void> {
 
     function pedirResync(motivo: string) {
       console.warn('out of sync, asking the room for the state:', motivo);
-      if (resyncs++ >= 3) { sinNube = true; pintarBanner(); return; }
+      // never give up (that left the game waiting forever until the player left and came back): after a few
+      // in a row, ask a little more slowly so a persistent mismatch does not flood the room
+      const pausa = Math.min(5000, 400 * Math.max(0, resyncs++ - 2));
       esperandoResync = true;
-      enviar({ t: 'resync' });
+      if (pausa === 0) return enviar({ t: 'resync' });
+      window.setTimeout(() => { if (!cerrado && esperandoResync) enviar({ t: 'resync' }); }, pausa);
     }
 
     /** (Re)builds the engine from the save (or the seed) and replays the log silently. */
@@ -363,10 +366,20 @@ export function jugarPartidaMulti(partida: PartidaLobby): Promise<void> {
         case 'evento':
           if (sala?.evento) void panelEvento(sala.evento).then((i) => elegir(i));
           return;
+        case 'tabernaComun': {
+          // decided together: a vote, the coin if you differ; a rumour is the same quest for both
+          const t = sala?.taberna;
+          if (!t) return;
+          void panelTaberna(run, t.rumores, t.olvido, {
+            voto: { olvidoActivo: q.opciones.includes('olvido'), nota: `Elegís juntos con ${companero()}: si no coincidís, decide la moneda. La misión es para los dos.` },
+          }).then((d) => elegir(d.accion === 'rumor' ? `rumor:${d.rumor.nodo}` : 'olvido'));
+          return;
+        }
         case 'taberna':
+          // the tavern chose to forget: the card comes off my own deck
           if (datos?.k !== 'taberna') return;
-          void panelTaberna(run, datos.rumores, datos.olvido)
-            .then((d) => elegir(d.accion === 'rumor' ? `rumor:${d.rumor.nodo}` : `olvido:${d.carta.uid}`));
+          void panelTaberna(run, [], datos.olvido, { soloOlvido: true })
+            .then((d) => { if (d.accion === 'olvido') elegir(`olvido:${d.carta.uid}`); });
           return;
       }
     }

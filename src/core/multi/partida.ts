@@ -11,7 +11,7 @@ import {
 import type { Curso, Fase, PartidaMulti } from './estado.ts';
 import { hashPartida as hashDe } from './hash.ts';
 import {
-  aplicarBendicionInicial, aplicarEnSala, nodosDelMapa, reliquiasValidas, votarMapa,
+  aplicarBendicionInicial, aplicarEnSala, nodosDelMapa, opcionesTaberna, reliquiasValidas, votarMapa,
 } from './salas.ts';
 import {
   HUECOS, type Entrada, type EntradaSellada, type GuardadoMulti, type Hueco, type Pregunta, type PresentadoresMulti,
@@ -125,6 +125,10 @@ export function pendiente(p: PartidaMulti, h: Hueco): Pregunta | null {
           .filter((c) => duo.puedeJugar(h, c))
           .map((c) => ({ carta: String(c.uid), objetivos: defDe(c).objetivo === 'enemigo' ? vivos : null }));
         return { tipo: 'combate', jugables, puedeFinTurno: true };
+      }
+      if (s.etapa === 'taberna') {
+        if (s.taberna!.votos[h] !== undefined) return null;
+        return { tipo: 'eleccion', clave: 'taberna-comun', contexto: 'tabernaComun', opciones: opcionesTaberna(p, s) };
       }
       if (s.etapa === 'reliquia') {
         const of = s.reliquias!;

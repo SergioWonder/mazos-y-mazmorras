@@ -46,7 +46,7 @@ export type Pregunta =
 
 /** Outcome of a coin toss, for the screens to animate it. */
 export interface ResultadoMoneda {
-  motivo: 'mapa' | 'reliquia';
+  motivo: 'mapa' | 'reliquia' | 'taberna';
   ganador: Hueco;
 }
 

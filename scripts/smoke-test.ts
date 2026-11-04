@@ -8,11 +8,11 @@ import {
   ACTOS, GOBLIN_CORTADOR, GOBLIN_ARQUERO, GOBLIN_FAMELICO, JEFE_OGRO, SENOR_CRIPTA, IGNIFAX,
   HERALDO_CULTO, CONTEMPLADOR, EMBAUCADOR_ARCANO,
 } from '../src/core/enemigos.ts';
-import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
+import { serializarRun, rehidratarRun, esCargable } from '../src/core/guardado.ts';
 import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA, esAlcanzable } from '../src/core/mapa.ts';
 import { ajusteEncuentro, PRIMEROS_FACILES, type ContextoEncuentro } from '../src/core/dificultad.ts';
 import {
-  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
+  recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe, contadorUid,
   poolDeClase, cartaUnicaDeClase, CONJURO_PRODIGIOSO, DAGA, MALDICIONES, GOLPE_SAGRADO, DEFENSA_SAGRADA,
 } from '../src/core/cartas.ts';
 import { piramideConjuros } from '../src/core/conjuros.ts';
@@ -33,7 +33,7 @@ import { WING_BONES, wingSpan } from '../src/fx/wing.ts';
 import { HERO_RIGS, FORM_RIGS, formFromLabel, currentForm, heroPose, heroBones, heroEffects, activeAction, ACTION_DURATION } from '../src/fx/hero-rig.ts';
 import type { CartaDef, CartaInstancia, ClaseId, EnemigoCombate, EnemigoDef, Movimiento } from '../src/core/types.ts';
 import { CombateDuo } from '../src/core/multi/combate-duo.ts';
-import { ofertasPorHeroe } from '../src/core/multi/salas.ts';
+import { ofertasPorHeroe, entrarEnSala } from '../src/core/multi/salas.ts';
 import {
   crearPartidaMulti, serializarPartidaMulti, rehidratarPartidaMulti, esPuntoDeGuardado, pendiente, esValida, aplicar,
   hashPartida, decisionBot, HUECOS, type PartidaMulti, type EntradaSellada, type Hueco,
@@ -10547,6 +10547,57 @@ try {
     check(pvEnemigo - e.pv === 3 && duo.combates.cara.jugador.pv === pvCara && pvCruz - duo.combates.cruz.jugador.pv === 7,
       `con raíces por encima del ataque el enemigo se hiere (−${pvEnemigo - e.pv}), cara no recibe nada y cruz recibe el golpe entero`);
     check(registro.join() === 'enemigo−3,cruz−7', `primero se hiere el enemigo y luego golpea al otro héroe (${registro.join()})`);
+  }
+
+  // Checking a solo save (cloud sync) while a two-player entry animates must not touch the card ids
+  {
+    const g = serializarRun(nuevaRun('druida', 3));
+    const antes = contadorUid();
+    const ok = esCargable(g);
+    check(ok && contadorUid() === antes, `comprobar si un guardado se puede cargar no gasta ids de carta (${antes} → ${contadorUid()})`);
+    check(!esCargable({ ...g, mazo: [{ id: 'carta-que-no-existe', mejorada: false }] }) && !esCargable({ ...g, v: 2 } as never),
+      'un guardado con cartas desconocidas o de otra versión no se puede cargar');
+  }
+
+  // The tavern is shared: the same rumours for both, a coin if they disagree, the same quest for both
+  {
+    const enTaberna = async (semilla: number) => {
+      const p = crearPartidaMulti({ semilla, clases: { cara: 'druida', cruz: 'barbaro' } });
+      const rb = crearRng(semilla);
+      let seq = 0;
+      while (p.fase.tipo !== 'mapa') for (const h of HUECOS) { const e = decisionBot(p, h, rb); if (e) await aplicar(p, { ...e, seq: seq++, de: h } as EntradaSellada); }
+      const taberna = p.runs.cara.mapa.find((n) => n.tipo === 'taberna' && !n.visitado)!;
+      await entrarEnSala(p, taberna.id);
+      let monedas = 0;
+      const ui = { moneda: async () => { monedas++; } };
+      const votar = async (h: Hueco, valor: string | number) => {
+        await aplicar(p, { tipo: 'eleccion', clave: (pendiente(p, h) as { clave: string }).clave, valor, seq: seq++, de: h } as EntradaSellada, ui);
+      };
+      return { p, votar, monedas: () => monedas };
+    };
+    const a = await enTaberna(41);
+    const [qa, qb] = [pendiente(a.p, 'cara'), pendiente(a.p, 'cruz')];
+    const rumores = qa?.tipo === 'eleccion' ? qa.opciones.filter((o) => String(o).startsWith('rumor:')) : [];
+    check(qa?.tipo === 'eleccion' && JSON.stringify(qa) === JSON.stringify(qb) && rumores.length === 2 && qa.opciones.includes('olvido'),
+      `en la taberna los dos ven las mismas opciones (${qa?.tipo === 'eleccion' ? qa.opciones.join(', ') : '-'})`);
+    await a.votar('cara', rumores[0]!);
+    await a.votar('cruz', rumores[1]!);
+    const misiones = HUECOS.map((h) => a.p.runs[h].mision?.nodo);
+    check(a.monedas() === 1 && misiones[0] !== undefined && misiones[0] === misiones[1] && rumores.includes(`rumor:${misiones[0]}`),
+      `si eligen rumores distintos decide la moneda y los dos reciben la misma misión (${misiones.join(' / ')})`);
+
+    const b = await enTaberna(41);
+    await b.votar('cara', 'olvido');
+    await b.votar('cruz', 'olvido');
+    const [oa, ob] = [pendiente(b.p, 'cara'), pendiente(b.p, 'cruz')];
+    const deCara = oa?.tipo === 'eleccion' ? oa.opciones : [];
+    const deCruz = ob?.tipo === 'eleccion' ? ob.opciones : [];
+    check(b.monedas() === 0 && deCara.length > 0 && deCara.every((o) => String(o).startsWith('olvido:')) && deCara.join() !== deCruz.join(),
+      'si los dos eligen olvidar, cada uno escoge después una carta de su propio mazo');
+    const antes = [b.p.runs.cara.mazo.length, b.p.runs.cruz.mazo.length];
+    await b.votar('cara', deCara[0]!);
+    check(b.p.runs.cara.mazo.length === antes[0] - 1 && b.p.runs.cruz.mazo.length === antes[1] && !b.p.runs.cara.mision,
+      'olvidar quita la carta solo a quien la escoge y no da misión');
   }
 
   // The Dungeon Master's ray takes one hero at a time

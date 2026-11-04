@@ -128,7 +128,15 @@ export function leerGuardado(): Guardado | null {
 
 /** True if this game version can load the save (it may come from another version through the cloud). */
 export function esCargable(g: Guardado): boolean {
-  try { return rehidratarRun(g) !== null; } catch { return false; }
+  // Checks the same things rehidratarRun refuses, without building the run: creating its cards would take ids from
+  // the shared card counter, which a two-player game is using while its entries animate (the cloud sync calls this).
+  try {
+    return g.v === 1
+      && g.mazo.every((c) => !!cartaPorId(CARTAS_RETIRADAS[c.id] ?? c.id))
+      && g.reliquias.every((id) => !!reliquiaPorId(id));
+  } catch {
+    return false;
+  }
 }
 
 /** Writes a save that came from the cloud; false if it is not a run this version can load. */
