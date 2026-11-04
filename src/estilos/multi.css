@@ -103,6 +103,10 @@
 .moneda-escena.moneda-quieta { filter: drop-shadow(0 0 1.2rem rgba(255, 215, 90, 0.55)); }
 .moneda-resultado { margin: 0; font-size: 1.5rem; font-weight: bold; color: var(--brasa-viva); text-shadow: 0 2px 8px #000; opacity: 0; transition: opacity 0.3s; }
 .moneda-resultado.visible { opacity: 1; }
+/* the WebGL coin (fx/moneda3d.ts) reuses the d20 overlay, above the two-player screens */
+.moneda3d-overlay { z-index: 130; }
+.moneda3d-titulo { position: absolute; top: 7%; left: 50%; transform: translateX(-50%); margin: 0; font-size: 1.15rem; color: var(--pergamino); text-shadow: 0 2px 6px #000; white-space: nowrap; }
+.dado3d-etiqueta.moneda3d-resultado { font-size: 1.6rem; color: #ffe08a; white-space: nowrap; text-shadow: 0 0 16px #ffb300, 0 2px 4px rgba(0, 0, 0, 0.85); }
 
 /* live alerts over any screen */
 .multi-avisos { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 120; display: flex; flex-direction: column; gap: 0.5rem; width: min(520px, calc(100vw - 20px)); pointer-events: none; }

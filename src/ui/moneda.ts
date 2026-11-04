@@ -1,9 +1,11 @@
-// The coin of the two-player game: heads (Cara) is the host, tails (Cruz) the guest. A CSS 3D coin tossed up and
-// spinning like the d20 rolls across the screen (fx/dado.ts): it lands on the face the engine already decided, and the
-// screen then says whose it is. The result never comes from here: it is only drawn.
+// The coin of the two-player game: heads (Cara) is the host, tails (Cruz) the guest. A gold coin in WebGL is flicked
+// across the table like the d20 (fx/moneda3d.ts): it flips, bounces and falls flat on the side the engine already
+// decided, and the screen then says whose it is. The result never comes from here: it is only drawn. Without WebGL
+// a CSS 3D coin spins in place instead.
 
 import type { Hueco, ResultadoMoneda } from '../core/multi/index.ts';
 import { audio } from '../fx/audio.ts';
+import { tossCoin } from '../fx/moneda3d.ts';
 import { fx } from '../fx/particulas.ts';
 import { reducedMotion } from './card-fly.ts';
 import { el, espera } from './util.ts';
@@ -16,6 +18,14 @@ const LANZAMIENTO_MS = 2200;
 
 /** Tosses the coin on screen. Resolves once the result has been read. */
 export async function lanzarMoneda(r: ResultadoMoneda, nombres: Record<Hueco, string>): Promise<void> {
+  const resultado = `${r.ganador === 'cara' ? 'Cara' : 'Cruz'}: gana ${nombres[r.ganador]}`;
+  // the sparkles go off as the coin settles, while its result is on show
+  if (await tossCoin(r.ganador === 'cara', { title: MOTIVO[r.motivo], result: resultado }, reducedMotion(), () => fx.estallido('estrellas'))) return;
+  await monedaCss(r, nombres, resultado);
+}
+
+/** Fallback without WebGL: a CSS 3D coin spinning in place. */
+async function monedaCss(r: ResultadoMoneda, nombres: Record<Hueco, string>, texto: string): Promise<void> {
   const capa = el('div', 'moneda-fondo');
   capa.setAttribute('role', 'status');
   const cara = (h: Hueco) => {
@@ -35,7 +45,7 @@ export async function lanzarMoneda(r: ResultadoMoneda, nombres: Record<Hueco, st
   }
   moneda.append(cara('cara'), canto, cara('cruz'));
   const resultado = el('p', 'moneda-resultado');
-  resultado.textContent = `${r.ganador === 'cara' ? 'Cara' : 'Cruz'}: gana ${nombres[r.ganador]}`;
+  resultado.textContent = texto;
   const escena = el('div', 'moneda-escena');
   escena.appendChild(moneda);
   capa.append(titulo, escena, resultado);

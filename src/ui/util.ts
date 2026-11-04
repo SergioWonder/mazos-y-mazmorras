@@ -1,6 +1,7 @@
 // Utilidades de DOM, números flotantes y sacudidas de pantalla.
 
 import { ajustes } from '../core/ajustes.ts';
+import { AnnouncementQueue } from './anuncio-cola.ts';
 
 export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -47,10 +48,41 @@ export function sacudir(intensidad = 1) {
 }
 
 /** Mensaje grande centrado (anuncios de efectos). */
+const ANUNCIO_SALIDA_MS = 450;
+let listaAnuncios: HTMLElement | null = null;
+/** Central announcements as a list of at most 3: each one stays a while, fades and
+ *  collapses so the ones below slide up, and those that did not fit come out then. */
+const colaAnuncios = new AnnouncementQueue<{ texto: string; clase: string }, HTMLElement>({
+  max: 3,
+  lifeMs: 1900,
+  fadeMs: ANUNCIO_SALIDA_MS,
+  show: ({ texto, clase }) => {
+    if (!listaAnuncios?.isConnected) {
+      listaAnuncios = el('div', 'anuncios-lista');
+      listaAnuncios.setAttribute('aria-live', 'polite');
+      document.body.appendChild(listaAnuncios);
+    }
+    const a = el('div', `anuncio ${clase}`, texto);
+    listaAnuncios.appendChild(a);
+    return a;
+  },
+  fade: (a) => {
+    // fade and shrink its line to nothing, so the list closes the gap smoothly
+    const alto = a.offsetHeight;
+    a.style.overflow = 'hidden';
+    a.animate(
+      [
+        { opacity: 1, height: `${alto}px`, transform: 'translateY(0)' },
+        { opacity: 0, height: '0px', marginTop: '0px', marginBottom: '0px', transform: 'translateY(-10px)' },
+      ],
+      { duration: ANUNCIO_SALIDA_MS, easing: 'ease-in', fill: 'forwards' },
+    );
+  },
+  remove: (a) => a.remove(),
+});
+
 export function anuncio(texto: string, clase = '') {
-  const a = el('div', `anuncio ${clase}`, texto);
-  document.body.appendChild(a);
-  setTimeout(() => a.remove(), 1400);
+  colaAnuncios.push({ texto, clase });
 }
 
 /**

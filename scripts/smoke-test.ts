@@ -5963,6 +5963,99 @@ try {
   check(false, `las pruebas del d20 revientan: ${(e as Error).stack ?? e}`);
 }
 
+// ── 3D coin: rigid-body toss that lands on the requested side ────────────────
+console.log('\n🪙 Física de la moneda');
+try {
+  const M = await import('../src/fx/coin-physics.ts');
+  const dot3 = (a: number[], b: number[]) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  let ladoBien = true, derecha = true, quieta = true, enRango = true, rebotes = true, energiaBaja = true, sobreLaMesa = true;
+  for (let s = 0; s < 16; s++) {
+    for (const heads of [true, false]) {
+      const pista = M.simulateToss({ heads, seed: 500 + s * 13 });
+      const fin = M.coinPoseAt(pista, pista.duration);
+      // the side that was asked for faces up, and its drawing reads upright for the camera (top of the screen = −z)
+      if (dot3(M.rotateVec(fin.q, M.faceNormal(heads)), [0, 1, 0]) < 0.995) ladoBien = false;
+      if (dot3(M.rotateVec(fin.q, M.faceTop(heads)), [0, 0, -1]) < 0.99) derecha = false;
+      for (const t of [pista.duration + 0.01, pista.duration + 2]) {
+        const p = M.coinPoseAt(pista, t);
+        if (p.q.some((c, i) => Math.abs(c - fin.q[i]) > 1e-9) || p.x.some((c, i) => Math.abs(c - fin.x[i]) > 1e-9)) quieta = false;
+      }
+      const ultimo = pista.frames[pista.frames.length - 1];
+      if (Math.hypot(...ultimo.v) > 1e-9 || Math.hypot(...ultimo.w) > 1e-9) quieta = false;
+      if (pista.duration < M.TOSS_MIN_S || pista.duration > M.TOSS_MAX_S) enRango = false;
+      const golpes = pista.impacts.map((i) => i.strength);
+      if (golpes.length < 2 || golpes[golpes.length - 1] >= golpes[0]) rebotes = false;
+      const E = pista.frames.map((f) => M.tossEnergy(f));
+      let min = E[0];
+      for (const e of E) { if (e > min + E[0] * 0.01) energiaBaja = false; min = Math.min(min, e); }
+      if (pista.frames.some((f) => M.lowestPoint(f.q, f.x) < -0.03)) sobreLaMesa = false;
+    }
+  }
+  check(ladoBien, 'la moneda acaba siempre con el lado pedido (cara o cruz) hacia arriba');
+  check(derecha, 'el dibujo de la cara que queda arriba se lee derecho');
+  check(quieta, 'tras caer, la moneda no gira ni se desplaza');
+  check(enRango, `el lanzamiento dura entre ${M.TOSS_MIN_S} y ${M.TOSS_MAX_S} s`);
+  check(rebotes, 'la moneda rebota varias veces perdiendo fuerza en cada golpe');
+  check(energiaBaja, 'la energía de la moneda decrece durante todo el lanzamiento');
+  check(sobreLaMesa, 'la moneda nunca atraviesa la mesa');
+
+  // the physics does not depend on the result: only the constant compensation changes
+  const c = M.simulateToss({ heads: true, seed: 42 });
+  const x = M.simulateToss({ heads: false, seed: 42 });
+  check(c.frames.length === x.frames.length && c.frames.every((f, i) => f.q.every((v, k) => v === x.frames[i].q[k])),
+    'la trayectoria es la misma salga cara o cruz (solo cambia la compensación)');
+  check(JSON.stringify(M.simulateToss({ heads: true, seed: 42 })) === JSON.stringify(c), 'el lanzamiento es determinista con la misma semilla');
+  check(JSON.stringify(M.simulateToss({ heads: true, seed: 43 }).frames) !== JSON.stringify(c.frames), 'otra semilla, otro lanzamiento');
+  check(M.isCoinSymmetry(c.compensation) && M.isCoinSymmetry(x.compensation), 'la compensación es una simetría del disco (la forma física no cambia)');
+  // a real toss: it flips over several times in the air
+  const vueltas = c.frames.reduce((n, f, i) => (i > 0 && Math.sign(M.rotateVec(f.q, [0, 1, 0])[1]) !== Math.sign(M.rotateVec(c.frames[i - 1].q, [0, 1, 0])[1]) ? n + 1 : n), 0);
+  check(vueltas >= 4, `la moneda da vueltas en el aire (${vueltas} medias vueltas)`);
+} catch (e) {
+  check(false, `las pruebas de la moneda revientan: ${(e as Error).stack ?? e}`);
+}
+
+// ── Central announcements: a list of at most 3, the rest wait their turn ─────
+console.log('\n📣 Cola de anuncios');
+try {
+  const { AnnouncementQueue } = await import('../src/ui/anuncio-cola.ts');
+  // manual clock: timers only fire when the test advances time
+  let ahora = 0;
+  const timers: { at: number; fn: () => void }[] = [];
+  const avanzar = (ms: number) => {
+    const fin = ahora + ms;
+    for (;;) {
+      timers.sort((a, b) => a.at - b.at);
+      const t = timers[0];
+      if (!t || t.at > fin) break;
+      timers.shift();
+      ahora = t.at;
+      t.fn();
+    }
+    ahora = fin;
+  };
+  const enPantalla: string[] = [];
+  const saliendo: string[] = [];
+  const cola = new AnnouncementQueue<string, string>({
+    max: 3, lifeMs: 2000, fadeMs: 400,
+    show: (s) => { enPantalla.push(s); return s; },
+    fade: (s) => { saliendo.push(s); },
+    remove: (s) => { enPantalla.splice(enPantalla.indexOf(s), 1); },
+    timer: (fn, ms) => { timers.push({ at: ahora + ms, fn }); },
+  });
+  ['a', 'b', 'c', 'd', 'e'].forEach((s) => cola.push(s));
+  check(enPantalla.join() === 'a,b,c' && cola.waiting === 2, 'como mucho 3 anuncios a la vez, en orden; los demás esperan');
+  avanzar(2000);
+  check(saliendo.join() === 'a,b,c' && enPantalla.length === 3, 'al cumplir su tiempo empiezan a desvanecerse sin desaparecer de golpe');
+  avanzar(400);
+  check(enPantalla.join() === 'd,e' && cola.waiting === 0, 'cuando se desvanecen los anteriores aparecen los que esperaban');
+  cola.push('f');
+  check(enPantalla.join() === 'd,e,f', 'con hueco libre, un anuncio nuevo sale al momento al final de la lista');
+  avanzar(5000);
+  check(enPantalla.length === 0 && cola.visible === 0, 'al final no queda ningún anuncio en pantalla');
+} catch (e) {
+  check(false, `las pruebas de la cola de anuncios revientan: ${(e as Error).stack ?? e}`);
+}
+
 // ── Rare and unique cards: each one plays its own VFX sequence ──────────────
 console.log('\n🌟 Secuencias propias de las cartas raras y únicas');
 try {
