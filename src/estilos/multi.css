@@ -3,8 +3,13 @@
 /* the lobby sits under the settings panel (z-index 96) so ⚙️ can open over it; the room sits over the lobby */
 .multi-fondo { z-index: 90; }
 .multi-sala-fondo { z-index: 91; }
-.multi-panel { width: min(620px, 100%); }
-.multi-cuerpo, .multi-sala-cuerpo { overflow-y: auto; display: flex; flex-direction: column; gap: 0.9rem; min-height: 6rem; }
+/* the lobby never grows past the screen (landscape phones): the panel is capped and its body scrolls */
+.multi-panel { width: min(620px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); min-height: 0; }
+.multi-cuerpo, .multi-sala-cuerpo {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  display: flex; flex-direction: column; gap: 0.9rem;
+}
+.multi-cuerpo > *, .multi-sala-cuerpo > * { flex-shrink: 0; }
 .multi-seccion { padding: 0.6rem 0.7rem 0.7rem; border: 1px solid rgba(217, 169, 63, 0.22); border-radius: 10px; background: rgba(0, 0, 0, 0.18); }
 .multi-seccion h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--brasa-viva); }
 .multi-ayuda { margin: 0 0 0.5rem; font-size: 0.85rem; line-height: 1.4; opacity: 0.8; }
