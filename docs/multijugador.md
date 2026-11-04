@@ -16,7 +16,13 @@ las decisiones marcadas (D#) son revertibles.
   héroe + lo compartido) es serializable. Dentro de una sala, el estado es «guardado al empezar la sala + entradas
   desde entonces». Retomar una partida, reconectar o resincronizar es reconstruir y reproducir ese log.
 - **El bot vive en el servidor**: la sala ejecuta el motor, así que decide por el hueco del bot y emite sus entradas
-  como si fuera un jugador.
+  como si fuera un jugador, con una pausa al azar (0,9–2,6 s) entre acciones. Cómo juega (`src/core/multi/bot.ts`):
+  en combate, una carta cada vez, la que más vale por energía: el bloqueo que cubre el ataque que viene (×3) va antes
+  que el daño, el daño cuenta hasta lo que aguanta el objetivo (rematar suma lo que evita), Débil cuenta lo que
+  ahorra y Vulnerable lo que suben los ataques que le quedan; Fuerza/Destreza valen el doble de lo que añaden al resto
+  de la mano este turno; robar va primero si el resto son golpes y defensas; el mago siempre juega lo que da espacios
+  de conjuro y el brujo siempre la Explosión Sobrenatural. En el mapa vota hacia su misión de la taberna; el resto
+  de elecciones, al azar. Piensa sin tocar el estado (lo que prueba lo deshace).
 
 ### Huecos
 
@@ -87,7 +93,8 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
 - **D2.** (Sustituida.) El daño enemigo alcanza **a los dos héroes a la vez**: cada ataque, y cada efecto enemigo
   dirigido a «el héroe» (debilitadores, estados, cartas que se añaden al mazo), se aplica a **cada héroe vivo**, cada
   uno con su bloqueo, Vulnerable y reliquias defensivas. Un ataque de varios golpes da todos los golpes a los dos.
-  Ya no hay tirada de objetivo (no gasta rng). El Rayo del Dungeon Master también alcanza a los dos. Con el daño
+  Ya no hay tirada de objetivo (no gasta rng). Excepción: cada Rayo del Dungeon Master mata a **un solo** héroe,
+  elegido con el rng compartido entre los vivos (en solitario no se tira nada). Con el daño
   efectivamente doblado, ×1,6 PV se mantiene salvo que bot contra bot muestre la partida imposible.
 - **D3.** Un héroe a 0 PV queda caído el resto del combate (sin turno). Si su compañero gana, se levanta con el 25 %
   de sus PV máximos. Si caen los dos, la run termina para ambos.

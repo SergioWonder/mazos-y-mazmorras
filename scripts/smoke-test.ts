@@ -9,7 +9,7 @@ import {
   HERALDO_CULTO, CONTEMPLADOR, EMBAUCADOR_ARCANO,
 } from '../src/core/enemigos.ts';
 import { serializarRun, rehidratarRun } from '../src/core/guardado.ts';
-import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA } from '../src/core/mapa.ts';
+import { generarMapa, nodosDisponibles, posicionNodo, ANCHO_MAPA, esAlcanzable } from '../src/core/mapa.ts';
 import { ajusteEncuentro, PRIMEROS_FACILES, type ContextoEncuentro } from '../src/core/dificultad.ts';
 import {
   recompensaCartas, DRUIDA, BARBARO, MAGO, PICARO, BRUJO, PALADIN, BASICAS, NEUTRALES_ESPECIALES, instanciar, mazoInicial, defDe,
@@ -10454,6 +10454,86 @@ try {
     check(pvEnemigo - e.pv === 3 && duo.combates.cara.jugador.pv === pvCara && pvCruz - duo.combates.cruz.jugador.pv === 7,
       `con raíces por encima del ataque el enemigo se hiere (−${pvEnemigo - e.pv}), cara no recibe nada y cruz recibe el golpe entero`);
     check(registro.join() === 'enemigo−3,cruz−7', `primero se hiere el enemigo y luego golpea al otro héroe (${registro.join()})`);
+  }
+
+  // The Dungeon Master's ray takes one hero at a time
+  {
+    const rayo: EnemigoDef = {
+      id: 'rayo-test', nombre: 'Rayo', arte: '⚡', pv: [40, 40],
+      ia: () => ({ nombre: 'Rayo del Dungeon Master', intencion: 'ataque', fx: 'divino', mataAlInstante: true, cita: 'prueba' }),
+    };
+    const duo = await nuevoDuo([rayo]);
+    await duo.terminarTurno('cara');
+    await duo.terminarTurno('cruz');
+    const caidos = HUECOS.filter((h) => !duo.combates[h].jugador.vivo);
+    check(caidos.length === 1 && !duo.terminado, `cada rayo del DM mata a un solo héroe (cae ${caidos.join(', ') || 'nadie'})`);
+    for (const h of HUECOS) if (duo.combates[h].jugador.vivo) await duo.terminarTurno(h);
+    check(HUECOS.every((h) => !duo.combates[h].jugador.vivo) && !!duo.terminado, 'el siguiente rayo se lleva al otro y acaba el combate');
+  }
+
+  // The bot plays with some sense (it is the seat `cruz`)
+  {
+    const enCombate = async (clases: Record<Hueco, ClaseId>, semilla = 21) => {
+      const p = crearPartidaMulti({ semilla, clases });
+      const rb = crearRng(semilla);
+      let seq = 0;
+      for (let i = 0; i < 400 && !(p.fase.tipo === 'sala' && p.fase.sala.combate); i++) {
+        for (const h of HUECOS) {
+          const e = decisionBot(p, h, rb);
+          if (e) { await aplicar(p, { ...e, seq: seq++, de: h } as EntradaSellada); break; }
+        }
+      }
+      if (p.fase.tipo !== 'sala' || !p.fase.sala.combate) throw new Error('no llega a un combate');
+      return { p, duo: p.fase.sala.combate };
+    };
+    /** What the bot plays with this hand, energy and incoming hit per enemy (undefined: no attack). */
+    const eligeBot = (p: PartidaMulti, duo: CombateDuo, ids: string[], energia: number, dano?: number) => {
+      const c = duo.combates.cruz;
+      const pool = [...BASICAS, ...DRUIDA, ...BARBARO, ...MAGO, ...PICARO, ...BRUJO, ...PALADIN];
+      const mano = ids.map((id) => instanciar(pool.find((d) => d.id === id)!));
+      c.jugador.mano = mano;
+      c.jugador.energia = energia;
+      c.jugador.bloqueo = 0;
+      for (const e of duo.enemigos) {
+        e.saltaAccion = false;
+        e.intencion = dano === undefined ? { nombre: 'Esperar', intencion: 'defensa', bloqueo: 0 } : { nombre: 'Golpe', intencion: 'ataque', dano };
+      }
+      const antes = hashPartida(p);
+      const e = decisionBot(p, 'cruz', crearRng(3));
+      if (hashPartida(p) !== antes) throw new Error('el bot ha cambiado el estado al pensar');
+      if (!e || e.tipo !== 'jugar') return e?.tipo ?? 'nada';
+      return defDe(mano.find((x) => String(x.uid) === e.carta)!).id;
+    };
+    const barbaro = await enCombate({ cara: 'druida', cruz: 'barbaro' });
+    check(eligeBot(barbaro.p, barbaro.duo, ['golpe', 'defender'], 1, 10) === 'defender', 'el bot se cubre si le van a pegar');
+    check(eligeBot(barbaro.p, barbaro.duo, ['golpe', 'defender'], 1) === 'golpe', 'el bot ataca si nadie le va a pegar');
+    check(eligeBot(barbaro.p, barbaro.duo, ['golpe', 'furia-creciente', 'golpe'], 3) === 'furia-creciente', 'el bot se sube la Fuerza antes si luego pega más');
+    check(eligeBot(barbaro.p, barbaro.duo, ['golpe', 'furia-creciente'], 1) === 'golpe', 'con una sola energía, el bot prefiere el golpe a la Fuerza');
+    const mago = await enCombate({ cara: 'druida', cruz: 'mago' });
+    check(eligeBot(mago.p, mago.duo, ['golpe', 'canalizar-mana'], 1, 10) === 'canalizar-mana', 'el mago bot siempre se gana espacios de conjuro');
+    check(eligeBot(mago.p, mago.duo, ['golpe', 'defender', 'truco-magia'], 2) === 'truco-magia', 'con solo golpes y defensas, el bot roba antes');
+    const brujo = await enCombate({ cara: 'druida', cruz: 'brujo' });
+    check(eligeBot(brujo.p, brujo.duo, ['defender', 'explosion-sobrenatural'], 1, 10) === 'explosion-sobrenatural', 'el brujo bot siempre lanza Explosión Sobrenatural');
+    check(eligeBot(brujo.p, brujo.duo, [], 3) === 'finTurno', 'sin cartas, el bot termina el turno');
+
+    // On the map it heads for its quest
+    const p = crearPartidaMulti({ semilla: 33, clases: { cara: 'druida', cruz: 'barbaro' } });
+    const rb = crearRng(33);
+    let seq = 0;
+    while (p.fase.tipo !== 'mapa') {
+      for (const h of HUECOS) { const e = decisionBot(p, h, rb); if (e) await aplicar(p, { ...e, seq: seq++, de: h } as EntradaSellada); }
+    }
+    const q = pendiente(p, 'cruz');
+    const run = p.runs.cruz;
+    const nodos = q?.tipo === 'mapa' ? q.nodos : [];
+    const meta = run.mapa.find((n) => nodos.filter((d) => d === n.id || esAlcanzable(run.mapa, d, n.id)).length === 1);
+    const camino = meta ? nodos.find((d) => d === meta.id || esAlcanzable(run.mapa, d, meta.id)) : undefined;
+    check(!!meta && nodos.length > 1, 'hay una misión a la que solo lleva uno de los caminos');
+    if (meta) {
+      run.mision = { nodo: meta.id, tipo: meta.tipo, texto: 'prueba' };
+      const votos = [1, 2, 3, 4, 5].map((k) => { const e = decisionBot(p, 'cruz', crearRng(k)); return e?.tipo === 'mapa' ? e.nodo : -1; });
+      check(votos.every((v) => v === camino), `con una misión, el bot vota el camino que lleva a ella (${votos.join(', ')} → ${camino})`);
+    }
   }
 
   // Relics: a class relic that does not fit a hero becomes one of his own class

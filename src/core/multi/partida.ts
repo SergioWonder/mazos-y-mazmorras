@@ -1,3 +1,4 @@
+import { jugadaBot, votoBot } from './bot.ts';
 import { ofrecerBendicionInicial } from '../bendiciones.ts';
 import { contadorUid, defDe, fijarContadorUid } from '../cartas.ts';
 import { rehidratarRun, serializarRun } from '../guardado.ts';
@@ -248,13 +249,10 @@ export function decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entra
   if (!q) return null;
   switch (q.tipo) {
     case 'mapa':
-      return { tipo: 'mapa', nodo: q.nodos[Math.floor(rng() * q.nodos.length)] };
+      return { tipo: 'mapa', nodo: votoBot(p.runs[h], q.nodos, rng) };
     case 'combate': {
-      const j = q.jugables[0];
-      if (!j) return { tipo: 'finTurno' };
-      return j.objetivos === null
-        ? { tipo: 'jugar', carta: j.carta }
-        : { tipo: 'jugar', carta: j.carta, objetivo: j.objetivos[0] };
+      const duo = p.fase.tipo === 'sala' ? p.fase.sala.combate : null;
+      return duo ? jugadaBot(duo.combates[h], q.jugables) : { tipo: 'finTurno' };
     }
     case 'eleccion':
       return { tipo: 'eleccion', clave: q.clave, valor: q.opciones[Math.floor(rng() * q.opciones.length)] };

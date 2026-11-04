@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.1.1';
+export const VERSION = '10.2.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.2.0',
+    fecha: '2026-11-04',
+    cambios: [
+      '⚡ En multijugador, cada rayo del Dungeon Master se lleva a un solo héroe: el otro aún puede salvar la mesa.',
+      '🤖 El bot juega con cabeza: se cubre de lo que viene, elige las mejores cartas, aprovecha Débil, Vulnerable, Fuerza y Destreza, roba cuando solo le quedan golpes y defensas, y va a por su misión de la taberna.',
+    ],
+  },
   {
     version: '10.1.1',
     fecha: '2026-11-04',
