@@ -6,11 +6,11 @@
 // on a satin field, patina in the recesses and a reeded edge. Without WebGL it
 // returns false and draws nothing, so the caller can fall back to a simpler coin.
 
-import { simulateToss, coinPoseAt, rotateVec, COIN_HALF_THICKNESS, type TossTrack, type Vec3, type Quat } from './coin-physics.ts';
+import { simulateToss, coinPoseAt, rotateVec, COIN_HALF_THICKNESS, TOSS_PEAK, type TossTrack, type Vec3, type Quat } from './coin-physics.ts';
 import type { RollBox } from './d20-physics.ts';
 import { coinAtlas } from './coin-art.ts';
 import { audio } from './audio.ts';
-import { modelMatrix, program, fitTableCamera, projectToScreen, tableDust, type Mat4 } from './gl-scene.ts';
+import { modelMatrix, program, fitTableCamera, projectToScreen, tableDust, lookAt, type Mat4 } from './gl-scene.ts';
 
 const SEG = 128;
 const FLAT_R = 0.955; // where the flat face ends and the bevel starts
@@ -261,17 +261,31 @@ export function tossCoin(heads: boolean, texts: CoinTexts, still = false, onRest
     const aUV = gl.getAttribLocation(coinProg, 'aUV'), aSide = gl.getAttribLocation(coinProg, 'aSide');
     const aCorner = gl.getAttribLocation(shadowProg, 'aCorner');
 
-    // ── camera ──
+    // ── camera: wide while the coin flies high, then it eases in to the table after the first bounce ──
     let proj: Mat4 = new Float32Array(16), view: Mat4 = new Float32Array(16), eye: Vec3 = [0, 10, 6];
+    let wideEye: Vec3 = eye, nearEye: Vec3 = eye;
     let cssW = 0, cssH = 0;
     const fit = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       cssW = window.innerWidth; cssH = window.innerHeight;
       canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
       gl.viewport(0, 0, canvas.width, canvas.height);
-      ({ proj, view, eye } = fitTableCamera(box, cssW / Math.max(1, cssH), FOV, PITCH));
+      const aspect = cssW / Math.max(1, cssH);
+      const wide = fitTableCamera(box, aspect, FOV, PITCH, 1.2, TOSS_PEAK);
+      wideEye = wide.eye;
+      nearEye = fitTableCamera(box, aspect, FOV, PITCH).eye;
+      proj = wide.proj;
+    };
+    const firstBounce = track.impacts[0]?.t ?? track.duration;
+    const DOLLY_S = 0.7;
+    const placeCamera = (t: number) => {
+      const k = Math.min(1, Math.max(0, (t - firstBounce) / DOLLY_S));
+      const e = k * k * (3 - 2 * k);
+      eye = [wideEye[0] + (nearEye[0] - wideEye[0]) * e, wideEye[1] + (nearEye[1] - wideEye[1]) * e, wideEye[2] + (nearEye[2] - wideEye[2]) * e];
+      view = lookAt(eye, [0, 0, 0.3]);
     };
     fit();
+    placeCamera(still ? track.duration : 0);
     const project = (p: Vec3) => projectToScreen(proj, view, p, cssW, cssH);
 
     const drawShadow = (q: Quat, x: Vec3) => {
@@ -319,6 +333,7 @@ export function tossCoin(heads: boolean, texts: CoinTexts, still = false, onRest
     };
 
     const render = (t: number, glow: number) => {
+      placeCamera(t);
       const p = coinPoseAt(track, t);
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

@@ -62,11 +62,13 @@ export function program(gl: WebGLRenderingContext, vs: string, fs: string): WebG
 
 /** Camera looking down at `pitch` onto the table, as close as it can get while the
  *  play area (plus a margin) stays on screen. */
-export function fitTableCamera(box: RollBox, aspect: number, fov: number, pitch: number, margin = 1.2): { proj: Mat4; view: Mat4; eye: Vec3 } {
+export function fitTableCamera(box: RollBox, aspect: number, fov: number, pitch: number, margin = 1.2, height = 0): { proj: Mat4; view: Mat4; eye: Vec3 } {
   const proj = perspective(fov, aspect, 0.1, 100);
   const target: Vec3 = [0, 0, 0.3];
   const pts: Vec3[] = [];
   for (const x of [box.minX - margin, box.maxX + margin]) for (const z of [box.minZ - margin, box.maxZ + margin]) pts.push([x, 0, z]);
+  // something flying up to `height` (plus its own size) must stay on screen too
+  if (height > 0) for (const x of [box.minX, box.maxX]) for (const z of [box.minZ, box.maxZ]) pts.push([x, height + 1, z]);
   let eye: Vec3 = [0, 10, 6], view = lookAt(eye, target);
   for (let d = 5; d < 60; d += 0.25) {
     eye = [0, target[1] + d * Math.sin(pitch), target[2] + d * Math.cos(pitch)];
