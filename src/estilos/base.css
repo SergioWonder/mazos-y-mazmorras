@@ -329,31 +329,52 @@ button {
 .tooltip-global em { opacity: 0.75; }
 
 /* ── Anuncios centrales ─────────────────────────────────────────────────── */
-.anuncio {
+/* a list of at most 3 (ui/anuncio-cola.ts): new ones join at the bottom, faded ones
+   collapse and the rest slide up */
+.anuncios-lista {
   position: fixed;
   left: 50%;
-  top: 30%;
+  top: 24%;
   transform: translateX(-50%);
   z-index: 85;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: calc(100vw - 24px);
+  pointer-events: none;
+}
+.anuncio {
   font-family: var(--fuente-titulo);
   font-size: 1.8rem;
+  line-height: 1.25;
   color: var(--pergamino);
   text-shadow: 0 0 18px rgba(255, 140, 59, 0.65), 0 2px 8px #000;
   pointer-events: none;
-  animation: anunciar 1.4s ease-out forwards;
-  white-space: nowrap;
+  animation: anunciar 0.3s ease-out both;
+  text-align: center;
+  max-width: 100%;
 }
 .anuncio-jefe { font-size: 3.2rem; color: #ff6b5e; letter-spacing: 0.12em; }
 .anuncio-rara { font-size: 2.4rem; color: var(--oro); }
 .anuncio-botin { color: var(--brasa-viva); }
-.anuncio-error { color: #ff8a8a; font-size: 1.3rem; top: 58%; }
+.anuncio-error { color: #ff8a8a; font-size: 1.3rem; }
 .anuncio-furia-perdida { color: #b9c4d0; }
+/* two-player screens are busier: smaller announcements */
+body.multi-activa .anuncio { font-size: 1.15rem; }
+body.multi-activa .anuncio-jefe { font-size: 1.9rem; }
+body.multi-activa .anuncio-rara { font-size: 1.45rem; }
+body.multi-activa .anuncio-error { font-size: 1rem; }
+@media (max-height: 500px) {
+  body.multi-activa .anuncio { font-size: 0.95rem; }
+  body.multi-activa .anuncio-jefe { font-size: 1.5rem; }
+  body.multi-activa .anuncio-rara { font-size: 1.15rem; }
+}
 
 @keyframes anunciar {
-  0% { opacity: 0; transform: translateX(-50%) scale(0.7); }
-  12% { opacity: 1; transform: translateX(-50%) scale(1.06); }
-  80% { opacity: 1; transform: translateX(-50%) scale(1); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+  0% { opacity: 0; transform: scale(0.7); }
+  70% { opacity: 1; transform: scale(1.06); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
 /* ── Sacudidas de pantalla ──────────────────────────────────────────────── */

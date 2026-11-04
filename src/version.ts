@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.2.1';
+export const VERSION = '10.3.0';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,14 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.3.0',
+    fecha: '2026-11-04',
+    cambios: [
+      '🪙 La moneda del multijugador es ahora una moneda de oro en 3D: sale lanzada, da vueltas, rebota por la mesa y cae de cara (un rey coronado) o de cruz (una cruz con un d20).',
+      '📣 Los avisos ya no se pisan: se apilan en una lista de hasta tres y suben según se desvanecen; en multijugador son más pequeños.',
+    ],
+  },
   {
     version: '10.2.1',
     fecha: '2026-11-04',
