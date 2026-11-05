@@ -1,7 +1,7 @@
 // Versión del juego y registro de cambios mostrado al actualizar.
 // Sube VERSION y añade una entrada al principio de CHANGELOG con cada release.
 
-export const VERSION = '10.4.2';
+export const VERSION = '10.4.3';
 
 export interface EntradaCambios {
   version: string;
@@ -10,6 +10,16 @@ export interface EntradaCambios {
 }
 
 export const CHANGELOG: EntradaCambios[] = [
+  {
+    version: '10.4.3',
+    fecha: '2026-11-05',
+    cambios: [
+      '⚖️ Multijugador: los enemigos tienen más vida, un 80 % más en el acto 1, un 95 % en el 2 y un 110 % en el 3 (antes, un 60 %).',
+      '🪓 Bárbaro: Furia Primaria+ da 3 de Fuerza y 1 de Destreza, Furia Creciente+ da 4 de Fuerza y Savia del Árbol del Mundo+ da 3 de Fuerza.',
+      '🩸 Bárbaro: Furia Sanguinaria baja bastante (1 de Fuerza, 3 de daño y 3 de Hemorragia; mejorada, 2, 4 y 4).',
+      '🧛 Bárbaro: Sed de Sangre ahora da bloqueo igual al daño que la Hemorragia le hace al enemigo (mejorada, un 50 % más).',
+    ],
+  },
   {
     version: '10.4.2',
     fecha: '2026-11-04',

@@ -211,7 +211,7 @@ export const DESCRIPCION_ESTADO: Record<string, string> = {
   roboAcelerado: 'Robas 1 carta adicional al inicio de tus turnos. Desaparece si te quedas sin cartas en la mano.',
   hemorragia:
     'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. No decae con el tiempo, pero se cierra (deja de repetirse) si pasas un turno sin infligirle daño no bloqueado.',
-  sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas esa cantidad de bloqueo.',
+  sedSangre: 'Cada vez que un enemigo pierde PV por Hemorragia, ganas bloqueo igual al daño que recibe (un 50 % más con el nivel 2).',
   escribania: 'Al inicio de cada turno escribes esa cantidad en el Conjuro Prodigioso.',
   veneno: 'Al inicio de su turno pierde esa cantidad de PV, ignorando el bloqueo. Baja 1 cada turno.',
   cartasAgotan: 'Este turno, cada carta que juegues se agota (sale del mazo el resto del combate).',

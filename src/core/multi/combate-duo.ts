@@ -3,9 +3,10 @@ import type { ContextoEncuentro } from '../dificultad.ts';
 import type { CartaInstancia, EnemigoCombate, EnemigoDef, EstadoRun } from '../types.ts';
 import { HUECOS, type Hueco } from './tipos.ts';
 
-/** D1: with two heroes every enemy has this much more HP, the ones that join later included
- *  (the damage does not change). The Dungeon Master is never scaled. */
-export const FACTOR_PV_DUO = 1.6;
+/** D1: with two heroes every enemy has this much HP more than solo, by act (+80 % / +95 % / +110 %),
+ *  the ones that join later included (the damage does not change). The Dungeon Master is never scaled. */
+export const FACTORES_PV_DUO = [1.8, 1.95, 2.1];
+export const factorPvDuo = (capitulo: number) => FACTORES_PV_DUO[Math.min(Math.max(capitulo, 0), FACTORES_PV_DUO.length - 1)];
 /** D3: a downed hero gets back up with this share of his max HP when the partner wins. */
 export const PV_AL_LEVANTARSE = 0.25;
 
@@ -35,12 +36,13 @@ export class CombateDuo implements VinculoDuo {
   ) {
     this.rng = rng;
     const cara = new Combate(runs.cara, defs, rng, ui.cara, eliteOJefe, contexto);
+    const factorPv = factorPvDuo(runs.cara.capitulo);
     // D1: the enemies are built (and tuned) once, by the first hero's combat
     for (const e of cara.enemigos) {
-      if (!esDungeonMaster(e)) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * FACTOR_PV_DUO));
+      if (!esDungeonMaster(e)) e.pv = e.pvMax = Math.max(1, Math.round(e.pvMax * factorPv));
     }
     const cruz = new Combate(runs.cruz, defs, rng, ui.cruz, eliteOJefe, contexto, cara.lado);
-    cara.lado.factorPv = FACTOR_PV_DUO; // the ones that join the fight later get it too
+    cara.lado.factorPv = factorPv; // the ones that join the fight later get it too
     this.combates = { cara, cruz };
     for (const h of HUECOS) {
       const c = this.combates[h];

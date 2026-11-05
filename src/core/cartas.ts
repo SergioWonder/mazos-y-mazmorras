@@ -856,9 +856,9 @@ export const BARBARO: CartaDef[] = [
       await c.ganarFuria(2, 1);
     },
     mejora: {
-      texto: 'Furia: gana 3 de Fuerza\ny 2 de Destreza.',
+      texto: 'Furia: gana 3 de Fuerza\ny 1 de Destreza.',
       jugar: async (c) => {
-        await c.ganarFuria(3, 2);
+        await c.ganarFuria(3, 1);
       },
     },
   },
@@ -990,9 +990,9 @@ export const BARBARO: CartaDef[] = [
       await c.ganarFuria(3);
     },
     mejora: {
-      texto: 'Furia: gana 5 de Fuerza.',
+      texto: 'Furia: gana 4 de Fuerza.',
       jugar: async (c) => {
-        await c.ganarFuria(5);
+        await c.ganarFuria(4);
       },
     },
   },
@@ -1232,19 +1232,19 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'todos',
     fx: 'furia',
-    texto: 'Furia: gana 2 de Fuerza.\nInflige 4 de daño a TODOS los enemigos.\nAplica 4 de Hemorragia a TODOS los enemigos.',
+    texto: 'Furia: gana 1 de Fuerza.\nInflige 3 de daño a TODOS los enemigos.\nAplica 3 de Hemorragia a TODOS los enemigos.',
     valores: (_c, n) => [{ tipo: 'ataque', indice: 1, base: n[1], fuerzaPrevia: n[0] }],
     jugar: async (c) => {
-      await c.ganarFuria(2);
-      await c.atacarTodos(4, 'sangre');
-      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
+      await c.ganarFuria(1);
+      await c.atacarTodos(3, 'sangre');
+      for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 3);
     },
     mejora: {
-      texto: 'Furia: gana 3 de Fuerza.\nInflige 6 de daño a TODOS los enemigos.\nAplica 5 de Hemorragia a TODOS los enemigos.',
+      texto: 'Furia: gana 2 de Fuerza.\nInflige 4 de daño a TODOS los enemigos.\nAplica 4 de Hemorragia a TODOS los enemigos.',
       jugar: async (c) => {
-        await c.ganarFuria(3);
-        await c.atacarTodos(6, 'sangre');
-        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 5);
+        await c.ganarFuria(2);
+        await c.atacarTodos(4, 'sangre');
+        for (const e of c.enemigos.filter((x) => x.vivo)) await c.aplicarEstado(e, 'hemorragia', 4);
       },
     },
   },
@@ -1257,12 +1257,12 @@ export const BARBARO: CartaDef[] = [
     coste: 1,
     objetivo: 'ninguno',
     fx: 'sangre',
-    texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas 1 de bloqueo.',
+    texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas bloqueo igual\nal daño que recibe.',
     jugar: async (c) => {
       await c.aplicarEstado(c.jugador, 'sedSangre', 1);
     },
     mejora: {
-      texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas 2 de bloqueo.',
+      texto: 'Poder: cada vez que un enemigo pierde PV\npor Hemorragia, ganas un 50 % más de\nbloqueo que el daño que recibe.',
       jugar: async (c) => {
         await c.aplicarEstado(c.jugador, 'sedSangre', 2);
       },
@@ -1336,10 +1336,10 @@ export const BARBARO: CartaDef[] = [
       await c.ganarFuria(2);
     },
     mejora: {
-      texto: 'Cura 9 PV.\nFuria: gana 4 de Fuerza.',
+      texto: 'Cura 9 PV.\nFuria: gana 3 de Fuerza.',
       jugar: async (c) => {
         await c.curar(9);
-        await c.ganarFuria(4);
+        await c.ganarFuria(3);
       },
     },
   },
