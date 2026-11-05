@@ -95,14 +95,14 @@ decisionBot(p: PartidaMulti, h: Hueco, rng: () => number): Entrada | null
 
 ### Decisiones aplicadas (revertibles)
 
-- **D1.** Enemigos a dos: PV ×1,6 (el daño no cambia). Vale también para los que se unen durante el combate
+- **D1.** Enemigos a dos: PV +80 % / +95 % / +110 % según el acto (×1,8 / ×1,95 / ×2,1; el daño no cambia). Vale también para los que se unen durante el combate
   (invocados, escindidos, refuerzos, el que sale de la filacteria…); el Dungeon Master no se escala.
 - **D2.** (Sustituida.) El daño enemigo alcanza **a los dos héroes a la vez**: cada ataque, y cada efecto enemigo
   dirigido a «el héroe» (debilitadores, estados, cartas que se añaden al mazo), se aplica a **cada héroe vivo**, cada
   uno con su bloqueo, Vulnerable y reliquias defensivas. Un ataque de varios golpes da todos los golpes a los dos.
   Ya no hay tirada de objetivo (no gasta rng). Excepción: cada Rayo del Dungeon Master mata a **un solo** héroe,
   elegido con el rng compartido entre los vivos (en solitario no se tira nada). Con el daño
-  efectivamente doblado, ×1,6 PV se mantiene salvo que bot contra bot muestre la partida imposible.
+  efectivamente doblado, el aumento de PV se mantiene salvo que bot contra bot muestre la partida imposible.
 - **D3.** Un héroe a 0 PV queda caído el resto del combate (sin turno). Si su compañero gana, se levanta con el 25 %
   de sus PV máximos. Si caen los dos, la run termina para ambos.
 - **D8.** Raíces y Oscuridad solo protegen a quien las lanzó (nerf a dos). Cada instancia de Raíces y cada aplicación de

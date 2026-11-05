@@ -8411,7 +8411,7 @@ console.log('\n🔢 Números calculados');
     'Sangre Caliente muestra como vigente la rama de Furia solo con Furia activa');
   check(await valor('senda-fanatico', reliquias, 1) === 14, 'Senda del Fanático: el bloqueo suma el doble de la Furia');
   check(await valor('forma-lobo', fuerte) === 16, 'Forma de Lobo cuenta la Fuerza que da antes de golpear');
-  check(await valor('furia-sanguinaria', fuerte) === 13, 'Furia Sanguinaria cuenta la Fuerza de su Furia');
+  check(await valor('furia-sanguinaria', fuerte) === 10, 'Furia Sanguinaria cuenta la Fuerza de su Furia');
   check(await valor('conjuro-prodigioso', reliquias) === 40, 'Conjuro Prodigioso: 10 + lo escrito (7), con reliquias y Vulnerable');
   check(await valor('daga', reliquias) === 28, 'Daga: Maestría con Cuchillas y Danza Mortal se suman');
   check(await valor('explosion-sobrenatural', reliquias) === 34, 'Explosión Sobrenatural: mejoras de poder, del turno y la carga que crece al lanzarla');
@@ -9593,6 +9593,59 @@ console.log('\n🍷 Festín Carmesí: la Hemorragia se vuelve Furia');
   check(fest.mejora?.coste === 1, 'Festín Carmesí+ cuesta 1');
 }
 
+// ── Barbarian balance: weaker Rage cards, Blood Thirst blocks what the bleed does ──
+console.log('\n🪓 Equilibrio del bárbaro: Furia y Sed de Sangre');
+{
+  const carta = (id: string) => BARBARO.find((c) => c.id === id)!;
+  const lanzar = async (def: CartaDef, mejorada: boolean, enemigos = [GOBLIN_CORTADOR, GOBLIN_ARQUERO]) => {
+    const comb = new Combate(nuevaRun('barbaro', 9200), enemigos, crearRng(9200), uiSilenciosa);
+    await comb.iniciar();
+    comb.run.reliquias.length = 0;
+    comb.jugador.estados = {};
+    comb.jugador.furiaFuerza = 0;
+    comb.jugador.furiaDestreza = 0;
+    await (mejorada ? def.mejora!.jugar! : def.jugar)(comb.contexto());
+    return comb;
+  };
+  const prim = carta('furia-primaria');
+  let comb = await lanzar(prim, true);
+  check(comb.jugador.furiaFuerza + comb.jugador.furiaDestreza === 4 && comb.jugador.furiaFuerza === 3 && comb.jugador.furiaDestreza === 1,
+    `Furia Primaria+ da 3 de Fuerza y solo 1 de Destreza (${comb.jugador.furiaFuerza}/${comb.jugador.furiaDestreza})`);
+  check(/3 de Fuerza\s+y 1 de Destreza/.test(prim.mejora!.texto), 'el texto de Furia Primaria+ lo dice');
+  comb = await lanzar(carta('furia-creciente'), true);
+  check(comb.jugador.furiaFuerza === 4, `Furia Creciente+ da 4 de Fuerza (${comb.jugador.furiaFuerza})`);
+  check(/gana 4 de Fuerza/.test(carta('furia-creciente').mejora!.texto), 'el texto de Furia Creciente+ lo dice');
+  comb = await lanzar(carta('senda-arbol-mundo'), true);
+  check(comb.jugador.furiaFuerza === 3, `Savia del Árbol del Mundo+ da 3 de Fuerza (${comb.jugador.furiaFuerza})`);
+  check(/gana 3 de Fuerza/.test(carta('senda-arbol-mundo').mejora!.texto), 'el texto de Savia+ lo dice');
+
+  const sang = carta('furia-sanguinaria');
+  comb = await lanzar(sang, false);
+  check(comb.jugador.furiaFuerza === 1 && comb.enemigos.every((e) => e.estados.hemorragia === 3),
+    `Furia Sanguinaria: 1 de Fuerza y 3 de Hemorragia (${comb.jugador.furiaFuerza}/${comb.enemigos[0].estados.hemorragia})`);
+  comb = await lanzar(sang, true);
+  check(comb.jugador.furiaFuerza === 2 && comb.enemigos.every((e) => e.estados.hemorragia === 4),
+    `Furia Sanguinaria+: 2 de Fuerza y 4 de Hemorragia (${comb.jugador.furiaFuerza}/${comb.enemigos[0].estados.hemorragia})`);
+
+  // Blood Thirst: block equal to the HP the bleeding enemy loses
+  const sed = carta('sed-de-sangre');
+  const quieto: EnemigoDef = { id: 'quieto-test', nombre: 'Quieto', arte: '👾', pv: [100, 100], ia: () => ({ nombre: 'Espera', intencion: 'mejora' }) };
+  comb = await lanzar(sed, false, [quieto]);
+  const e = comb.enemigos[0];
+  e.pv = e.pvMax = 100;
+  e.estados.hemorragia = 6;
+  comb.jugador.bloqueo = 0;
+  await comb.turnoDeEnemigo(e);
+  check(e.pv === 94 && comb.jugador.bloqueo === 6, `Sed de Sangre: 6 de Hemorragia dan 6 de bloqueo (${comb.jugador.bloqueo})`);
+  check(/igual\s+al daño/.test(sed.texto), 'el texto de Sed de Sangre habla del daño recibido');
+  comb = await lanzar(sed, true, [quieto]);
+  const e2 = comb.enemigos[0];
+  e2.estados.hemorragia = 6;
+  comb.jugador.bloqueo = 0;
+  await comb.turnoDeEnemigo(e2);
+  check(comb.jugador.bloqueo === 9, `Sed de Sangre+: 6 de Hemorragia dan 9 de bloqueo (${comb.jugador.bloqueo})`);
+}
+
 // ── Paladin: Holy Charge counts as both a Strike and a Defend ────────────────
 console.log('\n⚒️ Carga Sagrada: Golpe y Defensa a la vez');
 {
@@ -10469,7 +10522,7 @@ try {
   {
     const duo = await nuevoDuo([pegador(7, 40)]);
     const e = duo.enemigos[0];
-    check(e.pvMax === 64, 'los enemigos a dos héroes tienen un 60 % más de PV (40 → 64)');
+    check(e.pvMax === 72, 'los enemigos a dos héroes tienen un 80 % más de PV en el acto 1 (40 → 72)');
     check(duo.combates.cara.enemigos === duo.combates.cruz.enemigos, 'los dos héroes comparten los mismos objetos enemigo');
     const zarpazo = cartaDe(DRUIDA, 'zarpazo');
     const golpe1 = instanciar(BASICAS.find((c) => c.id === 'golpe')!);
@@ -10519,6 +10572,18 @@ try {
       `un ataque de varios golpes cae entero en los dos, cada uno con su bloqueo (cara −${pvCara - cara.jugador.pv}, cruz −${pvCruz - cruz.jugador.pv})`);
   }
 
+  // Co-op enemy HP grows by act: +80 % / +95 % / +110 %
+  {
+    for (const [capitulo, esperado] of [[0, 72], [1, 78], [2, 84]] as const) {
+      const runs = { cara: nuevaRun('druida', 7), cruz: nuevaRun('barbaro', 7) };
+      runs.cara.capitulo = capitulo;
+      runs.cruz.capitulo = capitulo;
+      const duo = new CombateDuo(runs, [pegador(7, 40)], crearRng(7), uiMulti);
+      await duo.iniciar();
+      check(duo.enemigos[0].pvMax === esperado, `a dos héroes, acto ${capitulo + 1}: 40 PV → ${esperado} (${duo.enemigos[0].pvMax})`);
+    }
+  }
+
   // D1 also for the enemies that join the fight (summons); the Dungeon Master is never scaled
   {
     const invocador: EnemigoDef = {
@@ -10529,7 +10594,7 @@ try {
     await duo.terminarTurno('cara');
     await duo.terminarTurno('cruz');
     const nuevo = duo.enemigos.find((x) => x.def.id === 'pegador-test');
-    check(!!nuevo && nuevo.pvMax === 16 && nuevo.pv === 16, `el enemigo invocado en combate también lleva los PV ×1,6 (10 → ${nuevo?.pvMax})`);
+    check(!!nuevo && nuevo.pvMax === 18 && nuevo.pv === 18, `el enemigo invocado en combate también lleva los PV ×1,8 (10 → ${nuevo?.pvMax})`);
   }
 
   // Roots and Darkness only protect the hero who cast them

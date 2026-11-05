@@ -93,7 +93,7 @@ export interface LadoEnemigo {
   golpesPantallaDM: number;
   /** The Dungeon Master fell to a natural 20 on Seduce: the true ending plays. */
   finalVerdadero: boolean;
-  /** HP scale of the enemies that join the fight (1.6 with two heroes, see multi/combate-duo.ts). */
+  /** HP scale of the enemies that join the fight (with two heroes, see multi/combate-duo.ts). */
   factorPv: number;
 }
 
@@ -2059,9 +2059,13 @@ export class Combate {
     const hem = e.estados.hemorragia ?? 0;
     if (hem > 0) {
       const mantenida = e.heridoEsteTurno === true;
+      const pvAntes = e.pv;
       await this.infligir(e, hem, 'sangre', true);
+      const perdido = Math.max(0, pvAntes - e.pv);
       for (const h of this.heroesVivos()) {
-        const sed = h.jugador.estados.sedSangre ?? 0;
+        // Blood Thirst: block equal to the HP the enemy lost (level 2: 50 % more, rounded up)
+        const nivel = h.jugador.estados.sedSangre ?? 0;
+        const sed = nivel > 1 ? Math.ceil(perdido * 1.5) : nivel > 0 ? perdido : 0;
         if (sed > 0) {
           h.jugador.bloqueo += sed;
           await h.ui.fxBloqueo(h.jugador, sed);
